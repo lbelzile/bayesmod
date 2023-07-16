@@ -1,0 +1,149 @@
+[
+  {
+    "objectID": "syllabus.html",
+    "href": "syllabus.html",
+    "title": "Syllabus",
+    "section": "",
+    "text": "Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\n\n\n   Fall 2023\n   Tuesday\n   8:30-11:30\n   Decelles, Rivière-du-Loup"
+  },
+  {
+    "objectID": "syllabus.html#textbooks",
+    "href": "syllabus.html#textbooks",
+    "title": "Syllabus",
+    "section": "Textbooks",
+    "text": "Textbooks\nI will assign readings from McElreath (2020) and Johnson et al. (2022), which is freely available online\nCourse notes for the class can be found online"
+  },
+  {
+    "objectID": "syllabus.html#other-references",
+    "href": "syllabus.html#other-references",
+    "title": "Syllabus",
+    "section": "Other references",
+    "text": "Other references\nThere will occasionally be additional articles to read; links to these other resources will be included on the content page for that session."
+  },
+  {
+    "objectID": "syllabus.html#student-hours",
+    "href": "syllabus.html#student-hours",
+    "title": "Syllabus",
+    "section": "Student hours",
+    "text": "Student hours\nWednesday afternoon from 13:00 until 16:00 or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.\nPlease watch this video:\n\n\nStudent hours are set times dedicated to all of you (most professors call these “office hours”; I don’t1). This means that I will be in my office waiting for you to come by if you want to talk to me in person (or remotely) with whatever questions you have. This is the best and easiest way to find me and the best chance for discussing class material and concerns."
+  },
+  {
+    "objectID": "syllabus.html#intellectual-integrity",
+    "href": "syllabus.html#intellectual-integrity",
+    "title": "Syllabus",
+    "section": "Intellectual integrity",
+    "text": "Intellectual integrity\nPlease don’t cheat! The official policy lists the school rules regarding plagiarism and academic integrity."
+  },
+  {
+    "objectID": "syllabus.html#student-services",
+    "href": "syllabus.html#student-services",
+    "title": "Syllabus",
+    "section": "Student services",
+    "text": "Student services\nStudents with special needs should feel free to approach me so we can best discuss accommodations. Do check out HEC Montréal’s disabled students and [psychological] (https://www.hec.ca/en/students/support-resources/psychological-support/index.html) support services."
+  },
+  {
+    "objectID": "syllabus.html#harassment-and-sexual-violence",
+    "href": "syllabus.html#harassment-and-sexual-violence",
+    "title": "Syllabus",
+    "section": "Harassment and sexual violence",
+    "text": "Harassment and sexual violence\nThe Center for Harassment Intervention (BIMH) is the unique access point for all members of the community subject to harassment or sexual violence. You can reach them at 514 343-7020 or by email at harcelement@hec.ca from Monday until Friday, from 8:30 until 4:30pm.\nIf you are in an emergency situation or fear for your safety, call emergency services at 911, followed by HEC Montréal security services at 514 340-6611.\nCheck the school official policy on these matters for more details."
+  },
+  {
+    "objectID": "syllabus.html#family-policy",
+    "href": "syllabus.html#family-policy",
+    "title": "Syllabus",
+    "section": "Family policy",
+    "text": "Family policy\nHEC does not have an official family policy, so the following guidelines reflect my own beliefs and commitments towards parent students2\n\nBabies are welcome in class as often as necessary for support feeding relationship.\nYou are welcome to bring your child to class in order to cover unforeseeable gaps in childcare.\nIf you come with babies or toddler, I ask that you sit close to the door so that, in case your little one needs special attention and is disrupting the learning of other students, you may step outside of class until their needs are met. Seats close to the door are reserved for parents attending class with their child."
+  },
+  {
+    "objectID": "syllabus.html#footnotes",
+    "href": "syllabus.html#footnotes",
+    "title": "Syllabus",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nThere’s fairly widespread misunderstanding about what office hours actually are! Many students often think that they are the times I shouldn’t be disturbed, which is the exact opposite of what they’re for!↩︎\nShamelessly stolen/adapted from similar policy by Drs. Melissa Cheney, Guy Grossman and Rohan Alexander↩︎"
+  },
+  {
+    "objectID": "example/installation.html",
+    "href": "example/installation.html",
+    "title": "Installing R and RStudio",
+    "section": "",
+    "text": "Install R\nTo install the latest version of R itself (the engine), currently 4.3.1 (Beagle Scouts).\n\nGo to the Comprehensive R Archive Network (CRAN) website: https://cran.r-project.org/\nClick on “Download R for XXX”, where XXX is either Mac or Windows:\n\n\n\n\n\n\nIf you use macOS, scroll down to the first .pkg file in the list of files and download it.\n\n\n\n\n\nIf you use Windows, click “base” (or click on the bolded “install R for the first time” link) and download it.\n\n\n\n\n\n\nDouble click on the downloaded file (check your Downloads folder). Click yes through all the prompts to install like any other program.\nInstall OS specific programs\n\n\nmacOS only: download and install XQuartz.\nWindows only: download and install Rtools\n\n\n\nInstall RStudio\nRStudio is an integrated development environment (IDE) for R. To install the latter, follow the instructions.\n\nGo to the free download location on RStudio’s website: https://www.rstudio.com/products/rstudio/download/#download\nThe website should automatically detect your operating system (Linux, macOS or Windows) and show a big download button for it:\n\n\n\n\n\n\nIf not, scroll down a little to the large table and choose the version of RStudio that matches your operating system.\n\n\n\n\n\n\nDouble click on the downloaded file (again, check your Downloads folder). Click yes through all the prompts to install like any other program.\n\nDouble click on RStudio to run it (check your applications folder or start menu).\n\n\nInstall tidyverse\nR packages are easy to install with RStudio. Select the packages panel, click on “Install,” type the name of the package you want to install, and press enter.\n\n\n\n\n\nThis can sometimes be tedious when you’re installing lots of packages, though. The tidyverse, for instance, consists of dozens of packages (including ggplot2) that all work together. Rather than install each individually, you can install a single magical package and get them all at the same time.\nGo to the packages panel in RStudio, click on “Install,” type “tidyverse”, and press enter. You’ll see a bunch of output in the RStudio console as all the tidyverse packages are installed.\n\n\n\n\n\nNotice also that RStudio will generate a line of code for you and run it: install.packages(\"tidyverse\"). You can also just paste and run this instead of using the packages panel.\n\n\nInstall tinytex\nWhen you knit to PDF, R uses a special scientific typesetting program named LaTeX, which is complicated and a large download. To make life easier, there’s an R package named tinytex that installs a minimal LaTeX program and that automatically deals with differences between macOS and Windows.\nTo install tinytex:\n\nUse the Packages in panel in RStudio to install tinytex like you did above with tidyverse. Alternatively, run install.packages(\"tinytex\") in the console.\nRun tinytex::install_tinytex() in the console.\nWait for a bit while R downloads and installs everything you need.\nYou should now be able to knit to PDF."
+  },
+  {
+    "objectID": "evaluations/index.html",
+    "href": "evaluations/index.html",
+    "title": "Evaluations",
+    "section": "",
+    "text": "You won’t learn without practicing and honing your skills. Problem sets do not count toward your final grade, but the practice will help you for the homework and the midterm exam."
+  },
+  {
+    "objectID": "evaluations/index.html#problem-sets",
+    "href": "evaluations/index.html#problem-sets",
+    "title": "Evaluations",
+    "section": "",
+    "text": "You won’t learn without practicing and honing your skills. Problem sets do not count toward your final grade, but the practice will help you for the homework and the midterm exam."
+  },
+  {
+    "objectID": "content/index.html",
+    "href": "content/index.html",
+    "title": "Readings, lectures, and videos",
+    "section": "",
+    "text": "Each class session has a set of required readings that you should complete before watching the lecture."
+  },
+  {
+    "objectID": "content/01-content.html#learning-objectives",
+    "href": "content/01-content.html#learning-objectives",
+    "title": "Basics",
+    "section": "Learning objectives",
+    "text": "Learning objectives"
+  },
+  {
+    "objectID": "content/01-content.html#preliminaries",
+    "href": "content/01-content.html#preliminaries",
+    "title": "Basics",
+    "section": "Preliminaries",
+    "text": "Preliminaries"
+  },
+  {
+    "objectID": "content/01-content.html#readings",
+    "href": "content/01-content.html#readings",
+    "title": "Basics",
+    "section": "Readings",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes."
+  },
+  {
+    "objectID": "content/01-content.html#complementary-readings",
+    "href": "content/01-content.html#complementary-readings",
+    "title": "Basics",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details."
+  },
+  {
+    "objectID": "content/01-content.html#slides",
+    "href": "content/01-content.html#slides",
+    "title": "Basics",
+    "section": "Slides",
+    "text": "Slides"
+  },
+  {
+    "objectID": "content/01-content.html#case-study",
+    "href": "content/01-content.html#case-study",
+    "title": "Basics",
+    "section": "Case study",
+    "text": "Case study"
+  },
+  {
+    "objectID": "example/index.html",
+    "href": "example/index.html",
+    "title": "Examples",
+    "section": "",
+    "text": "This section will contain annotated R code along with worked out examples. Useful resources for learning R, the tidyverse and Rmarkdown basics include\n\nThe Introduction to R and RStudio by Open Intro Stat\nTeacups, giraffes & statistics: basic statistical concepts and programming\nthe notebook RYouWithMe from R-Ladies Sydney\nthe book R for Data Science, which adheres to the tidyverse principles.\nthe R package DoSStoolkit, developped at the University of Toronto.\nthe introverse documentation.\nthe RStudio cheatsheets, also available from RStudio menu in Help &gt; Cheat Sheets\n\nTo install all R packages used throughout the course, use the command\n\ninstall.packages(\"cmdstanr\",\n                 repos = c(\"https://mc-stan.org/r-packages/\",\n                           getOption(\"repos\")))\n\npackages &lt;- c(\"coda\", \"mvtnorm\", \"remotes\", \"loo\", \"dagitty\", \"shape\")\nfor(i in seq_along(packages)){\n  if(!packages[i] %in% installed.packages()[,\"Package\"]){\n install.packages(packages[i])\n  }\n}\nremotes::install_github(\"rmcelreath/rethinking\")\n\ninstall.packages(c(\"BiocManager\",\"remotes\"))\nBiocManager::install(\"graph\")\nBiocManager::install(\"Rgraphviz\")\ninstall.packages(\n  \"INLA\",\n  repos = c(getOption(\"repos\"),\n            INLA = \"https://inla.r-inla-download.org/R/stable\"),\n  dep = TRUE)"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "\n            Special topics in statistics — Bayesian modelling\n        ",
+    "section": "",
+    "text": "Special topics in statistics — Bayesian modelling\n        \n        \n            Hands on introduction to Bayesian data analysis. The course will cover the formulation, evaluation and comparison of Bayesian models through examples.\n        \n        \n            MATH 80636A, Fall 2023HEC Montréal\n        \n    \n    \n      \n        \n        \n        \n      \n    \n\n\n\n\n\n\nInstructor\n\n   Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\nCourse details\n\n   Fall 2023\n   Tuesday\n   8:30-11:30\n   Decelles, Rivière-du-Loup\n\n\n\nContacting me\nI am best reached by email."
+  }
+]
