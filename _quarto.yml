@@ -36,8 +36,8 @@ website:
         file: content/index.qmd
       - text: "Evaluations"
         file: evaluations/index.qmd
-      - text: "Examples"
-        file: example/index.qmd
+      - text: "Exercises"
+        file: exercises/index.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/MATH80601A/"
  #     - icon: box
@@ -80,6 +80,15 @@ website:
           contents:
             - text: "**R** and RStudio"
               file: example/installation.qmd
+    - title: "Exercises"
+      style: "docked"
+      search: false
+      foreground: "#f3d03e"
+      contents:
+        - section: "Exercises"
+          contents:      
+            - exercises/index.qmd
+            - exercises/01-exercise.qmd
 
   page-footer:
     left: |

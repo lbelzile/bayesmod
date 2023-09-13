@@ -1,0 +1,120 @@
+---
+title: "Bayesics"
+---
+
+
+You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.
+
+For modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate $\lambda>0$, with associated density $f(x) = \lambda \exp(-\lambda x)$.
+
+## Exercise 1.1
+
+
+Compute the marginal likelihood when the prior for $\lambda$ is 
+
+1. an exponential distribution with rate $\kappa>0$, with prior density $p(\lambda) = \kappa \exp(-\lambda\kappa)$;
+2. same, but truncated above at 1, so the density is $p(\lambda) = \kappa \exp(-\lambda\kappa)\mathrm{I}\{\lambda \leq 1\}$; where $\mathrm{I}$ is one if the condition is satisfied and zero otherwise
+3. $\lambda \sim \mathsf{Ga}(\alpha, \beta)$, a gamma distribution with shape $\alpha>0$ and rate $\beta>0$, with prior density $p(\lambda) = \beta^\alpha\lambda^{\alpha-1}\exp(-\beta \lambda)/\Gamma(\alpha)$.
+
+Deduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution.
+
+## Exercise 1.2
+
+Consider the following priors
+
+1. a gamma distribution with rate $\beta=10$ and shape $\alpha = 50$
+2. an exponential distribution with rate 5
+3. a gamma distribution with rate $\beta=0.02$ and shape $\alpha = 14$
+4. a uniform prior on the unit interval [5,10]
+
+Associate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?
+
+Explain what would happen to the posterior curve if we increased the sample size.
+
+```{r}
+#| label: fig-betabinom
+#| eval: true
+#| echo: false
+#| fig-cap: "Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors."
+library(ggplot2)
+library(MetBrewer)
+library(patchwork)
+nobs <- 10L
+sumt <- 8*nobs
+
+set.seed(1234)
+g1 <- ggplot() +
+  stat_function(fun =  function(x){
+        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = 50 + sumt, rate = nobs + 10)}, n = 1001) +
+   scale_x_continuous(limits = c(0,20),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(y = "") + 
+    theme_classic() 
+
+g2 <- ggplot() +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        ifelse(x<5 | x > 10, 0, dgamma(x, shape = sumt, rate = nobs))/
+        diff(pgamma(c(5,10), shape = sumt, rate = nobs))}, n = 1001) +
+   scale_x_continuous(limits = c(0,20),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(y = "") + 
+    theme_classic() 
+
+g3 <- ggplot() +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = sumt + 14, rate = nobs + 0.02)}, n = 1001) +
+   scale_x_continuous(limits = c(0,20),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(y = "") + 
+    theme_classic() 
+
+
+g4 <- ggplot() +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = 1 + sumt, rate = nobs + 5)}, n = 1001) +
+   scale_x_continuous(limits = c(0,20),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(y = "") + 
+    theme_classic() 
+(g4 + g1) / (g2 + g3) +
+  plot_annotation(tag_levels = 'A') 
+```
+
+## Exercice 1.3
+
+Consider a half Cauchy prior over the positive half line, with density $p(\lambda) = 2\pi^{-1}(1+x^2)^{-1}$. Using a grid approximation in increments of 0.1, evaluate the unnormalized posterior density from 0 until 30 and use this to approximate the normalizing constant. 
+
+Plot the posterior distribution.
+
+Compare this with a numerical approximation of the integral using quadrature methods via `integrate` and return the corresponding normalizing constant.
+
+
+## Exercice 1.4
+
+Consider $\lambda \sim \mathsf{Ga}(\alpha = 1.4, \beta=0.2)$.
+
+1. Return the posterior mean, posterior median and maximum a posteriori (MAP).
+2. Return the 89% equi-tailed percentile credible interval.
+3. Return the 50% highest posterior density (HPD) interval (harder).
+
+Next, draw 100 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.
+
+Would the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all.
+
+

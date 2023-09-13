@@ -1,0 +1,253 @@
+---
+title: "Bayesian modelling"
+author: "Léo Belzile"
+subtitle: "Introduction to the Bayesics"
+date: today
+date-format: YYYY
+eval: true
+echo: true
+format:
+  revealjs:
+    slide-number: true
+    preview-links: auto
+    theme: [simple, hecmontreal.scss]
+    title-slide-attributes:
+      data-background-color: "#ff585d"
+---
+
+
+```{r include=FALSE}
+
+hecbleu <- c("#002855")
+fcols <- c(gris = "#888b8d",
+           bleu = "#0072ce",
+           aqua = "#00aec7",
+           vert = "#26d07c",
+           rouge = "#ff585d",
+           rose = "#eb6fbd",
+           jaune = "#f3d03e")
+pcols <- c(gris = "#d9d9d6",
+           bleu = "#92c1e9",
+           agua = "#88dbdf",
+           vert = "#8fe2b0",
+           rouge = "#ffb1bb",
+           rose = "#eab8e4",
+           jaune = "#f2f0a1")
+
+knitr::opts_chunk$set(fig.retina = 3, collapse = TRUE)
+options(digits = 3, width = 75)
+```
+
+## The Bayesian paradigm?
+
+- Satisfies the likelihood principle
+- Generative approach naturally extends to complex settings (hierarchical models)
+- Uncertainty quantification and natural framework for prediction
+- Capability to incorporate subject-matter expertise
+
+## Bayesian versus frequentist
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+### Frequentist
+
+- Parameters treated as fixed, data as random
+  - true value of parameter $\boldsymbol{\theta}$ is unknown.
+- Target is point estimator
+
+
+:::
+
+::: {.column width="50%"}
+
+### Bayesian 
+
+- Both parameters and data are random
+   - inference is conditional on observed data
+- Target is a distribution
+
+:::
+
+::::
+
+## Probability vs frequency
+
+In frequentist statistic, "probability" is synonym for 
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+> long-term frequency under repeated sampling
+
+:::
+
+
+::: {.column width="40%"}
+
+
+![](fig/dice.png)
+:::
+
+::::
+
+## What is probability?
+
+Probability reflects incomplete information.
+
+Quoting @deFinetti:1974
+
+> Probabilistic reasoning --- always to be understood as subjective --- merely stems from our being uncertain about something. 
+
+## Posterior
+
+Using Bayes' theorem, the posterior density is 
+
+\begin{align*}
+\color{#D55E00}{p(\boldsymbol{\Theta} \mid \boldsymbol{Y})} = \frac{\color{#0072B2}{p(\boldsymbol{Y} \mid \boldsymbol{\Theta})} \times  \color{#56B4E9}{p(\boldsymbol{\Theta})}}{\color{#E69F00}{\int p(\boldsymbol{Y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta})\mathrm{d} \boldsymbol{\theta}}},
+\end{align*}
+
+meaning that 
+$$\color{#D55E00}{\text{posterior}} \propto \color{#0072B2}{\text{likelihood}} \times \color{#56B4E9}{\text{prior}}$$
+
+. . .
+
+Evaluating the integral in the denominator, the **marginal likelihood** $\color{#E69F00}{p(\boldsymbol{Y})}$, is challenging when $\boldsymbol{\theta}$ is high-dimensional.
+
+
+<!--
+## Statistical inference {.smaller}
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+### Frequentist
+
+- Testing relies on asymptotic theory (NHST)
+- Unintuitive formulation 
+   - (frequency-based)
+   - e.g., "in repeated samples, 95% of the intervals would contain the true value"
+
+:::
+
+::: {.column width="50%"}
+
+### Bayesian 
+
+- Comparison in terms of models
+- Any summary of the posterior distribution can be queried
+   - e.g., credible intervals, posterior mean
+
+:::
+
+::::
+
+But Bayesian inference is often much more work than numerical optimization!
+
+-->
+
+## Illustration
+
+
+```{r}
+#| label: fig-betabinom
+#| eval: true
+#| echo: false
+#| cache: true
+#| fig-cap: "Scaled Binomial likelihood for six successes out of 14 trials, $\\mathsf{Beta}(3/2, 3/2)$ prior and corresponding posterior distribution from a beta-binomial model."
+library(ggplot2)
+library(MetBrewer)
+library(patchwork)
+
+set.seed(1234)
+n <- rpois(n = 1, lambda = 20)
+p <- 0.4
+k <- rbinom(n = 1, size = n, prob = p)
+binlik <- function(p){
+  dbinom(x = k, size = n, prob = p) / (choose(n,k) * beta(k+1, n-k+1))
+  }
+alpha <- 1.5
+beta <- 1.5
+
+ggplot() +
+    stat_function(fun =  function(x){
+        dbeta(x, shape1 = k, shape2 = n - k)},
+        mapping = aes(fill = "likelihood",
+                      col = "likelihood"),
+        alpha = 0.2,
+        geom = "area") +
+    stat_function(fun = function(x){
+        dbeta(x, shape1 = alpha, shape2 = beta)}, 
+        alpha = 0.2,
+        group = factor(2),
+        mapping = aes(fill = "prior",
+                      col = "prior"),
+        geom = "area") +
+    stat_function(fun = function(x){
+        dbeta(x, shape1 = k + alpha, shape2 = n - k + beta)},
+        mapping = aes(fill = "posterior", 
+                      col = "posterior"), 
+        group = factor(3),
+        alpha = 0.2,
+        geom = "area") +
+    scale_x_continuous(limits = c(0,1),
+                       expand = c(0,0),
+                       breaks = seq(0, 1, by = 0.25),
+                       labels = c("0", "0.25", "0.5", "0.75", "1")) +
+    scale_y_continuous(expand = c(0,0)) +
+    scale_color_manual(values = met.brewer("Renoir", 3), 
+                       labels = c("likelihood","posterior","prior"),
+                       aesthetics = c("colour", "fill")) +
+    labs(y = "",
+         colour = "",
+         fill = "") + 
+    theme_classic()
+```
+
+## Summarizing posterior distributions
+
+In frequentist statistics, we focus on a point estimator $\widehat{\boldsymbol{\theta}}$, such as the maximum likelihood estimator, and attempt to derive it's distribution, often relying on approximate large-sample distributions. In contrast, the output of the Bayesian learning will be either of:
+
+1. a fully characterized distribution in simple examples.
+2. a numerical approximation to the posterior distribution
+3. an exact or approximate sample drawn from the posterior distribution
+
+The first case, which we have already encountered, allows us to query moments (mean, median, mode) directly provided there are analytical expressions for the latter, or else we could simulate from the model.
+
+
+## Marginal posterior
+
+To get the posterior of a single component, additional integration is needed
+
+$$p(\theta_j \mid \boldsymbol{y}) = \int p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}_{-j}.$$
+
+
+## Validity of the posterior
+
+- The marginal likelihood does not depend on $\boldsymbol{\theta}$
+   - (a normalizing constant)
+- For the posterior density to be *proper*,
+   - the marginal likelihood must be a finite constant for fixed data $\boldsymbol{y}$).
+   - then posterior integrates to one.
+   - the posterior is proper whenever the prior function is a density
+
+
+
+
+
+## Bayesian inference in practice {.smaller}
+
+
+Most of the field revolves around the creation of algorithms that either 
+
+- circumvent the calculation of the normalizing constant 
+   - (Monte Carlo and Markov chain Monte Carlo methods)
+- provide accurate numerical approximation, including for marginalizing out all but one parameter.   
+  - (integrated nested Laplace approximations, variational inference, etc.)
+
+## References
+
