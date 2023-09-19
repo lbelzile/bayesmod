@@ -1,14 +1,26 @@
 ---
-title: "Basics"
+title: "Bayesics"
 date: "2023-09-19"
 ---
 
 
 ## Content
 
+- Probability
+- Key concepts: prior, posterior and interpretation
+- Predictive distributions
+- Marginal likelihood and numerical integration
+- Credible intervals, loss functions and posterior summaries
+- The beta binomial conjugate model
+
 ## Learning objectives
 
-## Preliminaries
+At the end of the chapter, students should be able to
+
+- define key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference
+- perform inference in conjugate models with a single parameter
+- calculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)
+- explain some of the conceptual differences between frequentist and Bayesian inference
 
 ## Readings
 
@@ -16,13 +28,24 @@ date: "2023-09-19"
 These readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies --- the strict minimum being the course notes.
 :::
 
+- [Chapter 1 of the course notes](https://lbelzile.github.io/MATH80601A/introduction.html)
+
 ## Complementary readings
 
 :::{.callout-warning}
 Complementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.
 :::
 
+- [Bayes' rules](https://www.bayesrulesbook.com/) [@Johnson.Ott.Dogucu:2022], chapters 2--5 and sections 8.1, 8.3
+- @Villani:2023, chapters 1 and 2
+- @Albert:2009, chapters 2 and 3
+
+
 ## Slides
 
-## Case study
 
+<p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides1.html">{{< fa arrow-up-right-from-square >}} &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides1.pdf" role="button">{{< fa file-pdf >}} &ensp;Download PDF of all slides</a></p>
+
+<div class="ratio ratio-16x9">
+<iframe class="slide-deck" src="../slides/bayesmod-slides1.html"></iframe>
+</div>

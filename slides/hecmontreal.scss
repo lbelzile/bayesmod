@@ -13,7 +13,7 @@ h1, h2, h3 {
   font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace;
 }
 
-$presentation-title-slide-text-align: left;
+$presentation-title-slide-text-align: center;
 
 $presentation-h1-font-size: 1.4em;
 $presentation-h2-font-size: 1.2em;
@@ -59,3 +59,37 @@ $font-weight: bold;
   text-align: center !important;
 }
 
+
+#title-slide {
+  .title, .subtitle {
+    opacity: 0.90;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: 700;
+    color: $blanc !important;
+   text-align: center;
+  }
+  .title {
+    font-size: 2.5em;
+  }
+
+  .subtitle {
+    font-size: 1.5em;
+  }
+  
+  .institute, .quarto-title-author, .quarto-author, .quarto-title, .date {
+    opacity: 0.50;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: 500;
+    font-size: 1.2em;
+    color: $blanc !important;
+    text-color: $blanc !important;
+    text-align: center;
+  }
+  
+  
+.center-x, .title-slide h1 {
+  text-align: center;
+ }
+}

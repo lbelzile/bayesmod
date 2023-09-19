@@ -30,7 +30,91 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-  </style>
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="bayesmod-slides1_files/libs/revealjs/dist/theme/quarto.css">
   <link href="bayesmod-slides1_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="bayesmod-slides1_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -327,7 +411,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Introduction to the Bayesics</p>
+  <p class="subtitle">Bayesics</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -339,8 +423,29 @@ Léo Belzile
 
   <p class="date">2023</p>
 </section>
-<section id="the-bayesian-paradigm" class="slide level2">
-<h2>The Bayesian paradigm?</h2>
+<section id="probability-vs-frequency" class="slide level2">
+<h2>Probability vs frequency</h2>
+<p>In frequentist statistic, “probability” is synonym for</p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<blockquote>
+<p>long-term frequency under repeated sampling</p>
+</blockquote>
+</div><div class="column" style="width:40%;">
+<p><img data-src="fig/dice.png"></p>
+</div>
+</div>
+</section>
+<section id="what-is-probability" class="slide level2">
+<h2>What is probability?</h2>
+<p>Probability reflects incomplete information.</p>
+<p>Quoting <span class="citation" data-cites="deFinetti:1974">Finetti (<a href="#/references" role="doc-biblioref" onclick="">1974</a>)</span></p>
+<blockquote>
+<p>Probabilistic reasoning — always to be understood as subjective — merely stems from our being uncertain about something.</p>
+</blockquote>
+</section>
+<section id="why-opt-for-the-bayesian-paradigm" class="slide level2">
+<h2>Why opt for the Bayesian paradigm?</h2>
 <ul>
 <li>Satisfies the likelihood principle</li>
 <li>Generative approach naturally extends to complex settings (hierarchical models)</li>
@@ -363,7 +468,7 @@ Léo Belzile
 </div><div class="column" style="width:50%;">
 <h3 id="bayesian">Bayesian</h3>
 <ul>
-<li>Both parameters and data are random
+<li><strong>Both</strong> parameters and data are random
 <ul>
 <li>inference is conditional on observed data</li>
 </ul></li>
@@ -372,72 +477,204 @@ Léo Belzile
 </div>
 </div>
 </section>
-<section id="probability-vs-frequency" class="slide level2">
-<h2>Probability vs frequency</h2>
-<p>In frequentist statistic, “probability” is synonym for</p>
-<div class="columns">
-<div class="column" style="width:60%;">
-<blockquote>
-<p>long-term frequency under repeated sampling</p>
-</blockquote>
-</div><div class="column" style="width:40%;">
-<p><img data-src="fig/dice.png"></p>
-</div>
-</div>
-</section>
-<section id="what-is-probability" class="slide level2">
-<h2>What is probability?</h2>
-<p>Probability reflects incomplete information.</p>
-<p>Quoting <span class="citation" data-cites="deFinetti:1974">@deFinetti:1974</span></p>
-<blockquote>
-<p>Probabilistic reasoning — always to be understood as subjective — merely stems from our being uncertain about something.</p>
-</blockquote>
+<section id="joint-and-marginal-distribution" class="slide level2">
+<h2>Joint and marginal distribution</h2>
+<p>The joint density of data <span class="math inline">\(\boldsymbol{Y}\)</span> and parameters <span class="math inline">\(\boldsymbol{\theta}\)</span> is</p>
+<p><span class="math display">\[\begin{align*}
+p(\boldsymbol{Y}, \boldsymbol{\theta}) = p(\boldsymbol{Y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta}) =  p(\boldsymbol{\theta} \mid \boldsymbol{Y}) p(\boldsymbol{Y})
+\end{align*}\]</span> where the marginal <span class="math inline">\(p(\boldsymbol{Y}) = \int_{\boldsymbol{\Theta}} p(\boldsymbol{Y}, \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}\)</span>.</p>
 </section>
 <section id="posterior" class="slide level2">
 <h2>Posterior</h2>
 <p>Using Bayes’ theorem, the posterior density is</p>
 <p><span class="math display">\[\begin{align*}
-\color{#D55E00}{p(\boldsymbol{\Theta} \mid \boldsymbol{Y})} = \frac{\color{#0072B2}{p(\boldsymbol{Y} \mid \boldsymbol{\Theta})} \times  \color{#56B4E9}{p(\boldsymbol{\Theta})}}{\color{#E69F00}{\int p(\boldsymbol{Y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta})\mathrm{d} \boldsymbol{\theta}}},
+\color{#D55E00}{p(\boldsymbol{\theta} \mid \boldsymbol{Y})} = \frac{\color{#0072B2}{p(\boldsymbol{Y} \mid \boldsymbol{\theta})} \times  \color{#56B4E9}{p(\boldsymbol{\theta})}}{\color{#E69F00}{\int p(\boldsymbol{Y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta})\mathrm{d} \boldsymbol{\theta}}},
 \end{align*}\]</span></p>
 <p>meaning that <span class="math display">\[\color{#D55E00}{\text{posterior}} \propto \color{#0072B2}{\text{likelihood}} \times \color{#56B4E9}{\text{prior}}\]</span></p>
-<div class="fragment">
-<p>Evaluating the integral in the denominator, the <strong>marginal likelihood</strong> <span class="math inline">\(\color{#E69F00}{p(\boldsymbol{Y})}\)</span>, is challenging when <span class="math inline">\(\boldsymbol{\theta}\)</span> is high-dimensional.</p>
-</div>
-</section>
-<section id="statistical-inference" class="slide level2 smaller">
-<h2>Statistical inference</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<h3 id="frequentist-1">Frequentist</h3>
-<ul>
-<li>Testing relies on asymptotic theory (NHST)</li>
-<li>Unintuitive formulation
-<ul>
-<li>(frequency-based)</li>
-<li>e.g., “in repeated samples, 95% of the intervals would contain the true value”</li>
-</ul></li>
-</ul>
-</div><div class="column" style="width:50%;">
-<h3 id="bayesian-1">Bayesian</h3>
-<ul>
-<li>Comparison in terms of models</li>
-<li>Any summary of the posterior distribution can be queried
-<ul>
-<li>e.g., credible intervals, posterior mean</li>
-</ul></li>
-</ul>
-</div>
-</div>
-<p>But Bayesian inference is often much more work than numerical optimization!</p>
-</section>
-<section id="illustration" class="slide level2">
-<h2>Illustration</h2>
 
-<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinom-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;1: Binomial likelihood for six successes out of 14 trials, <span class="math inline">\(\mathsf{Beta}(3/2, 3/2)\)</span> prior and posterior distribution from a beta-binomial model.</p></section>
-<section id="marginal-posterior" class="slide level2">
-<h2>Marginal posterior</h2>
-<p>To get the posterior of a single component, additional integration is needed</p>
-<p><span class="math display">\[p(\theta_j \mid \boldsymbol{y}) = \int p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}_{-j}.\]</span></p>
+<!--
+## Statistical inference {.smaller}
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+### Frequentist
+
+- Testing relies on asymptotic theory (NHST)
+- Unintuitive formulation 
+   - (frequency-based)
+   - e.g., "in repeated samples, 95% of the intervals would contain the true value"
+
+:::
+
+::: {.column width="50%"}
+
+### Bayesian 
+
+- Comparison in terms of models
+- Any summary of the posterior distribution can be queried
+   - e.g., credible intervals, posterior mean
+
+:::
+
+::::
+
+But Bayesian inference is often much more work than numerical optimization!
+
+-->
+<aside><div>
+<p>Evaluating the <strong>marginal likelihood</strong> <span class="math inline">\(\color{#E69F00}{p(\boldsymbol{Y})}\)</span>, is challenging when <span class="math inline">\(\boldsymbol{\theta}\)</span> is high-dimensional.</p>
+</div></aside></section>
+<section id="updating-beliefs-and-sequentiality" class="slide level2">
+<h2>Updating beliefs and sequentiality</h2>
+<p>By Bayes’ rule, we can consider <em>updating</em> the posterior by adding terms to the likelihood, noting that for independent <span class="math inline">\(\boldsymbol{y}_1\)</span> and <span class="math inline">\(\boldsymbol{y}_2\)</span>, <span class="math display">\[\begin{align*}
+p(\boldsymbol{\theta} \mid \boldsymbol{y}_1, \boldsymbol{y}_2) \propto p(\boldsymbol{y}_2 \mid \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_1)
+\end{align*}\]</span> The posterior is be updated in light of new information.</p>
+</section>
+<section id="binomial-distribution" class="slide level2">
+<h2>Binomial distribution</h2>
+<p>A binomial variable with probability of success <span class="math inline">\(\theta \in [0,1]\)</span> has mass function <span class="math display">\[\begin{align*}
+f(y; \theta) = \binom{n}{y} \theta^y (1-\theta)^{n-y}, \qquad y = 0, \ldots, n.
+\end{align*}\]</span> Moments of the number of successes out of <span class="math inline">\(n\)</span> trials are <span class="math display">\[\mathsf{E}(Y \mid \theta) = n \theta, \quad \mathsf{Va}(Y \mid \theta) = n \theta(1-\theta).\]</span></p>
+
+<aside><div>
+<p>The binomial coefficient <span class="math inline">\(\binom{n}{y}=n!/\{(n-y)!y!\}\)</span>, where <span class="math inline">\(n!=\Gamma(n+1)\)</span>.</p>
+</div></aside></section>
+<section id="beta-distribution" class="slide level2">
+<h2>Beta distribution</h2>
+<p>The beta distribution with shapes <span class="math inline">\(\alpha&gt;0\)</span> and <span class="math inline">\(\beta&gt;0\)</span>, denoted <span class="math inline">\(\mathsf{Be}(\alpha,\beta)\)</span>, has density <span class="math display">\[f(y) = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}y^{\alpha - 1}(1-y)^{\beta - 1}, \qquad y \in [0,1]\]</span></p>
+<ul>
+<li>expectation: <span class="math inline">\(\alpha/(\alpha+\beta)\)</span>;</li>
+<li>mode <span class="math inline">\((\alpha-1)/(\alpha+\beta-2)\)</span> if <span class="math inline">\(\alpha, \beta&gt;1\)</span>, else, <span class="math inline">\(0\)</span>, <span class="math inline">\(1\)</span> or none;</li>
+<li>variance: <span class="math inline">\(\alpha\beta/\{(\alpha+\beta)^2(\alpha+\beta+1)\}\)</span>.</li>
+</ul>
+<aside class="notes">
+<p>It is a continuous distribution over the unit interval.</p>
+<p>The uniform is a special case when both shapes are unity.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="beta-binomial-example" class="slide level2">
+<h2>Beta-binomial example</h2>
+<p>We write <span class="math inline">\(Y \sim \mathsf{Bin}(n, \theta)\)</span> for <span class="math inline">\(\theta \in [0,1]\)</span>; the likelihood is <span class="math display">\[L(\theta; y) = \binom{n}{y} \theta^y(1-\theta)^{n-y}.\]</span></p>
+<p>Consider a beta prior, <span class="math inline">\(\theta \sim \mathsf{Be}(\alpha, \beta)\)</span>, with density <span class="math display">\[
+p(\theta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta) }\theta^{\alpha-1}(1-\theta)^{\beta - 1}.
+\]</span></p>
+</section>
+<section id="density-versus-likelihood" class="slide level2 smaller">
+<h2>Density versus likelihood</h2>
+<p>The binomial distribution is discrete with support <span class="math inline">\(0, \ldots, n\)</span>, whereas the likelihood is continuous over <span class="math inline">\(\theta \in [0,1]\)</span>.</p>
+<div class="cell" data-hash="bayesmod-slides1_cache/revealjs/fig-binom-massvslik_aba0213bf09a5e6a222dc1310cc7b0be">
+<div class="cell-output-display">
+<div id="fig-binom-massvslik" class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="bayesmod-slides1_files/figure-revealjs/fig-binom-massvslik-1.png" style="width:70.0%"></p>
+<figcaption>Figure&nbsp;1: Binomial density function (left) and scaled likelihood function (right).</figcaption>
+</figure>
+</div>
+</div>
+</div>
+
+<aside><div>
+<p>If the density or mass function integrates to 1 over the range of <span class="math inline">\(Y\)</span>, the integral of the likelihood over <span class="math inline">\(\theta\)</span> does not.</p>
+</div></aside></section>
+<section id="proportionality" class="slide level2">
+<h2>Proportionality</h2>
+<p>Any term not a function of <span class="math inline">\(\theta\)</span> can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to</p>
+<p><span class="math display">\[\begin{align*}
+L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} p^{y}(1-p)^{n-y} \times p^{\alpha-1} (1-p)^{\beta-1}
+\\&amp; =p^{y + \alpha - 1}(1-p)^{n-y + \beta - 1}
+\end{align*}\]</span> the kernel of a beta density with shape parameters <span class="math inline">\(y + \alpha\)</span> and <span class="math inline">\(n-y + \beta\)</span>.</p>
+
+<aside><div>
+<p>The symbol <span class="math inline">\(\propto\)</span>, for proportionality, means dropping all terms not an argument of the left hand side.</p>
+</div></aside></section>
+<section id="experiments-and-likelihoods" class="slide level2 smaller">
+<h2>Experiments and likelihoods</h2>
+<p>Consider the following sampling mechanism, which lead to <span class="math inline">\(k\)</span> successes out of <span class="math inline">\(n\)</span> independent trials, with the same probability of success <span class="math inline">\(\theta\)</span>.</p>
+<ol type="1">
+<li>Bernoulli: sample fixed number of observations with <span class="math inline">\(L(\theta; y) =\theta^k(1-\theta)^{n-k}\)</span></li>
+<li>binomial: same, but record only total number of successes so <span class="math inline">\(L(\theta; y) =\binom{n}{k}\theta^k(1-\theta)^{n-k}\)</span></li>
+<li>negative binomial: sample data until you obtain a predetermined number of successes, whence <span class="math inline">\(L(\theta; y) =\binom{n-1}{k-1}\theta^k(1-\theta)^{n-k}\)</span></li>
+</ol>
+</section>
+<section id="likelihood-principle" class="slide level2">
+<h2>Likelihood principle</h2>
+<p>Two likelihoods that are proportional, up to a constant not depending on unknown parameters, yield the same evidence.</p>
+<p>In all cases, <span class="math inline">\(L(\theta; y) \stackrel{\theta}{\propto} \theta^k(1-\theta)^{n-k}\)</span>, so these yield the same inference for Bayesian.</p>
+
+<aside><div>
+<p>For a more in-depth discussion, see Section 6.3.2 of <span class="citation" data-cites="Casella.Berger:2002">Casella and Berger (<a href="#/references" role="doc-biblioref" onclick="">2002</a>)</span></p>
+</div></aside></section>
+<section id="integration" class="slide level2">
+<h2>Integration</h2>
+<p>We could approximate the <span class="math inline">\(\color{#E69F00}{\text{marginal likelihood}}\)</span> through either</p>
+<ul>
+<li>numerical integration (cubature)</li>
+<li>Monte Carlo simulations</li>
+</ul>
+<p>In more complicated models, we will try to sample observations by bypassing completely this calculation.</p>
+
+<aside><div>
+<p>The likelihood terms can be small (always less than one and decreasing for discrete data), so watch out for numerical overflow when evaluating normalizing constants.</p>
+</div></aside></section>
+<section id="numerical-example-of-monte-carlo-integration" class="slide level2">
+<h2>Numerical example of (Monte Carlo) integration</h2>
+<div class="cell" data-hash="bayesmod-slides1_cache/revealjs/betabinom-calculate-marg-lik_b9f9cf58d9c0e6fa52c16a0c2ab60868">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>y <span class="ot">&lt;-</span> 6L <span class="co"># number of successes </span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>n <span class="ot">&lt;-</span> 14L <span class="co"># number of trials</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>alpha <span class="ot">&lt;-</span> beta <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="co"># prior parameters</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>unnormalized_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta){</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  theta<span class="sc">^</span>(y<span class="sc">+</span>alpha<span class="dv">-1</span>) <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">^</span>(n<span class="sc">-</span>y <span class="sc">+</span> beta <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">integrate</span>(<span class="at">f =</span> unnormalized_posterior,</span>
+<span id="cb1-8"><a href="#cb1-8"></a>          <span class="at">lower =</span> <span class="dv">0</span>,</span>
+<span id="cb1-9"><a href="#cb1-9"></a>          <span class="at">upper =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.066906e-05 with absolute error &lt; 1e-12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Compare with known constant</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">beta</span>(y <span class="sc">+</span> alpha, n <span class="sc">-</span> y <span class="sc">+</span> beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.066906e-05</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Monte Carlo integration</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">mean</span>(<span class="fu">unnormalized_posterior</span>(<span class="fu">runif</span>(<span class="fl">1e5</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.064055e-05</code></pre>
+</div>
+</div>
+<!-- ## Marginal posterior -->
+<!-- In multi-parameter models, additional integration is needed to get the marginal posterior -->
+<!-- $$p(\theta_j \mid \boldsymbol{y}) = \int p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}_{-j}.$$ -->
+<!-- ::: aside -->
+<!-- Marginalization is trivial when we have a joint sample: simply keep the column corresponding to $\theta_j$. -->
+<!-- ::: -->
+</section>
+<section id="prior-likelihood-and-posterior" class="slide level2">
+<h2>Prior, likelihood and posterior</h2>
+
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinom-likpost-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;2: Scaled Binomial likelihood for six successes out of 14 trials, <span class="math inline">\(\mathsf{Beta}(3/2, 3/2)\)</span> prior and corresponding posterior distribution from a beta-binomial model.</p></section>
+<section id="proper-prior" class="slide level2">
+<h2>Proper prior</h2>
+<p>We could define the posterior simply as the normalized product of the likelihood and some prior function.</p>
+<p>The prior function need not even be proportional to a density function (i.e., integrable as a function of <span class="math inline">\(\boldsymbol{\theta}\)</span>).</p>
+<p>For example,</p>
+<ul>
+<li><span class="math inline">\(p(\theta) \propto \theta^{-1}(1-\theta)^{-1}\)</span> is improper because it is not integrable.</li>
+<li><span class="math inline">\(p(\theta) \propto 1\)</span> is a proper prior over <span class="math inline">\([0,1]\)</span> (uniform).</li>
+</ul>
 </section>
 <section id="validity-of-the-posterior" class="slide level2">
 <h2>Validity of the posterior</h2>
@@ -448,11 +685,65 @@ Léo Belzile
 </ul></li>
 <li>For the posterior density to be <em>proper</em>,
 <ul>
-<li>the marginal likelihood must be a finite constant for fixed data <span class="math inline">\(\boldsymbol{y}\)</span>).</li>
-<li>then posterior integrates to one.</li>
-<li>the posterior is proper whenever the prior function is a density</li>
+<li>the marginal likelihood must be a finite!</li>
+<li>in continuous models, the posterior is proper whenever the prior function is proper.</li>
 </ul></li>
 </ul>
+</section>
+<section id="different-priors-give-different-posteriors" class="slide level2">
+<h2>Different priors give different posteriors</h2>
+
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinom-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;3: Scaled binomial likelihood for six successes out of 14 trials, with <span class="math inline">\(\mathsf{Beta}(3/2, 3/2)\)</span> prior (left), <span class="math inline">\(\mathsf{Beta}(1/4, 1/4)\)</span> (middle) and truncated uniform on <span class="math inline">\([0,1/2]\)</span> (right), with the corresponding posterior distributions.</p></section>
+<section id="role-of-the-prior" class="slide level2">
+<h2>Role of the prior</h2>
+<p>The posterior is beta, with expected value <span class="math display">\[\begin{align*}
+\mathsf{E}(\theta \mid y) &amp;= w\frac{y}{n} + (1-w) \frac{\alpha}{\alpha + \beta}, \\ w&amp;=\frac{n}{n+\alpha+\beta}
+\end{align*}\]</span> a weighted average of</p>
+<ul>
+<li>the maximum likelihood estimator and</li>
+<li>the prior mean.</li>
+</ul>
+<aside class="notes">
+<p>We can think of the parameter <span class="math inline">\(\alpha\)</span> (respectively <span class="math inline">\(\beta\)</span>) as representing the fixed prior number of success (resp. failures).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="posterior-concentration" class="slide level2">
+<h2>Posterior concentration</h2>
+<p>Except for stubborn priors, the likelihood contribution dominates in large samples. The impact of the prior is then often negligible.</p>
+
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-sequential-1.png" width="1152" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;4: Beta posterior and binomial likelihood with a uniform prior for increasing number of observations (from left to right).</p></section>
+<section id="summarizing-posterior-distributions" class="slide level2">
+<h2>Summarizing posterior distributions</h2>
+<!-- In frequentist statistics, we focus on a point estimator $\widehat{\boldsymbol{\theta}}$, such as the maximum likelihood estimator, and attempt to derive it's distribution, often relying on approximate large-sample distributions. In contrast, t -->
+<p>The output of the Bayesian learning will be either of:</p>
+<ol type="1">
+<li>a fully characterized distribution (in toy examples).</li>
+<li>a numerical approximation to the posterior distribution.</li>
+<li>an exact or approximate sample drawn from the posterior distribution.</li>
+</ol>
+<aside class="notes">
+<p>The first case, which we have already encountered, allows us to query moments (mean, median, mode) directly provided there are analytical expressions for the latter, or else we could simulate from the model.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="bayesian-inference-in-practice" class="slide level2 smaller">
 <h2>Bayesian inference in practice</h2>
@@ -468,10 +759,110 @@ Léo Belzile
 </ul></li>
 </ul>
 </section>
-<section id="references" class="slide level2">
-<h2>References</h2>
-<div class="footer footer-default">
+<section id="predictive-distributions" class="slide level2">
+<h2>Predictive distributions</h2>
+<p>Define the <span class="math inline">\(\color{#D55E00}{\text{posterior predictive}}\)</span>, <span class="math display">\[\begin{align*}
+p(y_{\text{new}}\mid \boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#D55E00}{p(\boldsymbol{\theta} \mid \boldsymbol{y})} \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span> and the <span class="math inline">\(\color{#56B4E9}{\text{prior predictive}}\)</span> <span class="math display">\[\begin{align*}
+p(y_{\text{new}}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#56B4E9}{p(\boldsymbol{\theta})} \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span> is useful for determining whether the prior is sensical.</p>
+</section>
+<section id="analytical-derivation-of-predictive-distribution" class="slide level2">
+<h2>Analytical derivation of predictive distribution</h2>
+<p>Given the <span class="math inline">\(\mathsf{Be}(a, b)\)</span> prior or posterior, the predictive for <span class="math inline">\(n_{\text{new}}\)</span> trials is beta-binomial with density <span class="math display">\[\begin{align*}
+p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\theta^{a + y_{\text{new}}-1}(1-\theta)^{b + k - y_{\text{new}}-1}}{
+\mathrm{Be}(a, b)}\mathrm{d} \theta
+\\&amp;= \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\mathrm{Be}(a + y_{\text{new}}, b + n_{\text{new}} - y_{\text{new}})}{\mathrm{Be}(a, b)}
+\end{align*}\]</span></p>
+<p>Replace <span class="math inline">\(a=y + \alpha\)</span> and <span class="math inline">\(b=n-y + \beta\)</span> to get the posterior predictive distribution.</p>
+</section>
+<section id="posterior-predictive-distribution" class="slide level2">
+<h2>Posterior predictive distribution</h2>
 
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinompostpred-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;5: Beta-binomial posterior predictive distribution with corresponding binomial mass function evaluated at the maximum likelihood estimator.</p></section>
+<section id="posterior-predictive-distribution-via-simulation" class="slide level2">
+<h2>Posterior predictive distribution via simulation</h2>
+<p>The posterior predictive carries over the parameter uncertainty so will typically be wider and overdispersed relative to the corresponding distribution.</p>
+<p>Given a draw <span class="math inline">\(\theta^*\)</span> from the posterior, simulate a new observation from the distribution <span class="math inline">\(f(y_{\text{new}}; \theta^*)\)</span>.</p>
+<div class="cell" data-hash="bayesmod-slides1_cache/revealjs/post-samp-betabinom_06a307d06cb94271a470f1f7765ffd9e">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>npost <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co"># Sample draws from the posterior distribution</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>post_samp <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> npost, y <span class="sc">+</span> alpha, n <span class="sc">-</span> y <span class="sc">+</span> beta)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># For each draw, sample new observation</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>post_pred <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> npost, <span class="at">size =</span> n, <span class="at">prob =</span> post_samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+<aside><div>
+<p>The beta-binomial is used to model overdispersion in binary regression models.</p>
+</div></aside></section>
+<section id="summarizing-posterior-distributions-1" class="slide level2">
+<h2>Summarizing posterior distributions</h2>
+<p>The output of a Bayesian procedure is a <strong>distribution</strong> for the parameters given the data.</p>
+<p>We may wish to return different numerical summaries (expected value, variance, mode, quantiles, …)</p>
+<p>The question: which point estimator to return?</p>
+</section>
+<section id="decision-theory-and-loss-functions" class="slide level2">
+<h2>Decision theory and loss functions</h2>
+<p>A loss function <span class="math inline">\(c(\boldsymbol{\theta}, \boldsymbol{\upsilon})\)</span> is a mapping from <span class="math inline">\(\boldsymbol{\Theta} \to \mathbb{R}^k\)</span> that assigns a weight to each value <span class="math inline">\(\boldsymbol{\theta}\)</span>, corresponding to the regret or loss arising from choosing this value.</p>
+<p>The corresponding point estimator <span class="math inline">\(\widehat{\boldsymbol{\upsilon}}\)</span> is the minimizer of the expected loss <span class="math display">\[\widehat{\boldsymbol{\upsilon}} = \mathop{\mathrm{argmin}}_{\boldsymbol{\upsilon}} \int_{\boldsymbol{\Theta}} c(\boldsymbol{\theta}, \boldsymbol{\upsilon})p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}\]</span></p>
+</section>
+<section id="point-estimators-and-loss-functions" class="slide level2">
+<h2>Point estimators and loss functions</h2>
+<p>In a univariate setting, the most widely used point estimators are</p>
+<ul>
+<li>mean: quadratic loss <span class="math inline">\(c(\theta, \upsilon) = (\theta-\upsilon)^2\)</span></li>
+<li>median: absolute loss <span class="math inline">\(c(\theta, \upsilon)=|\theta - \upsilon|\)</span></li>
+<li>mode: 0-1 loss <span class="math inline">\(c(\theta, \upsilon) = 1-\mathrm{I}(\upsilon = \theta)\)</span></li>
+</ul>
+<p>The posterior mode <span class="math inline">\(\boldsymbol{\theta} = \mathrm{argmax}_{\boldsymbol{\theta}} p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is the <strong>maximum a posteriori</strong> or MAP estimator.</p>
+</section>
+<section id="measures-of-central-tendency" class="slide level2">
+<h2>Measures of central tendency</h2>
+
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-central-moments-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;6: Point estimators from a right-skewed distribution (left) and from a multimodal distribution (right).</p></section>
+<section id="example-of-loss-functions" class="slide level2">
+<h2>Example of loss functions</h2>
+
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-losses-1.png" width="768" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;7: Posterior density with mean, mode and median point estimators (left) and corresponding loss functions, scaled to have minimum value of zero (right).</p></section>
+<section id="credible-regions" class="slide level2">
+<h2>Credible regions</h2>
+<p>The freshman dream comes true! A <span class="math inline">\(1-\alpha\)</span> credible region give a set of parameter values which contains the “true value” of the parameter <span class="math inline">\(\boldsymbol{\theta}\)</span> with probability <span class="math inline">\(1-\alpha\)</span>.</p>
+<p>Caveat: <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span> suggests the term ‘compatibility’, as it</p>
+<blockquote>
+<p>returns the range of parameter values compatible with the model and data.</p>
+</blockquote>
+</section>
+<section id="which-credible-intervals" class="slide level2">
+<h2>Which credible intervals?</h2>
+<p>Multiple <span class="math inline">\(1-\alpha\)</span> intervals, most common are</p>
+<ul>
+<li>equitailed: region <span class="math inline">\(\alpha/2\)</span> and <span class="math inline">\(1-\alpha/2\)</span> quantiles and</li>
+<li><strong>highest posterior density interval</strong> (HPDI), which gives the smallest interval <span class="math inline">\((1-\alpha)\)</span> probability</li>
+</ul>
+
+<aside><div>
+<p>If we accept to have more than a single interval, the highest posterior density region can be a set of disjoint intervals. The HDPI is more sensitive to the number of draws and more computationally intensive (see <strong>R</strong> package <code>HDinterval</code>)</p>
+</div></aside></section>
+<section id="illustration-of-credible-regions" class="slide level2">
+<h2>Illustration of credible regions</h2>
+
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-credible-intervals-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;8: Density plots with 89% (top) and 50% (bottom) equitailed or central credible (left) and highest posterior density (right) regions for two data sets, highlighted in grey.</p></section>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
+
+<img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo r-stretch"><div class="footer footer-default">
+
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Casella.Berger:2002" class="csl-entry" role="listitem">
+Casella, G., and R. L. Berger. 2002. <em>Statistical Inference</em>. 2nd ed. Pacific Grove, CA: Duxbury.
+</div>
+<div id="ref-deFinetti:1974" class="csl-entry" role="listitem">
+Finetti, Bruno de. 1974. <em>Theory of Probability: A Critical Introductory Treatment</em>. Vol. 1. New York: Wiley.
+</div>
+<div id="ref-McElreath:2020" class="csl-entry" role="listitem">
+McElreath, Richard. 2020. <em>Statistical Rethinking: A <span>B</span>ayesian Course with Examples in <span>R</span> and <span>STAN</span></em>. 2nd ed. New York: Chapman; Hall/CRC.
+</div>
 </div>
 </section>
     </div>

@@ -69,12 +69,15 @@ I will assign readings from @McElreath:2020 and @Johnson.Ott.Dogucu:2022, which 
 
 [**Statistical Rethinking:<br>A Bayesian Course with Examples in R and Stan**](https://xcelab.net/rm/statistical-rethinking/)
 
-Richard McElreath
+R. McElreath
 
 :::
 
 <a href="https://xcelab.net/rm/statistical-rethinking/">
-```{r echo=FALSE, out.width="50%"}
+```{r}
+#| echo: false
+#| fig-align: 'center'
+#| out-width: "50%"
 knitr::include_graphics("files/img/rethinking-cover.jpg")
 ```
 </a>
@@ -87,12 +90,15 @@ knitr::include_graphics("files/img/rethinking-cover.jpg")
 
 [**Bayes Rules!<br>An Introduction to Applied Bayesian Modeling**](https://www.bayesrulesbook.com/)
 
-Alicia A. Johnson, Miles Q. Ott, and Mine Dogucu
+A.A. Johnson, M.Q. Ott, and M. Dogucu
 
 :::
 
 <a href="https://www.bayesrulesbook.com/">
-```{r echo=FALSE, out.width="50%"}
+```{r}
+#| echo: false
+#| fig-align: 'center'
+#| out-width: "50%"
 knitr::include_graphics("files/img/bayes-rules-cover.jpeg")
 ```
 </a>
@@ -114,22 +120,22 @@ Below is a tentative schedule for the Bayesian part.
 
 Week 4: **Basics of Bayesian inference**
 
-- Bayes' theorem and updating
+<!-- - Bayes' theorem and updating -->
+- Probability
 - Key concepts: prior, posterior and interpretation
-- Posterior predictive distribution
-- Marginal likelihood and Bayes factors
-- Credible intervals and high posterior density regions
-- Examples of conjugate models: Beta-binomial, gamma-Poisson
-- Why bother? insights gained from using the Bayesian approach
+- Predictive distributions
+- Marginal likelihood and numerical integration
+- Credible intervals, loss functions and posterior summaries
+- The beta binomial conjugate model
 
 Week 5: **Prior beliefs**
 
-- Prior predictive approach
-- Flat, vague priors.
-- Proper vs improper prior 
+- Conjugate priors
+- Flat and vague priors.
 - Priors for scale parameters
-- Impact of domain constraints and prior-to-posterior density changes.
-- Example of [prior knowledge elicitation](https://arxiv.org/abs/2112.01380) and [expert knowledge](http://www.jstor.org/stable/2986068)
+- Parameter elicitation and [expert knowledge](http://www.jstor.org/stable/2986068)
+- Penalized complexity prior
+- Prior sensitivity analysis
 
  
 Week 6: **Markov chain Monte Carlo**

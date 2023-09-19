@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Special topics in data science — Bayesian modelling - Installing R and RStudio</title>
+<title>Special topics in data science — Bayesian modelling - Priors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -64,7 +64,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -107,177 +107,83 @@ ul.task-list li input[type="checkbox"] {
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../example/installation.html">Installation</a></li><li class="breadcrumb-item"><a href="../example/installation.html"><strong>R</strong> and RStudio</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Overview</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../example/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Examples</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text">Installation</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../example/installation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><strong>R</strong> and RStudio</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#install-r" id="toc-install-r" class="nav-link active" data-scroll-target="#install-r">Install <strong>R</strong></a></li>
-  <li><a href="#install-rstudio" id="toc-install-rstudio" class="nav-link" data-scroll-target="#install-rstudio">Install RStudio</a></li>
-  <li><a href="#install-tidyverse" id="toc-install-tidyverse" class="nav-link" data-scroll-target="#install-tidyverse">Install <code>tidyverse</code></a></li>
-  <li><a href="#install-tinytex" id="toc-install-tinytex" class="nav-link" data-scroll-target="#install-tinytex">Install <code>tinytex</code></a></li>
+  <li><a href="#content" id="toc-content" class="nav-link active" data-scroll-target="#content">Content</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
+  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link" data-scroll-target="#preliminaries">Preliminaries</a></li>
+  <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
+  <li><a href="#complementary-readings" id="toc-complementary-readings" class="nav-link" data-scroll-target="#complementary-readings">Complementary readings</a></li>
+  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides">Slides</a></li>
+  <li><a href="#case-study" id="toc-case-study" class="nav-link" data-scroll-target="#case-study">Case study</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Installing <strong>R</strong> and RStudio</h1>
+<header id="title-block-header">
+<h1 class="title display-7">Priors</h1>
+
+<div class="date-block bg-content text-white p-2">
+  <p class="date">Content for Tuesday, September 26, 2023</p>
 </div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
 </header>
 
-<section id="install-r" class="level3">
-<h3 class="anchored" data-anchor-id="install-r">Install <strong>R</strong></h3>
-<p>To install the <em>latest</em> version of <strong>R</strong> itself (the engine), currently 4.3.1 (Beagle Scouts).</p>
-<ol type="1">
-<li>Go to the Comprehensive <strong>R</strong> Archive Network (CRAN) website: <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a></li>
-<li>Click on “Download <strong>R</strong> for <code>XXX</code>”, where <code>XXX</code> is either Mac or Windows:</li>
-</ol>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="../files/img/install/install-r-links.png" class="img-fluid" style="width:60.0%"></p>
-</div>
-</div>
-<p>If you use macOS, scroll down to the first <code>.pkg</code> file in the list of files and download it.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="../files/img/install/install-r-mac.png" class="img-fluid" style="width:100.0%"></p>
-</div>
-</div>
-<p>If you use Windows, click “base” (or click on the bolded “install <strong>R</strong> for the first time” link) and download it.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="../files/img/install/install-r-windows.png" class="img-fluid" style="width:100.0%"></p>
-</div>
-</div>
-<ol start="3" type="1">
-<li><p>Double click on the downloaded file (check your <code>Downloads</code> folder). Click yes through all the prompts to install like any other program.</p></li>
-<li><p>Install OS specific programs</p></li>
-</ol>
-<ul>
-<li>macOS only: <a href="https://www.xquartz.org/">download and install XQuartz</a>.</li>
-<li>Windows only: <a href="https://cran.r-project.org/bin/windows/Rtools/">download and install Rtools</a></li>
-</ul>
+<section id="content" class="level2">
+<h2 class="anchored" data-anchor-id="content">Content</h2>
 </section>
-<section id="install-rstudio" class="level3">
-<h3 class="anchored" data-anchor-id="install-rstudio">Install RStudio</h3>
-<p>RStudio is an integrated development environment (IDE) for <strong>R</strong>. To install the latter, follow the instructions.</p>
-<ol type="1">
-<li>Go to the free download location on RStudio’s website: <a href="https://www.rstudio.com/products/rstudio/download/#download" class="uri">https://www.rstudio.com/products/rstudio/download/#download</a></li>
-<li>The website should automatically detect your operating system (Linux, macOS or Windows) and show a big download button for it:</li>
-</ol>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="../files/img/install/install-r-rstudio1.png" class="img-fluid" style="width:50.0%"></p>
-</div>
-</div>
-<p>If not, scroll down a little to the large table and choose the version of RStudio that matches your operating system.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="../files/img/install/install-r-rstudio2.png" class="img-fluid" style="width:100.0%"></p>
-</div>
-</div>
-<ol start="3" type="1">
-<li>Double click on the downloaded file (again, check your <code>Downloads</code> folder). Click yes through all the prompts to install like any other program.</li>
-</ol>
-<p>Double click on RStudio to run it (check your applications folder or start menu).</p>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 </section>
-<section id="install-tidyverse" class="level3">
-<h3 class="anchored" data-anchor-id="install-tidyverse">Install <code>tidyverse</code></h3>
-<p><strong>R</strong> packages are easy to install with RStudio. Select the packages panel, click on “Install,” type the name of the package you want to install, and press enter.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="../files/img/install/install-r-package-panel.png" class="img-fluid" style="width:40.0%"></p>
-</div>
-</div>
-<p>This can sometimes be tedious when you’re installing lots of packages, though. <a href="https://www.tidyverse.org/">The tidyverse</a>, for instance, consists of dozens of packages (including <strong>ggplot2</strong>) that all work together. Rather than install each individually, you can install a single magical package and get them all at the same time.</p>
-<p>Go to the packages panel in RStudio, click on “Install,” type “tidyverse”, and press enter. You’ll see a bunch of output in the RStudio console as all the tidyverse packages are installed.</p>
-<div class="cell">
-<div class="cell-output-display">
-<p><img src="../files/img/install/install-r-tidyverse.png" class="img-fluid" style="width:60.0%"></p>
-</div>
-</div>
-<p>Notice also that RStudio will generate a line of code for you and run it: <code>install.packages("tidyverse")</code>. You can also just paste and run this instead of using the packages panel.</p>
+<section id="preliminaries" class="level2">
+<h2 class="anchored" data-anchor-id="preliminaries">Preliminaries</h2>
 </section>
-<section id="install-tinytex" class="level3">
-<h3 class="anchored" data-anchor-id="install-tinytex">Install <code>tinytex</code></h3>
-<p>When you knit to PDF, <strong>R</strong> uses a special scientific typesetting program named LaTeX, which is complicated and a large download. To make life easier, there’s an <strong>R</strong> package named <a href="https://yihui.org/tinytex/"><code>tinytex</code></a> that installs a minimal LaTeX program and that automatically deals with differences between macOS and Windows.</p>
-<p>To install <strong>tinytex</strong>:</p>
-<ol type="1">
-<li>Use the Packages in panel in RStudio to install <strong>tinytex</strong> like you did above with <strong>tidyverse</strong>. Alternatively, run <code>install.packages("tinytex")</code> in the console.</li>
-<li>Run <code>tinytex::install_tinytex()</code> in the console.</li>
-<li>Wait for a bit while <strong>R</strong> downloads and installs everything you need.</li>
-<li>You should now be able to knit to PDF.</li>
-</ol>
+<section id="readings" class="level2">
+<h2 class="anchored" data-anchor-id="readings">Readings</h2>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.</p>
+</div>
+</div>
+</section>
+<section id="complementary-readings" class="level2">
+<h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Complementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.</p>
+</div>
+</div>
+</section>
+<section id="slides" class="level2">
+<h2 class="anchored" data-anchor-id="slides">Slides</h2>
+</section>
+<section id="case-study" class="level2">
+<h2 class="anchored" data-anchor-id="case-study">Case study</h2>
 
 
 </section>

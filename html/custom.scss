@@ -21,7 +21,7 @@ $jaunep: #f2f0a1 !default;
 
 $primary:       $bleuhec !default;
 $secondary:     $vertf !default;
-$success:       $aquaf !default;
+$success:       $jaunef !default;
 $info:          $aquap !default;
 $warning:       $jaunef !default;
 $danger:        $rougef !default;
@@ -44,6 +44,8 @@ $h6-font-size: $font-size-base * 0.8;
 $toc-font-size: 1.1rem;
 $sidebar-font-size: 1.1rem;
 $sidebar-font-size-section: 0.9rem;
+$sidebar-light-color: $rougef;
+$sidebar-dark-color: $rougef;
 $link-color: $grisf;
 $link-hover-color: $grisp;
 $code-color: $bleuhec;
@@ -138,11 +140,11 @@ ol {
 }
 
 .bg-content {
-  background-color: $jaunep;
+  background-color: $jaunef;
 }
 
 .bg-assignment {
-  background-color: $jaunep;
+  background-color: $jaunef;
 }
 
 // Slightly larger buttons

@@ -48,7 +48,7 @@ website:
     - title: "Content"
       style: "docked"
       search: false
-      foreground: "#f3d03e"
+      foreground: "#000000"
       contents:
         - section: "Overview"
           contents:
@@ -57,21 +57,10 @@ website:
           contents:
             - text: "1: Introduction"
               file: content/01-content.qmd
-    - title: "Evaluations"
-      style: "docked"
-      search: false
-      foreground: "#f3d03e"
-      contents:
-        - section: "Overview"
-          contents:
-            - evaluations/index.qmd
-        - section: "Problem sets"
-          contents:
-            - evaluations/01-problem-set.qmd
     - title: "Examples"
       style: "docked"
       search: false
-      foreground: "#f3d03e"
+      foreground: "#000000"
       contents:
         - section: "Overview"
           contents:
@@ -83,10 +72,10 @@ website:
     - title: "Exercises"
       style: "docked"
       search: false
-      foreground: "#f3d03e"
+      foreground: "#000000"
       contents:
         - section: "Exercises"
-          contents:      
+          contents:
             - exercises/index.qmd
             - exercises/01-exercise.qmd
 
@@ -107,7 +96,7 @@ preview:
   browser: true
   watch-inputs: true
   navigate: true
-  
+
 format:
   html:
     theme:
