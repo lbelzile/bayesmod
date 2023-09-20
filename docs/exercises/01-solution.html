@@ -280,9 +280,8 @@ L_2(\boldsymbol{y}) &amp;= L_1(\boldsymbol{y}) \times \gamma\{n+1, (n\overline{y
 </section>
 <section id="exercice-1.3" class="level2">
 <h2 class="anchored" data-anchor-id="exercice-1.3">Exercice 1.3</h2>
-<p>The purpose of this exercise is to show that numerical integration won’t get you very far.</p>
-<p>Consider a half Cauchy prior over the positive half line, with density <span class="math inline">\(f(x) = 2\pi^{-1}(1+x^2)^{-1}\mathrm{I}(x \geq 0)\)</span>. Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes<span class="math inline">\(^{-1}\)</span>. Compare this approximation with that of quadrature methods via <code>integrate</code> and return the corresponding estimates of the normalizing constant.</p>
-<p>Plot the posterior distribution of <span class="math inline">\(1/\lambda\)</span>, the average waiting time.</p>
+<p>The purpose of this exercise is to show that even one-dimensional numerical integration requires some care. Consider a half Cauchy prior over the positive half line, with density <span class="math inline">\(f(x) = 2\pi^{-1}(1+x^2)^{-1}\mathrm{I}(x \geq 0)\)</span>. Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes<span class="math inline">\(^{-1}\)</span>. Compare this approximation with that of quadrature methods via <code>integrate</code> and return the corresponding estimates of the normalizing constant. <em>Indication</em>: check the values and make sure the output is sensical. Modify the integrand if necessary.</p>
+<p>Plot the posterior distribution of <span class="math inline">\(\omega = 1/\lambda\)</span>, the average waiting time.</p>
 <div class="solution proof">
 <p><span class="proof-title"><em>Solution</em>. </span>For an unnormalized density <span class="math inline">\(g(x)\)</span> such that <span class="math inline">\(\int g(x) \mathrm{d} x = c\)</span>, the normalizing constant is <span class="math inline">\(1/c\)</span>.</p>
 <p>First, remember that the density function of the scale <span class="math inline">\(\omega = \lambda^{-1}\)</span> is related to the one of the rate <span class="math inline">\(\lambda\)</span> through a change of variable, with Jacobian <span class="math inline">\(\omega^{-2}\)</span>.</p>
@@ -298,47 +297,52 @@ L_2(\boldsymbol{y}) &amp;= L_1(\boldsymbol{y}) \times \gamma\{n+1, (n\overline{y
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unormalized posterior</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>unnorm_post <span class="ot">&lt;-</span> <span class="cf">function</span>(x){<span class="fu">dfoldedCauchy</span>(x)<span class="sc">*</span><span class="fu">lik</span>(x)}</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define grid and evaluate product</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">30</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>(icst_lambda <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> unnorm_post, <span class="dv">0</span>, <span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>(icst_lambda <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> unnorm_post, <span class="dv">0</span>, <span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>7.074775e-15 with absolute error &lt; 1.4e-14</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(norm_const_1 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">sum</span>(<span class="fu">unnorm_post</span>(grid)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the normalized value gives integral of 1</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cst_test <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> <span class="cf">function</span>(x){<span class="fu">unnorm_post</span>(x)<span class="sc">/</span>icst_lambda<span class="sc">$</span>value}, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">lower =</span> <span class="dv">0</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">upper =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ouch! The integral is nearly zero, and there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. The normalizing constant, the reciprocal of the marginal likelihood, is not well estimated. The absolute error is of higher order than the estimate of the marginal likelihood, and this will be more problematic in higher dimensions.</p>
+<p>To palliate to this, we could slightly modify the integrand by scaling the likelihood by <span class="math inline">\((n\overline{y} )^{n+1}/n!\)</span>, the normalizing constant of the gamma integral, which is around <span class="math inline">\(2.4 \times 10^{14}\)</span>. This fixes the issue below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scale likelihood by using gamma distribution normalizing constant</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>slik <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">ybar =</span> <span class="dv">8</span>){</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(<span class="sc">-</span><span class="fu">lgamma</span>(n<span class="sc">+</span><span class="dv">1</span>) <span class="sc">+</span> (n<span class="sc">+</span><span class="dv">1</span>)<span class="sc">*</span><span class="fu">log</span>(n<span class="sc">*</span>ybar) <span class="sc">+</span> n<span class="sc">*</span>(<span class="fu">log</span>(x)<span class="sc">-</span>ybar<span class="sc">*</span>x))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Unnormalized posterior, version 2</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>unnorm_post2 <span class="ot">&lt;-</span> <span class="cf">function</span>(x){<span class="fu">dfoldedCauchy</span>(x)<span class="sc">*</span><span class="fu">slik</span>(x)}</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define grid and evaluate product</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">30</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>marglik_grid <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">unnorm_post2</span>(grid))<span class="sc">*</span><span class="fl">0.01</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Is the grid approximation good enough?</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># check equality to numerical tolerance</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">all.equal</span>(<span class="fu">integrate</span>(<span class="at">f =</span> unnorm_post2, <span class="dv">0</span>, <span class="dv">100</span>)<span class="sc">$</span>value, marglik_grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.794434e+12</code></pre>
+<pre><code>[1] TRUE</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(norm_const_2 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>icst_lambda<span class="sc">$</span>value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.413472e+14</code></pre>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>norm_cst <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>marglik_grid</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the normalized value</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cst_test <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> <span class="cf">function</span>(x){<span class="fu">unnorm_post</span>(x)<span class="sc">*</span>norm_const_2}, </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">lower =</span> <span class="dv">0</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">upper =</span> <span class="dv">100</span>)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>cst_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>0.3725121 with absolute error &lt; 8.6e-08</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>norm_const_3 <span class="ot">&lt;-</span> norm_const_2<span class="sc">/</span>cst_test<span class="sc">$</span>value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Note that, because the integral is nearly zero, there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. It is better to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density). The absolute error is of the same order as the reciprocal normalizing constant, even for a one-dimensional problem!</p>
-<p>For the posterior density, we can simply use the approximation with <span class="math inline">\(p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\lambda)p(\lambda)\)</span>. The posterior density for the reciprocal rate is <span class="math inline">\(p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\omega^{-1})p(\omega^{-1})\omega^{-2}\)</span> (don’t forget the Jacobian)!</p>
+<p>The prior normalizing by a known constant fixes the numerical issues. Generally, one would tend to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density).</p>
+<p>For the posterior density, we can simply use the approximation with <span class="math inline">\(p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\lambda)p(\lambda)\)</span>. The posterior density for the reciprocal rate is <span class="math inline">\(p(\omega \mid \boldsymbol{y}) \approx \widehat{c} L(\omega^{-1})p(\omega^{-1})\omega^{-2}\)</span> (don’t forget the Jacobian)!</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> <span class="cf">function</span>(x){<span class="fu">unnorm_post</span>(<span class="dv">1</span><span class="sc">/</span>x)<span class="sc">*</span>norm_const_3<span class="sc">/</span>x<span class="sc">^</span><span class="dv">2</span>},</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>),</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">1001</span>) <span class="sc">+</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"average waiting time "</span>, <span class="dv">1</span><span class="sc">/</span>lambda, <span class="st">" (in minutes)"</span>)),</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"posterior density"</span>) <span class="sc">+</span> </span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> <span class="cf">function</span>(x){<span class="fu">unnorm_post2</span>(<span class="dv">1</span><span class="sc">/</span>x)<span class="sc">*</span>norm_cst<span class="sc">/</span>x<span class="sc">^</span><span class="dv">2</span>},</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">30</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">1001</span>) <span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">""</span>, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">"average waiting time "</span>, <span class="dv">1</span><span class="sc">/</span>lambda, <span class="st">" (in minutes)"</span>)),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"posterior density"</span>) <span class="sc">+</span> </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="01-solution_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="01-solution_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -356,49 +360,49 @@ L_2(\boldsymbol{y}) &amp;= L_1(\boldsymbol{y}) \times \gamma\{n+1, (n\overline{y
 <div class="solution proof">
 <p><span class="proof-title"><em>Solution</em>. </span>We have already determined that the posterior is a Gamma distribution <span class="math inline">\(\mathsf{Ga}(a, b)\)</span>, where <span class="math inline">\(a= \alpha+ n= 11.4\)</span> and <span class="math inline">\(b=n\overline{y} + \beta = 80.2\)</span>. We can query the moments directly: the mode is <span class="math inline">\((a-1)/b\)</span> and the mean <span class="math inline">\(a/b\)</span>, while the median must be found numerically using the quantile function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fl">11.4</span> <span class="co"># shape parameter</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fl">80.2</span> <span class="co"># rate parameter</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.11</span> <span class="co"># level</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>postmean <span class="ot">&lt;-</span> a<span class="sc">/</span>b <span class="co"># posterior mean</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>postmed <span class="ot">&lt;-</span> <span class="fu">qgamma</span>(<span class="at">p =</span> <span class="fl">0.5</span>, <span class="at">shape =</span> a, <span class="at">rate =</span> b) <span class="co"># median</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>postmode <span class="ot">&lt;-</span> (a<span class="dv">-1</span>)<span class="sc">/</span>b <span class="co"># mode</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>credint <span class="ot">&lt;-</span> <span class="fu">qgamma</span>(<span class="at">p =</span> <span class="fu">c</span>(alpha<span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>), <span class="at">shape =</span> a, <span class="at">rate =</span> b)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Documentation states you must return the quantile function</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>HDInterval<span class="sc">::</span><span class="fu">hdi</span>(</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">object =</span> qgamma, </span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> a, </span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">rate =</span> b, </span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">credMass =</span> <span class="fl">0.50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fl">11.4</span> <span class="co"># shape parameter</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fl">80.2</span> <span class="co"># rate parameter</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.11</span> <span class="co"># level</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>postmean <span class="ot">&lt;-</span> a<span class="sc">/</span>b <span class="co"># posterior mean</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>postmed <span class="ot">&lt;-</span> <span class="fu">qgamma</span>(<span class="at">p =</span> <span class="fl">0.5</span>, <span class="at">shape =</span> a, <span class="at">rate =</span> b) <span class="co"># median</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>postmode <span class="ot">&lt;-</span> (a<span class="dv">-1</span>)<span class="sc">/</span>b <span class="co"># mode</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>credint <span class="ot">&lt;-</span> <span class="fu">qgamma</span>(<span class="at">p =</span> <span class="fu">c</span>(alpha<span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>), <span class="at">shape =</span> a, <span class="at">rate =</span> b)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Documentation states you must return the quantile function</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>HDInterval<span class="sc">::</span><span class="fu">hdi</span>(</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">object =</span> qgamma, </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> a, </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">rate =</span> b, </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">credMass =</span> <span class="fl">0.50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    lower     upper 
 0.1042228 0.1589696 
 attr(,"credMass")
 [1] 0.5</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively, find this numerically</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># MAP via minimization of the negative log likelihood</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>MAP <span class="ot">&lt;-</span> <span class="fu">optimize</span>(</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">f =</span> <span class="cf">function</span>(x){<span class="sc">-</span><span class="fu">dgamma</span>(x, <span class="at">shape =</span> a, <span class="at">rate =</span> b, <span class="at">log =</span> <span class="cn">TRUE</span>)},</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval =</span> <span class="fu">qgamma</span>(<span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.2</span>,<span class="fl">0.8</span>), <span class="at">shape =</span> a, <span class="at">rate =</span> b)</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>minimum</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Other quantities approximated by Monte Carlo</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample from posterior</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>post_samp <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="fl">1e4</span>, <span class="at">shape =</span> a, <span class="at">rate =</span> b)</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample mean and sample quantiles</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(post_samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively, find this numerically</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># MAP via minimization of the negative log likelihood</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>MAP <span class="ot">&lt;-</span> <span class="fu">optimize</span>(</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">f =</span> <span class="cf">function</span>(x){<span class="sc">-</span><span class="fu">dgamma</span>(x, <span class="at">shape =</span> a, <span class="at">rate =</span> b, <span class="at">log =</span> <span class="cn">TRUE</span>)},</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval =</span> <span class="fu">qgamma</span>(<span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.2</span>,<span class="fl">0.8</span>), <span class="at">shape =</span> a, <span class="at">rate =</span> b)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  )<span class="sc">$</span>minimum</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Other quantities approximated by Monte Carlo</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample from posterior</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>post_samp <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="fl">1e4</span>, <span class="at">shape =</span> a, <span class="at">rate =</span> b)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample mean and sample quantiles</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(post_samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1422132</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(post_samp, <span class="fu">c</span>(alpha<span class="sc">/</span><span class="dv">2</span>, <span class="fl">0.5</span>, <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(post_samp, <span class="fu">c</span>(alpha<span class="sc">/</span><span class="dv">2</span>, <span class="fl">0.5</span>, <span class="dv">1</span><span class="sc">-</span>alpha<span class="sc">/</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      5.5%        50%      94.5% 
 0.08286817 0.13834515 0.21530067 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Highest posterior density interval</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>credHDI <span class="ot">&lt;-</span> HDInterval<span class="sc">::</span><span class="fu">hdi</span>(</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> post_samp, </span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">credMass =</span> <span class="fl">0.50</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>credHDI</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Highest posterior density interval</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>credHDI <span class="ot">&lt;-</span> HDInterval<span class="sc">::</span><span class="fu">hdi</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> post_samp, </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">credMass =</span> <span class="fl">0.50</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>credHDI</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    lower     upper 
 0.1061453 0.1597930 
@@ -411,17 +415,17 @@ attr(,"credMass")
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>postpred_samp <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">rate =</span> post_samp[<span class="fu">seq_len</span>(<span class="dv">1000</span>)])</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> postpred_samp))<span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> ..density..)) <span class="sc">+</span> </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the likelihood is proportional to a gamma</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dexp,  </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">1001</span>, </span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>) <span class="co"># mle is average</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                ) <span class="sc">+</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"waiting time (in minutes)"</span>, </span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>postpred_samp <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">rate =</span> post_samp[<span class="fu">seq_len</span>(<span class="dv">1000</span>)])</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> postpred_samp))<span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> ..density..)) <span class="sc">+</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the likelihood is proportional to a gamma</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> dexp,  </span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">1001</span>, </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">list</span>(<span class="at">rate =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">8</span>) <span class="co"># mle is average</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                ) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"waiting time (in minutes)"</span>, </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div id="fig-postpred-exp" class="quarto-figure quarto-figure-center anchored">

@@ -143,11 +143,10 @@ The truncated distribution (bottom left) is clearly identified from the "stubbor
 
 
 
-The purpose of this exercise is to show that numerical integration won't get you very far.
+The purpose of this exercise is to show that even one-dimensional numerical integration requires some care.
+Consider a half Cauchy prior over the positive half line, with density $f(x) = 2\pi^{-1}(1+x^2)^{-1}\mathrm{I}(x \geq 0)$. Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes$^{-1}$. Compare this approximation with that of quadrature methods via `integrate` and return the corresponding estimates of the normalizing constant. *Indication*: check the values and make sure the output is sensical. Modify the integrand if necessary.
 
-Consider a half Cauchy prior over the positive half line, with density $f(x) = 2\pi^{-1}(1+x^2)^{-1}\mathrm{I}(x \geq 0)$. Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes$^{-1}$. Compare this approximation with that of quadrature methods via `integrate` and return the corresponding estimates of the normalizing constant.
-
-Plot the posterior distribution of $1/\lambda$, the average waiting time.
+Plot the posterior distribution of $\omega = 1/\lambda$, the average waiting time.
 
 
 ::: {.solution}
@@ -169,25 +168,41 @@ integrate(dfoldedCauchy, lower = 0, upper = Inf)
 
 # Unormalized posterior
 unnorm_post <- function(x){dfoldedCauchy(x)*lik(x)}
-# Define grid and evaluate product
-grid <- seq(from = 0, to = 30, by = 0.01)
 (icst_lambda <- integrate(f = unnorm_post, 0, 100))
-(norm_const_1 <- 1/sum(unnorm_post(grid)))
-(norm_const_2 <- 1/icst_lambda$value)
-  
-# Check that the normalized value
-cst_test <- integrate(f = function(x){unnorm_post(x)*norm_const_2}, 
+
+# Check that the normalized value gives integral of 1
+cst_test <- integrate(f = function(x){unnorm_post(x)/icst_lambda$value}, 
                       lower = 0,
                       upper = 100)
-cst_test
-norm_const_3 <- norm_const_2/cst_test$value
-
 ```
 
-Note that, because the integral is nearly zero, there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. It is better to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density). The absolute error is of the same order as the reciprocal normalizing constant, even for a one-dimensional problem!
+Ouch! The integral is nearly zero, and there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. The normalizing constant, the reciprocal of the marginal likelihood, is not well estimated.  The absolute error is of higher order than the estimate  of the marginal likelihood, and this will be more problematic in higher dimensions.
+
+To palliate to this, we could slightly modify the integrand by scaling the likelihood by $(n\overline{y} )^{n+1}/n!$, the normalizing constant of the gamma integral, which is around $2.4 \times 10^{14}$. This fixes the issue below.
+
+```{r}
+#| eval: true
+#| echo: true
+
+# Scale likelihood by using gamma distribution normalizing constant
+slik <- function(x, n = 10, ybar = 8){
+  exp(-lgamma(n+1) + (n+1)*log(n*ybar) + n*(log(x)-ybar*x))
+}
+# Unnormalized posterior, version 2
+unnorm_post2 <- function(x){dfoldedCauchy(x)*slik(x)}
+# Define grid and evaluate product
+grid <- seq(from = 0, to = 30, by = 0.01)
+marglik_grid <- sum(unnorm_post2(grid))*0.01
+# Is the grid approximation good enough?
+# check equality to numerical tolerance
+all.equal(integrate(f = unnorm_post2, 0, 100)$value, marglik_grid)
+norm_cst <- 1/marglik_grid
+```
+
+The prior normalizing by a known constant fixes the numerical issues. Generally, one would tend to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density).
 
 
-For the posterior density, we can simply use the approximation with $p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\lambda)p(\lambda)$. The posterior density for the reciprocal rate is $p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\omega^{-1})p(\omega^{-1})\omega^{-2}$ (don't forget the Jacobian)!
+For the posterior density, we can simply use the approximation with $p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\lambda)p(\lambda)$. The posterior density for the reciprocal rate is $p(\omega \mid \boldsymbol{y}) \approx \widehat{c} L(\omega^{-1})p(\omega^{-1})\omega^{-2}$ (don't forget the Jacobian)!
 
 ```{r}
 #| eval: true
@@ -197,7 +212,7 @@ For the posterior density, we can simply use the approximation with $p(\lambda \
 #| code-fold: true
 library(ggplot2)
 ggplot() + 
-  stat_function(fun = function(x){unnorm_post(1/x)*norm_const_3/x^2},
+  stat_function(fun = function(x){unnorm_post2(1/x)*norm_cst/x^2},
                 xlim = c(0, 30),
                 n = 1001) +
   labs(y = "", 
