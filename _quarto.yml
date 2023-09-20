@@ -3,7 +3,6 @@ project:
   output-dir: docs
   render:
     - "*.qmd"
-    - "!slides/"
   resources:
     - "files/"
     - "projects/"
@@ -72,10 +71,11 @@ website:
       search: false
       foreground: "#000000"
       contents:
-        - section: "Exercises"
+        - exercises/index.qmd
+        - section: "Bayesics"
           contents:
-            - exercises/index.qmd
-            - exercises/01-exercise.qmd
+             - exercises/01-exercise.qmd
+             - exercises/01-solution.qmd
 
   page-footer:
     left: |

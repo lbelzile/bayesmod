@@ -272,8 +272,8 @@ If the density or mass function integrates to 1 over the range of $Y$, the integ
 Any term not a function of $\theta$ can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to
 
 \begin{align*}
-L(\theta; y)p(\theta) & \stackrel{\theta}{\propto} p^{y}(1-p)^{n-y} \times p^{\alpha-1} (1-p)^{\beta-1}
-\\& =p^{y + \alpha - 1}(1-p)^{n-y + \beta - 1}
+L(\theta; y)p(\theta) & \stackrel{\theta}{\propto} \theta^{y}(1-\theta)^{n-y} \times \theta^{\alpha-1} (1-\theta)^{\beta-1}
+\\& =\theta^{y + \alpha - 1}(1-\theta)^{n-y + \beta - 1}
 \end{align*}
 the kernel of a beta density with shape parameters $y + \alpha$ and $n-y + \beta$.
 
@@ -479,7 +479,7 @@ g1 <- ggplot() +
                        expand = c(0,0),
                        breaks = seq(0, 1, by = 0.25),
                        labels = c("0", "0.25", "0.5", "0.75", "1")) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0,5)) +
     scale_color_manual(values = met.brewer("Renoir", 3), 
                        labels = c("likelihood","posterior","prior"),
                        aesthetics = c("colour", "fill")) +
@@ -513,7 +513,7 @@ g2 <- ggplot() +
                        expand = c(0,0),
                        breaks = seq(0, 1, by = 0.25),
                        labels = c("0", "0.25", "0.5", "0.75", "1")) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0,5)) +
     scale_color_manual(values = met.brewer("Renoir", 3), 
                        labels = c("likelihood","posterior","prior"),
                        aesthetics = c("colour", "fill")) +
@@ -548,7 +548,7 @@ g3 <- ggplot() +
                        expand = c(0,0),
                        breaks = seq(0, 1, by = 0.25),
                        labels = c("0", "0.25", "0.5", "0.75", "1")) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0,5)) +
     scale_color_manual(values = met.brewer("Renoir", 3), 
                        labels = c("likelihood","posterior","prior"),
                        aesthetics = c("colour", "fill")) +
@@ -628,7 +628,7 @@ g1 <- ggplot() +
                        expand = c(0,0),
                        breaks = seq(0, 1, by = 0.25),
                        labels = c("0", "0.25", "0.5", "0.75", "1")) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0,9)) +
     scale_color_manual(values = met.brewer("Renoir", 3), 
                        labels = c("likelihood","posterior","prior"),
                        aesthetics = c("colour", "fill")) +
@@ -662,7 +662,7 @@ g2 <- ggplot() +
                        expand = c(0,0),
                        breaks = seq(0, 1, by = 0.25),
                        labels = c("0", "0.25", "0.5", "0.75", "1")) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0,9)) +
     scale_color_manual(values = met.brewer("Renoir", 3), 
                        labels = c("likelihood","posterior","prior"),
                        aesthetics = c("colour", "fill")) +
@@ -696,7 +696,7 @@ g3 <- ggplot() +
                        expand = c(0,0),
                        breaks = seq(0, 1, by = 0.25),
                        labels = c("0", "0.25", "0.5", "0.75", "1")) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0,9)) +
     scale_color_manual(values = met.brewer("Renoir", 3), 
                        labels = c("likelihood","posterior","prior"),
                        aesthetics = c("colour", "fill")) +
@@ -863,11 +863,13 @@ The question: which point estimator to return?
 
 ## Decision theory and loss functions
 
-A loss function $c(\boldsymbol{\theta}, \boldsymbol{\upsilon})$ is a mapping from $\boldsymbol{\Theta} \to \mathbb{R}^k$ that assigns a weight to each value $\boldsymbol{\theta}$, corresponding to the regret or loss arising from choosing this value. 
+A loss function $c(\boldsymbol{\theta}, \boldsymbol{\upsilon}): \boldsymbol{\Theta} \mapsto \mathbb{R}^k$ assigns a weight to each value $\boldsymbol{\theta}$, corresponding to the regret or loss. 
 
 
-The corresponding point estimator $\widehat{\boldsymbol{\upsilon}}$ is the minimizer of the expected loss
-$$\widehat{\boldsymbol{\upsilon}} = \mathop{\mathrm{argmin}}_{\boldsymbol{\upsilon}} \int_{\boldsymbol{\Theta}} c(\boldsymbol{\theta}, \boldsymbol{\upsilon})p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}$$
+The point estimator $\widehat{\boldsymbol{\upsilon}}$ is the minimizer of the expected loss
+\begin{align*}
+\widehat{\boldsymbol{\upsilon}} &= \mathop{\mathrm{argmin}}_{\boldsymbol{\upsilon}}\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{c(\boldsymbol{\theta}, \boldsymbol{v})\} \\&=\mathop{\mathrm{argmin}}_{\boldsymbol{\upsilon}} \int_{\boldsymbol{\Theta}} c(\boldsymbol{\theta}, \boldsymbol{\upsilon})p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}
 
 
 ## Point estimators and loss functions
@@ -878,7 +880,7 @@ In a univariate setting, the most widely used point estimators are
 - median: absolute loss $c(\theta, \upsilon)=|\theta - \upsilon|$
 - mode: 0-1 loss $c(\theta, \upsilon) = 1-\mathrm{I}(\upsilon = \theta)$
 
-The posterior mode $\boldsymbol{\theta} = \mathrm{argmax}_{\boldsymbol{\theta}} p(\boldsymbol{\theta} \mid \boldsymbol{y})$ is the **maximum a posteriori** or MAP estimator.
+The posterior mode $\boldsymbol{\theta}_{\mathrm{map}} = \mathrm{argmax}_{\boldsymbol{\theta}} p(\boldsymbol{\theta} \mid \boldsymbol{y})$ is the **maximum a posteriori** or MAP estimator.
 
 ## Measures of central tendency
 
@@ -989,16 +991,17 @@ g1 <- ggplot() +
              linetype = "dotted") + # mode
   geom_vline(xintercept = 3/4,
              colour = cols[2]) + 
-  geom_label(mapping = aes(x = 4, y = 0.9*ymax[1], label = "mode"), 
+  geom_label(mapping = aes(x = 3, y = 0.9*ymax[1], label = "mode"), 
              fill = "white", colour = cols[1],
              label.r = unit(0, "lines")) +
-  geom_label(mapping = aes(x = 4, y = 0.75*ymax[1], label = "mean"),
+  geom_label(mapping = aes(x = 3, y = 0.75*ymax[1], label = "mean"),
              fill = "white", colour = cols[2],
              label.r = unit(0, "lines")) +
-  geom_label(mapping = aes(x = 4, y = 0.6*ymax[1], label = "median"),
+  geom_label(mapping = aes(x = 3, y = 0.6*ymax[1], label = "median"),
              fill = "white", colour = cols[3],
              label.r = unit(0, "lines")) +
   scale_y_continuous(limits = c(0, 1.3), expand = c(0,0)) +
+    scale_x_continuous(limits = c(0, 4), expand = c(0,0)) +
     labs(y = "", x = expression(theta),
        subtitle = "posterior density") + 
   theme_classic() 
@@ -1040,7 +1043,7 @@ g2 <- ggplot(data = losses) +
              fill = "white", colour = cols[3],
              label.r = unit(0, "lines")) +
   scale_y_continuous(limits = c(0,3), expand = c(0,0)) +
-  scale_x_continuous(limits = c(0, 2.5), expand = c(0,0)) + 
+  scale_x_continuous(limits = c(0, 2), expand = c(0,0)) + 
   labs(y = "", x = expression(theta),
        subtitle = "scaled loss") + 
   theme_classic()
@@ -1100,11 +1103,12 @@ stat_aud <- function(mapping = NULL, data = NULL, geom = "area",
     params = list(xlim = xlim, n = n, ...))
 }
 set.seed(2023)
-nsamp <- 1e4
+nsamp <- 1e5
 # Sample data from a mixture model
  mixt <- sort(c(rnorm(0.5*nsamp, 20, 4), 
                 rnorm(0.2*nsamp, 55, 10),
                 55 + rexp(0.3*nsamp, 0.08)))
+dmixt <- function(x){0.5*dnorm(x, 20, 4) + 0.2*dnorm(x, 55, 10) + 0.3*dexp(55+x, 0.08)}                
 # mixt <- rbeta(nsamp, shape1 = 0.5, shape2 = 0.2)
 # Compute equitailed interval bounds
 
@@ -1115,11 +1119,13 @@ g1 <- ggplot(data = data.frame(x = mixt),
            alpha = .2) +
   geom_density() + 
   labs(x = "", y = "") +
-  scale_y_continuous(limits = c(0,0.04), expand = c(0,0)) +
+  scale_y_continuous(limits = c(0,0.05), expand = c(0,0)) +
   theme_classic() 
 hdiD <- HDInterval::hdi(density(mixt), credMass = 0.89, allowSplit = TRUE)
 g2 <- ggplot(data = data.frame(x = mixt),
        mapping = aes(x = x)) +
+    geom_hline(yintercept = attr(hdiD, "height"),
+             alpha = 0.2, linetype = "dashed") +
     stat_aud(geom = "area",
            xlim = hdiD[1,], 
            alpha = .2) +
@@ -1127,13 +1133,16 @@ g2 <- ggplot(data = data.frame(x = mixt),
            xlim = hdiD[2,], 
            alpha = .2) +
   geom_density() +
+  # stat_function(fun = dmixt, 
+  #               xlim = c(0,100),
+  #               n = 1001) +
   labs(y = "", x = "") +
-  scale_y_continuous(limits = c(0,0.04), expand = c(0,0)) +
+  scale_y_continuous(limits = c(0,0.05), expand = c(0,0)) +
   theme_classic() 
 
 
 shape <- 0.8
-g3 <- ggplot() +
+g3 <- ggplot()  +
   stat_function(fun = dbeta, 
                 args = list(shape1 = shape, shape2 = shape), 
                 fill = "gray", xlim = c(0, qbeta(p = 0.25, shape, shape)),
@@ -1145,6 +1154,8 @@ g3 <- ggplot() +
   stat_function(fun = dbeta, 
                 args = list(shape1 = shape, shape2 = shape), 
                 xlim = c(0,1),n = 1001) +
+  geom_hline(yintercept = dbeta(qbeta(p = 0.75, shape, shape),shape, shape),
+             alpha = 0.5, linetype = "dashed") +
   labs(x = "", y = "") +
   scale_x_continuous(limits = c(0,1), expand = c(0,0)) +
   scale_y_continuous(limits = c(0,5), expand = c(0,0)) +
@@ -1162,7 +1173,7 @@ g4 <- ggplot() +
   scale_x_continuous(limits = c(0,1), expand = c(0,0)) +
   scale_y_continuous(limits = c(0,5), expand = c(0,0)) +
   theme_classic()
-(g1 + g2) / (g3 + g4)
+(g1 + g2) / (g4 + g3)
 ```
 
 ## References

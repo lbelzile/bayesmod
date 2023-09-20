@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="bayesmod-slides1_files/libs/clipboard/clipboard.min.js"></script>
-<script src="bayesmod-slides1_files/libs/quarto-html/tabby.min.js"></script>
-<script src="bayesmod-slides1_files/libs/quarto-html/popper.min.js"></script>
-<script src="bayesmod-slides1_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="bayesmod-slides1_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="bayesmod-slides1_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="bayesmod-slides1_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="bayesmod-slides1_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.3.433">
 
   <meta name="author" content="Léo Belzile, HEC Montréal">
   <meta name="dcterms.date" content="2023-01-01">
-  <title>Bayesian modelling</title>
+  <title>Special topics in data science — Bayesian modelling - Bayesian modelling</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="bayesmod-slides1_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="bayesmod-slides1_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -115,11 +115,11 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="bayesmod-slides1_files/libs/revealjs/dist/theme/quarto.css">
-  <link href="bayesmod-slides1_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="bayesmod-slides1_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="bayesmod-slides1_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="bayesmod-slides1_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
+  <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -593,8 +593,8 @@ p(\theta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta) }\theta^{\
 <h2>Proportionality</h2>
 <p>Any term not a function of <span class="math inline">\(\theta\)</span> can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to</p>
 <p><span class="math display">\[\begin{align*}
-L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} p^{y}(1-p)^{n-y} \times p^{\alpha-1} (1-p)^{\beta-1}
-\\&amp; =p^{y + \alpha - 1}(1-p)^{n-y + \beta - 1}
+L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} \theta^{y}(1-\theta)^{n-y} \times \theta^{\alpha-1} (1-\theta)^{\beta-1}
+\\&amp; =\theta^{y + \alpha - 1}(1-\theta)^{n-y + \beta - 1}
 \end{align*}\]</span> the kernel of a beta density with shape parameters <span class="math inline">\(y + \alpha\)</span> and <span class="math inline">\(n-y + \beta\)</span>.</p>
 
 <aside><div>
@@ -615,7 +615,7 @@ L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} p^{y}(1-p)^{n-y} \times p
 <p>In all cases, <span class="math inline">\(L(\theta; y) \stackrel{\theta}{\propto} \theta^k(1-\theta)^{n-k}\)</span>, so these yield the same inference for Bayesian.</p>
 
 <aside><div>
-<p>For a more in-depth discussion, see Section 6.3.2 of <span class="citation" data-cites="Casella.Berger:2002">Casella and Berger (<a href="#/references" role="doc-biblioref" onclick="">2002</a>)</span></p>
+<p>For a more in-depth discussion, see Section 6.3.2 of <span class="citation" data-cites="Casella.Berger:2002">Casella &amp; Berger (<a href="#/references" role="doc-biblioref" onclick="">2002</a>)</span></p>
 </div></aside></section>
 <section id="integration" class="slide level2">
 <h2>Integration</h2>
@@ -803,8 +803,10 @@ p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \
 </section>
 <section id="decision-theory-and-loss-functions" class="slide level2">
 <h2>Decision theory and loss functions</h2>
-<p>A loss function <span class="math inline">\(c(\boldsymbol{\theta}, \boldsymbol{\upsilon})\)</span> is a mapping from <span class="math inline">\(\boldsymbol{\Theta} \to \mathbb{R}^k\)</span> that assigns a weight to each value <span class="math inline">\(\boldsymbol{\theta}\)</span>, corresponding to the regret or loss arising from choosing this value.</p>
-<p>The corresponding point estimator <span class="math inline">\(\widehat{\boldsymbol{\upsilon}}\)</span> is the minimizer of the expected loss <span class="math display">\[\widehat{\boldsymbol{\upsilon}} = \mathop{\mathrm{argmin}}_{\boldsymbol{\upsilon}} \int_{\boldsymbol{\Theta}} c(\boldsymbol{\theta}, \boldsymbol{\upsilon})p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}\]</span></p>
+<p>A loss function <span class="math inline">\(c(\boldsymbol{\theta}, \boldsymbol{\upsilon}): \boldsymbol{\Theta} \mapsto \mathbb{R}^k\)</span> assigns a weight to each value <span class="math inline">\(\boldsymbol{\theta}\)</span>, corresponding to the regret or loss.</p>
+<p>The point estimator <span class="math inline">\(\widehat{\boldsymbol{\upsilon}}\)</span> is the minimizer of the expected loss <span class="math display">\[\begin{align*}
+\widehat{\boldsymbol{\upsilon}} &amp;= \mathop{\mathrm{argmin}}_{\boldsymbol{\upsilon}}\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{c(\boldsymbol{\theta}, \boldsymbol{v})\} \\&amp;=\mathop{\mathrm{argmin}}_{\boldsymbol{\upsilon}} \int_{\boldsymbol{\Theta}} c(\boldsymbol{\theta}, \boldsymbol{\upsilon})p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span></p>
 </section>
 <section id="point-estimators-and-loss-functions" class="slide level2">
 <h2>Point estimators and loss functions</h2>
@@ -814,7 +816,7 @@ p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \
 <li>median: absolute loss <span class="math inline">\(c(\theta, \upsilon)=|\theta - \upsilon|\)</span></li>
 <li>mode: 0-1 loss <span class="math inline">\(c(\theta, \upsilon) = 1-\mathrm{I}(\upsilon = \theta)\)</span></li>
 </ul>
-<p>The posterior mode <span class="math inline">\(\boldsymbol{\theta} = \mathrm{argmax}_{\boldsymbol{\theta}} p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is the <strong>maximum a posteriori</strong> or MAP estimator.</p>
+<p>The posterior mode <span class="math inline">\(\boldsymbol{\theta}_{\mathrm{map}} = \mathrm{argmax}_{\boldsymbol{\theta}} p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is the <strong>maximum a posteriori</strong> or MAP estimator.</p>
 </section>
 <section id="measures-of-central-tendency" class="slide level2">
 <h2>Measures of central tendency</h2>
@@ -849,18 +851,19 @@ p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \
 <img data-src="bayesmod-slides1_files/figure-revealjs/fig-credible-intervals-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;8: Density plots with 89% (top) and 50% (bottom) equitailed or central credible (left) and highest posterior density (right) regions for two data sets, highlighted in grey.</p></section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
+
 <div class="footer footer-default">
 
 </div>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
 <div id="ref-Casella.Berger:2002" class="csl-entry" role="listitem">
-Casella, G., and R. L. Berger. 2002. <em>Statistical Inference</em>. 2nd ed. Pacific Grove, CA: Duxbury.
+Casella, G., &amp; Berger, R. L. (2002). <em>Statistical inference</em> (2nd ed.). Duxbury.
 </div>
 <div id="ref-deFinetti:1974" class="csl-entry" role="listitem">
-Finetti, Bruno de. 1974. <em>Theory of Probability: A Critical Introductory Treatment</em>. Vol. 1. New York: Wiley.
+Finetti, B. de. (1974). <em>Theory of probability: A critical introductory treatment</em> (Vol. 1). Wiley.
 </div>
 <div id="ref-McElreath:2020" class="csl-entry" role="listitem">
-McElreath, Richard. 2020. <em>Statistical Rethinking: A <span>B</span>ayesian Course with Examples in <span>R</span> and <span>STAN</span></em>. 2nd ed. New York: Chapman; Hall/CRC.
+McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course with examples in <span>R</span> and <span>STAN</span></em> (2nd ed.). Chapman; Hall/CRC.
 </div>
 </div>
 </section>
@@ -868,19 +871,19 @@ McElreath, Richard. 2020. <em>Statistical Rethinking: A <span>B</span>ayesian Co
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="bayesmod-slides1_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="../site_libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="bayesmod-slides1_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../site_libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>

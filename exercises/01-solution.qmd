@@ -1,0 +1,290 @@
+---
+title: "Solution 1"
+---
+
+
+You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.
+
+For modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate $\lambda>0$, with associated density $f(x) = \lambda \exp(-\lambda x)$.
+
+## Exercise 1.1
+
+
+Compute the marginal likelihood when the prior for $\lambda$ is 
+
+1. an exponential distribution with rate $\kappa>0$, with prior density $p(\lambda) = \kappa \exp(-\lambda\kappa)$;
+2. same, but truncated above at 1, so the density is $p(\lambda) = \kappa \exp(-\lambda\kappa)\mathrm{I}\{\lambda \leq 1\}$; the indicator function $\mathrm{I}(\cdot)$ equals one if the condition is true and zero otherwise.
+3. $\lambda \sim \mathsf{Ga}(\alpha, \beta)$, a gamma distribution with shape $\alpha>0$ and rate $\beta>0$, with prior density $p(\lambda) = \beta^\alpha\lambda^{\alpha-1}\exp(-\beta \lambda)/\Gamma(\alpha)$.
+
+Deduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution.
+
+::: {.solution}
+The likelihood is
+\begin{align*}
+L(\lambda) = \prod_{i=1}^n \lambda \exp(-\lambda y_i) = \lambda^n \exp(-\lambda n\overline{y}),
+\end{align*}
+where $\overline{y}=8$ is the sample mean and $n=10$ the number of observations.
+
+The exponential distribution is a special case of the gamma, where $\lambda \sim \mathsf{Exp}(\kappa) \equiv \mathsf{Ga}(1, \kappa)$.
+
+The posterior densities are equal, up to proportionality, to
+\begin{align*}
+p_1(\lambda \mid y) &\propto\lambda^{n}\exp\{-(n\overline{y}+\kappa)\lambda\} \\
+p_2(\lambda \mid y) &\propto\lambda^{n}\exp\{-(n\overline{y}+\kappa)\lambda\}\mathrm{I}\{\lambda \geq 1\} \\
+p_3(\lambda \mid y) &\propto\lambda^{n+\alpha-1}\exp\{-(n\overline{y}+\beta)\lambda\}
+\end{align*}
+so these are $\mathsf{Ga}(n+1, n\overline{y} + \kappa)$, $\mathsf{Ga}(n+1, n\overline{y} + \kappa)$ truncated over $[0,1]$ and $\mathsf{Ga}(n+\alpha, n\overline{y} + \beta)$.
+
+Let $\Gamma(\cdot)$ denote the gamma function and $\gamma(a, x)$ the lower incomplete gamma function, $\gamma(a, x= \int_0^x t^{a-1}\exp(-t) \mathrm{d} t.$ The **marginal likelihood** can be obtained either by integrating the product of the likelihood and prior, or upon noting that  
+\begin{align*}
+p(\boldsymbol{y}) = \frac{L(\lambda) p(\lambda)}{p(\lambda \mid \boldsymbol{y})}
+\end{align*}
+so we get 
+\begin{align*}
+L_1(\boldsymbol{y}) &= (n\overline{y}+\kappa)^{n+1}/n!,\\ 
+L_2(\boldsymbol{y}) &= L_1(\boldsymbol{y}) \times \gamma\{n+1, (n\overline{y}+\kappa)\}, \\ L_3(\boldsymbol{y}) &= (n\overline{y} + \beta)^{n+\alpha}/\Gamma(n\overline{y} + \beta).
+\end{align*}
+
+
+:::
+
+
+## Exercise 1.2
+
+Consider the following priors
+
+1. a gamma distribution with rate $\beta=10$ and shape $\alpha = 50$
+2. an exponential distribution with rate 5
+3. a gamma distribution with rate $\beta=0.02$ and shape $\alpha = 14$
+4. a uniform prior on the unit interval [5,10]
+
+Associate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?
+
+Explain what would happen to the posterior curve if we increased the sample size.
+
+
+
+```{r}
+#| label: fig-betabinom
+#| eval: true
+#| echo: false
+#| fig-cap: "Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors."
+library(ggplot2)
+library(MetBrewer)
+library(patchwork)
+nobs <- 10L
+sumt <- 8*nobs
+
+set.seed(1234)
+g1 <- ggplot() +
+  stat_function(fun =  function(x){
+        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = 50 + sumt, rate = nobs + 10)}, n = 1001) +
+   scale_x_continuous(limits = c(0,20),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(y = "") + 
+    theme_classic() 
+
+g2 <- ggplot() +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        ifelse(x<5 | x > 10, 0, dgamma(x, shape = sumt, rate = nobs))/
+        diff(pgamma(c(5,10), shape = sumt, rate = nobs))}, n = 1001) +
+   scale_x_continuous(limits = c(0,20),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(y = "") + 
+    theme_classic() 
+
+g3 <- ggplot() +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = sumt + 14, rate = nobs + 0.02)}, n = 1001) +
+   scale_x_continuous(limits = c(0,20),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(y = "") + 
+    theme_classic() 
+
+
+g4 <- ggplot() +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = 1 + sumt, rate = nobs + 5)}, n = 1001) +
+   scale_x_continuous(limits = c(0,20),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0)) +
+    labs(y = "") + 
+    theme_classic() 
+(g4 + g1) / (g2 + g3) +
+  plot_annotation(tag_levels = 'A') 
+```
+
+::: {.solution}
+
+
+As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimator regardless of the prior function (if it is untruncated).
+
+The truncated distribution (bottom left) is clearly identified from the "stubborn" prior, so 4C. Prior 3 has an average of 7, both the remaining two have a mean of 5, so 3D. We can look at how pronounced the posterior are: the $\mathsf{Ga}(50,10)$ is much more informative and the posterior mean is closer to the prior mean, so 1A and so 2B.
+
+:::
+
+
+## Exercice 1.3
+
+
+
+The purpose of this exercise is to show that numerical integration won't get you very far.
+
+Consider a half Cauchy prior over the positive half line, with density $f(x) = 2\pi^{-1}(1+x^2)^{-1}\mathrm{I}(x \geq 0)$. Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes$^{-1}$. Compare this approximation with that of quadrature methods via `integrate` and return the corresponding estimates of the normalizing constant.
+
+Plot the posterior distribution of $1/\lambda$, the average waiting time.
+
+
+::: {.solution}
+
+For an unnormalized density $g(x)$ such that $\int g(x) \mathrm{d} x = c$, the normalizing constant is $1/c$.
+
+First, remember that the density function of the scale $\omega = \lambda^{-1}$ is related to the one of the rate $\lambda$ through a change of variable, with Jacobian $\omega^{-2}$.
+
+```{r}
+#| eval: true
+#| echo: true
+
+# Likelihood function - NOTE FORMULATION TO AVOID NUMERICAL OVERFLOW
+lik <- function(x, n = 10, ybar = 8){exp(n*(log(x)-ybar*x))}
+# Density of Cauchy over positive real line
+dfoldedCauchy <- function(x){2/pi/(1+x^2)}
+# Check integral
+integrate(dfoldedCauchy, lower = 0, upper = Inf)
+
+# Unormalized posterior
+unnorm_post <- function(x){dfoldedCauchy(x)*lik(x)}
+# Define grid and evaluate product
+grid <- seq(from = 0, to = 30, by = 0.01)
+(icst_lambda <- integrate(f = unnorm_post, 0, 100))
+(norm_const_1 <- 1/sum(unnorm_post(grid)))
+(norm_const_2 <- 1/icst_lambda$value)
+  
+# Check that the normalized value
+cst_test <- integrate(f = function(x){unnorm_post(x)*norm_const_2}, 
+                      lower = 0,
+                      upper = 100)
+cst_test
+norm_const_3 <- norm_const_2/cst_test$value
+
+```
+
+Note that, because the integral is nearly zero, there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. It is better to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density). The absolute error is of the same order as the reciprocal normalizing constant, even for a one-dimensional problem!
+
+
+For the posterior density, we can simply use the approximation with $p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\lambda)p(\lambda)$. The posterior density for the reciprocal rate is $p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\omega^{-1})p(\omega^{-1})\omega^{-2}$ (don't forget the Jacobian)!
+
+```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| message: false
+#| code-fold: true
+library(ggplot2)
+ggplot() + 
+  stat_function(fun = function(x){unnorm_post(1/x)*norm_const_3/x^2},
+                xlim = c(0, 30),
+                n = 1001) +
+  labs(y = "", 
+       x = expression(paste("average waiting time ", 1/lambda, " (in minutes)")),
+       subtitle = "posterior density") + 
+  theme_classic()
+```
+
+:::
+
+
+
+## Exercice 1.4
+
+Consider $\lambda \sim \mathsf{Ga}(\alpha = 1.4, \beta=0.2)$.
+
+1. Return the posterior mean, posterior median and maximum a posteriori (MAP).
+2. Return the 89% equitailed percentile credible interval.
+3. Return the 50% highest posterior density (HPD) interval (harder).
+
+Next, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.
+
+Would the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all.
+
+::: {.solution}
+
+We have already determined that the posterior is a Gamma distribution $\mathsf{Ga}(a, b)$, where $a= \alpha+ n= 11.4$ and $b=n\overline{y} + \beta = 80.2$. We can query the moments directly: the mode is $(a-1)/b$ and the mean $a/b$, while the median must be found numerically using the quantile function.
+
+```{r}
+#| eval: true
+#| echo: true
+a <- 11.4 # shape parameter
+b <- 80.2 # rate parameter
+alpha <- 0.11 # level
+postmean <- a/b # posterior mean
+postmed <- qgamma(p = 0.5, shape = a, rate = b) # median
+postmode <- (a-1)/b # mode
+credint <- qgamma(p = c(alpha/2, 1-alpha/2), shape = a, rate = b)
+# Documentation states you must return the quantile function
+HDInterval::hdi(
+    object = qgamma, 
+    shape = a, 
+    rate = b, 
+    credMass = 0.50)
+# Alternatively, find this numerically
+# MAP via minimization of the negative log likelihood
+MAP <- optimize(
+  f = function(x){-dgamma(x, shape = a, rate = b, log = TRUE)},
+  interval = qgamma(p = c(0.2,0.8), shape = a, rate = b)
+  )$minimum
+# Other quantities approximated by Monte Carlo
+# Sample from posterior
+post_samp <- rgamma(n = 1e4, shape = a, rate = b)
+# Sample mean and sample quantiles
+mean(post_samp)
+quantile(post_samp, c(alpha/2, 0.5, 1-alpha/2))
+# Highest posterior density interval
+credHDI <- HDInterval::hdi(
+  object = post_samp, 
+  credMass = 0.50)
+credHDI
+```
+
+Up to three significant digits, the posterior mean is `r round(postmean,3)`, the median is `r round(postmed, 3)` and the mode `r round(postmode, 3)`. The bounds of the equitailed 89% credible interval are [`r round(credint[1], 3)`, `r round(credint[2],3)`], those of the 50% HDPI [`r credHDI[1]`, `r credHDI[2]`].
+
+For the posterior predictive, we simply take the samples from the posterior, `post_samp`, and generate for each rate a new exponential
+
+```{r}
+#| eval: true
+#| echo: true
+#| label: fig-postpred-exp
+#| code-fold: true
+#| warning: false 
+#| message: false
+#| fig-cap: "Histogram of posterior predictive draws and density function of observations."
+postpred_samp <- rexp(n = 1000, rate = post_samp[seq_len(1000)])
+ggplot(data = data.frame(x = postpred_samp))+
+  geom_histogram(aes(x = x, y = ..density..)) + 
+  # the likelihood is proportional to a gamma
+  stat_function(fun = dexp,  
+                n = 1001, 
+                args = list(rate = 1/8) # mle is average
+                ) +
+  labs(x = "waiting time (in minutes)", 
+       y = "") +
+  theme_classic()
+```
+
+
+:::
