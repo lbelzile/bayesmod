@@ -54,6 +54,8 @@ website:
           contents:
             - text: "1: Introduction"
               file: content/01-content.qmd
+            - text: "2: Priors"
+              file: content/02-content.qmd
     - title: "Examples"
       style: "docked"
       search: false
@@ -76,7 +78,9 @@ website:
           contents:
              - exercises/01-exercise.qmd
              - exercises/01-solution.qmd
-
+        - section: "Priors"
+          contents:
+             - exercises/02-exercise.qmd
   page-footer:
     left: |
       Content {{< fa brands creative-commons >}} {{< var course.copyright_year >}} by [{{< var instructor.name_no_title >}}]({{< var instructor.url >}})<br>

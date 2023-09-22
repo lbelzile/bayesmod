@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Special topics in data science — Bayesian modelling - Priors</title>
+<title>Special topics in data science — Bayesian modelling - Exercice 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,25 +19,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
-}
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
 }
 </style>
 
@@ -79,6 +60,7 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -103,11 +85,11 @@ div.csl-indent {
  <span class="menu-text">Outline</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../content/index.html" aria-current="page">
+    <a class="nav-link" href="../content/index.html">
  <span class="menu-text">Content</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../exercises/index.html">
+    <a class="nav-link active" href="../exercises/index.html" aria-current="page">
  <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
@@ -121,7 +103,7 @@ div.csl-indent {
     </nav>
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Priors</h1>
+      <h1 class="quarto-secondary-nav-title">Exercice 2</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -134,9 +116,14 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/index.html" class="sidebar-item-text sidebar-link">Exercises</a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Overview</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Bayesics</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -144,14 +131,19 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/index.html" class="sidebar-item-text sidebar-link">Readings, lectures, and videos</a>
+  <a href="../exercises/01-exercise.html" class="sidebar-item-text sidebar-link">Exercice 1</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01-solution.html" class="sidebar-item-text sidebar-link">Solution 1</a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Course content</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Priors</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -159,12 +151,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/01-content.html" class="sidebar-item-text sidebar-link">1: Introduction</a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/02-content.html" class="sidebar-item-text sidebar-link active">2: Priors</a>
+  <a href="../exercises/02-exercise.html" class="sidebar-item-text sidebar-link active">Exercice 2</a>
   </div>
 </li>
       </ul>
@@ -178,117 +165,70 @@ div.csl-indent {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#content" id="toc-content" class="nav-link active" data-scroll-target="#content">Content</a></li>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
-  <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
-  <li><a href="#complementary-readings" id="toc-complementary-readings" class="nav-link" data-scroll-target="#complementary-readings">Complementary readings</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides">Slides</a></li>
+  <li><a href="#exercise-2.1" id="toc-exercise-2.1" class="nav-link active" data-scroll-target="#exercise-2.1">Exercise 2.1</a></li>
+  <li><a href="#exercise-2.2" id="toc-exercise-2.2" class="nav-link" data-scroll-target="#exercise-2.2">Exercise 2.2</a></li>
+  <li><a href="#exercise-2.3" id="toc-exercise-2.3" class="nav-link" data-scroll-target="#exercise-2.3">Exercise 2.3</a></li>
+  <li><a href="#exercise-2.4" id="toc-exercise-2.4" class="nav-link" data-scroll-target="#exercise-2.4">Exercise 2.4</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header">
-<h1 class="title d-none d-lg-block display-7">Priors</h1>
-
-<div class="date-block bg-content text-white p-2">
-  <p class="date">Content for Tuesday, September 26, 2023</p>
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Exercice 2</h1>
 </div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
 </header>
 
-<section id="content" class="level2">
-<h2 class="anchored" data-anchor-id="content">Content</h2>
-<ul>
-<li>Conjugate, flat, vague, Jeffrey’s, informative and penalized complexity priors</li>
-<li>Priors for regression models</li>
-<li>Parameter elicitation</li>
-<li>Prior sensitivity analysis</li>
-</ul>
+<section id="exercise-2.1" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2.1">Exercise 2.1</h2>
+<p>Consider a simple random sample of size <span class="math inline">\(n\)</span> from the Wald distribution, with density <span class="math display">\[\begin{align*}
+f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y &gt; 0)
+\end{align*}\]</span> for location <span class="math inline">\(\nu &gt;0\)</span> and shape <span class="math inline">\(\tau&gt;0\)</span>.</p>
+<ol type="a">
+<li>Write down the likelihood and show that it can be written in terms of the sufficient statistics <span class="math inline">\(\sum_{i=1}^n y_i\)</span> and <span class="math inline">\(\sum_{i=1} y_i^{-1}\)</span>.</li>
+<li>Show that the prior <span class="math display">\[ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \sigma^2),\]</span> the product of a gamma and a conditional reciprocal Gaussian, is conjugate for the Wald distribution.</li>
+<li>Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. <em>Hint</em>: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.</li>
+<li>Derive the marginal posterior <span class="math inline">\(p(\lambda)\)</span>.</li>
+</ol>
 </section>
-<section id="learning-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
-<p>At the end of the chapter, students should be able to</p>
-<ul>
-<li>choose a suitable prior for a Bayesian analysis</li>
-<li>derive parameters of posterior distributions in conjugate models</li>
-<li>perform parameter elicitation</li>
-<li>assess the impact of priors through sensitivity analysis</li>
-</ul>
+<section id="exercise-2.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2.2">Exercise 2.2</h2>
+<p>Consider the Rayleigh distribution with scale <span class="math inline">\(\sigma&gt;0\)</span>. It’s density is <span class="math display">\[f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).\]</span></p>
+<p>Derive the Fisher information matrix and use it to obtain Jeffrey’s prior for <span class="math inline">\(\sigma\)</span>. Determine whether the prior is proper.</p>
+<!-- Derivation of prior for the correlation $\rho$ in a bivariate normal, in
+Jeffrey's theory of probability (1937)
+-->
 </section>
-<section id="readings" class="level2">
-<h2 class="anchored" data-anchor-id="readings">Readings</h2>
-<div class="callout-warning callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>These readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.</p>
-</div>
-</div>
-<ul>
-<li><a href="https://lbelzile.github.io/MATH80601A/priors.html">Chapter 2 of the course notes</a></li>
-</ul>
+<section id="exercise-2.3" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2.3">Exercise 2.3</h2>
+<p>Consider a binomial model with an unknown probability of successes <span class="math inline">\(\theta \in [0,1]\)</span> model. Suppose your prior guess for <span class="math inline">\(\theta\)</span> has mean <span class="math inline">\(0.1\)</span> and standard deviation <span class="math inline">\(0.2\)</span></p>
+<ol type="a">
+<li>using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.</li>
+<li>do the same, this time for a truncated Gaussian distribution on the unit interval.</li>
+</ol>
+<p>Plot both priors and comment on differences, if any.</p>
 </section>
-<section id="complementary-readings" class="level2">
-<h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
-<div class="callout-warning callout callout-style-default callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Complementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.</p>
-</div>
-</div>
-<ul>
-<li><p><span class="citation" data-cites="Villani:2023">Villani (<a href="#ref-Villani:2023" role="doc-biblioref">2023</a>)</span>, chapter 4</p></li>
-<li><p><span class="citation" data-cites="Gelman:2013">Gelman et al. (<a href="#ref-Gelman:2013" role="doc-biblioref">2013</a>)</span>, chapters 2, 3 and 5</p></li>
-<li><p><span class="citation" data-cites="Johnson.Ott.Dogucu:2022">Johnson et al. (<a href="#ref-Johnson.Ott.Dogucu:2022" role="doc-biblioref">2022</a>)</span>, <a href="https://www.bayesrulesbook.com/chapter-5">chapter 5</a></p></li>
-<li><p>truncated Student-t priors for hierarchical models <span class="citation" data-cites="Gelman:2006">(<a href="#ref-Gelman:2006" role="doc-biblioref">Gelman, 2006</a>)</span></p></li>
-<li><p>penalized complexity priors <span class="citation" data-cites="Simpson:2017">(<a href="#ref-Simpson:2017" role="doc-biblioref">Simpson et al., 2017</a>)</span></p></li>
-</ul>
-</section>
-<section id="slides" class="level2">
-<h2 class="anchored" data-anchor-id="slides">Slides</h2>
-<p class="text-center">
-<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides2.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides2.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
-</p>
-<div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides2.html">
-</iframe>
-</div>
-
+<section id="exercise-2.4" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-2.4">Exercise 2.4</h2>
+<p>Replicate the analysis in Example 2.6 (Should you phrase your headline as a question?) using the <code>upworthy_question</code> data from the <code>hecbayes</code> package.</p>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
-<div id="ref-Gelman:2006" class="csl-entry" role="doc-biblioentry">
-Gelman, A. (2006). Prior distributions for variance parameters in hierarchical models (comment on article by <span>B</span>rowne and <span>D</span>raper). <em>Bayesian Analysis</em>, <em>1</em>(3), 515–534. <a href="https://doi.org/10.1214/06-BA117A">https://doi.org/10.1214/06-BA117A</a>
-</div>
-<div id="ref-Gelman:2013" class="csl-entry" role="doc-biblioentry">
-Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2013). <em>Bayesian data analysis</em> (3rd ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/b16018">https://doi.org/10.1201/b16018</a>
-</div>
-<div id="ref-Johnson.Ott.Dogucu:2022" class="csl-entry" role="doc-biblioentry">
-Johnson, A. A., Ott, M. Q., &amp; Dogucu, M. (2022). <em>Bayes rules! An introduction to applied <span>B</span>ayesian modeling</em> (1st ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9780429288340">https://doi.org/10.1201/9780429288340</a>
-</div>
-<div id="ref-Simpson:2017" class="csl-entry" role="doc-biblioentry">
-Simpson, D., Rue, H., Riebler, A., Martins, T. G., &amp; Sørbye, S. H. (2017). Penalising model component complexity: A principled, practical approach to constructing priors. <em>Statistical Science</em>, <em>32</em>(1), 1–28. <a href="https://doi.org/10.1214/16-STS576">https://doi.org/10.1214/16-STS576</a>
-</div>
-<div id="ref-Villani:2023" class="csl-entry" role="doc-biblioentry">
-Villani, M. (2023). <em>Bayesian learning: A gentle introduction</em>. <a href="https://mattiasvillani.com/BayesianLearningBook/">https://mattiasvillani.com/BayesianLearningBook/</a>
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

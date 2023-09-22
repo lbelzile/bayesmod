@@ -1,0 +1,42 @@
+---
+title: "Exercice 2"
+---
+
+## Exercise 2.1
+
+Consider a simple random sample of size $n$ from the Wald distribution, with density
+\begin{align*}
+f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y > 0)
+\end{align*}
+for location $\nu >0$ and shape $\tau>0$. 
+
+a. Write down the likelihood and show that it can be written in terms of the sufficient statistics $\sum_{i=1}^n y_i$ and $\sum_{i=1} y_i^{-1}$.
+b. Show that the prior
+$$ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \sigma^2),$$ the product of a gamma and a conditional reciprocal Gaussian, is conjugate for the Wald distribution.
+c. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
+d. Derive the marginal posterior $p(\lambda)$.
+
+
+## Exercise 2.2
+
+Consider the Rayleigh distribution with scale $\sigma>0$. It's density is
+$$f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).$$
+
+Derive the Fisher information matrix and use it to obtain Jeffrey's prior for $\sigma$. Determine whether the prior is proper.
+
+<!-- Derivation of prior for the correlation $\rho$ in a bivariate normal, in
+Jeffrey's theory of probability (1937)
+-->
+
+## Exercise 2.3
+
+Consider a binomial model with an unknown probability of successes $\theta \in [0,1]$ model. Suppose your prior guess for $\theta$ has mean $0.1$ and standard deviation $0.2$
+
+a. using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.
+b. do the same, this time for a truncated Gaussian distribution on the unit interval.
+
+Plot both priors and comment on differences, if any.
+
+## Exercise 2.4
+
+Replicate the analysis in Example 2.6 (Should you phrase your headline as a question?) using the `upworthy_question` data from the `hecbayes` package.
