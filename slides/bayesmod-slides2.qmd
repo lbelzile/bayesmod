@@ -14,6 +14,7 @@ format:
     theme: [simple, hecmontreal.scss]
     title-slide-attributes:
       data-background-color: "#ff585d"
+    logo: "fig/logo_hec_montreal_bleu_web.png"
 ---
 
 
@@ -550,6 +551,30 @@ knitr::include_graphics("fig/fig-sensitivity.png")
 ``` 
 
 Basically indistinguishable results for the random scale..
+
+## Eight schools example
+
+Average results on SAT program, for eight schools [@Rubin:1981]. 
+
+The hierarchical model is
+
+\begin{align*}
+Y_i &\sim \mathsf{No}(\mu + \eta_i, \sigma_i^2)\\
+\mu &\sim \mathsf{No}(0, 100)\\
+\eta_i & \sim \mathsf{No}(0, \tau^2)
+\end{align*}
+Given the large sample in each school, we treat $\sigma_i$ as fixed data.
+
+## Sensibility analysis for eight schools example
+
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-posterior-eightschool
+#| fig-cap: "Posterior density of the school-specific random effects standard deviation $\\tau$ under different priors."
+knitr::include_graphics("fig/eightschools-stddev-raneff.png")
+``` 
 
 ## References
 
