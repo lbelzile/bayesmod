@@ -37,14 +37,37 @@ so these are $\mathsf{Ga}(n+1, n\overline{y} + \kappa)$, $\mathsf{Ga}(n+1, n\ove
 
 Let $\Gamma(\cdot)$ denote the gamma function and $\gamma(a, x)$ the lower incomplete gamma function, $\gamma(a, x= \int_0^x t^{a-1}\exp(-t) \mathrm{d} t.$ The **marginal likelihood** can be obtained either by integrating the product of the likelihood and prior, or upon noting that  
 \begin{align*}
-p(\boldsymbol{y}) = \frac{L(\lambda) p(\lambda)}{p(\lambda \mid \boldsymbol{y})}
+p_i(\boldsymbol{y}) = \frac{L(\lambda) p_i(\lambda)}{p_i(\lambda \mid \boldsymbol{y})}
 \end{align*}
 so we get 
 \begin{align*}
-L_1(\boldsymbol{y}) &= (n\overline{y}+\kappa)^{n+1}/n!,\\ 
-L_2(\boldsymbol{y}) &= L_1(\boldsymbol{y}) \times \gamma\{n+1, (n\overline{y}+\kappa)\}, \\ L_3(\boldsymbol{y}) &= (n\overline{y} + \beta)^{n+\alpha}/\Gamma(n\overline{y} + \beta).
+p_1(\boldsymbol{y}) &= \kappa n!(n\overline{y}+\kappa)^{-(n+1)},\\ 
+p_2(\boldsymbol{y}) &= p_1(\boldsymbol{y}) \times \gamma\{n+1, (n\overline{y}+\kappa)\}, \\ 
+p_3(\boldsymbol{y}) &= \frac{\Gamma(n + \alpha)\beta^\alpha}{\Gamma(\alpha)(n\overline{y} + \beta)^{n+\alpha}}.
 \end{align*}
 
+```{r}
+#| eval: false
+#| echo: false
+#| label: sanity-checks
+n <- 10
+ybar <- 0.2
+kappa <- 0.6
+alpha <- rexp(1)
+beta <- rexp(1)
+loglik <- function(rate){n*dexp(x = ybar, rate = rate, log = TRUE)}
+prior1 <- function(rate){dexp(x = rate, rate = kappa, log = TRUE)}
+prior3 <- function(rate){dgamma(x = rate, shape = alpha, rate = beta, log = TRUE)}
+integrate(f = function(rate){
+   exp(loglik(rate) + prior1(rate) - 
+          (log(kappa) + lgamma(n+1) -(n+1)*log(n*ybar+kappa) +
+              pgamma(1, shape = n+1, rate = n*ybar+kappa, log.p = TRUE)))}, 
+   lower = 0, upper = 100)
+integrate(f = function(rate){
+   exp(loglik(rate) + prior3(rate) - 
+          (lgamma(n+alpha) + alpha*log(beta) - lgamma(alpha) - (n+alpha)*log(n*ybar+beta)))}, 
+   lower = 0, upper = 100)
+```
 
 :::
 
@@ -84,7 +107,7 @@ g1 <- ggplot() +
         dgamma(x, shape = 50 + sumt, rate = nobs + 10)}, n = 1001) +
    scale_x_continuous(limits = c(0,20),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
     labs(y = "") + 
     theme_classic() 
 
@@ -97,7 +120,7 @@ g2 <- ggplot() +
         diff(pgamma(c(5,10), shape = sumt, rate = nobs))}, n = 1001) +
    scale_x_continuous(limits = c(0,20),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
     labs(y = "") + 
     theme_classic() 
 
@@ -109,7 +132,7 @@ g3 <- ggplot() +
         dgamma(x, shape = sumt + 14, rate = nobs + 0.02)}, n = 1001) +
    scale_x_continuous(limits = c(0,20),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
     labs(y = "") + 
     theme_classic() 
 
@@ -122,7 +145,7 @@ g4 <- ggplot() +
         dgamma(x, shape = 1 + sumt, rate = nobs + 5)}, n = 1001) +
    scale_x_continuous(limits = c(0,20),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
     labs(y = "") + 
     theme_classic() 
 (g4 + g1) / (g2 + g3) +
@@ -218,6 +241,7 @@ ggplot() +
   labs(y = "", 
        x = expression(paste("average waiting time ", 1/lambda, " (in minutes)")),
        subtitle = "posterior density") + 
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +
   theme_classic()
 ```
 
@@ -298,6 +322,8 @@ ggplot(data = data.frame(x = postpred_samp))+
                 ) +
   labs(x = "waiting time (in minutes)", 
        y = "") +
+  scale_x_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +
   theme_classic()
 ```
 

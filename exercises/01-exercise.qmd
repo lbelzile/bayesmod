@@ -51,7 +51,7 @@ g1 <- ggplot() +
         dgamma(x, shape = 50 + sumt, rate = nobs + 10)}, n = 1001) +
    scale_x_continuous(limits = c(0,20),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
     labs(y = "") + 
     theme_classic() 
 
@@ -64,7 +64,7 @@ g2 <- ggplot() +
         diff(pgamma(c(5,10), shape = sumt, rate = nobs))}, n = 1001) +
    scale_x_continuous(limits = c(0,20),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
     labs(y = "") + 
     theme_classic() 
 
@@ -76,7 +76,7 @@ g3 <- ggplot() +
         dgamma(x, shape = sumt + 14, rate = nobs + 0.02)}, n = 1001) +
    scale_x_continuous(limits = c(0,20),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
     labs(y = "") + 
     theme_classic() 
 
@@ -89,7 +89,7 @@ g4 <- ggplot() +
         dgamma(x, shape = 1 + sumt, rate = nobs + 5)}, n = 1001) +
    scale_x_continuous(limits = c(0,20),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
     labs(y = "") + 
     theme_classic() 
 (g4 + g1) / (g2 + g3) +
