@@ -11,8 +11,8 @@ f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ -
 for location $\nu >0$ and shape $\tau>0$. 
 
 a. Write down the likelihood and show that it can be written in terms of the sufficient statistics $\sum_{i=1}^n y_i$ and $\sum_{i=1} y_i^{-1}$.
-b. Show that the prior
-$$ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \sigma^2),$$ the product of a gamma and a conditional reciprocal Gaussian, is conjugate for the Wald distribution.
+b. Show that the joint prior
+$$ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
 c. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
 d. Derive the marginal posterior $p(\lambda)$.
 
@@ -32,10 +32,10 @@ Jeffrey's theory of probability (1937)
 
 Consider a binomial model with an unknown probability of successes $\theta \in [0,1]$ model. Suppose your prior guess for $\theta$ has mean $0.1$ and standard deviation $0.2$
 
-a. using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.
-b. do the same, this time for a truncated Gaussian distribution on the unit interval.
+Using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.
 
-Plot both priors and comment on differences, if any.
+
+Plot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location $\mu=0.1$ and scale $\sigma=0.2$.^{Note that the parameters of the truncated Gaussian distribution do not correspond to moments!}
 
 ## Exercise 2.4
 

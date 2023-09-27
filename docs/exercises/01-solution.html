@@ -291,12 +291,22 @@ p_3(\boldsymbol{y}) &amp;= \frac{\Gamma(n + \alpha)\beta^\alpha}{\Gamma(\alpha)(
 </section>
 <section id="exercise-1.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-1.2">Exercise 1.2</h2>
-<p>Consider the following priors</p>
+<!-- Specifying priors for the rate is complicated because the units of $\lambda$ are $\text{minutes}^{-1}$. Rather, it makes sense to look at it's reciprocal: if $\lambda \sim \mathsf{Ga}(\alpha, \beta)$, then it's reciprocal $\omega=1/\lambda$ has an inverse gamma distribution, denoted $\omega \sim \mathsf{IGa}(\alpha, \beta)$, -->
+<!-- with density -->
+<!-- \begin{align*} -->
+<!-- f(y; \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} y^{-\alpha-1} \exp(-\beta/y) -->
+<!-- \end{align*} -->
+<!-- with $\mathsf{E}(\omega) = \beta/(\alpha-1)$ for $\alpha>1$ and $\beta > 0$. -->
+<!-- Consider the following priors for the expected waiting time, $Y=1/\lambda$. -->
+<!-- 1. an inverse gamma with scale $\beta=50$ and shape $\alpha = 10$ -->
+<!-- 2. an inverse gamma with scale $\beta=5$ and shape $\alpha=1$ (meaning $\lambda \sim \mathsf{Exp}(0.2)$) -->
+<!-- 3. a inverse gamma distribution with scale $\beta=7$ and shape $\alpha = 1$ -->
+<!-- 4. a uniform prior on the unit interval $[5,10]$ for $1/\lambda$ -->
+<p>Consider the following priors for the reciprocal expected waiting time, <span class="math inline">\(\lambda\)</span>.</p>
 <ol type="1">
-<li>a gamma distribution with rate <span class="math inline">\(\beta=10\)</span> and shape <span class="math inline">\(\alpha = 50\)</span></li>
-<li>an exponential distribution with rate 5</li>
-<li>a gamma distribution with rate <span class="math inline">\(\beta=0.02\)</span> and shape <span class="math inline">\(\alpha = 14\)</span></li>
-<li>a uniform prior on the unit interval [5,10]</li>
+<li>a gamma with rate <span class="math inline">\(\beta=100\)</span> and shape <span class="math inline">\(\alpha = 10\)</span></li>
+<li>an exponential with rate <span class="math inline">\(5\)</span></li>
+<li>a uniform prior on the unit interval <span class="math inline">\([5,10]\)</span> for <span class="math inline">\(1/\lambda\)</span></li>
 </ol>
 <p>Associate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?</p>
 <p>Explain what would happen to the posterior curve if we increased the sample size.</p>
@@ -304,15 +314,16 @@ p_3(\boldsymbol{y}) &amp;= \frac{\Gamma(n + \alpha)\beta^\alpha}{\Gamma(\alpha)(
 <div class="cell-output-display">
 <div id="fig-betabinom" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="01-solution_files/figure-html/fig-betabinom-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors.</figcaption><p></p>
+<p><img src="01-solution_files/figure-html/fig-betabinom-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="solution proof">
-<p><span class="proof-title"><em>Solution</em>. </span>As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimator regardless of the prior function (if it is untruncated).</p>
-<p>The truncated distribution (bottom left) is clearly identified from the “stubborn” prior, so 4C. Prior 3 has an average of 7, both the remaining two have a mean of 5, so 3D. We can look at how pronounced the posterior are: the <span class="math inline">\(\mathsf{Ga}(50,10)\)</span> is much more informative and the posterior mean is closer to the prior mean, so 1A and so 2B.</p>
+<p><span class="proof-title"><em>Solution</em>. </span>As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimate, <span class="math inline">\(\widehat{\lambda}=1/8\)</span>, regardless of the prior function (if it is untruncated).</p>
+<p>The mode of a gamma distribution with rate <span class="math inline">\(\beta\)</span> and shape <span class="math inline">\(\alpha\)</span> is <span class="math inline">\((\alpha-1)/\beta\)</span> for <span class="math inline">\(\alpha&gt;1\)</span>.</p>
+<p>The truncated distribution (bottom left) is clearly identified from the “stubborn” prior, which is <span class="math inline">\(p(\lambda) \propto \mathrm{I}(1/10 &lt; \lambda &lt; 1/5)/\lambda^2\)</span>, so 3C. Prior 1 has an average of 1/10 (less than the MLE) and provides nearly as much information as the data, so it is the more peaked posterior, so 1B. The exponential, or <span class="math inline">\(\mathsf{Ga}(1,5)\)</span>, is much less informative than the likelihood and posterior should be only slightly different for the other, so 2A.</p>
 </div>
 </section>
 <section id="exercice-1.3" class="level2">

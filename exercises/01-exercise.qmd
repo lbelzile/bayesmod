@@ -20,81 +20,92 @@ Deduce that, in all cases above and up to truncation, the posterior distribution
 
 ## Exercise 1.2
 
-Consider the following priors
+Consider the following priors for the reciprocal expected waiting time, $\lambda$.
 
-1. a gamma distribution with rate $\beta=10$ and shape $\alpha = 50$
-2. an exponential distribution with rate 5
-3. a gamma distribution with rate $\beta=0.02$ and shape $\alpha = 14$
-4. a uniform prior on the unit interval [5,10]
+1. a gamma with rate $\beta=100$ and shape $\alpha = 10$
+2. an exponential with rate $5$
+3. a uniform prior on the unit interval $[5,10]$ for $1/\lambda$
 
 Associate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?
 
 Explain what would happen to the posterior curve if we increased the sample size.
 
+
+
 ```{r}
 #| label: fig-betabinom
 #| eval: true
 #| echo: false
-#| fig-cap: "Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors."
+#| fig-cap: "Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator."
+#| out-width: '100%'
+#| fig-height: 4
+#| fig-width: 12
 library(ggplot2)
 library(MetBrewer)
 library(patchwork)
 nobs <- 10L
 sumt <- 8*nobs
-
+xlim <- 1/2
 set.seed(1234)
 g1 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
   stat_function(fun =  function(x){
-        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
         linetype = "dashed") +
     stat_function(fun =  function(x){
-        dgamma(x, shape = 50 + sumt, rate = nobs + 10)}, n = 1001) +
-   scale_x_continuous(limits = c(0,20),
+        dgamma(x, shape = nobs + 11, rate = 100 + sumt)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
     labs(y = "") + 
     theme_classic() 
 
+c <- integrate(function(x){dgamma(x, rate = sumt, shape = nobs + 1)/x^2}, lower = 1/10, upper = 1/5)$value
 g2 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
     stat_function(fun =  function(x){
-        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
         linetype = "dashed") +
     stat_function(fun =  function(x){
-        ifelse(x<5 | x > 10, 0, dgamma(x, shape = sumt, rate = nobs))/
-        diff(pgamma(c(5,10), shape = sumt, rate = nobs))}, n = 1001) +
-   scale_x_continuous(limits = c(0,20),
+        ifelse(x>1/5 | x < 1/10, 0, 
+               dgamma(x, rate = sumt, shape = nobs + 1)/x^2)/c}, n = 10001,
+        xlim = c(1/10-0.01, 1/5+0.01)) +
+   scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
     labs(y = "") + 
     theme_classic() 
 
 g3 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
     stat_function(fun =  function(x){
-        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+       dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
         linetype = "dashed") +
     stat_function(fun =  function(x){
-        dgamma(x, shape = sumt + 14, rate = nobs + 0.02)}, n = 1001) +
-   scale_x_continuous(limits = c(0,20),
+        dgamma(x, rate = sumt + 0.5, shape = nobs + 1.1)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
     labs(y = "") + 
     theme_classic() 
 
 
 g4 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
     stat_function(fun =  function(x){
-        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
         linetype = "dashed") +
     stat_function(fun =  function(x){
-        dgamma(x, shape = 1 + sumt, rate = nobs + 5)}, n = 1001) +
-   scale_x_continuous(limits = c(0,20),
+        dgamma(x, rate = 5 + sumt, shape = nobs+1)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
     labs(y = "") + 
     theme_classic() 
-(g4 + g1) / (g2 + g3) +
+(g4 + g1 + g2) +
   plot_annotation(tag_levels = 'A') 
 ```
+
 
 ## Exercice 1.3
 

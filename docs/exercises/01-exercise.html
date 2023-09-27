@@ -206,12 +206,11 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="exercise-1.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-1.2">Exercise 1.2</h2>
-<p>Consider the following priors</p>
+<p>Consider the following priors for the reciprocal expected waiting time, <span class="math inline">\(\lambda\)</span>.</p>
 <ol type="1">
-<li>a gamma distribution with rate <span class="math inline">\(\beta=10\)</span> and shape <span class="math inline">\(\alpha = 50\)</span></li>
-<li>an exponential distribution with rate 5</li>
-<li>a gamma distribution with rate <span class="math inline">\(\beta=0.02\)</span> and shape <span class="math inline">\(\alpha = 14\)</span></li>
-<li>a uniform prior on the unit interval [5,10]</li>
+<li>a gamma with rate <span class="math inline">\(\beta=100\)</span> and shape <span class="math inline">\(\alpha = 10\)</span></li>
+<li>an exponential with rate <span class="math inline">\(5\)</span></li>
+<li>a uniform prior on the unit interval <span class="math inline">\([5,10]\)</span> for <span class="math inline">\(1/\lambda\)</span></li>
 </ol>
 <p>Associate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?</p>
 <p>Explain what would happen to the posterior curve if we increased the sample size.</p>
@@ -219,8 +218,8 @@ ul.task-list li input[type="checkbox"] {
 <div class="cell-output-display">
 <div id="fig-betabinom" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="01-exercise_files/figure-html/fig-betabinom-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors.</figcaption><p></p>
+<p><img src="01-exercise_files/figure-html/fig-betabinom-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator.</figcaption><p></p>
 </figure>
 </div>
 </div>

@@ -74,12 +74,27 @@ integrate(f = function(rate){
 
 ## Exercise 1.2
 
-Consider the following priors
+<!-- Specifying priors for the rate is complicated because the units of $\lambda$ are $\text{minutes}^{-1}$. Rather, it makes sense to look at it's reciprocal: if $\lambda \sim \mathsf{Ga}(\alpha, \beta)$, then it's reciprocal $\omega=1/\lambda$ has an inverse gamma distribution, denoted $\omega \sim \mathsf{IGa}(\alpha, \beta)$, -->
+<!-- with density -->
+<!-- \begin{align*} -->
+<!-- f(y; \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} y^{-\alpha-1} \exp(-\beta/y) -->
+<!-- \end{align*} -->
+<!-- with $\mathsf{E}(\omega) = \beta/(\alpha-1)$ for $\alpha>1$ and $\beta > 0$. -->
 
-1. a gamma distribution with rate $\beta=10$ and shape $\alpha = 50$
-2. an exponential distribution with rate 5
-3. a gamma distribution with rate $\beta=0.02$ and shape $\alpha = 14$
-4. a uniform prior on the unit interval [5,10]
+<!-- Consider the following priors for the expected waiting time, $Y=1/\lambda$. -->
+
+<!-- 1. an inverse gamma with scale $\beta=50$ and shape $\alpha = 10$ -->
+<!-- 2. an inverse gamma with scale $\beta=5$ and shape $\alpha=1$ (meaning $\lambda \sim \mathsf{Exp}(0.2)$) -->
+<!-- 3. a inverse gamma distribution with scale $\beta=7$ and shape $\alpha = 1$ -->
+<!-- 4. a uniform prior on the unit interval $[5,10]$ for $1/\lambda$ -->
+
+
+
+Consider the following priors for the reciprocal expected waiting time, $\lambda$.
+
+1. a gamma with rate $\beta=100$ and shape $\alpha = 10$
+2. an exponential with rate $5$
+3. a uniform prior on the unit interval $[5,10]$ for $1/\lambda$
 
 Associate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?
 
@@ -91,73 +106,85 @@ Explain what would happen to the posterior curve if we increased the sample size
 #| label: fig-betabinom
 #| eval: true
 #| echo: false
-#| fig-cap: "Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors."
+#| fig-cap: "Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator."
+#| out-width: '100%'
+#| fig-height: 4
+#| fig-width: 12
 library(ggplot2)
 library(MetBrewer)
 library(patchwork)
 nobs <- 10L
 sumt <- 8*nobs
-
+xlim <- 1/2
 set.seed(1234)
 g1 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
   stat_function(fun =  function(x){
-        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
         linetype = "dashed") +
     stat_function(fun =  function(x){
-        dgamma(x, shape = 50 + sumt, rate = nobs + 10)}, n = 1001) +
-   scale_x_continuous(limits = c(0,20),
+        dgamma(x, shape = nobs + 11, rate = 100 + sumt)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
     labs(y = "") + 
     theme_classic() 
 
+c <- integrate(function(x){dgamma(x, rate = sumt, shape = nobs + 1)/x^2}, lower = 1/10, upper = 1/5)$value
 g2 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
     stat_function(fun =  function(x){
-        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
         linetype = "dashed") +
     stat_function(fun =  function(x){
-        ifelse(x<5 | x > 10, 0, dgamma(x, shape = sumt, rate = nobs))/
-        diff(pgamma(c(5,10), shape = sumt, rate = nobs))}, n = 1001) +
-   scale_x_continuous(limits = c(0,20),
+        ifelse(x>1/5 | x < 1/10, 0, 
+               dgamma(x, rate = sumt, shape = nobs + 1)/x^2)/c}, n = 10001,
+        xlim = c(1/10-0.01, 1/5+0.01)) +
+   scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
     labs(y = "") + 
     theme_classic() 
 
 g3 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
     stat_function(fun =  function(x){
-        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+       dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
         linetype = "dashed") +
     stat_function(fun =  function(x){
-        dgamma(x, shape = sumt + 14, rate = nobs + 0.02)}, n = 1001) +
-   scale_x_continuous(limits = c(0,20),
+        dgamma(x, rate = sumt + 0.5, shape = nobs + 1.1)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
     labs(y = "") + 
     theme_classic() 
 
 
 g4 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
     stat_function(fun =  function(x){
-        dgamma(x, shape = sumt, rate = nobs)}, n = 1001,
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
         linetype = "dashed") +
     stat_function(fun =  function(x){
-        dgamma(x, shape = 1 + sumt, rate = nobs + 5)}, n = 1001) +
-   scale_x_continuous(limits = c(0,20),
+        dgamma(x, rate = 5 + sumt, shape = nobs+1)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
-    scale_y_continuous(expand = c(0,0), limits = c(0, 0.7)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
     labs(y = "") + 
     theme_classic() 
-(g4 + g1) / (g2 + g3) +
+(g4 + g1 + g2) +
   plot_annotation(tag_levels = 'A') 
 ```
+
 
 ::: {.solution}
 
 
-As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimator regardless of the prior function (if it is untruncated).
+As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimate, $\widehat{\lambda}=1/8$, regardless of the prior function (if it is untruncated).
 
-The truncated distribution (bottom left) is clearly identified from the "stubborn" prior, so 4C. Prior 3 has an average of 7, both the remaining two have a mean of 5, so 3D. We can look at how pronounced the posterior are: the $\mathsf{Ga}(50,10)$ is much more informative and the posterior mean is closer to the prior mean, so 1A and so 2B.
+The mode of a gamma distribution with rate $\beta$ and shape $\alpha$ is $(\alpha-1)/\beta$ for $\alpha>1$.
+
+The truncated distribution (bottom left) is clearly identified from the "stubborn" prior, which is $p(\lambda) \propto \mathrm{I}(1/10 < \lambda < 1/5)/\lambda^2$, so 3C. Prior 1 has an average of 1/10 (less than the MLE) and provides nearly as much information as the data, so it is the more peaked posterior, so 1B. The exponential, or  $\mathsf{Ga}(1,5)$, is much less informative than the likelihood and posterior should be only slightly different for the other, so 2A.
 
 :::
 

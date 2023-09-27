@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -144,32 +207,165 @@ ul.task-list li input[type="checkbox"] {
 f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y &gt; 0)
 \end{align*}\]</span> for location <span class="math inline">\(\nu &gt;0\)</span> and shape <span class="math inline">\(\tau&gt;0\)</span>.</p>
 <ol type="a">
-<li>Write down the likelihood and show that it can be written in terms of the sufficient statistics <span class="math inline">\(\sum_{i=1}^n y_i\)</span> and <span class="math inline">\(\sum_{i=1} y_i^{-1}\)</span>.</li>
-<li>Show that the prior <span class="math display">\[ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \sigma^2),\]</span> the product of a gamma and a conditional reciprocal Gaussian, is conjugate for the Wald distribution.</li>
+<li>Write down the likelihood and show the posterior only depends on the data through the sufficient statistics <span class="math inline">\(\sum_{i=1}^n y_i\)</span> and <span class="math inline">\(\sum_{i=1} y_i^{-1}\)</span>.</li>
+<li>Show that the joint prior <span class="math display">\[ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \tau^{-1}\lambda^{-1}),\]</span> the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.</li>
 <li>Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. <em>Hint</em>: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.</li>
 <li>Derive the marginal posterior <span class="math inline">\(p(\lambda)\)</span>.</li>
 </ol>
+<div class="solution proof">
+<p><span class="proof-title"><em>Solution</em>. </span>The log likelihood for an independent and identically distributed sample is <span class="math display">\[\begin{align*}
+\ell(\nu, \lambda) = \frac{n}{2} \ln(\lambda) - \frac{3}{2} \sum_{i=1}^n \ln(y_i) - \frac{\lambda}{2\nu^2} \sum_{i=1}^n (y_i - 2\nu + \nu^2/y_i)
+\end{align*}\]</span> and we readily see that the model is an exponential family with sufficient statistics <span class="math inline">\(t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i\)</span> and <span class="math inline">\(t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}\)</span>.</p>
+<p>The joint prior is of the form <span class="math display">\[\begin{align*}
+p(\lambda, \nu) &amp;\propto \lambda^{\alpha-1}\exp(-\lambda \beta) \\
+p(\nu \mid \lambda) &amp; \propto \frac{(\lambda \tau)^{1/2}}{\nu^2}\exp\left\{-\frac{\lambda\tau }{2}(\nu^{-1}-\mu)^2\right\},
+\end{align*}\]</span> where the last step follows from a change of variable. To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get <span class="math display">\[\begin{align*}
+p(\lambda, \nu \mid \boldsymbol{y}) &amp;\propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau}{\nu^{2}}-2\frac{\tau\mu}{\nu} + \tau\mu^2 +\frac{t_1(\boldsymbol{y})}{\nu^2} -  \frac{2n}{\nu} + t_2(\boldsymbol{y})\right\}\right] \\&amp; \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau + t_1(\boldsymbol{y})}{\nu^2} - 2\frac{\tau\mu+n}{\nu} + \tau\mu^2 + t_2(\boldsymbol{y})\right\} \right]
+\\&amp; \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp\left[-\lambda \left\{\beta + \frac{c_3-c_1c_2^2}{2}\right\}\right] \exp\left\{ -\frac{\lambda c_1}{2}\left(\frac{1}{\nu^2} - \frac{2c_2}{\nu} + c_2^2\right)\right\}
+\end{align*}\]</span> where <span class="math inline">\(c_1=\{\tau + t_1(\boldsymbol{y})\}\)</span>, <span class="math inline">\(c_2 =(\tau\mu+n)/c_1\)</span> and <span class="math inline">\(c_3 =\tau\mu^2 + t_2(\boldsymbol{y})\)</span>.</p>
+</div>
 </section>
 <section id="exercise-2.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-2.2">Exercise 2.2</h2>
 <p>Consider the Rayleigh distribution with scale <span class="math inline">\(\sigma&gt;0\)</span>. It’s density is <span class="math display">\[f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).\]</span></p>
 <p>Derive the Fisher information matrix and use it to obtain Jeffrey’s prior for <span class="math inline">\(\sigma\)</span>. Determine whether the prior is proper.</p>
-<!-- Derivation of prior for the correlation $\rho$ in a bivariate normal, in
-Jeffrey's theory of probability (1937)
--->
+<div class="solution proof">
+<p><span class="proof-title"><em>Solution</em>. </span>The log likelihood for a sample of size one is <span class="math display">\[\begin{align*}
+\ell(\sigma) = \log(y) - 2\log(\sigma) - \frac{y^2}{2\sigma^2}
+\end{align*}\]</span> and the negative of the Hessian is <span class="math display">\[\begin{align*}
+\jmath(\sigma) = -\frac{\partial \ell(\sigma)}{\partial \sigma} = -\frac{2}{\sigma^2} + \frac{3y^2}{\sigma^4}
+\end{align*}\]</span> To compute the Fisher information, we need the second moment of the Rayleigh distribution, <span class="math display">\[\begin{align*}
+\mathsf{E}(Y^2) &amp;= \int_0^\infty \frac{y^3}{\sigma^2}\exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{d} y\\&amp;= 2\sigma^2 \int_0^\infty u \exp(-u) \mathrm{d} u
+\\&amp;= 2\sigma^2
+\end{align*}\]</span> where we made the change of variable <span class="math inline">\(u= 0.5y^2\sigma^{-2}\)</span>, <span class="math inline">\(\mathrm{d} u = y\sigma^{-2}\mathrm{d} y\)</span> and recovered the expected value of a unit exponential distribution.</p>
+<p>The Fisher information is <span class="math inline">\(\imath(\sigma) = \mathsf{E}\{\jmath(\sigma)\}=-2/\sigma^2 + 6/\sigma^2 = 3/\sigma^2\)</span>. Jeffrey’s prior for the scale, <span class="math inline">\(p(\sigma) =|\imath(\sigma)|^{1/2}\)</span>, is proportional to <span class="math inline">\(\sigma^{-1}\)</span> and thus improper.</p>
+</div>
 </section>
 <section id="exercise-2.3" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-2.3">Exercise 2.3</h2>
 <p>Consider a binomial model with an unknown probability of successes <span class="math inline">\(\theta \in [0,1]\)</span> model. Suppose your prior guess for <span class="math inline">\(\theta\)</span> has mean <span class="math inline">\(0.1\)</span> and standard deviation <span class="math inline">\(0.2\)</span></p>
-<ol type="a">
-<li>using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.</li>
-<li>do the same, this time for a truncated Gaussian distribution on the unit interval.</li>
-</ol>
-<p>Plot both priors and comment on differences, if any.</p>
+<p>Using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.</p>
+<p>Plot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location <span class="math inline">\(\mu=0.1\)</span> and scale <span class="math inline">\(\sigma=0.2\)</span>.^{Note that the parameters of the truncated Gaussian distribution do not correspond to moments!}</p>
+<div class="solution proof">
+<p><span class="proof-title"><em>Solution</em>. </span>The beta distribution has expected value <span class="math inline">\(\alpha/(\alpha+\beta)\)</span> and variance <span class="math inline">\(\alpha\beta(\alpha+\beta)^{-2}(\alpha+\beta+1)^{-1}\)</span>.</p>
+<p>Since the system of equations is nonlinear, we need to solve numerically to find the two unknown value of the parameters or else simply substitute <span class="math inline">\(\beta = \alpha (1-\mu)/\mu\)</span> in the equation for the variance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>beta_moments <span class="ot">&lt;-</span> <span class="cf">function</span>(par, mean, variance){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  alpha <span class="ot">&lt;-</span> par[<span class="dv">1</span>]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(alpha<span class="sc">/</span>(alpha<span class="sc">+</span>beta) <span class="sc">-</span> mean,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    alpha<span class="sc">*</span>beta<span class="sc">/</span>(alpha<span class="sc">+</span>beta)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(alpha<span class="sc">+</span>beta<span class="sc">+</span><span class="dv">1</span>) <span class="sc">-</span> variance)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Numerical root finding algorithm</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># We need to give good starting values</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>rootSolve<span class="sc">::</span><span class="fu">multiroot</span>(<span class="at">f =</span> beta_moments,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">start =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.8</span>),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">positive =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean =</span> <span class="fl">0.1</span>, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">variance =</span> <span class="fl">0.04</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$root
+[1] 0.125 1.125
+
+$f.root
+[1] 5.504125e-12 4.298423e-12
+
+$iter
+[1] 5
+
+$estim.precis
+[1] 4.901274e-12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">uniroot</span>(<span class="at">f =</span> <span class="cf">function</span>(alpha, <span class="at">mean =</span> <span class="fl">0.1</span>, <span class="at">variance =</span> <span class="fl">0.04</span>){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> alpha<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>mean)<span class="sc">/</span>mean</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  alpha<span class="sc">*</span>beta<span class="sc">/</span>(alpha<span class="sc">+</span>beta)<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>(alpha<span class="sc">+</span>beta<span class="sc">+</span><span class="dv">1</span>) <span class="sc">-</span> variance}, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">interval =</span> <span class="fu">c</span>(<span class="fl">1e-4</span>, <span class="dv">1</span>))<span class="sc">$</span>root</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> alpha<span class="sc">*</span>(<span class="dv">1</span><span class="fl">-0.1</span>)<span class="sc">/</span><span class="fl">0.1</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">alpha =</span> alpha, <span class="at">beta =</span> beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>alpha  beta 
+0.125 1.125 </code></pre>
+</div>
+</div>
+<p>and we find <span class="math inline">\(\alpha = 0.125\)</span> and <span class="math inline">\(\beta=1.125\)</span>.</p>
+<p>Let <span class="math inline">\(a = -\mu/\sigma\)</span> and <span class="math inline">\(b = (1-\mu)/\sigma\)</span> denote the standardized lower and upper bounds, respectively. The density of the truncated Gaussian with location <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma\)</span> on the unit interval is <span class="math display">\[\begin{align*}
+f(x; \mu, \sigma) = \frac{1}{\sigma}\frac{\phi\left(\frac{x - \mu}{\sigma}\right)}{\Phi(b) - \Phi(a)},
+\end{align*}\]</span> where <span class="math inline">\(\phi\)</span> is the density of a standard Gaussian <span class="math inline">\(\mathsf{No}(0,1)\)</span> and <span class="math inline">\(\Phi\)</span> the corresponding distribution function.</p>
+<!--
+and we can easily obtain the formulae for the first two moments (e.g., Wikipedia). Let $a = -\mu/\sigma$ and $b = (1-\mu)/\sigma$ denote the centered bounds; then
+\begin{align*}
+\mathsf{E}(Y) &= \mu - \sigma\frac{\phi(b) - \phi(a) }{\Phi(b) - \Phi(a)} \\
+\mathsf{Va}(Y) & = \sigma\left[1 - \frac{b\phi(b) - \phi(a)}{\Phi(b) - \Phi(a)} - \left\{\frac{\phi(b) - \phi(a) }{\Phi(b) - \Phi(a)}\right\}^2\right]
+\end{align*}
+we have reasonable guess for starting values
+
+-->
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-priors-match" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="02-solution_files/figure-html/fig-priors-match-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Beta (full line) and truncated Gaussian (dashed line) prior densities.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The beta distribution, while matching the moments, is implying very low chance of success with a mode at zero. By contrast, the truncated Gaussian (which does not have mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>) has the mode at <span class="math inline">\(\mu=0.1\)</span>. Which one is preferable depends on the context; we could also match the parameters of the truncated Gaussian.</p>
+</div>
 </section>
 <section id="exercise-2.4" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-2.4">Exercise 2.4</h2>
 <p>Replicate the analysis of Example 2.6 (Should you phrase your headline as a question?) of the <a href="https://lbelzile.github.io/MATH80601A/priors.html">course notes</a> using the <code>upworthy_question</code> data from the <a href="https://github.com/lbelzile/hecbayes"><code>hecbayes</code> package</a>.</p>
+<div class="solution proof">
+<div class="cell">
+<span class="proof-title"><em>Solution</em>. </span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Prior parameters</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">2.5</span> <span class="co"># shape</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fl">0.04</span> <span class="co"># rate</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Pool data from all questions (only total counts matter)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>summary_stats <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_impressions =</span> <span class="fu">sum</span>(impressions),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_clicks =</span> <span class="fu">sum</span>(clicks)) <span class="sc">|&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.vector</span>()</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract total number of successes out of trials</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Impressions here serve as count</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>n_yes <span class="ot">&lt;-</span> summary_stats<span class="sc">$</span>total_impressions[<span class="dv">1</span>]</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>y_yes <span class="ot">&lt;-</span> summary_stats<span class="sc">$</span>total_clicks[<span class="dv">1</span>]</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>n_no <span class="ot">&lt;-</span>  summary_stats<span class="sc">$</span>total_impressions[<span class="dv">2</span>]</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>y_no <span class="ot">&lt;-</span> summary_stats<span class="sc">$</span>total_clicks[<span class="dv">2</span>]</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate posterior sample draws</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Since likelihood and priors are independent, </span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co"># so are the posteriors for the rates. </span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># We can draw independently from each.</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>post_data_upworthy_question <span class="ot">&lt;-</span> </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>( </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">yes =</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="fl">1e4</span>, <span class="at">shape =</span> alpha <span class="sc">+</span> y_yes, <span class="at">rate =</span> beta <span class="sc">+</span> n_yes),</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">no =</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="fl">1e4</span>,  <span class="at">shape =</span> alpha <span class="sc">+</span> y_no, <span class="at">rate =</span> beta <span class="sc">+</span> n_no))</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the histogram of the ratio of rates (question / no question)</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> post_data_upworthy_question,</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> yes<span class="sc">/</span>no)) <span class="sc">+</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"rate ratio"</span>, <span class="at">y =</span> <span class="st">""</span>,</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="fu">expression</span>(lambda[<span class="st">"yes"</span>]<span class="sc">/</span>lambda[<span class="st">"no"</span>])) <span class="sc">+</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.05</span>))) <span class="sc">+</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="02-solution_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the posterior mean for the quantity</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>post_mean <span class="ot">&lt;-</span> <span class="fu">with</span>(post_data_upworthy_question, <span class="fu">mean</span>(yes<span class="sc">/</span>no))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>post_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9317745</code></pre>
+</div>
+</div>
+</div>
 
 
 </section>
