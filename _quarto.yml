@@ -56,6 +56,8 @@ website:
               file: content/01-content.qmd
             - text: "2: Priors"
               file: content/02-content.qmd
+            - text: "3: Simulation-based inference"
+              file: content/03-content.qmd
     - title: "Examples"
       style: "docked"
       search: false
@@ -81,6 +83,10 @@ website:
         - section: "Priors"
           contents:
              - exercises/02-exercise.qmd
+             - exercises/02-solution.qmd
+        - section: "Simulation-based inference"
+          contents:
+             - exercises/03-exercise.qmd
   page-footer:
     left: |
       Content {{< fa brands creative-commons >}} {{< var course.copyright_year >}} by [{{< var instructor.name_no_title >}}]({{< var instructor.url >}})<br>

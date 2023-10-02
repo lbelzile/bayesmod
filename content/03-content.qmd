@@ -1,0 +1,57 @@
+---
+title: "Simulation-based inference"
+date: "2023-10-03"
+---
+
+
+## Content
+
+- Monte Carlo methods
+- Markov chains
+- Metropolis--Hastings--Green algorithm
+- Gibbs sampling
+- Practical considerations
+
+## Learning objectives
+
+At the end of the chapter, students should be able to
+
+- understand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ
+- implement a MHG algorithm to draw samples from the posterior
+- use output of MCMC to obtain estimates and standard errors
+- diagnose performance of MCMC algorithms and implement potential remedies
+
+
+## Readings
+
+:::{.callout-warning}
+
+These readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies --- the strict minimum being the course notes.
+
+:::
+
+- [@Geyer:2011](https://www.mcmchandbook.net/HandbookChapter1.pdf)
+- [Chapter 3 of the course notes](https://lbelzile.github.io/MATH80601A/mcmc.html)
+
+
+## Complementary readings
+
+:::{.callout-warning}
+Complementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.
+:::
+
+- @Green:2015 (overview of MCMC methods)
+- @Albert:2009, chapters 6 and 10 (several examples)
+- @McElreath:2020, chapter 9 (non technical)
+
+
+## Slides
+
+<!--
+<p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides3.html">{{< fa arrow-up-right-from-square >}} &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides3.pdf" role="button">{{< fa file-pdf >}} &ensp;Download PDF of all slides</a></p>
+
+<div class="ratio ratio-16x9">
+<iframe class="slide-deck" src="../slides/bayesmod-slides3.html"></iframe>
+</div>
+
+-->

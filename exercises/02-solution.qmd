@@ -1,5 +1,5 @@
 ---
-title: "Exercice 2"
+title: "Solution 2"
 ---
 
 ## Exercise 2.1
@@ -37,6 +37,8 @@ p(\lambda, \nu \mid \boldsymbol{y}) &\propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\
 \\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp\left[-\lambda \left\{\beta + \frac{c_3-c_1c_2^2}{2}\right\}\right] \exp\left\{ -\frac{\lambda c_1}{2}\left(\frac{1}{\nu^2} - \frac{2c_2}{\nu} + c_2^2\right)\right\} 
 \end{align*}
 where $c_1=\{\tau + t_1(\boldsymbol{y})\}$, $c_2 =(\tau\mu+n)/c_1$ and $c_3 =\tau\mu^2 + t_2(\boldsymbol{y})$.
+
+TO BE CONTINUED
 
 :::
 
@@ -77,7 +79,7 @@ Consider a binomial model with an unknown probability of successes $\theta \in [
 Using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.
 
 
-Plot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location $\mu=0.1$ and scale $\sigma=0.2$.^{Note that the parameters of the truncated Gaussian distribution do not correspond to moments!}
+Plot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location $\mu=0.1$ and scale $\sigma=0.2$.^[Note that the parameters of the truncated Gaussian distribution do not correspond to moments!]
 
 
 ::: {.solution}
