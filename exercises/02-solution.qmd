@@ -19,26 +19,37 @@ d. Derive the marginal posterior $p(\lambda)$.
 
 
 ::: {.solution}
-The log likelihood for an independent and identically distributed sample is
+
+
+a. The log likelihood for an independent and identically distributed sample is, up to terms not depending on the parameters,
 \begin{align*}
-\ell(\nu, \lambda) = \frac{n}{2} \ln(\lambda) - \frac{3}{2} \sum_{i=1}^n \ln(y_i) - \frac{\lambda}{2\nu^2} \sum_{i=1}^n (y_i - 2\nu + \nu^2/y_i)
+\ell(\nu, \lambda) \stackrel{\nu, \lambda}{\propto} \frac{n}{2} \ln(\lambda) -  - \frac{\lambda}{2\nu^2} \sum_{i=1}^n (y_i - 2\nu + \nu^2/y_i)
 \end{align*}
 and we readily see that the model is an exponential family with sufficient statistics $t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i$ and $t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}$.
 
 The joint prior is of the form
 \begin{align*}
-p(\lambda, \nu) &\propto \lambda^{\alpha-1}\exp(-\lambda \beta) \\
+p(\lambda) &\propto \lambda^{\alpha-1}\exp(-\lambda \beta) \\
 p(\nu \mid \lambda) & \propto \frac{(\lambda \tau)^{1/2}}{\nu^2}\exp\left\{-\frac{\lambda\tau }{2}(\nu^{-1}-\mu)^2\right\},
 \end{align*}
 where the last step follows from a change of variable.
-To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get
+
+
+b. To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get
 \begin{align*}
 p(\lambda, \nu \mid \boldsymbol{y}) &\propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau}{\nu^{2}}-2\frac{\tau\mu}{\nu} + \tau\mu^2 +\frac{t_1(\boldsymbol{y})}{\nu^2} -  \frac{2n}{\nu} + t_2(\boldsymbol{y})\right\}\right] \\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau + t_1(\boldsymbol{y})}{\nu^2} - 2\frac{\tau\mu+n}{\nu} + \tau\mu^2 + t_2(\boldsymbol{y})\right\} \right]
-\\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp\left[-\lambda \left\{\beta + \frac{c_3-c_1c_2^2}{2}\right\}\right] \exp\left\{ -\frac{\lambda c_1}{2}\left(\frac{1}{\nu^2} - \frac{2c_2}{\nu} + c_2^2\right)\right\} 
+\\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp\left[-\lambda \left\{\beta + \frac{c_3-c_1c_2^2}{2}\right\}\right] \exp\left\{ -\frac{\lambda c_1}{2}\left(\nu^{-1} - c_2\right)^2\right\} 
 \end{align*}
 where $c_1=\{\tau + t_1(\boldsymbol{y})\}$, $c_2 =(\tau\mu+n)/c_1$ and $c_3 =\tau\mu^2 + t_2(\boldsymbol{y})$.
 
-TO BE CONTINUED
+c. We see that the joint posterior as the product of two densities, say $q(\lambda \mid \boldsymbol{y})p(1/\nu \mid \lambda)$; $q(\lambda \mid \boldsymbol{y})$ is the density of a gamma distribution with shape $a = (n+1)/2+\alpha$ and rate $b=\beta + (c_3-c_1c_2^2)/2$, whereas the other is a reciprocal Gaussian with mean parameter $c_2$ and precision $\lambda c_1$. $\mathsf{Ga}\left\{(n+1)/2+\alpha\right\}$
+
+d. To get the marginal $p(\lambda \mid \boldsymbol{y})$, we need to integrate with respect to $\nu$. Making the change of variable $\mu = 1/\nu$, we recover a Gaussian kernel
+\begin{align*}
+p(\lambda \mid \boldsymbol{y}) &= \lambda^{a-1}\exp(-b\lambda)\int_{\mathbb{R}}\exp\left\{ -\frac{\lambda c_1}{2}\left(\mu - c_2\right)^2\right\}  \mathrm{d} \mu 
+\\&\propto \lambda^{a-1}\exp(-b\lambda) \lambda^{-1/2}
+\end{align*}
+so we conclude that, marginally, $\lambda \sim \mathsf{Ga}(n+ \alpha, b)$.
 
 :::
 
@@ -58,7 +69,7 @@ The log likelihood for a sample of size one is
 \end{align*}
 and the negative of the Hessian is 
 \begin{align*}
-\jmath(\sigma) = -\frac{\partial \ell(\sigma)}{\partial \sigma} = -\frac{2}{\sigma^2} + \frac{3y^2}{\sigma^4}
+\jmath(\sigma) = -\frac{\partial^2 \ell(\sigma)}{\partial \sigma^2} = -\frac{2}{\sigma^2} + \frac{3y^2}{\sigma^4}
 \end{align*}
 To compute the Fisher information, we need the second moment of the Rayleigh distribution,
 \begin{align*}
