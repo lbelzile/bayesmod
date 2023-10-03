@@ -1,66 +1,276 @@
 [
   {
-    "objectID": "syllabus.html",
-    "href": "syllabus.html",
-    "title": "Outline",
+    "objectID": "content/01-content.html",
+    "href": "content/01-content.html",
+    "title": "Bayesics",
     "section": "",
-    "text": "Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\n\n\n   Fall 2023\n   Tuesday\n   8:30-11:30\n   Decelles, Rivière-du-Loup"
+    "text": "Probability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model"
   },
   {
-    "objectID": "syllabus.html#textbooks",
-    "href": "syllabus.html#textbooks",
-    "title": "Outline",
-    "section": "Textbooks",
-    "text": "Textbooks\nI will assign readings from McElreath (2020) and Johnson et al. (2022), which is freely available online.\n\n\n\nStatistical Rethinking:A Bayesian Course with Examples in R and Stan\nR. McElreath\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBayes Rules!An Introduction to Applied Bayesian Modeling\nA.A. Johnson, M.Q. Ott, and M. Dogucu\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCourse notes for the class can be found online"
+    "objectID": "content/01-content.html#learning-objectives",
+    "href": "content/01-content.html#learning-objectives",
+    "title": "Bayesics",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ndefine key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference\nperform inference in conjugate models with a single parameter\ncalculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)\nexplain some of the conceptual differences between frequentist and Bayesian inference"
   },
   {
-    "objectID": "syllabus.html#other-references",
-    "href": "syllabus.html#other-references",
-    "title": "Outline",
-    "section": "Other references",
-    "text": "Other references\nThere will occasionally be additional articles to read; links to these other resources will be included on the content page for that session."
+    "objectID": "content/01-content.html#readings",
+    "href": "content/01-content.html#readings",
+    "title": "Bayesics",
+    "section": "Readings",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 1 of the course notes"
   },
   {
-    "objectID": "syllabus.html#student-hours",
-    "href": "syllabus.html#student-hours",
-    "title": "Outline",
-    "section": "Student hours",
-    "text": "Student hours\nWednesday afternoon from 13:00 until 16:00 or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.\nPlease watch this video:\n\n\nStudent hours are set times dedicated to all of you (most professors call these “office hours”; I don’t1). This means that I will be in my office waiting for you to come by if you want to talk to me in person (or remotely) with whatever questions you have. This is the best and easiest way to find me and the best chance for discussing class material and concerns."
+    "objectID": "content/01-content.html#complementary-readings",
+    "href": "content/01-content.html#complementary-readings",
+    "title": "Bayesics",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nEdwards et al. (1992)\nJohnson et al. (2022), chapters 2–4 and sections 8.1, 8.3\nVillani (2023), chapters 1 and 2\nAlbert (2009), chapters 2 and 3"
   },
   {
-    "objectID": "syllabus.html#intellectual-integrity",
-    "href": "syllabus.html#intellectual-integrity",
-    "title": "Outline",
-    "section": "Intellectual integrity",
-    "text": "Intellectual integrity\nPlease don’t cheat! The official policy lists the school rules regarding plagiarism and academic integrity."
+    "objectID": "content/01-content.html#slides",
+    "href": "content/01-content.html#slides",
+    "title": "Bayesics",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
   },
   {
-    "objectID": "syllabus.html#student-services",
-    "href": "syllabus.html#student-services",
-    "title": "Outline",
-    "section": "Student services",
-    "text": "Student services\nStudents with special needs should feel free to approach me so we can best discuss accommodations. Do check out HEC Montréal’s disabled students and [psychological] (https://www.hec.ca/en/students/support-resources/psychological-support/index.html) support services."
+    "objectID": "content/02-content.html",
+    "href": "content/02-content.html",
+    "title": "Priors",
+    "section": "",
+    "text": "Conjugate, flat, vague, Jeffrey’s, informative and penalized complexity priors\nPriors for regression models\nParameter elicitation\nPrior sensitivity analysis"
   },
   {
-    "objectID": "syllabus.html#harassment-and-sexual-violence",
-    "href": "syllabus.html#harassment-and-sexual-violence",
-    "title": "Outline",
-    "section": "Harassment and sexual violence",
-    "text": "Harassment and sexual violence\nThe Center for Harassment Intervention (BIMH) is the unique access point for all members of the community subject to harassment or sexual violence. You can reach them at 514 343-7020 or by email at harcelement@hec.ca from Monday until Friday, from 8:30 until 4:30pm.\nIf you are in an emergency situation or fear for your safety, call emergency services at 911, followed by HEC Montréal security services at 514 340-6611.\nCheck the school official policy on these matters for more details."
+    "objectID": "content/02-content.html#learning-objectives",
+    "href": "content/02-content.html#learning-objectives",
+    "title": "Priors",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nchoose a suitable prior for a Bayesian analysis\nderive parameters of posterior distributions in conjugate models\nperform parameter elicitation\nassess the impact of priors through sensitivity analysis"
   },
   {
-    "objectID": "syllabus.html#family-policy",
-    "href": "syllabus.html#family-policy",
-    "title": "Outline",
-    "section": "Family policy",
-    "text": "Family policy\nHEC does not have an official family policy, so the following guidelines reflect my own beliefs and commitments towards parent students2\n\nBabies are welcome in class as often as necessary for support feeding relationship.\nYou are welcome to bring your child to class in order to cover unforeseeable gaps in childcare.\nIf you come with babies or toddler, I ask that you sit close to the door so that, in case your little one needs special attention and is disrupting the learning of other students, you may step outside of class until their needs are met. Seats close to the door are reserved for parents attending class with their child."
+    "objectID": "content/02-content.html#readings",
+    "href": "content/02-content.html#readings",
+    "title": "Priors",
+    "section": "Readings",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 2 of the course notes"
   },
   {
-    "objectID": "syllabus.html#footnotes",
-    "href": "syllabus.html#footnotes",
-    "title": "Outline",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nThere’s fairly widespread misunderstanding about what office hours actually are! Many students often think that they are the times I shouldn’t be disturbed, which is the exact opposite of what they’re for!↩︎\nShamelessly stolen/adapted from similar policy by Drs. Melissa Cheney, Guy Grossman and Rohan Alexander↩︎"
+    "objectID": "content/02-content.html#complementary-readings",
+    "href": "content/02-content.html#complementary-readings",
+    "title": "Priors",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nVillani (2023), chapter 4\nGelman et al. (2013), chapters 2, 3 and 5\nJohnson et al. (2022), chapter 5\ntruncated Student-t priors for hierarchical models (Gelman, 2006)\npenalized complexity priors (Simpson et al., 2017)"
+  },
+  {
+    "objectID": "content/02-content.html#slides",
+    "href": "content/02-content.html#slides",
+    "title": "Priors",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
+  },
+  {
+    "objectID": "content/03-content.html",
+    "href": "content/03-content.html",
+    "title": "Simulation-based inference",
+    "section": "",
+    "text": "Monte Carlo methods\nMarkov chains\nMetropolis–Hastings–Green algorithm\nGibbs sampling\nPractical considerations"
+  },
+  {
+    "objectID": "content/03-content.html#learning-objectives",
+    "href": "content/03-content.html#learning-objectives",
+    "title": "Simulation-based inference",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a MHG algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors\ndiagnose performance of MCMC algorithms and implement potential remedies"
+  },
+  {
+    "objectID": "content/03-content.html#readings",
+    "href": "content/03-content.html#readings",
+    "title": "Simulation-based inference",
+    "section": "Readings",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nGeyer (2011)\nChapter 3 of the course notes"
+  },
+  {
+    "objectID": "content/03-content.html#complementary-readings",
+    "href": "content/03-content.html#complementary-readings",
+    "title": "Simulation-based inference",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nGreen et al. (2015) (overview of MCMC methods)\nAlbert (2009), chapters 6 and 10 (several examples)\nMcElreath (2020), chapter 9 (non technical)"
+  },
+  {
+    "objectID": "content/03-content.html#slides",
+    "href": "content/03-content.html#slides",
+    "title": "Simulation-based inference",
+    "section": "Slides",
+    "text": "Slides"
+  },
+  {
+    "objectID": "content/index.html",
+    "href": "content/index.html",
+    "title": "Readings, lectures, and videos",
+    "section": "",
+    "text": "Each class session has a set of required readings that you should complete before watching the lecture."
+  },
+  {
+    "objectID": "example/index.html",
+    "href": "example/index.html",
+    "title": "Examples",
+    "section": "",
+    "text": "This section will contain annotated R code along with worked out examples. Useful resources for learning R, the tidyverse and Rmarkdown basics include\n\nThe Introduction to R and RStudio by Open Intro Stat\nTeacups, giraffes & statistics: basic statistical concepts and programming\nthe notebook RYouWithMe from R-Ladies Sydney\nthe book R for Data Science, which adheres to the tidyverse principles.\nthe R package DoSStoolkit, developped at the University of Toronto.\nthe introverse documentation.\nthe RStudio cheatsheets, also available from RStudio menu in Help > Cheat Sheets\n\nTo install all R packages used throughout the course, use the command\n\ninstall.packages(\"cmdstanr\",\n                 repos = c(\"https://mc-stan.org/r-packages/\",\n                           getOption(\"repos\")))\n\npackages <- c(\"coda\", \"mvtnorm\", \"remotes\", \"loo\", \"dagitty\", \"shape\", \"rust\")\nfor(i in seq_along(packages)){\n  if(!packages[i] %in% installed.packages()[,\"Package\"]){\n install.packages(packages[i])\n  }\n}\nremotes::install_github(\"rmcelreath/rethinking\")\n\ninstall.packages(c(\"BiocManager\",\"remotes\"))\nBiocManager::install(\"graph\")\nBiocManager::install(\"Rgraphviz\")\ninstall.packages(\n  \"INLA\",\n  repos = c(getOption(\"repos\"),\n            INLA = \"https://inla.r-inla-download.org/R/stable\"),\n  dep = TRUE)"
+  },
+  {
+    "objectID": "example/installation.html",
+    "href": "example/installation.html",
+    "title": "Installing R and RStudio",
+    "section": "",
+    "text": "Install R\nTo install the latest version of R itself (the engine), currently 4.3.1 (Beagle Scouts).\n\nGo to the Comprehensive R Archive Network (CRAN) website: https://cran.r-project.org/\nClick on “Download R for XXX”, where XXX is either Mac or Windows:\n\n\n\n\n\n\nIf you use macOS, scroll down to the first .pkg file in the list of files and download it.\n\n\n\n\n\nIf you use Windows, click “base” (or click on the bolded “install R for the first time” link) and download it.\n\n\n\n\n\n\nDouble click on the downloaded file (check your Downloads folder). Click yes through all the prompts to install like any other program.\nInstall OS specific programs\n\n\nmacOS only: download and install XQuartz.\nWindows only: download and install Rtools\n\n\n\nInstall RStudio\nRStudio is an integrated development environment (IDE) for R. To install the latter, follow the instructions.\n\nGo to the free download location on RStudio’s website: https://www.rstudio.com/products/rstudio/download/#download\nThe website should automatically detect your operating system (Linux, macOS or Windows) and show a big download button for it:\n\n\n\n\n\n\nIf not, scroll down a little to the large table and choose the version of RStudio that matches your operating system.\n\n\n\n\n\n\nDouble click on the downloaded file (again, check your Downloads folder). Click yes through all the prompts to install like any other program.\n\nDouble click on RStudio to run it (check your applications folder or start menu).\n\n\nInstall tidyverse\nR packages are easy to install with RStudio. Select the packages panel, click on “Install,” type the name of the package you want to install, and press enter.\n\n\n\n\n\nThis can sometimes be tedious when you’re installing lots of packages, though. The tidyverse, for instance, consists of dozens of packages (including ggplot2) that all work together. Rather than install each individually, you can install a single magical package and get them all at the same time.\nGo to the packages panel in RStudio, click on “Install,” type “tidyverse”, and press enter. You’ll see a bunch of output in the RStudio console as all the tidyverse packages are installed.\n\n\n\n\n\nNotice also that RStudio will generate a line of code for you and run it: install.packages(\"tidyverse\"). You can also just paste and run this instead of using the packages panel.\n\n\nInstall tinytex\nWhen you knit to PDF, R uses a special scientific typesetting program named LaTeX, which is complicated and a large download. To make life easier, there’s an R package named tinytex that installs a minimal LaTeX program and that automatically deals with differences between macOS and Windows.\nTo install tinytex:\n\nUse the Packages in panel in RStudio to install tinytex like you did above with tidyverse. Alternatively, run install.packages(\"tinytex\") in the console.\nRun tinytex::install_tinytex() in the console.\nWait for a bit while R downloads and installs everything you need.\nYou should now be able to knit to PDF."
+  },
+  {
+    "objectID": "exercises/01-exercise.html",
+    "href": "exercises/01-exercise.html",
+    "title": "Exercice 1",
+    "section": "",
+    "text": "You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.\nFor modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate \\(\\lambda>0\\), with associated density \\(f(x) = \\lambda \\exp(-\\lambda x)\\)."
+  },
+  {
+    "objectID": "exercises/01-exercise.html#exercise-1.1",
+    "href": "exercises/01-exercise.html#exercise-1.1",
+    "title": "Exercice 1",
+    "section": "Exercise 1.1",
+    "text": "Exercise 1.1\nCompute the marginal likelihood when the prior for \\(\\lambda\\) is\n\nan exponential distribution with rate \\(\\kappa>0\\), with prior density \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\);\nsame, but truncated above at 1, so the density is \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\mathrm{I}\\{\\lambda \\leq 1\\}\\); the indicator function \\(\\mathrm{I}(\\cdot)\\) equals one if the condition is true and zero otherwise.\n\\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta)\\), a gamma distribution with shape \\(\\alpha>0\\) and rate \\(\\beta>0\\), with prior density \\(p(\\lambda) = \\beta^\\alpha\\lambda^{\\alpha-1}\\exp(-\\beta \\lambda)/\\Gamma(\\alpha)\\).\n\nDeduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution."
+  },
+  {
+    "objectID": "exercises/01-exercise.html#exercise-1.2",
+    "href": "exercises/01-exercise.html#exercise-1.2",
+    "title": "Exercice 1",
+    "section": "Exercise 1.2",
+    "text": "Exercise 1.2\nConsider the following priors for the reciprocal expected waiting time, \\(\\lambda\\).\n\na gamma with rate \\(\\beta=100\\) and shape \\(\\alpha = 10\\)\nan exponential with rate \\(5\\)\na uniform prior on the unit interval \\([5,10]\\) for \\(1/\\lambda\\)\n\nAssociate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?\nExplain what would happen to the posterior curve if we increased the sample size.\n\n\n\n\n\nFigure 1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator."
+  },
+  {
+    "objectID": "exercises/01-exercise.html#exercice-1.3",
+    "href": "exercises/01-exercise.html#exercice-1.3",
+    "title": "Exercice 1",
+    "section": "Exercice 1.3",
+    "text": "Exercice 1.3\nThe purpose of this exercise is to show that even one-dimensional numerical integration requires some care. Consider a half Cauchy prior over the positive half line, with density \\(f(x) = 2\\pi^{-1}(1+x^2)^{-1}\\mathrm{I}(x \\geq 0)\\). Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes\\(^{-1}\\). Compare this approximation with that of quadrature methods via integrate and return the corresponding estimates of the normalizing constant. Indication: check the values and make sure the output is sensical. Modify the integrand if necessary.\nPlot the posterior distribution of \\(1/\\lambda\\), the average waiting time."
+  },
+  {
+    "objectID": "exercises/01-exercise.html#exercice-1.4",
+    "href": "exercises/01-exercise.html#exercice-1.4",
+    "title": "Exercice 1",
+    "section": "Exercice 1.4",
+    "text": "Exercice 1.4\nConsider \\(\\lambda \\sim \\mathsf{Ga}(\\alpha = 1.4, \\beta=0.2)\\).\n\nReturn the posterior mean, posterior median and maximum a posteriori (MAP).\nReturn the 89% equitailed percentile credible interval.\nReturn the 50% highest posterior density (HPD) interval (harder).\n\nNext, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.\nWould the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all."
+  },
+  {
+    "objectID": "exercises/01-solution.html",
+    "href": "exercises/01-solution.html",
+    "title": "Solution 1",
+    "section": "",
+    "text": "You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.\nFor modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate \\(\\lambda>0\\), with associated density \\(f(x) = \\lambda \\exp(-\\lambda x)\\)."
+  },
+  {
+    "objectID": "exercises/01-solution.html#exercise-1.1",
+    "href": "exercises/01-solution.html#exercise-1.1",
+    "title": "Solution 1",
+    "section": "Exercise 1.1",
+    "text": "Exercise 1.1\nCompute the marginal likelihood when the prior for \\(\\lambda\\) is\n\nan exponential distribution with rate \\(\\kappa>0\\), with prior density \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\);\nsame, but truncated above at 1, so the density is \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\mathrm{I}\\{\\lambda \\leq 1\\}\\); the indicator function \\(\\mathrm{I}(\\cdot)\\) equals one if the condition is true and zero otherwise.\n\\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta)\\), a gamma distribution with shape \\(\\alpha>0\\) and rate \\(\\beta>0\\), with prior density \\(p(\\lambda) = \\beta^\\alpha\\lambda^{\\alpha-1}\\exp(-\\beta \\lambda)/\\Gamma(\\alpha)\\).\n\nDeduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution.\n\nSolution. The likelihood is \\[\\begin{align*}\nL(\\lambda) = \\prod_{i=1}^n \\lambda \\exp(-\\lambda y_i) = \\lambda^n \\exp(-\\lambda n\\overline{y}),\n\\end{align*}\\] where \\(\\overline{y}=8\\) is the sample mean and \\(n=10\\) the number of observations.\nThe exponential distribution is a special case of the gamma, where \\(\\lambda \\sim \\mathsf{Exp}(\\kappa) \\equiv \\mathsf{Ga}(1, \\kappa)\\).\nThe posterior densities are equal, up to proportionality, to \\[\\begin{align*}\np_1(\\lambda \\mid y) &\\propto\\lambda^{n}\\exp\\{-(n\\overline{y}+\\kappa)\\lambda\\} \\\\\np_2(\\lambda \\mid y) &\\propto\\lambda^{n}\\exp\\{-(n\\overline{y}+\\kappa)\\lambda\\}\\mathrm{I}\\{\\lambda \\geq 1\\} \\\\\np_3(\\lambda \\mid y) &\\propto\\lambda^{n+\\alpha-1}\\exp\\{-(n\\overline{y}+\\beta)\\lambda\\}\n\\end{align*}\\] so these are \\(\\mathsf{Ga}(n+1, n\\overline{y} + \\kappa)\\), \\(\\mathsf{Ga}(n+1, n\\overline{y} + \\kappa)\\) truncated over \\([0,1]\\) and \\(\\mathsf{Ga}(n+\\alpha, n\\overline{y} + \\beta)\\).\nLet \\(\\Gamma(\\cdot)\\) denote the gamma function and \\(\\gamma(a, x)\\) the lower incomplete gamma function, \\(\\gamma(a, x= \\int_0^x t^{a-1}\\exp(-t) \\mathrm{d} t.\\) The marginal likelihood can be obtained either by integrating the product of the likelihood and prior, or upon noting that\n\\[\\begin{align*}\np_i(\\boldsymbol{y}) = \\frac{L(\\lambda) p_i(\\lambda)}{p_i(\\lambda \\mid \\boldsymbol{y})}\n\\end{align*}\\] so we get \\[\\begin{align*}\np_1(\\boldsymbol{y}) &= \\kappa n!(n\\overline{y}+\\kappa)^{-(n+1)},\\\\\np_2(\\boldsymbol{y}) &= p_1(\\boldsymbol{y}) \\times \\gamma\\{n+1, (n\\overline{y}+\\kappa)\\}, \\\\\np_3(\\boldsymbol{y}) &= \\frac{\\Gamma(n + \\alpha)\\beta^\\alpha}{\\Gamma(\\alpha)(n\\overline{y} + \\beta)^{n+\\alpha}}.\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "exercises/01-solution.html#exercise-1.2",
+    "href": "exercises/01-solution.html#exercise-1.2",
+    "title": "Solution 1",
+    "section": "Exercise 1.2",
+    "text": "Exercise 1.2\n\n\n\n\n\n\n\n\n\n\n\nConsider the following priors for the reciprocal expected waiting time, \\(\\lambda\\).\n\na gamma with rate \\(\\beta=100\\) and shape \\(\\alpha = 10\\)\nan exponential with rate \\(5\\)\na uniform prior on the unit interval \\([5,10]\\) for \\(1/\\lambda\\)\n\nAssociate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?\nExplain what would happen to the posterior curve if we increased the sample size.\n\n\n\n\n\nFigure 1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator.\n\n\n\n\n\nSolution. As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimate, \\(\\widehat{\\lambda}=1/8\\), regardless of the prior function (if it is untruncated).\nThe mode of a gamma distribution with rate \\(\\beta\\) and shape \\(\\alpha\\) is \\((\\alpha-1)/\\beta\\) for \\(\\alpha>1\\).\nThe truncated distribution (bottom left) is clearly identified from the “stubborn” prior, which is \\(p(\\lambda) \\propto \\mathrm{I}(1/10 < \\lambda < 1/5)/\\lambda^2\\), so 3C. Prior 1 has an average of 1/10 (less than the MLE) and provides nearly as much information as the data, so it is the more peaked posterior, so 1B. The exponential, or \\(\\mathsf{Ga}(1,5)\\), is much less informative than the likelihood and posterior should be only slightly different for the other, so 2A."
+  },
+  {
+    "objectID": "exercises/01-solution.html#exercice-1.3",
+    "href": "exercises/01-solution.html#exercice-1.3",
+    "title": "Solution 1",
+    "section": "Exercice 1.3",
+    "text": "Exercice 1.3\nThe purpose of this exercise is to show that even one-dimensional numerical integration requires some care. Consider a half Cauchy prior over the positive half line, with density \\(f(x) = 2\\pi^{-1}(1+x^2)^{-1}\\mathrm{I}(x \\geq 0)\\). Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes\\(^{-1}\\). Compare this approximation with that of quadrature methods via integrate and return the corresponding estimates of the normalizing constant. Indication: check the values and make sure the output is sensical. Modify the integrand if necessary.\nPlot the posterior distribution of \\(\\omega = 1/\\lambda\\), the average waiting time.\n\nSolution. For an unnormalized density \\(g(x)\\) such that \\(\\int g(x) \\mathrm{d} x = c\\), the normalizing constant is \\(1/c\\).\nFirst, remember that the density function of the scale \\(\\omega = \\lambda^{-1}\\) is related to the one of the rate \\(\\lambda\\) through a change of variable, with Jacobian \\(\\omega^{-2}\\).\n\n# Likelihood function - NOTE FORMULATION TO AVOID NUMERICAL OVERFLOW\nlik <- function(x, n = 10, ybar = 8){exp(n*(log(x)-ybar*x))}\n# Density of Cauchy over positive real line\ndfoldedCauchy <- function(x){2/pi/(1+x^2)}\n# Check integral\nintegrate(dfoldedCauchy, lower = 0, upper = Inf)\n\n1 with absolute error < 1.6e-10\n\n# Unormalized posterior\nunnorm_post <- function(x){dfoldedCauchy(x)*lik(x)}\n(icst_lambda <- integrate(f = unnorm_post, 0, 100))\n\n7.074775e-15 with absolute error < 1.4e-14\n\n# Check that the normalized value gives integral of 1\ncst_test <- integrate(f = function(x){unnorm_post(x)/icst_lambda$value}, \n                      lower = 0,\n                      upper = 100)\n\nOuch! The integral is nearly zero, and there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. The normalizing constant, the reciprocal of the marginal likelihood, is not well estimated. The absolute error is of higher order than the estimate of the marginal likelihood, and this will be more problematic in higher dimensions.\nTo palliate to this, we could slightly modify the integrand by scaling the likelihood by \\((n\\overline{y} )^{n+1}/n!\\), the normalizing constant of the gamma integral, which is around \\(2.4 \\times 10^{14}\\). This fixes the issue below.\n\n# Scale likelihood by using gamma distribution normalizing constant\nslik <- function(x, n = 10, ybar = 8){\n  exp(-lgamma(n+1) + (n+1)*log(n*ybar) + n*(log(x)-ybar*x))\n}\n# Unnormalized posterior, version 2\nunnorm_post2 <- function(x){dfoldedCauchy(x)*slik(x)}\n# Define grid and evaluate product\ngrid <- seq(from = 0, to = 30, by = 0.01)\nmarglik_grid <- sum(unnorm_post2(grid))*0.01\n# Is the grid approximation good enough?\n# check equality to numerical tolerance\nall.equal(integrate(f = unnorm_post2, 0, 100)$value, marglik_grid)\n\n[1] TRUE\n\nnorm_cst <- 1/marglik_grid\n\nThe prior normalizing by a known constant fixes the numerical issues. Generally, one would tend to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density).\nFor the posterior density, we can simply use the approximation with \\(p(\\lambda \\mid \\boldsymbol{y}) \\approx \\widehat{c} L(\\lambda)p(\\lambda)\\). The posterior density for the reciprocal rate is \\(p(\\omega \\mid \\boldsymbol{y}) \\approx \\widehat{c} L(\\omega^{-1})p(\\omega^{-1})\\omega^{-2}\\) (don’t forget the Jacobian)!\n\n\nCode\nlibrary(ggplot2)\nggplot() + \n  stat_function(fun = function(x){unnorm_post2(1/x)*norm_cst/x^2},\n                xlim = c(0, 30),\n                n = 1001) +\n  labs(y = \"\", \n       x = expression(paste(\"average waiting time \", 1/lambda, \" (in minutes)\")),\n       subtitle = \"posterior density\") + \n  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +\n  theme_classic()"
+  },
+  {
+    "objectID": "exercises/01-solution.html#exercice-1.4",
+    "href": "exercises/01-solution.html#exercice-1.4",
+    "title": "Solution 1",
+    "section": "Exercice 1.4",
+    "text": "Exercice 1.4\nConsider \\(\\lambda \\sim \\mathsf{Ga}(\\alpha = 1.4, \\beta=0.2)\\).\n\nReturn the posterior mean, posterior median and maximum a posteriori (MAP).\nReturn the 89% equitailed percentile credible interval.\nReturn the 50% highest posterior density (HPD) interval (harder).\n\nNext, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.\nWould the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all.\n\nSolution. We have already determined that the posterior is a Gamma distribution \\(\\mathsf{Ga}(a, b)\\), where \\(a= \\alpha+ n= 11.4\\) and \\(b=n\\overline{y} + \\beta = 80.2\\). We can query the moments directly: the mode is \\((a-1)/b\\) and the mean \\(a/b\\), while the median must be found numerically using the quantile function.\n\na <- 11.4 # shape parameter\nb <- 80.2 # rate parameter\nalpha <- 0.11 # level\npostmean <- a/b # posterior mean\npostmed <- qgamma(p = 0.5, shape = a, rate = b) # median\npostmode <- (a-1)/b # mode\ncredint <- qgamma(p = c(alpha/2, 1-alpha/2), shape = a, rate = b)\n# Documentation states you must return the quantile function\nHDInterval::hdi(\n    object = qgamma, \n    shape = a, \n    rate = b, \n    credMass = 0.50)\n\n    lower     upper \n0.1042228 0.1589696 \nattr(,\"credMass\")\n[1] 0.5\n\n# Alternatively, find this numerically\n# MAP via minimization of the negative log likelihood\nMAP <- optimize(\n  f = function(x){-dgamma(x, shape = a, rate = b, log = TRUE)},\n  interval = qgamma(p = c(0.2,0.8), shape = a, rate = b)\n  )$minimum\n# Other quantities approximated by Monte Carlo\n# Sample from posterior\npost_samp <- rgamma(n = 1e4, shape = a, rate = b)\n# Sample mean and sample quantiles\nmean(post_samp)\n\n[1] 0.1422132\n\nquantile(post_samp, c(alpha/2, 0.5, 1-alpha/2))\n\n      5.5%        50%      94.5% \n0.08286817 0.13834515 0.21530067 \n\n# Highest posterior density interval\ncredHDI <- HDInterval::hdi(\n  object = post_samp, \n  credMass = 0.50)\ncredHDI\n\n    lower     upper \n0.1061453 0.1597930 \nattr(,\"credMass\")\n[1] 0.5\n\n\nUp to three significant digits, the posterior mean is 0.142, the median is 0.138 and the mode 0.13. The bounds of the equitailed 89% credible interval are [0.082, 0.215], those of the 50% HDPI [0.1061453, 0.159793].\nFor the posterior predictive, we simply take the samples from the posterior, post_samp, and generate for each rate a new exponential\n\n\nCode\npostpred_samp <- rexp(n = 1000, rate = post_samp[seq_len(1000)])\nggplot(data = data.frame(x = postpred_samp))+\n  geom_histogram(aes(x = x, y = ..density..)) + \n  # the likelihood is proportional to a gamma\n  stat_function(fun = dexp,  \n                n = 1001, \n                args = list(rate = 1/8) # mle is average\n                ) +\n  labs(x = \"waiting time (in minutes)\", \n       y = \"\") +\n  scale_x_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +\n  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +\n  theme_classic()\n\n\n\n\n\nFigure 2: Histogram of posterior predictive draws and density function of observations."
+  },
+  {
+    "objectID": "exercises/02-exercise.html",
+    "href": "exercises/02-exercise.html",
+    "title": "Exercice 2",
+    "section": "",
+    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y > 0)\n\\end{align*}\\] for location \\(\\nu >0\\) and shape \\(\\tau>0\\).\n\nWrite down the likelihood and show that it can be written in terms of the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{Ga}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{No}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\)."
+  },
+  {
+    "objectID": "exercises/02-exercise.html#exercise-2.2",
+    "href": "exercises/02-exercise.html#exercise-2.2",
+    "title": "Exercice 2",
+    "section": "Exercise 2.2",
+    "text": "Exercise 2.2\nConsider the Rayleigh distribution with scale \\(\\sigma>0\\). It’s density is \\[f(y; \\sigma) = \\frac{y}{\\sigma^2} \\exp\\left(-\\frac{y^2}{2\\sigma^2}\\right)\\mathrm{I}(x \\geq 0).\\]\nDerive the Fisher information matrix and use it to obtain Jeffrey’s prior for \\(\\sigma\\). Determine whether the prior is proper."
+  },
+  {
+    "objectID": "exercises/02-exercise.html#exercise-2.3",
+    "href": "exercises/02-exercise.html#exercise-2.3",
+    "title": "Exercice 2",
+    "section": "Exercise 2.3",
+    "text": "Exercise 2.3\nConsider a binomial model with an unknown probability of successes \\(\\theta \\in [0,1]\\) model. Suppose your prior guess for \\(\\theta\\) has mean \\(0.1\\) and standard deviation \\(0.2\\)\nUsing moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.\nPlot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location \\(\\mu=0.1\\) and scale \\(\\sigma=0.2\\).1"
+  },
+  {
+    "objectID": "exercises/02-exercise.html#exercise-2.4",
+    "href": "exercises/02-exercise.html#exercise-2.4",
+    "title": "Exercice 2",
+    "section": "Exercise 2.4",
+    "text": "Exercise 2.4\nReplicate the analysis of Example 2.6 (Should you phrase your headline as a question?) of the course notes using the upworthy_question data from the hecbayes package."
+  },
+  {
+    "objectID": "exercises/02-solution.html",
+    "href": "exercises/02-solution.html",
+    "title": "Solution 2",
+    "section": "",
+    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y > 0)\n\\end{align*}\\] for location \\(\\nu >0\\) and shape \\(\\tau>0\\).\n\nWrite down the likelihood and show the posterior only depends on the data through the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{Ga}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{No}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).\n\n\nSolution. The log likelihood for an independent and identically distributed sample is \\[\\begin{align*}\n\\ell(\\nu, \\lambda) = \\frac{n}{2} \\ln(\\lambda) - \\frac{3}{2} \\sum_{i=1}^n \\ln(y_i) - \\frac{\\lambda}{2\\nu^2} \\sum_{i=1}^n (y_i - 2\\nu + \\nu^2/y_i)\n\\end{align*}\\] and we readily see that the model is an exponential family with sufficient statistics \\(t_1(\\boldsymbol{y}) = \\sum_{i=1}^n y_i\\) and \\(t_2(\\boldsymbol{y}) = \\sum_{i=1}^n y_i^{-1}\\).\nThe joint prior is of the form \\[\\begin{align*}\np(\\lambda, \\nu) &\\propto \\lambda^{\\alpha-1}\\exp(-\\lambda \\beta) \\\\\np(\\nu \\mid \\lambda) & \\propto \\frac{(\\lambda \\tau)^{1/2}}{\\nu^2}\\exp\\left\\{-\\frac{\\lambda\\tau }{2}(\\nu^{-1}-\\mu)^2\\right\\},\n\\end{align*}\\] where the last step follows from a change of variable. To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get \\[\\begin{align*}\np(\\lambda, \\nu \\mid \\boldsymbol{y}) &\\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau}{\\nu^{2}}-2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 +\\frac{t_1(\\boldsymbol{y})}{\\nu^2} -  \\frac{2n}{\\nu} + t_2(\\boldsymbol{y})\\right\\}\\right] \\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau + t_1(\\boldsymbol{y})}{\\nu^2} - 2\\frac{\\tau\\mu+n}{\\nu} + \\tau\\mu^2 + t_2(\\boldsymbol{y})\\right\\} \\right]\n\\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp\\left[-\\lambda \\left\\{\\beta + \\frac{c_3-c_1c_2^2}{2}\\right\\}\\right] \\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\frac{1}{\\nu^2} - \\frac{2c_2}{\\nu} + c_2^2\\right)\\right\\}\n\\end{align*}\\] where \\(c_1=\\{\\tau + t_1(\\boldsymbol{y})\\}\\), \\(c_2 =(\\tau\\mu+n)/c_1\\) and \\(c_3 =\\tau\\mu^2 + t_2(\\boldsymbol{y})\\).\nTO BE CONTINUED"
+  },
+  {
+    "objectID": "exercises/02-solution.html#exercise-2.2",
+    "href": "exercises/02-solution.html#exercise-2.2",
+    "title": "Solution 2",
+    "section": "Exercise 2.2",
+    "text": "Exercise 2.2\nConsider the Rayleigh distribution with scale \\(\\sigma>0\\). It’s density is \\[f(y; \\sigma) = \\frac{y}{\\sigma^2} \\exp\\left(-\\frac{y^2}{2\\sigma^2}\\right)\\mathrm{I}(x \\geq 0).\\]\nDerive the Fisher information matrix and use it to obtain Jeffrey’s prior for \\(\\sigma\\). Determine whether the prior is proper.\n\nSolution. The log likelihood for a sample of size one is \\[\\begin{align*}\n\\ell(\\sigma) = \\log(y) - 2\\log(\\sigma) - \\frac{y^2}{2\\sigma^2}\n\\end{align*}\\] and the negative of the Hessian is \\[\\begin{align*}\n\\jmath(\\sigma) = -\\frac{\\partial \\ell(\\sigma)}{\\partial \\sigma} = -\\frac{2}{\\sigma^2} + \\frac{3y^2}{\\sigma^4}\n\\end{align*}\\] To compute the Fisher information, we need the second moment of the Rayleigh distribution, \\[\\begin{align*}\n\\mathsf{E}(Y^2) &= \\int_0^\\infty \\frac{y^3}{\\sigma^2}\\exp\\left(-\\frac{y^2}{2\\sigma^2}\\right)\\mathrm{d} y\\\\&= 2\\sigma^2 \\int_0^\\infty u \\exp(-u) \\mathrm{d} u\n\\\\&= 2\\sigma^2\n\\end{align*}\\] where we made the change of variable \\(u= 0.5y^2\\sigma^{-2}\\), \\(\\mathrm{d} u = y\\sigma^{-2}\\mathrm{d} y\\) and recovered the expected value of a unit exponential distribution.\nThe Fisher information is \\(\\imath(\\sigma) = \\mathsf{E}\\{\\jmath(\\sigma)\\}=-2/\\sigma^2 + 6/\\sigma^2 = 3/\\sigma^2\\). Jeffrey’s prior for the scale, \\(p(\\sigma) =|\\imath(\\sigma)|^{1/2}\\), is proportional to \\(\\sigma^{-1}\\) and thus improper."
+  },
+  {
+    "objectID": "exercises/02-solution.html#exercise-2.3",
+    "href": "exercises/02-solution.html#exercise-2.3",
+    "title": "Solution 2",
+    "section": "Exercise 2.3",
+    "text": "Exercise 2.3\nConsider a binomial model with an unknown probability of successes \\(\\theta \\in [0,1]\\) model. Suppose your prior guess for \\(\\theta\\) has mean \\(0.1\\) and standard deviation \\(0.2\\)\nUsing moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.\nPlot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location \\(\\mu=0.1\\) and scale \\(\\sigma=0.2\\).1\n\nSolution. The beta distribution has expected value \\(\\alpha/(\\alpha+\\beta)\\) and variance \\(\\alpha\\beta(\\alpha+\\beta)^{-2}(\\alpha+\\beta+1)^{-1}\\).\nSince the system of equations is nonlinear, we need to solve numerically to find the two unknown value of the parameters or else simply substitute \\(\\beta = \\alpha (1-\\mu)/\\mu\\) in the equation for the variance.\n\nbeta_moments <- function(par, mean, variance){\n  alpha <- par[1]\n  beta <- par[2]\n  c(alpha/(alpha+beta) - mean,\n    alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)\n}\n# Numerical root finding algorithm\n# We need to give good starting values\nrootSolve::multiroot(f = beta_moments,\n                     start = c(0.1, 0.8),\n                     positive = TRUE,\n                     mean = 0.1, \n                     variance = 0.04)\n\n$root\n[1] 0.125 1.125\n\n$f.root\n[1] 5.504125e-12 4.298423e-12\n\n$iter\n[1] 5\n\n$estim.precis\n[1] 4.901274e-12\n\nalpha <- uniroot(f = function(alpha, mean = 0.1, variance = 0.04){\n  beta <- alpha*(1-mean)/mean\n  alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance}, \n  interval = c(1e-4, 1))$root\nbeta <- alpha*(1-0.1)/0.1\nc(alpha = alpha, beta = beta)\n\nalpha  beta \n0.125 1.125 \n\n\nand we find \\(\\alpha = 0.125\\) and \\(\\beta=1.125\\).\nLet \\(a = -\\mu/\\sigma\\) and \\(b = (1-\\mu)/\\sigma\\) denote the standardized lower and upper bounds, respectively. The density of the truncated Gaussian with location \\(\\mu\\) and scale \\(\\sigma\\) on the unit interval is \\[\\begin{align*}\nf(x; \\mu, \\sigma) = \\frac{1}{\\sigma}\\frac{\\phi\\left(\\frac{x - \\mu}{\\sigma}\\right)}{\\Phi(b) - \\Phi(a)},\n\\end{align*}\\] where \\(\\phi\\) is the density of a standard Gaussian \\(\\mathsf{No}(0,1)\\) and \\(\\Phi\\) the corresponding distribution function.\n\n\n\n\n\n\nFigure 1: Beta (full line) and truncated Gaussian (dashed line) prior densities.\n\n\n\n\nThe beta distribution, while matching the moments, is implying very low chance of success with a mode at zero. By contrast, the truncated Gaussian (which does not have mean \\(\\mu\\) and variance \\(\\sigma^2\\)) has the mode at \\(\\mu=0.1\\). Which one is preferable depends on the context; we could also match the parameters of the truncated Gaussian."
+  },
+  {
+    "objectID": "exercises/02-solution.html#exercise-2.4",
+    "href": "exercises/02-solution.html#exercise-2.4",
+    "title": "Solution 2",
+    "section": "Exercise 2.4",
+    "text": "Exercise 2.4\nReplicate the analysis of Example 2.6 (Should you phrase your headline as a question?) of the course notes using the upworthy_question data from the hecbayes package.\n\n\nSolution. \ndata(upworthy_question, package = \"hecbayes\")\n# Prior parameters\nalpha <- 2.5 # shape\nbeta <- 0.04 # rate\n\n# Pool data from all questions (only total counts matter)\nsummary_stats <- upworthy_question |>\n  dplyr::group_by(question) |>\n  dplyr::summarize(\n    total_impressions = sum(impressions),\n    total_clicks = sum(clicks)) |>\n  dplyr::ungroup() |>\n  as.vector()\n# Extract total number of successes out of trials\n# Impressions here serve as count\nn_yes <- summary_stats$total_impressions[1]\ny_yes <- summary_stats$total_clicks[1]\nn_no <-  summary_stats$total_impressions[2]\ny_no <- summary_stats$total_clicks[2]\n# Generate posterior sample draws\n# Since likelihood and priors are independent, \n# so are the posteriors for the rates. \n# We can draw independently from each.\nset.seed(1234)\npost_data_upworthy_question <- \n  data.frame( \n  yes = rgamma(n = 1e4, shape = alpha + y_yes, rate = beta + n_yes),\n  no = rgamma(n = 1e4,  shape = alpha + y_no, rate = beta + n_no))\n# Plot the histogram of the ratio of rates (question / no question)\nggplot(data = post_data_upworthy_question,\n  mapping = aes(x = yes/no)) +\n  geom_histogram() +\n  labs(x = \"rate ratio\", y = \"\",\n       caption = expression(lambda[\"yes\"]/lambda[\"no\"])) +\n  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +\n  theme_classic()\n\n\n\n# Compute the posterior mean for the quantity\npost_mean <- with(post_data_upworthy_question, mean(yes/no))\npost_mean\n\n[1] 0.9317745"
+  },
+  {
+    "objectID": "exercises/03-exercise.html",
+    "href": "exercises/03-exercise.html",
+    "title": "Exercice 3",
+    "section": "",
+    "text": "We revisit Exercise 1.3, which used a half-Cauchy prior for the exponential waiting time of buses.\nThe ratio-of-uniform method, implemented in the rust R package, can be used to simulate independent draws from the posterior of the rate \\(\\lambda\\). The following code produces\n\nnobs <- 10L # number of observations\nybar <- 8   # average waiting time\nB <- 1000L  # number of draws\n# Un-normalized log posterior: scaled log likelihood + log prior\nupost <- function(x){ \n  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +\n    log(2) + dt(x = x, df = 1, log = TRUE)}\npost_samp <- rust::ru(logf = upost, \n                      n = B, \n                      d = 1,  # dimension of parameter (scalar)\n                      init = nobs/ybar) # initial value of mode\n\nEstimate using the Monte Carlo sample:\n\nthe probability that the waiting time is between 3 and 15 minutes\nthe average waiting time\nthe standard deviation of the waiting time\n\nNext, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior. Estimate the same quantities and assess the variability of the Monte Carlo estimators for both correlated draws and the independent draws."
+  },
+  {
+    "objectID": "exercises/index.html",
+    "href": "exercises/index.html",
+    "title": "Exercises",
+    "section": "",
+    "text": "This section will contain exercises that are directly connected to the course notes, in addition to other exercises from reference manuals."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Special topics in data science --- Bayesian modelling",
+    "section": "",
+    "text": "Special topics in data science — Bayesian modelling\n        \n        \n            Hands on introduction to Bayesian data analysis. The course will cover the formulation, evaluation and comparison of Bayesian models through examples.\n        \n        \n            MATH 80636A, Fall 2023HEC Montréal\n        \n    \n    \n      \n        \n        \n        \n      \n    \n\n\n\n\n\n\nInstructor\n\n   Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\nCourse details\n\n   Fall 2023\n   Tuesday\n   8:30-11:30\n   Decelles, Rivière-du-Loup\n\n\n\nContacting me\nI am best reached by email."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#probability-vs-frequency",
@@ -123,7 +333,7 @@
     "href": "slides/bayesmod-slides1.html#beta-distribution",
     "title": "Bayesian modelling",
     "section": "Beta distribution",
-    "text": "Beta distribution\nThe beta distribution with shapes \\(\\alpha&gt;0\\) and \\(\\beta&gt;0\\), denoted \\(\\mathsf{Be}(\\alpha,\\beta)\\), has density \\[f(y) = \\frac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}y^{\\alpha - 1}(1-y)^{\\beta - 1}, \\qquad y \\in [0,1]\\]\n\nexpectation: \\(\\alpha/(\\alpha+\\beta)\\);\nmode \\((\\alpha-1)/(\\alpha+\\beta-2)\\) if \\(\\alpha, \\beta&gt;1\\), else, \\(0\\), \\(1\\) or none;\nvariance: \\(\\alpha\\beta/\\{(\\alpha+\\beta)^2(\\alpha+\\beta+1)\\}\\).\n\n\nIt is a continuous distribution over the unit interval.\nThe uniform is a special case when both shapes are unity."
+    "text": "Beta distribution\nThe beta distribution with shapes \\(\\alpha>0\\) and \\(\\beta>0\\), denoted \\(\\mathsf{Be}(\\alpha,\\beta)\\), has density \\[f(y) = \\frac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}y^{\\alpha - 1}(1-y)^{\\beta - 1}, \\qquad y \\in [0,1]\\]\n\nexpectation: \\(\\alpha/(\\alpha+\\beta)\\);\nmode \\((\\alpha-1)/(\\alpha+\\beta-2)\\) if \\(\\alpha, \\beta>1\\), else, \\(0\\), \\(1\\) or none;\nvariance: \\(\\alpha\\beta/\\{(\\alpha+\\beta)^2(\\alpha+\\beta+1)\\}\\).\n\n\nIt is a continuous distribution over the unit interval.\nThe uniform is a special case when both shapes are unity."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#beta-binomial-example",
@@ -172,7 +382,7 @@
     "href": "slides/bayesmod-slides1.html#numerical-example-of-monte-carlo-integration",
     "title": "Bayesian modelling",
     "section": "Numerical example of (Monte Carlo) integration",
-    "text": "Numerical example of (Monte Carlo) integration\n\ny &lt;- 6L # number of successes \nn &lt;- 14L # number of trials\nalpha &lt;- beta &lt;- 1.5 # prior parameters\nunnormalized_posterior &lt;- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n\n1.066906e-05 with absolute error &lt; 1e-12\n\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n\n[1] 1.066906e-05\n\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n\n[1] 1.064055e-05"
+    "text": "Numerical example of (Monte Carlo) integration\n\ny <- 6L # number of successes \nn <- 14L # number of trials\nalpha <- beta <- 1.5 # prior parameters\nunnormalized_posterior <- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n\n1.066906e-05 with absolute error < 1e-12\n\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n\n[1] 1.066906e-05\n\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n\n[1] 1.064055e-05"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#prior-likelihood-and-posterior",
@@ -256,7 +466,7 @@
     "href": "slides/bayesmod-slides1.html#posterior-predictive-distribution-via-simulation",
     "title": "Bayesian modelling",
     "section": "Posterior predictive distribution via simulation",
-    "text": "Posterior predictive distribution via simulation\nThe posterior predictive carries over the parameter uncertainty so will typically be wider and overdispersed relative to the corresponding distribution.\nGiven a draw \\(\\theta^*\\) from the posterior, simulate a new observation from the distribution \\(f(y_{\\text{new}}; \\theta^*)\\).\n\nnpost &lt;- 1e4L\n# Sample draws from the posterior distribution\npost_samp &lt;- rbeta(n = npost, y + alpha, n - y + beta)\n# For each draw, sample new observation\npost_pred &lt;- rbinom(n = npost, size = n, prob = post_samp)\n\n\n\nThe beta-binomial is used to model overdispersion in binary regression models."
+    "text": "Posterior predictive distribution via simulation\nThe posterior predictive carries over the parameter uncertainty so will typically be wider and overdispersed relative to the corresponding distribution.\nGiven a draw \\(\\theta^*\\) from the posterior, simulate a new observation from the distribution \\(f(y_{\\text{new}}; \\theta^*)\\).\n\nnpost <- 1e4L\n# Sample draws from the posterior distribution\npost_samp <- rbeta(n = npost, y + alpha, n - y + beta)\n# For each draw, sample new observation\npost_pred <- rbinom(n = npost, size = n, prob = post_samp)\n\n\n\nThe beta-binomial is used to model overdispersion in binary regression models."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#summarizing-posterior-distributions-1",
@@ -320,328 +530,6 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References\n\n\n\n\n\n\n\nCasella, G., & Berger, R. L. (2002). Statistical inference (2nd ed.). Duxbury.\n\n\nFinetti, B. de. (1974). Theory of probability: A critical introductory treatment (Vol. 1). Wiley.\n\n\nMcElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and STAN (2nd ed.). Chapman; Hall/CRC."
-  },
-  {
-    "objectID": "exercises/index.html",
-    "href": "exercises/index.html",
-    "title": "Exercises",
-    "section": "",
-    "text": "This section will contain exercises that are directly connected to the course notes, in addition to other exercises from reference manuals."
-  },
-  {
-    "objectID": "exercises/02-solution.html",
-    "href": "exercises/02-solution.html",
-    "title": "Solution 2",
-    "section": "",
-    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nWrite down the likelihood and show the posterior only depends on the data through the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{Ga}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{No}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).\n\n\nSolution. The log likelihood for an independent and identically distributed sample is \\[\\begin{align*}\n\\ell(\\nu, \\lambda) = \\frac{n}{2} \\ln(\\lambda) - \\frac{3}{2} \\sum_{i=1}^n \\ln(y_i) - \\frac{\\lambda}{2\\nu^2} \\sum_{i=1}^n (y_i - 2\\nu + \\nu^2/y_i)\n\\end{align*}\\] and we readily see that the model is an exponential family with sufficient statistics \\(t_1(\\boldsymbol{y}) = \\sum_{i=1}^n y_i\\) and \\(t_2(\\boldsymbol{y}) = \\sum_{i=1}^n y_i^{-1}\\).\nThe joint prior is of the form \\[\\begin{align*}\np(\\lambda, \\nu) &\\propto \\lambda^{\\alpha-1}\\exp(-\\lambda \\beta) \\\\\np(\\nu \\mid \\lambda) & \\propto \\frac{(\\lambda \\tau)^{1/2}}{\\nu^2}\\exp\\left\\{-\\frac{\\lambda\\tau }{2}(\\nu^{-1}-\\mu)^2\\right\\},\n\\end{align*}\\] where the last step follows from a change of variable. To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get \\[\\begin{align*}\np(\\lambda, \\nu \\mid \\boldsymbol{y}) &\\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau}{\\nu^{2}}-2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 +\\frac{t_1(\\boldsymbol{y})}{\\nu^2} -  \\frac{2n}{\\nu} + t_2(\\boldsymbol{y})\\right\\}\\right] \\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau + t_1(\\boldsymbol{y})}{\\nu^2} - 2\\frac{\\tau\\mu+n}{\\nu} + \\tau\\mu^2 + t_2(\\boldsymbol{y})\\right\\} \\right]\n\\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp\\left[-\\lambda \\left\\{\\beta + \\frac{c_3-c_1c_2^2}{2}\\right\\}\\right] \\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\frac{1}{\\nu^2} - \\frac{2c_2}{\\nu} + c_2^2\\right)\\right\\}\n\\end{align*}\\] where \\(c_1=\\{\\tau + t_1(\\boldsymbol{y})\\}\\), \\(c_2 =(\\tau\\mu+n)/c_1\\) and \\(c_3 =\\tau\\mu^2 + t_2(\\boldsymbol{y})\\).\nTO BE CONTINUED"
-  },
-  {
-    "objectID": "exercises/02-solution.html#exercise-2.1",
-    "href": "exercises/02-solution.html#exercise-2.1",
-    "title": "Solution 2",
-    "section": "",
-    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nWrite down the likelihood and show the posterior only depends on the data through the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{Ga}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{No}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).\n\n\nSolution. The log likelihood for an independent and identically distributed sample is \\[\\begin{align*}\n\\ell(\\nu, \\lambda) = \\frac{n}{2} \\ln(\\lambda) - \\frac{3}{2} \\sum_{i=1}^n \\ln(y_i) - \\frac{\\lambda}{2\\nu^2} \\sum_{i=1}^n (y_i - 2\\nu + \\nu^2/y_i)\n\\end{align*}\\] and we readily see that the model is an exponential family with sufficient statistics \\(t_1(\\boldsymbol{y}) = \\sum_{i=1}^n y_i\\) and \\(t_2(\\boldsymbol{y}) = \\sum_{i=1}^n y_i^{-1}\\).\nThe joint prior is of the form \\[\\begin{align*}\np(\\lambda, \\nu) &\\propto \\lambda^{\\alpha-1}\\exp(-\\lambda \\beta) \\\\\np(\\nu \\mid \\lambda) & \\propto \\frac{(\\lambda \\tau)^{1/2}}{\\nu^2}\\exp\\left\\{-\\frac{\\lambda\\tau }{2}(\\nu^{-1}-\\mu)^2\\right\\},\n\\end{align*}\\] where the last step follows from a change of variable. To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get \\[\\begin{align*}\np(\\lambda, \\nu \\mid \\boldsymbol{y}) &\\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau}{\\nu^{2}}-2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 +\\frac{t_1(\\boldsymbol{y})}{\\nu^2} -  \\frac{2n}{\\nu} + t_2(\\boldsymbol{y})\\right\\}\\right] \\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau + t_1(\\boldsymbol{y})}{\\nu^2} - 2\\frac{\\tau\\mu+n}{\\nu} + \\tau\\mu^2 + t_2(\\boldsymbol{y})\\right\\} \\right]\n\\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp\\left[-\\lambda \\left\\{\\beta + \\frac{c_3-c_1c_2^2}{2}\\right\\}\\right] \\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\frac{1}{\\nu^2} - \\frac{2c_2}{\\nu} + c_2^2\\right)\\right\\}\n\\end{align*}\\] where \\(c_1=\\{\\tau + t_1(\\boldsymbol{y})\\}\\), \\(c_2 =(\\tau\\mu+n)/c_1\\) and \\(c_3 =\\tau\\mu^2 + t_2(\\boldsymbol{y})\\).\nTO BE CONTINUED"
-  },
-  {
-    "objectID": "exercises/02-solution.html#exercise-2.2",
-    "href": "exercises/02-solution.html#exercise-2.2",
-    "title": "Solution 2",
-    "section": "Exercise 2.2",
-    "text": "Exercise 2.2\nConsider the Rayleigh distribution with scale \\(\\sigma&gt;0\\). It’s density is \\[f(y; \\sigma) = \\frac{y}{\\sigma^2} \\exp\\left(-\\frac{y^2}{2\\sigma^2}\\right)\\mathrm{I}(x \\geq 0).\\]\nDerive the Fisher information matrix and use it to obtain Jeffrey’s prior for \\(\\sigma\\). Determine whether the prior is proper.\n\nSolution. The log likelihood for a sample of size one is \\[\\begin{align*}\n\\ell(\\sigma) = \\log(y) - 2\\log(\\sigma) - \\frac{y^2}{2\\sigma^2}\n\\end{align*}\\] and the negative of the Hessian is \\[\\begin{align*}\n\\jmath(\\sigma) = -\\frac{\\partial \\ell(\\sigma)}{\\partial \\sigma} = -\\frac{2}{\\sigma^2} + \\frac{3y^2}{\\sigma^4}\n\\end{align*}\\] To compute the Fisher information, we need the second moment of the Rayleigh distribution, \\[\\begin{align*}\n\\mathsf{E}(Y^2) &= \\int_0^\\infty \\frac{y^3}{\\sigma^2}\\exp\\left(-\\frac{y^2}{2\\sigma^2}\\right)\\mathrm{d} y\\\\&= 2\\sigma^2 \\int_0^\\infty u \\exp(-u) \\mathrm{d} u\n\\\\&= 2\\sigma^2\n\\end{align*}\\] where we made the change of variable \\(u= 0.5y^2\\sigma^{-2}\\), \\(\\mathrm{d} u = y\\sigma^{-2}\\mathrm{d} y\\) and recovered the expected value of a unit exponential distribution.\nThe Fisher information is \\(\\imath(\\sigma) = \\mathsf{E}\\{\\jmath(\\sigma)\\}=-2/\\sigma^2 + 6/\\sigma^2 = 3/\\sigma^2\\). Jeffrey’s prior for the scale, \\(p(\\sigma) =|\\imath(\\sigma)|^{1/2}\\), is proportional to \\(\\sigma^{-1}\\) and thus improper."
-  },
-  {
-    "objectID": "exercises/02-solution.html#exercise-2.3",
-    "href": "exercises/02-solution.html#exercise-2.3",
-    "title": "Solution 2",
-    "section": "Exercise 2.3",
-    "text": "Exercise 2.3\nConsider a binomial model with an unknown probability of successes \\(\\theta \\in [0,1]\\) model. Suppose your prior guess for \\(\\theta\\) has mean \\(0.1\\) and standard deviation \\(0.2\\)\nUsing moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.\nPlot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location \\(\\mu=0.1\\) and scale \\(\\sigma=0.2\\).1\n\nSolution. The beta distribution has expected value \\(\\alpha/(\\alpha+\\beta)\\) and variance \\(\\alpha\\beta(\\alpha+\\beta)^{-2}(\\alpha+\\beta+1)^{-1}\\).\nSince the system of equations is nonlinear, we need to solve numerically to find the two unknown value of the parameters or else simply substitute \\(\\beta = \\alpha (1-\\mu)/\\mu\\) in the equation for the variance.\n\nbeta_moments &lt;- function(par, mean, variance){\n  alpha &lt;- par[1]\n  beta &lt;- par[2]\n  c(alpha/(alpha+beta) - mean,\n    alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)\n}\n# Numerical root finding algorithm\n# We need to give good starting values\nrootSolve::multiroot(f = beta_moments,\n                     start = c(0.1, 0.8),\n                     positive = TRUE,\n                     mean = 0.1, \n                     variance = 0.04)\n\n$root\n[1] 0.125 1.125\n\n$f.root\n[1] 5.504125e-12 4.298423e-12\n\n$iter\n[1] 5\n\n$estim.precis\n[1] 4.901274e-12\n\nalpha &lt;- uniroot(f = function(alpha, mean = 0.1, variance = 0.04){\n  beta &lt;- alpha*(1-mean)/mean\n  alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance}, \n  interval = c(1e-4, 1))$root\nbeta &lt;- alpha*(1-0.1)/0.1\nc(alpha = alpha, beta = beta)\n\nalpha  beta \n0.125 1.125 \n\n\nand we find \\(\\alpha = 0.125\\) and \\(\\beta=1.125\\).\nLet \\(a = -\\mu/\\sigma\\) and \\(b = (1-\\mu)/\\sigma\\) denote the standardized lower and upper bounds, respectively. The density of the truncated Gaussian with location \\(\\mu\\) and scale \\(\\sigma\\) on the unit interval is \\[\\begin{align*}\nf(x; \\mu, \\sigma) = \\frac{1}{\\sigma}\\frac{\\phi\\left(\\frac{x - \\mu}{\\sigma}\\right)}{\\Phi(b) - \\Phi(a)},\n\\end{align*}\\] where \\(\\phi\\) is the density of a standard Gaussian \\(\\mathsf{No}(0,1)\\) and \\(\\Phi\\) the corresponding distribution function.\n\n\n\n\n\n\nFigure 1: Beta (full line) and truncated Gaussian (dashed line) prior densities.\n\n\n\n\nThe beta distribution, while matching the moments, is implying very low chance of success with a mode at zero. By contrast, the truncated Gaussian (which does not have mean \\(\\mu\\) and variance \\(\\sigma^2\\)) has the mode at \\(\\mu=0.1\\). Which one is preferable depends on the context; we could also match the parameters of the truncated Gaussian."
-  },
-  {
-    "objectID": "exercises/02-solution.html#exercise-2.4",
-    "href": "exercises/02-solution.html#exercise-2.4",
-    "title": "Solution 2",
-    "section": "Exercise 2.4",
-    "text": "Exercise 2.4\nReplicate the analysis of Example 2.6 (Should you phrase your headline as a question?) of the course notes using the upworthy_question data from the hecbayes package.\n\nSolution. \n\ndata(upworthy_question, package = \"hecbayes\")\n# Prior parameters\nalpha &lt;- 2.5 # shape\nbeta &lt;- 0.04 # rate\n\n# Pool data from all questions (only total counts matter)\nsummary_stats &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(\n    total_impressions = sum(impressions),\n    total_clicks = sum(clicks)) |&gt;\n  dplyr::ungroup() |&gt;\n  as.vector()\n# Extract total number of successes out of trials\n# Impressions here serve as count\nn_yes &lt;- summary_stats$total_impressions[1]\ny_yes &lt;- summary_stats$total_clicks[1]\nn_no &lt;-  summary_stats$total_impressions[2]\ny_no &lt;- summary_stats$total_clicks[2]\n# Generate posterior sample draws\n# Since likelihood and priors are independent, \n# so are the posteriors for the rates. \n# We can draw independently from each.\nset.seed(1234)\npost_data_upworthy_question &lt;- \n  data.frame( \n  yes = rgamma(n = 1e4, shape = alpha + y_yes, rate = beta + n_yes),\n  no = rgamma(n = 1e4,  shape = alpha + y_no, rate = beta + n_no))\n# Plot the histogram of the ratio of rates (question / no question)\nggplot(data = post_data_upworthy_question,\n  mapping = aes(x = yes/no)) +\n  geom_histogram() +\n  labs(x = \"rate ratio\", y = \"\",\n       caption = expression(lambda[\"yes\"]/lambda[\"no\"])) +\n  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +\n  theme_classic()\n\n\n\n# Compute the posterior mean for the quantity\npost_mean &lt;- with(post_data_upworthy_question, mean(yes/no))\npost_mean\n\n[1] 0.9317745"
-  },
-  {
-    "objectID": "exercises/02-solution.html#footnotes",
-    "href": "exercises/02-solution.html#footnotes",
-    "title": "Solution 2",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nNote that the parameters of the truncated Gaussian distribution do not correspond to moments!↩︎"
-  },
-  {
-    "objectID": "exercises/01-solution.html",
-    "href": "exercises/01-solution.html",
-    "title": "Solution 1",
-    "section": "",
-    "text": "You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.\nFor modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate \\(\\lambda&gt;0\\), with associated density \\(f(x) = \\lambda \\exp(-\\lambda x)\\)."
-  },
-  {
-    "objectID": "exercises/01-solution.html#exercise-1.1",
-    "href": "exercises/01-solution.html#exercise-1.1",
-    "title": "Solution 1",
-    "section": "Exercise 1.1",
-    "text": "Exercise 1.1\nCompute the marginal likelihood when the prior for \\(\\lambda\\) is\n\nan exponential distribution with rate \\(\\kappa&gt;0\\), with prior density \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\);\nsame, but truncated above at 1, so the density is \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\mathrm{I}\\{\\lambda \\leq 1\\}\\); the indicator function \\(\\mathrm{I}(\\cdot)\\) equals one if the condition is true and zero otherwise.\n\\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta)\\), a gamma distribution with shape \\(\\alpha&gt;0\\) and rate \\(\\beta&gt;0\\), with prior density \\(p(\\lambda) = \\beta^\\alpha\\lambda^{\\alpha-1}\\exp(-\\beta \\lambda)/\\Gamma(\\alpha)\\).\n\nDeduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution.\n\nSolution. The likelihood is \\[\\begin{align*}\nL(\\lambda) = \\prod_{i=1}^n \\lambda \\exp(-\\lambda y_i) = \\lambda^n \\exp(-\\lambda n\\overline{y}),\n\\end{align*}\\] where \\(\\overline{y}=8\\) is the sample mean and \\(n=10\\) the number of observations.\nThe exponential distribution is a special case of the gamma, where \\(\\lambda \\sim \\mathsf{Exp}(\\kappa) \\equiv \\mathsf{Ga}(1, \\kappa)\\).\nThe posterior densities are equal, up to proportionality, to \\[\\begin{align*}\np_1(\\lambda \\mid y) &\\propto\\lambda^{n}\\exp\\{-(n\\overline{y}+\\kappa)\\lambda\\} \\\\\np_2(\\lambda \\mid y) &\\propto\\lambda^{n}\\exp\\{-(n\\overline{y}+\\kappa)\\lambda\\}\\mathrm{I}\\{\\lambda \\geq 1\\} \\\\\np_3(\\lambda \\mid y) &\\propto\\lambda^{n+\\alpha-1}\\exp\\{-(n\\overline{y}+\\beta)\\lambda\\}\n\\end{align*}\\] so these are \\(\\mathsf{Ga}(n+1, n\\overline{y} + \\kappa)\\), \\(\\mathsf{Ga}(n+1, n\\overline{y} + \\kappa)\\) truncated over \\([0,1]\\) and \\(\\mathsf{Ga}(n+\\alpha, n\\overline{y} + \\beta)\\).\nLet \\(\\Gamma(\\cdot)\\) denote the gamma function and \\(\\gamma(a, x)\\) the lower incomplete gamma function, \\(\\gamma(a, x= \\int_0^x t^{a-1}\\exp(-t) \\mathrm{d} t.\\) The marginal likelihood can be obtained either by integrating the product of the likelihood and prior, or upon noting that\n\\[\\begin{align*}\np_i(\\boldsymbol{y}) = \\frac{L(\\lambda) p_i(\\lambda)}{p_i(\\lambda \\mid \\boldsymbol{y})}\n\\end{align*}\\] so we get \\[\\begin{align*}\np_1(\\boldsymbol{y}) &= \\kappa n!(n\\overline{y}+\\kappa)^{-(n+1)},\\\\\np_2(\\boldsymbol{y}) &= p_1(\\boldsymbol{y}) \\times \\gamma\\{n+1, (n\\overline{y}+\\kappa)\\}, \\\\\np_3(\\boldsymbol{y}) &= \\frac{\\Gamma(n + \\alpha)\\beta^\\alpha}{\\Gamma(\\alpha)(n\\overline{y} + \\beta)^{n+\\alpha}}.\n\\end{align*}\\]"
-  },
-  {
-    "objectID": "exercises/01-solution.html#exercise-1.2",
-    "href": "exercises/01-solution.html#exercise-1.2",
-    "title": "Solution 1",
-    "section": "Exercise 1.2",
-    "text": "Exercise 1.2\n\n\n\n\n\n\n\n\n\n\n\nConsider the following priors for the reciprocal expected waiting time, \\(\\lambda\\).\n\na gamma with rate \\(\\beta=100\\) and shape \\(\\alpha = 10\\)\nan exponential with rate \\(5\\)\na uniform prior on the unit interval \\([5,10]\\) for \\(1/\\lambda\\)\n\nAssociate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?\nExplain what would happen to the posterior curve if we increased the sample size.\n\n\n\n\n\nFigure 1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator.\n\n\n\n\n\nSolution. As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimate, \\(\\widehat{\\lambda}=1/8\\), regardless of the prior function (if it is untruncated).\nThe mode of a gamma distribution with rate \\(\\beta\\) and shape \\(\\alpha\\) is \\((\\alpha-1)/\\beta\\) for \\(\\alpha&gt;1\\).\nThe truncated distribution (bottom left) is clearly identified from the “stubborn” prior, which is \\(p(\\lambda) \\propto \\mathrm{I}(1/10 &lt; \\lambda &lt; 1/5)/\\lambda^2\\), so 3C. Prior 1 has an average of 1/10 (less than the MLE) and provides nearly as much information as the data, so it is the more peaked posterior, so 1B. The exponential, or \\(\\mathsf{Ga}(1,5)\\), is much less informative than the likelihood and posterior should be only slightly different for the other, so 2A."
-  },
-  {
-    "objectID": "exercises/01-solution.html#exercice-1.3",
-    "href": "exercises/01-solution.html#exercice-1.3",
-    "title": "Solution 1",
-    "section": "Exercice 1.3",
-    "text": "Exercice 1.3\nThe purpose of this exercise is to show that even one-dimensional numerical integration requires some care. Consider a half Cauchy prior over the positive half line, with density \\(f(x) = 2\\pi^{-1}(1+x^2)^{-1}\\mathrm{I}(x \\geq 0)\\). Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes\\(^{-1}\\). Compare this approximation with that of quadrature methods via integrate and return the corresponding estimates of the normalizing constant. Indication: check the values and make sure the output is sensical. Modify the integrand if necessary.\nPlot the posterior distribution of \\(\\omega = 1/\\lambda\\), the average waiting time.\n\nSolution. For an unnormalized density \\(g(x)\\) such that \\(\\int g(x) \\mathrm{d} x = c\\), the normalizing constant is \\(1/c\\).\nFirst, remember that the density function of the scale \\(\\omega = \\lambda^{-1}\\) is related to the one of the rate \\(\\lambda\\) through a change of variable, with Jacobian \\(\\omega^{-2}\\).\n\n# Likelihood function - NOTE FORMULATION TO AVOID NUMERICAL OVERFLOW\nlik &lt;- function(x, n = 10, ybar = 8){exp(n*(log(x)-ybar*x))}\n# Density of Cauchy over positive real line\ndfoldedCauchy &lt;- function(x){2/pi/(1+x^2)}\n# Check integral\nintegrate(dfoldedCauchy, lower = 0, upper = Inf)\n\n1 with absolute error &lt; 1.6e-10\n\n# Unormalized posterior\nunnorm_post &lt;- function(x){dfoldedCauchy(x)*lik(x)}\n(icst_lambda &lt;- integrate(f = unnorm_post, 0, 100))\n\n7.074775e-15 with absolute error &lt; 1.4e-14\n\n# Check that the normalized value gives integral of 1\ncst_test &lt;- integrate(f = function(x){unnorm_post(x)/icst_lambda$value}, \n                      lower = 0,\n                      upper = 100)\n\nOuch! The integral is nearly zero, and there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. The normalizing constant, the reciprocal of the marginal likelihood, is not well estimated. The absolute error is of higher order than the estimate of the marginal likelihood, and this will be more problematic in higher dimensions.\nTo palliate to this, we could slightly modify the integrand by scaling the likelihood by \\((n\\overline{y} )^{n+1}/n!\\), the normalizing constant of the gamma integral, which is around \\(2.4 \\times 10^{14}\\). This fixes the issue below.\n\n# Scale likelihood by using gamma distribution normalizing constant\nslik &lt;- function(x, n = 10, ybar = 8){\n  exp(-lgamma(n+1) + (n+1)*log(n*ybar) + n*(log(x)-ybar*x))\n}\n# Unnormalized posterior, version 2\nunnorm_post2 &lt;- function(x){dfoldedCauchy(x)*slik(x)}\n# Define grid and evaluate product\ngrid &lt;- seq(from = 0, to = 30, by = 0.01)\nmarglik_grid &lt;- sum(unnorm_post2(grid))*0.01\n# Is the grid approximation good enough?\n# check equality to numerical tolerance\nall.equal(integrate(f = unnorm_post2, 0, 100)$value, marglik_grid)\n\n[1] TRUE\n\nnorm_cst &lt;- 1/marglik_grid\n\nThe prior normalizing by a known constant fixes the numerical issues. Generally, one would tend to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density).\nFor the posterior density, we can simply use the approximation with \\(p(\\lambda \\mid \\boldsymbol{y}) \\approx \\widehat{c} L(\\lambda)p(\\lambda)\\). The posterior density for the reciprocal rate is \\(p(\\omega \\mid \\boldsymbol{y}) \\approx \\widehat{c} L(\\omega^{-1})p(\\omega^{-1})\\omega^{-2}\\) (don’t forget the Jacobian)!\n\n\nCode\nlibrary(ggplot2)\nggplot() + \n  stat_function(fun = function(x){unnorm_post2(1/x)*norm_cst/x^2},\n                xlim = c(0, 30),\n                n = 1001) +\n  labs(y = \"\", \n       x = expression(paste(\"average waiting time \", 1/lambda, \" (in minutes)\")),\n       subtitle = \"posterior density\") + \n  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +\n  theme_classic()"
-  },
-  {
-    "objectID": "exercises/01-solution.html#exercice-1.4",
-    "href": "exercises/01-solution.html#exercice-1.4",
-    "title": "Solution 1",
-    "section": "Exercice 1.4",
-    "text": "Exercice 1.4\nConsider \\(\\lambda \\sim \\mathsf{Ga}(\\alpha = 1.4, \\beta=0.2)\\).\n\nReturn the posterior mean, posterior median and maximum a posteriori (MAP).\nReturn the 89% equitailed percentile credible interval.\nReturn the 50% highest posterior density (HPD) interval (harder).\n\nNext, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.\nWould the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all.\n\nSolution. We have already determined that the posterior is a Gamma distribution \\(\\mathsf{Ga}(a, b)\\), where \\(a= \\alpha+ n= 11.4\\) and \\(b=n\\overline{y} + \\beta = 80.2\\). We can query the moments directly: the mode is \\((a-1)/b\\) and the mean \\(a/b\\), while the median must be found numerically using the quantile function.\n\na &lt;- 11.4 # shape parameter\nb &lt;- 80.2 # rate parameter\nalpha &lt;- 0.11 # level\npostmean &lt;- a/b # posterior mean\npostmed &lt;- qgamma(p = 0.5, shape = a, rate = b) # median\npostmode &lt;- (a-1)/b # mode\ncredint &lt;- qgamma(p = c(alpha/2, 1-alpha/2), shape = a, rate = b)\n# Documentation states you must return the quantile function\nHDInterval::hdi(\n    object = qgamma, \n    shape = a, \n    rate = b, \n    credMass = 0.50)\n\n    lower     upper \n0.1042228 0.1589696 \nattr(,\"credMass\")\n[1] 0.5\n\n# Alternatively, find this numerically\n# MAP via minimization of the negative log likelihood\nMAP &lt;- optimize(\n  f = function(x){-dgamma(x, shape = a, rate = b, log = TRUE)},\n  interval = qgamma(p = c(0.2,0.8), shape = a, rate = b)\n  )$minimum\n# Other quantities approximated by Monte Carlo\n# Sample from posterior\npost_samp &lt;- rgamma(n = 1e4, shape = a, rate = b)\n# Sample mean and sample quantiles\nmean(post_samp)\n\n[1] 0.1422132\n\nquantile(post_samp, c(alpha/2, 0.5, 1-alpha/2))\n\n      5.5%        50%      94.5% \n0.08286817 0.13834515 0.21530067 \n\n# Highest posterior density interval\ncredHDI &lt;- HDInterval::hdi(\n  object = post_samp, \n  credMass = 0.50)\ncredHDI\n\n    lower     upper \n0.1061453 0.1597930 \nattr(,\"credMass\")\n[1] 0.5\n\n\nUp to three significant digits, the posterior mean is 0.142, the median is 0.138 and the mode 0.13. The bounds of the equitailed 89% credible interval are [0.082, 0.215], those of the 50% HDPI [0.1061453, 0.159793].\nFor the posterior predictive, we simply take the samples from the posterior, post_samp, and generate for each rate a new exponential\n\n\nCode\npostpred_samp &lt;- rexp(n = 1000, rate = post_samp[seq_len(1000)])\nggplot(data = data.frame(x = postpred_samp))+\n  geom_histogram(aes(x = x, y = ..density..)) + \n  # the likelihood is proportional to a gamma\n  stat_function(fun = dexp,  \n                n = 1001, \n                args = list(rate = 1/8) # mle is average\n                ) +\n  labs(x = \"waiting time (in minutes)\", \n       y = \"\") +\n  scale_x_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +\n  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +\n  theme_classic()\n\n\n\n\n\nFigure 2: Histogram of posterior predictive draws and density function of observations."
-  },
-  {
-    "objectID": "example/installation.html",
-    "href": "example/installation.html",
-    "title": "Installing R and RStudio",
-    "section": "",
-    "text": "Install R\nTo install the latest version of R itself (the engine), currently 4.3.1 (Beagle Scouts).\n\nGo to the Comprehensive R Archive Network (CRAN) website: https://cran.r-project.org/\nClick on “Download R for XXX”, where XXX is either Mac or Windows:\n\n\n\n\n\n\nIf you use macOS, scroll down to the first .pkg file in the list of files and download it.\n\n\n\n\n\nIf you use Windows, click “base” (or click on the bolded “install R for the first time” link) and download it.\n\n\n\n\n\n\nDouble click on the downloaded file (check your Downloads folder). Click yes through all the prompts to install like any other program.\nInstall OS specific programs\n\n\nmacOS only: download and install XQuartz.\nWindows only: download and install Rtools\n\n\n\nInstall RStudio\nRStudio is an integrated development environment (IDE) for R. To install the latter, follow the instructions.\n\nGo to the free download location on RStudio’s website: https://www.rstudio.com/products/rstudio/download/#download\nThe website should automatically detect your operating system (Linux, macOS or Windows) and show a big download button for it:\n\n\n\n\n\n\nIf not, scroll down a little to the large table and choose the version of RStudio that matches your operating system.\n\n\n\n\n\n\nDouble click on the downloaded file (again, check your Downloads folder). Click yes through all the prompts to install like any other program.\n\nDouble click on RStudio to run it (check your applications folder or start menu).\n\n\nInstall tidyverse\nR packages are easy to install with RStudio. Select the packages panel, click on “Install,” type the name of the package you want to install, and press enter.\n\n\n\n\n\nThis can sometimes be tedious when you’re installing lots of packages, though. The tidyverse, for instance, consists of dozens of packages (including ggplot2) that all work together. Rather than install each individually, you can install a single magical package and get them all at the same time.\nGo to the packages panel in RStudio, click on “Install,” type “tidyverse”, and press enter. You’ll see a bunch of output in the RStudio console as all the tidyverse packages are installed.\n\n\n\n\n\nNotice also that RStudio will generate a line of code for you and run it: install.packages(\"tidyverse\"). You can also just paste and run this instead of using the packages panel.\n\n\nInstall tinytex\nWhen you knit to PDF, R uses a special scientific typesetting program named LaTeX, which is complicated and a large download. To make life easier, there’s an R package named tinytex that installs a minimal LaTeX program and that automatically deals with differences between macOS and Windows.\nTo install tinytex:\n\nUse the Packages in panel in RStudio to install tinytex like you did above with tidyverse. Alternatively, run install.packages(\"tinytex\") in the console.\nRun tinytex::install_tinytex() in the console.\nWait for a bit while R downloads and installs everything you need.\nYou should now be able to knit to PDF."
-  },
-  {
-    "objectID": "content/index.html",
-    "href": "content/index.html",
-    "title": "Readings, lectures, and videos",
-    "section": "",
-    "text": "Each class session has a set of required readings that you should complete before watching the lecture."
-  },
-  {
-    "objectID": "content/02-content.html",
-    "href": "content/02-content.html",
-    "title": "Priors",
-    "section": "",
-    "text": "Conjugate, flat, vague, Jeffrey’s, informative and penalized complexity priors\nPriors for regression models\nParameter elicitation\nPrior sensitivity analysis"
-  },
-  {
-    "objectID": "content/02-content.html#content",
-    "href": "content/02-content.html#content",
-    "title": "Priors",
-    "section": "",
-    "text": "Conjugate, flat, vague, Jeffrey’s, informative and penalized complexity priors\nPriors for regression models\nParameter elicitation\nPrior sensitivity analysis"
-  },
-  {
-    "objectID": "content/02-content.html#learning-objectives",
-    "href": "content/02-content.html#learning-objectives",
-    "title": "Priors",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nchoose a suitable prior for a Bayesian analysis\nderive parameters of posterior distributions in conjugate models\nperform parameter elicitation\nassess the impact of priors through sensitivity analysis"
-  },
-  {
-    "objectID": "content/02-content.html#readings",
-    "href": "content/02-content.html#readings",
-    "title": "Priors",
-    "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 2 of the course notes"
-  },
-  {
-    "objectID": "content/02-content.html#complementary-readings",
-    "href": "content/02-content.html#complementary-readings",
-    "title": "Priors",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nVillani (2023), chapter 4\nGelman et al. (2013), chapters 2, 3 and 5\nJohnson et al. (2022), chapter 5\ntruncated Student-t priors for hierarchical models (Gelman, 2006)\npenalized complexity priors (Simpson et al., 2017)"
-  },
-  {
-    "objectID": "content/02-content.html#slides",
-    "href": "content/02-content.html#slides",
-    "title": "Priors",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
-  },
-  {
-    "objectID": "content/01-content.html",
-    "href": "content/01-content.html",
-    "title": "Bayesics",
-    "section": "",
-    "text": "Probability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model"
-  },
-  {
-    "objectID": "content/01-content.html#content",
-    "href": "content/01-content.html#content",
-    "title": "Bayesics",
-    "section": "",
-    "text": "Probability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model"
-  },
-  {
-    "objectID": "content/01-content.html#learning-objectives",
-    "href": "content/01-content.html#learning-objectives",
-    "title": "Bayesics",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ndefine key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference\nperform inference in conjugate models with a single parameter\ncalculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)\nexplain some of the conceptual differences between frequentist and Bayesian inference"
-  },
-  {
-    "objectID": "content/01-content.html#readings",
-    "href": "content/01-content.html#readings",
-    "title": "Bayesics",
-    "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 1 of the course notes"
-  },
-  {
-    "objectID": "content/01-content.html#complementary-readings",
-    "href": "content/01-content.html#complementary-readings",
-    "title": "Bayesics",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nEdwards et al. (1992)\nJohnson et al. (2022), chapters 2–4 and sections 8.1, 8.3\nVillani (2023), chapters 1 and 2\nAlbert (2009), chapters 2 and 3"
-  },
-  {
-    "objectID": "content/01-content.html#slides",
-    "href": "content/01-content.html#slides",
-    "title": "Bayesics",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
-  },
-  {
-    "objectID": "content/03-content.html",
-    "href": "content/03-content.html",
-    "title": "Simulation-based inference",
-    "section": "",
-    "text": "Monte Carlo methods\nMarkov chains\nMetropolis–Hastings–Green algorithm\nGibbs sampling\nPractical considerations"
-  },
-  {
-    "objectID": "content/03-content.html#content",
-    "href": "content/03-content.html#content",
-    "title": "Simulation-based inference",
-    "section": "",
-    "text": "Monte Carlo methods\nMarkov chains\nMetropolis–Hastings–Green algorithm\nGibbs sampling\nPractical considerations"
-  },
-  {
-    "objectID": "content/03-content.html#learning-objectives",
-    "href": "content/03-content.html#learning-objectives",
-    "title": "Simulation-based inference",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a MHG algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors\ndiagnose performance of MCMC algorithms and implement potential remedies"
-  },
-  {
-    "objectID": "content/03-content.html#readings",
-    "href": "content/03-content.html#readings",
-    "title": "Simulation-based inference",
-    "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nGeyer (2011)\nChapter 3 of the course notes"
-  },
-  {
-    "objectID": "content/03-content.html#complementary-readings",
-    "href": "content/03-content.html#complementary-readings",
-    "title": "Simulation-based inference",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nGreen et al. (2015) (overview of MCMC methods)\nAlbert (2009), chapters 6 and 10 (several examples)\nMcElreath (2020), chapter 9 (non technical)"
-  },
-  {
-    "objectID": "example/index.html",
-    "href": "example/index.html",
-    "title": "Examples",
-    "section": "",
-    "text": "This section will contain annotated R code along with worked out examples. Useful resources for learning R, the tidyverse and Rmarkdown basics include\n\nThe Introduction to R and RStudio by Open Intro Stat\nTeacups, giraffes & statistics: basic statistical concepts and programming\nthe notebook RYouWithMe from R-Ladies Sydney\nthe book R for Data Science, which adheres to the tidyverse principles.\nthe R package DoSStoolkit, developped at the University of Toronto.\nthe introverse documentation.\nthe RStudio cheatsheets, also available from RStudio menu in Help &gt; Cheat Sheets\n\nTo install all R packages used throughout the course, use the command\n\ninstall.packages(\"cmdstanr\",\n                 repos = c(\"https://mc-stan.org/r-packages/\",\n                           getOption(\"repos\")))\n\npackages &lt;- c(\"coda\", \"mvtnorm\", \"remotes\", \"loo\", \"dagitty\", \"shape\", \"rust\")\nfor(i in seq_along(packages)){\n  if(!packages[i] %in% installed.packages()[,\"Package\"]){\n install.packages(packages[i])\n  }\n}\nremotes::install_github(\"rmcelreath/rethinking\")\n\ninstall.packages(c(\"BiocManager\",\"remotes\"))\nBiocManager::install(\"graph\")\nBiocManager::install(\"Rgraphviz\")\ninstall.packages(\n  \"INLA\",\n  repos = c(getOption(\"repos\"),\n            INLA = \"https://inla.r-inla-download.org/R/stable\"),\n  dep = TRUE)"
-  },
-  {
-    "objectID": "exercises/01-exercise.html",
-    "href": "exercises/01-exercise.html",
-    "title": "Exercice 1",
-    "section": "",
-    "text": "You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.\nFor modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate \\(\\lambda&gt;0\\), with associated density \\(f(x) = \\lambda \\exp(-\\lambda x)\\)."
-  },
-  {
-    "objectID": "exercises/01-exercise.html#exercise-1.1",
-    "href": "exercises/01-exercise.html#exercise-1.1",
-    "title": "Exercice 1",
-    "section": "Exercise 1.1",
-    "text": "Exercise 1.1\nCompute the marginal likelihood when the prior for \\(\\lambda\\) is\n\nan exponential distribution with rate \\(\\kappa&gt;0\\), with prior density \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\);\nsame, but truncated above at 1, so the density is \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\mathrm{I}\\{\\lambda \\leq 1\\}\\); the indicator function \\(\\mathrm{I}(\\cdot)\\) equals one if the condition is true and zero otherwise.\n\\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta)\\), a gamma distribution with shape \\(\\alpha&gt;0\\) and rate \\(\\beta&gt;0\\), with prior density \\(p(\\lambda) = \\beta^\\alpha\\lambda^{\\alpha-1}\\exp(-\\beta \\lambda)/\\Gamma(\\alpha)\\).\n\nDeduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution."
-  },
-  {
-    "objectID": "exercises/01-exercise.html#exercise-1.2",
-    "href": "exercises/01-exercise.html#exercise-1.2",
-    "title": "Exercice 1",
-    "section": "Exercise 1.2",
-    "text": "Exercise 1.2\nConsider the following priors for the reciprocal expected waiting time, \\(\\lambda\\).\n\na gamma with rate \\(\\beta=100\\) and shape \\(\\alpha = 10\\)\nan exponential with rate \\(5\\)\na uniform prior on the unit interval \\([5,10]\\) for \\(1/\\lambda\\)\n\nAssociate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?\nExplain what would happen to the posterior curve if we increased the sample size.\n\n\n\n\n\nFigure 1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator."
-  },
-  {
-    "objectID": "exercises/01-exercise.html#exercice-1.3",
-    "href": "exercises/01-exercise.html#exercice-1.3",
-    "title": "Exercice 1",
-    "section": "Exercice 1.3",
-    "text": "Exercice 1.3\nThe purpose of this exercise is to show that even one-dimensional numerical integration requires some care. Consider a half Cauchy prior over the positive half line, with density \\(f(x) = 2\\pi^{-1}(1+x^2)^{-1}\\mathrm{I}(x \\geq 0)\\). Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes\\(^{-1}\\). Compare this approximation with that of quadrature methods via integrate and return the corresponding estimates of the normalizing constant. Indication: check the values and make sure the output is sensical. Modify the integrand if necessary.\nPlot the posterior distribution of \\(1/\\lambda\\), the average waiting time."
-  },
-  {
-    "objectID": "exercises/01-exercise.html#exercice-1.4",
-    "href": "exercises/01-exercise.html#exercice-1.4",
-    "title": "Exercice 1",
-    "section": "Exercice 1.4",
-    "text": "Exercice 1.4\nConsider \\(\\lambda \\sim \\mathsf{Ga}(\\alpha = 1.4, \\beta=0.2)\\).\n\nReturn the posterior mean, posterior median and maximum a posteriori (MAP).\nReturn the 89% equitailed percentile credible interval.\nReturn the 50% highest posterior density (HPD) interval (harder).\n\nNext, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.\nWould the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all."
-  },
-  {
-    "objectID": "exercises/02-exercise.html",
-    "href": "exercises/02-exercise.html",
-    "title": "Exercice 2",
-    "section": "",
-    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nWrite down the likelihood and show that it can be written in terms of the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{Ga}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{No}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\)."
-  },
-  {
-    "objectID": "exercises/02-exercise.html#exercise-2.1",
-    "href": "exercises/02-exercise.html#exercise-2.1",
-    "title": "Exercice 2",
-    "section": "",
-    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nWrite down the likelihood and show that it can be written in terms of the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{Ga}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{No}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\)."
-  },
-  {
-    "objectID": "exercises/02-exercise.html#exercise-2.2",
-    "href": "exercises/02-exercise.html#exercise-2.2",
-    "title": "Exercice 2",
-    "section": "Exercise 2.2",
-    "text": "Exercise 2.2\nConsider the Rayleigh distribution with scale \\(\\sigma&gt;0\\). It’s density is \\[f(y; \\sigma) = \\frac{y}{\\sigma^2} \\exp\\left(-\\frac{y^2}{2\\sigma^2}\\right)\\mathrm{I}(x \\geq 0).\\]\nDerive the Fisher information matrix and use it to obtain Jeffrey’s prior for \\(\\sigma\\). Determine whether the prior is proper."
-  },
-  {
-    "objectID": "exercises/02-exercise.html#exercise-2.3",
-    "href": "exercises/02-exercise.html#exercise-2.3",
-    "title": "Exercice 2",
-    "section": "Exercise 2.3",
-    "text": "Exercise 2.3\nConsider a binomial model with an unknown probability of successes \\(\\theta \\in [0,1]\\) model. Suppose your prior guess for \\(\\theta\\) has mean \\(0.1\\) and standard deviation \\(0.2\\)\nUsing moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.\nPlot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location \\(\\mu=0.1\\) and scale \\(\\sigma=0.2\\).1"
-  },
-  {
-    "objectID": "exercises/02-exercise.html#exercise-2.4",
-    "href": "exercises/02-exercise.html#exercise-2.4",
-    "title": "Exercice 2",
-    "section": "Exercise 2.4",
-    "text": "Exercise 2.4\nReplicate the analysis of Example 2.6 (Should you phrase your headline as a question?) of the course notes using the upworthy_question data from the hecbayes package."
-  },
-  {
-    "objectID": "exercises/02-exercise.html#footnotes",
-    "href": "exercises/02-exercise.html#footnotes",
-    "title": "Exercice 2",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nNote that the parameters of the truncated Gaussian distribution do not correspond to moments!↩︎"
-  },
-  {
-    "objectID": "exercises/03-exercise.html",
-    "href": "exercises/03-exercise.html",
-    "title": "Exercice 3",
-    "section": "",
-    "text": "We revisit Exercise 1.3, which used a half-Cauchy prior for the exponential waiting time of buses.\nThe ratio-of-uniform method, implemented in the rust R package, can be used to simulate independent draws from the posterior of the rate \\(\\lambda\\). The following code produces\n\nnobs &lt;- 10L # number of observations\nybar &lt;- 8   # average waiting time\nB &lt;- 1000L  # number of draws\n# Un-normalized log posterior: scaled log likelihood + log prior\nupost &lt;- function(x){ \n  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +\n    log(2) + dt(x = x, df = 1, log = TRUE)}\npost_samp &lt;- rust::ru(logf = upost, \n                      n = B, \n                      d = 1,  # dimension of parameter (scalar)\n                      init = nobs/ybar) # initial value of mode\n\nEstimate using the Monte Carlo sample:\n\nthe probability that the waiting time is between 3 and 15 minutes\nthe average waiting time\nthe standard deviation of the waiting time\n\nNext, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior. Estimate the same quantities and assess the variability of the Monte Carlo estimators for both correlated draws and the independent draws."
-  },
-  {
-    "objectID": "exercises/03-exercise.html#exercise-3.1",
-    "href": "exercises/03-exercise.html#exercise-3.1",
-    "title": "Exercice 3",
-    "section": "",
-    "text": "We revisit Exercise 1.3, which used a half-Cauchy prior for the exponential waiting time of buses.\nThe ratio-of-uniform method, implemented in the rust R package, can be used to simulate independent draws from the posterior of the rate \\(\\lambda\\). The following code produces\n\nnobs &lt;- 10L # number of observations\nybar &lt;- 8   # average waiting time\nB &lt;- 1000L  # number of draws\n# Un-normalized log posterior: scaled log likelihood + log prior\nupost &lt;- function(x){ \n  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +\n    log(2) + dt(x = x, df = 1, log = TRUE)}\npost_samp &lt;- rust::ru(logf = upost, \n                      n = B, \n                      d = 1,  # dimension of parameter (scalar)\n                      init = nobs/ybar) # initial value of mode\n\nEstimate using the Monte Carlo sample:\n\nthe probability that the waiting time is between 3 and 15 minutes\nthe average waiting time\nthe standard deviation of the waiting time\n\nNext, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior. Estimate the same quantities and assess the variability of the Monte Carlo estimators for both correlated draws and the independent draws."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "\n            Special topics in data science — Bayesian modelling\n        ",
-    "section": "",
-    "text": "Special topics in data science — Bayesian modelling\n        \n        \n            Hands on introduction to Bayesian data analysis. The course will cover the formulation, evaluation and comparison of Bayesian models through examples.\n        \n        \n            MATH 80636A, Fall 2023HEC Montréal\n        \n    \n    \n      \n        \n        \n        \n      \n    \n\n\n\n\n\n\nInstructor\n\n   Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\nCourse details\n\n   Fall 2023\n   Tuesday\n   8:30-11:30\n   Decelles, Rivière-du-Loup\n\n\n\nContacting me\nI am best reached by email."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#priors",
@@ -788,7 +676,7 @@
     "href": "slides/bayesmod-slides2.html#mdi-prior-for-generalized-pareto",
     "title": "Bayesian modelling",
     "section": "MDI prior for generalized Pareto",
-    "text": "MDI prior for generalized Pareto\nLet \\(Y_i \\sim \\mathsf{GP}(\\sigma, \\xi)\\) be generalized Pareto with density \\[f(x) = \\sigma^{-1}(1+\\xi x/\\sigma)_{+}^{-1/\\xi-1}\\] for \\(\\sigma&gt;0\\) and \\(\\xi \\in \\mathbb{R}\\), and \\(x_{+} =\\max\\{0, x\\}\\).\nConsider the maximum data information (MDI) \\[p(\\xi) \\propto \\exp(-\\xi).\\]\nSince \\(\\lim_{\\xi \\to -\\infty} \\exp(-\\xi) = \\infty\\), the prior density increases without bound as \\(\\xi\\) becomes smaller."
+    "text": "MDI prior for generalized Pareto\nLet \\(Y_i \\sim \\mathsf{GP}(\\sigma, \\xi)\\) be generalized Pareto with density \\[f(x) = \\sigma^{-1}(1+\\xi x/\\sigma)_{+}^{-1/\\xi-1}\\] for \\(\\sigma>0\\) and \\(\\xi \\in \\mathbb{R}\\), and \\(x_{+} =\\max\\{0, x\\}\\).\nConsider the maximum data information (MDI) \\[p(\\xi) \\propto \\exp(-\\xi).\\]\nSince \\(\\lim_{\\xi \\to -\\infty} \\exp(-\\xi) = \\infty\\), the prior density increases without bound as \\(\\xi\\) becomes smaller."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#truncated-mdi-for-generalized-pareto-distribution",
@@ -809,7 +697,7 @@
     "href": "slides/bayesmod-slides2.html#flat-priors-for-scale-parameters",
     "title": "Bayesian modelling",
     "section": "Flat priors for scale parameters",
-    "text": "Flat priors for scale parameters\nConsider a scale parameter \\(\\sigma &gt; 0\\).\n\nWe could truncate the range, e.g., \\(\\sigma \\sim \\mathsf{U}(0, 50)\\), but this is not ‘uninformative’, as extreme values of \\(\\sigma\\) are as likely as small ones.\nThese priors are not invariant: if \\(p\\{\\log(\\sigma)\\} \\propto 1\\) implies \\(p(\\sigma) \\propto \\sigma^{-1}\\) so can be informative on another scale."
+    "text": "Flat priors for scale parameters\nConsider a scale parameter \\(\\sigma > 0\\).\n\nWe could truncate the range, e.g., \\(\\sigma \\sim \\mathsf{U}(0, 50)\\), but this is not ‘uninformative’, as extreme values of \\(\\sigma\\) are as likely as small ones.\nThese priors are not invariant: if \\(p\\{\\log(\\sigma)\\} \\propto 1\\) implies \\(p(\\sigma) \\propto \\sigma^{-1}\\) so can be informative on another scale."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#vague-priors",
@@ -865,7 +753,7 @@
     "href": "slides/bayesmod-slides2.html#fixing-penalized-complexity-hyperparameter",
     "title": "Bayesian modelling",
     "section": "Fixing penalized complexity hyperparameter",
-    "text": "Fixing penalized complexity hyperparameter\nPick rate \\(\\lambda\\) to control prior density in the tail, by specifying a value for (a transformation of) the parameter, say \\(g(\\zeta)\\), which is interpretable.\nElicit values of \\(Q\\) and small probability \\(\\alpha\\) such that the tail probability \\[\\Pr\\{g(\\zeta) &gt; Q\\} = \\alpha.\\]"
+    "text": "Fixing penalized complexity hyperparameter\nPick rate \\(\\lambda\\) to control prior density in the tail, by specifying a value for (a transformation of) the parameter, say \\(g(\\zeta)\\), which is interpretable.\nElicit values of \\(Q\\) and small probability \\(\\alpha\\) such that the tail probability \\[\\Pr\\{g(\\zeta) > Q\\} = \\alpha.\\]"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#penalized-complexity-prior-for-random-effect-scale",
@@ -943,5 +831,285 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References\n\n\n\n\n\n\n\nBrodeur, M., Ruer, P., Léger, P.-M., & Sénécal, S. (2021). Smartwatches are more distracting than mobile phones while driving: Results from an experimental study. Accident Analysis & Prevention, 149, 105846. https://doi.org/10.1016/j.aap.2020.105846\n\n\nGelman, A. (2006). Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper). Bayesian Analysis, 1(3), 515–534. https://doi.org/10.1214/06-BA117A\n\n\nMatias, J. N., Munger, K., Le Quere, M. A., & Ebersole, C. (2021). The Upworthy Research Archive, a time series of 32,487 experiments in U.S. media. Scientific Data, 8(195). https://doi.org/10.1038/s41597-021-00934-7\n\n\nMcElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and STAN (2nd ed.). Chapman; Hall/CRC.\n\n\nRubin, D. B. (1981). Estimation in parallel randomized experiments. Journal of Educational Statistics, 6(4), 377–401. https://doi.org/10.3102/10769986006004377\n\n\nSimpson, D., Rue, H., Riebler, A., Martins, T. G., & Sørbye, S. H. (2017). Penalising model component complexity: A principled, practical approach to constructing priors. Statistical Science, 32(1), 1–28. https://doi.org/10.1214/16-STS576"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#bayesian-inference-beyond-conjugate-models",
+    "href": "slides/bayesmod-slides3.html#bayesian-inference-beyond-conjugate-models",
+    "title": "Simulation-based inference",
+    "section": "Bayesian inference beyond conjugate models",
+    "text": "Bayesian inference beyond conjugate models\nHow to circumvent the problem of intractable posteriors?\n\nsimulation-based methods: accept-reject, Markov chain Monte Carlo, particle filters, etc.\ndeterministic methods: (integrated nested) Laplace approximations, variational Bayes, expectation propagation, etc.\n\nWe focus on the Monte Carlo methods in the sequel."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#objective-of-methods",
+    "href": "slides/bayesmod-slides3.html#objective-of-methods",
+    "title": "Simulation-based inference",
+    "section": "Objective of methods",
+    "text": "Objective of methods\nSuppose we can simulate \\(B\\) i.i.d. variables with the same distribution, \\(X_b \\sim F\\) \\((b=1, \\ldots, B).\\)\nWe want to compute \\(\\mathsf{E}\\{g(X)\\}=\\mu_g\\) for some functional \\(g(\\cdot)\\)\n\n\\(g(x)=x\\) (posterior mean)\n\\(g(x) = \\mathsf{I}(x \\in A)\\) (probability of event)\netc."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#monte-carlo-methods",
+    "href": "slides/bayesmod-slides3.html#monte-carlo-methods",
+    "title": "Simulation-based inference",
+    "section": "Monte Carlo methods",
+    "text": "Monte Carlo methods\nWe substitute expected value by sample average \\[\\widehat{\\mu}_g = \\frac{1}{B} \\sum_{b=1}^B g(X_b), \\qquad X_b \\sim F\\]\n\nlaw of large number guarantees convergence of \\(\\widehat{\\mu}_g \\to \\mu_g\\) if the latter is finite.\ncentral limit theorem applies: \\[\\sqrt{B}(\\widehat{\\mu}_g - \\mu_g) \\sim \\mathsf{No}(0, \\sigma^2_g).\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#ordinary-monte-carlo",
+    "href": "slides/bayesmod-slides3.html#ordinary-monte-carlo",
+    "title": "Simulation-based inference",
+    "section": "Ordinary Monte Carlo",
+    "text": "Ordinary Monte Carlo\nWe want to have an estimator as precise as possible.\n\nbut we can’t control the variance of \\(g(X)\\), say \\(\\sigma_g^2\\)\nthe more simulations \\(B\\), the lower the variance of the mean.\nsample average for i.i.d. data has variance \\(\\sigma^2_g/B\\)\nto reduce the standard deviation by a factor 10, we need \\(100 \\times B\\) draws!\n\nRemember: the answer is random."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#example-functionals-of-gamma-distribution",
+    "href": "slides/bayesmod-slides3.html#example-functionals-of-gamma-distribution",
+    "title": "Simulation-based inference",
+    "section": "Example: functionals of gamma distribution",
+    "text": "Example: functionals of gamma distribution\n\nFigure 1: Running mean trace plots for \\(g(x)=\\mathrm{I}(x<1)\\) (left), \\(g(x)=x\\) (middle) and \\(g(x)=1/x\\) (right) for a Gamma distribution with shape 0.5 and rate 2, as a function of the Monte Carlo sample size."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#simulation-algorithms-inversion-method",
+    "href": "slides/bayesmod-slides3.html#simulation-algorithms-inversion-method",
+    "title": "Simulation-based inference",
+    "section": "Simulation algorithms: inversion method",
+    "text": "Simulation algorithms: inversion method\nIf \\(F\\) is an absolutely continuous distribution function, then \\[F(X) \\sim \\mathsf{U}(0,1).\\] The inversion method consists in applying the quantile function \\(F^{-1}\\) to \\(U \\sim \\mathsf{U}(0,1)\\), viz. \\[F^{-1}(U) \\sim X.\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#inversion-method-for-truncated-distributions",
+    "href": "slides/bayesmod-slides3.html#inversion-method-for-truncated-distributions",
+    "title": "Simulation-based inference",
+    "section": "Inversion method for truncated distributions",
+    "text": "Inversion method for truncated distributions\nConsider a random variable \\(Y\\) with distribution function \\(F\\).\nIf \\(X\\) follows the same distribution as \\(Y\\), but restricted over the interval \\([a,b]\\), then \\[\\Pr(X \\leq x) = \\frac{F(x) - F(a)}{F(b)-F(a)}, \\qquad a \\leq x \\leq b,\\]\nTherefore, \\[F^{-1}[F(a) + \\{F(b)-F(a)\\}U] \\sim X\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#simulation-algorithms-accept-reject",
+    "href": "slides/bayesmod-slides3.html#simulation-algorithms-accept-reject",
+    "title": "Simulation-based inference",
+    "section": "Simulation algorithms: accept-reject",
+    "text": "Simulation algorithms: accept-reject\n\nTarget: sample from density \\(p(x)\\) (hard to sample from)\nProposal: find a density \\(q(x)\\) with nested support, \\(\\mathrm{supp}(p) \\subset \\mathrm{supp}(q)\\), such that \\[\\frac{p(x)}{q(x)} \\leq C, \\quad C \\geq 1.\\]\n\n\n\n\n\n\n\nRejection sampling algorithm\n\n\n\nGenerate \\(X\\) from proposal with density \\(q(x)\\).\nCompute the ratio \\(R \\gets p(X)/ q(X)\\).\nIf \\(R \\leq CU\\) for \\(U \\sim \\mathsf{U}(0,1)\\), return \\(X\\), else go back to step 1."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#remarks-on-rejection-sampling",
+    "href": "slides/bayesmod-slides3.html#remarks-on-rejection-sampling",
+    "title": "Simulation-based inference",
+    "section": "Remarks on rejection sampling",
+    "text": "Remarks on rejection sampling\n\nAcceptance rate is \\(1/C\\)\n\nwe need on average \\(C\\) draws from \\(q\\) to get one from \\(p\\)\n\n\\(q\\) must be more heavy-tailed than \\(p\\)\n\ne.g., \\(q(x)\\) Student-\\(t\\) for \\(p(x)\\) Gaussian\n\n\\(q\\) should be cheap and easy to sample from!"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#designing-a-good-proposal-density",
+    "href": "slides/bayesmod-slides3.html#designing-a-good-proposal-density",
+    "title": "Simulation-based inference",
+    "section": "Designing a good proposal density",
+    "text": "Designing a good proposal density\nGood choices must satisfy the following constraints:\n\npick a family \\(q(x)\\) so that \\[C = \\mathrm{sup}_x \\frac{p(x)}{q(x)}\\] is as close to 1 as possible.\nyou can use numerical optimization with \\(f(x) =\\log p(x) - \\log q(x)\\) to find the mode \\(x^\\star\\) and the upper bound \\(C = \\exp f(x^\\star)\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#example-of-accept-reject-1",
+    "href": "slides/bayesmod-slides3.html#example-of-accept-reject-1",
+    "title": "Simulation-based inference",
+    "section": "Example of accept-reject (1)",
+    "text": "Example of accept-reject (1)\nConsider sampling \\(Y \\sim \\mathsf{No}(\\mu, \\sigma^2)\\), but truncated in the interval \\((a, b)\\). The target density is \\[\\begin{align*}\np(x; \\mu, \\sigma, a, b) = \\frac{1}{\\sigma}\\frac{\\phi\\left(\\frac{x-\\mu}{\\sigma}\\right)}{\\Phi(\\beta)-\\Phi(\\alpha)}.\n\\end{align*}\\] for \\(\\alpha= (a-\\mu)/\\sigma\\) and \\(\\beta = (b-\\mu)/\\sigma\\). where \\(\\phi(\\cdot), \\Phi(\\cdot)\\) are respectively the density and distribution function of the standard Gaussian distribution."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#accept-reject-crude-version",
+    "href": "slides/bayesmod-slides3.html#accept-reject-crude-version",
+    "title": "Simulation-based inference",
+    "section": "Accept-reject (crude version)",
+    "text": "Accept-reject (crude version)\n\nSimulate \\(X \\sim \\mathsf{No}(\\mu, \\sigma^2)\\)\nreject any draw if \\(X < a\\) or \\(X> b\\).\n\nThe acceptance rate is \\(C^{-1} = \\{\\Phi(\\beta) - \\Phi(\\alpha)\\}\\)\n\n# Standard Gaussian truncated on [0,1]\ncandidate <- rnorm(1e5)\ntrunc_samp <- candidate[candidate >= 0 & candidate <= 1]\n# Acceptance rate\nlength(trunc_samp)/1e5\n\n[1] 0.34242\n\n# Theoretical acceptance rate\npnorm(1)-pnorm(0)\n\n[1] 0.3413447"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#accept-reject-for-truncated-gaussian",
+    "href": "slides/bayesmod-slides3.html#accept-reject-for-truncated-gaussian",
+    "title": "Simulation-based inference",
+    "section": "Accept-reject for truncated Gaussian",
+    "text": "Accept-reject for truncated Gaussian\nSince the Gaussian is a location scale family, the inversion method gives \\[\\begin{align*}\nX \\sim \\mu + \\sigma\\Phi^{-1}\\left[\\Phi(\\alpha) + \\{\\Phi(\\beta)-\\Phi(\\alpha)\\}U\\right]\n\\end{align*}\\]\nWe however need to evaluate \\(\\Phi\\) numerically (no closed-form expression).\nThe method fails for rare event simulation because the computer returns\n\n\\(\\Phi(x) = 0\\) for \\(x \\leq -39\\)\n\\(\\Phi(x)=1\\) for \\(x \\geq 8.3\\),\n\nimplying that \\(a \\leq 8.3\\) for this approach to work (LEcuyer.Botev:2017?)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#simulating-tails-of-gaussian-variables",
+    "href": "slides/bayesmod-slides3.html#simulating-tails-of-gaussian-variables",
+    "title": "Simulation-based inference",
+    "section": "Simulating tails of Gaussian variables",
+    "text": "Simulating tails of Gaussian variables\nWe consider simulation from a standard Gaussian truncated above \\(a>0\\) (Devroye:1986?).\nWrite the density of the truncated Gaussian as \\[f(x) = \\frac{\\exp(-x^2/2)}{\\int_{a}^{\\infty}\\exp(-z^2/2)\\mathrm{d} z}  =\\frac{\\exp(-x^2/2)}{c_1}.\\]\nNote that, for \\(x \\geq a\\), \\[c_1f(x) \\leq \\frac{x}{a}\\exp\\left(-\\frac{x^2}{2}\\right)= a^{-1}\\exp\\left(-\\frac{a^2}{2}\\right)g(x);\\] where \\(g(x)\\) is the density of a Rayleigh variable shifted by \\(a\\).1\nThe constant \\(C= \\exp(-a^2/2)(c_1a)^{-1}\\) approaches 1 quickly as \\(a \\to \\infty\\) (asymptotically optimality)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#accept-reject-truncated-gaussian-with-rayleigh",
+    "href": "slides/bayesmod-slides3.html#accept-reject-truncated-gaussian-with-rayleigh",
+    "title": "Simulation-based inference",
+    "section": "Accept-reject: truncated Gaussian with Rayleigh",
+    "text": "Accept-reject: truncated Gaussian with Rayleigh\nThe shifted Rayleigh has distribution function \\[G(x) = 1-\\exp\\{(a^2-x^2)/2\\}, x \\geq a.\\]\n\n\n\n\n\n\nMarsaglia algorithm\n\n\n\nGenerate a shifted Rayleigh above \\(a\\), \\(X \\gets \\{a^2 - 2\\log(U)\\}^{1/2}\\) for \\(U \\sim \\mathsf{U}(0,1)\\)\nAccept \\(X\\) if \\(XV \\leq a\\), where \\(V \\sim \\mathsf{U}(0,1)\\).\n\n\n\n\nFor sampling on \\([a,b]\\), propose from a Rayleigh truncated above at \\(b\\) (LEcuyer.Botev:2017?).\n\na <- 8.3\nniter <- 1000L\nX <- sqrt(a^2 + 2*rexp(niter))\nsamp <- X[runif(niter)*X <= a]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#markov-chains",
+    "href": "slides/bayesmod-slides3.html#markov-chains",
+    "title": "Simulation-based inference",
+    "section": "Markov chains",
+    "text": "Markov chains\nPlain ordinary Monte Carlo is great, but few algorithms are generic enough to be useful in complex high-dimensional problems.\nWe will instead typically build Markov chains that target an invariant stationary distribution."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#caveats",
+    "href": "slides/bayesmod-slides3.html#caveats",
+    "title": "Simulation-based inference",
+    "section": "Caveats?",
+    "text": "Caveats?\nMarkov chain Monte Carlo methods generate correlated draws.\nQuestions:\n\ncan we use them as ordinary independent samples?\nwhat is the price to pay?\n\nWe need to do a little theoretical detour to answer these questions."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#stationarity-and-markov-property",
+    "href": "slides/bayesmod-slides3.html#stationarity-and-markov-property",
+    "title": "Simulation-based inference",
+    "section": "Stationarity and Markov property",
+    "text": "Stationarity and Markov property\nA stochastic process is (weakly) stationary if\n\nthe distribution of \\(\\{X_1, \\ldots, X_t\\}\\) is the same as that of \\(\\{X_{n+1}, \\ldots X_{t+n}\\}\\) for any value of \\(n\\) and given \\(t\\).\n\nA stochastic process is Markov if\n\nit satisfies the Markov property: given the current state of the chain, the future only depends on the current state and not on the past."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#autoregressive-process-of-order-1",
+    "href": "slides/bayesmod-slides3.html#autoregressive-process-of-order-1",
+    "title": "Simulation-based inference",
+    "section": "Autoregressive process of order 1",
+    "text": "Autoregressive process of order 1\nConsider a first-order autoregressive process, or \\(\\mathsf{AR}(1)\\),\n\\[Y_t = \\mu + \\phi(Y_{t-1} - \\mu) + \\varepsilon_t,\\] where\n\n\\(\\phi\\) is the lag-one correlation,\n\\(\\mu\\) the global mean\n\\(\\varepsilon_t\\) is an iid innovation with mean zero and variance \\(\\sigma^2\\)\n\nIf \\(|\\phi| < 1\\), the process is stationary, otherwise variance increases with \\(t\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#variance-of-a-stationary-distribution",
+    "href": "slides/bayesmod-slides3.html#variance-of-a-stationary-distribution",
+    "title": "Simulation-based inference",
+    "section": "Variance of a stationary distribution",
+    "text": "Variance of a stationary distribution\nFor a correlated sequence, the variance of the stationary distribution is \\[\\begin{align*}\n\\tau^2 = \\mathsf{Va}(Y_t) + 2 \\sum_{k=1}^\\infty \\mathsf{Co}(Y_t, Y_{t-k}).\n\\end{align*}\\]\n\nfor i.i.d. data, \\(\\tau^2 = \\mathsf{Va}(Y_t)\\)\nfor stationary \\(\\mathsf{AR}(1)\\) process, we get \\(\\sigma^2/(1-\\phi^2)\\) (geometric series)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#variance-of-sample-average",
+    "href": "slides/bayesmod-slides3.html#variance-of-sample-average",
+    "title": "Simulation-based inference",
+    "section": "Variance of sample average",
+    "text": "Variance of sample average\nIntuitively, a sample of correlated observations carries less information than an independent sample of draws.\nWe want the variance of the sample average, which is \\[\\begin{align*}\n\\mathsf{Va}\\left(\\overline{Y}_T\\right) = \\frac{1}{T}\\sum_{t=1}^T \\mathsf{Va}(Y_t) + \\frac{2}{T} \\sum_{t=1}^{T-1}\\sum_{s = t+1}^T \\mathsf{Co}(Y_t, Y_s).\n\\end{align*}\\]\nIf the process is stationary, the covariances at lag \\(k\\) are the same regardless of the time index and the unconditional variance is constant."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#variance-of-sample-average-redux",
+    "href": "slides/bayesmod-slides3.html#variance-of-sample-average-redux",
+    "title": "Simulation-based inference",
+    "section": "Variance of sample average, redux",
+    "text": "Variance of sample average, redux\nIf a central limit theorem applies, the limiting variance of the sample mean is \\[\\begin{align*}\n\\lim_{T \\to \\infty} T\\mathsf{Va}\\left(\\overline{Y}_T\\right) = \\tau^2 \\left\\{1+2\\sum_{t=1}^\\infty \\gamma_t\\right\\}.\n\\end{align*}\\] which is a function of\n\nthe unconditional variance \\(\\tau^2\\)\nthe lag-\\(k\\) autocorrelation \\(\\mathsf{Cor}(Y_{t}, Y_{t+k})=\\gamma_k\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#variance-of-sample-mean-of-ar1",
+    "href": "slides/bayesmod-slides3.html#variance-of-sample-mean-of-ar1",
+    "title": "Simulation-based inference",
+    "section": "Variance of sample mean of AR(1)",
+    "text": "Variance of sample mean of AR(1)\nThe lag-\\(k\\) correlation of the stationary autoregressive process of order 1 is \\(\\phi^k\\), so \\[T\\mathsf{Va}\\left(\\overline{Y}_T\\right)=\\sigma^2(1+\\phi)/(1-\\phi).\\]\nFor an independent sample, we have \\[T\\mathsf{Va}\\left(\\overline{Y}_T\\right)=\\sigma^2/(1-\\phi^2).\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#morale-of-the-story",
+    "href": "slides/bayesmod-slides3.html#morale-of-the-story",
+    "title": "Simulation-based inference",
+    "section": "Morale of the story",
+    "text": "Morale of the story\nThe price to pay for having correlated samples is\n\ninefficiency\n\nThe higher the autocorrelation, the larger the variability of our estimators."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#inefficiency-curve",
+    "href": "slides/bayesmod-slides3.html#inefficiency-curve",
+    "title": "Simulation-based inference",
+    "section": "Inefficiency curve",
+    "text": "Inefficiency curve\n\nFigure 2: Scaled asymptotic variance of the sample mean for AR(1) (dashed) and independent observations with the same marginal variance (full line). The plot on the right gives the variance ratio for positive correlations.To get the same precision for the mean of \\(\\mathsf{AR}(1)\\) process with \\(\\phi \\approx 0.75\\) than with i.i.d. data, we would need 9 times as many observations."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#when-can-we-use-markov-chains",
+    "href": "slides/bayesmod-slides3.html#when-can-we-use-markov-chains",
+    "title": "Simulation-based inference",
+    "section": "When can we use Markov chains?",
+    "text": "When can we use Markov chains?\nIf a Markov chain is irreducible and aperiodic, it has a unique stationary distribution.\n\nirreducibility: means that the chain can move from anywhere to anywhere, so it doesn’t get stuck in part of the space forever.\nacyclic: cyclical chains loop around and visit periodically a state\n\nErgodic theorem is our guarantee of convergence."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#examples",
+    "href": "slides/bayesmod-slides3.html#examples",
+    "title": "Simulation-based inference",
+    "section": "Examples",
+    "text": "Examples\nConsider discrete Markov chains over the integers \\(1, 2, 3\\) with transition matrices\n\\[\nP_1 = \\begin{pmatrix}\n0.5 & 0.3 & 0.2 \\\\\n0 & 0.4 & 0.6 \\\\\n0 & 0.5 & 0.5\n\\end{pmatrix},\n\\quad\nP_2 = \\begin{pmatrix}\n0 & 0 & 1 \\\\\n1 & 0 & 0 \\\\\n0 & 1 & 0\n\\end{pmatrix}.\n\\] Chain 1 is reducible to \\(\\{2, 3\\}\\), chain 2 is cyclical."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#convergence-of-markov-chains",
+    "href": "slides/bayesmod-slides3.html#convergence-of-markov-chains",
+    "title": "Simulation-based inference",
+    "section": "Convergence of Markov chains",
+    "text": "Convergence of Markov chains\n\nFigure 3: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#markov-chain-monte-carlo",
+    "href": "slides/bayesmod-slides3.html#markov-chain-monte-carlo",
+    "title": "Simulation-based inference",
+    "section": "Markov chain Monte Carlo",
+    "text": "Markov chain Monte Carlo\nWe consider simulating from a distribution with associated density function \\(\\propto p(\\boldsymbol{\\theta})\\).\n\nknown up to a normalizing factor not depending on \\(\\boldsymbol{\\theta}\\).\n\nWe use \\(q(\\boldsymbol{\\theta} \\mid \\boldsymbol{\\theta}^*)\\) as transition kernel to generate proposals."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#metropolishastings-algorithm",
+    "href": "slides/bayesmod-slides3.html#metropolishastings-algorithm",
+    "title": "Simulation-based inference",
+    "section": "Metropolis–Hastings algorithm",
+    "text": "Metropolis–Hastings algorithm\nStarting from an initial value \\(\\boldsymbol{\\theta}_0\\):\n\ndraw a proposal value \\(\\boldsymbol{\\theta}_t^{\\star} \\sim q(\\boldsymbol{\\theta} \\mid \\boldsymbol{\\theta}_{t-1})\\).\nCompute the acceptance ratio \\[\nR = \\frac{p(\\boldsymbol{\\theta}_t^{\\star})}{p(\\boldsymbol{\\theta}_{t-1})}\\frac{q(\\boldsymbol{\\theta}_{t-1} \\mid \\boldsymbol{\\theta}_t^{\\star} )}{q(\\boldsymbol{\\theta}_t^{\\star} \\mid \\boldsymbol{\\theta}_{t-1})}\n\\]\nWith probability \\(\\max\\{R, 1\\}\\), accept the proposal and set \\(\\boldsymbol{\\theta}_t \\gets \\boldsymbol{\\theta}_t^{\\star}\\), otherwise set the value to the previous state, \\(\\boldsymbol{\\theta}_t \\gets \\boldsymbol{\\theta}_{t-1}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#interpretation",
+    "href": "slides/bayesmod-slides3.html#interpretation",
+    "title": "Simulation-based inference",
+    "section": "Interpretation",
+    "text": "Interpretation\n\nIf \\(R>1\\), the proposal has higher density and we always accept the move. If the ratio is less than one, the proposal is in a lower probability region.\nIf we reject the move, the Markov chain stays at the current value, which induces autocorrelation.\nSince the acceptance probability depends only on the density through ratios, we can work with unnormalized density functions."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#references",
+    "href": "slides/bayesmod-slides3.html#references",
+    "title": "Simulation-based inference",
+    "section": "References",
+    "text": "References"
+  },
+  {
+    "objectID": "syllabus.html",
+    "href": "syllabus.html",
+    "title": "Outline",
+    "section": "",
+    "text": "Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\n\n\n   Fall 2023\n   Tuesday\n   8:30-11:30\n   Decelles, Rivière-du-Loup"
+  },
+  {
+    "objectID": "syllabus.html#textbooks",
+    "href": "syllabus.html#textbooks",
+    "title": "Outline",
+    "section": "Textbooks",
+    "text": "Textbooks\nI will assign readings from McElreath (2020) and Johnson et al. (2022), which is freely available online.\n\n\n\nStatistical Rethinking:A Bayesian Course with Examples in R and Stan\nR. McElreath\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBayes Rules!An Introduction to Applied Bayesian Modeling\nA.A. Johnson, M.Q. Ott, and M. Dogucu\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCourse notes for the class can be found online"
+  },
+  {
+    "objectID": "syllabus.html#other-references",
+    "href": "syllabus.html#other-references",
+    "title": "Outline",
+    "section": "Other references",
+    "text": "Other references\nThere will occasionally be additional articles to read; links to these other resources will be included on the content page for that session."
+  },
+  {
+    "objectID": "syllabus.html#student-hours",
+    "href": "syllabus.html#student-hours",
+    "title": "Outline",
+    "section": "Student hours",
+    "text": "Student hours\nWednesday afternoon from 13:00 until 16:00 or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.\nPlease watch this video:\n\n\nStudent hours are set times dedicated to all of you (most professors call these “office hours”; I don’t1). This means that I will be in my office waiting for you to come by if you want to talk to me in person (or remotely) with whatever questions you have. This is the best and easiest way to find me and the best chance for discussing class material and concerns."
+  },
+  {
+    "objectID": "syllabus.html#intellectual-integrity",
+    "href": "syllabus.html#intellectual-integrity",
+    "title": "Outline",
+    "section": "Intellectual integrity",
+    "text": "Intellectual integrity\nPlease don’t cheat! The official policy lists the school rules regarding plagiarism and academic integrity."
+  },
+  {
+    "objectID": "syllabus.html#student-services",
+    "href": "syllabus.html#student-services",
+    "title": "Outline",
+    "section": "Student services",
+    "text": "Student services\nStudents with special needs should feel free to approach me so we can best discuss accommodations. Do check out HEC Montréal’s disabled students and [psychological] (https://www.hec.ca/en/students/support-resources/psychological-support/index.html) support services."
+  },
+  {
+    "objectID": "syllabus.html#harassment-and-sexual-violence",
+    "href": "syllabus.html#harassment-and-sexual-violence",
+    "title": "Outline",
+    "section": "Harassment and sexual violence",
+    "text": "Harassment and sexual violence\nThe Center for Harassment Intervention (BIMH) is the unique access point for all members of the community subject to harassment or sexual violence. You can reach them at 514 343-7020 or by email at harcelement@hec.ca from Monday until Friday, from 8:30 until 4:30pm.\nIf you are in an emergency situation or fear for your safety, call emergency services at 911, followed by HEC Montréal security services at 514 340-6611.\nCheck the school official policy on these matters for more details."
+  },
+  {
+    "objectID": "syllabus.html#family-policy",
+    "href": "syllabus.html#family-policy",
+    "title": "Outline",
+    "section": "Family policy",
+    "text": "Family policy\nHEC does not have an official family policy, so the following guidelines reflect my own beliefs and commitments towards parent students2\n\nBabies are welcome in class as often as necessary for support feeding relationship.\nYou are welcome to bring your child to class in order to cover unforeseeable gaps in childcare.\nIf you come with babies or toddler, I ask that you sit close to the door so that, in case your little one needs special attention and is disrupting the learning of other students, you may step outside of class until their needs are met. Seats close to the door are reserved for parents attending class with their child."
   }
 ]
