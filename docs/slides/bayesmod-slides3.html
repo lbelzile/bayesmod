@@ -5,15 +5,14 @@
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
-<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.2.335">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.3.433">
 
   <meta name="author" content="Léo Belzile">
   <meta name="dcterms.date" content="2023-01-01">
-  <title>Special topics in data science — Bayesian modelling - Simulation-based inference</title>
+  <title>Special topics in data science — Bayesian modelling - Bayesian modelling</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -28,9 +27,10 @@
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
       width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -95,8 +95,27 @@
     code span.va { color: #111111; } /* Variable */
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
-  </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css" id="theme">
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -139,44 +158,44 @@
     font-weight: 400;
   }
 
-  .callout.callout-captioned.callout-style-simple .callout-body {
+  .callout.callout-titled.callout-style-simple .callout-body {
     margin-top: 0.2em;
   }
 
-  .callout:not(.callout-captioned) .callout-body {
+  .callout:not(.callout-titled) .callout-body {
       display: flex;
   }
 
-  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
     padding-left: 1.6em;
   }
 
-  .callout.callout-captioned .callout-header {
+  .callout.callout-titled .callout-header {
     padding-top: 0.2em;
     margin-bottom: -0.2em;
   }
 
-  .callout.callout-captioned .callout-caption  p {
+  .callout.callout-titled .callout-title  p {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
   }
     
-  .callout.callout-captioned.callout-style-simple .callout-content  p {
+  .callout.callout-titled.callout-style-simple .callout-content  p {
     margin-top: 0;
   }
 
-  .callout.callout-captioned.callout-style-default .callout-content  p {
+  .callout.callout-titled.callout-style-default .callout-content  p {
     margin-top: 0.7em;
   }
 
-  .callout.callout-style-simple div.callout-caption {
+  .callout.callout-style-simple div.callout-title {
     border-bottom: none;
     font-size: .9rem;
     font-weight: 600;
     opacity: 75%;
   }
 
-  .callout.callout-style-default  div.callout-caption {
+  .callout.callout-style-default  div.callout-title {
     border-bottom: none;
     font-weight: 600;
     opacity: 85%;
@@ -208,7 +227,7 @@
     background-size: 0.9rem 0.9rem;
   }
 
-  .callout-caption {
+  .callout-title {
     display: flex
   }
     
@@ -221,16 +240,16 @@
     display: none !important;
   }
 
-  .callout.callout-captioned .callout-body > .callout-content > :last-child {
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
     margin-bottom: 0.5rem;
   }
 
-  .callout.callout-captioned .callout-icon::before {
+  .callout.callout-titled .callout-icon::before {
     margin-top: .5rem;
     padding-right: .5rem;
   }
 
-  .callout:not(.callout-captioned) .callout-icon::before {
+  .callout:not(.callout-titled) .callout-icon::before {
     margin-top: 1rem;
     padding-right: .5rem;
   }
@@ -245,7 +264,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
   }
 
-  div.callout-note.callout-style-default .callout-caption {
+  div.callout-note.callout-style-default .callout-title {
     background-color: #dae6fb
   }
 
@@ -257,7 +276,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
   }
 
-  div.callout-important.callout-style-default .callout-caption {
+  div.callout-important.callout-style-default .callout-title {
     background-color: #f7dddc
   }
 
@@ -269,7 +288,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
   }
 
-  div.callout-warning.callout-style-default .callout-caption {
+  div.callout-warning.callout-style-default .callout-title {
     background-color: #fcefdc
   }
 
@@ -281,7 +300,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
   }
 
-  div.callout-tip.callout-style-default .callout-caption {
+  div.callout-tip.callout-style-default .callout-title {
     background-color: #ccf1e3
   }
 
@@ -293,7 +312,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
   }
 
-  div.callout-caution.callout-style-default .callout-caption {
+  div.callout-caution.callout-style-default .callout-title {
     background-color: #ffe5d0
   }
 
@@ -391,8 +410,8 @@
     <div class="slides">
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
-  <h1 class="title">Simulation-based inference</h1>
-  <p class="subtitle">Priors</p>
+  <h1 class="title">Bayesian modelling</h1>
+  <p class="subtitle">Simulation-based inference</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -438,7 +457,7 @@ Léo Belzile
 <li>but we can’t control the variance of <span class="math inline">\(g(X)\)</span>, say <span class="math inline">\(\sigma_g^2\)</span></li>
 <li>the more simulations <span class="math inline">\(B\)</span>, the lower the variance of the mean.</li>
 <li>sample average for i.i.d. data has variance <span class="math inline">\(\sigma^2_g/B\)</span></li>
-<li>to reduce the standard deviation by a factor 10, we need <span class="math inline">\(100 \times B\)</span> draws!</li>
+<li>to reduce the standard deviation by a factor 10, we need <span class="math inline">\(100\)</span> times more draws!</li>
 </ul>
 <p>Remember: the answer is <strong>random</strong>.</p>
 </section>
@@ -462,23 +481,14 @@ Léo Belzile
 <li><strong>Target</strong>: sample from density <span class="math inline">\(p(x)\)</span> (hard to sample from)</li>
 <li><strong>Proposal</strong>: find a density <span class="math inline">\(q(x)\)</span> with nested support, <span class="math inline">\(\mathrm{supp}(p) \subset \mathrm{supp}(q)\)</span>, such that <span class="math display">\[\frac{p(x)}{q(x)} \leq C, \quad C \geq 1.\]</span></li>
 </ul>
-<div class="callout callout-important callout-captioned callout-style-default">
-<div class="callout-body">
-<div class="callout-caption">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Rejection sampling algorithm</strong></p>
-</div>
-<div class="callout-content">
+</section>
+<section id="rejection-sampling-algorithm" class="slide level2">
+<h2>Rejection sampling algorithm</h2>
 <ol type="1">
 <li>Generate <span class="math inline">\(X\)</span> from proposal with density <span class="math inline">\(q(x)\)</span>.</li>
 <li>Compute the ratio <span class="math inline">\(R \gets p(X)/ q(X)\)</span>.</li>
 <li>If <span class="math inline">\(R \leq CU\)</span> for <span class="math inline">\(U \sim \mathsf{U}(0,1)\)</span>, return <span class="math inline">\(X\)</span>, else go back to step 1.</li>
 </ol>
-</div>
-</div>
-</div>
 </section>
 <section id="remarks-on-rejection-sampling" class="slide level2">
 <h2>Remarks on rejection sampling</h2>
@@ -542,20 +552,20 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <li><span class="math inline">\(\Phi(x) = 0\)</span> for <span class="math inline">\(x \leq -39\)</span></li>
 <li><span class="math inline">\(\Phi(x)=1\)</span> for <span class="math inline">\(x \geq 8.3\)</span>,</li>
 </ul>
-<p>implying that <span class="math inline">\(a \leq 8.3\)</span> for this approach to work <span class="citation" data-cites="LEcuyer.Botev:2017">(<a href="" role="doc-biblioref" onclick="return false;"><strong>LEcuyer.Botev:2017?</strong></a>)</span>.</p>
+<p>implying that <span class="math inline">\(a \leq 8.3\)</span> for this approach to work <span class="citation" data-cites="LEcuyer.Botev:2017">(<a href="#/references" role="doc-biblioref" onclick="">Botev &amp; L’Écuyer, 2017</a>)</span>.</p>
 </section>
 <section id="simulating-tails-of-gaussian-variables" class="slide level2 smaller">
 <h2>Simulating tails of Gaussian variables</h2>
-<p>We consider simulation from a standard Gaussian truncated above <span class="math inline">\(a&gt;0\)</span> <span class="citation" data-cites="Devroye:1986">(<a href="" role="doc-biblioref" onclick="return false;"><strong>Devroye:1986?</strong></a>)</span>.</p>
+<p>We consider simulation from a standard Gaussian truncated above <span class="math inline">\(a&gt;0\)</span> <span class="citation" data-cites="Devroye:1986">(<a href="#/references" role="doc-biblioref" onclick="">Devroye, 1986, p. 381</a>)</span>.</p>
 <p>Write the density of the truncated Gaussian as <span class="math display">\[f(x) = \frac{\exp(-x^2/2)}{\int_{a}^{\infty}\exp(-z^2/2)\mathrm{d} z}  =\frac{\exp(-x^2/2)}{c_1}.\]</span></p>
 <p>Note that, for <span class="math inline">\(x \geq a\)</span>, <span class="math display">\[c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);\]</span> where <span class="math inline">\(g(x)\)</span> is the density of a Rayleigh variable shifted by <span class="math inline">\(a\)</span>.<sup>1</sup></p>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>The constant <span class="math inline">\(C= \exp(-a^2/2)(c_1a)^{-1}\)</span> approaches 1 quickly as <span class="math inline">\(a \to \infty\)</span> (asymptotically optimality). </p></li></ol></aside></section>
 <section id="accept-reject-truncated-gaussian-with-rayleigh" class="slide level2 smaller">
 <h2>Accept-reject: truncated Gaussian with Rayleigh</h2>
 <p>The shifted Rayleigh has distribution function <span class="math display">\[G(x) = 1-\exp\{(a^2-x^2)/2\}, x \geq a.\]</span></p>
-<div class="callout callout-important callout-captioned callout-style-default">
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
-<div class="callout-caption">
+<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -569,7 +579,7 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 </div>
 </div>
 </div>
-<p>For sampling on <span class="math inline">\([a,b]\)</span>, propose from a Rayleigh truncated above at <span class="math inline">\(b\)</span> <span class="citation" data-cites="LEcuyer.Botev:2017">(<a href="" role="doc-biblioref" onclick="return false;"><strong>LEcuyer.Botev:2017?</strong></a>)</span>.</p>
+<p>For sampling on <span class="math inline">\([a,b]\)</span>, propose from a Rayleigh truncated above at <span class="math inline">\(b\)</span> <span class="citation" data-cites="LEcuyer.Botev:2017">(<a href="#/references" role="doc-biblioref" onclick="">Botev &amp; L’Écuyer, 2017</a>)</span>.</p>
 <div class="cell" data-hash="bayesmod-slides3_cache/revealjs/marsaglia-algo_56f11c194038fbe5108d867343a91982">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>a <span class="ot">&lt;-</span> <span class="fl">8.3</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>niter <span class="ot">&lt;-</span> 1000L</span>
@@ -634,7 +644,7 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 </section>
 <section id="variance-of-sample-average-redux" class="slide level2">
 <h2>Variance of sample average, redux</h2>
-<p>If a central limit theorem applies, the limiting variance of the sample mean is <span class="math display">\[\begin{align*}
+<p>If a central limit theorem applies, the limiting variance of the sample mean simplifies to <span class="math display">\[\begin{align*}
 \lim_{T \to \infty} T\mathsf{Va}\left(\overline{Y}_T\right) = \tau^2 \left\{1+2\sum_{t=1}^\infty \gamma_t\right\}.
 \end{align*}\]</span> which is a function of</p>
 <ul>
@@ -642,6 +652,10 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <li>the lag-<span class="math inline">\(k\)</span> autocorrelation <span class="math inline">\(\mathsf{Cor}(Y_{t}, Y_{t+k})=\gamma_k\)</span></li>
 </ul>
 </section>
+<section id="correlogram" class="slide level2">
+<h2>Correlogram</h2>
+
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-correlograms-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;2: Correlogram of two two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number.</p></section>
 <section id="variance-of-sample-mean-of-ar1" class="slide level2">
 <h2>Variance of sample mean of AR(1)</h2>
 <p>The lag-<span class="math inline">\(k\)</span> correlation of the stationary autoregressive process of order 1 is <span class="math inline">\(\phi^k\)</span>, so <span class="math display">\[T\mathsf{Va}\left(\overline{Y}_T\right)=\sigma^2(1+\phi)/(1-\phi).\]</span></p>
@@ -658,7 +672,7 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <section id="inefficiency-curve" class="slide level2 smaller">
 <h2>Inefficiency curve</h2>
 
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-ar1-variance-1.png" width="768" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;2: Scaled asymptotic variance of the sample mean for AR(1) (dashed) and independent observations with the same marginal variance (full line). The plot on the right gives the variance ratio for positive correlations.</p><p>To get the same precision for the mean of <span class="math inline">\(\mathsf{AR}(1)\)</span> process with <span class="math inline">\(\phi \approx 0.75\)</span> than with i.i.d. data, we would need 9 times as many observations.</p>
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-ar1-variance-1.png" width="768" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;3: Scaled asymptotic variance of the sample mean for AR(1) (dashed) and independent observations with the same marginal variance (full line). The plot on the right gives the variance ratio for positive correlations.</p><p>To get the same precision for the mean of <span class="math inline">\(\mathsf{AR}(1)\)</span> process with <span class="math inline">\(\phi \approx 0.75\)</span> than with i.i.d. data, we would need 9 times as many observations.</p>
 </section>
 <section id="when-can-we-use-markov-chains" class="slide level2">
 <h2>When can we use Markov chains?</h2>
@@ -689,7 +703,7 @@ P_2 = \begin{pmatrix}
 <section id="convergence-of-markov-chains" class="slide level2">
 <h2>Convergence of Markov chains</h2>
 
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-discrete-markov-chain-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;3: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).</p></section>
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-discrete-markov-chain-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;4: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).</p></section>
 <section id="markov-chain-monte-carlo" class="slide level2">
 <h2>Markov chain Monte Carlo</h2>
 <p>We consider simulating from a distribution with associated density function <span class="math inline">\(\propto p(\boldsymbol{\theta})\)</span>.</p>
@@ -712,17 +726,229 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 <section id="interpretation" class="slide level2">
 <h2>Interpretation</h2>
 <ul>
-<li>If <span class="math inline">\(R&gt;1\)</span>, the proposal has higher density and we always accept the move. If the ratio is less than one, the proposal is in a lower probability region.</li>
+<li>If <span class="math inline">\(R&gt;1\)</span>, the proposal has higher density and we always accept the move.</li>
 <li>If we reject the move, the Markov chain stays at the current value, which induces autocorrelation.</li>
-<li>Since the acceptance probability depends only on the density through ratios, we can work with unnormalized density functions.</li>
+<li>Since the acceptance probability depends only on the density through ratios, normalizing factors of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> cancel out.</li>
 </ul>
 </section>
-<section id="references" class="slide level2">
+<section id="symmetric-proposals-and-random-walk" class="slide level2">
+<h2>Symmetric proposals and random walk</h2>
+<p>If the proposal is symmetric, the ratio of proposal densities is <span class="math display">\[q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} ) / q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1}) = 1.\]</span></p>
+<p>Common examples include random walk proposals <span class="math display">\[\boldsymbol{\theta}_t^{\star} \gets \boldsymbol{\theta}_{t-1} + \tau Z, \qquad Z\]</span> where <span class="math inline">\(Z\)</span> is a mean zero, variance one random variable.</p>
+</section>
+<section id="independent-proposals" class="slide level2">
+<h2>Independent proposals</h2>
+<ul>
+<li>If we pick instead a global proposal, we must ensure that <span class="math inline">\(q\)</span> samples in far regions (recall rejection sampling), otherwise …</li>
+<li>Good proposals include heavy tailed distribution such as Student-<span class="math inline">\(t\)</span> with small degrees of freedom, centered at the maximum a posteriori <span class="math inline">\(\widehat{\boldsymbol{\theta}}\)</span> and with scale matrix <span class="math inline">\(-\mathbf{H}^{-1}(\boldsymbol{\theta}_t^{\star})\)</span>, where <span class="math inline">\(\mathbf{H}(\cdot)\)</span> is the Hessian of the log posterior.</li>
+</ul>
+</section>
+<section id="upworthy-data-example" class="slide level2">
+<h2>Upworthy data example</h2>
+<p>We model the Poisson rates for headlines with questions or not. Our model is <span class="math display">\[\begin{align*}
+Y_{i} &amp;\sim \mathsf{Po}(n_i\lambda_i), \qquad (i=1,2)\\
+\lambda_1 &amp;= \exp(\beta\kappa) \\
+\lambda_2 &amp;= \exp(\beta) \\
+\beta &amp; \sim \mathsf{No}(\log 0.01, 1.5) \\
+\kappa &amp;\sim \mathsf{No}(0, 1)
+\end{align*}\]</span></p>
+</section>
+<section id="implementation-details-data-and-containers" class="slide level2">
+<h2>Implementation details: data and containers</h2>
+<p>In regression models, scale inputs if possible.</p>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-8_8fc9126a69d76ac06efdcb933143fdec">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># Compute sufficient statistics</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
+<span id="cb6-6"><a href="#cb6-6"></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co"># Create containers for MCMC</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb6-9"><a href="#cb6-9"></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> 2L)</span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="implementation-details-log-posterior-function" class="slide level2">
+<h2>Implementation details: log posterior function</h2>
+<p>Perform all calculations on the log scale to avoid numerical overflow!</p>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-9_1f279c26dee331434f7e24181324b5b3">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
+<span id="cb7-4"><a href="#cb7-4"></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-5"><a href="#cb7-5"></a>}</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># Note common signature of function</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb7-8"><a href="#cb7-8"></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-10"><a href="#cb7-10"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb7-12"><a href="#cb7-12"></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
+<span id="cb7-13"><a href="#cb7-13"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="implementation-details-proposal-variance-and-starting-values." class="slide level2">
+<h2>Implementation details: proposal variance and starting values.</h2>
+<p>Use good starting values for your Markov chains, such as maximum a posteriori.</p>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-10_8aad5150feaa1da26dc707139c29f06c">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="at">fn =</span> logpost,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
+<span id="cb8-8"><a href="#cb8-8"></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># Use MAP as starting value</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># Compute logpost_cur - we can keep track of this to reduce calculations</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co"># Proposal covariance</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
+<span id="cb8-15"><a href="#cb8-15"></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="implementation-details-metropolishastings-algorithm" class="slide level2">
+<h2>Implementation details: Metropolis–Hastings algorithm</h2>
+<p>Use seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.</p>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-11_e12d47e0400333e9a6cd0dc657f9778e">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>naccept <span class="ot">&lt;-</span> 0L</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
+<span id="cb9-6"><a href="#cb9-6"></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
+<span id="cb9-8"><a href="#cb9-8"></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
+<span id="cb9-9"><a href="#cb9-9"></a>    cur <span class="ot">&lt;-</span> prop</span>
+<span id="cb9-10"><a href="#cb9-10"></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
+<span id="cb9-11"><a href="#cb9-11"></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> 1L</span>
+<span id="cb9-12"><a href="#cb9-12"></a>  }</span>
+<span id="cb9-13"><a href="#cb9-13"></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
+<span id="cb9-14"><a href="#cb9-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="implementation-details-analysis-of-output" class="slide level2">
+<h2>Implementation details: analysis of output</h2>
+<p>Need specialized methods to compute standard errors of the posterior mean.</p>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-12_d74dfff1c088d459799993111036e60c">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Posterior summaries</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co"># Computing standard errors using batch means</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(mcmc<span class="sc">::</span><span class="fu">olbm</span>(chain, <span class="at">batch.length =</span> niter<span class="sc">/</span><span class="dv">40</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>1. Empirical mean and standard deviation for each variable,
+   plus standard error of the mean:
+
+          Mean       SD  Naive SE Time-series SE
+beta  -4.51268 0.001697 1.697e-05      6.176e-05
+kappa  0.07075 0.002033 2.033e-05      9.741e-05
+
+2. Quantiles for each variable:
+
+          2.5%      25%      50%      75%    97.5%
+beta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929
+kappa  0.06673  0.06933  0.07077  0.07212  0.07463</code></pre>
+</section>
+<section id="standard-errors-of-posterior-mean" class="slide level2">
+<h2>Standard errors of posterior mean</h2>
+<p>A method recommended by <span class="citation" data-cites="Geyer:2011">Geyer (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> consists in running a long chain and</p>
+<ol type="1">
+<li>Break the chain of length <span class="math inline">\(B\)</span> in <span class="math inline">\(K\)</span> blocks of size <span class="math inline">\(\approx K/B\)</span>.</li>
+<li>Compute the sample mean of each segment. These values form a Markov chain and should be approximately uncorrelated.</li>
+<li>Compute the standard deviation of the segments mean. Rescale by <span class="math inline">\(K^{-1/2}\)</span> to get standard error of global chain mean.</li>
+</ol>
+</section>
+<section id="pro-tips-initial-values" class="slide level2">
+<h2>Pro tips: initial values</h2>
+<p>Batch means only works if the chain is sampling from the stationary distribution!</p>
+<p>The previous result (and any estimate) will be unreliable and biased if the chain is not sampling from the posterior.</p>
+<p>This happens often with poor starting value. We are guaranteed to reach stationarity, but this may take more time than the number of steps <span class="math inline">\(B\)</span> we fixed.</p>
+<p>One can discard initial draws during a <strong>burn in</strong> or warmup period, but you better use good starting value.</p>
+</section>
+<section id="visual-diagnostic-trace-plots" class="slide level2">
+<h2>Visual diagnostic: trace plots</h2>
+<p>Display the Markov chain sample path as a function of the number of iterations.</p>
+
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-badstart-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;5: Traceplots of three Markov chains for the same target with different initial values for the first 500 iterations (left) and trace rank plot after discarding these (right).</p></section>
+<section id="checking-convergence-with-multiple-chains" class="slide level2">
+<h2>Checking convergence with multiple chains</h2>
+<ul>
+<li>Run multiple chains to see if they converge to the same target.
+<ul>
+<li>if not, check starting values (compare log posterior) or parameter identifiability!</li>
+</ul></li>
+<li>Markov chains should look like a fat hairy caterpillar!</li>
+<li><code>bayesplot</code> and <code>coda</code> have functionalities for plots (trace plot, trace rank, correlograms, marginal densities, etc.)</li>
+</ul>
+</section>
+<section id="healthy-markov-chains-on-display" class="slide level2">
+<h2>Healthy Markov chains on display</h2>
+<p>Four chains run in parallel.</p>
+
+<img data-src="fig/catterpillar_traceplots.png" class="r-stretch"></section>
+<section id="goldilock-principle-and-proposal-variance" class="slide level2">
+<h2>Goldilock principle and proposal variance</h2>
+<p>Mixing of the chain requires just the right variance (not too small nor too large).</p>
+
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-goldilock-trace-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;6: Example of traceplot with proposal variance that is too small (top), adequate (middle) and too large (bottom).</p></section>
+<section id="correlograms-for-goldilock" class="slide level2">
+<h2>Correlograms for Goldilock</h2>
+
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-goldilock-correlogram-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;7: Correlogram for the three Markov chains.</p></section>
+<section id="tuning-markov-chain-monte-carlo" class="slide level2">
+<h2>Tuning Markov chain Monte Carlo</h2>
+<ul>
+<li>Outside of starting values, the variance of the proposal has a huge impact on the asymptotic variance.</li>
+<li>We can check this via the acceptance rate (how many proposals are accepted).</li>
+<li>In 1D, rule of thumb is an acceptance rate of 0.44 is optimal, and this ratio decreases to 0.234 when <span class="math inline">\(D \geq 2\)</span> <span class="citation" data-cites="Sherlock:2013">(<a href="#/references" role="doc-biblioref" onclick="">Sherlock, 2013</a>)</span> for random walk Metropolis–Hastings.</li>
+<li>Adapt the variance during warmup by increasing/decreasing proposal variance (if acceptance rate is too large/small).</li>
+</ul>
+</section>
+<section id="block-update-or-one-parameter-at-a-time" class="slide level2">
+<h2>Block update or one parameter at a time?</h2>
+<p>As with any accept-reject, proposals become inefficient when the dimension <span class="math inline">\(D\)</span> increase: this is the curse of dimensionality.</p>
+<ul>
+<li>updating parameters in turn increases acceptance rate (with clever proposals), but also leads to more autocorrelation between parameters</li>
+<li>using orthogonal parametrization whenever possible (reparametrize the model to decorrelate parameters)</li>
+<li>if you cannot, draw correlated proposals (using the chain history to inform the correlation, if necessary)</li>
+</ul>
+</section>
+<section id="parameter-transformation" class="slide level2">
+<h2>Parameter transformation</h2>
+<p>Parameters may be bounded, e.g.&nbsp;<span class="math inline">\(\theta_i \in [a,b]\)</span>.</p>
+<ul>
+<li>We can ignore this and simply discard proposals outside of the range, by setting the log posterior at <span class="math inline">\(-\infty\)</span> outside <span class="math inline">\([a,b]\)</span></li>
+<li>We can do a transformation, e.g., <span class="math inline">\(\log \theta_i\)</span> if <span class="math inline">\(\theta_i &gt; 0\)</span> and perform a random walk on the uncontrained space: need Jacobians!</li>
+<li>Another alternative is to use truncated proposals (especially with more complex algorithms like MALA)</li>
+</ul>
+</section>
+<section id="efficient-proposals-mala" class="slide level2 smaller">
+<h2>Efficient proposals: MALA</h2>
+<p>The Metropolis-adjusted Langevin algorithm (MALA) uses a Gaussian random walk proposal <span class="math display">\[\boldsymbol{\theta}^{\star}_t \sim \mathsf{No}\{\mu(\boldsymbol{\theta}_{t-1}), \tau^2\mathbf{A})\},\]</span> where <span class="math display">\[\mu(\boldsymbol{\theta}_{t-1})=\boldsymbol{\theta}_{t-1} + \mathbf{A}\eta \nabla \ell(\boldsymbol{\theta}_{t-1}),\]</span> and with variance <span class="math inline">\(\tau^2\mathbf{A}\)</span>, for some mass matrix <span class="math inline">\(\boldsymbol{A}\)</span>, tuning parameter <span class="math inline">\(\tau&gt;0\)</span> and a damping factor <span class="math inline">\(\eta &lt; 1\)</span>.</p>
+<p>We need to compute the density for the reverse move with mean <span class="math inline">\(\mu(\boldsymbol{\theta}_{t}^\star)\)</span>.<sup>1</sup></p>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>This is akin to a Newton algorithm, so beware if far from the mode (where gradient can be large)!</p></li></ol></aside></section>
+<section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 
 <img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo r-stretch"><div class="footer footer-default">
 
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-LEcuyer.Botev:2017" class="csl-entry" role="listitem">
+Botev, Z., &amp; L’Écuyer, P. (2017). Simulation from the normal distribution truncated to an interval in the tail. <em>Proceedings of the 10th EAI International Conference on Performance Evaluation Methodologies and Tools on 10th EAI International Conference on Performance Evaluation Methodologies and Tools</em>, 23–29. <a href="https://doi.org/10.4108/eai.25-10-2016.2266879">https://doi.org/10.4108/eai.25-10-2016.2266879</a>
+</div>
+<div id="ref-Devroye:1986" class="csl-entry" role="listitem">
+Devroye, L. (1986). <em><span>Non-Uniform Random Variate Generation</span></em>. Springer. <a href="http://www.nrbook.com/devroye/">http://www.nrbook.com/devroye/</a>
+</div>
+<div id="ref-Geyer:2011" class="csl-entry" role="listitem">
+Geyer, C. J. (2011). Introduction to <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 3–48). CRC Press. <a href="https://doi.org/10.1201/b10905">https://doi.org/10.1201/b10905</a>
+</div>
+<div id="ref-Sherlock:2013" class="csl-entry" role="listitem">
+Sherlock, C. (2013). Optimal scaling of the random walk <span>M</span>etropolis: General criteria for the 0.234 acceptance rule. <em>Journal of Applied Probability</em>, <em>50</em>(1), 1–15. <a href="https://doi.org/10.1239/jap/1363784420">https://doi.org/10.1239/jap/1363784420</a>
+</div>
 </div>
 </section>
 
@@ -757,7 +983,7 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -999,9 +1225,23 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
       tabsets.forEach(function(tabset) {
         const tabby = new Tabby('#' + tabset.id);
       });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
       const clipboard = new window.ClipboardJS('.code-copy-button', {
-        target: function(trigger) {
-          return trigger.previousElementSibling;
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
         }
       });
       clipboard.on('success', function(e) {
@@ -1049,7 +1289,7 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
           },
           interactive: true,
           interactiveBorder: 10,
-          theme: 'quarto-reveal',
+          theme: 'light-border',
           placement: 'bottom-start'
         };
           config['offset'] = [0,0];
