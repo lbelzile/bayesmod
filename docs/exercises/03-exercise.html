@@ -236,6 +236,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#exercise-3.1" id="toc-exercise-3.1" class="nav-link active" data-scroll-target="#exercise-3.1">Exercise 3.1</a></li>
+  <li><a href="#exercise-3.2" id="toc-exercise-3.2" class="nav-link" data-scroll-target="#exercise-3.2">Exercise 3.2</a></li>
+  <li><a href="#exercise-3.3" id="toc-exercise-3.3" class="nav-link" data-scroll-target="#exercise-3.3">Exercise 3.3</a></li>
   </ul>
 </nav>
     </div>
@@ -261,6 +263,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="exercise-3.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-3.1">Exercise 3.1</h2>
+<p>Consider the Laplace family of distribution, <span class="math inline">\(\mathsf{La}(\nu, \tau)\)</span>, with density <span class="math display">\[\begin{align*}
+g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau &gt; 0
+\end{align*}\]</span> as a candidate distribution for rejection sampling from <span class="math inline">\(\mathsf{No}(0,1)\)</span>.</p>
+<ol type="1">
+<li>Provide an inversion sampling algorithm to generate from <span class="math inline">\(\mathsf{La}(\nu, \tau)\)</span>.</li>
+<li>Can you use the proposal to generate from a standard Gaussian? for Student-<span class="math inline">\(t\)</span> with 1 degree of freedom? Justify your answer.</li>
+<li>Find the optimal parameters and the upper bound <span class="math inline">\(C\)</span>. Generate 1000 samples from a standard Gaussian.</li>
+<li>Compute the empirical acceptance rate and compare it with that of using a location-scale version of the Student-t with <span class="math inline">\(\nu=3\)</span> degrees of freedom. Which distribution would make a better candidate?</li>
+</ol>
+</section>
+<section id="exercise-3.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-3.2">Exercise 3.2</h2>
 <p>We revisit <a href="../exercises/01-exercise.html#exercice-1.3">Exercise 1.3</a>, which used a half-Cauchy prior for the exponential waiting time of buses.</p>
 <p>The ratio-of-uniform method, implemented in the <a href="https://paulnorthrop.github.io/rust/index.html"><code>rust</code> <strong>R</strong> package</a>, can be used to simulate independent draws from the posterior of the rate <span class="math inline">\(\lambda\)</span>. The following code produces</p>
 <div class="cell">
@@ -282,7 +296,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>the average waiting time</li>
 <li>the standard deviation of the waiting time</li>
 </ol>
-<p>Next, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior. Estimate the same quantities and assess the variability of the Monte Carlo estimators for both correlated draws and the independent draws.</p>
+<p>Next, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior. Estimate the same quantities and compute the ratio of the variance of the Monte Carlo sample average estimators for both correlated draws (using batch means) and the independent draws.</p>
+</section>
+<section id="exercise-3.3" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-3.3">Exercise 3.3</h2>
+<p>Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates <span class="math inline">\(\lambda_i\)</span> <span class="math inline">\((i=1,2)\)</span>, with the same priors. Use a Metropolis–Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.</p>
+<ol type="1">
+<li>Tune the variance to reach an approximate acceptance rate of 0.44.</li>
+<li>Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See <a href="http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html"><code>bayesplot</code></a> or <code>coda</code>. Comment on the convergence and mixing of your Markov chain Monte Carlo.</li>
+<li>Report summary statistics of the chain and compare them with the course notes.</li>
+</ol>
 
 
 </section>

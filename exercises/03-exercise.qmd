@@ -2,7 +2,22 @@
 title: "Exercice 3"
 ---
 
+
 ## Exercise 3.1
+
+Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
+\begin{align*}
+g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau > 0
+\end{align*}
+as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
+
+1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau)$.
+2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
+3. Find the optimal parameters and the upper bound $C$. Generate 1000 samples from a standard Gaussian.
+4. Compute the empirical acceptance rate and compare it with that of using a location-scale version of the Student-t with $\nu=3$ degrees of freedom. Which distribution would make a better candidate?
+
+
+## Exercise 3.2
 
 We revisit [Exercise 1.3](/exercises/01-exercise.html#exercice-1.3), which used a half-Cauchy prior for the exponential waiting time of buses.
 
@@ -30,4 +45,14 @@ Estimate using the Monte Carlo sample:
 2. the average waiting time
 3. the standard deviation of the waiting time
 
-Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior. Estimate the same quantities and assess the variability of the Monte Carlo estimators for both correlated draws and the independent draws.
+Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior. Estimate the same quantities and compute the ratio of the variance of the Monte Carlo sample average estimators for both correlated draws (using batch means) and the independent draws.
+
+## Exercise 3.3
+
+Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates $\lambda_i$ $(i=1,2)$, with the same priors. Use a Metropolis--Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.
+
+1. Tune the variance to reach an approximate acceptance rate of 0.44.
+2. Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See [`bayesplot`](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html) or `coda`. Comment on  the convergence and mixing of your Markov chain Monte Carlo.
+3. Report summary statistics of the chain and compare them with the course notes.
+
+
