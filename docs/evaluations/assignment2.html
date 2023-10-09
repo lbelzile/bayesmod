@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Special topics in data science — Bayesian modelling - Assignment 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Special topics in data science — Bayesian modelling</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html" rel="" target="">
+ <span class="menu-text">Outline</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../content/index.html" rel="" target="">
+ <span class="menu-text">Content</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../exercises/index.html" rel="" target="">
+ <span class="menu-text">Exercises</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../evaluations/assignment2.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Assignment</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://lbelzile.github.io/MATH80601A/" rel="" target="">
+ <span class="menu-text">Notes</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-americans-dont-vote" id="toc-why-americans-dont-vote" class="nav-link active" data-scroll-target="#why-americans-dont-vote">2.1 Why Americans (don’t) vote</a></li>
+  <li><a href="#can-speed-limits-reduce-accidents" id="toc-can-speed-limits-reduce-accidents" class="nav-link" data-scroll-target="#can-speed-limits-reduce-accidents">2.2 Can speed limits reduce accidents?</a></li>
+  <li><a href="#predicting-success-in-university-based-on-high-school-and-standardized-tests" id="toc-predicting-success-in-university-based-on-high-school-and-standardized-tests" class="nav-link" data-scroll-target="#predicting-success-in-university-based-on-high-school-and-standardized-tests">2.3 Predicting success in university based on high school and standardized tests</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Assignment 2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Assignment 2 is due by Tuesday, November 7th 2023, at 8:00am on ZoneCours.</p>
+<ul>
+<li>Please submit your report as a PDF and your code as a <strong>R</strong> file (in addition to Quarto or Rmarkdown files if any).</li>
+<li>Please use the naming convention <code>studentid.ext</code> for all your files, replacing <code>studentid</code> by your student id and <code>ext</code> by the extension (either <code>pdf</code>, <code>qmd</code>, <code>rmd</code> or <code>r</code>).</li>
+<li>Show your work and make sure your analysis is <strong>reproducible</strong> (by setting the seed and checking before submission that your code compiles without error).</li>
+</ul>
+<p>The databases used in the assignment are available from the <code>hecbayes</code> and <code>LearnBayes</code> <strong>R</strong> packages. To download the latest version of the latter, use the command</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"LearnBayes"</span>, <span class="st">"remotes"</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"lbelzile/hecbayes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="why-americans-dont-vote" class="level1">
+<h1>2.1 Why Americans (don’t) vote</h1>
+<p>The <code>voting</code> database contains results from a Ipsos survey commissioned by FiveThirtyEight to study determinants of electoral participation during national elections in the United States: results are discussed in <a href="https://projects.fivethirtyeight.com/non-voters-poll-2020-election/"><em>Why Millions of Americans Don’t Vote</em></a>.</p>
+<p>We are interested in modelling the frequency of voting (variable <code>vote</code>), an ordered categorical variable which is treated as a draw from a multinomial distribution with <span class="math inline">\(d=3\)</span> categories. Records have been coupled with census registers and weighted to reflect the US population as a whole; the <code>weight</code> variable reflects the sampling weight.</p>
+<p>The Dirichlet distribution, whose density for a <span class="math inline">\(d\)</span>-variate vector <span class="math inline">\((x_1, \ldots, x_d)\)</span> on the <span class="math inline">\(d\)</span>-simplex<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is <span class="math display">\[
+f(x; \boldsymbol{\alpha}) = \frac{\Gamma\left(\sum_{j=1}^d \alpha_j\right)}{\prod_{j=1}^d \Gamma(\alpha_j)}\prod_{j=1}^d x_j^{\alpha_j-1}, \qquad \alpha_j &gt; 0 \, (j=1, \ldots, d).
+\]</span></p>
+<ol type="1">
+<li>Perform an exploratory data analysis: what explains patterns of voting?</li>
+<li>Derive the posterior distribution of the proportion for each voting habit <strong>per education level</strong> if we assign to each independent uniform Dirichlet priors with <span class="math inline">\(\boldsymbol{\alpha}=\mathbf{1}_3\)</span>.<br>
+<em>Hint</em>: start by writing the weighted log likelihood function.</li>
+<li>Report the expected posterior proportion of <code>always</code> voters in each class.</li>
+<li>Plot the posterior density of the odds ratio for <code>always</code> voters for all pairs and associated 89% credible intervals. Comment on the results</li>
+<li><ol type="a">
+<li>Split records by age category (with age bands <span class="math inline">\((20,35], (35, 55], (55, 70] \ldots, (70, 100]\)</span>).</li>
+<li>For each age category, compute the weighted number of people per voter category.</li>
+<li>Next, draw 1000 samples from the posterior predictive distributions (depending on education level) for each individual and compute the weighted number of person per age bin, in order to get 50% credible intervals for each age bands.</li>
+<li>Plot the resulting bands with your data estimates.</li>
+<li>What do these suggest about the goodness of fit (i.e., is the variability sufficient to capture observed effects)?</li>
+</ol></li>
+<li><a href="#fig-age">Figure&nbsp;1</a> shows the unconditional change in probability of voting as a function of age. What these suggest about the patterns uncovered, and how could these be addressed in a statistical analysis?</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-age" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="assignment2_files/figure-html/fig-age-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Probability of belonging to a voting category as a function of age; estimates are based on a multinomial generalized additive logistic model.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="can-speed-limits-reduce-accidents" class="level1">
+<h1>2.2 Can speed limits reduce accidents?</h1>
+<p>The <code>sweden</code> dataset <span class="citation" data-cites="Svensson:1981">(<a href="#ref-Svensson:1981" role="doc-biblioref">Svensson, 1981</a>)</span> contains records for road traffic accidents following a speed limits experiment on motorways in Sweden. Road traffic accidents and speed limits experiment on motorway in Sweden.</p>
+<p>We consider a Poisson regression model: let <span class="math inline">\(Y_{i1}\)</span> (respectively <span class="math inline">\(Y_{i2}\)</span>) denote the number of accidents in 1961 (respectively 1962) on day <span class="math inline">\(i\)</span> and let <span class="math inline">\(\texttt{limit}_{ij}\)</span> denote a binary indicator equal to one if speed limits were enforced on day <span class="math inline">\(i\)</span> of year <span class="math inline">\(j\)</span>. <span class="math display">\[\begin{align*}
+Y_{i1} &amp;\sim \mathsf{Po}\{\exp(\delta_i + \alpha_1 \texttt{limit}_{i1})\},\\
+Y_{i2} &amp;\sim\mathsf{Po}\{\exp(\delta_i + \gamma +  \alpha_2 \texttt{limit}_{i2})\}, \qquad i=1, \ldots, 92.
+\end{align*}\]</span> The nuisance parameters <span class="math inline">\(\delta_1, \ldots, \delta_{92}\)</span> control for changes in background number of accidents and are of no practical interest, while <span class="math inline">\(\gamma\)</span> denotes the change from 1961 to 1962. We are interested here in assessing changes in the number of accidents due to the policy, <span class="math inline">\(\alpha\)</span>; of secondary interest is to determine whether there has been a decrease in the number of accident relative to 1961.</p>
+<p>Use vague priors for <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\alpha\)</span> and use a random effect <span class="math inline">\(\delta_i \sim \mathsf{No}(0, \tau^2)\)</span> with a suitable prior for <span class="math inline">\(\tau\)</span>.</p>
+<ol type="1">
+<li>Using Metropolis-within-Gibbs, obtain posterior draws for the parameters. Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report the effective sample sizes.</li>
+<li>Produce trace plots of the Markov chains and correlograms for parameters <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\tau\)</span>. Comment on the quality of your sampler.</li>
+<li>Return the posterior mode, posterior mean and 89% HPD region, in addition to density plot for the multiplicative effect on traffic, <span class="math inline">\(\exp(\gamma)\)</span>. Comment on the effectiveness of the policy.</li>
+<li>Obtain a caterpillar plot of the parameters <span class="math inline">\(\delta_i\)</span> (<span class="math inline">\(i=1,\ldots, 92\)</span>) as follows:</li>
+</ol>
+<ol type="a">
+<li>obtain point estimates of the posterior mode for each random effect <span class="math inline">\(\delta_i\)</span> and sort them in increasing order</li>
+<li>for each parameter, obtain 80% credible intervals.</li>
+<li>plot the point estimates and intervals against order.</li>
+</ol>
+<ol start="5" type="1">
+<li>Fit the model using maximum likelihood treating day as a fixed effect using the code provided below. Superimpose the estimated effects on your caterpillar and discuss the shrinkage effect of the prior.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">contrasts=</span><span class="fu">c</span>(<span class="st">"contr.sum"</span>,<span class="st">"contr.poly"</span>)) <span class="co"># sum-to-zero constraint for factors</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(sweden, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">glm</span>(accidents <span class="sc">~</span> day <span class="sc">+</span> limit <span class="sc">+</span> year,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> <span class="fu">poisson</span>(<span class="st">"log"</span>), <span class="at">data =</span> sweden)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>fixef <span class="ot">&lt;-</span> <span class="fu">coef</span>(mod)[<span class="fu">substr</span>(<span class="fu">names</span>(<span class="fu">coef</span>(mod)), <span class="dv">1</span>,<span class="dv">3</span>) <span class="sc">==</span> <span class="st">"day"</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>fixef <span class="ot">&lt;-</span> <span class="fu">c</span>(fixef, <span class="at">day92 =</span> <span class="sc">-</span><span class="fu">sum</span>(fixef))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="6" type="1">
+<li>Perform a sensitivity analysis of your prior for <span class="math inline">\(\tau\)</span> by comparing with, e.g., a folded Student-<span class="math inline">\(t\)</span>, the improper prior <span class="math inline">\(\tau^{-1}\)</span>, an inverse gamma conditionally conjugate prior or a penalized complexity prior with different rate parameters. Comment on the robustness of your conclusions to the choice of prior for <span class="math inline">\(\tau\)</span>.</li>
+</ol>
+</section>
+<section id="predicting-success-in-university-based-on-high-school-and-standardized-tests" class="level1">
+<h1>2.3 Predicting success in university based on high school and standardized tests</h1>
+<p><span class="citation" data-cites="Albert:1994">Albert (<a href="#ref-Albert:1994" role="doc-biblioref">1994</a>)</span> considers the grade point average (GPA) of university students as a function of their high school ranking (HSR, eight categories) and their ACT standardized score test results (five categories, higher scores are better). This kind of problem is useful for student retention, as it may help target students who may need additional resources early on.</p>
+<p>Model grade point averages as Gaussian, with <span class="math display">\[\begin{align*}
+Y_{ij} &amp;\sim \mathsf{No}(\mu_{ij}, \sigma^2),
+\mu_{ij} &amp;= \alpha_{i} + \gamma_{j} \qquad i=1, \ldots, 8; j =1, \ldots, 5
+\end{align*}\]</span> Suppose we want to enforce the constraint that the average GPA is increasing as a function of <code>HSR</code> (so <span class="math inline">\(\alpha_1 \leq \alpha_2 \leq \cdots \leq \alpha_8\)</span>) and of <code>ACT</code> scores <span class="math inline">\((\gamma_1 \leq \cdots \leq \gamma_5)\)</span>, with higher values and ranking indicating higher average GPA. Use a conjugate prior for <span class="math inline">\(\sigma\)</span> centered at 0.65. The <code>iowagpa</code> data set from package <code>LearnBayes</code> contains the data frame with the average response <code>gpa</code>, the counts <code>n</code> in each category and both categorical explanatories <code>HSR</code> and <code>ACT</code>.</p>
+<ol type="1">
+<li>Use Gibbs sampling with a random scan to sample from the 40 mean parameters, enforcing the monotonicity constraints.</li>
+<li>Consider a block update to sample all of <span class="math inline">\(\boldsymbol{\alpha}\)</span> and <span class="math inline">\(\boldsymbol{\gamma}\)</span>, in turn. Compare the Markov chains with the one parameter at a time: does it improve mixing?</li>
+</ol>
+<p><em>Hint</em>: to sample a <span class="math inline">\(d\)</span>-variate Gaussian vector <span class="math inline">\(\boldsymbol{Z} \in \mathbb{R}^d\)</span> with mean <span class="math inline">\(\boldsymbol{\mu}\)</span> and variance <span class="math inline">\(\boldsymbol{\Sigma}\)</span> subject to the linear constraints <span class="math inline">\(\mu_{i+1} -\mu_i \geq 0\)</span> for <span class="math inline">\(i=2, \ldots, d\)</span>, we encode the restrictions in a <span class="math inline">\(d \times d\)</span> invertible matrix <span class="math inline">\(\mathbf{A}\)</span>, simulate <span class="math inline">\(\boldsymbol{X} \sim \mathsf{No}(\mathbf{A}\boldsymbol{\mu}, \mathbf{A}\boldsymbol{\Sigma}\mathbf{A}^{\top})\)</span> truncated below by <span class="math inline">\((-\infty, \boldsymbol{0}_{d-1})\)</span> and return <span class="math inline">\(\boldsymbol{Z} = \mathbf{A}^{-1}\boldsymbol{X}\)</span>. The <code>TruncNormA</code> function below uses the <code>TruncatedNormal</code> package to accomplish this.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>TruncNormA <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, sigma){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">length</span>(mu)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(d <span class="sc">==</span> <span class="fu">ncol</span>(matrix), </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>            d <span class="sc">==</span> <span class="fu">nrow</span>(matrix),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">isTRUE</span>(<span class="fu">all</span>(<span class="fu">eigen</span>(sigma, <span class="at">only.values =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>values <span class="sc">&gt;</span> <span class="dv">0</span>)))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Build constraint matrix</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  A <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span>, d)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>d) {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    A[i, i <span class="sc">-</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  Ainv <span class="ot">&lt;-</span> <span class="fu">solve</span>(A)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  samp <span class="ot">&lt;-</span> TruncatedNormal<span class="sc">::</span><span class="fu">rtmvnorm</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">1</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu =</span> <span class="fu">c</span>(A <span class="sc">%*%</span> mu),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">sigma =</span> A <span class="sc">%*%</span> sigma <span class="sc">%*%</span> <span class="fu">t</span>(A),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">lb =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="fu">rep</span>(<span class="dv">0</span>, d <span class="sc">-</span> <span class="dv">1</span>)),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">ub =</span> <span class="fu">rep</span>(<span class="cn">Inf</span>, d)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">as.numeric</span>(Ainv <span class="sc">%*%</span> samp))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>Plot the posterior means as a function of <code>HSR</code> and <code>ACT</code> and superimpose the cell means. Does the model appear reasonable?</li>
+<li>Consider instead a simpler linear regression model where <span class="math inline">\(\mu= \beta_0 + \beta_1 \texttt{HSR} + \beta_2 \texttt{ACT}\)</span>, with suitable priors for <span class="math inline">\(\boldsymbol{\beta}\)</span> to be determined. Use a Metropolis–Hastings algorithm to draw posterior samples.
+<ol type="a">
+<li>Plot the posterior density of both slope parameters and comment on the postulated relationship.</li>
+<li>Using the Bayesian workflow, assess the adequacy of the models in reproducing the average cell means. Contrast the two models.</li>
+</ol></li>
+<li>Use the models to obtain the posterior probability of having a satisfactory GPA of 2.5 and above using either model for each cell.</li>
+</ol>
+
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Albert:1994" class="csl-entry" role="listitem">
+Albert, J. H. (1994). A <span>B</span>ayesian approach to estimation of <span>GPA</span>s of <span>U</span>niversity of <span>I</span>owa freshmen under order restrictions. <em>Journal of Educational Statistics</em>, <em>19</em>(1), 1–21. <a href="https://doi.org/10.3102/10769986019001001">https://doi.org/10.3102/10769986019001001</a>
+</div>
+<div id="ref-Svensson:1981" class="csl-entry" role="listitem">
+Svensson, A. (1981). On a goodness-of-fit test for multiplicative <span>P</span>oisson models. <em>The Annals of Statistics</em>, <em>9</em>(4), 697–704. <a href="https://doi.org/10.1214/aos/1176345512">https://doi.org/10.1214/aos/1176345512</a>
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The components of the vector <span class="math inline">\(\boldsymbol{x} \in \mathbb{R}^d_{+}\)</span> are positive and sum to one.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Content <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2023 by <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a><br> Website template by <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> under <a href="https://mit-license.org/">MIT License</a><br> All content licensed under a <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Made with <i class="fa-brands fa-r-project" aria-hidden="true"></i> and <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/bayesmod">View the source at <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
+  </div>
+</footer>
+
+
+
+</body></html>
