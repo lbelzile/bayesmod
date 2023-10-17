@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Special topics in data science — Bayesian modelling - Priors</title>
+<title>Special topics in data science — Bayesian modelling - Markov chain Monte Carlo</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -131,7 +131,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/02-content.html">2: Priors</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/04-content.html">4: Markov chain Monte Carlo</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -177,7 +177,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/02-content.html" class="sidebar-item-text sidebar-link active">
+  <a href="../content/02-content.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">2: Priors</span></a>
   </div>
 </li>
@@ -189,7 +189,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/04-content.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/04-content.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">4: Markov chain Monte Carlo</span></a>
   </div>
 </li>
@@ -217,30 +217,28 @@ div.csl-indent {
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header">
-<h1 class="title display-7">Priors</h1>
+<h1 class="title display-7">Markov chain Monte Carlo</h1>
 
 <div class="date-block bg-content text-white p-2">
-  <p class="date">Content for Tuesday, September 26, 2023</p>
+  <p class="date">Content for Tuesday, October 17, 2023</p>
 </div>
 </header>
 
 <section id="content" class="level2">
 <h2 class="anchored" data-anchor-id="content">Content</h2>
 <ul>
-<li>Conjugate, flat, vague, Jeffrey’s, informative and penalized complexity priors</li>
-<li>Priors for regression models</li>
-<li>Parameter elicitation</li>
-<li>Prior sensitivity analysis</li>
+<li>Efficient proposals for Metropolis–Hastings and tuning</li>
+<li>Gibbs sampling and data augmentation</li>
+<li>Bayesian worflow and diagnostics for MCMC</li>
 </ul>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>At the end of the chapter, students should be able to</p>
 <ul>
-<li>choose a suitable prior for a Bayesian analysis</li>
-<li>derive parameters of posterior distributions in conjugate models</li>
-<li>perform parameter elicitation</li>
-<li>assess the impact of priors through sensitivity analysis</li>
+<li>implement MALA and Gibbs sampling</li>
+<li>derive the conditional distributions of a model for Gibbs sampling</li>
+<li>diagnose performance of MCMC algorithms and implement potential remedies</li>
 </ul>
 </section>
 <section id="readings" class="level2">
@@ -259,7 +257,8 @@ Warning
 </div>
 </div>
 <ul>
-<li><a href="https://lbelzile.github.io/MATH80601A/priors.html">Chapter 2 of the course notes</a></li>
+<li><a href="https://www.mcmchandbook.net/HandbookChapter1.pdf"><span class="citation" data-cites="Geyer:2011">Geyer (<span>2011</span>)</span></a></li>
+<li><a href="https://lbelzile.github.io/MATH80601A/mcmc.html">Chapter 3 of the course notes</a></li>
 </ul>
 </section>
 <section id="complementary-readings" class="level2">
@@ -278,20 +277,17 @@ Warning
 </div>
 </div>
 <ul>
-<li><p><span class="citation" data-cites="Villani:2023">Villani (<a href="#ref-Villani:2023" role="doc-biblioref">2023</a>)</span>, chapter 4</p></li>
-<li><p><span class="citation" data-cites="Gelman:2013">Gelman et al. (<a href="#ref-Gelman:2013" role="doc-biblioref">2013</a>)</span>, chapters 2, 3 and 5</p></li>
-<li><p><span class="citation" data-cites="Johnson.Ott.Dogucu:2022">Johnson et al. (<a href="#ref-Johnson.Ott.Dogucu:2022" role="doc-biblioref">2022</a>)</span>, <a href="https://www.bayesrulesbook.com/chapter-5">chapter 5</a></p></li>
-<li><p>truncated Student-t priors for hierarchical models <span class="citation" data-cites="Gelman:2006">(<a href="#ref-Gelman:2006" role="doc-biblioref">Gelman, 2006</a>)</span></p></li>
-<li><p>penalized complexity priors <span class="citation" data-cites="Simpson:2017">(<a href="#ref-Simpson:2017" role="doc-biblioref">Simpson et al., 2017</a>)</span></p></li>
+<li><span class="citation" data-cites="Albert:2009">Albert (<a href="#ref-Albert:2009" role="doc-biblioref">2009</a>)</span>, chapters 6 and 10 (several examples)</li>
+<li><span class="citation" data-cites="McElreath:2020">McElreath (<a href="#ref-McElreath:2020" role="doc-biblioref">2020</a>)</span>, chapter 9 (non technical)</li>
 </ul>
 </section>
 <section id="slides" class="level2">
 <h2 class="anchored" data-anchor-id="slides">Slides</h2>
 <p class="text-center">
-<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides2.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides2.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
+<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides4.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides4.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
 </p>
 <div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides2.html">
+<iframe class="slide-deck" src="../slides/bayesmod-slides4.html">
 </iframe>
 </div>
 
@@ -300,20 +296,14 @@ Warning
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
-<div id="ref-Gelman:2006" class="csl-entry" role="listitem">
-Gelman, A. (2006). Prior distributions for variance parameters in hierarchical models (comment on article by <span>B</span>rowne and <span>D</span>raper). <em>Bayesian Analysis</em>, <em>1</em>(3), 515–534. <a href="https://doi.org/10.1214/06-BA117A">https://doi.org/10.1214/06-BA117A</a>
+<div id="ref-Albert:2009" class="csl-entry" role="listitem">
+Albert, J. (2009). <em>Bayesian computation with <span>R</span></em> (2nd ed.). Springer. <a href="https://doi.org/10.1007/978-0-387-92298-0">https://doi.org/10.1007/978-0-387-92298-0</a>
 </div>
-<div id="ref-Gelman:2013" class="csl-entry" role="listitem">
-Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2013). <em>Bayesian data analysis</em> (3rd ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/b16018">https://doi.org/10.1201/b16018</a>
+<div id="ref-Geyer:2011" class="csl-entry" role="listitem">
+Geyer, C. J. (2011). Introduction to <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo. In <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em>. CRC Press. <a href="https://doi.org/10.1201/b10905-3">https://doi.org/10.1201/b10905-3</a>
 </div>
-<div id="ref-Johnson.Ott.Dogucu:2022" class="csl-entry" role="listitem">
-Johnson, A. A., Ott, M. Q., &amp; Dogucu, M. (2022). <em>Bayes rules! An introduction to applied <span>B</span>ayesian modeling</em> (1st ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9780429288340">https://doi.org/10.1201/9780429288340</a>
-</div>
-<div id="ref-Simpson:2017" class="csl-entry" role="listitem">
-Simpson, D., Rue, H., Riebler, A., Martins, T. G., &amp; Sørbye, S. H. (2017). Penalising model component complexity: A principled, practical approach to constructing priors. <em>Statistical Science</em>, <em>32</em>(1), 1–28. <a href="https://doi.org/10.1214/16-STS576">https://doi.org/10.1214/16-STS576</a>
-</div>
-<div id="ref-Villani:2023" class="csl-entry" role="listitem">
-Villani, M. (2023). <em>Bayesian learning: A gentle introduction</em>. <a href="https://mattiasvillani.com/BayesianLearningBook/">https://mattiasvillani.com/BayesianLearningBook/</a>
+<div id="ref-McElreath:2020" class="csl-entry" role="listitem">
+McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course with examples in <span>R</span> and <span>STAN</span></em> (2nd ed.). Chapman; Hall/CRC.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

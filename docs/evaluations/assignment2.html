@@ -283,6 +283,9 @@ Y_{i2} &amp;\sim\mathsf{Po}\{\exp(\delta_i + \gamma +  \alpha_2 \texttt{limit}_{
 Y_{ij} &amp;\sim \mathsf{No}(\mu_{ij}, \sigma^2),
 \mu_{ij} &amp;= \alpha_{i} + \gamma_{j} \qquad i=1, \ldots, 8; j =1, \ldots, 5
 \end{align*}\]</span> Suppose we want to enforce the constraint that the average GPA is increasing as a function of <code>HSR</code> (so <span class="math inline">\(\alpha_1 \leq \alpha_2 \leq \cdots \leq \alpha_8\)</span>) and of <code>ACT</code> scores <span class="math inline">\((\gamma_1 \leq \cdots \leq \gamma_5)\)</span>, with higher values and ranking indicating higher average GPA. Use a conjugate prior for <span class="math inline">\(\sigma\)</span> centered at 0.65. The <code>iowagpa</code> data set from package <code>LearnBayes</code> contains the data frame with the average response <code>gpa</code>, the counts <code>n</code> in each category and both categorical explanatories <code>HSR</code> and <code>ACT</code>.</p>
+<p>For simplicity, use improper priors <span class="math display">\[
+p(\sigma, \boldsymbol{\alpha}, \boldsymbol{\gamma}) =\frac{ \mathsf{I}(-\infty \leq \alpha_1 \leq \cdots \leq \alpha_8 \leq \infty) \mathsf{I}(-\infty \leq \gamma_1 \leq \cdots \leq \gamma_5 \leq \infty)}{\sigma},
+\]</span> where <span class="math inline">\(\mathsf{I}(\cdot)\)</span> denotes the indicator function. You could also use a conjugate prior for <span class="math inline">\(\sigma\)</span>.</p>
 <ol type="1">
 <li>Use Gibbs sampling with a random scan to sample from the 40 mean parameters, enforcing the monotonicity constraints.</li>
 <li>Consider a block update to sample all of <span class="math inline">\(\boldsymbol{\alpha}\)</span> and <span class="math inline">\(\boldsymbol{\gamma}\)</span>, in turn. Compare the Markov chains with the one parameter at a time: does it improve mixing?</li>

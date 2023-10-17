@@ -187,6 +187,12 @@ div.csl-indent {
  <span class="menu-text">3: Simulation-based inference</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/04-content.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4: Markov chain Monte Carlo</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -223,9 +229,7 @@ div.csl-indent {
 <ul>
 <li>Monte Carlo methods</li>
 <li>Markov chains</li>
-<li>Metropolis–Hastings–Green algorithm</li>
-<li>Gibbs sampling</li>
-<li>Practical considerations</li>
+<li>Metropolis–Hastings algorithm</li>
 </ul>
 </section>
 <section id="learning-objectives" class="level2">
@@ -235,7 +239,6 @@ div.csl-indent {
 <li>understand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ</li>
 <li>implement a MHG algorithm to draw samples from the posterior</li>
 <li>use output of MCMC to obtain estimates and standard errors</li>
-<li>diagnose performance of MCMC algorithms and implement potential remedies</li>
 </ul>
 </section>
 <section id="readings" class="level2">
@@ -275,8 +278,6 @@ Warning
 </div>
 <ul>
 <li><span class="citation" data-cites="Green:2015">Green et al. (<a href="#ref-Green:2015" role="doc-biblioref">2015</a>)</span> (overview of MCMC methods)</li>
-<li><span class="citation" data-cites="Albert:2009">Albert (<a href="#ref-Albert:2009" role="doc-biblioref">2009</a>)</span>, chapters 6 and 10 (several examples)</li>
-<li><span class="citation" data-cites="McElreath:2020">McElreath (<a href="#ref-McElreath:2020" role="doc-biblioref">2020</a>)</span>, chapter 9 (non technical)</li>
 </ul>
 </section>
 <section id="slides" class="level2">
@@ -294,17 +295,11 @@ Warning
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
-<div id="ref-Albert:2009" class="csl-entry" role="listitem">
-Albert, J. (2009). <em>Bayesian computation with <span>R</span></em> (2nd ed.). Springer. <a href="https://doi.org/10.1007/978-0-387-92298-0">https://doi.org/10.1007/978-0-387-92298-0</a>
-</div>
 <div id="ref-Geyer:2011" class="csl-entry" role="listitem">
 Geyer, C. J. (2011). Introduction to <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo. In <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em>. CRC Press. <a href="https://doi.org/10.1201/b10905-3">https://doi.org/10.1201/b10905-3</a>
 </div>
 <div id="ref-Green:2015" class="csl-entry" role="listitem">
 Green, P. J., Łatuszyński, K., Pereyra, M., &amp; Robert, C. P. (2015). Bayesian computation: A summary of the current state, and samples backwards and forwards. <em>Statistics and Computing</em>, <em>25</em>(4), 835–862. <a href="https://doi.org/10.1007/s11222-015-9574-5">https://doi.org/10.1007/s11222-015-9574-5</a>
-</div>
-<div id="ref-McElreath:2020" class="csl-entry" role="listitem">
-McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course with examples in <span>R</span> and <span>STAN</span></em> (2nd ed.). Chapman; Hall/CRC.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

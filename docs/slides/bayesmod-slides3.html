@@ -423,30 +423,6 @@ Léo Belzile
 
   <p class="date">2023</p>
 </section>
-<section class="slide level2">
-
-<pre data-include="FALSE"><code>
-hecbleu &lt;- c("#002855")
-fcols &lt;- c(gris = "#888b8d",
-           bleu = "#0072ce",
-           aqua = "#00aec7",
-           vert = "#26d07c",
-           rouge = "#ff585d",
-           rose = "#eb6fbd",
-           jaune = "#f3d03e")
-pcols &lt;- c(gris = "#d9d9d6",
-           bleu = "#92c1e9",
-           agua = "#88dbdf",
-           vert = "#8fe2b0",
-           rouge = "#ffb1bb",
-           rose = "#eab8e4",
-           jaune = "#f2f0a1")
-library(ggplot2)
-theme_set(theme_classic())
-library(patchwork)
-knitr::opts_chunk$set(fig.retina = 3, collapse = TRUE)
-options(digits = 3, width = 75)</code></pre>
-</section>
 <section id="bayesian-inference-beyond-conjugate-models" class="slide level2">
 <h2>Bayesian inference beyond conjugate models</h2>
 <p>How to circumvent the problem of intractable posteriors?</p>
@@ -471,7 +447,7 @@ options(digits = 3, width = 75)</code></pre>
 <p>We substitute expected value by sample average <span class="math display">\[\widehat{\mu}_g = \frac{1}{B} \sum_{b=1}^B g(X_b), \qquad X_b \sim F\]</span></p>
 <ul>
 <li>law of large number guarantees convergence of <span class="math inline">\(\widehat{\mu}_g \to \mu_g\)</span> if the latter is finite.</li>
-<li>central limit theorem applies: <span class="math display">\[\sqrt{B}(\widehat{\mu}_g - \mu_g) \sim \mathsf{No}(0, \sigma^2_g).\]</span></li>
+<li>Under finite second moments, central limit theorem gives <span class="math display">\[\sqrt{B}(\widehat{\mu}_g - \mu_g) \sim \mathsf{No}(0, \sigma^2_g).\]</span></li>
 </ul>
 </section>
 <section id="ordinary-monte-carlo" class="slide level2">
@@ -536,8 +512,12 @@ options(digits = 3, width = 75)</code></pre>
 <li>you can use numerical optimization with <span class="math inline">\(f(x) =\log p(x) - \log q(x)\)</span> to find the mode <span class="math inline">\(x^\star\)</span> and the upper bound <span class="math inline">\(C = \exp f(x^\star)\)</span>.</li>
 </ul>
 </section>
-<section id="example-of-accept-reject-1" class="slide level2">
-<h2>Example of accept-reject (1)</h2>
+<section id="accept-reject-illustration" class="slide level2">
+<h2>Accept-reject illustration</h2>
+
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-acceptreject-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;2: Target density (full) and scaled proposal density (dashed): the vertical segment at <span class="math inline">\(x=1\)</span> shows the percentage of acceptance for a uniform slice under the scaled proposal, giving an acceptance ratio of 0.58.</p></section>
+<section id="truncated-gaussian-via-accept-reject" class="slide level2">
+<h2>Truncated Gaussian via accept-reject</h2>
 <p>Consider sampling <span class="math inline">\(Y \sim \mathsf{No}(\mu, \sigma^2)\)</span>, but truncated in the interval <span class="math inline">\((a, b)\)</span>. The target density is <span class="math display">\[\begin{align*}
 p(x; \mu, \sigma, a, b) = \frac{1}{\sigma}\frac{\phi\left(\frac{x-\mu}{\sigma}\right)}{\Phi(\beta)-\Phi(\alpha)}.
 \end{align*}\]</span> for <span class="math inline">\(\alpha= (a-\mu)/\sigma\)</span> and <span class="math inline">\(\beta = (b-\mu)/\sigma\)</span>. where <span class="math inline">\(\phi(\cdot), \Phi(\cdot)\)</span> are respectively the density and distribution function of the standard Gaussian distribution.</p>
@@ -549,17 +529,17 @@ p(x; \mu, \sigma, a, b) = \frac{1}{\sigma}\frac{\phi\left(\frac{x-\mu}{\sigma}\r
 <li>reject any draw if <span class="math inline">\(X &lt; a\)</span> or <span class="math inline">\(X&gt; b\)</span>.</li>
 </ol>
 <p>The acceptance rate is <span class="math inline">\(C^{-1} = \{\Phi(\beta) - \Phi(\alpha)\}\)</span></p>
-<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-2_d571ef37cc3664bf57c42bb223ddfcf8">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Standard Gaussian truncated on [0,1]</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>candidate <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e5</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>trunc_samp <span class="ot">&lt;-</span> candidate[candidate <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> candidate <span class="sc">&lt;=</span> <span class="dv">1</span>]</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># Acceptance rate</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="fu">length</span>(trunc_samp)<span class="sc">/</span><span class="fl">1e5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-4_b6de8b05b755a63d6a54f7cfad0fa6ba">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Standard Gaussian truncated on [0,1]</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>candidate <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e5</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>trunc_samp <span class="ot">&lt;-</span> candidate[candidate <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> candidate <span class="sc">&lt;=</span> <span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># Acceptance rate</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">length</span>(trunc_samp)<span class="sc">/</span><span class="fl">1e5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.34242</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Theoretical acceptance rate</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">pnorm</span>(<span class="dv">1</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Theoretical acceptance rate</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">pnorm</span>(<span class="dv">1</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.3413447</code></pre>
 </div>
@@ -580,8 +560,8 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 </section>
 <section id="simulating-tails-of-gaussian-variables" class="slide level2 smaller">
 <h2>Simulating tails of Gaussian variables</h2>
-<p>We consider simulation from a standard Gaussian truncated above <span class="math inline">\(a&gt;0\)</span> <span class="citation" data-cites="Devroye:1986">(<a href="#/references" role="doc-biblioref" onclick="">Devroye, 1986, p. 381</a>)</span>.</p>
-<p>Write the density of the truncated Gaussian as <span class="math display">\[f(x) = \frac{\exp(-x^2/2)}{\int_{a}^{\infty}\exp(-z^2/2)\mathrm{d} z}  =\frac{\exp(-x^2/2)}{c_1}.\]</span></p>
+<p>We consider simulation from a standard Gaussian truncated above <span class="math inline">\(a&gt;0\)</span></p>
+<p>Write the density of the truncated Gaussian as <span class="citation" data-cites="Devroye:1986">(<a href="#/references" role="doc-biblioref" onclick="">Devroye, 1986, p. 381</a>)</span><span class="math display">\[f(x) = \frac{\exp(-x^2/2)}{\int_{a}^{\infty}\exp(-z^2/2)\mathrm{d} z}  =\frac{\exp(-x^2/2)}{c_1}.\]</span></p>
 <p>Note that, for <span class="math inline">\(x \geq a\)</span>, <span class="math display">\[c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);\]</span> where <span class="math inline">\(g(x)\)</span> is the density of a Rayleigh variable shifted by <span class="math inline">\(a\)</span>.<sup>1</sup></p>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>The constant <span class="math inline">\(C= \exp(-a^2/2)(c_1a)^{-1}\)</span> approaches 1 quickly as <span class="math inline">\(a \to \infty\)</span> (asymptotically optimality). </p></li></ol></aside></section>
 <section id="accept-reject-truncated-gaussian-with-rayleigh" class="slide level2 smaller">
@@ -605,10 +585,10 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 </div>
 <p>For sampling on <span class="math inline">\([a,b]\)</span>, propose from a Rayleigh truncated above at <span class="math inline">\(b\)</span> <span class="citation" data-cites="LEcuyer.Botev:2017">(<a href="#/references" role="doc-biblioref" onclick="">Botev &amp; L’Écuyer, 2017</a>)</span>.</p>
 <div class="cell" data-hash="bayesmod-slides3_cache/revealjs/marsaglia-algo_56f11c194038fbe5108d867343a91982">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>a <span class="ot">&lt;-</span> <span class="fl">8.3</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>niter <span class="ot">&lt;-</span> 1000L</span>
-<span id="cb6-3"><a href="#cb6-3"></a>X <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(a<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">rexp</span>(niter))</span>
-<span id="cb6-4"><a href="#cb6-4"></a>samp <span class="ot">&lt;-</span> X[<span class="fu">runif</span>(niter)<span class="sc">*</span>X <span class="sc">&lt;=</span> a]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>a <span class="ot">&lt;-</span> <span class="fl">8.3</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>niter <span class="ot">&lt;-</span> 1000L</span>
+<span id="cb5-3"><a href="#cb5-3"></a>X <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(a<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">rexp</span>(niter))</span>
+<span id="cb5-4"><a href="#cb5-4"></a>samp <span class="ot">&lt;-</span> X[<span class="fu">runif</span>(niter)<span class="sc">*</span>X <span class="sc">&lt;=</span> a]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="markov-chains" class="slide level2">
@@ -679,18 +659,18 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <section id="correlogram" class="slide level2">
 <h2>Correlogram</h2>
 
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-correlograms-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;2: Correlogram of two two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number.</p></section>
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-correlograms-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;3: Correlogram of two two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number.</p></section>
 <section id="variance-of-sample-mean-of-ar1" class="slide level2">
 <h2>Variance of sample mean of AR(1)</h2>
 <p>The lag-<span class="math inline">\(k\)</span> correlation of the stationary autoregressive process of order 1 is <span class="math inline">\(\phi^k\)</span>, so <span class="math display">\[T\mathsf{Va}\left(\overline{Y}_T\right)=\sigma^2(1+\phi)/(1-\phi).\]</span></p>
 <p>For an independent sample, we have <span class="math display">\[T\mathsf{Va}\left(\overline{Y}_T\right)=\sigma^2/(1-\phi^2).\]</span></p>
 </section>
-<section id="inefficiency-curve" class="slide level2 smaller">
-<h2>Inefficiency curve</h2>
+<section id="inefficiency-curve-for-ar1" class="slide level2 smaller">
+<h2>Inefficiency curve for AR(1)</h2>
 
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-ar1-variance-1.png" width="768" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;3: Scaled asymptotic variance of the sample mean for AR(1) (dashed) and independent observations with the same marginal variance (full line). The plot on the right gives the variance ratio for positive correlations.</p><p>To get the same precision for the mean of <span class="math inline">\(\mathsf{AR}(1)\)</span> process with <span class="math inline">\(\phi \approx 0.75\)</span> than with i.i.d. data, we would need 9 times as many observations.</p>
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-ar1-variance-1.png" width="768" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;4: Scaled asymptotic variance of the sample mean for AR(1) (dashed) and independent observations with the same marginal variance (full line). The plot on the right gives the variance ratio for positive correlations.</p><p>To get the same precision for the mean of <span class="math inline">\(\mathsf{AR}(1)\)</span> process with <span class="math inline">\(\phi \approx 0.75\)</span> than with i.i.d. data, we would need 9 times as many observations.</p>
 </section>
-<section id="morale-of-the-story" class="slide level2 center">
+<section id="morale-of-the-story" class="slide level2">
 <h2>Morale of the story</h2>
 <p>The price to pay for having correlated samples is</p>
 <div style="font-size: 2em; color: #ff585d; text-align: center">
@@ -727,7 +707,7 @@ P_2 = \begin{pmatrix}
 <section id="convergence-of-markov-chains" class="slide level2">
 <h2>Convergence of Markov chains</h2>
 
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-discrete-markov-chain-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;4: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).</p></section>
+<img data-src="bayesmod-slides3_files/figure-revealjs/fig-discrete-markov-chain-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;5: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).</p></section>
 <section id="markov-chain-monte-carlo" class="slide level2">
 <h2>Markov chain Monte Carlo</h2>
 <p>We consider simulating from a distribution with associated density function <span class="math inline">\(\propto p(\boldsymbol{\theta})\)</span>.</p>
@@ -780,87 +760,87 @@ Y_{i} &amp;\sim \mathsf{Po}(n_i\lambda_i), \qquad (i=1,2)\\
 <section id="implementation-details-data-and-containers" class="slide level2">
 <h2>Implementation details: data and containers</h2>
 <p>In regression models, scale inputs if possible.</p>
-<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-7_e3a1875dad41d1a5ddb1cf30eb6b99d3">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="co"># Compute sufficient statistics</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
-<span id="cb7-6"><a href="#cb7-6"></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co"># Create containers for MCMC</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
-<span id="cb7-9"><a href="#cb7-9"></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> 2L)</span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-9_b1c6b7a58130ff53ff85e924c661c101">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co"># Compute sufficient statistics</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
+<span id="cb6-6"><a href="#cb6-6"></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co"># Create containers for MCMC</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb6-9"><a href="#cb6-9"></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> 2L)</span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-log-posterior-function" class="slide level2">
 <h2>Implementation details: log posterior function</h2>
 <p>Perform all calculations on the log scale to avoid numerical overflow!</p>
-<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-8_122383fef665c79710684b7a9ac1d3a7">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
-<span id="cb8-3"><a href="#cb8-3"></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
-<span id="cb8-4"><a href="#cb8-4"></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb8-5"><a href="#cb8-5"></a>}</span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co"># Note common signature of function</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb8-8"><a href="#cb8-8"></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-10"><a href="#cb8-10"></a>}</span>
-<span id="cb8-11"><a href="#cb8-11"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb8-12"><a href="#cb8-12"></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
-<span id="cb8-13"><a href="#cb8-13"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-10_93406348805c816dd8c12bce41053d2f">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
+<span id="cb7-4"><a href="#cb7-4"></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-5"><a href="#cb7-5"></a>}</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># Note common signature of function</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb7-8"><a href="#cb7-8"></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-10"><a href="#cb7-10"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb7-12"><a href="#cb7-12"></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
+<span id="cb7-13"><a href="#cb7-13"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="implementation-details-proposal-variance-and-starting-values." class="slide level2">
-<h2>Implementation details: proposal variance and starting values.</h2>
+<section id="implementation-details-proposals" class="slide level2">
+<h2>Implementation details: proposals</h2>
 <p>Use good starting values for your Markov chains, such as maximum a posteriori.</p>
-<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-9_8dfed4c93da45e3aa34135e516d4bc0a">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
-<span id="cb9-4"><a href="#cb9-4"></a>  <span class="at">fn =</span> logpost,</span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
-<span id="cb9-6"><a href="#cb9-6"></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
-<span id="cb9-7"><a href="#cb9-7"></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
-<span id="cb9-8"><a href="#cb9-8"></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-9"><a href="#cb9-9"></a><span class="co"># Use MAP as starting value</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
-<span id="cb9-11"><a href="#cb9-11"></a><span class="co"># Compute logpost_cur - we can keep track of this to reduce calculations</span></span>
-<span id="cb9-12"><a href="#cb9-12"></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
-<span id="cb9-13"><a href="#cb9-13"></a><span class="co"># Proposal covariance</span></span>
-<span id="cb9-14"><a href="#cb9-14"></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
-<span id="cb9-15"><a href="#cb9-15"></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-11_007d921e20ad26aaea0a1d2efcbae026">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="at">fn =</span> logpost,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
+<span id="cb8-8"><a href="#cb8-8"></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># Use MAP as starting value</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co"># Compute logpost_cur - we can keep track of this to reduce calculations</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co"># Proposal covariance</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
+<span id="cb8-15"><a href="#cb8-15"></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-metropolishastings-algorithm" class="slide level2">
 <h2>Implementation details: Metropolis–Hastings algorithm</h2>
 <p>Use seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.</p>
-<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-10_15ead21e1a68f3ea27edb96bfb1f07ad">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>naccept <span class="ot">&lt;-</span> 0L</span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
-<span id="cb10-6"><a href="#cb10-6"></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
-<span id="cb10-7"><a href="#cb10-7"></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
-<span id="cb10-8"><a href="#cb10-8"></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
-<span id="cb10-9"><a href="#cb10-9"></a>    cur <span class="ot">&lt;-</span> prop</span>
-<span id="cb10-10"><a href="#cb10-10"></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
-<span id="cb10-11"><a href="#cb10-11"></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> 1L</span>
-<span id="cb10-12"><a href="#cb10-12"></a>  }</span>
-<span id="cb10-13"><a href="#cb10-13"></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
-<span id="cb10-14"><a href="#cb10-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-12_3326b6ccd67bd74fa68d3e5ddcd4be73">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>naccept <span class="ot">&lt;-</span> 0L</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
+<span id="cb9-6"><a href="#cb9-6"></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
+<span id="cb9-8"><a href="#cb9-8"></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
+<span id="cb9-9"><a href="#cb9-9"></a>    cur <span class="ot">&lt;-</span> prop</span>
+<span id="cb9-10"><a href="#cb9-10"></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
+<span id="cb9-11"><a href="#cb9-11"></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> 1L</span>
+<span id="cb9-12"><a href="#cb9-12"></a>  }</span>
+<span id="cb9-13"><a href="#cb9-13"></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
+<span id="cb9-14"><a href="#cb9-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-analysis-of-output" class="slide level2">
 <h2>Implementation details: analysis of output</h2>
 <p>Need specialized methods to compute standard errors of the posterior mean.</p>
-<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-11_47ae026f6deb946ef5e39b0ddaff3534">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Posterior summaries</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="co"># Computing standard errors using batch means</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(mcmc<span class="sc">::</span><span class="fu">olbm</span>(chain, <span class="at">batch.length =</span> niter<span class="sc">/</span><span class="dv">40</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="bayesmod-slides3_cache/revealjs/unnamed-chunk-13_a3e97d1d888b1632de8e240765fb9f7a">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Posterior summaries</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co"># Computing standard errors using batch means</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(mcmc<span class="sc">::</span><span class="fu">olbm</span>(chain, <span class="at">batch.length =</span> niter<span class="sc">/</span><span class="dv">40</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>1. Empirical mean and standard deviation for each variable,
    plus standard error of the mean:
@@ -875,84 +855,6 @@ kappa  0.07075 0.002033 2.033e-05      9.741e-05
 beta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929
 kappa  0.06673  0.06933  0.07077  0.07212  0.07463</code></pre>
 </section>
-<section id="standard-errors-of-posterior-mean" class="slide level2">
-<h2>Standard errors of posterior mean</h2>
-<p>A method recommended by <span class="citation" data-cites="Geyer:2011">Geyer (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> consists in running a long chain and</p>
-<ol type="1">
-<li>Break the chain of length <span class="math inline">\(B\)</span> in <span class="math inline">\(K\)</span> blocks of size <span class="math inline">\(\approx K/B\)</span>.</li>
-<li>Compute the sample mean of each segment. These values form a Markov chain and should be approximately uncorrelated.</li>
-<li>Compute the standard deviation of the segments mean. Rescale by <span class="math inline">\(K^{-1/2}\)</span> to get standard error of global chain mean.</li>
-</ol>
-</section>
-<section id="pro-tips-initial-values" class="slide level2">
-<h2>Pro tips: initial values</h2>
-<p>Batch means only works if the chain is sampling from the stationary distribution!</p>
-<p>The previous result (and any estimate) will be unreliable and biased if the chain is not sampling from the posterior.</p>
-<p>This happens often with poor starting value. We are guaranteed to reach stationarity, but this may take more time than the number of steps <span class="math inline">\(B\)</span> we fixed.</p>
-<p>One can discard initial draws during a <strong>burn in</strong> or warmup period, but you better use good starting value.</p>
-</section>
-<section id="visual-diagnostic-trace-plots" class="slide level2">
-<h2>Visual diagnostic: trace plots</h2>
-<p>Display the Markov chain sample path as a function of the number of iterations.</p>
-
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-badstart-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;5: Traceplots of three Markov chains for the same target with different initial values for the first 500 iterations (left) and trace rank plot after discarding these (right).</p></section>
-<section id="checking-convergence-with-multiple-chains" class="slide level2">
-<h2>Checking convergence with multiple chains</h2>
-<ul>
-<li>Run multiple chains to see if they converge to the same target.
-<ul>
-<li>if not, check starting values (compare log posterior) or parameter identifiability!</li>
-</ul></li>
-<li>Markov chains should look like a fat hairy caterpillar!</li>
-<li><code>bayesplot</code> and <code>coda</code> have functionalities for plots (trace plot, trace rank, correlograms, marginal densities, etc.)</li>
-</ul>
-</section>
-<section id="healthy-markov-chains-on-display" class="slide level2">
-<h2>Healthy Markov chains on display</h2>
-<p>Four chains run in parallel.</p>
-
-<img data-src="fig/catterpillar_traceplots.png" class="r-stretch"></section>
-<section id="goldilock-principle-and-proposal-variance" class="slide level2">
-<h2>Goldilock principle and proposal variance</h2>
-<p>Mixing of the chain requires just the right variance (not too small nor too large).</p>
-
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-goldilock-trace-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;6: Example of traceplot with proposal variance that is too small (top), adequate (middle) and too large (bottom).</p></section>
-<section id="correlograms-for-goldilock" class="slide level2">
-<h2>Correlograms for Goldilock</h2>
-
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-goldilock-correlogram-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;7: Correlogram for the three Markov chains.</p></section>
-<section id="tuning-markov-chain-monte-carlo" class="slide level2">
-<h2>Tuning Markov chain Monte Carlo</h2>
-<ul>
-<li>Outside of starting values, the variance of the proposal has a huge impact on the asymptotic variance.</li>
-<li>We can check this via the acceptance rate (how many proposals are accepted).</li>
-<li>In 1D, rule of thumb is an acceptance rate of 0.44 is optimal, and this ratio decreases to 0.234 when <span class="math inline">\(D \geq 2\)</span> <span class="citation" data-cites="Sherlock:2013">(<a href="#/references" role="doc-biblioref" onclick="">Sherlock, 2013</a>)</span> for random walk Metropolis–Hastings.</li>
-<li>Adapt the variance during warmup by increasing/decreasing proposal variance (if acceptance rate is too large/small).</li>
-</ul>
-</section>
-<section id="block-update-or-one-parameter-at-a-time" class="slide level2">
-<h2>Block update or one parameter at a time?</h2>
-<p>As with any accept-reject, proposals become inefficient when the dimension <span class="math inline">\(D\)</span> increase: this is the curse of dimensionality.</p>
-<ul>
-<li>updating parameters in turn increases acceptance rate (with clever proposals), but also leads to more autocorrelation between parameters</li>
-<li>using orthogonal parametrization whenever possible (reparametrize the model to decorrelate parameters)</li>
-<li>if you cannot, draw correlated proposals (using the chain history to inform the correlation, if necessary)</li>
-</ul>
-</section>
-<section id="parameter-transformation" class="slide level2">
-<h2>Parameter transformation</h2>
-<p>Parameters may be bounded, e.g.&nbsp;<span class="math inline">\(\theta_i \in [a,b]\)</span>.</p>
-<ul>
-<li>We can ignore this and simply discard proposals outside of the range, by setting the log posterior at <span class="math inline">\(-\infty\)</span> outside <span class="math inline">\([a,b]\)</span></li>
-<li>We can do a transformation, e.g., <span class="math inline">\(\log \theta_i\)</span> if <span class="math inline">\(\theta_i &gt; 0\)</span> and perform a random walk on the uncontrained space: need Jacobians!</li>
-<li>Another alternative is to use truncated proposals (especially with more complex algorithms like MALA)</li>
-</ul>
-</section>
-<section id="efficient-proposals-mala" class="slide level2 smaller">
-<h2>Efficient proposals: MALA</h2>
-<p>The Metropolis-adjusted Langevin algorithm (MALA) uses a Gaussian random walk proposal <span class="math display">\[\boldsymbol{\theta}^{\star}_t \sim \mathsf{No}\{\mu(\boldsymbol{\theta}_{t-1}), \tau^2\mathbf{A})\},\]</span> where <span class="math display">\[\mu(\boldsymbol{\theta}_{t-1})=\boldsymbol{\theta}_{t-1} + \mathbf{A}\eta \nabla \ell(\boldsymbol{\theta}_{t-1}),\]</span> and with variance <span class="math inline">\(\tau^2\mathbf{A}\)</span>, for some mass matrix <span class="math inline">\(\boldsymbol{A}\)</span>, tuning parameter <span class="math inline">\(\tau&gt;0\)</span> and a damping factor <span class="math inline">\(\eta &lt; 1\)</span>.</p>
-<p>We need to compute the density for the reverse move with mean <span class="math inline">\(\mu(\boldsymbol{\theta}_{t}^\star)\)</span>.<sup>1</sup></p>
-<aside><ol class="aside-footnotes"><li id="fn2"><p>This is akin to a Newton algorithm, so beware if far from the mode (where gradient can be large)!</p></li></ol></aside></section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
@@ -966,12 +868,6 @@ Botev, Z., &amp; L’Écuyer, P. (2017). Simulation from the normal distribution
 </div>
 <div id="ref-Devroye:1986" class="csl-entry" role="listitem">
 Devroye, L. (1986). <em><span>Non-Uniform Random Variate Generation</span></em>. Springer. <a href="http://www.nrbook.com/devroye/">http://www.nrbook.com/devroye/</a>
-</div>
-<div id="ref-Geyer:2011" class="csl-entry" role="listitem">
-Geyer, C. J. (2011). Introduction to <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 3–48). CRC Press. <a href="https://doi.org/10.1201/b10905">https://doi.org/10.1201/b10905</a>
-</div>
-<div id="ref-Sherlock:2013" class="csl-entry" role="listitem">
-Sherlock, C. (2013). Optimal scaling of the random walk <span>M</span>etropolis: General criteria for the 0.234 acceptance rule. <em>Journal of Applied Probability</em>, <em>50</em>(1), 1–15. <a href="https://doi.org/10.1239/jap/1363784420">https://doi.org/10.1239/jap/1363784420</a>
 </div>
 </div>
 </section>

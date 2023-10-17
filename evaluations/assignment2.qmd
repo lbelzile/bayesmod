@@ -133,6 +133,12 @@ Y_{ij} &\sim \mathsf{No}(\mu_{ij}, \sigma^2),
 \end{align*}
 Suppose we want to enforce the constraint that the average GPA is increasing as a function of `HSR` (so $\alpha_1 \leq \alpha_2 \leq \cdots \leq \alpha_8$) and of `ACT` scores $(\gamma_1 \leq \cdots \leq \gamma_5)$, with higher values and ranking indicating higher average GPA. Use a conjugate prior for $\sigma$ centered at 0.65. The `iowagpa` data set from package `LearnBayes` contains the data frame with the average response `gpa`, the counts `n` in each category and both categorical explanatories `HSR` and `ACT`.
 
+For simplicity, use improper priors 
+$$
+p(\sigma, \boldsymbol{\alpha}, \boldsymbol{\gamma}) =\frac{ \mathsf{I}(-\infty \leq \alpha_1 \leq \cdots \leq \alpha_8 \leq \infty) \mathsf{I}(-\infty \leq \gamma_1 \leq \cdots \leq \gamma_5 \leq \infty)}{\sigma},
+$$
+where $\mathsf{I}(\cdot)$ denotes the indicator function. You could also use a conjugate prior for $\sigma$.
+
 1. Use Gibbs sampling with a random scan to sample from the 40 mean parameters, enforcing the monotonicity constraints.
 2. Consider a block update to sample all of $\boldsymbol{\alpha}$ and $\boldsymbol{\gamma}$, in turn. Compare the Markov chains with the one parameter at a time: does it improve mixing?
 
