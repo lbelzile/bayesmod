@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Special topics in data science — Bayesian modelling - Exercice 3</title>
+<title>Special topics in data science — Bayesian modelling - Exercice 4</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,41 +20,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
 }
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
 }
-</style>
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -148,7 +133,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/03-exercise.html">Simulation-based inference</a></li><li class="breadcrumb-item"><a href="../exercises/03-exercise.html">Exercice 3</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/04-exercise.html">Markov chain Monte Carlo</a></li><li class="breadcrumb-item"><a href="../exercises/04-exercise.html">Exercice 4</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -223,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/03-exercise.html" class="sidebar-item-text sidebar-link active">
+  <a href="../exercises/03-exercise.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Exercice 3</span></a>
   </div>
 </li>
@@ -246,7 +231,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/04-exercise.html" class="sidebar-item-text sidebar-link">
+  <a href="../exercises/04-exercise.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Exercice 4</span></a>
   </div>
 </li>
@@ -262,9 +247,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-3.1" id="toc-exercise-3.1" class="nav-link active" data-scroll-target="#exercise-3.1">Exercise 3.1</a></li>
-  <li><a href="#exercise-3.2" id="toc-exercise-3.2" class="nav-link" data-scroll-target="#exercise-3.2">Exercise 3.2</a></li>
-  <li><a href="#exercise-3.3" id="toc-exercise-3.3" class="nav-link" data-scroll-target="#exercise-3.3">Exercise 3.3</a></li>
+  <li><a href="#exercise-4.1" id="toc-exercise-4.1" class="nav-link active" data-scroll-target="#exercise-4.1">Exercise 4.1</a></li>
+  <li><a href="#exercise-4.2" id="toc-exercise-4.2" class="nav-link" data-scroll-target="#exercise-4.2">Exercise 4.2</a></li>
   </ul>
 </nav>
     </div>
@@ -273,7 +257,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Exercice 3</h1>
+<h1 class="title">Exercice 4</h1>
 </div>
 
 
@@ -288,56 +272,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="exercise-3.1" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-3.1">Exercise 3.1</h2>
-<p>Consider the Laplace family of distribution, <span class="math inline">\(\mathsf{La}(\nu, \tau)\)</span>, with density <span class="math display">\[\begin{align*}
-g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau &gt; 0
-\end{align*}\]</span> as a candidate distribution for rejection sampling from <span class="math inline">\(\mathsf{No}(0,1)\)</span>.</p>
+<section id="exercise-4.1" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-4.1">Exercise 4.1</h2>
+<p>The Pareto distribution with shape <span class="math inline">\(\alpha&gt;0\)</span> and scale <span class="math inline">\(\tau&gt;0\)</span> has density <span class="math display">\[
+f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathsf{I}(x &gt; \tau).
+\]</span> It can be used to model power laws in insurance and finance, or in demography. The <code>uscitypopn</code> contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.</p>
 <ol type="1">
-<li>Provide an inversion sampling algorithm to generate from <span class="math inline">\(\mathsf{La}(\nu, \tau)\)</span>.</li>
-<li>Can you use the proposal to generate from a standard Gaussian? for Student-<span class="math inline">\(t\)</span> with 1 degree of freedom? Justify your answer.</li>
-<li>Consider as proposal a location-scale version of the Student-t with <span class="math inline">\(\nu=3\)</span> degrees of freedom. Find the optimal location and scale parameters and the upper bound <span class="math inline">\(C\)</span> for your choice.</li>
-<li>Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.</li>
+<li>Using improper priors, write the joint posterior for a simple random sample of size <span class="math inline">\(n\)</span> and derive the conditional distributions <span class="math inline">\(p(\alpha \mid \boldsymbol{y}, \tau)\)</span> and <span class="math inline">\(p(\tau \mid \alpha, \boldsymbol{y})\)</span>.</li>
+<li>The mononomial distribution <span class="math inline">\(\mathsf{Mono}(a,b)\)</span> has density <span class="math inline">\(p(x) \propto x^a\mathsf{I}(0 \leq x \leq b)\)</span>. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.</li>
+<li>Implement Gibbs sampling for this problem for the <code>uscitypopn</code> data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Hence calculate the accuracy of your estimates?</li>
 </ol>
 </section>
-<section id="exercise-3.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-3.2">Exercise 3.2</h2>
-<p>We revisit <a href="../exercises/01-exercise.html#exercice-1.3">Exercise 1.3</a>, which used a half-Cauchy prior for the exponential waiting time of buses.</p>
-<p>The ratio-of-uniform method, implemented in the <a href="https://paulnorthrop.github.io/rust/index.html"><code>rust</code> <strong>R</strong> package</a>, can be used to simulate independent draws from the posterior of the rate <span class="math inline">\(\lambda\)</span>. The following code produces</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> 10L <span class="co"># number of observations</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ybar <span class="ot">&lt;-</span> <span class="dv">8</span>   <span class="co"># average waiting time</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> 1000L  <span class="co"># number of draws</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Un-normalized log posterior: scaled log likelihood + log prior</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>upost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ </span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dgamma</span>(<span class="at">x =</span> x, <span class="at">shape =</span> nobs <span class="sc">+</span> 1L, <span class="at">rate =</span> nobs<span class="sc">*</span>ybar, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(<span class="dv">2</span>) <span class="sc">+</span> <span class="fu">dt</span>(<span class="at">x =</span> x, <span class="at">df =</span> <span class="dv">1</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)}</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>post_samp <span class="ot">&lt;-</span> rust<span class="sc">::</span><span class="fu">ru</span>(<span class="at">logf =</span> upost, </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n =</span> B, </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">d =</span> <span class="dv">1</span>,  <span class="co"># dimension of parameter (scalar)</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">init =</span> nobs<span class="sc">/</span>ybar)<span class="sc">$</span>sim_vals <span class="co"># initial value of mode</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="exercise-4.2" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-4.2">Exercise 4.2</h2>
+<p>Implement the Bayesian LASSO for the <code>efron2004</code> cancer surgery from package <code>care</code>. Check <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> for the details of the Gibbs sampling.</p>
+<ol type="1">
+<li>Fit the model for a range of values of <span class="math inline">\(\lambda\)</span> and produce parameter estimate paths to replicate Figure 1 of the paper.</li>
+<li>Check the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?</li>
+<li>Implement the approaches in section 3 to find <span class="math inline">\(\lambda\)</span>.</li>
+<li>For three models with different values of <span class="math inline">\(\lambda\)</span>, compute the widely applicable information criterion and use it to assess predictive performance.</li>
+</ol>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Park.Casella:2008" class="csl-entry" role="listitem">
+Park, T., &amp; Casella, G. (2008). The <span>B</span>ayesian <span>L</span>asso. <em>Journal of the American Statistical Association</em>, <em>103</em>(482), 681–686. <a href="https://doi.org/10.1198/016214508000000337">https://doi.org/10.1198/016214508000000337</a>
 </div>
-<p>Estimate using the Monte Carlo sample:</p>
-<ol type="1">
-<li>the probability that the waiting time is between 3 and 15 minutes</li>
-<li>the average waiting time</li>
-<li>the standard deviation of the waiting time</li>
-</ol>
-<p>Next, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.</p>
-</section>
-<section id="exercise-3.3" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-3.3">Exercise 3.3</h2>
-<p>Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates <span class="math inline">\(\lambda_i\)</span> <span class="math inline">\((i=1,2)\)</span>, with the same priors. Use a Metropolis–Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.</p>
-<ol type="1">
-<li>Tune the variance to reach an approximate acceptance rate of 0.44.</li>
-<li>Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See <a href="http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html"><code>bayesplot</code></a> or <code>coda</code>. Comment on the convergence and mixing of your Markov chain Monte Carlo.</li>
-<li>Report summary statistics of the chains.</li>
-</ol>
-
-
-</section>
-
-</main> <!-- /main -->
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

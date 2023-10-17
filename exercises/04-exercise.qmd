@@ -1,0 +1,26 @@
+---
+title: "Exercice 4"
+---
+
+
+## Exercise 4.1
+
+The Pareto distribution with shape $\alpha>0$ and scale $\tau>0$ has density
+$$
+f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathsf{I}(x > \tau).
+$$
+It can be used to model power laws in insurance and finance, or in demography. The `uscitypopn` contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.
+
+1. Using improper priors, write the joint posterior for a simple random sample of size $n$ and derive the conditional distributions $p(\alpha \mid \boldsymbol{y}, \tau)$ and $p(\tau \mid \alpha, \boldsymbol{y})$.
+2. The mononomial distribution $\mathsf{Mono}(a,b)$ has density $p(x) \propto x^a\mathsf{I}(0 \leq x \leq b)$. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.
+3. Implement Gibbs sampling for this problem for the `uscitypopn` data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Hence calculate the accuracy of your estimates?
+
+
+## Exercise 4.2
+
+Implement the Bayesian LASSO for the `efron2004` cancer surgery from package `care`.  Check @Park.Casella:2008 for the details of the Gibbs sampling.
+
+1. Fit the model for a range of values of $\lambda$ and produce parameter estimate paths to replicate Figure 1 of the paper.
+2. Check the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?
+3. Implement the approaches in section 3 to find $\lambda$.
+4. For three models with different values of $\lambda$, compute the widely applicable information criterion and use it to assess predictive performance.
