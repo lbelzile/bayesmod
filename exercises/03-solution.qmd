@@ -1,5 +1,5 @@
 ---
-title: "Exercice 3"
+title: "Solution 3"
 ---
 
 
@@ -13,7 +13,8 @@ as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
 
 1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau)$.
 2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
-3. Find the optimal parameters and the upper bound $C$ for a location-scale version of the Student-t with $\nu=3$ degrees of freedom to generate from the standard Laplace.
+3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
+ degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
 4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
 
 
@@ -25,10 +26,66 @@ as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
 F(x) = \begin{cases}
 \frac{1}{2} \exp\left(\frac{x-\nu}{\tau}\right) & x \leq \nu\\
 1 - \frac{1}{2} \exp\left(-\frac{x-\nu}{\tau}\right) & x >\nu\\
+\end{cases}
 \end{align*}
-and using the quantile transform, set $X=\nu + \tau \log(2U) if $U \leq 0.5$ and $X=\nu - \tau\log(2-2U)$ if $U > 0.5$ for $U \sim \mathsf{U}(0,1)$.
-2. The Gaussian has lighter tail than the Laplace, so this won't work. The Cauchy distribution would be a candidate.
-3. 
+and using the quantile transform, set $X=\nu + \tau \log(2U)$ if $U \leq 0.5$ and $X=\nu - \tau\log(2-2U)$ if $U > 0.5$ for $U \sim \mathsf{U}(0,1)$.
+2. The Gaussian has lighter tail than the Laplace, so this won't work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.
+3. The optimal value for the location of the Student-$t$ would be $\nu$ (here zero for the standard Laplace). We compute the optimal scale via in the code below:
+$$
+\mathrm{argmax}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmin}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
+$$
+
+
+```{r}
+
+#' Laplace density
+dlaplace <- function(x, loc = 0, scale = 1, log = FALSE){
+ stopifnot(scale > 0)
+ logdens <-  -log(2*scale) - abs(x-loc)/scale
+ if(log){
+ return(logdens)
+ } else{
+ return(exp(logdens))
+ }
+}
+dstudent <- function(x, loc = 0, scale = 1, df = 1, log = FALSE){
+  logdens <- -log(scale) + dt(x = (x - loc)/scale, df = df, log = TRUE)
+   if(log){
+    return(logdens)
+   } else{
+   return(exp(logdens))
+   }
+}
+# For each value of the scale sigma,
+# find the minimum value of x (typically at zero)
+opt <- optimize(f = function(sigma){
+  optimize(f = function(x){
+  dlaplace(x, log = TRUE) - 
+    dstudent(x, scale = sigma, df = 3, log = TRUE)}, 
+  maximum = TRUE, 
+  interval = c(-100, 100))$objective
+}, interval = c(0.1,10))
+(C <- exp(opt$objective))
+(sigma <- opt$minimum)
+
+# Simulate from accept-reject
+ntrials <- 1.1*C*1000
+# Simulate from location-scale student
+candidate <- sigma*rt(n = ntrials, df = 3)
+# Compute log of acceptance rate
+logR <- dlaplace(candidate, log = TRUE) - 
+  dstudent(candidate, scale = sigma, df = 3, log = TRUE) 
+samp <- candidate[logR >= log(C) + -rexp(ntrials)]
+# Monte Carlo estimator of the acceptance rate
+ntrials/length(samp)
+# Plot density
+library(ggplot2)
+ggplot(data = data.frame(x = samp),
+       mapping = aes(x = x)) +
+  geom_density() +
+  theme_classic()
+```
+4. The Monte Carlo acceptance rate is `r round(ntrials/length(samp), 2)`, compared with the analytical bound found via numerical optimization of `r round(C, 2)`, to two significant digits.
 
 :::
 
@@ -52,7 +109,7 @@ upost <- function(x){
 post_samp <- rust::ru(logf = upost, 
                       n = B, 
                       d = 1,  # dimension of parameter (scalar)
-                      init = nobs/ybar) # initial value of mode
+                      init = nobs/ybar)$sim_vals # initial value of mode
 ```
 
 Estimate using the Monte Carlo sample:
@@ -61,7 +118,43 @@ Estimate using the Monte Carlo sample:
 2. the average waiting time
 3. the standard deviation of the waiting time
 
-Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior. Estimate the same quantities and compute the ratio of the variance of the Monte Carlo sample average estimators for both correlated draws (using batch means) and the independent draws.
+
+::: {.solution}
+
+```{r}
+# Lambda is the reciprocal mean (1/minute)
+times <- 1/post_samp
+mean(times > 3 & times < 15)
+mean(times)
+sd(times)
+```
+
+:::
+
+Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.
+
+```{r}
+B <- 1e4L
+curr <- 8/10 # prior mean
+chains <- numeric(B) # container
+sd_prop <- 0.1
+for(b in seq_len(B)){
+  prop <- rnorm(n = 1, mean = curr, sd = sd_prop)
+  if(upost(prop) - upost(curr) > -rexp(1)){
+    curr <- prop
+  }
+  chains[b] <- curr
+}
+# Discard burn-in
+times <- 1/chains[-(1:100)]
+mean(times > 3 & times < 15)
+mean(times)
+sd(times)
+# Summary of MCMC
+mcmc <- coda::mcmc(chains)
+summary(mcmc)
+```
+
 
 ## Exercise 3.3
 
@@ -69,6 +162,86 @@ Repeat the simulations in Example 3.6, this time with a parametrization in terms
 
 1. Tune the variance to reach an approximate acceptance rate of 0.44.
 2. Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See [`bayesplot`](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html) or `coda`. Comment on  the convergence and mixing of your Markov chain Monte Carlo.
-3. Report summary statistics of the chain and compare them with the course notes.
+3. Report summary statistics of the chains.
 
+:::{ .solution}
 
+The only thing we need to do is change the parametrization, and add tuning of the variance.
+```{r}
+#| cache: true
+data(upworthy_question, package = "hecbayes")
+# Compute sufficient statistics
+data <- upworthy_question |>
+  dplyr::group_by(question) |>
+  dplyr::summarize(ntot = sum(impressions),
+                   y = sum(clicks))
+# Code log posterior as sum of log likelihood and log prior
+loglik <- function(par, counts = data$y, offset = data$ntot, ...){
+  lambda <- exp(c(par[1] + log(offset[1]), par[2] + log(offset[2])))
+ sum(dpois(x = counts, lambda = lambda, log = TRUE))
+}
+logprior <- function(par, ...){
+  sum(dnorm(x = par, mean = log(0.01), sd = 1.5, log = TRUE))
+}
+logpost <- function(par, ...){
+  loglik(par, ...) + logprior(par, ...)
+}
+# Compute maximum a posteriori (MAP)
+map <- optim(
+  par = rep(-4, 2),
+  fn = logpost,
+  control = list(fnscale = -1),
+  offset = data$ntot,
+  counts = data$y,
+  hessian = TRUE)
+# Use MAP as starting value
+cur <- map$par
+# Compute logpost_cur - we can keep track of this to reduce calculations
+logpost_cur <- logpost(cur)
+# Proposal covariance
+cov_map <- -2*solve(map$hessian)
+chol <- chol(cov_map)
+
+set.seed(80601)
+niter <- 1e4L
+nchains <- 4L
+npar <- 2L
+chain <- array(0, dim = c(niter, nchains, npar))
+naccept <- 0L
+for(j in 1:nchains){
+  for(i in seq_len(niter)){
+    # Multivariate normal proposal - symmetric random walk
+    prop <- chol %*% rnorm(n = 2)/1.05 + cur
+    logpost_prop <- logpost(prop)
+    # Compute acceptance ratio (no q because the ratio is 1)
+    logR <- logpost_prop - logpost_cur
+    if(logR > -rexp(1)){
+      cur <- prop
+      logpost_cur <- logpost_prop
+      naccept <- naccept + 1L
+    }
+    chain[i,j,] <- cur
+  }
+}
+# Acceptance rate
+naccept/(nchains * niter)
+
+# Create some summary graphs
+library(bayesplot)
+# Name chains so that the graphs can be labelled
+dimnames(chain)[[3]] <- c("lambda[1]","lambda[2]")
+
+# Trace plots, correlograms, density plots and bivariate scatterplot
+bayesplot::mcmc_trace(chain)
+bayesplot::mcmc_acf_bar(chain)
+bayesplot::mcmc_dens(chain)
+bayesplot::mcmc_scatter(chain)
+# Posterior summaries with coda
+# Need to create a list of mcmc objects...
+mcmc_list <- coda::as.mcmc.list(
+    lapply(seq_len(nchains),
+           function(ch) coda::as.mcmc(chain[, ch, ])))
+summary(mcmc_list)
+```
+
+:::

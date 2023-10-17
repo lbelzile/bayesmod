@@ -227,6 +227,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Exercice 3</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/03-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercice 3</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -273,8 +279,8 @@ g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qqua
 <ol type="1">
 <li>Provide an inversion sampling algorithm to generate from <span class="math inline">\(\mathsf{La}(\nu, \tau)\)</span>.</li>
 <li>Can you use the proposal to generate from a standard Gaussian? for Student-<span class="math inline">\(t\)</span> with 1 degree of freedom? Justify your answer.</li>
-<li>Find the optimal parameters and the upper bound <span class="math inline">\(C\)</span>. Generate 1000 samples from a standard Gaussian.</li>
-<li>Compute the empirical acceptance rate and compare it with that of using a location-scale version of the Student-t with <span class="math inline">\(\nu=3\)</span> degrees of freedom. Which distribution would make a better candidate?</li>
+<li>Consider as proposal a location-scale version of the Student-t with <span class="math inline">\(\nu=3\)</span> degrees of freedom. Find the optimal location and scale parameters and the upper bound <span class="math inline">\(C\)</span> for your choice.</li>
+<li>Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.</li>
 </ol>
 </section>
 <section id="exercise-3.2" class="level2">
@@ -292,7 +298,7 @@ g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qqua
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>post_samp <span class="ot">&lt;-</span> rust<span class="sc">::</span><span class="fu">ru</span>(<span class="at">logf =</span> upost, </span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n =</span> B, </span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">d =</span> <span class="dv">1</span>,  <span class="co"># dimension of parameter (scalar)</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">init =</span> nobs<span class="sc">/</span>ybar) <span class="co"># initial value of mode</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">init =</span> nobs<span class="sc">/</span>ybar)<span class="sc">$</span>sim_vals <span class="co"># initial value of mode</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Estimate using the Monte Carlo sample:</p>
 <ol type="1">
@@ -300,7 +306,7 @@ g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qqua
 <li>the average waiting time</li>
 <li>the standard deviation of the waiting time</li>
 </ol>
-<p>Next, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior. Estimate the same quantities and compute the ratio of the variance of the Monte Carlo sample average estimators for both correlated draws (using batch means) and the independent draws.</p>
+<p>Next, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.</p>
 </section>
 <section id="exercise-3.3" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-3.3">Exercise 3.3</h2>
@@ -308,7 +314,7 @@ g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qqua
 <ol type="1">
 <li>Tune the variance to reach an approximate acceptance rate of 0.44.</li>
 <li>Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See <a href="http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html"><code>bayesplot</code></a> or <code>coda</code>. Comment on the convergence and mixing of your Markov chain Monte Carlo.</li>
-<li>Report summary statistics of the chain and compare them with the course notes.</li>
+<li>Report summary statistics of the chains.</li>
 </ol>
 
 
