@@ -1509,7 +1509,7 @@
     "href": "slides/bayesmod-slides4.html#data-augmentation-with-scale-mixture-of-gaussian",
     "title": "Bayesian modelling",
     "section": "Data augmentation with scale mixture of Gaussian",
-    "text": "Data augmentation with scale mixture of Gaussian\nThe Laplace distribution with mean \\(\\mu\\) and scale \\(\\sigma\\), which has density \\[\\begin{align*}\nf(x; \\mu, \\sigma) = \\frac{1}{2\\sigma}\\exp\\left(-\\frac{|x-\\mu|}{\\sigma}\\right),\n\\end{align*}\\] can be expressed as a scale mixture of Gaussians, where \\(Y \\mid W=w \\sim \\mathsf{La}(\\mu, w)\\) is equivalent to \\(Z \\mid W=w \\sim \\mathsf{Norm}(\\mu, \\tau)\\) and \\(\\tau \\sim \\mathsf{Exp}\\{(2\\sigma)^{-1}\\}\\)."
+    "text": "Data augmentation with scale mixture of Gaussian\nThe Laplace distribution with mean \\(\\mu\\) and scale \\(\\sigma\\), which has density \\[\\begin{align*}\nf(x; \\mu, \\sigma) = \\frac{1}{2\\sigma}\\exp\\left(-\\frac{|x-\\mu|}{\\sigma}\\right),\n\\end{align*}\\] can be expressed as a scale mixture of Gaussians, where \\(Y \\mid \\tau \\sim \\mathsf{La}(\\mu, \\tau)\\) is equivalent to \\(Z \\mid \\tau \\sim \\mathsf{Norm}(\\mu, \\tau)\\) and \\(\\tau \\sim \\mathsf{Exp}\\{(2\\sigma)^{-1}\\}\\)."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#joint-posterior-for-laplace-model",

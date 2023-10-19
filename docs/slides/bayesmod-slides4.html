@@ -793,7 +793,7 @@ Z_i \mid y_i, \boldsymbol{\beta} &amp;\sim \begin{cases}
 <h2>Data augmentation with scale mixture of Gaussian</h2>
 <p>The Laplace distribution with mean <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma\)</span>, which has density <span class="math display">\[\begin{align*}
 f(x; \mu, \sigma) = \frac{1}{2\sigma}\exp\left(-\frac{|x-\mu|}{\sigma}\right),
-\end{align*}\]</span> can be expressed as a scale mixture of Gaussians, where <span class="math inline">\(Y \mid W=w \sim \mathsf{La}(\mu, w)\)</span> is equivalent to <span class="math inline">\(Z \mid W=w \sim \mathsf{Norm}(\mu, \tau)\)</span> and <span class="math inline">\(\tau \sim \mathsf{Exp}\{(2\sigma)^{-1}\}\)</span>.</p>
+\end{align*}\]</span> can be expressed as a scale mixture of Gaussians, where <span class="math inline">\(Y \mid \tau \sim \mathsf{La}(\mu, \tau)\)</span> is equivalent to <span class="math inline">\(Z \mid \tau \sim \mathsf{Norm}(\mu, \tau)\)</span> and <span class="math inline">\(\tau \sim \mathsf{Exp}\{(2\sigma)^{-1}\}\)</span>.</p>
 </section>
 <section id="joint-posterior-for-laplace-model" class="slide level2">
 <h2>Joint posterior for Laplace model</h2>

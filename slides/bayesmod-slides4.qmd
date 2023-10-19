@@ -637,7 +637,7 @@ The Laplace distribution with mean $\mu$ and scale $\sigma$, which has density
 \begin{align*}
 f(x; \mu, \sigma) = \frac{1}{2\sigma}\exp\left(-\frac{|x-\mu|}{\sigma}\right),
 \end{align*}
-can be expressed as a scale mixture of Gaussians, where $Y \mid W=w \sim \mathsf{La}(\mu, w)$ is equivalent to $Z \mid W=w \sim \mathsf{Norm}(\mu, \tau)$ and $\tau \sim \mathsf{Exp}\{(2\sigma)^{-1}\}$.
+can be expressed as a scale mixture of Gaussians, where $Y \mid \tau \sim \mathsf{La}(\mu, \tau)$ is equivalent to $Z \mid \tau \sim \mathsf{Norm}(\mu, \tau)$ and $\tau \sim \mathsf{Exp}\{(2\sigma)^{-1}\}$.
 
 ## Joint posterior for Laplace model
 
