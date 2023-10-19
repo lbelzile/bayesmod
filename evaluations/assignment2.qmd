@@ -128,7 +128,7 @@ fixef <- c(fixef, day92 = -sum(fixef))
 
 Model grade point averages as Gaussian, with 
 \begin{align*}
-Y_{ij} &\sim \mathsf{No}(\mu_{ij}, \sigma^2),
+Y_{ij} &\sim \mathsf{No}(\mu_{ij}, \sigma^2),\\
 \mu_{ij} &= \alpha_{i} + \gamma_{j} \qquad i=1, \ldots, 8; j =1, \ldots, 5
 \end{align*}
 Suppose we want to enforce the constraint that the average GPA is increasing as a function of `HSR` (so $\alpha_1 \leq \alpha_2 \leq \cdots \leq \alpha_8$) and of `ACT` scores $(\gamma_1 \leq \cdots \leq \gamma_5)$, with higher values and ranking indicating higher average GPA. Use a conjugate prior for $\sigma$ centered at 0.65. The `iowagpa` data set from package `LearnBayes` contains the data frame with the average response `gpa`, the counts `n` in each category and both categorical explanatories `HSR` and `ACT`.

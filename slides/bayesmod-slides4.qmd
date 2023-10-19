@@ -180,9 +180,9 @@ Parameters may be bounded, e.g. $\theta_i \in [a,b]$.
 
 ## Efficient proposals: MALA {.smaller}
 
-The Metropolis-adjusted Langevin algorithm (MALA) uses a Gaussian random walk proposal $$\boldsymbol{\theta}^{\star}_t \sim \mathsf{No}\{\mu(\boldsymbol{\theta}_{t-1}), \tau^2\mathbf{A}\},$$ where $$\mu(\boldsymbol{\theta}_{t-1})=\boldsymbol{\theta}_{t-1} + \mathbf{A}\eta \nabla \ell(\boldsymbol{\theta}_{t-1}),$$ and with variance $\tau^2\mathbf{A}$, for some mass matrix $\boldsymbol{A}$, tuning parameter $\tau>0$ and a damping factor $\eta < 1$.
+The Metropolis-adjusted Langevin algorithm (MALA) uses a Gaussian random walk proposal $$\boldsymbol{\theta}^{\star}_t \sim \mathsf{Norm}\{\mu(\boldsymbol{\theta}_{t-1}), \tau^2\mathbf{A}\},$$ with mean $$\mu(\boldsymbol{\theta}_{t-1})=\boldsymbol{\theta}_{t-1} + \mathbf{A}\eta \nabla \log p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y}),$$ and variance $\tau^2\mathbf{A}$, for some mass matrix $\mathbf{A}$, tuning parameter $\tau>0$. 
 
-This is akin to a Newton algorithm, so beware if you are far from the mode (where the gradient is typically large)!
+The parameter $\eta < 1$ is a learning rate. This is akin to a Newton algorithm, so beware if you are far from the mode (where the gradient is typically large)!
 
 
 ## Higher order proposals
@@ -204,15 +204,13 @@ These methods are more efficient than random walk Metropolis--Hastings, but they
 
 ## Modelling individual headlines of **Upworthy** example
 
-The number of conversion is binomial
+The number of conversions `nclick` is binomial with sample size $n_i=$`nimpression`.
 
-- sample size $n_i$ of the binomial  is `nimpression`.
-- number of successes is `nclick`
-- since $n_i$ is large, the sample average `nclick`/`nimpression` is approximately Gaussian.
+Since $n_i$ is large, the sample average `nclick`/`nimpression` is approximately Gaussian, so write
 
 \begin{align*}
 Y_i &\sim \mathsf{Norm}(\mu, \sigma^2/n_i)\\
-\mu &\sim \mathsf{TruncNorm}(0.01, 0.1^2, 0 1) \\
+\mu &\sim \mathsf{TruncNorm}(0.01, 0.1^2, 0, 1) \\
 \sigma &\sim \mathsf{Exp}(0.7)
 \end{align*}
 
@@ -300,8 +298,8 @@ cholA <- chol(Amat)
 # Create containers for MCMC
 B <- 1e4L # number of iterations
 warmup <- 1e3L # adaptation period
-prop_sd <- rep(1, 2) # tuning parameters
 npar <- 2L
+prop_sd <- rep(1, npar) # tuning parameter
 chains <- matrix(nrow = B, ncol = npar)
 damping <- 0.8
 acceptance <- attempts <- 0 
@@ -555,7 +553,7 @@ Consider independent and identically distributed observations, with
 \begin{align*}
 Y_i &\sim \mathsf{Norm}(\mu, \tau), \qquad i=1, \ldots, n) 
 \\\mu &\sim \mathsf{Norm}(\nu, \omega)\\
-\sigma &\sim \mathsf{InvGamma}(\alpha, \beta)
+\tau &\sim \mathsf{InvGamma}(\alpha, \beta)
 \end{align*}
 
 The joint posterior is not available in closed form, but the independent priors for the mean and variance of the observations are conditionally conjugate.
@@ -564,7 +562,7 @@ The joint posterior is not available in closed form, but the independent priors 
 
 Write the posterior density as usual,
 \begin{align*}
-p(\mu, \tau \mid \boldsymbol{y}) \propto& \tau^{-n/2}\exp\left\{-\frac{1}{2\tau}\left(\sum_{i=1}^n y_i^2 - 2\mu \sum_{i=1}^n y_i+n\mu^2 \right)\right\}\\& \times \exp\left\{-\frac{(\mu-\nu)^2}{2\omega}\right\} \times \tau^{-\alpha-1}\exp(-\beta/\tau)
+&p(\mu, \tau \mid \boldsymbol{y}) \propto \tau^{-\alpha-1}\exp(-\beta/\tau)\\ &\quad \times \tau^{-n/2}\exp\left\{-\frac{1}{2\tau}\left(\sum_{i=1}^n y_i^2 - 2\mu \sum_{i=1}^n y_i+n\mu^2 \right)\right\}\\&\quad \times \exp\left\{-\frac{(\mu-\nu)^2}{2\omega}\right\} 
 \end{align*}
 
 ## Recognizing distributions from posterior
@@ -572,13 +570,13 @@ p(\mu, \tau \mid \boldsymbol{y}) \propto& \tau^{-n/2}\exp\left\{-\frac{1}{2\tau}
 Consider the conditional densities of each parameter in turn (up to proportionality):
 \begin{align*}
 p(\mu \mid \tau, \boldsymbol{y}) &\propto \exp\left\{-\frac{1}{2} \left( \frac{\mu^2-2\mu\overline{y}}{\tau/n} + \frac{\mu^2-2\nu \mu}{\omega}\right)\right\}\\
-p(\tau \mid \mu, \boldsymbol{y}) & \propto \tau^{-n/2-\alpha-1}\exp\left[-\left\{\frac{\sum_{i=1}^n (y_i-\mu)^2}{2} + \beta \right\}/\tau\right]
+p(\tau \mid \mu, \boldsymbol{y}) & \propto \tau^{-n/2-\alpha-1}\exp\left[-\frac{\left\{\frac{\sum_{i=1}^n (y_i-\mu)^2}{2} + \beta \right\}}{\tau}\right]
 \end{align*}
 
 ## Gibs sample
 We can simulate in turn 
 \begin{align*}
-\mu_t \mid \tau_{t-1}, \boldsymbol{y} &\sim \mathsf{Norm}\left(\frac{n\overline{y}\omega+\tau \nu}{\omega\tau}, \frac{\omega \tau}{\tau + \omega/n}\right)\\
+\mu_t \mid \tau_{t-1}, \boldsymbol{y} &\sim \mathsf{Norm}\left(\frac{n\overline{y}\omega+\tau \nu}{\tau + n\omega}, \frac{\omega \tau}{\tau + n\omega}\right)\\
 \tau_t \mid \mu_t, \boldsymbol{y} &\sim \mathsf{InvGamma}\left\{\frac{n}{2}+\alpha, \frac{\sum_{i=1}^n (y_i-\mu)^2}{2} + \beta\right\}.
 \end{align*}
 
@@ -586,19 +584,19 @@ We can simulate in turn
 ## Data augmentation and auxiliary variables
 
 
-- When the likelihood $p(\boldsymbol{y}; \boldsymbol{\theta})$ is intractable or costly to evaluate (e.g., mixtures, missing data, censoring), auxiliary variables are introduced to simplify calculations.
+When the likelihood $p(\boldsymbol{y}; \boldsymbol{\theta})$ is intractable or costly to evaluate (e.g., mixtures, missing data, censoring), auxiliary variables are introduced to simplify calculations.
 
 
 Consider auxiliary variables $\boldsymbol{u} \in \mathbb{R}^k$ such that 
-$$\int_{\mathbb{R}^k} p(\boldsymbol{u}, \boldsymbol{\theta}; \boldsymbol{y}) \mathrm{d} \boldsymbol{u} = p(\boldsymbol{\theta}; \boldsymbol{y}),$$
+$$\int_{\mathbb{R}^k} p(\boldsymbol{u}, \boldsymbol{\theta}\mid \boldsymbol{y}) \mathrm{d} \boldsymbol{u} = p(\boldsymbol{\theta}\mid \boldsymbol{y}),$$
 i.e., the marginal distribution is that of interest, but evaluation of $p(\boldsymbol{u}, \boldsymbol{\theta}; \boldsymbol{y})$ is cheaper. 
 
 ## Bayesian augmentation 
 
-The data augmentation algorithm  [@Tanner.Wong:1987] consists in running a Markov chain on the augmented state space $(\Theta, \mathbb{R}^k)$, simulating in turn
+The data augmentation algorithm  [@Tanner.Wong:1987] consists in running a Markov chain on the augmented state space $(\Theta, \mathbb{R}^k)$, simulating in turn from the conditionals 
 
-- from the conditionals $p(\boldsymbol{u}; \boldsymbol{\theta}, \boldsymbol{y})$ and
-- $p(\boldsymbol{\theta}; \boldsymbol{u}, \boldsymbol{y})$ 
+- $p(\boldsymbol{u}\mid \boldsymbol{\theta}, \boldsymbol{y})$ and
+- $p(\boldsymbol{\theta}\mid \boldsymbol{u}, \boldsymbol{y})$ 
 
 For more details and examples, see @vanDyk.Meng:2001 and @Hobert:2011.
 
@@ -625,13 +623,13 @@ p(\boldsymbol{z}, \boldsymbol{y} \mid \boldsymbol{\beta}) &\propto \exp\left\{-\
 ## Conditional distributions for probit regression
 
 \begin{align*}
-\boldsymbol{\beta} \mid \boldsymbol{z}, \boldsymbol{y} &\sim \mathsf{Norm}\{\widehat{\boldsymbol{\beta}}, (\mathbf{X}^\top\mathbf{X})^{-1}\}\\
-Z_i \mid Y_i=y_i, \boldsymbol{\beta} &\sim \begin{cases}
+\boldsymbol{\beta} \mid \boldsymbol{z}, \boldsymbol{y} &\sim \mathsf{Norm}\left\{\widehat{\boldsymbol{\beta}}, (\mathbf{X}^\top\mathbf{X})^{-1}\right\}\\
+Z_i \mid y_i, \boldsymbol{\beta} &\sim \begin{cases}
 \mathsf{TruncNorm}(\mathbf{x}_i\boldsymbol{\beta}, -\infty, 0) & y_i =0 \\
 \mathsf{TruncNorm}(\mathbf{x}_i\boldsymbol{\beta}, 0, \infty) & y_i =1.
 \end{cases}
 \end{align*}
-with $\widehat{\boldsymbol{\beta}}=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{z}$ the ordinary least square coefficients.
+with $\widehat{\boldsymbol{\beta}}=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{z}$ the ordinary least square estimator.
 
 ## Data augmentation with scale mixture of Gaussian
 
@@ -639,7 +637,7 @@ The Laplace distribution with mean $\mu$ and scale $\sigma$, which has density
 \begin{align*}
 f(x; \mu, \sigma) = \frac{1}{2\sigma}\exp\left(-\frac{|x-\mu|}{\sigma}\right),
 \end{align*}
-can be expressed as a scale mixture of Gaussians, where $Y \sim \mathsf{La}(\mu, \sigma)$ is equivalent to $Z \mid W=w \sim \mathsf{Norm}(\mu, \tau)$ and $\tau \sim \mathsf{Exp}\{(2\sigma)^{-1}\}$.
+can be expressed as a scale mixture of Gaussians, where $Y \mid W=w \sim \mathsf{La}(\mu, w)$ is equivalent to $Z \mid W=w \sim \mathsf{Norm}(\mu, \tau)$ and $\tau \sim \mathsf{Exp}\{(2\sigma)^{-1}\}$.
 
 ## Joint posterior for Laplace model
 
@@ -669,7 +667,7 @@ and we recognize the Wald (or inverse Gaussian) density, where $\xi_i \sim \math
 
 @Park.Casella:2008 use this hierarchical construction to defined the Bayesian LASSO. With a model matrix $\mathbf{X}$ whose columns are standardized to have mean zero and unit standard deviation, we may write
 \begin{align*}
-\boldsymbol{Y} \mid \mu, \boldsymbol{\beta}, \sigma^2 &\sim  \mathsf{Norm}_n(\nu \boldsymbol{1}_n + \mathbf{X}\boldsymbol{\beta}, \sigma \mathbf{I}_n)\\
+\boldsymbol{Y} \mid \mu, \boldsymbol{\beta}, \sigma^2 &\sim  \mathsf{Norm}_n(\mu \boldsymbol{1}_n + \mathbf{X}\boldsymbol{\beta}, \sigma \mathbf{I}_n)\\
 \beta_j \mid \sigma, \tau &\sim \mathsf{Norm}(0, \sigma\tau)\\
 \tau &\sim \mathsf{Exp}(\lambda/2)
 \end{align*}
