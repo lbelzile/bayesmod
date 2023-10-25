@@ -29,13 +29,13 @@ $$
 f(x; \boldsymbol{\alpha}) = \frac{\Gamma\left(\sum_{j=1}^d \alpha_j\right)}{\prod_{j=1}^d \Gamma(\alpha_j)}\prod_{j=1}^d x_j^{\alpha_j-1}, \qquad \alpha_j > 0 \, (j=1, \ldots, d).
 $$
 
-1. Perform an exploratory data analysis: what explains patterns of voting?
+1. Perform a short exploratory data analysis: what explains patterns of voting?
 2. Derive the posterior distribution of the proportion for each voting habit **per education level** if we assign to each independent uniform Dirichlet priors with $\boldsymbol{\alpha}=\mathbf{1}_3$.\
 *Hint*: start by writing the weighted log likelihood function.
 3. Report the expected posterior proportion of `always` voters in each class.
 4. Plot the posterior density of the odds ratio for `always` voters for all pairs and associated 89% credible intervals. Comment on the results
 5. 
-    a. Split records by age category (with age bands $(20,35], (35, 55], (55, 70] \ldots, (70, 100]$). 
+    a. Split records by age category (with age bands $(20,35], (35, 55], (55, 70], (70, 100]$). 
     b. For each age category, compute the weighted number of people per voter category.
     c. Next, draw 1000 samples from the posterior predictive distributions (depending on education level) for each individual and compute the weighted number of person per age bin, in order to get 50% credible intervals for each age bands. 
     d. Plot the resulting bands with your data estimates. 
