@@ -194,7 +194,7 @@ For a single parameter update $\theta$, a Taylor series expansion of the log pos
 
 We need $f''(\theta_{t-1})$ to be negative!
 
-This gives **local adaption** relative to MALA (global variance)
+This gives **local adaption** relative to MALA (global variance).
 
 ## Higher order and moves
 
@@ -899,20 +899,18 @@ knitr::include_graphics("fig/fig-posterior-pred-check.png")
 
 ## Log pointwise predictive density
 
-Consider the expected value of the log observation-wise log posterior with respect to the posterior distribution $p(\boldsymbol{\theta} \mid \boldsymbol{y})$, 
+Consider the expected value of the log observation-wise log density with respect to the posterior distribution $p(\boldsymbol{\theta} \mid \boldsymbol{y})$, 
 \begin{align*}
-\mathsf{LPPD} = \mathsf{E}_{\boldsymbol{\theta} \mid \boldsymbol{y}} \left\{ \log p(y_i \mid \boldsymbol{\theta})\right\},
+\mathsf{LPPD}_i = \mathsf{E}_{\boldsymbol{\theta} \mid \boldsymbol{y}} \left\{ \log p(y_i \mid \boldsymbol{\theta})\right\},
 \end{align*}
  
-We can approximate this quantity pointwise by averaging the log posterior of each sample observation over the posterior samples via Monte Carlo.
-
-The higher the value of $\mathsf{LPPD}$, the better the fit. 
+The higher the value of $\mathsf{LPPD}_i$, the better the fit for that observation.
 
 ## Widely available information criterion 
 
 To build an information criterion, we add a penalization factor that approximates the effective number of parameters in the model, with
 \begin{align*}
-n\mathsf{WAIC} = -\mathsf{LPPD} + \mathsf{Va}_{\boldsymbol{\theta} \mid \boldsymbol{y}}\{\log p(y_i \mid \boldsymbol{\theta})\}
+n\mathsf{WAIC} = -\sum_{i=1}^n \mathsf{LPPD}_i + \sum_{i=1}^n \mathsf{Va}_{\boldsymbol{\theta} \mid \boldsymbol{y}}\{\log p(y_i \mid \boldsymbol{\theta})\}
 \end{align*} 
 where we use again the empirical variance to compute the rightmost term.
 

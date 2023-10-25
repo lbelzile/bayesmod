@@ -221,7 +221,7 @@ The support of $f$ mustn't depend on $\boldsymbol{\theta}$.]
 
 
 
-## Conjugate priors for common exponential families
+## Conjugate priors for common exponential families {.smaller}
 
 | distribution | unknown parameter |  conjugate prior |
 |-------------------|:-----------------|:-----------------|
@@ -234,12 +234,12 @@ The support of $f$ mustn't depend on $\boldsymbol{\theta}$.]
 
 ## Conjugate prior for the Poisson 
 
-If $Y \sim \mathsf{Po}(\mu)$ with density $f(y) = \mu^x\exp(-\mu x)/x!$, then for $\mu \sim \mathsf{Ga}(\alpha, \beta)$ with $\alpha, \beta$ fixed. 
+If $Y \sim \mathsf{Po}(\mu)$ with density $f(y) = \mu^x\exp(-\mu x)/x!$, then for $\mu \sim \mathsf{Ga}(\alpha, \beta)$ with $\alpha, \beta$ fixed. Consider an i.i.d. sample with mean $\overline{y}$. The posterior density is
 
 $$
-p(\mu \mid y) \stackrel{\mu}{\propto} \mu^x \exp(-\mu x) \mu^{\alpha-1} \exp(-\beta \mu)
+p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\overline{y}\right) \mu^{\alpha-1} \exp(-\beta \mu)
 $$
-so the posterior is gamma $\mathsf{Ga}(x + \alpha, x + \beta)$.
+so must be gamma $\mathsf{Ga}(n\overline{y} + \alpha, n\overline{y} + \beta)$.
 
 *Parameter interpretation*: $\alpha$ events in $\beta$ time intervals.
 

@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.3.433">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Special topics in data science — Bayesian modelling - Exercice 4</title>
+<title>Special topics in data science — Bayesian modelling - Exercise 4</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -17,14 +17,15 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
 }
-.hanging div.csl-entry {
+.hanging-indent div.csl-entry {
   margin-left:2em;
   text-indent:-2em;
 }
@@ -38,8 +39,7 @@ div.csl-right-inline {
 }
 div.csl-indent {
   margin-left: 2em;
-}
-</style>
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -75,10 +75,12 @@ div.csl-indent {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -94,127 +96,149 @@ div.csl-indent {
     <span class="navbar-title">Special topics in data science — Bayesian modelling</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../syllabus.html">
+    <a class="nav-link" href="../syllabus.html" rel="" target="">
  <span class="menu-text">Outline</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../content/index.html">
+    <a class="nav-link" href="../content/index.html" rel="" target="">
  <span class="menu-text">Content</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../exercises/index.html" aria-current="page">
+    <a class="nav-link active" href="../exercises/index.html" rel="" target="" aria-current="page">
  <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../evaluations/assignment2.html">
+    <a class="nav-link" href="../evaluations/assignment2.html" rel="" target="">
  <span class="menu-text">Assignment</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://lbelzile.github.io/MATH80601A/">
+    <a class="nav-link" href="https://lbelzile.github.io/MATH80601A/" rel="" target="">
  <span class="menu-text">Notes</span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Exercice 4</h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/04-exercise.html">Markov chain Monte Carlo</a></li><li class="breadcrumb-item"><a href="../exercises/04-exercise.html">Exercise 4</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
     </div>
   </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/index.html" class="sidebar-item-text sidebar-link">Exercises</a>
+  <a href="../exercises/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercises</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Bayesics</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Bayesics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/01-exercise.html" class="sidebar-item-text sidebar-link">Exercice 1</a>
+  <a href="../exercises/01-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/01-solution.html" class="sidebar-item-text sidebar-link">Solution 1</a>
+  <a href="../exercises/01-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 1</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Priors</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Priors</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/02-exercise.html" class="sidebar-item-text sidebar-link">Exercice 2</a>
+  <a href="../exercises/02-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/02-solution.html" class="sidebar-item-text sidebar-link">Solution 2</a>
+  <a href="../exercises/02-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 2</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Simulation-based inference</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Simulation-based inference</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/03-exercise.html" class="sidebar-item-text sidebar-link">Exercice 3</a>
+  <a href="../exercises/03-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercise 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/03-solution.html" class="sidebar-item-text sidebar-link">Solution 3</a>
+  <a href="../exercises/03-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 3</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Markov chain Monte Carlo</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Markov chain Monte Carlo</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../exercises/04-exercise.html" class="sidebar-item-text sidebar-link active">Exercice 4</a>
+  <a href="../exercises/04-exercise.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Exercise 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/04-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 4</span></a>
   </div>
 </li>
       </ul>
@@ -222,6 +246,7 @@ div.csl-indent {
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -238,7 +263,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Exercice 4</h1>
+<h1 class="title">Exercise 4</h1>
 </div>
 
 
@@ -257,29 +282,29 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="exercise-4.1">Exercise 4.1</h2>
 <p>The Pareto distribution with shape <span class="math inline">\(\alpha&gt;0\)</span> and scale <span class="math inline">\(\tau&gt;0\)</span> has density <span class="math display">\[
 f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathsf{I}(x &gt; \tau).
-\]</span> It can be used to model power laws in insurance and finance, or in demography. The <code>uscitypopn</code> contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.</p>
+\]</span> It can be used to model power laws in insurance and finance, or in demography. The <code>uscitypopn</code> data set in the <code>hecbayes</code> package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.</p>
 <ol type="1">
-<li>Using improper priors, write the joint posterior for a simple random sample of size <span class="math inline">\(n\)</span> and derive the conditional distributions <span class="math inline">\(p(\alpha \mid \boldsymbol{y}, \tau)\)</span> and <span class="math inline">\(p(\tau \mid \alpha, \boldsymbol{y})\)</span>.</li>
-<li>The mononomial distribution <span class="math inline">\(\mathsf{Mono}(a,b)\)</span> has density <span class="math inline">\(p(x) \propto x^a\mathsf{I}(0 \leq x \leq b)\)</span>. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.</li>
-<li>Implement Gibbs sampling for this problem for the <code>uscitypopn</code> data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Hence calculate the accuracy of your estimates?</li>
+<li>Using improper priors, write the joint posterior for a simple random sample of size <span class="math inline">\(n\)</span> and derive the conditional distributions <span class="math inline">\(p(\alpha \mid \boldsymbol{y}, \tau)\)</span> and <span class="math inline">\(p(\tau \mid \alpha, \boldsymbol{y})\)</span>. <em>Hint</em>: the conditional density <span class="math inline">\(p(\alpha \mid \boldsymbol{y}, \tau)\)</span> is that of a gamma; use the fact that <span class="math inline">\(m^\alpha=\exp\{\alpha\log(m)\}\)</span> for <span class="math inline">\(m&gt;0\)</span>.</li>
+<li>The mononomial distribution <span class="math inline">\(\mathsf{Mono}(a,b)\)</span> has density <span class="math inline">\(p(x) \propto x^{a-1}\mathsf{I}(0 \leq x \leq b)\)</span> for <span class="math inline">\(a, b &gt; 0\)</span>. Find the normalizing constant for the distribution and obtain the quantile function to derive a random number generator.</li>
+<li>Implement Gibbs sampling for this problem for the <code>uscitypopn</code> data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates.</li>
 </ol>
 </section>
 <section id="exercise-4.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-4.2">Exercise 4.2</h2>
-<p>Implement the Bayesian LASSO for the <code>efron2004</code> cancer surgery from package <code>care</code>. Check <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> for the details of the Gibbs sampling.</p>
+<p>Implement the Bayesian LASSO for the <code>diabetes</code> cancer surgery from package <code>lars</code>. Check <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> for the details of the Gibbs sampling.</p>
 <ol type="1">
-<li>Fit the model for a range of values of <span class="math inline">\(\lambda\)</span> and produce parameter estimate paths to replicate Figure 1 of the paper.</li>
+<li>Fit the model for a range of values of <span class="math inline">\(\lambda=0.237\)</span> and produce parameter estimate paths to replicate Figure 2 of the paper.</li>
 <li>Check the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?</li>
-<li>Implement the approaches in section 3 to find <span class="math inline">\(\lambda\)</span>.</li>
-<li>For three models with different values of <span class="math inline">\(\lambda\)</span>, compute the widely applicable information criterion and use it to assess predictive performance.</li>
+<li>Implement the method of section 3.1 from <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> by adding <span class="math inline">\(\lambda\)</span> as a parameter.</li>
+<li>For three models with different values of <span class="math inline">\(\lambda\)</span>, compute the widely applicable information criterion (WAIC) and use it to assess predictive performance.</li>
 </ol>
 
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="doc-bibliography">
-<div id="ref-Park.Casella:2008" class="csl-entry" role="doc-biblioentry">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Park.Casella:2008" class="csl-entry" role="listitem">
 Park, T., &amp; Casella, G. (2008). The <span>B</span>ayesian <span>L</span>asso. <em>Journal of the American Statistical Association</em>, <em>103</em>(482), 681–686. <a href="https://doi.org/10.1198/016214508000000337">https://doi.org/10.1198/016214508000000337</a>
 </div>
 </div></section></div></main> <!-- /main -->
@@ -310,9 +335,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -377,6 +416,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -420,6 +545,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">Content <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2023 by <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a><br> Website template by <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> under <a href="https://mit-license.org/">MIT License</a><br> All content licensed under a <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
     <div class="nav-footer-right">Made with <i class="fa-brands fa-r-project" aria-hidden="true"></i> and <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/bayesmod">View the source at <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
   </div>
 </footer>
