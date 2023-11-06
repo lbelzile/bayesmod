@@ -181,20 +181,8 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Assignment 2</h1>
-</div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
+<header id="title-block-header">
+<h1 class="title display-7">Assignment 2</h1>
 
 </header>
 
@@ -218,16 +206,16 @@ f(x; \boldsymbol{\alpha}) = \frac{\Gamma\left(\sum_{j=1}^d \alpha_j\right)}{\pro
 \]</span></p>
 <ol type="1">
 <li>Perform a short exploratory data analysis: what explains patterns of voting?</li>
-<li>Derive the posterior distribution of the proportion for each voting habit <strong>per education level</strong> if we assign to each independent uniform Dirichlet priors with <span class="math inline">\(\boldsymbol{\alpha}=\mathbf{1}_3\)</span>.<br>
+<li>Derive the posterior distribution of the proportion for each voting habit <strong>per education level</strong> if we assign to each independent uniform Dirichlet priors with <span class="math inline">\(\boldsymbol{\alpha}=\mathbf{1}_3 = (1,1,1)^\top\)</span>.<br>
 <em>Hint</em>: start by writing the weighted log likelihood function.</li>
 <li>Report the expected posterior proportion of <code>always</code> voters in each class.</li>
-<li>Plot the posterior density of the odds ratio for <code>always</code> voters for all pairs and associated 89% credible intervals. Comment on the results</li>
-<li><ol type="a">
+<li>Plot the posterior density of the odds ratio <span class="math inline">\(p_{\texttt{rarely/never}}/p_{\texttt{always}}\)</span> and <span class="math inline">\(p_{\texttt{seldom}}/p_{\texttt{always}}\)</span> with an associated 89% credible intervals. Comment on the results.</li>
+<li>The purpose of this exercise is to check whether the model with <code>educ</code> level alone is sufficient to explain patterns of voting. Start by simulating <span class="math inline">\(B=1000\)</span> draws from the posterior distributions for each education level.
+<ol type="a">
 <li>Split records by age category (with age bands <span class="math inline">\((20,35], (35, 55], (55, 70], (70, 100]\)</span>).</li>
 <li>For each age category, compute the weighted number of people per voter category.</li>
-<li>Next, draw 1000 samples from the posterior predictive distributions (depending on education level) for each individual and compute the weighted number of person per age bin, in order to get 50% credible intervals for each age bands.</li>
-<li>Plot the resulting bands with your data estimates.</li>
-<li>What do these suggest about the goodness of fit (i.e., is the variability sufficient to capture observed effects)?</li>
+<li>Next, draw 1000 samples from the posterior predictive distributions (depending on education level) for each individual.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and compute the weighted number of entries per age bin, in order to get the mean (or median) and a 50% equitailed credible intervals for each age bands. This will yield <span class="math inline">\(3\times 4\)</span> estimates, for each voting categories/age band.</li>
+<li>Compare the data estimates from b. with your estimates and credible intervals. What do these suggest about the goodness of fit (i.e., is the variability sufficient to capture observed effects)?</li>
 </ol></li>
 <li><a href="#fig-age">Figure&nbsp;1</a> shows the unconditional change in probability of voting as a function of age. What these suggest about the patterns uncovered, and how could these be addressed in a statistical analysis?</li>
 </ol>
@@ -251,14 +239,14 @@ Y_{i2} &amp;\sim\mathsf{Po}\{\exp(\delta_i + \gamma +  \alpha_2 \texttt{limit}_{
 \end{align*}\]</span> The nuisance parameters <span class="math inline">\(\delta_1, \ldots, \delta_{92}\)</span> control for changes in background number of accidents and are of no practical interest, while <span class="math inline">\(\gamma\)</span> denotes the change from 1961 to 1962. We are interested here in assessing changes in the number of accidents due to the policy, <span class="math inline">\(\alpha\)</span>; of secondary interest is to determine whether there has been a decrease in the number of accident relative to 1961.</p>
 <p>Use vague priors for <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\alpha\)</span> and use a random effect <span class="math inline">\(\delta_i \sim \mathsf{No}(0, \tau^2)\)</span> with a suitable prior for <span class="math inline">\(\tau\)</span>.</p>
 <ol type="1">
-<li>Using Metropolis-within-Gibbs, obtain posterior draws for the parameters. Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report the effective sample sizes.</li>
+<li>Using a variant of Metropolis–Hastings algorithm, obtain posterior draws for the parameters <span class="math display">\[(\alpha_1, \alpha_2, \gamma, \delta_1, \ldots, \delta_{92}, \tau^2).\]</span> Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report these effective sample sizes.</li>
 <li>Produce trace plots of the Markov chains and correlograms for parameters <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\tau\)</span>. Comment on the quality of your sampler.</li>
 <li>Return the posterior mode, posterior mean and 89% HPD region, in addition to density plot for the multiplicative effect on traffic, <span class="math inline">\(\exp(\gamma)\)</span>. Comment on the effectiveness of the policy.</li>
 <li>Obtain a caterpillar plot of the parameters <span class="math inline">\(\delta_i\)</span> (<span class="math inline">\(i=1,\ldots, 92\)</span>) as follows:</li>
 </ol>
 <ol type="a">
-<li>obtain point estimates of the posterior mode for each random effect <span class="math inline">\(\delta_i\)</span> and sort them in increasing order</li>
-<li>for each parameter, obtain 80% credible intervals.</li>
+<li>obtain posterior mean for each random effect <span class="math inline">\(\delta_i\)</span> and sort them in increasing order</li>
+<li>for each parameter, obtain 80% equitailed credible intervals.</li>
 <li>plot the point estimates and intervals against order.</li>
 </ol>
 <ol start="5" type="1">
@@ -340,6 +328,7 @@ Svensson, A. (1981). On a goodness-of-fit test for multiplicative <span>P</span>
 
 <ol>
 <li id="fn1"><p>The components of the vector <span class="math inline">\(\boldsymbol{x} \in \mathbb{R}^d_{+}\)</span> are positive and sum to one.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>You should thus have <span class="math inline">\(n \times 1000\)</span> draws with entries <code>rarely/never</code>, <code>seldom</code>, <code>always</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

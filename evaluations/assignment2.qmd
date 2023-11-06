@@ -30,16 +30,15 @@ f(x; \boldsymbol{\alpha}) = \frac{\Gamma\left(\sum_{j=1}^d \alpha_j\right)}{\pro
 $$
 
 1. Perform a short exploratory data analysis: what explains patterns of voting?
-2. Derive the posterior distribution of the proportion for each voting habit **per education level** if we assign to each independent uniform Dirichlet priors with $\boldsymbol{\alpha}=\mathbf{1}_3$.\
+2. Derive the posterior distribution of the proportion for each voting habit **per education level** if we assign to each independent uniform Dirichlet priors with $\boldsymbol{\alpha}=\mathbf{1}_3 = (1,1,1)^\top$.\
 *Hint*: start by writing the weighted log likelihood function.
 3. Report the expected posterior proportion of `always` voters in each class.
-4. Plot the posterior density of the odds ratio for `always` voters for all pairs and associated 89% credible intervals. Comment on the results
-5. 
+4. Plot the posterior density of the odds ratio $p_{\texttt{rarely/never}}/p_{\texttt{always}}$ and $p_{\texttt{seldom}}/p_{\texttt{always}}$ with an associated 89% credible intervals. Comment on the results.
+5. The purpose of this exercise is to check whether the model with `educ` level alone is sufficient to explain patterns of voting. Start by simulating $B=1000$ draws from the posterior distributions for each education level.
     a. Split records by age category (with age bands $(20,35], (35, 55], (55, 70], (70, 100]$). 
     b. For each age category, compute the weighted number of people per voter category.
-    c. Next, draw 1000 samples from the posterior predictive distributions (depending on education level) for each individual and compute the weighted number of person per age bin, in order to get 50% credible intervals for each age bands. 
-    d. Plot the resulting bands with your data estimates. 
-    e. What do these suggest about the goodness of fit (i.e., is the variability sufficient to capture observed effects)?
+    c. Next, draw 1000 samples from the posterior predictive distributions (depending on education level) for each individual.^[You should thus have $n \times 1000$ draws with entries `rarely/never`, `seldom`, `always`.] and compute the weighted number of entries per age bin, in order to get the mean (or median) and a 50% equitailed credible intervals for each age bands. This will yield $3\times 4$ estimates, for each voting categories/age band.
+    d. Compare the data estimates from b. with your estimates and credible intervals. What do these suggest about the goodness of fit (i.e., is the variability sufficient to capture observed effects)?
 6. @fig-age shows the unconditional change in probability of voting as a function of age. What these suggest about the patterns uncovered, and how could these be addressed in a statistical analysis?
 
 ```{r}
@@ -100,12 +99,12 @@ The nuisance parameters $\delta_1, \ldots, \delta_{92}$ control for changes in b
 
 Use vague priors for $\gamma$ and $\alpha$ and use a random effect $\delta_i \sim \mathsf{No}(0, \tau^2)$ with a suitable prior for $\tau$.
 
-1. Using Metropolis-within-Gibbs, obtain posterior draws for the parameters. Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report the effective sample sizes.
+1. Using a variant of Metropolis--Hastings algorithm, obtain posterior draws for the parameters $$(\alpha_1, \alpha_2, \gamma, \delta_1, \ldots, \delta_{92}, \tau^2).$$ Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report these effective sample sizes.
 2. Produce trace plots of the Markov chains and correlograms for parameters $\alpha$, $\gamma$ and $\tau$. Comment on the quality of your sampler.
 3. Return the posterior mode, posterior mean and 89\% HPD region, in addition to density plot for the multiplicative effect on traffic, $\exp(\gamma)$. Comment on the effectiveness of the policy.
 4. Obtain a caterpillar plot of the parameters $\delta_i$ ($i=1,\ldots, 92$) as follows: 
-  a. obtain point estimates of the posterior mode for each random effect $\delta_i$ and sort them in increasing order
-  b. for each parameter, obtain 80% credible intervals.
+  a. obtain posterior mean for each random effect $\delta_i$ and sort them in increasing order
+  b. for each parameter, obtain 80% equitailed credible intervals.
   c. plot the point estimates and intervals against order.
 5. Fit the model using maximum likelihood treating day as a fixed effect using the code provided below. Superimpose the estimated effects on your caterpillar and discuss the shrinkage effect of the prior.
 
