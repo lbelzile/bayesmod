@@ -366,7 +366,7 @@ F(x) = \begin{cases}
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo estimator of the acceptance rate</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ntrials<span class="sc">/</span><span class="fu">length</span>(samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.252261</code></pre>
+<pre><code>[1] 1.237738</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot density</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -379,7 +379,7 @@ F(x) = \begin{cases}
 </div>
 </div>
 <ol start="4" type="1">
-<li>The Monte Carlo acceptance rate is 1.25, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits.</li>
+<li>The Monte Carlo acceptance rate is 1.24, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits.</li>
 </ol>
 </div>
 </section>
@@ -413,15 +413,15 @@ F(x) = \begin{cases}
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>post_samp</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.987</code></pre>
+<pre><code>[1] 0.983</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 8.031375</code></pre>
+<pre><code>[1] 8.019044</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.53749</code></pre>
+<pre><code>[1] 2.718529</code></pre>
 </div>
 </div>
 </div>
@@ -442,15 +442,15 @@ F(x) = \begin{cases}
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>chains[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)]</span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9764646</code></pre>
+<pre><code>[1] 0.9759596</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 8.034626</code></pre>
+<pre><code>[1] 8.108757</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.619788</code></pre>
+<pre><code>[1] 2.66034</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of MCMC</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>mcmc <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">mcmc</span>(chains)</span>
@@ -466,12 +466,12 @@ Sample size per chain = 10000
    plus standard error of the mean:
 
           Mean             SD       Naive SE Time-series SE 
-     0.1373035      0.0445814      0.0004458      0.0012284 
+     0.1355660      0.0421769      0.0004218      0.0010339 
 
 2. Quantiles for each variable:
 
    2.5%     25%     50%     75%   97.5% 
-0.06726 0.10784 0.13248 0.16139 0.23015 </code></pre>
+0.06707 0.10729 0.13195 0.15895 0.22644 </code></pre>
 </div>
 </div>
 </section>
@@ -485,7 +485,7 @@ Sample size per chain = 10000
 </ol>
 <div class="solution proof">
 <p><span class="proof-title"><em>Solution</em>. </span>The only thing we need to do is change the parametrization, and add tuning of the variance.</p>
-<div class="cell" data-hash="03-solution_cache/html/unnamed-chunk-5_020d9a6ee1e1e15986d4ed0e8b80ddc4">
+<div class="cell" data-hash="03-solution_cache/html/unnamed-chunk-5_a15eeaa3f1c864e3d81b7aa6ad27c91d">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute sufficient statistics</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
@@ -546,31 +546,16 @@ Sample size per chain = 10000
 <pre><code>[1] 0.44355</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create some summary graphs</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This is bayesplot version 1.10.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>- bayesplot theme set to bayesplot::theme_default()</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>   * Does _not_ affect other ggplot2 plots</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>   * See ?bayesplot_theme_set for details on theme setting</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Name chains so that the graphs can be labelled</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(chain)[[<span class="dv">3</span>]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lambda[1]"</span>,<span class="st">"lambda[2]"</span>)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Trace plots, correlograms, density plots and bivariate scatterplot</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_trace</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Name chains so that the graphs can be labelled</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(chain)[[<span class="dv">3</span>]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lambda[1]"</span>,<span class="st">"lambda[2]"</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Trace plots, correlograms, density plots and bivariate scatterplot</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_trace</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="03-solution_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_acf_bar</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_acf_bar</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: The `facets` argument of `facet_grid()` is deprecated as of ggplot2 2.2.0.
 ℹ Please use the `rows` argument instead.
@@ -580,20 +565,20 @@ Sample size per chain = 10000
 <div class="cell-output-display">
 <p><img src="03-solution_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_dens</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_dens</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="03-solution_files/figure-html/unnamed-chunk-5-3.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_scatter</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_scatter</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="03-solution_files/figure-html/unnamed-chunk-5-4.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summaries with coda</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Need to create a list of mcmc objects...</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>mcmc_list <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">as.mcmc.list</span>(</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lapply</span>(<span class="fu">seq_len</span>(nchains),</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>           <span class="cf">function</span>(ch) coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain[, ch, ])))</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mcmc_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summaries with coda</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Need to create a list of mcmc objects...</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>mcmc_list <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">as.mcmc.list</span>(</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lapply</span>(<span class="fu">seq_len</span>(nchains),</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>           <span class="cf">function</span>(ch) coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain[, ch, ])))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mcmc_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Iterations = 1:10000

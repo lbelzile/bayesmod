@@ -763,93 +763,58 @@
     "text": "This section will contain annotated R code along with worked out examples. Useful resources for learning R, the tidyverse and Rmarkdown basics include\n\nThe Introduction to R and RStudio by Open Intro Stat\nTeacups, giraffes & statistics: basic statistical concepts and programming\nthe notebook RYouWithMe from R-Ladies Sydney\nthe book R for Data Science, which adheres to the tidyverse principles.\nthe R package DoSStoolkit, developped at the University of Toronto.\nthe introverse documentation.\nthe RStudio cheatsheets, also available from RStudio menu in Help &gt; Cheat Sheets\n\nTo install all R packages used throughout the course, use the command\n\ninstall.packages(\"cmdstanr\",\n                 repos = c(\"https://mc-stan.org/r-packages/\",\n                           getOption(\"repos\")))\n\npackages &lt;- c(\"coda\", \"mvtnorm\", \"remotes\", \"loo\", \"dagitty\", \"shape\", \"rust\")\nfor(i in seq_along(packages)){\n  if(!packages[i] %in% installed.packages()[,\"Package\"]){\n install.packages(packages[i])\n  }\n}\nremotes::install_github(\"rmcelreath/rethinking\")\n\ninstall.packages(c(\"BiocManager\",\"remotes\"))\nBiocManager::install(\"graph\")\nBiocManager::install(\"Rgraphviz\")\ninstall.packages(\n  \"INLA\",\n  repos = c(getOption(\"repos\"),\n            INLA = \"https://inla.r-inla-download.org/R/stable\"),\n  dep = TRUE)"
   },
   {
-    "objectID": "content/index.html",
-    "href": "content/index.html",
-    "title": "Readings, lectures, and videos",
+    "objectID": "evaluations/assignment2.html",
+    "href": "evaluations/assignment2.html",
+    "title": "Assignment 2",
     "section": "",
-    "text": "Each class session has a set of required readings that you should complete before watching the lecture."
+    "text": "Assignment 2 is due by Tuesday, November 7th 2023, at 8:00am on ZoneCours.\nThe databases used in the assignment are available from the hecbayes and LearnBayes R packages. To download the latest version of the latter, use the command\ninstall.packages(c(\"LearnBayes\", \"remotes\"))\nremotes::install_github(\"lbelzile/hecbayes\")"
   },
   {
-    "objectID": "content/03-content.html",
-    "href": "content/03-content.html",
-    "title": "Simulation-based inference",
-    "section": "",
-    "text": "Monte Carlo methods\nMarkov chains\nMetropolis–Hastings algorithm"
+    "objectID": "evaluations/assignment2.html#footnotes",
+    "href": "evaluations/assignment2.html#footnotes",
+    "title": "Assignment 2",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nThe components of the vector \\(\\boldsymbol{x} \\in \\mathbb{R}^d_{+}\\) are positive and sum to one.↩︎\nYou should thus have \\(n \\times 1000\\) draws with entries rarely/never, seldom, always.↩︎"
   },
   {
-    "objectID": "content/03-content.html#content",
-    "href": "content/03-content.html#content",
-    "title": "Simulation-based inference",
+    "objectID": "content/04-content.html",
+    "href": "content/04-content.html",
+    "title": "Markov chain Monte Carlo",
     "section": "",
-    "text": "Monte Carlo methods\nMarkov chains\nMetropolis–Hastings algorithm"
+    "text": "Efficient proposals for Metropolis–Hastings and tuning\nGibbs sampling and data augmentation\nBayesian worflow and diagnostics for MCMC"
   },
   {
-    "objectID": "content/03-content.html#learning-objectives",
-    "href": "content/03-content.html#learning-objectives",
-    "title": "Simulation-based inference",
+    "objectID": "content/04-content.html#content",
+    "href": "content/04-content.html#content",
+    "title": "Markov chain Monte Carlo",
+    "section": "",
+    "text": "Efficient proposals for Metropolis–Hastings and tuning\nGibbs sampling and data augmentation\nBayesian worflow and diagnostics for MCMC"
+  },
+  {
+    "objectID": "content/04-content.html#learning-objectives",
+    "href": "content/04-content.html#learning-objectives",
+    "title": "Markov chain Monte Carlo",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a MHG algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors"
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nimplement MALA and Gibbs sampling\nderive the conditional distributions of a model for Gibbs sampling\ndiagnose performance of MCMC algorithms and implement potential remedies"
   },
   {
-    "objectID": "content/03-content.html#readings",
-    "href": "content/03-content.html#readings",
-    "title": "Simulation-based inference",
+    "objectID": "content/04-content.html#readings",
+    "href": "content/04-content.html#readings",
+    "title": "Markov chain Monte Carlo",
     "section": "Readings",
     "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nGeyer (2011)\nChapter 3 of the course notes"
   },
   {
-    "objectID": "content/03-content.html#complementary-readings",
-    "href": "content/03-content.html#complementary-readings",
-    "title": "Simulation-based inference",
+    "objectID": "content/04-content.html#complementary-readings",
+    "href": "content/04-content.html#complementary-readings",
+    "title": "Markov chain Monte Carlo",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nGreen et al. (2015) (overview of MCMC methods)"
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nAlbert (2009), chapters 6 and 10 (several examples)\nMcElreath (2020), chapter 9 (non technical)"
   },
   {
-    "objectID": "content/03-content.html#slides",
-    "href": "content/03-content.html#slides",
-    "title": "Simulation-based inference",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
-  },
-  {
-    "objectID": "content/01-content.html",
-    "href": "content/01-content.html",
-    "title": "Bayesics",
-    "section": "",
-    "text": "Probability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model"
-  },
-  {
-    "objectID": "content/01-content.html#content",
-    "href": "content/01-content.html#content",
-    "title": "Bayesics",
-    "section": "",
-    "text": "Probability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model"
-  },
-  {
-    "objectID": "content/01-content.html#learning-objectives",
-    "href": "content/01-content.html#learning-objectives",
-    "title": "Bayesics",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ndefine key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference\nperform inference in conjugate models with a single parameter\ncalculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)\nexplain some of the conceptual differences between frequentist and Bayesian inference"
-  },
-  {
-    "objectID": "content/01-content.html#readings",
-    "href": "content/01-content.html#readings",
-    "title": "Bayesics",
-    "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 1 of the course notes"
-  },
-  {
-    "objectID": "content/01-content.html#complementary-readings",
-    "href": "content/01-content.html#complementary-readings",
-    "title": "Bayesics",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nEdwards et al. (1992)\nJohnson et al. (2022), chapters 2–4 and sections 8.1, 8.3\nVillani (2023), chapters 1 and 2\nAlbert (2009), chapters 2 and 3"
-  },
-  {
-    "objectID": "content/01-content.html#slides",
-    "href": "content/01-content.html#slides",
-    "title": "Bayesics",
+    "objectID": "content/04-content.html#slides",
+    "href": "content/04-content.html#slides",
+    "title": "Markov chain Monte Carlo",
     "section": "Slides",
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
   },
@@ -896,60 +861,109 @@
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
   },
   {
-    "objectID": "content/04-content.html",
-    "href": "content/04-content.html",
-    "title": "Markov chain Monte Carlo",
+    "objectID": "content/01-content.html",
+    "href": "content/01-content.html",
+    "title": "Bayesics",
     "section": "",
-    "text": "Efficient proposals for Metropolis–Hastings and tuning\nGibbs sampling and data augmentation\nBayesian worflow and diagnostics for MCMC"
+    "text": "Probability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model"
   },
   {
-    "objectID": "content/04-content.html#content",
-    "href": "content/04-content.html#content",
-    "title": "Markov chain Monte Carlo",
+    "objectID": "content/01-content.html#content",
+    "href": "content/01-content.html#content",
+    "title": "Bayesics",
     "section": "",
-    "text": "Efficient proposals for Metropolis–Hastings and tuning\nGibbs sampling and data augmentation\nBayesian worflow and diagnostics for MCMC"
+    "text": "Probability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model"
   },
   {
-    "objectID": "content/04-content.html#learning-objectives",
-    "href": "content/04-content.html#learning-objectives",
-    "title": "Markov chain Monte Carlo",
+    "objectID": "content/01-content.html#learning-objectives",
+    "href": "content/01-content.html#learning-objectives",
+    "title": "Bayesics",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nimplement MALA and Gibbs sampling\nderive the conditional distributions of a model for Gibbs sampling\ndiagnose performance of MCMC algorithms and implement potential remedies"
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ndefine key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference\nperform inference in conjugate models with a single parameter\ncalculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)\nexplain some of the conceptual differences between frequentist and Bayesian inference"
   },
   {
-    "objectID": "content/04-content.html#readings",
-    "href": "content/04-content.html#readings",
-    "title": "Markov chain Monte Carlo",
+    "objectID": "content/01-content.html#readings",
+    "href": "content/01-content.html#readings",
+    "title": "Bayesics",
     "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nGeyer (2011)\nChapter 3 of the course notes"
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 1 of the course notes"
   },
   {
-    "objectID": "content/04-content.html#complementary-readings",
-    "href": "content/04-content.html#complementary-readings",
-    "title": "Markov chain Monte Carlo",
+    "objectID": "content/01-content.html#complementary-readings",
+    "href": "content/01-content.html#complementary-readings",
+    "title": "Bayesics",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nAlbert (2009), chapters 6 and 10 (several examples)\nMcElreath (2020), chapter 9 (non technical)"
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nEdwards et al. (1992)\nJohnson et al. (2022), chapters 2–4 and sections 8.1, 8.3\nVillani (2023), chapters 1 and 2\nAlbert (2009), chapters 2 and 3"
   },
   {
-    "objectID": "content/04-content.html#slides",
-    "href": "content/04-content.html#slides",
-    "title": "Markov chain Monte Carlo",
+    "objectID": "content/01-content.html#slides",
+    "href": "content/01-content.html#slides",
+    "title": "Bayesics",
     "section": "Slides",
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
   },
   {
-    "objectID": "evaluations/assignment2.html",
-    "href": "evaluations/assignment2.html",
-    "title": "Assignment 2",
+    "objectID": "content/03-content.html",
+    "href": "content/03-content.html",
+    "title": "Simulation-based inference",
     "section": "",
-    "text": "Assignment 2 is due by Tuesday, November 7th 2023, at 8:00am on ZoneCours.\nThe databases used in the assignment are available from the hecbayes and LearnBayes R packages. To download the latest version of the latter, use the command\ninstall.packages(c(\"LearnBayes\", \"remotes\"))\nremotes::install_github(\"lbelzile/hecbayes\")"
+    "text": "Monte Carlo methods\nMarkov chains\nMetropolis–Hastings algorithm"
   },
   {
-    "objectID": "evaluations/assignment2.html#footnotes",
-    "href": "evaluations/assignment2.html#footnotes",
-    "title": "Assignment 2",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nThe components of the vector \\(\\boldsymbol{x} \\in \\mathbb{R}^d_{+}\\) are positive and sum to one.↩︎\nYou should thus have \\(n \\times 1000\\) draws with entries rarely/never, seldom, always.↩︎"
+    "objectID": "content/03-content.html#content",
+    "href": "content/03-content.html#content",
+    "title": "Simulation-based inference",
+    "section": "",
+    "text": "Monte Carlo methods\nMarkov chains\nMetropolis–Hastings algorithm"
+  },
+  {
+    "objectID": "content/03-content.html#learning-objectives",
+    "href": "content/03-content.html#learning-objectives",
+    "title": "Simulation-based inference",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a MHG algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors"
+  },
+  {
+    "objectID": "content/03-content.html#readings",
+    "href": "content/03-content.html#readings",
+    "title": "Simulation-based inference",
+    "section": "Readings",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nGeyer (2011)\nChapter 3 of the course notes"
+  },
+  {
+    "objectID": "content/03-content.html#complementary-readings",
+    "href": "content/03-content.html#complementary-readings",
+    "title": "Simulation-based inference",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nGreen et al. (2015) (overview of MCMC methods)"
+  },
+  {
+    "objectID": "content/03-content.html#slides",
+    "href": "content/03-content.html#slides",
+    "title": "Simulation-based inference",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
+  },
+  {
+    "objectID": "content/index.html",
+    "href": "content/index.html",
+    "title": "Readings, lectures, and videos",
+    "section": "",
+    "text": "Each class session has a set of required readings that you should complete before watching the lecture."
+  },
+  {
+    "objectID": "evaluations/index.html",
+    "href": "evaluations/index.html",
+    "title": "Evaluations",
+    "section": "",
+    "text": "You won’t learn without practicing and honing your skills. Problem sets do not count toward your final grade, but the practice will help you for the homework and the midterm exam."
+  },
+  {
+    "objectID": "evaluations/index.html#problem-sets",
+    "href": "evaluations/index.html#problem-sets",
+    "title": "Evaluations",
+    "section": "",
+    "text": "You won’t learn without practicing and honing your skills. Problem sets do not count toward your final grade, but the practice will help you for the homework and the midterm exam."
   },
   {
     "objectID": "example/installation.html",
@@ -1040,28 +1054,28 @@
     "href": "exercises/03-solution.html",
     "title": "Solution 3",
     "section": "",
-    "text": "Consider the Laplace family of distribution, \\(\\mathsf{La}(\\nu, \\tau)\\), with density \\[\\begin{align*}\ng(x; \\nu, \\tau) = \\frac{1}{2\\tau} \\exp\\left(- \\frac{|x-\\nu|}{\\tau}\\right), \\qquad \\nu \\in \\mathbb{R}, \\tau &gt; 0\n\\end{align*}\\] as a candidate distribution for rejection sampling from \\(\\mathsf{No}(0,1)\\).\n\nProvide an inversion sampling algorithm to generate from \\(\\mathsf{La}(\\nu, \\tau)\\).\nCan you use the proposal to generate from a standard Gaussian? for Student-\\(t\\) with 1 degree of freedom? Justify your answer.\nConsider as proposal a location-scale version of the Student-t with \\(\\nu=3\\) degrees of freedom. Find the optimal location and scale parameters and the upper bound \\(C\\) for your choice.\nUse the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.\n\n\nSolution. \n\nThe distribution function is \\[\\begin{align*}\nF(x) = \\begin{cases}\n\\frac{1}{2} \\exp\\left(\\frac{x-\\nu}{\\tau}\\right) & x \\leq \\nu\\\\\n1 - \\frac{1}{2} \\exp\\left(-\\frac{x-\\nu}{\\tau}\\right) & x &gt;\\nu\\\\\n\\end{cases}\n\\end{align*}\\] and using the quantile transform, set \\(X=\\nu + \\tau \\log(2U)\\) if \\(U \\leq 0.5\\) and \\(X=\\nu - \\tau\\log(2-2U)\\) if \\(U &gt; 0.5\\) for \\(U \\sim \\mathsf{U}(0,1)\\).\nThe Gaussian has lighter tail than the Laplace, so this won’t work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.\nThe optimal value for the location of the Student-\\(t\\) would be \\(\\nu\\) (here zero for the standard Laplace). We compute the optimal scale via in the code below: \\[\n\\mathrm{argmax}_{\\sigma \\in \\mathbb{R}_{+}}\\mathrm{argmin}_{x \\in \\mathbb{R}} \\{\\log f(x) - \\log g(x; \\sigma)\\}\n\\]\n\n\n#' Laplace density\ndlaplace &lt;- function(x, loc = 0, scale = 1, log = FALSE){\n stopifnot(scale &gt; 0)\n logdens &lt;-  -log(2*scale) - abs(x-loc)/scale\n if(log){\n return(logdens)\n } else{\n return(exp(logdens))\n }\n}\ndstudent &lt;- function(x, loc = 0, scale = 1, df = 1, log = FALSE){\n  logdens &lt;- -log(scale) + dt(x = (x - loc)/scale, df = df, log = TRUE)\n   if(log){\n    return(logdens)\n   } else{\n   return(exp(logdens))\n   }\n}\n# For each value of the scale sigma,\n# find the minimum value of x (typically at zero)\nopt &lt;- optimize(f = function(sigma){\n  optimize(f = function(x){\n  dlaplace(x, log = TRUE) - \n    dstudent(x, scale = sigma, df = 3, log = TRUE)}, \n  maximum = TRUE, \n  interval = c(-100, 100))$objective\n}, interval = c(0.1,10))\n(C &lt;- exp(opt$objective))\n\n[1] 1.261368\n\n(sigma &lt;- opt$minimum)\n\n[1] 0.9272381\n\n# Simulate from accept-reject\nntrials &lt;- 1.1*C*1000\n# Simulate from location-scale student\ncandidate &lt;- sigma*rt(n = ntrials, df = 3)\n# Compute log of acceptance rate\nlogR &lt;- dlaplace(candidate, log = TRUE) - \n  dstudent(candidate, scale = sigma, df = 3, log = TRUE) \nsamp &lt;- candidate[logR &gt;= log(C) + -rexp(ntrials)]\n# Monte Carlo estimator of the acceptance rate\nntrials/length(samp)\n\n[1] 1.252261\n\n# Plot density\nlibrary(ggplot2)\nggplot(data = data.frame(x = samp),\n       mapping = aes(x = x)) +\n  geom_density() +\n  theme_classic()\n\n\n\n\n\nThe Monte Carlo acceptance rate is 1.25, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits."
+    "text": "Consider the Laplace family of distribution, \\(\\mathsf{La}(\\nu, \\tau)\\), with density \\[\\begin{align*}\ng(x; \\nu, \\tau) = \\frac{1}{2\\tau} \\exp\\left(- \\frac{|x-\\nu|}{\\tau}\\right), \\qquad \\nu \\in \\mathbb{R}, \\tau &gt; 0\n\\end{align*}\\] as a candidate distribution for rejection sampling from \\(\\mathsf{No}(0,1)\\).\n\nProvide an inversion sampling algorithm to generate from \\(\\mathsf{La}(\\nu, \\tau)\\).\nCan you use the proposal to generate from a standard Gaussian? for Student-\\(t\\) with 1 degree of freedom? Justify your answer.\nConsider as proposal a location-scale version of the Student-t with \\(\\nu=3\\) degrees of freedom. Find the optimal location and scale parameters and the upper bound \\(C\\) for your choice.\nUse the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.\n\n\nSolution. \n\nThe distribution function is \\[\\begin{align*}\nF(x) = \\begin{cases}\n\\frac{1}{2} \\exp\\left(\\frac{x-\\nu}{\\tau}\\right) & x \\leq \\nu\\\\\n1 - \\frac{1}{2} \\exp\\left(-\\frac{x-\\nu}{\\tau}\\right) & x &gt;\\nu\\\\\n\\end{cases}\n\\end{align*}\\] and using the quantile transform, set \\(X=\\nu + \\tau \\log(2U)\\) if \\(U \\leq 0.5\\) and \\(X=\\nu - \\tau\\log(2-2U)\\) if \\(U &gt; 0.5\\) for \\(U \\sim \\mathsf{U}(0,1)\\).\nThe Gaussian has lighter tail than the Laplace, so this won’t work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.\nThe optimal value for the location of the Student-\\(t\\) would be \\(\\nu\\) (here zero for the standard Laplace). We compute the optimal scale via in the code below: \\[\n\\mathrm{argmax}_{\\sigma \\in \\mathbb{R}_{+}}\\mathrm{argmin}_{x \\in \\mathbb{R}} \\{\\log f(x) - \\log g(x; \\sigma)\\}\n\\]\n\n\n#' Laplace density\ndlaplace &lt;- function(x, loc = 0, scale = 1, log = FALSE){\n stopifnot(scale &gt; 0)\n logdens &lt;-  -log(2*scale) - abs(x-loc)/scale\n if(log){\n return(logdens)\n } else{\n return(exp(logdens))\n }\n}\ndstudent &lt;- function(x, loc = 0, scale = 1, df = 1, log = FALSE){\n  logdens &lt;- -log(scale) + dt(x = (x - loc)/scale, df = df, log = TRUE)\n   if(log){\n    return(logdens)\n   } else{\n   return(exp(logdens))\n   }\n}\n# For each value of the scale sigma,\n# find the minimum value of x (typically at zero)\nopt &lt;- optimize(f = function(sigma){\n  optimize(f = function(x){\n  dlaplace(x, log = TRUE) - \n    dstudent(x, scale = sigma, df = 3, log = TRUE)}, \n  maximum = TRUE, \n  interval = c(-100, 100))$objective\n}, interval = c(0.1,10))\n(C &lt;- exp(opt$objective))\n\n[1] 1.261368\n\n(sigma &lt;- opt$minimum)\n\n[1] 0.9272381\n\n# Simulate from accept-reject\nntrials &lt;- 1.1*C*1000\n# Simulate from location-scale student\ncandidate &lt;- sigma*rt(n = ntrials, df = 3)\n# Compute log of acceptance rate\nlogR &lt;- dlaplace(candidate, log = TRUE) - \n  dstudent(candidate, scale = sigma, df = 3, log = TRUE) \nsamp &lt;- candidate[logR &gt;= log(C) + -rexp(ntrials)]\n# Monte Carlo estimator of the acceptance rate\nntrials/length(samp)\n\n[1] 1.237738\n\n# Plot density\nlibrary(ggplot2)\nggplot(data = data.frame(x = samp),\n       mapping = aes(x = x)) +\n  geom_density() +\n  theme_classic()\n\n\n\n\n\nThe Monte Carlo acceptance rate is 1.24, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits."
   },
   {
     "objectID": "exercises/03-solution.html#exercise-3.1",
     "href": "exercises/03-solution.html#exercise-3.1",
     "title": "Solution 3",
     "section": "",
-    "text": "Consider the Laplace family of distribution, \\(\\mathsf{La}(\\nu, \\tau)\\), with density \\[\\begin{align*}\ng(x; \\nu, \\tau) = \\frac{1}{2\\tau} \\exp\\left(- \\frac{|x-\\nu|}{\\tau}\\right), \\qquad \\nu \\in \\mathbb{R}, \\tau &gt; 0\n\\end{align*}\\] as a candidate distribution for rejection sampling from \\(\\mathsf{No}(0,1)\\).\n\nProvide an inversion sampling algorithm to generate from \\(\\mathsf{La}(\\nu, \\tau)\\).\nCan you use the proposal to generate from a standard Gaussian? for Student-\\(t\\) with 1 degree of freedom? Justify your answer.\nConsider as proposal a location-scale version of the Student-t with \\(\\nu=3\\) degrees of freedom. Find the optimal location and scale parameters and the upper bound \\(C\\) for your choice.\nUse the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.\n\n\nSolution. \n\nThe distribution function is \\[\\begin{align*}\nF(x) = \\begin{cases}\n\\frac{1}{2} \\exp\\left(\\frac{x-\\nu}{\\tau}\\right) & x \\leq \\nu\\\\\n1 - \\frac{1}{2} \\exp\\left(-\\frac{x-\\nu}{\\tau}\\right) & x &gt;\\nu\\\\\n\\end{cases}\n\\end{align*}\\] and using the quantile transform, set \\(X=\\nu + \\tau \\log(2U)\\) if \\(U \\leq 0.5\\) and \\(X=\\nu - \\tau\\log(2-2U)\\) if \\(U &gt; 0.5\\) for \\(U \\sim \\mathsf{U}(0,1)\\).\nThe Gaussian has lighter tail than the Laplace, so this won’t work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.\nThe optimal value for the location of the Student-\\(t\\) would be \\(\\nu\\) (here zero for the standard Laplace). We compute the optimal scale via in the code below: \\[\n\\mathrm{argmax}_{\\sigma \\in \\mathbb{R}_{+}}\\mathrm{argmin}_{x \\in \\mathbb{R}} \\{\\log f(x) - \\log g(x; \\sigma)\\}\n\\]\n\n\n#' Laplace density\ndlaplace &lt;- function(x, loc = 0, scale = 1, log = FALSE){\n stopifnot(scale &gt; 0)\n logdens &lt;-  -log(2*scale) - abs(x-loc)/scale\n if(log){\n return(logdens)\n } else{\n return(exp(logdens))\n }\n}\ndstudent &lt;- function(x, loc = 0, scale = 1, df = 1, log = FALSE){\n  logdens &lt;- -log(scale) + dt(x = (x - loc)/scale, df = df, log = TRUE)\n   if(log){\n    return(logdens)\n   } else{\n   return(exp(logdens))\n   }\n}\n# For each value of the scale sigma,\n# find the minimum value of x (typically at zero)\nopt &lt;- optimize(f = function(sigma){\n  optimize(f = function(x){\n  dlaplace(x, log = TRUE) - \n    dstudent(x, scale = sigma, df = 3, log = TRUE)}, \n  maximum = TRUE, \n  interval = c(-100, 100))$objective\n}, interval = c(0.1,10))\n(C &lt;- exp(opt$objective))\n\n[1] 1.261368\n\n(sigma &lt;- opt$minimum)\n\n[1] 0.9272381\n\n# Simulate from accept-reject\nntrials &lt;- 1.1*C*1000\n# Simulate from location-scale student\ncandidate &lt;- sigma*rt(n = ntrials, df = 3)\n# Compute log of acceptance rate\nlogR &lt;- dlaplace(candidate, log = TRUE) - \n  dstudent(candidate, scale = sigma, df = 3, log = TRUE) \nsamp &lt;- candidate[logR &gt;= log(C) + -rexp(ntrials)]\n# Monte Carlo estimator of the acceptance rate\nntrials/length(samp)\n\n[1] 1.252261\n\n# Plot density\nlibrary(ggplot2)\nggplot(data = data.frame(x = samp),\n       mapping = aes(x = x)) +\n  geom_density() +\n  theme_classic()\n\n\n\n\n\nThe Monte Carlo acceptance rate is 1.25, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits."
+    "text": "Consider the Laplace family of distribution, \\(\\mathsf{La}(\\nu, \\tau)\\), with density \\[\\begin{align*}\ng(x; \\nu, \\tau) = \\frac{1}{2\\tau} \\exp\\left(- \\frac{|x-\\nu|}{\\tau}\\right), \\qquad \\nu \\in \\mathbb{R}, \\tau &gt; 0\n\\end{align*}\\] as a candidate distribution for rejection sampling from \\(\\mathsf{No}(0,1)\\).\n\nProvide an inversion sampling algorithm to generate from \\(\\mathsf{La}(\\nu, \\tau)\\).\nCan you use the proposal to generate from a standard Gaussian? for Student-\\(t\\) with 1 degree of freedom? Justify your answer.\nConsider as proposal a location-scale version of the Student-t with \\(\\nu=3\\) degrees of freedom. Find the optimal location and scale parameters and the upper bound \\(C\\) for your choice.\nUse the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.\n\n\nSolution. \n\nThe distribution function is \\[\\begin{align*}\nF(x) = \\begin{cases}\n\\frac{1}{2} \\exp\\left(\\frac{x-\\nu}{\\tau}\\right) & x \\leq \\nu\\\\\n1 - \\frac{1}{2} \\exp\\left(-\\frac{x-\\nu}{\\tau}\\right) & x &gt;\\nu\\\\\n\\end{cases}\n\\end{align*}\\] and using the quantile transform, set \\(X=\\nu + \\tau \\log(2U)\\) if \\(U \\leq 0.5\\) and \\(X=\\nu - \\tau\\log(2-2U)\\) if \\(U &gt; 0.5\\) for \\(U \\sim \\mathsf{U}(0,1)\\).\nThe Gaussian has lighter tail than the Laplace, so this won’t work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.\nThe optimal value for the location of the Student-\\(t\\) would be \\(\\nu\\) (here zero for the standard Laplace). We compute the optimal scale via in the code below: \\[\n\\mathrm{argmax}_{\\sigma \\in \\mathbb{R}_{+}}\\mathrm{argmin}_{x \\in \\mathbb{R}} \\{\\log f(x) - \\log g(x; \\sigma)\\}\n\\]\n\n\n#' Laplace density\ndlaplace &lt;- function(x, loc = 0, scale = 1, log = FALSE){\n stopifnot(scale &gt; 0)\n logdens &lt;-  -log(2*scale) - abs(x-loc)/scale\n if(log){\n return(logdens)\n } else{\n return(exp(logdens))\n }\n}\ndstudent &lt;- function(x, loc = 0, scale = 1, df = 1, log = FALSE){\n  logdens &lt;- -log(scale) + dt(x = (x - loc)/scale, df = df, log = TRUE)\n   if(log){\n    return(logdens)\n   } else{\n   return(exp(logdens))\n   }\n}\n# For each value of the scale sigma,\n# find the minimum value of x (typically at zero)\nopt &lt;- optimize(f = function(sigma){\n  optimize(f = function(x){\n  dlaplace(x, log = TRUE) - \n    dstudent(x, scale = sigma, df = 3, log = TRUE)}, \n  maximum = TRUE, \n  interval = c(-100, 100))$objective\n}, interval = c(0.1,10))\n(C &lt;- exp(opt$objective))\n\n[1] 1.261368\n\n(sigma &lt;- opt$minimum)\n\n[1] 0.9272381\n\n# Simulate from accept-reject\nntrials &lt;- 1.1*C*1000\n# Simulate from location-scale student\ncandidate &lt;- sigma*rt(n = ntrials, df = 3)\n# Compute log of acceptance rate\nlogR &lt;- dlaplace(candidate, log = TRUE) - \n  dstudent(candidate, scale = sigma, df = 3, log = TRUE) \nsamp &lt;- candidate[logR &gt;= log(C) + -rexp(ntrials)]\n# Monte Carlo estimator of the acceptance rate\nntrials/length(samp)\n\n[1] 1.237738\n\n# Plot density\nlibrary(ggplot2)\nggplot(data = data.frame(x = samp),\n       mapping = aes(x = x)) +\n  geom_density() +\n  theme_classic()\n\n\n\n\n\nThe Monte Carlo acceptance rate is 1.24, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits."
   },
   {
     "objectID": "exercises/03-solution.html#exercise-3.2",
     "href": "exercises/03-solution.html#exercise-3.2",
     "title": "Solution 3",
     "section": "Exercise 3.2",
-    "text": "Exercise 3.2\nWe revisit Exercise 1.3, which used a half-Cauchy prior for the exponential waiting time of buses.\nThe ratio-of-uniform method, implemented in the rust R package, can be used to simulate independent draws from the posterior of the rate \\(\\lambda\\). The following code produces\n\nnobs &lt;- 10L # number of observations\nybar &lt;- 8   # average waiting time\nB &lt;- 1000L  # number of draws\n# Un-normalized log posterior: scaled log likelihood + log prior\nupost &lt;- function(x){ \n  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +\n    log(2) + dt(x = x, df = 1, log = TRUE)}\npost_samp &lt;- rust::ru(logf = upost, \n                      n = B, \n                      d = 1,  # dimension of parameter (scalar)\n                      init = nobs/ybar)$sim_vals # initial value of mode\n\nEstimate using the Monte Carlo sample:\n\nthe probability that the waiting time is between 3 and 15 minutes\nthe average waiting time\nthe standard deviation of the waiting time\n\n\nSolution. \n\n# Lambda is the reciprocal mean (1/minute)\ntimes &lt;- 1/post_samp\nmean(times &gt; 3 & times &lt; 15)\n\n[1] 0.987\n\nmean(times)\n\n[1] 8.031375\n\nsd(times)\n\n[1] 2.53749\n\n\n\nNext, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.\n\nB &lt;- 1e4L\ncurr &lt;- 8/10 # prior mean\nchains &lt;- numeric(B) # container\nsd_prop &lt;- 0.1\nfor(b in seq_len(B)){\n  prop &lt;- rnorm(n = 1, mean = curr, sd = sd_prop)\n  if(upost(prop) - upost(curr) &gt; -rexp(1)){\n    curr &lt;- prop\n  }\n  chains[b] &lt;- curr\n}\n# Discard burn-in\ntimes &lt;- 1/chains[-(1:100)]\nmean(times &gt; 3 & times &lt; 15)\n\n[1] 0.9764646\n\nmean(times)\n\n[1] 8.034626\n\nsd(times)\n\n[1] 2.619788\n\n# Summary of MCMC\nmcmc &lt;- coda::mcmc(chains)\nsummary(mcmc)\n\n\nIterations = 1:10000\nThinning interval = 1 \nNumber of chains = 1 \nSample size per chain = 10000 \n\n1. Empirical mean and standard deviation for each variable,\n   plus standard error of the mean:\n\n          Mean             SD       Naive SE Time-series SE \n     0.1373035      0.0445814      0.0004458      0.0012284 \n\n2. Quantiles for each variable:\n\n   2.5%     25%     50%     75%   97.5% \n0.06726 0.10784 0.13248 0.16139 0.23015"
+    "text": "Exercise 3.2\nWe revisit Exercise 1.3, which used a half-Cauchy prior for the exponential waiting time of buses.\nThe ratio-of-uniform method, implemented in the rust R package, can be used to simulate independent draws from the posterior of the rate \\(\\lambda\\). The following code produces\n\nnobs &lt;- 10L # number of observations\nybar &lt;- 8   # average waiting time\nB &lt;- 1000L  # number of draws\n# Un-normalized log posterior: scaled log likelihood + log prior\nupost &lt;- function(x){ \n  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +\n    log(2) + dt(x = x, df = 1, log = TRUE)}\npost_samp &lt;- rust::ru(logf = upost, \n                      n = B, \n                      d = 1,  # dimension of parameter (scalar)\n                      init = nobs/ybar)$sim_vals # initial value of mode\n\nEstimate using the Monte Carlo sample:\n\nthe probability that the waiting time is between 3 and 15 minutes\nthe average waiting time\nthe standard deviation of the waiting time\n\n\nSolution. \n\n# Lambda is the reciprocal mean (1/minute)\ntimes &lt;- 1/post_samp\nmean(times &gt; 3 & times &lt; 15)\n\n[1] 0.983\n\nmean(times)\n\n[1] 8.019044\n\nsd(times)\n\n[1] 2.718529\n\n\n\nNext, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.\n\nB &lt;- 1e4L\ncurr &lt;- 8/10 # prior mean\nchains &lt;- numeric(B) # container\nsd_prop &lt;- 0.1\nfor(b in seq_len(B)){\n  prop &lt;- rnorm(n = 1, mean = curr, sd = sd_prop)\n  if(upost(prop) - upost(curr) &gt; -rexp(1)){\n    curr &lt;- prop\n  }\n  chains[b] &lt;- curr\n}\n# Discard burn-in\ntimes &lt;- 1/chains[-(1:100)]\nmean(times &gt; 3 & times &lt; 15)\n\n[1] 0.9759596\n\nmean(times)\n\n[1] 8.108757\n\nsd(times)\n\n[1] 2.66034\n\n# Summary of MCMC\nmcmc &lt;- coda::mcmc(chains)\nsummary(mcmc)\n\n\nIterations = 1:10000\nThinning interval = 1 \nNumber of chains = 1 \nSample size per chain = 10000 \n\n1. Empirical mean and standard deviation for each variable,\n   plus standard error of the mean:\n\n          Mean             SD       Naive SE Time-series SE \n     0.1355660      0.0421769      0.0004218      0.0010339 \n\n2. Quantiles for each variable:\n\n   2.5%     25%     50%     75%   97.5% \n0.06707 0.10729 0.13195 0.15895 0.22644"
   },
   {
     "objectID": "exercises/03-solution.html#exercise-3.3",
     "href": "exercises/03-solution.html#exercise-3.3",
     "title": "Solution 3",
     "section": "Exercise 3.3",
-    "text": "Exercise 3.3\nRepeat the simulations in Example 3.6, this time with a parametrization in terms of log rates \\(\\lambda_i\\) \\((i=1,2)\\), with the same priors. Use a Metropolis–Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.\n\nTune the variance to reach an approximate acceptance rate of 0.44.\nProduce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See bayesplot or coda. Comment on the convergence and mixing of your Markov chain Monte Carlo.\nReport summary statistics of the chains.\n\n\nSolution. The only thing we need to do is change the parametrization, and add tuning of the variance.\n\ndata(upworthy_question, package = \"hecbayes\")\n# Compute sufficient statistics\ndata &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(ntot = sum(impressions),\n                   y = sum(clicks))\n# Code log posterior as sum of log likelihood and log prior\nloglik &lt;- function(par, counts = data$y, offset = data$ntot, ...){\n  lambda &lt;- exp(c(par[1] + log(offset[1]), par[2] + log(offset[2])))\n sum(dpois(x = counts, lambda = lambda, log = TRUE))\n}\nlogprior &lt;- function(par, ...){\n  sum(dnorm(x = par, mean = log(0.01), sd = 1.5, log = TRUE))\n}\nlogpost &lt;- function(par, ...){\n  loglik(par, ...) + logprior(par, ...)\n}\n# Compute maximum a posteriori (MAP)\nmap &lt;- optim(\n  par = rep(-4, 2),\n  fn = logpost,\n  control = list(fnscale = -1),\n  offset = data$ntot,\n  counts = data$y,\n  hessian = TRUE)\n# Use MAP as starting value\ncur &lt;- map$par\n# Compute logpost_cur - we can keep track of this to reduce calculations\nlogpost_cur &lt;- logpost(cur)\n# Proposal covariance\ncov_map &lt;- -2*solve(map$hessian)\nchol &lt;- chol(cov_map)\n\nset.seed(80601)\nniter &lt;- 1e4L\nnchains &lt;- 4L\nnpar &lt;- 2L\nchain &lt;- array(0, dim = c(niter, nchains, npar))\nnaccept &lt;- 0L\nfor(j in 1:nchains){\n  for(i in seq_len(niter)){\n    # Multivariate normal proposal - symmetric random walk\n    prop &lt;- chol %*% rnorm(n = 2)/1.05 + cur\n    logpost_prop &lt;- logpost(prop)\n    # Compute acceptance ratio (no q because the ratio is 1)\n    logR &lt;- logpost_prop - logpost_cur\n    if(logR &gt; -rexp(1)){\n      cur &lt;- prop\n      logpost_cur &lt;- logpost_prop\n      naccept &lt;- naccept + 1L\n    }\n    chain[i,j,] &lt;- cur\n  }\n}\n# Acceptance rate\nnaccept/(nchains * niter)\n\n[1] 0.44355\n\n# Create some summary graphs\nlibrary(bayesplot)\n\nThis is bayesplot version 1.10.0\n\n\n- Online documentation and vignettes at mc-stan.org/bayesplot\n\n\n- bayesplot theme set to bayesplot::theme_default()\n\n\n   * Does _not_ affect other ggplot2 plots\n\n\n   * See ?bayesplot_theme_set for details on theme setting\n\n# Name chains so that the graphs can be labelled\ndimnames(chain)[[3]] &lt;- c(\"lambda[1]\",\"lambda[2]\")\n\n# Trace plots, correlograms, density plots and bivariate scatterplot\nbayesplot::mcmc_trace(chain)\n\n\n\nbayesplot::mcmc_acf_bar(chain)\n\nWarning: The `facets` argument of `facet_grid()` is deprecated as of ggplot2 2.2.0.\nℹ Please use the `rows` argument instead.\nℹ The deprecated feature was likely used in the bayesplot package.\n  Please report the issue at &lt;https://github.com/stan-dev/bayesplot/issues/&gt;.\n\n\n\n\nbayesplot::mcmc_dens(chain)\n\n\n\nbayesplot::mcmc_scatter(chain)\n\n\n\n# Posterior summaries with coda\n# Need to create a list of mcmc objects...\nmcmc_list &lt;- coda::as.mcmc.list(\n    lapply(seq_len(nchains),\n           function(ch) coda::as.mcmc(chain[, ch, ])))\nsummary(mcmc_list)\n\n\nIterations = 1:10000\nThinning interval = 1 \nNumber of chains = 4 \nSample size per chain = 10000 \n\n1. Empirical mean and standard deviation for each variable,\n   plus standard error of the mean:\n\n            Mean       SD  Naive SE Time-series SE\nlambda[1] -4.513 0.001730 8.648e-06      2.384e-05\nlambda[2] -4.442 0.001192 5.962e-06      1.670e-05\n\n2. Quantiles for each variable:\n\n            2.5%    25%    50%    75%  97.5%\nlambda[1] -4.516 -4.514 -4.513 -4.511 -4.509\nlambda[2] -4.444 -4.443 -4.442 -4.441 -4.440"
+    "text": "Exercise 3.3\nRepeat the simulations in Example 3.6, this time with a parametrization in terms of log rates \\(\\lambda_i\\) \\((i=1,2)\\), with the same priors. Use a Metropolis–Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.\n\nTune the variance to reach an approximate acceptance rate of 0.44.\nProduce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See bayesplot or coda. Comment on the convergence and mixing of your Markov chain Monte Carlo.\nReport summary statistics of the chains.\n\n\nSolution. The only thing we need to do is change the parametrization, and add tuning of the variance.\n\ndata(upworthy_question, package = \"hecbayes\")\n# Compute sufficient statistics\ndata &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(ntot = sum(impressions),\n                   y = sum(clicks))\n# Code log posterior as sum of log likelihood and log prior\nloglik &lt;- function(par, counts = data$y, offset = data$ntot, ...){\n  lambda &lt;- exp(c(par[1] + log(offset[1]), par[2] + log(offset[2])))\n sum(dpois(x = counts, lambda = lambda, log = TRUE))\n}\nlogprior &lt;- function(par, ...){\n  sum(dnorm(x = par, mean = log(0.01), sd = 1.5, log = TRUE))\n}\nlogpost &lt;- function(par, ...){\n  loglik(par, ...) + logprior(par, ...)\n}\n# Compute maximum a posteriori (MAP)\nmap &lt;- optim(\n  par = rep(-4, 2),\n  fn = logpost,\n  control = list(fnscale = -1),\n  offset = data$ntot,\n  counts = data$y,\n  hessian = TRUE)\n# Use MAP as starting value\ncur &lt;- map$par\n# Compute logpost_cur - we can keep track of this to reduce calculations\nlogpost_cur &lt;- logpost(cur)\n# Proposal covariance\ncov_map &lt;- -2*solve(map$hessian)\nchol &lt;- chol(cov_map)\n\nset.seed(80601)\nniter &lt;- 1e4L\nnchains &lt;- 4L\nnpar &lt;- 2L\nchain &lt;- array(0, dim = c(niter, nchains, npar))\nnaccept &lt;- 0L\nfor(j in 1:nchains){\n  for(i in seq_len(niter)){\n    # Multivariate normal proposal - symmetric random walk\n    prop &lt;- chol %*% rnorm(n = 2)/1.05 + cur\n    logpost_prop &lt;- logpost(prop)\n    # Compute acceptance ratio (no q because the ratio is 1)\n    logR &lt;- logpost_prop - logpost_cur\n    if(logR &gt; -rexp(1)){\n      cur &lt;- prop\n      logpost_cur &lt;- logpost_prop\n      naccept &lt;- naccept + 1L\n    }\n    chain[i,j,] &lt;- cur\n  }\n}\n# Acceptance rate\nnaccept/(nchains * niter)\n\n[1] 0.44355\n\n# Create some summary graphs\nlibrary(bayesplot)\n# Name chains so that the graphs can be labelled\ndimnames(chain)[[3]] &lt;- c(\"lambda[1]\",\"lambda[2]\")\n\n# Trace plots, correlograms, density plots and bivariate scatterplot\nbayesplot::mcmc_trace(chain)\n\n\n\nbayesplot::mcmc_acf_bar(chain)\n\nWarning: The `facets` argument of `facet_grid()` is deprecated as of ggplot2 2.2.0.\nℹ Please use the `rows` argument instead.\nℹ The deprecated feature was likely used in the bayesplot package.\n  Please report the issue at &lt;https://github.com/stan-dev/bayesplot/issues/&gt;.\n\n\n\n\nbayesplot::mcmc_dens(chain)\n\n\n\nbayesplot::mcmc_scatter(chain)\n\n\n\n# Posterior summaries with coda\n# Need to create a list of mcmc objects...\nmcmc_list &lt;- coda::as.mcmc.list(\n    lapply(seq_len(nchains),\n           function(ch) coda::as.mcmc(chain[, ch, ])))\nsummary(mcmc_list)\n\n\nIterations = 1:10000\nThinning interval = 1 \nNumber of chains = 4 \nSample size per chain = 10000 \n\n1. Empirical mean and standard deviation for each variable,\n   plus standard error of the mean:\n\n            Mean       SD  Naive SE Time-series SE\nlambda[1] -4.513 0.001730 8.648e-06      2.384e-05\nlambda[2] -4.442 0.001192 5.962e-06      1.670e-05\n\n2. Quantiles for each variable:\n\n            2.5%    25%    50%    75%  97.5%\nlambda[1] -4.516 -4.514 -4.513 -4.511 -4.509\nlambda[2] -4.444 -4.443 -4.442 -4.441 -4.440"
   },
   {
     "objectID": "exercises/04-solution.html",

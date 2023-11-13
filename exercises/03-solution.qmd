@@ -168,6 +168,7 @@ Repeat the simulations in Example 3.6, this time with a parametrization in terms
 
 The only thing we need to do is change the parametrization, and add tuning of the variance.
 ```{r}
+#| message: false
 #| cache: true
 data(upworthy_question, package = "hecbayes")
 # Compute sufficient statistics

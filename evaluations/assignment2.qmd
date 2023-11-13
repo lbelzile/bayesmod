@@ -92,14 +92,14 @@ $Y_{i1}$ (respectively $Y_{i2}$) denote the number of accidents in 1961
 indicator equal to one if speed limits were enforced on day $i$ of year
 $j$. 
 \begin{align*}
-Y_{i1} &\sim \mathsf{Po}\{\exp(\delta_i + \alpha_1 \texttt{limit}_{i1})\},\\
-Y_{i2} &\sim\mathsf{Po}\{\exp(\delta_i + \gamma +  \alpha_2 \texttt{limit}_{i2})\}, \qquad i=1, \ldots, 92. 
+Y_{i1} &\sim \mathsf{Po}\{\exp(\delta_i + \beta +\alpha \texttt{limit}_{i1})\},\\
+Y_{i2} &\sim\mathsf{Po}\{\exp(\delta_i + \beta + \gamma +  \alpha \texttt{limit}_{i2})\}, \qquad i=1, \ldots, 92. 
 \end{align*}
 The nuisance parameters $\delta_1, \ldots, \delta_{92}$ control for changes in background number of accidents and are of no practical interest, while $\gamma$ denotes the change from 1961 to 1962. We are interested here in assessing changes in the number of accidents due to the policy, $\alpha$; of secondary interest is to determine whether there has been a decrease in the number of accident relative to 1961. 
 
-Use vague priors for $\gamma$ and $\alpha$ and use a random effect $\delta_i \sim \mathsf{No}(0, \tau^2)$ with a suitable prior for $\tau$.
+Use vague priors for $\beta$, $\gamma$ and $\alpha$. The random effect $\delta_i \sim \mathsf{No}(0, \tau^2)$ with a suitable prior for $\tau$.
 
-1. Using a variant of Metropolis--Hastings algorithm, obtain posterior draws for the parameters $$(\alpha_1, \alpha_2, \gamma, \delta_1, \ldots, \delta_{92}, \tau^2).$$ Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report these effective sample sizes.
+1. Using a Metropolis-within-Gibbs algorithm, obtain posterior draws for the parameters $$(\alpha_1, \alpha_2, \gamma, \delta_1, \ldots, \delta_{92}, \tau^2).$$ Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report these effective sample sizes.
 2. Produce trace plots of the Markov chains and correlograms for parameters $\alpha$, $\gamma$ and $\tau$. Comment on the quality of your sampler.
 3. Return the posterior mode, posterior mean and 89\% HPD region, in addition to density plot for the multiplicative effect on traffic, $\exp(\gamma)$. Comment on the effectiveness of the policy.
 4. Obtain a caterpillar plot of the parameters $\delta_i$ ($i=1,\ldots, 92$) as follows: 
