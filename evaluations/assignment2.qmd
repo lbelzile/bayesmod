@@ -99,9 +99,10 @@ The nuisance parameters $\delta_1, \ldots, \delta_{92}$ control for changes in b
 
 Use vague priors for $\beta$, $\gamma$ and $\alpha$. The random effect $\delta_i \sim \mathsf{No}(0, \tau^2)$ with a suitable prior for $\tau$.
 
-1. Using a Metropolis-within-Gibbs algorithm, obtain posterior draws for the parameters $$(\alpha_1, \alpha_2, \gamma, \delta_1, \ldots, \delta_{92}, \tau^2).$$ Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report these effective sample sizes.
+1. Otain posterior draws for the parameters $$(\alpha, \beta, \gamma, \delta_1, \ldots, \delta_{92}, \tau^2).$$ If you use a conjugate prior for $\tau^2$, you can use a Gibbs step for this parameter, but otherwise you will have to resort to a variant of Metropolis--Hastings.
+Perform enough simulations to obtain an effective sample size of 1000 for each parameter and report these effective sample sizes.
 2. Produce trace plots of the Markov chains and correlograms for parameters $\alpha$, $\gamma$ and $\tau$. Comment on the quality of your sampler.
-3. Return the posterior mode, posterior mean and 89\% HPD region, in addition to density plot for the multiplicative effect on traffic, $\exp(\gamma)$. Comment on the effectiveness of the policy.
+3. Return the posterior mode, posterior mean and 89\% HPD region, in addition to density plot for the multiplicative effect on traffic, $\exp(\alpha)$. Comment on the effectiveness of the policy.
 4. Obtain a caterpillar plot of the parameters $\delta_i$ ($i=1,\ldots, 92$) as follows: 
   a. obtain posterior mean for each random effect $\delta_i$ and sort them in increasing order
   b. for each parameter, obtain 80% equitailed credible intervals.
