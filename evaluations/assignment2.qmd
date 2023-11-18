@@ -112,14 +112,31 @@ Perform enough simulations to obtain an effective sample size of 1000 for each p
 ```{r}
 #| eval: false
 #| echo: true
-options(contrasts=c("contr.sum","contr.poly")) # sum-to-zero constraint for factors
 data(sweden, package = "hecbayes")
 mod <- glm(accidents ~ day + limit + year,
-               family = poisson("log"), data = sweden)
+           family = poisson("log"),
+           contrasts = list(day = "contr.sum"), # sum-to-zero constraint
+           data = sweden)
 fixef <- coef(mod)[substr(names(coef(mod)), 1,3) == "day"]
 fixef <- c(fixef, day92 = -sum(fixef))
 ```
-
+```{r}
+#| eval: false
+#| echo: false
+# Poisson mixed model
+remod <- lme4::glmer(
+  accidents ~ (1 | day) + limit + year,
+  family = poisson("log"),
+  data = sweden)
+randef <- unlist(lme4::ranef(remod)$day)
+library(ggplot2)
+ggplot(data = data.frame(re = randef, fe = fixef),
+       mapping = aes(x = fe, y = re)) +
+  geom_point() + 
+  geom_abline(slope = 1, intercept = 0) +
+  labs(x = "fixed effects", y = "random effects") +
+  theme_classic()
+```
 6. Perform a sensitivity analysis of your prior for $\tau$ by comparing with, e.g., a folded Student-$t$, the improper prior $\tau^{-1}$, an inverse gamma conditionally conjugate prior or a penalized complexity prior with different rate parameters. Comment on the robustness of your conclusions to the choice of prior for $\tau$.
 
 # 2.3 Predicting success in university based on high school and standardized tests
