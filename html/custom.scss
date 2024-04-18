@@ -44,13 +44,13 @@ $h6-font-size: $font-size-base * 0.8;
 $toc-font-size: 1.1rem;
 $sidebar-font-size: 1.1rem;
 $sidebar-font-size-section: 0.9rem;
-$sidebar-light-color: $rougef;
+$sidebar-light-color: $rougep;
 $sidebar-dark-color: $rougef;
-$link-color: $grisf;
-$link-hover-color: $grisp;
+$link-color: $rougef;
+$link-hover-color: $rougep;
 $code-color: $bleuhec;
 $code-bg: lighten($bleuhec, 90%);
-$navbar-hl: $grisf;
+$navbar-hl: $rougep;
 
 
 /*-- scss:rules --*/
@@ -66,13 +66,13 @@ ol {
 // Home page stuff
 .title-block {
   margin: 1em 0;
-  border-bottom: 3px solid $grisp;
   padding-bottom: 1em;
 }
 
 .course-details {
   margin: 0 0 1em;
-  border-bottom: 3px solid $grisp;
+  border-top: 3px solid $grisf;
+  border-bottom: 3px solid $grisf;
   padding-bottom: 1em;
 }
 
@@ -128,7 +128,7 @@ ol {
 .schedule-page h3 {
   text-align: center;
   margin-top: 3rem;
-  border-bottom: 3px solid $jaunef;
+  border-bottom: 3px solid $rougef;
   padding-bottom: 0.5rem;
 }
 
@@ -140,11 +140,11 @@ ol {
 }
 
 .bg-content {
-  background-color: $jaunef;
+  background-color: $rougef;
 }
 
 .bg-assignment {
-  background-color: $jaunef;
+  background-color: $rougef;
 }
 
 // Slightly larger buttons
@@ -192,7 +192,7 @@ main {
 // Increase font size in TOC
 #TOC {
   padding-bottom: 0.1em;
-  background-color: lighten($jaunep, 60%);
+  background-color: lighten($rougep, 60%);
 }
 
 #toc-title {
@@ -209,7 +209,7 @@ main {
 // Shrink blocks of code
 pre.text, pre.sourceCode, .cell-output pre {
   font-size: 0.775em;
-  color: $jaunef;
+  color: $rougep;
 }
 
 // Slight bottom margin to output

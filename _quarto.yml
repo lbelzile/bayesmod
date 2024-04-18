@@ -21,13 +21,13 @@ bibliography: files/bib/references.bib
 csl: files/bib/apa.csl
 
 website:
-  title: "Special topics in data science --- Bayesian modelling"
+  title: "Bayesian modelling"
   site-url: "https://lbelzile.github.io/bayesmod"
   description: "Hands on introduction to Bayesian data analysis. The course will cover the formulation, evaluation and comparison of Bayesian models through examples."
 
   navbar:
     pinned: true
-    background: "#f3d03e"
+    background: "#ff585d"
     right:
       - syllabus.qmd
 #      - schedule.qmd
@@ -35,8 +35,8 @@ website:
         file: content/index.qmd
       - text: "Exercises"
         file: exercises/index.qmd
-      - text: "Assignment"
-        file: evaluations/assignment2.qmd
+ #    - text: "Assignment"
+ #      file: evaluations/assignment2.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/MATH80601A/"
  #     - icon: box
