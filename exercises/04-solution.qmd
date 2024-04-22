@@ -76,7 +76,7 @@ We can see that the autocorrelation is minimal, so the sampler is quite efficien
 
 Implement the Bayesian LASSO for the `diabetes` cancer surgery from package `lars`.  Check @Park.Casella:2008 for the details of the Gibbs sampling.
 
-1. Fit the model for a range of values of $\lambda=0.237$ and produce parameter estimate paths to replicate Figure 2 of the paper.
+1. Fit the model for a range of values of $\lambda$ and produce parameter estimate paths to replicate Figure 2 of the paper.
 2. Check the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?
 3. Implement the method of section 3.1 from @Park.Casella:2008 by adding $\lambda$ as a parameter.
 4. For three models with different values of $\lambda$, compute the widely applicable information criterion (WAIC) and use it to assess predictive performance.
@@ -216,7 +216,7 @@ waic <- attr(lasso_empbayes, "waic")
 ```{r}
 #| eval: true
 #| echo: false
-#| fig-cap: "Standardized median posterior estimates of the coefficients for the Bayesian LASSOwith 95 percent equitailed credible intervals, with $\\lambda$ estimated using empirical Bayes. Ordinary least square estimates are denoted by crosses."
+#| fig-cap: "Standardized median posterior estimates of the coefficients for the Bayesian LASSO with 95 percent equitailed credible intervals, with $\\lambda$ estimated using empirical Bayes. Ordinary least square estimates are denoted by crosses."
 #| label: fig-parkcasellaf2
 xlabs <- factor(1:10, levels = 1:10, labels = colnames(diabetes$x))
 library(ggplot2)
