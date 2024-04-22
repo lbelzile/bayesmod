@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Bayesian modelling - Outline</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Bayesian modelling</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./syllabus.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Outline</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./content/index.html" rel="" target="">
+ <span class="menu-text">Content</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./exercises/index.html" rel="" target="">
+ <span class="menu-text">Exercises</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://lbelzile.github.io/MATH80601A/" rel="" target="">
+ <span class="menu-text">Notes</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#course-content" id="toc-course-content" class="nav-link active" data-scroll-target="#course-content">Course content</a></li>
+  <li><a href="#target-audience-and-prerequisites" id="toc-target-audience-and-prerequisites" class="nav-link" data-scroll-target="#target-audience-and-prerequisites">Target audience and prerequisites</a></li>
+  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials">Course materials</a>
+  <ul class="collapse">
+  <li><a href="#textbooks" id="toc-textbooks" class="nav-link" data-scroll-target="#textbooks">Textbooks</a></li>
+  <li><a href="#other-references" id="toc-other-references" class="nav-link" data-scroll-target="#other-references">Other references</a></li>
+  </ul></li>
+  <li><a href="#course-content-1" id="toc-course-content-1" class="nav-link" data-scroll-target="#course-content-1">Course content</a>
+  <ul class="collapse">
+  <li><a href="#student-hours" id="toc-student-hours" class="nav-link" data-scroll-target="#student-hours">Student hours</a></li>
+  <li><a href="#intellectual-integrity" id="toc-intellectual-integrity" class="nav-link" data-scroll-target="#intellectual-integrity">Intellectual integrity</a></li>
+  <li><a href="#student-services" id="toc-student-services" class="nav-link" data-scroll-target="#student-services">Student services</a></li>
+  <li><a href="#harassment-and-sexual-violence" id="toc-harassment-and-sexual-violence" class="nav-link" data-scroll-target="#harassment-and-sexual-violence">Harassment and sexual violence</a></li>
+  <li><a href="#family-policy" id="toc-family-policy" class="nav-link" data-scroll-target="#family-policy">Family policy</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Outline</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="grid course-details course-details-smaller">
+<section id="instructor" class="level3 g-col-6">
+<h3 class="anchored" data-anchor-id="instructor">Instructor</h3>
+<ul>
+<li><i class="fa-solid fa-user" aria-hidden="true"></i> &nbsp; <a href="https://www.lbelzile.bitbucket.io">Dr.&nbsp;Léo Belzile</a></li>
+<li><i class="fa-solid fa-university" aria-hidden="true"></i> &nbsp; 4.850, Côte-Sainte-Catherine</li>
+<li><i class="fa-solid fa-envelope" aria-hidden="true"></i> &nbsp; <a href="mailto:leo.belzile@hec.ca">leo.belzile@hec.ca</a></li>
+</ul>
+</section>
+<section id="course-details" class="level3 g-col-6">
+<h3 class="anchored" data-anchor-id="course-details">Course details</h3>
+<ul>
+<li><i class="fa-solid fa-calendar-alt" aria-hidden="true"></i> &nbsp; Winter 2025</li>
+<li><i class="fa-solid fa-calendar" aria-hidden="true"></i> &nbsp; Monday</li>
+<li><i class="fa-solid fa-clock" aria-hidden="true"></i> &nbsp; 15:30-18:30</li>
+<li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> &nbsp; TBD</li>
+</ul>
+</section>
+</div>
+<section id="course-content" class="level1">
+<h1>Course content</h1>
+<p>Hands on introduction to Bayesian data analysis. The course will cover the formulation, evaluation and comparison of Bayesian models through examples.</p>
+<p>Mathematical review. Basics of Markov Chain Monte Carlo methods and sampling algorithms, with a focus on off the shelf software (e.g., OpenBugs, Stan, INLA). Approximation methods. Hierarchical modelling, with a focus on latent Gaussian models.</p>
+<p>Themes covered:</p>
+<ul>
+<li>Introduction to the Bayesian paradigm</li>
+<li>Formulation, comparison and evaluation of Bayesian models</li>
+<li>Sampling algorithms and Markov chain Monte Carlo methods</li>
+<li>Computational strategies for inference</li>
+<li>Hierarchical models</li>
+<li>Advanced topics</li>
+</ul>
+</section>
+<section id="target-audience-and-prerequisites" class="level1">
+<h1>Target audience and prerequisites</h1>
+<p>The course is part of the PhD program in Administration offered by HEC Montréal jointly with McGill, Concordia and Université du Québec à Montréal (UQÀM). Other Québec students can register via <a href="https://services.bci-qc.ca/eds/index_eds.html">BCI</a>.</p>
+</section>
+<section id="course-materials" class="level1">
+<h1>Course materials</h1>
+<p>I will provide slides and videos. In addition to those, there will be assigned readings from textbook and reference papers.</p>
+<section id="textbooks" class="level2">
+<h2 class="anchored" data-anchor-id="textbooks">Textbooks</h2>
+<p>I will assign readings from <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#ref-McElreath:2020" role="doc-biblioref">2020</a>)</span> and <span class="citation" data-cites="Johnson.Ott.Dogucu:2022">Johnson et al. (<a href="#ref-Johnson.Ott.Dogucu:2022" role="doc-biblioref">2022</a>)</span>, which is freely available <a href="https://www.bayesrulesbook.com/">online</a>.</p>
+<div class="grid">
+<div class="g-col-6">
+<div class="text-center">
+<p><a href="https://xcelab.net/rm/statistical-rethinking/"><strong>Statistical Rethinking:<br>A Bayesian Course with Examples in R and Stan</strong></a></p>
+<p>R. McElreath</p>
+</div>
+<p><a href="https://xcelab.net/rm/statistical-rethinking/"></a></p><a href="https://xcelab.net/rm/statistical-rethinking/">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="files/img/rethinking-cover.jpg" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</a><p><a href="https://xcelab.net/rm/statistical-rethinking/"></a></p>
+</div>
+<div class="g-col-6">
+<div class="text-center">
+<p><a href="https://www.bayesrulesbook.com/"><strong>Bayes Rules!<br>An Introduction to Applied Bayesian Modeling</strong></a></p>
+<p>A.A. Johnson, M.Q. Ott, and M. Dogucu</p>
+</div>
+<p><a href="https://www.bayesrulesbook.com/"></a></p><a href="https://www.bayesrulesbook.com/">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="files/img/bayes-rules-cover.jpeg" class="img-fluid figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</a><p><a href="https://www.bayesrulesbook.com/"></a></p>
+</div>
+</div>
+<p>Course notes for the class can be found <a href="https://lbelzile.github.io/math80601a">online</a></p>
+</section>
+<section id="other-references" class="level2">
+<h2 class="anchored" data-anchor-id="other-references">Other references</h2>
+<p>There will occasionally be additional articles to read; links to these other resources will be included on the content page for that session.</p>
+</section>
+</section>
+<section id="course-content-1" class="level1">
+<h1>Course content</h1>
+<p>Below is a tentative schedule.</p>
+<p>Week 1: <strong>Tools of the trade</strong></p>
+<ul>
+<li>Review of probability distributions</li>
+<li>Monte Carlo integration</li>
+<li>Likelihood based methods</li>
+<li>Bayes’ theorem and updating</li>
+<li>Marginalization and conditioning</li>
+</ul>
+<p>Week 2: <strong>Basics of Bayesian inference</strong></p>
+<ul>
+<li>Key concepts: prior, posterior and interpretation</li>
+<li>Predictive distributions</li>
+<li>Marginal likelihood and numerical integration</li>
+<li>Credible intervals, loss functions and posterior summaries</li>
+<li>The beta binomial conjugate model</li>
+</ul>
+<p>Week 3: <strong>Prior beliefs</strong></p>
+<ul>
+<li>Conjugate priors</li>
+<li>Flat and vague priors.</li>
+<li>Priors for scale parameters</li>
+<li>Parameter elicitation and <a href="http://www.jstor.org/stable/2986068">expert knowledge</a></li>
+<li>Penalized complexity prior</li>
+<li>Prior sensitivity analysis</li>
+</ul>
+<p>Week 4: <strong>Markov chain Monte Carlo methods</strong></p>
+<ul>
+<li>Basics of Markov chains</li>
+<li>Rejection sampling</li>
+<li>Slice sampling</li>
+<li>Metropolis–Hastings algorithm</li>
+</ul>
+<p>Week 5: <strong>Markov chain Monte Carlo methods</strong></p>
+<ul>
+<li>Gibbs sampling</li>
+<li>Reversible jumps</li>
+<li>Hamiltonian Monte Carlo</li>
+</ul>
+<p>Week 6: <strong>Regression models</strong></p>
+<ul>
+<li>Bayesian generalized linear model</li>
+<li>Random effects and pooling</li>
+</ul>
+<p>Week 7: <strong>Bayesian workflow and model diagnostics</strong></p>
+<ul>
+<li>Bayesian workflow</li>
+<li>Model diagnostics (WAIC, LOO-CV, etc.)</li>
+<li>Estimation from Markov chain</li>
+</ul>
+<p>Week 8: <strong>Computational strategies for MCMC</strong></p>
+<ul>
+<li>Model reparametrization</li>
+<li>Marginalization and joint updates</li>
+<li>Numerical approximations</li>
+<li>Optimal tuning of variance parameters</li>
+</ul>
+<p>Week 9: <strong>Hierarchical models</strong></p>
+<ul>
+<li>Multi-stage modelling</li>
+<li>Latent Gaussian models</li>
+<li>Applications to time series and spatial data</li>
+</ul>
+<p>Week 10: <strong>Deterministic approximations</strong></p>
+<ul>
+<li>Laplace approximation</li>
+<li>Integrated Laplace approximation</li>
+</ul>
+<p>Week 11: <strong>Variational inference</strong></p>
+<ul>
+<li>Gradient descent</li>
+<li>ELBO criterion and Kullback–Leibler divergence</li>
+<li>Variational Bayes</li>
+</ul>
+<p>Week 12: <strong>Final review</strong></p>
+<ul>
+<li>Expectation propagation</li>
+<li>Course recap</li>
+</ul>
+<section id="student-hours" class="level2">
+<h2 class="anchored" data-anchor-id="student-hours">Student hours</h2>
+<p>Wednesday afternoon from 13:00 until 16:00 or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.</p>
+<p>Please watch this video:</p>
+<iframe src="https://player.vimeo.com/video/270014784" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="" style="display: block; margin: 0 auto 1rem;">
+</iframe>
+<p>Student hours are set times dedicated to all of you (most professors call these “office hours”; I don’t<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>). This means that I will be in my office waiting for you to come by if you want to talk to me in person (or remotely) with whatever questions you have. This is the best and easiest way to find me and the best chance for discussing class material and concerns.</p>
+</section>
+<section id="intellectual-integrity" class="level2">
+<h2 class="anchored" data-anchor-id="intellectual-integrity">Intellectual integrity</h2>
+<p>Please don’t cheat! The <a href="https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/REG_intellectual-integrity-students-v2.pdf">official policy</a> lists the school rules regarding plagiarism and academic integrity.</p>
+</section>
+<section id="student-services" class="level2">
+<h2 class="anchored" data-anchor-id="student-services">Student services</h2>
+<p>Students with special needs should feel free to approach me so we can best discuss accommodations. Do check out <a href="https://www.hec.ca/en/students/support-resources/support-disabled-students/index.html">HEC Montréal’s disabled students</a> and [psychological] (https://www.hec.ca/en/students/support-resources/psychological-support/index.html) support services.</p>
+</section>
+<section id="harassment-and-sexual-violence" class="level2">
+<h2 class="anchored" data-anchor-id="harassment-and-sexual-violence">Harassment and sexual violence</h2>
+<p>The Center for Harassment Intervention (BIMH) is the unique access point for all members of the community subject to harassment or sexual violence. You can reach them at 514 343-7020 or by email at <a href="mailto:harcelement@hec.ca"><code>harcelement@hec.ca</code></a> from Monday until Friday, from 8:30 until 4:30pm.</p>
+<p>If you are in an emergency situation or fear for your safety, call emergency services at 911, followed by HEC Montréal security services at 514 340-6611.</p>
+<p><a href="https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/policy-to-prevent-and-fight-sexual-violence.pdf">Check the school official policy on these matters</a> for more details.</p>
+</section>
+<section id="family-policy" class="level2">
+<h2 class="anchored" data-anchor-id="family-policy">Family policy</h2>
+<p>HEC now has an <a href="https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/DIR_parents-etudes.pdf">official family policy</a>, but the following guidelines reflect my own beliefs and commitments towards parent students<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<ol type="1">
+<li>Babies are welcome in class as often as necessary for support feeding relationship.</li>
+<li>You are welcome to bring your child to class in order to cover unforeseeable gaps in childcare.</li>
+<li>If you come with babies or toddler, I ask that you sit close to the door so that, in case your little one needs special attention and is disrupting the learning of other students, you may step outside of class until their needs are met. Seats close to the door are reserved for parents attending class with their child.</li>
+</ol>
+<!-- # Evaluations and grades -->
+<!-- You can find descriptions for all the assignments on the [evaluations](/evaluations/) page. -->
+</section>
+</section>
+<section id="references" class="level1 unnumbered">
+
+
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Johnson.Ott.Dogucu:2022" class="csl-entry" role="listitem">
+Johnson, A. A., Ott, M. Q., &amp; Dogucu, M. (2022). <em>Bayes rules! An introduction to applied <span>B</span>ayesian modeling</em> (1st ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9780429288340">https://doi.org/10.1201/9780429288340</a>
+</div>
+<div id="ref-McElreath:2020" class="csl-entry" role="listitem">
+McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course with examples in <span>R</span> and <span>STAN</span></em> (2nd ed.). Chapman; Hall/CRC.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>There’s fairly widespread misunderstanding about what office hours actually are! <a href="https://www.chronicle.com/article/Can-This-Man-Change-How-Elite/245714/">Many students often think that they are the times I <em>shouldn’t</em> be disturbed</a>, which is the exact opposite of what they’re for!<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Shamelessly stolen/adapted from similar policy by Drs. Melissa Cheney, Guy Grossman and Rohan Alexander<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Content <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> 2023-2025 by <a href="https://www.lbelzile.bitbucket.io">Léo Belzile</a><br> Website template by <a href="https://www.andrewheiss.com/">Dr.&nbsp;Andrew Heiss</a> under <a href="https://mit-license.org/">MIT License</a><br> All content licensed under a <i class="fa-brands fa-creative-commons" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-by" aria-hidden="true"></i> <i class="fa-brands fa-creative-commons-nc" aria-hidden="true"></i> <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Made with <i class="fa-brands fa-r-project" aria-hidden="true"></i> and <a href="https://quarto.org/">Quarto</a><br> <a href="https://www.github.com/lbelzile/bayesmod">View the source at <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a></div>
+  </div>
+</footer>
+
+
+
+</body></html>

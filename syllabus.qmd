@@ -50,7 +50,7 @@ Themes covered:
 
 # Target audience and prerequisites
 
-The course is part of the PhD program in Administration offered by HEC Montréal jointly with McGill, Concordia and Université du Québec à Montréal (UQÀM).
+The course is part of the PhD program in Administration offered by HEC Montréal jointly with McGill, Concordia and Université du Québec à Montréal (UQÀM). Other Québec students can register via [BCI](https://services.bci-qc.ca/eds/index_eds.html).
 
 # Course materials
 
@@ -116,19 +116,26 @@ There will occasionally be additional articles to read; links to these other res
 
 # Course content
 
-Below is a tentative schedule for the Bayesian part. 
+Below is a tentative schedule. 
 
-Week 4: **Basics of Bayesian inference**
 
-<!-- - Bayes' theorem and updating -->
-- Probability
+Week 1: **Tools of the trade**
+
+- Review of probability distributions
+- Monte Carlo integration
+- Likelihood based methods
+- Bayes' theorem and updating
+- Marginalization and conditioning
+
+Week 2: **Basics of Bayesian inference**
+
 - Key concepts: prior, posterior and interpretation
 - Predictive distributions
 - Marginal likelihood and numerical integration
 - Credible intervals, loss functions and posterior summaries
 - The beta binomial conjugate model
 
-Week 5: **Prior beliefs**
+Week 3: **Prior beliefs**
 
 - Conjugate priors
 - Flat and vague priors.
@@ -138,17 +145,61 @@ Week 5: **Prior beliefs**
 - Prior sensitivity analysis
 
  
-Week 6: **Markov chain Monte Carlo**
+Week 4: **Markov chain Monte Carlo methods**
 
-- Monte Carlo algorithms
-- Basics on Markov chains
+- Basics of Markov chains
+- Rejection sampling
+- Slice sampling
 - Metropolis--Hastings algorithm
 
-Week 7: **Regression models**
+Week 5: **Markov chain Monte Carlo methods**
 
-- Gibbs sampling and conjugate models
-- Hierarchical modelling
-- Bayesian workflow and model diagnostics
+- Gibbs sampling
+- Reversible jumps
+- Hamiltonian Monte Carlo
+
+Week 6: **Regression models**
+
+- Bayesian generalized linear model
+- Random effects and pooling
+
+Week 7: **Bayesian workflow and model diagnostics**
+
+- Bayesian workflow
+- Model diagnostics (WAIC, LOO-CV, etc.)
+- Estimation from Markov chain
+
+Week 8: **Computational strategies for MCMC**
+
+- Model reparametrization
+- Marginalization and joint updates
+- Numerical approximations
+- Optimal tuning of variance parameters
+
+Week 9: **Hierarchical models**
+
+- Multi-stage modelling
+- Latent Gaussian models
+- Applications to time series and spatial data
+
+Week 10: **Deterministic approximations**
+
+- Laplace approximation
+- Integrated Laplace approximation
+
+Week 11: **Variational inference**
+
+- Gradient descent
+- ELBO criterion and Kullback--Leibler divergence
+- Variational Bayes
+
+
+Week 12: **Final review**
+
+- Expectation propagation
+- Course recap
+
+
 
 ## Student hours
 
@@ -179,7 +230,8 @@ If you are in an emergency situation or fear for your safety, call emergency ser
 
 ## Family policy
 
-HEC does not have an official family policy, so the following guidelines reflect my own beliefs and commitments towards parent students^[Shamelessly stolen/adapted from similar policy by Drs. Melissa Cheney, Guy Grossman and Rohan Alexander]
+
+HEC now has an [official family policy](https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/DIR_parents-etudes.pdf), but the following guidelines reflect my own beliefs and commitments towards parent students^[Shamelessly stolen/adapted from similar policy by Drs. Melissa Cheney, Guy Grossman and Rohan Alexander]
 
 1. Babies are welcome in class as often as necessary for support feeding relationship.
 2. You are welcome to bring your child to class in order to cover unforeseeable gaps in childcare. 
