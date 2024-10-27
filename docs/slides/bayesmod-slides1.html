@@ -8,7 +8,7 @@
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.5.56">
 
   <meta name="author" content="Léo Belzile, HEC Montréal">
   <meta name="dcterms.date" content="2024-01-01">
@@ -32,7 +32,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -43,7 +43,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -71,7 +71,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -85,7 +85,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -99,6 +99,7 @@
     div.csl-bib-body { }
     div.csl-entry {
       clear: both;
+      margin-bottom: 0em;
     }
     .hanging-indent div.csl-entry {
       margin-left:2em;
@@ -241,7 +242,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -433,8 +435,7 @@ Léo Belzile, HEC Montréal
 </blockquote>
 </div><div class="column" style="width:40%;">
 <p><img data-src="fig/dice.png"></p>
-</div>
-</div>
+</div></div>
 </section>
 <section id="what-is-probability" class="slide level2">
 <h2>What is probability?</h2>
@@ -474,8 +475,7 @@ Léo Belzile, HEC Montréal
 </ul></li>
 <li>Target is a distribution</li>
 </ul>
-</div>
-</div>
+</div></div>
 </section>
 <section id="joint-and-marginal-distribution" class="slide level2">
 <h2>Joint and marginal distribution</h2>
@@ -575,12 +575,16 @@ p(\theta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta) }\theta^{\
 <section id="density-versus-likelihood" class="slide level2 smaller">
 <h2>Density versus likelihood</h2>
 <p>The binomial distribution is discrete with support <span class="math inline">\(0, \ldots, n\)</span>, whereas the likelihood is continuous over <span class="math inline">\(\theta \in [0,1]\)</span>.</p>
-<div class="cell" data-hash="bayesmod-slides1_cache/revealjs/fig-binom-massvslik_aba0213bf09a5e6a222dc1310cc7b0be">
+<div class="cell">
 <div class="cell-output-display">
-<div id="fig-binom-massvslik" class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="bayesmod-slides1_files/figure-revealjs/fig-binom-massvslik-1.png" style="width:70.0%"></p>
-<figcaption>Figure&nbsp;1: Binomial density function (left) and scaled likelihood function (right).</figcaption>
+<div id="fig-binom-massvslik" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-binom-massvslik-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-binom-massvslik-1.png" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-binom-massvslik-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Binomial density function (left) and scaled likelihood function (right).
+</figcaption>
 </figure>
 </div>
 </div>
@@ -631,29 +635,23 @@ L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} \theta^{y}(1-\theta)^{n-y
 </div></aside></section>
 <section id="numerical-example-of-monte-carlo-integration" class="slide level2">
 <h2>Numerical example of (Monte Carlo) integration</h2>
-<div class="cell" data-hash="bayesmod-slides1_cache/revealjs/betabinom-calculate-marg-lik_b9f9cf58d9c0e6fa52c16a0c2ab60868">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>y <span class="ot">&lt;-</span> 6L <span class="co"># number of successes </span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>n <span class="ot">&lt;-</span> 14L <span class="co"># number of trials</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>alpha <span class="ot">&lt;-</span> beta <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="co"># prior parameters</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>unnormalized_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta){</span>
-<span id="cb1-5"><a href="#cb1-5"></a>  theta<span class="sc">^</span>(y<span class="sc">+</span>alpha<span class="dv">-1</span>) <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">^</span>(n<span class="sc">-</span>y <span class="sc">+</span> beta <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb1-6"><a href="#cb1-6"></a>}</span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="fu">integrate</span>(<span class="at">f =</span> unnormalized_posterior,</span>
-<span id="cb1-8"><a href="#cb1-8"></a>          <span class="at">lower =</span> <span class="dv">0</span>,</span>
-<span id="cb1-9"><a href="#cb1-9"></a>          <span class="at">upper =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>1.066906e-05 with absolute error &lt; 1e-12</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Compare with known constant</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">beta</span>(y <span class="sc">+</span> alpha, n <span class="sc">-</span> y <span class="sc">+</span> beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.066906e-05</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Monte Carlo integration</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">mean</span>(<span class="fu">unnormalized_posterior</span>(<span class="fu">runif</span>(<span class="fl">1e5</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.064055e-05</code></pre>
-</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>y <span class="ot">&lt;-</span> <span class="dv">6</span>L <span class="co"># number of successes </span></span>
+<span id="cb1-2"><a></a>n <span class="ot">&lt;-</span> <span class="dv">14</span>L <span class="co"># number of trials</span></span>
+<span id="cb1-3"><a></a>alpha <span class="ot">&lt;-</span> beta <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="co"># prior parameters</span></span>
+<span id="cb1-4"><a></a>unnormalized_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta){</span>
+<span id="cb1-5"><a></a>  theta<span class="sc">^</span>(y<span class="sc">+</span>alpha<span class="dv">-1</span>) <span class="sc">*</span> (<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">^</span>(n<span class="sc">-</span>y <span class="sc">+</span> beta <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb1-6"><a></a>}</span>
+<span id="cb1-7"><a></a><span class="fu">integrate</span>(<span class="at">f =</span> unnormalized_posterior,</span>
+<span id="cb1-8"><a></a>          <span class="at">lower =</span> <span class="dv">0</span>,</span>
+<span id="cb1-9"><a></a>          <span class="at">upper =</span> <span class="dv">1</span>)</span>
+<span id="cb1-10"><a></a><span class="do">## 1.07e-05 with absolute error &lt; 1e-12</span></span>
+<span id="cb1-11"><a></a><span class="co"># Compare with known constant</span></span>
+<span id="cb1-12"><a></a><span class="fu">beta</span>(y <span class="sc">+</span> alpha, n <span class="sc">-</span> y <span class="sc">+</span> beta)</span>
+<span id="cb1-13"><a></a><span class="do">## [1] 1.07e-05</span></span>
+<span id="cb1-14"><a></a><span class="co"># Monte Carlo integration</span></span>
+<span id="cb1-15"><a></a><span class="fu">mean</span>(<span class="fu">unnormalized_posterior</span>(<span class="fu">runif</span>(<span class="fl">1e5</span>)))</span>
+<span id="cb1-16"><a></a><span class="do">## [1] 1.06e-05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <!-- ## Marginal posterior -->
 <!-- In multi-parameter models, additional integration is needed to get the marginal posterior -->
@@ -665,7 +663,9 @@ L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} \theta^{y}(1-\theta)^{n-y
 <section id="prior-likelihood-and-posterior" class="slide level2">
 <h2>Prior, likelihood and posterior</h2>
 
-<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinom-likpost-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;2: Scaled Binomial likelihood for six successes out of 14 trials, <span class="math inline">\(\mathsf{Beta}(3/2, 3/2)\)</span> prior and corresponding posterior distribution from a beta-binomial model.</p></section>
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinom-likpost-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;2: Scaled Binomial likelihood for six successes out of 14 trials, <span class="math inline">\(\mathsf{Beta}(3/2, 3/2)\)</span> prior and corresponding posterior distribution from a beta-binomial model.
+</p></section>
 <section id="proper-prior" class="slide level2">
 <h2>Proper prior</h2>
 <p>We could define the posterior simply as the normalized product of the likelihood and some prior function.</p>
@@ -693,7 +693,9 @@ L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} \theta^{y}(1-\theta)^{n-y
 <section id="different-priors-give-different-posteriors" class="slide level2">
 <h2>Different priors give different posteriors</h2>
 
-<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinom-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;3: Scaled binomial likelihood for six successes out of 14 trials, with <span class="math inline">\(\mathsf{Beta}(3/2, 3/2)\)</span> prior (left), <span class="math inline">\(\mathsf{Beta}(1/4, 1/4)\)</span> (middle) and truncated uniform on <span class="math inline">\([0,1/2]\)</span> (right), with the corresponding posterior distributions.</p></section>
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinom-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;3: Scaled binomial likelihood for six successes out of 14 trials, with <span class="math inline">\(\mathsf{Beta}(3/2, 3/2)\)</span> prior (left), <span class="math inline">\(\mathsf{Beta}(1/4, 1/4)\)</span> (middle) and truncated uniform on <span class="math inline">\([0,1/2]\)</span> (right), with the corresponding posterior distributions.
+</p></section>
 <section id="role-of-the-prior" class="slide level2">
 <h2>Role of the prior</h2>
 <p>The posterior is beta, with expected value <span class="math display">\[\begin{align*}
@@ -721,7 +723,9 @@ L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} \theta^{y}(1-\theta)^{n-y
 <h2>Posterior concentration</h2>
 <p>Except for stubborn priors, the likelihood contribution dominates in large samples. The impact of the prior is then often negligible.</p>
 
-<img data-src="bayesmod-slides1_files/figure-revealjs/fig-sequential-1.png" width="1152" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;4: Beta posterior and binomial likelihood with a uniform prior for increasing number of observations (from left to right).</p></section>
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-sequential-1.png" width="1152" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;4: Beta posterior and binomial likelihood with a uniform prior for increasing number of observations (from left to right).
+</p></section>
 <section id="summarizing-posterior-distributions" class="slide level2">
 <h2>Summarizing posterior distributions</h2>
 <!-- In frequentist statistics, we focus on a point estimator $\widehat{\boldsymbol{\theta}}$, such as the maximum likelihood estimator, and attempt to derive it's distribution, often relying on approximate large-sample distributions. In contrast, t -->
@@ -779,17 +783,19 @@ p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \
 <section id="posterior-predictive-distribution" class="slide level2">
 <h2>Posterior predictive distribution</h2>
 
-<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinompostpred-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;5: Beta-binomial posterior predictive distribution with corresponding binomial mass function evaluated at the maximum likelihood estimator.</p></section>
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-betabinompostpred-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;5: Beta-binomial posterior predictive distribution with corresponding binomial mass function evaluated at the maximum likelihood estimator.
+</p></section>
 <section id="posterior-predictive-distribution-via-simulation" class="slide level2">
 <h2>Posterior predictive distribution via simulation</h2>
 <p>The posterior predictive carries over the parameter uncertainty so will typically be wider and overdispersed relative to the corresponding distribution.</p>
 <p>Given a draw <span class="math inline">\(\theta^*\)</span> from the posterior, simulate a new observation from the distribution <span class="math inline">\(f(y_{\text{new}}; \theta^*)\)</span>.</p>
-<div class="cell" data-hash="bayesmod-slides1_cache/revealjs/post-samp-betabinom_06a307d06cb94271a470f1f7765ffd9e">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>npost <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="co"># Sample draws from the posterior distribution</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>post_samp <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> npost, y <span class="sc">+</span> alpha, n <span class="sc">-</span> y <span class="sc">+</span> beta)</span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># For each draw, sample new observation</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>post_pred <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> npost, <span class="at">size =</span> n, <span class="at">prob =</span> post_samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>npost <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb2-2"><a></a><span class="co"># Sample draws from the posterior distribution</span></span>
+<span id="cb2-3"><a></a>post_samp <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> npost, y <span class="sc">+</span> alpha, n <span class="sc">-</span> y <span class="sc">+</span> beta)</span>
+<span id="cb2-4"><a></a><span class="co"># For each draw, sample new observation</span></span>
+<span id="cb2-5"><a></a>post_pred <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> npost, <span class="at">size =</span> n, <span class="at">prob =</span> post_samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 <aside><div>
@@ -821,11 +827,15 @@ p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \
 <section id="measures-of-central-tendency" class="slide level2">
 <h2>Measures of central tendency</h2>
 
-<img data-src="bayesmod-slides1_files/figure-revealjs/fig-central-moments-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;6: Point estimators from a right-skewed distribution (left) and from a multimodal distribution (right).</p></section>
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-central-moments-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;6: Point estimators from a right-skewed distribution (left) and from a multimodal distribution (right).
+</p></section>
 <section id="example-of-loss-functions" class="slide level2">
 <h2>Example of loss functions</h2>
 
-<img data-src="bayesmod-slides1_files/figure-revealjs/fig-losses-1.png" width="768" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;7: Posterior density with mean, mode and median point estimators (left) and corresponding loss functions, scaled to have minimum value of zero (right).</p></section>
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-losses-1.png" width="768" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;7: Posterior density with mean, mode and median point estimators (left) and corresponding loss functions, scaled to have minimum value of zero (right).
+</p></section>
 <section id="credible-regions" class="slide level2">
 <h2>Credible regions</h2>
 <p>The freshman dream comes true! A <span class="math inline">\(1-\alpha\)</span> credible region give a set of parameter values which contains the “true value” of the parameter <span class="math inline">\(\boldsymbol{\theta}\)</span> with probability <span class="math inline">\(1-\alpha\)</span>.</p>
@@ -848,15 +858,19 @@ p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \
 <section id="illustration-of-credible-regions" class="slide level2">
 <h2>Illustration of credible regions</h2>
 
-<img data-src="bayesmod-slides1_files/figure-revealjs/fig-credible-intervals-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Figure&nbsp;8: Density plots with 89% (top) and 50% (bottom) equitailed or central credible (left) and highest posterior density (right) regions for two data sets, highlighted in grey.</p></section>
+<img data-src="bayesmod-slides1_files/figure-revealjs/fig-credible-intervals-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">
+Figure&nbsp;8: Density plots with 89% (top) and 50% (bottom) equitailed or central credible (left) and highest posterior density (right) regions for two data sets, highlighted in grey.
+</p></section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
-
-<img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo r-stretch"><div class="footer footer-default">
+<div class="quarto-auto-generated-content">
+<p><img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo"></p>
+<div class="footer footer-default">
 
 </div>
-<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-Casella.Berger:2002" class="csl-entry" role="listitem">
 Casella, G., &amp; Berger, R. L. (2002). <em>Statistical inference</em> (2nd ed.). Duxbury.
 </div>
@@ -894,7 +908,6 @@ McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': true,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1149,18 +1162,7 @@ McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1192,11 +1194,50 @@ McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1206,8 +1247,17 @@ McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1221,7 +1271,11 @@ McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {

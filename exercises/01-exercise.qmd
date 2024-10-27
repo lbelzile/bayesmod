@@ -57,7 +57,7 @@ g1 <- ggplot() +
    scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
     scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
-    labs(y = "") + 
+    labs(y = "", x = "reciprocal expected waiting time") +
     theme_classic() 
 
 c <- integrate(function(x){dgamma(x, rate = sumt, shape = nobs + 1)/x^2}, lower = 1/10, upper = 1/5)$value
@@ -73,7 +73,7 @@ g2 <- ggplot() +
    scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
     scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
-    labs(y = "") + 
+    labs(y = "", x = "reciprocal expected waiting time") +
     theme_classic() 
 
 g3 <- ggplot() +
@@ -86,7 +86,7 @@ g3 <- ggplot() +
    scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
     scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
-    labs(y = "") + 
+    labs(y = "", x = "reciprocal expected waiting time") +
     theme_classic() 
 
 
@@ -100,7 +100,7 @@ g4 <- ggplot() +
    scale_x_continuous(limits = c(0,xlim),
                        expand = c(0,0)) +
     scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
-    labs(y = "") + 
+    labs(y = "", x = "reciprocal expected waiting time") +
     theme_classic() 
 (g4 + g1 + g2) +
   plot_annotation(tag_levels = 'A') 

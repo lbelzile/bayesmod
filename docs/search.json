@@ -133,5 +133,264 @@
       "Markov chain Monte Carlo",
       "Solution 4"
     ]
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#probability-vs-frequency",
+    "href": "slides/bayesmod-slides1.html#probability-vs-frequency",
+    "title": "Bayesian modelling",
+    "section": "Probability vs frequency",
+    "text": "Probability vs frequency\nIn frequentist statistic, “probability” is synonym for\n\n\n\nlong-term frequency under repeated sampling"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#what-is-probability",
+    "href": "slides/bayesmod-slides1.html#what-is-probability",
+    "title": "Bayesian modelling",
+    "section": "What is probability?",
+    "text": "What is probability?\nProbability reflects incomplete information.\nQuoting Finetti (1974)\n\nProbabilistic reasoning — always to be understood as subjective — merely stems from our being uncertain about something."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#why-opt-for-the-bayesian-paradigm",
+    "href": "slides/bayesmod-slides1.html#why-opt-for-the-bayesian-paradigm",
+    "title": "Bayesian modelling",
+    "section": "Why opt for the Bayesian paradigm?",
+    "text": "Why opt for the Bayesian paradigm?\n\nSatisfies the likelihood principle\nGenerative approach naturally extends to complex settings (hierarchical models)\nUncertainty quantification and natural framework for prediction\nCapability to incorporate subject-matter expertise"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#bayesian-versus-frequentist",
+    "href": "slides/bayesmod-slides1.html#bayesian-versus-frequentist",
+    "title": "Bayesian modelling",
+    "section": "Bayesian versus frequentist",
+    "text": "Bayesian versus frequentist\n\n\nFrequentist\n\nParameters treated as fixed, data as random\n\ntrue value of parameter \\(\\boldsymbol{\\theta}\\) is unknown.\n\nTarget is point estimator\n\n\nBayesian\n\nBoth parameters and data are random\n\ninference is conditional on observed data\n\nTarget is a distribution"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#joint-and-marginal-distribution",
+    "href": "slides/bayesmod-slides1.html#joint-and-marginal-distribution",
+    "title": "Bayesian modelling",
+    "section": "Joint and marginal distribution",
+    "text": "Joint and marginal distribution\nThe joint density of data \\(\\boldsymbol{Y}\\) and parameters \\(\\boldsymbol{\\theta}\\) is\n\\[\\begin{align*}\np(\\boldsymbol{Y}, \\boldsymbol{\\theta}) = p(\\boldsymbol{Y} \\mid \\boldsymbol{\\theta}) p(\\boldsymbol{\\theta}) =  p(\\boldsymbol{\\theta} \\mid \\boldsymbol{Y}) p(\\boldsymbol{Y})\n\\end{align*}\\] where the marginal \\(p(\\boldsymbol{Y}) = \\int_{\\boldsymbol{\\Theta}} p(\\boldsymbol{Y}, \\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#posterior",
+    "href": "slides/bayesmod-slides1.html#posterior",
+    "title": "Bayesian modelling",
+    "section": "Posterior",
+    "text": "Posterior\nUsing Bayes’ theorem, the posterior density is\n\\[\\begin{align*}\n\\color{#D55E00}{p(\\boldsymbol{\\theta} \\mid \\boldsymbol{Y})} = \\frac{\\color{#0072B2}{p(\\boldsymbol{Y} \\mid \\boldsymbol{\\theta})} \\times  \\color{#56B4E9}{p(\\boldsymbol{\\theta})}}{\\color{#E69F00}{\\int p(\\boldsymbol{Y} \\mid \\boldsymbol{\\theta}) p(\\boldsymbol{\\theta})\\mathrm{d} \\boldsymbol{\\theta}}},\n\\end{align*}\\]\nmeaning that \\[\\color{#D55E00}{\\text{posterior}} \\propto \\color{#0072B2}{\\text{likelihood}} \\times \\color{#56B4E9}{\\text{prior}}\\]\n\n\n\nEvaluating the marginal likelihood \\(\\color{#E69F00}{p(\\boldsymbol{Y})}\\), is challenging when \\(\\boldsymbol{\\theta}\\) is high-dimensional."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#updating-beliefs-and-sequentiality",
+    "href": "slides/bayesmod-slides1.html#updating-beliefs-and-sequentiality",
+    "title": "Bayesian modelling",
+    "section": "Updating beliefs and sequentiality",
+    "text": "Updating beliefs and sequentiality\nBy Bayes’ rule, we can consider updating the posterior by adding terms to the likelihood, noting that for independent \\(\\boldsymbol{y}_1\\) and \\(\\boldsymbol{y}_2\\), \\[\\begin{align*}\np(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}_1, \\boldsymbol{y}_2) \\propto p(\\boldsymbol{y}_2 \\mid \\boldsymbol{\\theta}) p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}_1)\n\\end{align*}\\] The posterior is be updated in light of new information."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#binomial-distribution",
+    "href": "slides/bayesmod-slides1.html#binomial-distribution",
+    "title": "Bayesian modelling",
+    "section": "Binomial distribution",
+    "text": "Binomial distribution\nA binomial variable with probability of success \\(\\theta \\in [0,1]\\) has mass function \\[\\begin{align*}\nf(y; \\theta) = \\binom{n}{y} \\theta^y (1-\\theta)^{n-y}, \\qquad y = 0, \\ldots, n.\n\\end{align*}\\] Moments of the number of successes out of \\(n\\) trials are \\[\\mathsf{E}(Y \\mid \\theta) = n \\theta, \\quad \\mathsf{Va}(Y \\mid \\theta) = n \\theta(1-\\theta).\\]\n\n\nThe binomial coefficient \\(\\binom{n}{y}=n!/\\{(n-y)!y!\\}\\), where \\(n!=\\Gamma(n+1)\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#beta-distribution",
+    "href": "slides/bayesmod-slides1.html#beta-distribution",
+    "title": "Bayesian modelling",
+    "section": "Beta distribution",
+    "text": "Beta distribution\nThe beta distribution with shapes \\(\\alpha&gt;0\\) and \\(\\beta&gt;0\\), denoted \\(\\mathsf{Be}(\\alpha,\\beta)\\), has density \\[f(y) = \\frac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}y^{\\alpha - 1}(1-y)^{\\beta - 1}, \\qquad y \\in [0,1]\\]\n\nexpectation: \\(\\alpha/(\\alpha+\\beta)\\);\nmode \\((\\alpha-1)/(\\alpha+\\beta-2)\\) if \\(\\alpha, \\beta&gt;1\\), else, \\(0\\), \\(1\\) or none;\nvariance: \\(\\alpha\\beta/\\{(\\alpha+\\beta)^2(\\alpha+\\beta+1)\\}\\).\n\n\nIt is a continuous distribution over the unit interval.\nThe uniform is a special case when both shapes are unity."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#beta-binomial-example",
+    "href": "slides/bayesmod-slides1.html#beta-binomial-example",
+    "title": "Bayesian modelling",
+    "section": "Beta-binomial example",
+    "text": "Beta-binomial example\nWe write \\(Y \\sim \\mathsf{Bin}(n, \\theta)\\) for \\(\\theta \\in [0,1]\\); the likelihood is \\[L(\\theta; y) = \\binom{n}{y} \\theta^y(1-\\theta)^{n-y}.\\]\nConsider a beta prior, \\(\\theta \\sim \\mathsf{Be}(\\alpha, \\beta)\\), with density \\[\np(\\theta) = \\frac{\\Gamma(\\alpha + \\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta) }\\theta^{\\alpha-1}(1-\\theta)^{\\beta - 1}.\n\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#density-versus-likelihood",
+    "href": "slides/bayesmod-slides1.html#density-versus-likelihood",
+    "title": "Bayesian modelling",
+    "section": "Density versus likelihood",
+    "text": "Density versus likelihood\nThe binomial distribution is discrete with support \\(0, \\ldots, n\\), whereas the likelihood is continuous over \\(\\theta \\in [0,1]\\).\n\n\n\n\n\n\n\n\nFigure 1: Binomial density function (left) and scaled likelihood function (right).\n\n\n\n\n\n\n\nIf the density or mass function integrates to 1 over the range of \\(Y\\), the integral of the likelihood over \\(\\theta\\) does not."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#proportionality",
+    "href": "slides/bayesmod-slides1.html#proportionality",
+    "title": "Bayesian modelling",
+    "section": "Proportionality",
+    "text": "Proportionality\nAny term not a function of \\(\\theta\\) can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to\n\\[\\begin{align*}\nL(\\theta; y)p(\\theta) & \\stackrel{\\theta}{\\propto} \\theta^{y}(1-\\theta)^{n-y} \\times \\theta^{\\alpha-1} (1-\\theta)^{\\beta-1}\n\\\\& =\\theta^{y + \\alpha - 1}(1-\\theta)^{n-y + \\beta - 1}\n\\end{align*}\\] the kernel of a beta density with shape parameters \\(y + \\alpha\\) and \\(n-y + \\beta\\).\n\n\nThe symbol \\(\\propto\\), for proportionality, means dropping all terms not an argument of the left hand side."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#experiments-and-likelihoods",
+    "href": "slides/bayesmod-slides1.html#experiments-and-likelihoods",
+    "title": "Bayesian modelling",
+    "section": "Experiments and likelihoods",
+    "text": "Experiments and likelihoods\nConsider the following sampling mechanism, which lead to \\(k\\) successes out of \\(n\\) independent trials, with the same probability of success \\(\\theta\\).\n\nBernoulli: sample fixed number of observations with \\(L(\\theta; y) =\\theta^k(1-\\theta)^{n-k}\\)\nbinomial: same, but record only total number of successes so \\(L(\\theta; y) =\\binom{n}{k}\\theta^k(1-\\theta)^{n-k}\\)\nnegative binomial: sample data until you obtain a predetermined number of successes, whence \\(L(\\theta; y) =\\binom{n-1}{k-1}\\theta^k(1-\\theta)^{n-k}\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#likelihood-principle",
+    "href": "slides/bayesmod-slides1.html#likelihood-principle",
+    "title": "Bayesian modelling",
+    "section": "Likelihood principle",
+    "text": "Likelihood principle\nTwo likelihoods that are proportional, up to a constant not depending on unknown parameters, yield the same evidence.\nIn all cases, \\(L(\\theta; y) \\stackrel{\\theta}{\\propto} \\theta^k(1-\\theta)^{n-k}\\), so these yield the same inference for Bayesian.\n\n\nFor a more in-depth discussion, see Section 6.3.2 of Casella & Berger (2002)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#integration",
+    "href": "slides/bayesmod-slides1.html#integration",
+    "title": "Bayesian modelling",
+    "section": "Integration",
+    "text": "Integration\nWe could approximate the \\(\\color{#E69F00}{\\text{marginal likelihood}}\\) through either\n\nnumerical integration (cubature)\nMonte Carlo simulations\n\nIn more complicated models, we will try to sample observations by bypassing completely this calculation.\n\n\nThe likelihood terms can be small (always less than one and decreasing for discrete data), so watch out for numerical overflow when evaluating normalizing constants."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#numerical-example-of-monte-carlo-integration",
+    "href": "slides/bayesmod-slides1.html#numerical-example-of-monte-carlo-integration",
+    "title": "Bayesian modelling",
+    "section": "Numerical example of (Monte Carlo) integration",
+    "text": "Numerical example of (Monte Carlo) integration\n\ny &lt;- 6L # number of successes \nn &lt;- 14L # number of trials\nalpha &lt;- beta &lt;- 1.5 # prior parameters\nunnormalized_posterior &lt;- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n## 1.07e-05 with absolute error &lt; 1e-12\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n## [1] 1.07e-05\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n## [1] 1.06e-05"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#prior-likelihood-and-posterior",
+    "href": "slides/bayesmod-slides1.html#prior-likelihood-and-posterior",
+    "title": "Bayesian modelling",
+    "section": "Prior, likelihood and posterior",
+    "text": "Prior, likelihood and posterior\n\n\nFigure 2: Scaled Binomial likelihood for six successes out of 14 trials, \\(\\mathsf{Beta}(3/2, 3/2)\\) prior and corresponding posterior distribution from a beta-binomial model."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#proper-prior",
+    "href": "slides/bayesmod-slides1.html#proper-prior",
+    "title": "Bayesian modelling",
+    "section": "Proper prior",
+    "text": "Proper prior\nWe could define the posterior simply as the normalized product of the likelihood and some prior function.\nThe prior function need not even be proportional to a density function (i.e., integrable as a function of \\(\\boldsymbol{\\theta}\\)).\nFor example,\n\n\\(p(\\theta) \\propto \\theta^{-1}(1-\\theta)^{-1}\\) is improper because it is not integrable.\n\\(p(\\theta) \\propto 1\\) is a proper prior over \\([0,1]\\) (uniform)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#validity-of-the-posterior",
+    "href": "slides/bayesmod-slides1.html#validity-of-the-posterior",
+    "title": "Bayesian modelling",
+    "section": "Validity of the posterior",
+    "text": "Validity of the posterior\n\nThe marginal likelihood does not depend on \\(\\boldsymbol{\\theta}\\)\n\n(a normalizing constant)\n\nFor the posterior density to be proper,\n\nthe marginal likelihood must be a finite!\nin continuous models, the posterior is proper whenever the prior function is proper."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#different-priors-give-different-posteriors",
+    "href": "slides/bayesmod-slides1.html#different-priors-give-different-posteriors",
+    "title": "Bayesian modelling",
+    "section": "Different priors give different posteriors",
+    "text": "Different priors give different posteriors\n\n\nFigure 3: Scaled binomial likelihood for six successes out of 14 trials, with \\(\\mathsf{Beta}(3/2, 3/2)\\) prior (left), \\(\\mathsf{Beta}(1/4, 1/4)\\) (middle) and truncated uniform on \\([0,1/2]\\) (right), with the corresponding posterior distributions."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#role-of-the-prior",
+    "href": "slides/bayesmod-slides1.html#role-of-the-prior",
+    "title": "Bayesian modelling",
+    "section": "Role of the prior",
+    "text": "Role of the prior\nThe posterior is beta, with expected value \\[\\begin{align*}\n\\mathsf{E}(\\theta \\mid y) &= w\\frac{y}{n} + (1-w) \\frac{\\alpha}{\\alpha + \\beta}, \\\\ w&=\\frac{n}{n+\\alpha+\\beta}\n\\end{align*}\\] a weighted average of\n\nthe maximum likelihood estimator and\nthe prior mean.\n\n\nWe can think of the parameter \\(\\alpha\\) (respectively \\(\\beta\\)) as representing the fixed prior number of success (resp. failures)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#posterior-concentration",
+    "href": "slides/bayesmod-slides1.html#posterior-concentration",
+    "title": "Bayesian modelling",
+    "section": "Posterior concentration",
+    "text": "Posterior concentration\nExcept for stubborn priors, the likelihood contribution dominates in large samples. The impact of the prior is then often negligible.\n\n\nFigure 4: Beta posterior and binomial likelihood with a uniform prior for increasing number of observations (from left to right)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#summarizing-posterior-distributions",
+    "href": "slides/bayesmod-slides1.html#summarizing-posterior-distributions",
+    "title": "Bayesian modelling",
+    "section": "Summarizing posterior distributions",
+    "text": "Summarizing posterior distributions\n\nThe output of the Bayesian learning will be either of:\n\na fully characterized distribution (in toy examples).\na numerical approximation to the posterior distribution.\nan exact or approximate sample drawn from the posterior distribution.\n\n\nThe first case, which we have already encountered, allows us to query moments (mean, median, mode) directly provided there are analytical expressions for the latter, or else we could simulate from the model."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#bayesian-inference-in-practice",
+    "href": "slides/bayesmod-slides1.html#bayesian-inference-in-practice",
+    "title": "Bayesian modelling",
+    "section": "Bayesian inference in practice",
+    "text": "Bayesian inference in practice\nMost of the field revolves around the creation of algorithms that either\n\ncircumvent the calculation of the normalizing constant\n\n(Monte Carlo and Markov chain Monte Carlo methods)\n\nprovide accurate numerical approximation, including for marginalizing out all but one parameter.\n\n(integrated nested Laplace approximations, variational inference, etc.)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#predictive-distributions",
+    "href": "slides/bayesmod-slides1.html#predictive-distributions",
+    "title": "Bayesian modelling",
+    "section": "Predictive distributions",
+    "text": "Predictive distributions\nDefine the \\(\\color{#D55E00}{\\text{posterior predictive}}\\), \\[\\begin{align*}\np(y_{\\text{new}}\\mid \\boldsymbol{y}) = \\int_{\\boldsymbol{\\Theta}} p(y_{\\text{new}} \\mid \\boldsymbol{\\theta}) \\color{#D55E00}{p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})} \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\] and the \\(\\color{#56B4E9}{\\text{prior predictive}}\\) \\[\\begin{align*}\np(y_{\\text{new}}) = \\int_{\\boldsymbol{\\Theta}} p(y_{\\text{new}} \\mid \\boldsymbol{\\theta}) \\color{#56B4E9}{p(\\boldsymbol{\\theta})} \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\] is useful for determining whether the prior is sensical."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#analytical-derivation-of-predictive-distribution",
+    "href": "slides/bayesmod-slides1.html#analytical-derivation-of-predictive-distribution",
+    "title": "Bayesian modelling",
+    "section": "Analytical derivation of predictive distribution",
+    "text": "Analytical derivation of predictive distribution\nGiven the \\(\\mathsf{Be}(a, b)\\) prior or posterior, the predictive for \\(n_{\\text{new}}\\) trials is beta-binomial with density \\[\\begin{align*}\np(y_{\\text{new}}\\mid y) &= \\int_0^1 \\binom{n_{\\text{new}}}{y_{\\text{new}}} \\frac{\\theta^{a + y_{\\text{new}}-1}(1-\\theta)^{b + k - y_{\\text{new}}-1}}{\n\\mathrm{Be}(a, b)}\\mathrm{d} \\theta\n\\\\&= \\binom{n_{\\text{new}}}{y_{\\text{new}}} \\frac{\\mathrm{Be}(a + y_{\\text{new}}, b + n_{\\text{new}} - y_{\\text{new}})}{\\mathrm{Be}(a, b)}\n\\end{align*}\\]\nReplace \\(a=y + \\alpha\\) and \\(b=n-y + \\beta\\) to get the posterior predictive distribution."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#posterior-predictive-distribution",
+    "href": "slides/bayesmod-slides1.html#posterior-predictive-distribution",
+    "title": "Bayesian modelling",
+    "section": "Posterior predictive distribution",
+    "text": "Posterior predictive distribution\n\n\nFigure 5: Beta-binomial posterior predictive distribution with corresponding binomial mass function evaluated at the maximum likelihood estimator."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#posterior-predictive-distribution-via-simulation",
+    "href": "slides/bayesmod-slides1.html#posterior-predictive-distribution-via-simulation",
+    "title": "Bayesian modelling",
+    "section": "Posterior predictive distribution via simulation",
+    "text": "Posterior predictive distribution via simulation\nThe posterior predictive carries over the parameter uncertainty so will typically be wider and overdispersed relative to the corresponding distribution.\nGiven a draw \\(\\theta^*\\) from the posterior, simulate a new observation from the distribution \\(f(y_{\\text{new}}; \\theta^*)\\).\n\nnpost &lt;- 1e4L\n# Sample draws from the posterior distribution\npost_samp &lt;- rbeta(n = npost, y + alpha, n - y + beta)\n# For each draw, sample new observation\npost_pred &lt;- rbinom(n = npost, size = n, prob = post_samp)\n\n\n\nThe beta-binomial is used to model overdispersion in binary regression models."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#summarizing-posterior-distributions-1",
+    "href": "slides/bayesmod-slides1.html#summarizing-posterior-distributions-1",
+    "title": "Bayesian modelling",
+    "section": "Summarizing posterior distributions",
+    "text": "Summarizing posterior distributions\nThe output of a Bayesian procedure is a distribution for the parameters given the data.\nWe may wish to return different numerical summaries (expected value, variance, mode, quantiles, …)\nThe question: which point estimator to return?"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#decision-theory-and-loss-functions",
+    "href": "slides/bayesmod-slides1.html#decision-theory-and-loss-functions",
+    "title": "Bayesian modelling",
+    "section": "Decision theory and loss functions",
+    "text": "Decision theory and loss functions\nA loss function \\(c(\\boldsymbol{\\theta}, \\boldsymbol{\\upsilon}): \\boldsymbol{\\Theta} \\mapsto \\mathbb{R}^k\\) assigns a weight to each value \\(\\boldsymbol{\\theta}\\), corresponding to the regret or loss.\nThe point estimator \\(\\widehat{\\boldsymbol{\\upsilon}}\\) is the minimizer of the expected loss \\[\\begin{align*}\n\\widehat{\\boldsymbol{\\upsilon}} &= \\mathop{\\mathrm{argmin}}_{\\boldsymbol{\\upsilon}}\\mathsf{E}_{\\boldsymbol{\\Theta} \\mid \\boldsymbol{Y}}\\{c(\\boldsymbol{\\theta}, \\boldsymbol{v})\\} \\\\&=\\mathop{\\mathrm{argmin}}_{\\boldsymbol{\\upsilon}} \\int_{\\boldsymbol{\\Theta}} c(\\boldsymbol{\\theta}, \\boldsymbol{\\upsilon})p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#point-estimators-and-loss-functions",
+    "href": "slides/bayesmod-slides1.html#point-estimators-and-loss-functions",
+    "title": "Bayesian modelling",
+    "section": "Point estimators and loss functions",
+    "text": "Point estimators and loss functions\nIn a univariate setting, the most widely used point estimators are\n\nmean: quadratic loss \\(c(\\theta, \\upsilon) = (\\theta-\\upsilon)^2\\)\nmedian: absolute loss \\(c(\\theta, \\upsilon)=|\\theta - \\upsilon|\\)\nmode: 0-1 loss \\(c(\\theta, \\upsilon) = 1-\\mathrm{I}(\\upsilon = \\theta)\\)\n\nThe posterior mode \\(\\boldsymbol{\\theta}_{\\mathrm{map}} = \\mathrm{argmax}_{\\boldsymbol{\\theta}} p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) is the maximum a posteriori or MAP estimator."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#measures-of-central-tendency",
+    "href": "slides/bayesmod-slides1.html#measures-of-central-tendency",
+    "title": "Bayesian modelling",
+    "section": "Measures of central tendency",
+    "text": "Measures of central tendency\n\n\nFigure 6: Point estimators from a right-skewed distribution (left) and from a multimodal distribution (right)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#example-of-loss-functions",
+    "href": "slides/bayesmod-slides1.html#example-of-loss-functions",
+    "title": "Bayesian modelling",
+    "section": "Example of loss functions",
+    "text": "Example of loss functions\n\n\nFigure 7: Posterior density with mean, mode and median point estimators (left) and corresponding loss functions, scaled to have minimum value of zero (right)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#credible-regions",
+    "href": "slides/bayesmod-slides1.html#credible-regions",
+    "title": "Bayesian modelling",
+    "section": "Credible regions",
+    "text": "Credible regions\nThe freshman dream comes true! A \\(1-\\alpha\\) credible region give a set of parameter values which contains the “true value” of the parameter \\(\\boldsymbol{\\theta}\\) with probability \\(1-\\alpha\\).\nCaveat: McElreath (2020) suggests the term ‘compatibility’, as it\n\nreturns the range of parameter values compatible with the model and data."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#which-credible-intervals",
+    "href": "slides/bayesmod-slides1.html#which-credible-intervals",
+    "title": "Bayesian modelling",
+    "section": "Which credible intervals?",
+    "text": "Which credible intervals?\nMultiple \\(1-\\alpha\\) intervals, most common are\n\nequitailed: region \\(\\alpha/2\\) and \\(1-\\alpha/2\\) quantiles and\nhighest posterior density interval (HPDI), which gives the smallest interval \\((1-\\alpha)\\) probability\n\n\n\nIf we accept to have more than a single interval, the highest posterior density region can be a set of disjoint intervals. The HDPI is more sensitive to the number of draws and more computationally intensive (see R package HDinterval)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#illustration-of-credible-regions",
+    "href": "slides/bayesmod-slides1.html#illustration-of-credible-regions",
+    "title": "Bayesian modelling",
+    "section": "Illustration of credible regions",
+    "text": "Illustration of credible regions\n\n\nFigure 8: Density plots with 89% (top) and 50% (bottom) equitailed or central credible (left) and highest posterior density (right) regions for two data sets, highlighted in grey."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#references",
+    "href": "slides/bayesmod-slides1.html#references",
+    "title": "Bayesian modelling",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\n\n\n\nCasella, G., & Berger, R. L. (2002). Statistical inference (2nd ed.). Duxbury.\n\n\nFinetti, B. de. (1974). Theory of probability: A critical introductory treatment (Vol. 1). Wiley.\n\n\nMcElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and STAN (2nd ed.). Chapman; Hall/CRC."
   }
 ]
