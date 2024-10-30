@@ -15,7 +15,7 @@ library(pander)
 
 - {{< fa user >}} &nbsp; [{{< var instructor.name >}}]({{< var instructor.url >}})
 - {{< fa university >}} &nbsp; {{< var instructor.office >}}
-- {{< fa envelope >}} &nbsp; <a href="mailto:{{< var instructor.email >}}">{{< var instructor.email >}}</a>
+- {{< fa envelope >}} &nbsp; <a href='mailto:{{< var instructor.email >}}'>{{< var instructor.email >}}</a>
 
 :::
 
@@ -58,56 +58,27 @@ I will provide slides and videos. In addition to those, there will be assigned r
 
 ## Textbooks
 
-I will assign readings from @McElreath:2020 and @Johnson.Ott.Dogucu:2022, which is freely available [online](https://www.bayesrulesbook.com/).
+Course notes for the class can be found [online](https://lbelzile.github.io/MATH80601A/)
+
+Additional references include @Gelman:2013, @McElreath:2020 and @Johnson.Ott.Dogucu:2022.
+
+- A. Gelman, J. Carlin, H. Stern, D. Dunson, A. Vehtari and D. Rubin (2013). [**Bayesian Data Analysis**](http://www.stat.columbia.edu/~gelman/book/), 3rd edition, CRC press. doi: [10.1201/b16018](https://doi.org/10.1201/b16018)
+- R. McElreath  (2020). [**Statistical Rethinking:<br>A Bayesian Course with Examples in R and Stan**](https://xcelab.net/rm/statistical-rethinking/), 2nd edition, CRC Press.
+- A.A. Johnson, M.Q. Ott, and M. Dogucu (2022). [**Bayes Rules!<br>An Introduction to Applied Bayesian Modeling**](https://www.bayesrulesbook.com/), 1st edition, CRC Press. Free available [online](https://www.bayesrulesbook.com/).
 
 
-::: {.grid}
 
-::: {.g-col-6}
-
-::: {.text-center}
-
-[**Statistical Rethinking:<br>A Bayesian Course with Examples in R and Stan**](https://xcelab.net/rm/statistical-rethinking/)
-
-R. McElreath
-
-:::
-
-<a href="https://xcelab.net/rm/statistical-rethinking/">
 ```{r}
 #| echo: false
 #| fig-align: 'center'
-#| out-width: "50%"
+#| out-width: "90%"
+#| layout-ncol: 3
+knitr::include_graphics("files/img/bda-cover.jpg")
 knitr::include_graphics("files/img/rethinking-cover.jpg")
-```
-</a>
-
-:::
-
-::: {.g-col-6}
-
-::: {.text-center}
-
-[**Bayes Rules!<br>An Introduction to Applied Bayesian Modeling**](https://www.bayesrulesbook.com/)
-
-A.A. Johnson, M.Q. Ott, and M. Dogucu
-
-:::
-
-<a href="https://www.bayesrulesbook.com/">
-```{r}
-#| echo: false
-#| fig-align: 'center'
-#| out-width: "50%"
 knitr::include_graphics("files/img/bayes-rules-cover.jpeg")
 ```
-</a>
 
-:::
 
-:::
-
-Course notes for the class can be found [online](https://lbelzile.github.io/math80601a)
 
 
 ## Other references
@@ -140,7 +111,7 @@ Week 3: **Prior beliefs**
 - Conjugate priors
 - Flat and vague priors.
 - Priors for scale parameters
-- Parameter elicitation and [expert knowledge](http://www.jstor.org/stable/2986068)
+- Parameter elicitation and expert knowledge
 - Penalized complexity prior
 - Prior sensitivity analysis
 
@@ -180,6 +151,7 @@ Week 9: **Hierarchical models**
 
 - Multi-stage modelling
 - Latent Gaussian models
+- Probabilistic programming
 - Applications to time series and spatial data
 
 Week 10: **Deterministic approximations**
@@ -197,13 +169,14 @@ Week 11: **Variational inference**
 Week 12: **Final review**
 
 - Expectation propagation
+- Model comparison and Bayes factors
 - Course recap
 
 
 
 ## Student hours
 
-Wednesday afternoon from 13:00 until 16:00 or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.
+Monday before class or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.
 
 Please watch this video:
 
