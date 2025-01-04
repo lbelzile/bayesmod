@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.56">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,10 +54,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-669af3988224ca8fe9f5a2d8c8406fee.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -121,6 +121,10 @@ div.csl-indent {
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="./news/index.html"> 
+<span class="menu-text">News</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="https://lbelzile.github.io/MATH80601A/"> 
 <span class="menu-text">Notes</span></a>
   </li>  
@@ -147,7 +151,8 @@ div.csl-indent {
   <li><a href="#textbooks" id="toc-textbooks" class="nav-link" data-scroll-target="#textbooks">Textbooks</a></li>
   <li><a href="#other-references" id="toc-other-references" class="nav-link" data-scroll-target="#other-references">Other references</a></li>
   </ul></li>
-  <li><a href="#course-content-1" id="toc-course-content-1" class="nav-link" data-scroll-target="#course-content-1">Course content</a>
+  <li><a href="#course-content-1" id="toc-course-content-1" class="nav-link" data-scroll-target="#course-content-1">Course content</a></li>
+  <li><a href="#evaluations" id="toc-evaluations" class="nav-link" data-scroll-target="#evaluations">Evaluations</a>
   <ul class="collapse">
   <li><a href="#student-hours" id="toc-student-hours" class="nav-link" data-scroll-target="#student-hours">Student hours</a></li>
   <li><a href="#intellectual-integrity" id="toc-intellectual-integrity" class="nav-link" data-scroll-target="#intellectual-integrity">Intellectual integrity</a></li>
@@ -196,7 +201,7 @@ div.csl-indent {
 <li><i class="fa-solid fa-calendar-alt" aria-hidden="true"></i> &nbsp; Winter 2025</li>
 <li><i class="fa-solid fa-calendar" aria-hidden="true"></i> &nbsp; Monday</li>
 <li><i class="fa-solid fa-clock" aria-hidden="true"></i> &nbsp; 15:30-18:30</li>
-<li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> &nbsp; TBD</li>
+<li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> &nbsp; <a href="https://www.hec.ca/campus/cote_sainte_catherine/1er_etage/salles_cours/labid-aljundi.html">CSC, Labid Aljundi</a></li>
 </ul>
 </section>
 </div>
@@ -233,7 +238,7 @@ div.csl-indent {
 <div>
 
 </div>
-<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="3">
+<div class="cell quarto-layout-panel" data-layout-ncol="3" data-layout-align="center">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
 <div class="quarto-figure quarto-figure-center">
@@ -269,11 +274,12 @@ div.csl-indent {
 <p>Below is a tentative schedule.</p>
 <p>Week 1: <strong>Tools of the trade</strong></p>
 <ul>
-<li>Review of probability distributions</li>
-<li>Monte Carlo integration</li>
-<li>Likelihood based methods</li>
-<li>Bayes’ theorem and updating</li>
 <li>Marginalization and conditioning</li>
+<li>Bayes’ theorem</li>
+<li>Review of probability distributions</li>
+<li>Likelihood</li>
+<li>Monte Carlo integration</li>
+<li>Rejection sampling</li>
 </ul>
 <p>Week 2: <strong>Basics of Bayesian inference</strong></p>
 <ul>
@@ -295,7 +301,6 @@ div.csl-indent {
 <p>Week 4: <strong>Markov chain Monte Carlo methods</strong></p>
 <ul>
 <li>Basics of Markov chains</li>
-<li>Rejection sampling</li>
 <li>Slice sampling</li>
 <li>Metropolis–Hastings algorithm</li>
 </ul>
@@ -313,8 +318,8 @@ div.csl-indent {
 <p>Week 7: <strong>Bayesian workflow and model diagnostics</strong></p>
 <ul>
 <li>Bayesian workflow</li>
+<li>Model comparison and Bayes factors</li>
 <li>Model diagnostics (WAIC, LOO-CV, etc.)</li>
-<li>Estimation from Markov chain</li>
 </ul>
 <p>Week 8: <strong>Computational strategies for MCMC</strong></p>
 <ul>
@@ -344,9 +349,54 @@ div.csl-indent {
 <p>Week 12: <strong>Final review</strong></p>
 <ul>
 <li>Expectation propagation</li>
-<li>Model comparison and Bayes factors</li>
 <li>Course recap</li>
 </ul>
+</section>
+<section id="evaluations" class="level1">
+<h1>Evaluations</h1>
+<p>Your final grade will be based on weekly problem sets and check-ins, a midterm and a final examination.</p>
+<p>There will be weekly exercises pertaining to the class material, one of which must be handed in for credit. We will discuss the other exercises at the beginning of the next class.</p>
+<p>The midterm will take place on Monday, March 3rd from 15:30–18:30. The final is cumulative and will take place on Tuesday, April 15th from 18:30–21:30.</p>
+<p>Team work counts towards your final grade only if you score more than 50% on individual evaluations.</p>
+<div class="centered-table">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 44%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Assignment</th>
+<th style="text-align: center;">Points</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Weekly check-in (10 × 0.5 pt)</td>
+<td style="text-align: center;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Problem sets (10 x 3 pts)</td>
+<td style="text-align: center;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Midterm examination (30 pts)</td>
+<td style="text-align: center;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Final examination (35 pts)</td>
+<td style="text-align: center;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: center;">100</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="centered-table">
+
+</div>
 <section id="student-hours" class="level2">
 <h2 class="anchored" data-anchor-id="student-hours">Student hours</h2>
 <p>Monday before class or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.</p>
@@ -488,8 +538,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -600,7 +648,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

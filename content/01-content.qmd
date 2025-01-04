@@ -1,26 +1,17 @@
 ---
-title: "Bayesics"
-date: "2023-09-19"
+title: "Introduction"
 ---
-
 
 ## Content
 
-- Probability
-- Key concepts: prior, posterior and interpretation
-- Predictive distributions
-- Marginal likelihood and numerical integration
-- Credible intervals, loss functions and posterior summaries
-- The beta binomial conjugate model
+- Marginalization and conditioning
+- Bayes' theorem
+- Review of probability distributions
+- Likelihood
+- Monte Carlo integration
+- Rejection sampling
 
-## Learning objectives
 
-At the end of the chapter, students should be able to
-
-- define key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference
-- perform inference in conjugate models with a single parameter
-- calculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)
-- explain some of the conceptual differences between frequentist and Bayesian inference
 
 ## Readings
 
@@ -30,17 +21,17 @@ These readings should be completed before class, to ensure timely understanding 
 
 - [Chapter 1 of the course notes](https://lbelzile.github.io/MATH80601A/introduction.html)
 
+
 ## Complementary readings
 
 :::{.callout-warning}
 Complementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.
 :::
 
-- @Edwards.Lindman.Savage:1963
-- @Johnson.Ott.Dogucu:2022, [chapters 2--4 and sections 8.1, 8.3](https://www.bayesrulesbook.com/)
-- @Villani:2023, chapters 1 and 2
-- @Albert:2009, chapters 2 and 3
-
+- Chapter 1 of @Wood:2015
+- Chapter 4 and 6.1 of @Davison:2003
+- Chapters 2 and 3 of @Casella.Robert:2004
+- Chapters 1--6 of @Casella.Berger:2002
 
 ## Slides
 

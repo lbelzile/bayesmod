@@ -1,23 +1,23 @@
 ---
-title: "Simulation-based inference"
-date: "2023-10-03"
+title: "Priors"
 ---
 
 
 ## Content
 
-- Monte Carlo methods
-- Markov chains
-- Metropolis--Hastings algorithm
+- Conjugate, flat, vague, Jeffrey's, informative and penalized complexity priors
+- Priors for regression models
+- Parameter elicitation
+- Prior sensitivity analysis
 
 ## Learning objectives
 
 At the end of the chapter, students should be able to
 
-- understand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ
-- implement a MHG algorithm to draw samples from the posterior
-- use output of MCMC to obtain estimates and standard errors
-
+- choose a suitable prior for a Bayesian analysis
+- derive parameters of posterior distributions in conjugate models
+- perform parameter elicitation
+- assess the impact of priors through sensitivity analysis
 
 ## Readings
 
@@ -27,8 +27,8 @@ These readings should be completed before class, to ensure timely understanding 
 
 :::
 
-- [@Geyer:2011](https://www.mcmchandbook.net/HandbookChapter1.pdf)
-- [Chapter 3 of the course notes](https://lbelzile.github.io/MATH80601A/mcmc.html)
+
+- [Chapter 3 of the course notes](https://lbelzile.github.io/MATH80601A/priors.html)
 
 
 ## Complementary readings
@@ -37,16 +37,21 @@ These readings should be completed before class, to ensure timely understanding 
 Complementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.
 :::
 
-- @Green:2015 (overview of MCMC methods)
 
+- @Villani:2023, chapter 4
+- @Gelman:2013, chapters 2, 3 and 5
+- @Johnson.Ott.Dogucu:2022, [chapter 5](https://www.bayesrulesbook.com/chapter-5)
+
+
+
+- truncated Student-t priors for hierarchical models [@Gelman:2006]
+- penalized complexity priors [@Simpson:2017]
 
 ## Slides
 
 
 <p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides3.html">{{< fa arrow-up-right-from-square >}} &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides3.pdf" role="button">{{< fa file-pdf >}} &ensp;Download PDF of all slides</a></p>
 
-
 <div class="ratio ratio-16x9">
 <iframe class="slide-deck" src="../slides/bayesmod-slides3.html"></iframe>
 </div>
-

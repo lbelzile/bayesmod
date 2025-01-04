@@ -1,248 +1,209 @@
 ---
 title: "Solution 3"
+draft: true
 ---
-
 
 ## Exercise 3.1
 
-Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
+Consider a simple random sample of size $n$ from the Wald distribution, with density
 \begin{align*}
-g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau > 0
+f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y > 0)
 \end{align*}
-as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
+for location $\nu >0$ and shape $\tau>0$. 
 
-1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau)$.
-2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
-3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
- degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
-4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
+a. Show that the joint prior
+$$ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
+b. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
+c. Derive the marginal posterior $p(\lambda)$.
 
 
 
 ::: {.solution}
 
-1. The distribution function is 
+a. To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get
 \begin{align*}
-F(x) = \begin{cases}
-\frac{1}{2} \exp\left(\frac{x-\nu}{\tau}\right) & x \leq \nu\\
-1 - \frac{1}{2} \exp\left(-\frac{x-\nu}{\tau}\right) & x >\nu\\
-\end{cases}
+p(\lambda, \nu \mid \boldsymbol{y}) &\propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau}{\nu^{2}}-2\frac{\tau\mu}{\nu} + \tau\mu^2 +\frac{t_1(\boldsymbol{y})}{\nu^2} -  \frac{2n}{\nu} + t_2(\boldsymbol{y})\right\}\right] \\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau + t_1(\boldsymbol{y})}{\nu^2} - 2\frac{\tau\mu+n}{\nu} + \tau\mu^2 + t_2(\boldsymbol{y})\right\} \right]
+\\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp\left[-\lambda \left\{\beta + \frac{c_3-c_1c_2^2}{2}\right\}\right] \exp\left\{ -\frac{\lambda c_1}{2}\left(\nu^{-1} - c_2\right)^2\right\} 
 \end{align*}
-and using the quantile transform, set $X=\nu + \tau \log(2U)$ if $U \leq 0.5$ and $X=\nu - \tau\log(2-2U)$ if $U > 0.5$ for $U \sim \mathsf{U}(0,1)$.
-2. The Gaussian has lighter tail than the Laplace, so this won't work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.
-3. The optimal value for the location of the Student-$t$ would be $\nu$ (here zero for the standard Laplace). We compute the optimal scale via in the code below:
-$$
-\mathrm{argmax}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmin}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
-$$
+where $c_1=\{\tau + t_1(\boldsymbol{y})\}$, $c_2 =(\tau\mu+n)/c_1$ and $c_3 =\tau\mu^2 + t_2(\boldsymbol{y})$.
 
+b. We see that the joint posterior as the product of two densities, say $q(\lambda \mid \boldsymbol{y})p(1/\nu \mid \lambda)$; $q(\lambda \mid \boldsymbol{y})$ is the density of a gamma distribution with shape $a = (n+1)/2+\alpha$ and rate $b=\beta + (c_3-c_1c_2^2)/2$, whereas the other is a reciprocal Gaussian with mean parameter $c_2$ and precision $\lambda c_1$. $\mathsf{Ga}\left\{(n+1)/2+\alpha\right\}$
 
-```{r}
-
-#' Laplace density
-dlaplace <- function(x, loc = 0, scale = 1, log = FALSE){
- stopifnot(scale > 0)
- logdens <-  -log(2*scale) - abs(x-loc)/scale
- if(log){
- return(logdens)
- } else{
- return(exp(logdens))
- }
-}
-dstudent <- function(x, loc = 0, scale = 1, df = 1, log = FALSE){
-  logdens <- -log(scale) + dt(x = (x - loc)/scale, df = df, log = TRUE)
-   if(log){
-    return(logdens)
-   } else{
-   return(exp(logdens))
-   }
-}
-# For each value of the scale sigma,
-# find the minimum value of x (typically at zero)
-opt <- optimize(f = function(sigma){
-  optimize(f = function(x){
-  dlaplace(x, log = TRUE) - 
-    dstudent(x, scale = sigma, df = 3, log = TRUE)}, 
-  maximum = TRUE, 
-  interval = c(-100, 100))$objective
-}, interval = c(0.1,10))
-(C <- exp(opt$objective))
-(sigma <- opt$minimum)
-
-# Simulate from accept-reject
-ntrials <- 1.1*C*1000
-# Simulate from location-scale student
-candidate <- sigma*rt(n = ntrials, df = 3)
-# Compute log of acceptance rate
-logR <- dlaplace(candidate, log = TRUE) - 
-  dstudent(candidate, scale = sigma, df = 3, log = TRUE) 
-samp <- candidate[logR >= log(C) + -rexp(ntrials)]
-# Monte Carlo estimator of the acceptance rate
-ntrials/length(samp)
-# Plot density
-library(ggplot2)
-ggplot(data = data.frame(x = samp),
-       mapping = aes(x = x)) +
-  geom_density() +
-  theme_classic()
-```
-4. The Monte Carlo acceptance rate is `r round(ntrials/length(samp), 2)`, compared with the analytical bound found via numerical optimization of `r round(C, 2)`, to two significant digits.
+c. To get the marginal $p(\lambda \mid \boldsymbol{y})$, we need to integrate with respect to $\nu$. Making the change of variable $\mu = 1/\nu$, we recover a Gaussian kernel
+\begin{align*}
+p(\lambda \mid \boldsymbol{y}) &= \lambda^{a-1}\exp(-b\lambda)\int_{\mathbb{R}}\exp\left\{ -\frac{\lambda c_1}{2}\left(\mu - c_2\right)^2\right\}  \mathrm{d} \mu 
+\\&\propto \lambda^{a-1}\exp(-b\lambda) \lambda^{-1/2}
+\end{align*}
+so we conclude that, marginally, $\lambda \sim \mathsf{Ga}(n+ \alpha, b)$.
 
 :::
-
 
 ## Exercise 3.2
 
-We revisit [Exercise 1.3](/exercises/01-exercise.html#exercice-1.3), which used a half-Cauchy prior for the exponential waiting time of buses.
+Consider the Rayleigh distribution with scale $\sigma>0$. It's density is
+$$f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).$$
 
-The ratio-of-uniform method, implemented in the [`rust` **R** package](https://paulnorthrop.github.io/rust/index.html), can be used to simulate independent draws from the posterior of the rate $\lambda$.
-The following code produces 
-```{r}
-#| eval: true
-#| echo: true
-nobs <- 10L # number of observations
-ybar <- 8   # average waiting time
-B <- 1000L  # number of draws
-# Un-normalized log posterior: scaled log likelihood + log prior
-upost <- function(x){ 
-  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +
-    log(2) + dt(x = x, df = 1, log = TRUE)}
-post_samp <- rust::ru(logf = upost, 
-                      n = B, 
-                      d = 1,  # dimension of parameter (scalar)
-                      init = nobs/ybar)$sim_vals # initial value of mode
-```
-
-Estimate using the Monte Carlo sample:
-
-1. the probability that the waiting time is between 3 and 15 minutes
-2. the average waiting time
-3. the standard deviation of the waiting time
+Derive the Fisher information matrix and use it to obtain Jeffrey's prior for $\sigma$. Determine whether the prior is proper.
 
 
 ::: {.solution}
 
-```{r}
-# Lambda is the reciprocal mean (1/minute)
-times <- 1/post_samp
-mean(times > 3 & times < 15)
-mean(times)
-sd(times)
-```
+The log likelihood for a sample of size one is 
+\begin{align*}
+\ell(\sigma) = \log(y) - 2\log(\sigma) - \frac{y^2}{2\sigma^2}
+\end{align*}
+and the negative of the Hessian is 
+\begin{align*}
+\jmath(\sigma) = -\frac{\partial^2 \ell(\sigma)}{\partial \sigma^2} = -\frac{2}{\sigma^2} + \frac{3y^2}{\sigma^4}
+\end{align*}
+To compute the Fisher information, we need the second moment of the Rayleigh distribution,
+\begin{align*}
+\mathsf{E}(Y^2) &= \int_0^\infty \frac{y^3}{\sigma^2}\exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{d} y\\&= 2\sigma^2 \int_0^\infty u \exp(-u) \mathrm{d} u
+\\&= 2\sigma^2
+\end{align*}
+where we made the change of variable $u= 0.5y^2\sigma^{-2}$, $\mathrm{d} u = y\sigma^{-2}\mathrm{d} y$ and recovered the expected value of a unit exponential distribution.
+
+The Fisher information is $\imath(\sigma) = \mathsf{E}\{\jmath(\sigma)\}=-2/\sigma^2 + 6/\sigma^2 = 3/\sigma^2$. Jeffrey's prior for the scale, $p(\sigma) =|\imath(\sigma)|^{1/2}$, is proportional to $\sigma^{-1}$ and thus improper.
 
 :::
-
-Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.
-
-```{r}
-B <- 1e4L
-curr <- 8/10 # prior mean
-chains <- numeric(B) # container
-sd_prop <- 0.1
-for(b in seq_len(B)){
-  prop <- rnorm(n = 1, mean = curr, sd = sd_prop)
-  if(upost(prop) - upost(curr) > -rexp(1)){
-    curr <- prop
-  }
-  chains[b] <- curr
-}
-# Discard burn-in
-times <- 1/chains[-(1:100)]
-mean(times > 3 & times < 15)
-mean(times)
-sd(times)
-# Summary of MCMC
-mcmc <- coda::mcmc(chains)
-summary(mcmc)
-```
 
 
 ## Exercise 3.3
 
-Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates $\lambda_i$ $(i=1,2)$, with the same priors. Use a Metropolis--Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.
+Consider a binomial model with an unknown probability of successes $\theta \in [0,1]$ model. Suppose your prior guess for $\theta$ has mean $0.1$ and standard deviation $0.2$
 
-1. Tune the variance to reach an approximate acceptance rate of 0.44.
-2. Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See [`bayesplot`](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html) or `coda`. Comment on  the convergence and mixing of your Markov chain Monte Carlo.
-3. Report summary statistics of the chains.
+Using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.
 
-:::{ .solution}
 
-The only thing we need to do is change the parametrization, and add tuning of the variance.
+Plot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location $\mu=0.1$ and scale $\sigma=0.2$.^[Note that the parameters of the truncated Gaussian distribution do not correspond to moments!]
+
+
+::: {.solution}
+
+The beta distribution has expected value $\alpha/(\alpha+\beta)$ and variance $\alpha\beta(\alpha+\beta)^{-2}(\alpha+\beta+1)^{-1}$.
+
+Since the system of equations is nonlinear, we need to solve numerically to find the two unknown value of the parameters or else simply substitute $\beta = \alpha (1-\mu)/\mu$ in the equation for the variance.
+
+```{r}
+beta_moments <- function(par, mean, variance){
+  alpha <- par[1]
+  beta <- par[2]
+  c(alpha/(alpha+beta) - mean,
+    alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)
+}
+# Numerical root finding algorithm
+# We need to give good starting values
+rootSolve::multiroot(f = beta_moments,
+                     start = c(0.1, 0.8),
+                     positive = TRUE,
+                     mean = 0.1, 
+                     variance = 0.04)
+
+alpha <- uniroot(f = function(alpha, mean = 0.1, variance = 0.04){
+  beta <- alpha*(1-mean)/mean
+  alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance}, 
+  interval = c(1e-4, 1))$root
+beta <- alpha*(1-0.1)/0.1
+c(alpha = alpha, beta = beta)
+```
+
+and we find $\alpha = 0.125$ and $\beta=1.125$.
+
+Let $a = -\mu/\sigma$ and $b = (1-\mu)/\sigma$ denote the standardized lower and upper bounds, respectively. The density of the truncated Gaussian with location $\mu$ and scale $\sigma$ on the unit interval is
+\begin{align*}
+f(x; \mu, \sigma) = \frac{1}{\sigma}\frac{\phi\left(\frac{x - \mu}{\sigma}\right)}{\Phi(b) - \Phi(a)},
+\end{align*}
+where $\phi$ is the density of a standard Gaussian $\mathsf{No}(0,1)$ and $\Phi$ the corresponding distribution function.
+
+<!--
+and we can easily obtain the formulae for the first two moments (e.g., Wikipedia). Let $a = -\mu/\sigma$ and $b = (1-\mu)/\sigma$ denote the centered bounds; then
+\begin{align*}
+\mathsf{E}(Y) &= \mu - \sigma\frac{\phi(b) - \phi(a) }{\Phi(b) - \Phi(a)} \\
+\mathsf{Va}(Y) & = \sigma\left[1 - \frac{b\phi(b) - \phi(a)}{\Phi(b) - \Phi(a)} - \left\{\frac{\phi(b) - \phi(a) }{\Phi(b) - \Phi(a)}\right\}^2\right]
+\end{align*}
+we have reasonable guess for starting values
+
+-->
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-cap: "Beta (full line) and truncated Gaussian (dashed line) prior densities."
+#| label: fig-priors-match
+mu <- 0.1; sigma <- 0.2
+alpha <- 0.125; beta <- 1.125
+library(ggplot2)
+ggplot() + 
+  stat_function(fun = dbeta,
+                xlim = c(0,1), 
+                args = list(shape1 = alpha, shape2 = beta),
+                n = 1001) +
+  stat_function(fun = function(x){
+    dnorm(x, mean = mu, sd = sigma)/diff(pnorm(q = c(0,1), mean = mu, sd = sigma))}, 
+  xlim = c(0,1), 
+  n = 1001L,
+  linetype = "dashed") +
+  scale_x_continuous(limits = c(0,1),
+                     labels = c("0", "0.25","0.5","0.75","1"),
+                     expand = c(0,0)) + 
+  scale_y_continuous(limits = c(0,10), expand = c(0,0),
+                     labels = c("0","2.5","5","7.5","10")) + 
+  labs(x = "", y = "", subtitle = "prior densities") + 
+  theme_classic()
+```
+
+The beta distribution, while matching the moments, is implying very low chance of success with a mode at zero. By contrast, the truncated Gaussian (which does not have mean $\mu$ and variance $\sigma^2$) has the mode at $\mu=0.1$. Which one is preferable depends on the context; we could also match the parameters of the truncated Gaussian.
+
+:::
+
+## Exercise 3.4
+
+Reproduce the analysis of Example 2.6 (Should you phrase your headline as a question?) of the [course notes](https://lbelzile.github.io/MATH80601A/priors.html) using the `upworthy_question` data from the [`hecbayes` package](https://github.com/lbelzile/hecbayes).
+
+
+:::{.solution}
+
 ```{r}
 #| message: false
-#| cache: true
 data(upworthy_question, package = "hecbayes")
-# Compute sufficient statistics
-data <- upworthy_question |>
+# Prior parameters
+alpha <- 2.5 # shape
+beta <- 0.04 # rate
+
+# Pool data from all questions (only total counts matter)
+summary_stats <- upworthy_question |>
   dplyr::group_by(question) |>
-  dplyr::summarize(ntot = sum(impressions),
-                   y = sum(clicks))
-# Code log posterior as sum of log likelihood and log prior
-loglik <- function(par, counts = data$y, offset = data$ntot, ...){
-  lambda <- exp(c(par[1] + log(offset[1]), par[2] + log(offset[2])))
- sum(dpois(x = counts, lambda = lambda, log = TRUE))
-}
-logprior <- function(par, ...){
-  sum(dnorm(x = par, mean = log(0.01), sd = 1.5, log = TRUE))
-}
-logpost <- function(par, ...){
-  loglik(par, ...) + logprior(par, ...)
-}
-# Compute maximum a posteriori (MAP)
-map <- optim(
-  par = rep(-4, 2),
-  fn = logpost,
-  control = list(fnscale = -1),
-  offset = data$ntot,
-  counts = data$y,
-  hessian = TRUE)
-# Use MAP as starting value
-cur <- map$par
-# Compute logpost_cur - we can keep track of this to reduce calculations
-logpost_cur <- logpost(cur)
-# Proposal covariance
-cov_map <- -2*solve(map$hessian)
-chol <- chol(cov_map)
-
-set.seed(80601)
-niter <- 1e4L
-nchains <- 4L
-npar <- 2L
-chain <- array(0, dim = c(niter, nchains, npar))
-naccept <- 0L
-for(j in 1:nchains){
-  for(i in seq_len(niter)){
-    # Multivariate normal proposal - symmetric random walk
-    prop <- chol %*% rnorm(n = 2)/1.05 + cur
-    logpost_prop <- logpost(prop)
-    # Compute acceptance ratio (no q because the ratio is 1)
-    logR <- logpost_prop - logpost_cur
-    if(logR > -rexp(1)){
-      cur <- prop
-      logpost_cur <- logpost_prop
-      naccept <- naccept + 1L
-    }
-    chain[i,j,] <- cur
-  }
-}
-# Acceptance rate
-naccept/(nchains * niter)
-
-# Create some summary graphs
-library(bayesplot)
-# Name chains so that the graphs can be labelled
-dimnames(chain)[[3]] <- c("lambda[1]","lambda[2]")
-
-# Trace plots, correlograms, density plots and bivariate scatterplot
-bayesplot::mcmc_trace(chain)
-bayesplot::mcmc_acf_bar(chain)
-bayesplot::mcmc_dens(chain)
-bayesplot::mcmc_scatter(chain)
-# Posterior summaries with coda
-# Need to create a list of mcmc objects...
-mcmc_list <- coda::as.mcmc.list(
-    lapply(seq_len(nchains),
-           function(ch) coda::as.mcmc(chain[, ch, ])))
-summary(mcmc_list)
+  dplyr::summarize(
+    total_impressions = sum(impressions),
+    total_clicks = sum(clicks)) |>
+  dplyr::ungroup() |>
+  as.vector()
+# Extract total number of successes out of trials
+# Impressions here serve as count
+n_yes <- summary_stats$total_impressions[1]
+y_yes <- summary_stats$total_clicks[1]
+n_no <-  summary_stats$total_impressions[2]
+y_no <- summary_stats$total_clicks[2]
+# Generate posterior sample draws
+# Since likelihood and priors are independent, 
+# so are the posteriors for the rates. 
+# We can draw independently from each.
+set.seed(1234)
+post_data_upworthy_question <- 
+  data.frame( 
+  yes = rgamma(n = 1e4, shape = alpha + y_yes, rate = beta + n_yes),
+  no = rgamma(n = 1e4,  shape = alpha + y_no, rate = beta + n_no))
+# Plot the histogram of the ratio of rates (question / no question)
+ggplot(data = post_data_upworthy_question,
+  mapping = aes(x = yes/no)) +
+  geom_histogram() +
+  labs(x = "rate ratio", y = "",
+       caption = expression(lambda["yes"]/lambda["no"])) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  theme_classic()
+# Compute the posterior mean for the quantity
+post_mean <- with(post_data_upworthy_question, mean(yes/no))
+post_mean
 ```
 
 :::

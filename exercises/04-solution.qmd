@@ -1,268 +1,249 @@
 ---
 title: "Solution 4"
+draft: true
 ---
 
 
 ## Exercise 4.1
 
-The Pareto distribution with shape $\alpha>0$ and scale $\tau>0$ has density
-$$
-f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathsf{I}(x > \tau).
-$$
-It can be used to model power laws in insurance and finance, or in demography. The `uscitypopn` data set in the `hecbayes` package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.
+Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
+\begin{align*}
+g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau > 0
+\end{align*}
+as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
 
-1. Using improper priors, write the joint posterior for a simple random sample of size $n$ and derive the conditional distributions $p(\alpha \mid \boldsymbol{y}, \tau)$ and $p(\tau \mid \alpha, \boldsymbol{y})$.
-2. The mononomial distribution $\mathsf{Mono}(a,b)$ has density $p(x) \propto x^{a-1}\mathsf{I}(0 \leq x \leq b)$. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.
-3. Implement Gibbs sampling for this problem for the `uscitypopn` data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates?
+1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau)$.
+2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
+3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
+ degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
+4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
 
 
 
 ::: {.solution}
 
-With improper prior, the joint posterior is the product of the likelihood contributions so
-$$
-p(\alpha, \tau \mid \boldsymbol{y}) \propto \alpha^n \left(\prod_{i=1}^n y_i\right)^{-\alpha-1} \tau^{-n\alpha} \mathsf{I}(\min_i y_i > \tau).
-$$
-Using the hint, write the conditional density for $\alpha$ given the rest as
+1. The distribution function is 
 \begin{align*}
-p(\alpha \mid \boldsymbol{y}, \tau) \propto \alpha^n \left( \frac{\prod_{i=1}^n y_i}{\tau^n}\right)^{-\alpha} = \alpha^{(n+1)-1} \exp\left\{-\alpha \left(\sum_{i=1}^n\log y_i - n\log \tau\right) \right\}
+F(x) = \begin{cases}
+\frac{1}{2} \exp\left(\frac{x-\nu}{\tau}\right) & x \leq \nu\\
+1 - \frac{1}{2} \exp\left(-\frac{x-\nu}{\tau}\right) & x >\nu\\
+\end{cases}
 \end{align*}
-which is $\mathsf{Gamma}\big(n+1, \sum_{i=1}^n \log y_i - n \log \tau \big)$. For the second, we have
-\begin{align*}
-p(\tau \mid \alpha, \boldsymbol{y}) \propto \tau^{n\alpha} \mathsf{I}(\min_{i} y_i > \tau),
-\end{align*}
-a mononomial distribution with parameters $a=n\alpha+1$ and $b = \min_{i} y_i$.
+and using the quantile transform, set $X=\nu + \tau \log(2U)$ if $U \leq 0.5$ and $X=\nu - \tau\log(2-2U)$ if $U > 0.5$ for $U \sim \mathsf{U}(0,1)$.
+2. The Gaussian has lighter tail than the Laplace, so this won't work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.
+3. The optimal value for the location of the Student-$t$ would be $\nu$ (here zero for the standard Laplace). We compute the optimal scale via in the code below:
+$$
+\mathrm{argmax}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmin}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
+$$
 
-To find the normalizing constant of the mononomial distribution, we simply integrate the unnormalized density to obtain the reciprocal constant: if $c = \int g(x) \mathrm{d} x$ for $c < \infty$ and $g(x) \geq 0$ for all $x$, then $g(x)/c$ integrates to one and is a valid density. Thus, we find 
-$$c= \int_0^b x^{a-1}\mathrm{d} x = \left[\frac{x^{a}}{a}\right]_{0}^b= \frac{b^{a}}{a}.$$
-The distribution function is $G(x) = (x/b)^{a}$ for $x \in [0,b]$ and the quantile function $G^{-1}(u) = u^{1/a}b$.
 
 ```{r}
-#| cache: true
-qmono <- function(u, a, b, log = FALSE){
-  stopifnot(isTRUE(all(a > 0, b > 0, u >= 0, u <= 1)))
- logq <-   log(u)/(a+1) + log(b)
- if(log){ return(logq)} else { return(exp(logq)) }
-}
 
-
-# Load data
-data("uscitypopn", package = "hecbayes")
-y <- uscitypopn$population
-n <- length(y)
-# Summary statistics appearing in the posterior distribution
-sumlogy <- sum(log(y))
-miny <- min(y)
-# MCMC via Gibbs sampling
-B <- 1e4L
-chains <- matrix(0, nrow = B, ncol = 2)
-colnames(chains) <- c("alpha", "tau")
-curr <- c(2, 2e5)
-for(b in seq_len(B)){
-  chains[b,1] <- curr[1] <- rgamma(n = 1, shape = n+1, rate = sumlogy - n*log(curr[2]))
-  chains[b,2] <- curr[2] <- qmono(runif(1), a = n*curr[1]+1, b = miny)
+#' Laplace density
+dlaplace <- function(x, loc = 0, scale = 1, log = FALSE){
+ stopifnot(scale > 0)
+ logdens <-  -log(2*scale) - abs(x-loc)/scale
+ if(log){
+ return(logdens)
+ } else{
+ return(exp(logdens))
+ }
 }
-chains <- coda::as.mcmc(chains)
-# Compute effective sample size
-coda::effectiveSize(chains)
-summary(chains)
+dstudent <- function(x, loc = 0, scale = 1, df = 1, log = FALSE){
+  logdens <- -log(scale) + dt(x = (x - loc)/scale, df = df, log = TRUE)
+   if(log){
+    return(logdens)
+   } else{
+   return(exp(logdens))
+   }
+}
+# For each value of the scale sigma,
+# find the minimum value of x (typically at zero)
+opt <- optimize(f = function(sigma){
+  optimize(f = function(x){
+  dlaplace(x, log = TRUE) - 
+    dstudent(x, scale = sigma, df = 3, log = TRUE)}, 
+  maximum = TRUE, 
+  interval = c(-100, 100))$objective
+}, interval = c(0.1,10))
+(C <- exp(opt$objective))
+(sigma <- opt$minimum)
+
+# Simulate from accept-reject
+ntrials <- 1.1*C*1000
+# Simulate from location-scale student
+candidate <- sigma*rt(n = ntrials, df = 3)
+# Compute log of acceptance rate
+logR <- dlaplace(candidate, log = TRUE) - 
+  dstudent(candidate, scale = sigma, df = 3, log = TRUE) 
+samp <- candidate[logR >= log(C) + -rexp(ntrials)]
+# Monte Carlo estimator of the acceptance rate
+ntrials/length(samp)
+# Plot density
+library(ggplot2)
+ggplot(data = data.frame(x = samp),
+       mapping = aes(x = x)) +
+  geom_density() +
+  theme_classic()
 ```
-We can see that the autocorrelation is minimal, so the sampler is quite efficient.
-
+4. The Monte Carlo acceptance rate is `r round(ntrials/length(samp), 2)`, compared with the analytical bound found via numerical optimization of `r round(C, 2)`, to two significant digits.
 
 :::
+
 
 ## Exercise 4.2
 
-Implement the Bayesian LASSO for the `diabetes` cancer surgery from package `lars`.  Check @Park.Casella:2008 for the details of the Gibbs sampling.
+We revisit [Exercise 2.3](/exercises/02-exercise.html#exercice-2.3), which used a half-Cauchy prior for the exponential waiting time of buses.
 
-1. Fit the model for a range of values of $\lambda$ and produce parameter estimate paths to replicate Figure 2 of the paper.
-2. Check the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?
-3. Implement the method of section 3.1 from @Park.Casella:2008 by adding $\lambda$ as a parameter.
-4. For three models with different values of $\lambda$, compute the widely applicable information criterion (WAIC) and use it to assess predictive performance.
+The ratio-of-uniform method, implemented in the [`rust` **R** package](https://paulnorthrop.github.io/rust/index.html), can be used to simulate independent draws from the posterior of the rate $\lambda$.
+The following code produces 
+```{r}
+#| eval: true
+#| echo: true
+nobs <- 10L # number of observations
+ybar <- 8   # average waiting time
+B <- 1000L  # number of draws
+# Un-normalized log posterior: scaled log likelihood + log prior
+upost <- function(x){ 
+  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +
+    log(2) + dt(x = x, df = 1, log = TRUE)}
+post_samp <- rust::ru(logf = upost, 
+                      n = B, 
+                      d = 1,  # dimension of parameter (scalar)
+                      init = nobs/ybar)$sim_vals # initial value of mode
+```
+
+Estimate using the Monte Carlo sample:
+
+1. the probability that the waiting time is between 3 and 15 minutes
+2. the average waiting time
+3. the standard deviation of the waiting time
 
 
 ::: {.solution}
 
-We first setup a Gibbs sampler for a given value of $\lambda$, or using the empirical Bayes estimator provided in section 3.1. The effective sampling size for fixed $\lambda$ is good. If we let the parameter varies, the performance degrades and we obtain an effective size shy of 1000 for 10K iterations for $\lambda$, and comfortably above 5000 for others. 
-
 ```{r}
-#| eval: true
-#| echo: true
-#| cache: true
-data(diabetes, package = "lars")
-bayeslasso <- function(lambda = NULL, 
-                       B = 1e4L,
-                       x = diabetes$x, 
-                       y = diabetes$y){
-  stopifnot(is.matrix(x), is.vector(y))
-  # Scale inputs in case
-  x <- scale(x, center = TRUE, scale = FALSE)
-  y <- y - mean(y)
-  # Check method
-  if(is.null(lambda)){
-    method <- "empbayes"
-  } else{
-    method <- "fixed" 
-  }
-  burnin <- 250L
-  # Precompute quantities and dimensions
-  xtx <- crossprod(x)
-  p <- ncol(x)
-  n <- nrow(x)
-  # Obtain initial estimates
-  linmod <- lm(y ~ x - 1)
-  betaols <- coef(linmod)
-  beta.curr <- betaols
-  sigmasq.curr <- mean(residuals(linmod)^2)
-  tausqinv.curr <- rep(1, p)
-  # Value reported in the text for the optimal parameter: lambda = 0.237
-  beta.ind <- 1:p
-  sigmasq.ind <- p + 1L
-  tausq.ind <- seq(from = p + 2L, length.out = p, by = 1L)
-  chains <- matrix(0, nrow = B, ncol = p + 1 + p + 
-                     ifelse(method == "fixed", 0,1))
-  if(method == "fixed"){
-    colnames(chains) <- c(paste0("beta", 1:p), "sigmasq",
-                          paste0("tausq", 1:p))
-    lambdasq.curr <- lambda[1]^2
-  } else{
-    colnames(chains) <- c(paste0("beta", 1:p), "sigmasq", 
-                          paste0("tausq", 1:p), "lambda")
-    lambdasq.curr <- p*sqrt(sigmasq.curr)/sum(abs(betaols))
-    lambdasq.ind <- ncol(chains)
-  }
-# MCMC loop
-for(b in seq_len(B + burnin)){
-  ind <- pmax(1, b-burnin)
-  Ainv <- solve(xtx + diag(tausqinv.curr))
-  beta.curr <- chains[ind,beta.ind] <- as.numeric(
-    mvtnorm::rmvnorm(
-      n = 1, 
-      mean = as.numeric(Ainv %*% t(x) %*% y), 
-      sigma = sigmasq.curr*Ainv))
-  sigmasq.curr <- chains[ind, sigmasq.ind] <- 1/rgamma(
-    n = 1, 
-    shape = (n-1+p)/2,
-    rate = sum((y-x %*% beta.curr)^2)/2 + 
-      sum(beta.curr^2*tausqinv.curr)/2)
-  # Compute marginal posterior mean for lambda, using section 3.1
-  sumexpect <- 0
-  for(j in 1:p){
-    tausqinv.curr[j] <- actuar::rinvgauss(
-      n = 1, 
-      mean = sqrt(lambdasq.curr*sigmasq.curr)/abs(beta.curr[j]),
-      dispersion = 1/lambdasq.curr)
-    if(method != "fixed"){
-    sumexpect <- sumexpect + mean(1/actuar::rinvgauss(
-      n = 1000, 
-      mean = sqrt(lambdasq.curr*sigmasq.curr)/abs(beta.curr[j]),
-      dispersion = 1/lambdasq.curr))
-    }
-  }
-  chains[ind, tausq.ind] <- 1/tausqinv.curr
-  if(method != "fixed"){
-    lambdasq.curr <- chains[ind, lambdasq.ind] <- 2*p/sumexpect
-  }
-}
-  if(method != "fixed"){
-  chains[, lambdasq.ind] <- sqrt(chains[, lambdasq.ind])
-}
-# Cast Markov chains to mcmc class object.
-chains.mcmc <- coda::as.mcmc(chains)
-# Effective sample size
-ess <- as.integer(round(coda::effectiveSize(chains.mcmc), 0))
-
-# Compute WAIC from log pointwise density
-lppd <- 0
-penalty <- 0
-for(i in seq_len(n)){
-  lppd_i <- dnorm(
-    x = y[i], 
-    mean = as.numeric(chains[,beta.ind] %*% c(x[i,])), 
-    sd = sqrt(chains[,sigmasq.ind]), 
-    log = TRUE)
-  lppd <- lppd + mean(lppd_i)
-  penalty <- penalty + var(lppd_i)
-}
-waic <- (-lppd + penalty)/n
-l1norm <- mean(rowSums(abs(chains[,beta.ind])))
-
-# Parameter estimates and 95% equitailed credible intervals
-quant <- t(apply(chains, 2, 
-                quantile, prob = c(0.025, 0.5, 0.975)))
-regpar <- as.data.frame(cbind(quant,
-                colMeans(chains),
-                coda::batchSE(chains.mcmc),
-                ess))
-regpar$pars <- rownames(quant)
-rownames(regpar) <- NULL
-colnames(regpar) <- c("lower", "median", "upper", 
-                      "mean", "se", "ess", "par")
-regpar <- regpar[,c(7,4:5,1:3,6)]
-attr(regpar, "waic") <- waic
-attr(regpar, "l1norm") <- l1norm
- return(regpar)
-}
-
-# Call the MCMC sampler
-set.seed(2023)
-lasso_empbayes <- bayeslasso(lambda = NULL)
-# Extract the value of WAIC
-waic <- attr(lasso_empbayes, "waic")
-
+# Lambda is the reciprocal mean (1/minute)
+times <- 1/post_samp
+mean(times > 3 & times < 15)
+mean(times)
+sd(times)
 ```
 
-```{r}
-#| eval: true
-#| echo: false
-#| fig-cap: "Standardized median posterior estimates of the coefficients for the Bayesian LASSO with 95 percent equitailed credible intervals, with $\\lambda$ estimated using empirical Bayes. Ordinary least square estimates are denoted by crosses."
-#| label: fig-parkcasellaf2
-xlabs <- factor(1:10, levels = 1:10, labels = colnames(diabetes$x))
-library(ggplot2)
-ggplot() +
-  geom_pointrange(
-    data = data.frame(
-      y = reorder(x = xlabs, dplyr::desc(xlabs)),
-      median = lasso_empbayes[1:10,"median"],
-      lower = lasso_empbayes[1:10,"lower"],
-      upper = lasso_empbayes[1:10,"upper"]),
-    mapping = aes(
-      xmin = lower, 
-      xmax = upper, 
-      x = median, 
-      y = y)) +
-  geom_point(
-    data = data.frame(
-      y = reorder(x = xlabs, dplyr::desc(xlabs)), 
-      x = coef(lm(y ~ x - 1, data = diabetes))),
-    mapping = aes(x = x, y = y),
-    shape = 4) +
-  labs(x = "standardized coefficients",
-       y = "") +
-  theme_classic()
-```
-The plot corresponds to Figure 2 of @Park.Casella:2008 and the posterior summaries, reported in @tbl-coefs, are also in line with those of the paper.
-
-
-```{r}
-#| label: tbl-coefs
-#| eval: true
-#| echo: false
-#| tbl-cap: "Estimates posterior summaries from the Bayesian LASSO, based on 10K draws. Posterior means and adjusted standard errors, posterior median and equitailed 95 percent credible intervals, effective sample."
-knitr::kable(lasso_empbayes, digits = 2)
-```
-
-For the last part, we can simply run the MCMC and find the value of $\lambda$ that yields the lowest value of WAIC. 
-
-```{r}
-#| cache: true
-#| eval: true
-set.seed(2023)
-blasso1 <- bayeslasso(lambda = 0.1)
-blasso2 <- bayeslasso(lambda = 0.2)
-blasso3 <- bayeslasso(lambda = 1)
-2*length(diabetes$y)*c(attr(blasso1, "waic"), attr(blasso2, "waic"), attr(blasso3, "waic"))
-```
 :::
 
+Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.
+
+```{r}
+B <- 1e4L
+curr <- 8/10 # prior mean
+chains <- numeric(B) # container
+sd_prop <- 0.1
+for(b in seq_len(B)){
+  prop <- rnorm(n = 1, mean = curr, sd = sd_prop)
+  if(upost(prop) - upost(curr) > -rexp(1)){
+    curr <- prop
+  }
+  chains[b] <- curr
+}
+# Discard burn-in
+times <- 1/chains[-(1:100)]
+mean(times > 3 & times < 15)
+mean(times)
+sd(times)
+# Summary of MCMC
+mcmc <- coda::mcmc(chains)
+summary(mcmc)
+```
+
+
+## Exercise 4.3
+
+Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates $\lambda_i$ $(i=1,2)$, with the same priors. Use a Metropolis--Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.
+
+1. Tune the variance to reach an approximate acceptance rate of 0.44.
+2. Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See [`bayesplot`](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html) or `coda`. Comment on  the convergence and mixing of your Markov chain Monte Carlo.
+3. Report summary statistics of the chains.
+
+:::{ .solution}
+
+The only thing we need to do is change the parametrization, and add tuning of the variance.
+```{r}
+#| message: false
+#| cache: true
+data(upworthy_question, package = "hecbayes")
+# Compute sufficient statistics
+data <- upworthy_question |>
+  dplyr::group_by(question) |>
+  dplyr::summarize(ntot = sum(impressions),
+                   y = sum(clicks))
+# Code log posterior as sum of log likelihood and log prior
+loglik <- function(par, counts = data$y, offset = data$ntot, ...){
+  lambda <- exp(c(par[1] + log(offset[1]), par[2] + log(offset[2])))
+ sum(dpois(x = counts, lambda = lambda, log = TRUE))
+}
+logprior <- function(par, ...){
+  sum(dnorm(x = par, mean = log(0.01), sd = 1.5, log = TRUE))
+}
+logpost <- function(par, ...){
+  loglik(par, ...) + logprior(par, ...)
+}
+# Compute maximum a posteriori (MAP)
+map <- optim(
+  par = rep(-4, 2),
+  fn = logpost,
+  control = list(fnscale = -1),
+  offset = data$ntot,
+  counts = data$y,
+  hessian = TRUE)
+# Use MAP as starting value
+cur <- map$par
+# Compute logpost_cur - we can keep track of this to reduce calculations
+logpost_cur <- logpost(cur)
+# Proposal covariance
+cov_map <- -2*solve(map$hessian)
+chol <- chol(cov_map)
+
+set.seed(80601)
+niter <- 1e4L
+nchains <- 4L
+npar <- 2L
+chain <- array(0, dim = c(niter, nchains, npar))
+naccept <- 0L
+for(j in 1:nchains){
+  for(i in seq_len(niter)){
+    # Multivariate normal proposal - symmetric random walk
+    prop <- chol %*% rnorm(n = 2)/1.05 + cur
+    logpost_prop <- logpost(prop)
+    # Compute acceptance ratio (no q because the ratio is 1)
+    logR <- logpost_prop - logpost_cur
+    if(logR > -rexp(1)){
+      cur <- prop
+      logpost_cur <- logpost_prop
+      naccept <- naccept + 1L
+    }
+    chain[i,j,] <- cur
+  }
+}
+# Acceptance rate
+naccept/(nchains * niter)
+
+# Create some summary graphs
+library(bayesplot)
+# Name chains so that the graphs can be labelled
+dimnames(chain)[[3]] <- c("lambda[1]","lambda[2]")
+
+# Trace plots, correlograms, density plots and bivariate scatterplot
+bayesplot::mcmc_trace(chain)
+bayesplot::mcmc_acf_bar(chain)
+bayesplot::mcmc_dens(chain)
+bayesplot::mcmc_scatter(chain)
+# Posterior summaries with coda
+# Need to create a list of mcmc objects...
+mcmc_list <- coda::as.mcmc.list(
+    lapply(seq_len(nchains),
+           function(ch) coda::as.mcmc(chain[, ch, ])))
+summary(mcmc_list)
+```
+
+:::

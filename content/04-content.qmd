@@ -1,45 +1,32 @@
 ---
 title: "Markov chain Monte Carlo"
-date: "2023-10-17"
 ---
 
 
 ## Content
 
+- Metropolis--Hastings algorithm
 - Efficient proposals for Metropolis--Hastings and tuning
-- Gibbs sampling and data augmentation
-- Bayesian worflow and diagnostics for MCMC
 
 ## Learning objectives
 
 At the end of the chapter, students should be able to
 
-- implement MALA and Gibbs sampling
-- derive the conditional distributions of a model for Gibbs sampling
-- diagnose performance of MCMC algorithms and implement potential remedies
-
+- understand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ
+- implement a MHG algorithm to draw samples from the posterior
+- use output of MCMC to obtain estimates and standard errors
 
 
 ## Readings
 
-:::{.callout-warning}
-
-These readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies --- the strict minimum being the course notes.
-
-:::
 
 - [@Geyer:2011](https://www.mcmchandbook.net/HandbookChapter1.pdf)
-- [Chapter 3 of the course notes](https://lbelzile.github.io/MATH80601A/mcmc.html)
+- [Chapter 4 of the course notes](https://lbelzile.github.io/MATH80601A/mcmc.html)
 
 
 ## Complementary readings
 
-:::{.callout-warning}
-Complementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.
-:::
-
-- @Albert:2009, chapters 6 and 10 (several examples)
-- @McElreath:2020, chapter 9 (non technical)
+- @Green:2015 (overview of MCMC methods)
 
 
 ## Slides

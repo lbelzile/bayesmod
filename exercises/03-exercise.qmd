@@ -2,60 +2,40 @@
 title: "Exercise 3"
 ---
 
-
 ## Exercise 3.1
 
-Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
+Consider a simple random sample of size $n$ from the Wald distribution, with density
 \begin{align*}
-g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau > 0
+f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y > 0)
 \end{align*}
-as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
+for location $\nu >0$ and shape $\tau>0$. 
 
-1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau)$.
-2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
-3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
- degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
-4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
+a. Show that the joint prior
+$$ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
+b. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
+c. Derive the marginal posterior $p(\lambda)$.
 
 
 ## Exercise 3.2
 
-We revisit [Exercise 1.3](/exercises/01-exercise.html#exercice-1.3), which used a half-Cauchy prior for the exponential waiting time of buses.
+Consider the Rayleigh distribution with scale $\sigma>0$. It's density is
+$$f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).$$
 
-The ratio-of-uniform method, implemented in the [`rust` **R** package](https://paulnorthrop.github.io/rust/index.html), can be used to simulate independent draws from the posterior of the rate $\lambda$.
-The following code produces 
-```{r}
-#| eval: true
-#| echo: true
-nobs <- 10L # number of observations
-ybar <- 8   # average waiting time
-B <- 1000L  # number of draws
-# Un-normalized log posterior: scaled log likelihood + log prior
-upost <- function(x){ 
-  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +
-    log(2) + dt(x = x, df = 1, log = TRUE)}
-post_samp <- rust::ru(logf = upost, 
-                      n = B, 
-                      d = 1,  # dimension of parameter (scalar)
-                      init = nobs/ybar)$sim_vals # initial value of mode
-```
+Derive the Fisher information matrix and use it to obtain Jeffrey's prior for $\sigma$. Determine whether the prior is proper.
 
-Estimate using the Monte Carlo sample:
-
-1. the probability that the waiting time is between 3 and 15 minutes
-2. the average waiting time
-3. the standard deviation of the waiting time
-
-
-Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.
+<!-- Derivation of prior for the correlation $\rho$ in a bivariate normal, in
+Jeffrey's theory of probability (1937)
+-->
 
 ## Exercise 3.3
 
-Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates $\lambda_i$ $(i=1,2)$, with the same priors. Use a Metropolis--Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.
+Consider a binomial model with an unknown probability of successes $\theta \in [0,1]$ model. Suppose your prior guess for $\theta$ has mean $0.1$ and standard deviation $0.2$
+
+Using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.
 
 
-1. Tune the variance to reach an approximate acceptance rate of 0.44.
-2. Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See [`bayesplot`](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html) or `coda`. Comment on  the convergence and mixing of your Markov chain Monte Carlo.
-3. Report summary statistics of the chains.
+Plot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location $\mu=0.1$ and scale $\sigma=0.2$.^[Note that the parameters of the truncated Gaussian distribution do not correspond to moments!]
 
+## Exercise 3.4
 
+Reproduce the analysis of Example 2.6 (Should you phrase your headline as a question?) of the [course notes](https://lbelzile.github.io/MATH80601A/priors.html) using the `upworthy_question` data from the [`hecbayes` package](https://github.com/lbelzile/hecbayes).

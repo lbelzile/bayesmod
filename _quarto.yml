@@ -35,8 +35,8 @@ website:
         file: content/index.qmd
       - text: "Exercises"
         file: exercises/index.qmd
- #    - text: "Assignment"
- #      file: evaluations/assignment2.qmd
+      - text: "News"
+        file: news/index.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/MATH80601A/"
  #     - icon: box
@@ -56,9 +56,9 @@ website:
           contents:
             - text: "1: Introduction"
               file: content/01-content.qmd
-            - text: "2: Priors"
+            - text: "2: Bayesics"
               file: content/02-content.qmd
-            - text: "3: Simulation-based inference"
+            - text: "3: Priors"
               file: content/03-content.qmd
             - text: "4: Markov chain Monte Carlo"
               file: content/04-content.qmd
@@ -74,7 +74,7 @@ website:
           contents:
             - text: "**R** and RStudio"
               file: example/installation.qmd
-    - title: "Assignment"
+    - title: "Problem sets"
       file: evaluations/assignment2.qmd
     - title: "Exercises"
       style: "docked"
@@ -82,22 +82,26 @@ website:
       foreground: "#000000"
       contents:
         - exercises/index.qmd
-        - section: "Bayesics"
+        - section: "1. Introduction"
           contents:
              - exercises/01-exercise.qmd
              - exercises/01-solution.qmd
-        - section: "Priors"
+        - section: "2. Bayesics"
           contents:
              - exercises/02-exercise.qmd
              - exercises/02-solution.qmd
-        - section: "Simulation-based inference"
+        - section: "3. Priors"
           contents:
              - exercises/03-exercise.qmd
              - exercises/03-solution.qmd
-        - section: "Markov chain Monte Carlo"
+        - section: "4. Metropolis--Hastings"
           contents:
-             - exercises/04-exercise.qmd        
+             - exercises/04-exercise.qmd
              - exercises/04-solution.qmd
+        - section: "5. Gibbs sampling"
+          contents:
+             - exercises/05-exercise.qmd        
+             - exercises/05-solution.qmd
   page-footer:
     left: |
       Content {{< fa brands creative-commons >}} {{< var course.copyright_year >}} by [{{< var instructor.name_no_title >}}]({{< var instructor.url >}})<br>

@@ -1,224 +1,359 @@
 ---
 title: "Solution 2"
+draft: true
 ---
+
+
+You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.
+
+For modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate $\lambda>0$, with associated density $f(x) = \lambda \exp(-\lambda x)$.
 
 ## Exercise 2.1
 
-Consider a simple random sample of size $n$ from the Wald distribution, with density
-\begin{align*}
-f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y > 0)
-\end{align*}
-for location $\nu >0$ and shape $\tau>0$. 
 
-a. Write down the likelihood and show the posterior only depends on the data through the sufficient statistics $\sum_{i=1}^n y_i$ and $\sum_{i=1} y_i^{-1}$.
-b. Show that the joint prior
-$$ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
-c. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
-d. Derive the marginal posterior $p(\lambda)$.
+Compute the marginal likelihood when the prior for $\lambda$ is 
 
+1. an exponential distribution with rate $\kappa>0$, with prior density $p(\lambda) = \kappa \exp(-\lambda\kappa)$;
+2. same, but truncated above at 1, so the density is $p(\lambda) = \kappa \exp(-\lambda\kappa)\mathrm{I}\{\lambda \leq 1\}$; the indicator function $\mathrm{I}(\cdot)$ equals one if the condition is true and zero otherwise.
+3. $\lambda \sim \mathsf{Ga}(\alpha, \beta)$, a gamma distribution with shape $\alpha>0$ and rate $\beta>0$, with prior density $p(\lambda) = \beta^\alpha\lambda^{\alpha-1}\exp(-\beta \lambda)/\Gamma(\alpha)$.
 
+Deduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution.
 
 ::: {.solution}
-
-
-a. The log likelihood for an independent and identically distributed sample is, up to terms not depending on the parameters,
+The likelihood is
 \begin{align*}
-\ell(\nu, \lambda) \stackrel{\nu, \lambda}{\propto} \frac{n}{2} \ln(\lambda) -  - \frac{\lambda}{2\nu^2} \sum_{i=1}^n (y_i - 2\nu + \nu^2/y_i)
+L(\lambda) = \prod_{i=1}^n \lambda \exp(-\lambda y_i) = \lambda^n \exp(-\lambda n\overline{y}),
 \end{align*}
-and we readily see that the model is an exponential family with sufficient statistics $t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i$ and $t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}$.
+where $\overline{y}=8$ is the sample mean and $n=10$ the number of observations.
 
-The joint prior is of the form
+The exponential distribution is a special case of the gamma, where $\lambda \sim \mathsf{Exp}(\kappa) \equiv \mathsf{Ga}(1, \kappa)$.
+
+The posterior densities are equal, up to proportionality, to
 \begin{align*}
-p(\lambda) &\propto \lambda^{\alpha-1}\exp(-\lambda \beta) \\
-p(\nu \mid \lambda) & \propto \frac{(\lambda \tau)^{1/2}}{\nu^2}\exp\left\{-\frac{\lambda\tau }{2}(\nu^{-1}-\mu)^2\right\},
+p_1(\lambda \mid y) &\propto\lambda^{n}\exp\{-(n\overline{y}+\kappa)\lambda\} \\
+p_2(\lambda \mid y) &\propto\lambda^{n}\exp\{-(n\overline{y}+\kappa)\lambda\}\mathrm{I}\{\lambda \geq 1\} \\
+p_3(\lambda \mid y) &\propto\lambda^{n+\alpha-1}\exp\{-(n\overline{y}+\beta)\lambda\}
 \end{align*}
-where the last step follows from a change of variable.
+so these are $\mathsf{Ga}(n+1, n\overline{y} + \kappa)$, $\mathsf{Ga}(n+1, n\overline{y} + \kappa)$ truncated over $[0,1]$ and $\mathsf{Ga}(n+\alpha, n\overline{y} + \beta)$.
 
-
-b. To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get
+Let $\Gamma(\cdot)$ denote the gamma function and $\gamma(a, x)$ the lower incomplete gamma function, $\gamma(a, x= \int_0^x t^{a-1}\exp(-t) \mathrm{d} t.$ The **marginal likelihood** can be obtained either by integrating the product of the likelihood and prior, or upon noting that  
 \begin{align*}
-p(\lambda, \nu \mid \boldsymbol{y}) &\propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau}{\nu^{2}}-2\frac{\tau\mu}{\nu} + \tau\mu^2 +\frac{t_1(\boldsymbol{y})}{\nu^2} -  \frac{2n}{\nu} + t_2(\boldsymbol{y})\right\}\right] \\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau + t_1(\boldsymbol{y})}{\nu^2} - 2\frac{\tau\mu+n}{\nu} + \tau\mu^2 + t_2(\boldsymbol{y})\right\} \right]
-\\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp\left[-\lambda \left\{\beta + \frac{c_3-c_1c_2^2}{2}\right\}\right] \exp\left\{ -\frac{\lambda c_1}{2}\left(\nu^{-1} - c_2\right)^2\right\} 
+p_i(\boldsymbol{y}) = \frac{L(\lambda) p_i(\lambda)}{p_i(\lambda \mid \boldsymbol{y})}
 \end{align*}
-where $c_1=\{\tau + t_1(\boldsymbol{y})\}$, $c_2 =(\tau\mu+n)/c_1$ and $c_3 =\tau\mu^2 + t_2(\boldsymbol{y})$.
-
-c. We see that the joint posterior as the product of two densities, say $q(\lambda \mid \boldsymbol{y})p(1/\nu \mid \lambda)$; $q(\lambda \mid \boldsymbol{y})$ is the density of a gamma distribution with shape $a = (n+1)/2+\alpha$ and rate $b=\beta + (c_3-c_1c_2^2)/2$, whereas the other is a reciprocal Gaussian with mean parameter $c_2$ and precision $\lambda c_1$. $\mathsf{Ga}\left\{(n+1)/2+\alpha\right\}$
-
-d. To get the marginal $p(\lambda \mid \boldsymbol{y})$, we need to integrate with respect to $\nu$. Making the change of variable $\mu = 1/\nu$, we recover a Gaussian kernel
+so we get 
 \begin{align*}
-p(\lambda \mid \boldsymbol{y}) &= \lambda^{a-1}\exp(-b\lambda)\int_{\mathbb{R}}\exp\left\{ -\frac{\lambda c_1}{2}\left(\mu - c_2\right)^2\right\}  \mathrm{d} \mu 
-\\&\propto \lambda^{a-1}\exp(-b\lambda) \lambda^{-1/2}
+p_1(\boldsymbol{y}) &= \kappa n!(n\overline{y}+\kappa)^{-(n+1)},\\ 
+p_2(\boldsymbol{y}) &= p_1(\boldsymbol{y}) \times \gamma\{n+1, (n\overline{y}+\kappa)\}, \\ 
+p_3(\boldsymbol{y}) &= \frac{\Gamma(n + \alpha)\beta^\alpha}{\Gamma(\alpha)(n\overline{y} + \beta)^{n+\alpha}}.
 \end{align*}
-so we conclude that, marginally, $\lambda \sim \mathsf{Ga}(n+ \alpha, b)$.
+
+```{r}
+#| eval: false
+#| echo: false
+#| label: sanity-checks
+n <- 10
+ybar <- 0.2
+kappa <- 0.6
+alpha <- rexp(1)
+beta <- rexp(1)
+loglik <- function(rate){n*dexp(x = ybar, rate = rate, log = TRUE)}
+prior1 <- function(rate){dexp(x = rate, rate = kappa, log = TRUE)}
+prior3 <- function(rate){dgamma(x = rate, shape = alpha, rate = beta, log = TRUE)}
+integrate(f = function(rate){
+   exp(loglik(rate) + prior1(rate) - 
+          (log(kappa) + lgamma(n+1) -(n+1)*log(n*ybar+kappa) +
+              pgamma(1, shape = n+1, rate = n*ybar+kappa, log.p = TRUE)))}, 
+   lower = 0, upper = 100)
+integrate(f = function(rate){
+   exp(loglik(rate) + prior3(rate) - 
+          (lgamma(n+alpha) + alpha*log(beta) - lgamma(alpha) - (n+alpha)*log(n*ybar+beta)))}, 
+   lower = 0, upper = 100)
+```
 
 :::
+
 
 ## Exercise 2.2
 
-Consider the Rayleigh distribution with scale $\sigma>0$. It's density is
-$$f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).$$
+<!-- Specifying priors for the rate is complicated because the units of $\lambda$ are $\text{minutes}^{-1}$. Rather, it makes sense to look at it's reciprocal: if $\lambda \sim \mathsf{Ga}(\alpha, \beta)$, then it's reciprocal $\omega=1/\lambda$ has an inverse gamma distribution, denoted $\omega \sim \mathsf{IGa}(\alpha, \beta)$, -->
+<!-- with density -->
+<!-- \begin{align*} -->
+<!-- f(y; \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} y^{-\alpha-1} \exp(-\beta/y) -->
+<!-- \end{align*} -->
+<!-- with $\mathsf{E}(\omega) = \beta/(\alpha-1)$ for $\alpha>1$ and $\beta > 0$. -->
 
-Derive the Fisher information matrix and use it to obtain Jeffrey's prior for $\sigma$. Determine whether the prior is proper.
+<!-- Consider the following priors for the expected waiting time, $Y=1/\lambda$. -->
+
+<!-- 1. an inverse gamma with scale $\beta=50$ and shape $\alpha = 10$ -->
+<!-- 2. an inverse gamma with scale $\beta=5$ and shape $\alpha=1$ (meaning $\lambda \sim \mathsf{Exp}(0.2)$) -->
+<!-- 3. a inverse gamma distribution with scale $\beta=7$ and shape $\alpha = 1$ -->
+<!-- 4. a uniform prior on the unit interval $[5,10]$ for $1/\lambda$ -->
+
+
+
+Consider the following priors for the reciprocal expected waiting time, $\lambda$.
+
+1. a gamma with rate $\beta=100$ and shape $\alpha = 10$
+2. an exponential with rate $5$
+3. a uniform prior on the unit interval $[5,10]$ for $1/\lambda$
+
+Associate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?
+
+Explain what would happen to the posterior curve if we increased the sample size.
+
+
+
+```{r}
+#| label: fig-betabinom
+#| eval: true
+#| echo: false
+#| fig-cap: "Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator."
+#| out-width: '100%'
+#| fig-height: 4
+#| fig-width: 12
+library(ggplot2)
+library(MetBrewer)
+library(patchwork)
+nobs <- 10L
+sumt <- 8*nobs
+xlim <- 1/2
+set.seed(1234)
+g1 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
+  stat_function(fun =  function(x){
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = nobs + 11, rate = 100 + sumt)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
+    labs(y = "", x = "reciprocal expected waiting time") +
+    theme_classic() 
+
+c <- integrate(function(x){dgamma(x, rate = sumt, shape = nobs + 1)/x^2}, lower = 1/10, upper = 1/5)$value
+g2 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        ifelse(x>1/5 | x < 1/10, 0, 
+               dgamma(x, rate = sumt, shape = nobs + 1)/x^2)/c}, n = 10001,
+        xlim = c(1/10-0.01, 1/5+0.01)) +
+   scale_x_continuous(limits = c(0,xlim),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
+    labs(y = "", x = "reciprocal expected waiting time") +
+    theme_classic() 
+
+g3 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
+    stat_function(fun =  function(x){
+       dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, rate = sumt + 0.5, shape = nobs + 1.1)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
+    labs(y = "", x = "reciprocal expected waiting time") +
+    theme_classic() 
+
+
+g4 <- ggplot() +
+  geom_vline(linetype = "dashed", alpha = 0.5, xintercept = 1/8) +
+    stat_function(fun =  function(x){
+        dgamma(x, shape = nobs+1, rate = sumt)}, n = 1001,
+        linetype = "dashed") +
+    stat_function(fun =  function(x){
+        dgamma(x, rate = 5 + sumt, shape = nobs+1)}, n = 1001) +
+   scale_x_continuous(limits = c(0,xlim),
+                       expand = c(0,0)) +
+    scale_y_continuous(expand = expansion(add = c(0, 0.1)), limits = c(0, 30)) +
+    labs(y = "", x = "reciprocal expected waiting time") +
+    theme_classic() 
+(g4 + g1 + g2) +
+  plot_annotation(tag_levels = 'A') 
+```
 
 
 ::: {.solution}
 
-The log likelihood for a sample of size one is 
-\begin{align*}
-\ell(\sigma) = \log(y) - 2\log(\sigma) - \frac{y^2}{2\sigma^2}
-\end{align*}
-and the negative of the Hessian is 
-\begin{align*}
-\jmath(\sigma) = -\frac{\partial^2 \ell(\sigma)}{\partial \sigma^2} = -\frac{2}{\sigma^2} + \frac{3y^2}{\sigma^4}
-\end{align*}
-To compute the Fisher information, we need the second moment of the Rayleigh distribution,
-\begin{align*}
-\mathsf{E}(Y^2) &= \int_0^\infty \frac{y^3}{\sigma^2}\exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{d} y\\&= 2\sigma^2 \int_0^\infty u \exp(-u) \mathrm{d} u
-\\&= 2\sigma^2
-\end{align*}
-where we made the change of variable $u= 0.5y^2\sigma^{-2}$, $\mathrm{d} u = y\sigma^{-2}\mathrm{d} y$ and recovered the expected value of a unit exponential distribution.
 
-The Fisher information is $\imath(\sigma) = \mathsf{E}\{\jmath(\sigma)\}=-2/\sigma^2 + 6/\sigma^2 = 3/\sigma^2$. Jeffrey's prior for the scale, $p(\sigma) =|\imath(\sigma)|^{1/2}$, is proportional to $\sigma^{-1}$ and thus improper.
+As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimate, $\widehat{\lambda}=1/8$, regardless of the prior function (if it is untruncated).
+
+The mode of a gamma distribution with rate $\beta$ and shape $\alpha$ is $(\alpha-1)/\beta$ for $\alpha>1$.
+
+The truncated distribution (bottom left) is clearly identified from the "stubborn" prior, which is $p(\lambda) \propto \mathrm{I}(1/10 < \lambda < 1/5)/\lambda^2$, so 3C. Prior 1 has an average of 1/10 (less than the MLE) and provides nearly as much information as the data, so it is the more peaked posterior, so 1B. The exponential, or  $\mathsf{Ga}(1,5)$, is much less informative than the likelihood and posterior should be only slightly different for the other, so 2A.
 
 :::
 
 
-## Exercise 2.3
-
-Consider a binomial model with an unknown probability of successes $\theta \in [0,1]$ model. Suppose your prior guess for $\theta$ has mean $0.1$ and standard deviation $0.2$
-
-Using moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.
+## Exercice 2.3
 
 
-Plot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location $\mu=0.1$ and scale $\sigma=0.2$.^[Note that the parameters of the truncated Gaussian distribution do not correspond to moments!]
+
+The purpose of this exercise is to show that even one-dimensional numerical integration requires some care.
+Consider a half Cauchy prior over the positive half line, with density $f(x) = 2\pi^{-1}(1+x^2)^{-1}\mathrm{I}(x \geq 0)$. Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes$^{-1}$. Compare this approximation with that of quadrature methods via `integrate` and return the corresponding estimates of the normalizing constant. *Indication*: check the values and make sure the output is sensical. Modify the integrand if necessary.
+
+Plot the posterior distribution of $\omega = 1/\lambda$, the average waiting time.
 
 
 ::: {.solution}
 
-The beta distribution has expected value $\alpha/(\alpha+\beta)$ and variance $\alpha\beta(\alpha+\beta)^{-2}(\alpha+\beta+1)^{-1}$.
+For an unnormalized density $g(x)$ such that $\int g(x) \mathrm{d} x = c$, the normalizing constant is $1/c$.
 
-Since the system of equations is nonlinear, we need to solve numerically to find the two unknown value of the parameters or else simply substitute $\beta = \alpha (1-\mu)/\mu$ in the equation for the variance.
-
-```{r}
-beta_moments <- function(par, mean, variance){
-  alpha <- par[1]
-  beta <- par[2]
-  c(alpha/(alpha+beta) - mean,
-    alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)
-}
-# Numerical root finding algorithm
-# We need to give good starting values
-rootSolve::multiroot(f = beta_moments,
-                     start = c(0.1, 0.8),
-                     positive = TRUE,
-                     mean = 0.1, 
-                     variance = 0.04)
-
-alpha <- uniroot(f = function(alpha, mean = 0.1, variance = 0.04){
-  beta <- alpha*(1-mean)/mean
-  alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance}, 
-  interval = c(1e-4, 1))$root
-beta <- alpha*(1-0.1)/0.1
-c(alpha = alpha, beta = beta)
-```
-
-and we find $\alpha = 0.125$ and $\beta=1.125$.
-
-Let $a = -\mu/\sigma$ and $b = (1-\mu)/\sigma$ denote the standardized lower and upper bounds, respectively. The density of the truncated Gaussian with location $\mu$ and scale $\sigma$ on the unit interval is
-\begin{align*}
-f(x; \mu, \sigma) = \frac{1}{\sigma}\frac{\phi\left(\frac{x - \mu}{\sigma}\right)}{\Phi(b) - \Phi(a)},
-\end{align*}
-where $\phi$ is the density of a standard Gaussian $\mathsf{No}(0,1)$ and $\Phi$ the corresponding distribution function.
-
-<!--
-and we can easily obtain the formulae for the first two moments (e.g., Wikipedia). Let $a = -\mu/\sigma$ and $b = (1-\mu)/\sigma$ denote the centered bounds; then
-\begin{align*}
-\mathsf{E}(Y) &= \mu - \sigma\frac{\phi(b) - \phi(a) }{\Phi(b) - \Phi(a)} \\
-\mathsf{Va}(Y) & = \sigma\left[1 - \frac{b\phi(b) - \phi(a)}{\Phi(b) - \Phi(a)} - \left\{\frac{\phi(b) - \phi(a) }{\Phi(b) - \Phi(a)}\right\}^2\right]
-\end{align*}
-we have reasonable guess for starting values
-
--->
+First, remember that the density function of the scale $\omega = \lambda^{-1}$ is related to the one of the rate $\lambda$ through a change of variable, with Jacobian $\omega^{-2}$.
 
 ```{r}
 #| eval: true
-#| echo: false
-#| fig-cap: "Beta (full line) and truncated Gaussian (dashed line) prior densities."
-#| label: fig-priors-match
-mu <- 0.1; sigma <- 0.2
-alpha <- 0.125; beta <- 1.125
-library(ggplot2)
-ggplot() + 
-  stat_function(fun = dbeta,
-                xlim = c(0,1), 
-                args = list(shape1 = alpha, shape2 = beta),
-                n = 1001) +
-  stat_function(fun = function(x){
-    dnorm(x, mean = mu, sd = sigma)/diff(pnorm(q = c(0,1), mean = mu, sd = sigma))}, 
-  xlim = c(0,1), 
-  n = 1001L,
-  linetype = "dashed") +
-  scale_x_continuous(limits = c(0,1),
-                     labels = c("0", "0.25","0.5","0.75","1"),
-                     expand = c(0,0)) + 
-  scale_y_continuous(limits = c(0,10), expand = c(0,0),
-                     labels = c("0","2.5","5","7.5","10")) + 
-  labs(x = "", y = "", subtitle = "prior densities") + 
-  theme_classic()
+#| echo: true
+
+# Likelihood function - NOTE FORMULATION TO AVOID NUMERICAL OVERFLOW
+lik <- function(x, n = 10, ybar = 8){exp(n*(log(x)-ybar*x))}
+# Density of Cauchy over positive real line
+dfoldedCauchy <- function(x){2/pi/(1+x^2)}
+# Check integral
+integrate(dfoldedCauchy, lower = 0, upper = Inf)
+
+# Unormalized posterior
+unnorm_post <- function(x){dfoldedCauchy(x)*lik(x)}
+(icst_lambda <- integrate(f = unnorm_post, 0, 100))
+
+# Check that the normalized value gives integral of 1
+cst_test <- integrate(f = function(x){unnorm_post(x)/icst_lambda$value}, 
+                      lower = 0,
+                      upper = 100)
 ```
 
-The beta distribution, while matching the moments, is implying very low chance of success with a mode at zero. By contrast, the truncated Gaussian (which does not have mean $\mu$ and variance $\sigma^2$) has the mode at $\mu=0.1$. Which one is preferable depends on the context; we could also match the parameters of the truncated Gaussian.
+Ouch! The integral is nearly zero, and there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. The normalizing constant, the reciprocal of the marginal likelihood, is not well estimated.  The absolute error is of higher order than the estimate  of the marginal likelihood, and this will be more problematic in higher dimensions.
+
+To palliate to this, we could slightly modify the integrand by scaling the likelihood by $(n\overline{y} )^{n+1}/n!$, the normalizing constant of the gamma integral, which is around $2.4 \times 10^{14}$. This fixes the issue below.
+
+```{r}
+#| eval: true
+#| echo: true
+
+# Scale likelihood by using gamma distribution normalizing constant
+slik <- function(x, n = 10, ybar = 8){
+  exp(-lgamma(n+1) + (n+1)*log(n*ybar) + n*(log(x)-ybar*x))
+}
+# Unnormalized posterior, version 2
+unnorm_post2 <- function(x){dfoldedCauchy(x)*slik(x)}
+# Define grid and evaluate product
+grid <- seq(from = 0, to = 30, by = 0.01)
+marglik_grid <- sum(unnorm_post2(grid))*0.01
+# Is the grid approximation good enough?
+# check equality to numerical tolerance
+all.equal(integrate(f = unnorm_post2, 0, 100)$value, marglik_grid)
+norm_cst <- 1/marglik_grid
+```
+
+The prior normalizing by a known constant fixes the numerical issues. Generally, one would tend to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density).
+
+
+For the posterior density, we can simply use the approximation with $p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\lambda)p(\lambda)$. The posterior density for the reciprocal rate is $p(\omega \mid \boldsymbol{y}) \approx \widehat{c} L(\omega^{-1})p(\omega^{-1})\omega^{-2}$ (don't forget the Jacobian)!
+
+```{r}
+#| eval: true
+#| echo: true
+#| warning: false
+#| message: false
+#| code-fold: true
+library(ggplot2)
+ggplot() + 
+  stat_function(fun = function(x){unnorm_post2(1/x)*norm_cst/x^2},
+                xlim = c(0, 30),
+                n = 1001) +
+  labs(y = "", 
+       x = expression(paste("average waiting time ", 1/lambda, " (in minutes)")),
+       subtitle = "posterior density") + 
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +
+  theme_classic()
+```
 
 :::
 
-## Exercise 2.4
-
-Replicate the analysis of Example 2.6 (Should you phrase your headline as a question?) of the [course notes](https://lbelzile.github.io/MATH80601A/priors.html) using the `upworthy_question` data from the [`hecbayes` package](https://github.com/lbelzile/hecbayes).
 
 
-:::{.solution}
+## Exercice 2.4
+
+Consider $\lambda \sim \mathsf{Ga}(\alpha = 1.4, \beta=0.2)$.
+
+1. Return the posterior mean, posterior median and maximum a posteriori (MAP).
+2. Return the 89% equitailed percentile credible interval.
+3. Return the 50% highest posterior density (HPD) interval (harder).
+
+Next, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.
+
+Would the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all.
+
+::: {.solution}
+
+We have already determined that the posterior is a Gamma distribution $\mathsf{Ga}(a, b)$, where $a= \alpha+ n= 11.4$ and $b=n\overline{y} + \beta = 80.2$. We can query the moments directly: the mode is $(a-1)/b$ and the mean $a/b$, while the median must be found numerically using the quantile function.
 
 ```{r}
-#| message: false
-data(upworthy_question, package = "hecbayes")
-# Prior parameters
-alpha <- 2.5 # shape
-beta <- 0.04 # rate
-
-# Pool data from all questions (only total counts matter)
-summary_stats <- upworthy_question |>
-  dplyr::group_by(question) |>
-  dplyr::summarize(
-    total_impressions = sum(impressions),
-    total_clicks = sum(clicks)) |>
-  dplyr::ungroup() |>
-  as.vector()
-# Extract total number of successes out of trials
-# Impressions here serve as count
-n_yes <- summary_stats$total_impressions[1]
-y_yes <- summary_stats$total_clicks[1]
-n_no <-  summary_stats$total_impressions[2]
-y_no <- summary_stats$total_clicks[2]
-# Generate posterior sample draws
-# Since likelihood and priors are independent, 
-# so are the posteriors for the rates. 
-# We can draw independently from each.
-set.seed(1234)
-post_data_upworthy_question <- 
-  data.frame( 
-  yes = rgamma(n = 1e4, shape = alpha + y_yes, rate = beta + n_yes),
-  no = rgamma(n = 1e4,  shape = alpha + y_no, rate = beta + n_no))
-# Plot the histogram of the ratio of rates (question / no question)
-ggplot(data = post_data_upworthy_question,
-  mapping = aes(x = yes/no)) +
-  geom_histogram() +
-  labs(x = "rate ratio", y = "",
-       caption = expression(lambda["yes"]/lambda["no"])) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-  theme_classic()
-# Compute the posterior mean for the quantity
-post_mean <- with(post_data_upworthy_question, mean(yes/no))
-post_mean
+#| eval: true
+#| echo: true
+a <- 11.4 # shape parameter
+b <- 80.2 # rate parameter
+alpha <- 0.11 # level
+postmean <- a/b # posterior mean
+postmed <- qgamma(p = 0.5, shape = a, rate = b) # median
+postmode <- (a-1)/b # mode
+credint <- qgamma(p = c(alpha/2, 1-alpha/2), shape = a, rate = b)
+# Documentation states you must return the quantile function
+HDInterval::hdi(
+    object = qgamma, 
+    shape = a, 
+    rate = b, 
+    credMass = 0.50)
+# Alternatively, find this numerically
+# MAP via minimization of the negative log likelihood
+MAP <- optimize(
+  f = function(x){-dgamma(x, shape = a, rate = b, log = TRUE)},
+  interval = qgamma(p = c(0.2,0.8), shape = a, rate = b)
+  )$minimum
+# Other quantities approximated by Monte Carlo
+# Sample from posterior
+post_samp <- rgamma(n = 1e4, shape = a, rate = b)
+# Sample mean and sample quantiles
+mean(post_samp)
+quantile(post_samp, c(alpha/2, 0.5, 1-alpha/2))
+# Highest posterior density interval
+credHDI <- HDInterval::hdi(
+  object = post_samp, 
+  credMass = 0.50)
+credHDI
 ```
+
+Up to three significant digits, the posterior mean is `r round(postmean,3)`, the median is `r round(postmed, 3)` and the mode `r round(postmode, 3)`. The bounds of the equitailed 89% credible interval are [`r round(credint[1], 3)`, `r round(credint[2],3)`], those of the 50% HDPI [`r credHDI[1]`, `r credHDI[2]`].
+
+For the posterior predictive, we simply take the samples from the posterior, `post_samp`, and generate for each rate a new exponential
+
+```{r}
+#| eval: true
+#| echo: true
+#| label: fig-postpred-exp
+#| code-fold: true
+#| warning: false 
+#| message: false
+#| fig-cap: "Histogram of posterior predictive draws and density function of observations."
+postpred_samp <- rexp(n = 1000, rate = post_samp[seq_len(1000)])
+ggplot(data = data.frame(x = postpred_samp))+
+  geom_histogram(aes(x = x, y = ..density..)) + 
+  # the likelihood is proportional to a gamma
+  stat_function(fun = dexp,  
+                n = 1001, 
+                args = list(rate = 1/8) # mle is average
+                ) +
+  labs(x = "waiting time (in minutes)", 
+       y = "") +
+  scale_x_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .1))) +
+  theme_classic()
+```
+
 
 :::

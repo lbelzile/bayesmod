@@ -92,11 +92,12 @@ Below is a tentative schedule.
 
 Week 1: **Tools of the trade**
 
-- Review of probability distributions
-- Monte Carlo integration
-- Likelihood based methods
-- Bayes' theorem and updating
 - Marginalization and conditioning
+- Bayes' theorem
+- Review of probability distributions
+- Likelihood
+- Monte Carlo integration
+- Rejection sampling
 
 Week 2: **Basics of Bayesian inference**
 
@@ -119,7 +120,6 @@ Week 3: **Prior beliefs**
 Week 4: **Markov chain Monte Carlo methods**
 
 - Basics of Markov chains
-- Rejection sampling
 - Slice sampling
 - Metropolis--Hastings algorithm
 
@@ -137,8 +137,8 @@ Week 6: **Regression models**
 Week 7: **Bayesian workflow and model diagnostics**
 
 - Bayesian workflow
+- Model comparison and Bayes factors
 - Model diagnostics (WAIC, LOO-CV, etc.)
-- Estimation from Markov chain
 
 Week 8: **Computational strategies for MCMC**
 
@@ -169,10 +169,59 @@ Week 11: **Variational inference**
 Week 12: **Final review**
 
 - Expectation propagation
-- Model comparison and Bayes factors
 - Course recap
 
+# Evaluations
 
+
+Your final grade will be based on weekly problem sets and check-ins, a midterm and a final examination. 
+
+There will be weekly exercises pertaining to the class material, one of which must be handed in for credit. We will discuss the other exercises at the beginning of the next class.
+
+The midterm will take place on Monday, March 3rd from 15:30--18:30. The final is cumulative and will take place on Tuesday, April 15th from 18:30--21:30.
+
+
+```{r assignments-grades, include=FALSE}
+assignments <- tibble::tribble(
+  ~Points,  ~Assignment,
+  10 * 0.5 , "Weekly check-in (10 × 0.5 pt)",
+  10 * 3 ,   "Problem sets (10 x 3 pts)",
+  30      ,  "Midterm examination (30 pts)",
+  35      ,  "Final examination (35 pts)",
+)
+
+grading <- tibble::tribble(
+  ~Grade, ~Range,  ~Grade1, ~Range1,
+  "A+",  "90-100%", "B",  "70-75%",
+  "A", "85–90%",  "B-", "65-70%",
+  "A-", "80–85%",  "C+", "60-65%",
+  "B+",  "75-80%",  "F",  "<60%"
+)
+```
+
+Team work counts towards your final grade only if you score more than 50% on individual evaluations.
+
+<div class="centered-table">
+
+```{r show-assignments-table, echo=FALSE, results="asis"}
+assignments_total <- tibble(Assignment = "Total",
+                            Points = sum(assignments$Points))
+
+bind_rows(assignments, assignments_total) %>% 
+  select(Assignment, Points) %>% 
+  pandoc.table(justify = "lc", missing = "—")
+```
+</div>
+
+<div class="centered-table">
+
+```{r show-grades-table, echo=FALSE, results="asis",eval=FALSE}
+grading %>%
+  pandoc.table(justify = "lclc", 
+               col.names = c("Grade", "Range", "Grade", "Range"))
+```
+
+</div>
 
 ## Student hours
 
