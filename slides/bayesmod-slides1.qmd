@@ -8,6 +8,8 @@ eval: true
 cache: true
 echo: true
 standalone: true
+width: 1200
+height: 900
 bibliography: MATH80601A.bib
 format:
   revealjs:
@@ -203,7 +205,86 @@ so $\Lambda \mid Y=y \sim \mathsf{gamma}(k\mu + y, k+1)$.
 f(y) &= \frac{f(y,  \lambda)}{f(\lambda \mid y)} = \frac{\frac{\lambda^y\exp(-\lambda)}{\Gamma(y+1)}  \frac{k^{k\mu}\lambda^{k\mu-1}\exp(-k\lambda)}{\Gamma(k\mu)}}{ \frac{(k+1)^{k\mu+y}\lambda^{k\mu+y-1}\exp\{-(k+1)\lambda\}}{\Gamma(k\mu+y)}}\\
 &= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}k^{k\mu} (k+1)^{-k\mu-y}\\&= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}\left(1-\frac{1}{k+1}\right)^{k\mu} \left(\frac{1}{k+1}\right)^y
 \end{align*}
-The marginal of $Y$ is negative binomial with prob. of success $1/(k+1)$. 
+Marginally, $Y \sim \mathsf{neg. binom}(p)$ where $p=(k+1)^{-1}.$
+
+## Change of variable formula
+
+Consider an injective (one-to-one) differentiable function $\boldsymbol{g}: \mathbb{R}^d \to \mathbb{R}^d,$ with inverse $g^{-1}.$ Then, if $\boldsymbol{Y}=\boldsymbol{g}(\boldsymbol{X}),$
+\begin{align*}
+\Pr(\boldsymbol{Y} \leq \boldsymbol{y}) = \Pr\{\boldsymbol{g}(\boldsymbol{X}) \leq \boldsymbol{y}\} = \Pr\{\boldsymbol{X} \leq \boldsymbol{x} = \boldsymbol{g}^{-1}(\boldsymbol{y})\}.
+\end{align*}
+
+Using the chain rule, the density of $\boldsymbol{Y}$ is
+\begin{align*}
+f_{\boldsymbol{Y}}(\boldsymbol{y}) = f_{\boldsymbol{X}}\left\{\boldsymbol{g}^{-1}(\boldsymbol{y})\right\} \left| \mathbf{J}_{\boldsymbol{g}^{-1}}(\boldsymbol{y})\right| = f_{\boldsymbol{X}}(\boldsymbol{x}) \left| \mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})\right|^{-1}
+\end{align*}
+where $\mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})$ is the Jacobian matrix with $i,j$th element $\partial [\boldsymbol{g}(\boldsymbol{x})]_i / \partial x_j.$
+
+## Gaussian location-scale
+
+Consider $d$ independent standard Gaussian variates $X_j \sim \mathsf{Gauss}(0, \sigma^2)$ for $j=1, \ldots, d,$ with joint density function
+\begin{align*}
+f_{\boldsymbol{X}}(\boldsymbol{x})= (2\pi)^{-d/2} \exp \left( - \frac{\boldsymbol{x}^\top\boldsymbol{x}}{2}\right).
+\end{align*}
+Consider the transformation $\boldsymbol{Y} = \mathbf{A}\boldsymbol{X}+\boldsymbol{b},$ with $\mathbf{A}$ an invertible matrix.
+
+## Change of variable for Gaussian
+
+- The inverse transformation is $\boldsymbol{g}^{-1}(\boldsymbol{y}) = \mathbf{A}^{-1}(\boldsymbol{y}-\boldsymbol{b}).$
+- The Jacobian $\mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})$ is simply $\mathbf{A},$ so the joint density of $\boldsymbol{Y}$ is
+\begin{align*}
+(2\pi)^{-d/2} |\mathbf{A}|^{-1}\exp \left\{ - \frac{(\boldsymbol{y}-\boldsymbol{b})^\top\mathbf{A}^{-\top}\mathbf{A}^{-1}(\boldsymbol{y}-\boldsymbol{b})}{2}\right\}.
+\end{align*}
+Since $|\mathbf{A}^{-1}| = |\mathbf{A}|^{-1}$ and $\mathbf{A}^{-\top}\mathbf{A}^{-1} = (\mathbf{AA}^\top)^{-1},$ we recover $\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{b}, \mathbf{AA}^\top).$
+
+
+## Partitioning of covariance matrices
+
+Let $\boldsymbol{\Sigma}$ be a $d \times d$ positive definite covariance matrix. We define the precision matrix $\boldsymbol{Q} = \boldsymbol{\Sigma}^{-1}.$ Suppose the
+matrices are partitioned into blocks, 
+\begin{align*}
+\boldsymbol{\Sigma}= 
+\begin{pmatrix}
+\boldsymbol{\Sigma}_{11} & \boldsymbol{\Sigma}_{12} \\
+\boldsymbol{\Sigma}_{21} & \boldsymbol{\Sigma}_{22}
+\end{pmatrix} \text{ and }
+\boldsymbol{\Sigma}^{-1}= \boldsymbol{Q} = 
+\begin{pmatrix} 
+\boldsymbol{Q}_{11} &\boldsymbol{Q}_{12}
+\\ \boldsymbol{Q}_{21} & \boldsymbol{Q}_{22}
+\end{pmatrix}
+\end{align*}
+with $\dim(\boldsymbol{\Sigma}_{11})=k\times k$ and $\dim(\boldsymbol{\Sigma}_{22})=(d-k) \times (d-k).$
+
+## Matrix identities
+
+The following relationships hold:
+
+- $\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}=-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}$ 
+- $\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}=\boldsymbol{Q}_{11}^{-1}$
+- $\det(\boldsymbol{\Sigma})=\det(\boldsymbol{\Sigma}_{22})\det(\boldsymbol{\Sigma}_{1|2})$ 
+where $\boldsymbol{\Sigma}_{1|2}=\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}.$
+
+## Gaussian subvectors
+
+Let $\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{\mu}, \boldsymbol{\Sigma})$ and consider the partition
+\begin{align*}
+ \boldsymbol{Y} = \begin{pmatrix} \boldsymbol{Y}_1 \\ \boldsymbol{Y}_2\end{pmatrix}, \quad 
+ \boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2\end{pmatrix}, \quad 
+ \boldsymbol{\Sigma} = \begin{pmatrix} \boldsymbol{\Sigma}_{11} & \boldsymbol{\Sigma}_{12}\\ \boldsymbol{\Sigma}_{21} & \boldsymbol{\Sigma}_{22}\end{pmatrix},
+\end{align*}
+where $\boldsymbol{Y}_1$ is a $k \times 1$ and $\boldsymbol{Y}_2$ is a $(d-k) \times 1$ vector for some $1\leq k < d.$
+
+
+
+## Conditional distribution of Gaussian vectors
+
+Then, we have the conditional distribution 
+\begin{align*}
+\boldsymbol{Y}_1 \mid \boldsymbol{Y}_2 =\boldsymbol{y}_2 &\sim \mathsf{Gauss}_k(\boldsymbol{\mu}_1+\boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{\Sigma}_{1|2})
+\\& \sim  \mathsf{Gauss}_k(\boldsymbol{\mu}_1-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{Q}^{-1}_{11})
+\end{align*}
+and $\boldsymbol{\Sigma}_{1|2}=\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}$ is the Schur complement of $\boldsymbol{\Sigma}_{22}.$
 
 ## Likelihood
 
@@ -343,26 +424,51 @@ By the laws of iterated expectation and iterative variance,
 \end{align*}
 The marginal distribution of $Y$, unconditionally, has a variance which exceeds its mean.
 
-## Monte Carlo methods
+## Estimation of integrals
 
-Suppose we can simulate $B$ i.i.d. variables with the same distribution, $X_b \sim F$ $(b=1, \ldots, B).$
+Suppose we can simulate $B$ i.i.d. variables with the same distribution, $x_1, \ldots, x_B$ with distribution $F$.
 
-We want to compute $\mathsf{E}\{g(X)\}=\mu_g$ for some functional $g(\cdot)$
+We want to compute $\mathsf{E}\{g(X)\}=\int g(x) f(x) \mathrm{d} x=\mu_g$ for some functional $g(\cdot)$
 
 - $g(x)=x$ (posterior mean)
 - $g(x) = \mathsf{I}(x \in A)$ (probability of event)
 - etc.
 
-## Monte Carlo methods
+## Vanilla Monte Carlo integration
 
-We substitute expected value by sample average 
-$$\widehat{\mu}_g = \frac{1}{B} \sum_{b=1}^B g(X_b), \qquad X_b \sim F$$
+We substitute expected value by sample average of
+\begin{align*}
+\widehat{\mu}_g = \frac{1}{B} \sum_{b=1}^B g(x_b).
+\end{align*}
 
 - law of large number guarantees convergence of $\widehat{\mu}_g \to \mu_g$ if the latter is finite.
 - Under finite second moments, central limit theorem gives $$\sqrt{B}(\widehat{\mu}_g - \mu_g) \sim \mathsf{No}(0, \sigma^2_g).$$
 
+## Importance sampling
 
-## Ordinary Monte Carlo
+Consider density $q$ instead with $\mathrm{supp}(p) \subseteq \mathrm{supp}(q).$ Then,
+\begin{align*}
+\mathsf{E}\{g(X)\} = \int_{\mathcal{X}} g(x) \frac{p(x)}{q(x)} q(x) \mathrm{d} x
+\end{align*}
+and we can proceed similarly by drawing samples from $q$. 
+
+
+## Importance sampling estimator
+
+An alternative Monte Carlo estimator uses the weighted average
+\begin{align*}
+\widetilde{\mathsf{E}}\{g(X)\} =\frac{B^{-1} \sum_{b=1}^B w_b g(x_b) }{B^{-1}\sum_{b=1}^B w_b}.
+\end{align*}
+with weights $w_b = p(x_b)/q(x_b)$. The latter equal 1 on average, so one could omit the denominator without harm. 
+
+## Standard errors
+
+If the variance of $g(X)$ is finite, we can approximate the latter by the sample variance of the simple random sample and obtain the Monte Carlo standard error of the estimator
+\begin{align*}
+\mathsf{se}^2[\widehat{\mathsf{E}}\{g(X)\}] = \frac{1}{B(B-1)} \sum_{b=1}^B \left[ g(x_b) -  \widehat{\mathsf{E}}\{g(X)\} \right]^2.
+\end{align*}
+
+## Precision of Monte Carlo integration
 
 We want to have an estimator as precise as possible.
 

@@ -4,13 +4,37 @@ title: "Exercise 1"
 
 # Exercise 1.1
 
-Consider $\boldsymbol{Y}=(Y_1, \ldots, Y_3)^\top \in \mathbb{S}_{2}$ a trivariate vector, where $\boldsymbol{Y} \sim \mathsf{Dir}(\alpha_1, \alpha_2, \alpha_3)$
+Consider $\boldsymbol{Y}=(Y_1, \ldots, Y_3)^\top \in \mathbb{S}_{2}$ a trivariate vector, where $\boldsymbol{Y} \sim \mathsf{Dirichlet}(\alpha_1, \alpha_2, \alpha_3)$
 
 a. Derive the marginal distribution of $(Y_1, Y_2)$.
 b. Derive the conditional distribution of $Y_3 \mid (Y_1, Y_2)$.
 
 
 # Exercise 1.2
+
+Consider the geometric distribution with mass function
+\begin{align*}
+f(y; p) = p(1-p)^{y-1}, \qquad y = 1, 2, \ldots;
+\end{align*}
+the latter is used to model the number of independent trials $Y$ until a first success, the latter with probability $p$.
+
+a. Show that the geometric distribution $\mathsf{geom}(p)$ is an exponential family.
+b. Show that the $\mathsf{beta}(\alpha_1, \alpha_2)$ distribution is conjugate to the geometric distribution.
+c. If $Y \mid P=p \sim \mathsf{geom}(p)$ and $P \sim \mathsf{beta}(\alpha_1, \alpha_2)$, show that $P \mid Y=y$ is beta distributed and obtain the parameters of the latter.
+
+# Exercise 1.3
+
+Linear mixed effect regression model specifies that response vectors for individual $i$, $\boldsymbol{Y}_i \in \mathbb{R}^k$, are Gaussian. The model includes model matrix $\mathbf{X}_i$ with fixed effect coefficients $\boldsymbol{\beta}$, and another $k\times l$ model matrix  $\mathbf{Z}_i$ with random effects. The hierarchical formulation of the model is
+\begin{align*}
+\boldsymbol{Y}_i \mid \mathcal{B}_i=\boldsymbol{b}_i &\sim \mathsf{Gauss}_k(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\boldsymbol{b}_i, \sigma^2 \mathbf{I}_k) \\
+\mathcal{B}_i & \sim \mathsf{Gauss}_l(\boldsymbol{0}_k, \boldsymbol{\Omega})
+\end{align*}
+
+
+a. Using the tower property, derive the marginal mean and covariance matrix of $\boldsymbol{Y}_i$
+b. Hence obtain the parameters of the joint distribution of $(\boldsymbol{Y}_i^\top, \mathcal{B}_i^\top)^\top$.
+
+# Exercise 1.4
 
 Consider a simple random sample of size $n$ from the Wald distribution, with density
 \begin{align*}
@@ -23,7 +47,7 @@ a. Write down the likelihood and show that it can be written in terms of the suf
 b. Derive the Fisher information matrix
 
 
-## Exercise 1.3
+## Exercise 1.5
 
 Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
 \begin{align*}
@@ -37,7 +61,6 @@ as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
  degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
 4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
 
-## Exercise 1.4
 
 <!--
 The ratio-of-uniform method, implemented in the [`rust` **R** package](https://paulnorthrop.github.io/rust/index.html), can be used to simulate independent draws from an unnormalized density function assuming the latter is bounded after use of a Box--Cox transformation.

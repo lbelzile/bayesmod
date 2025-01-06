@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile, HEC Montréal">
   <meta name="dcterms.date" content="2025-01-01">
@@ -379,7 +379,70 @@ f(\lambda \mid Y=y) \stackrel{\lambda}{\propto}\lambda^{y+k\mu-1}\exp\{-(k+1)\la
 <p><span class="math display">\[\begin{align*}
 f(y) &amp;= \frac{f(y,  \lambda)}{f(\lambda \mid y)} = \frac{\frac{\lambda^y\exp(-\lambda)}{\Gamma(y+1)}  \frac{k^{k\mu}\lambda^{k\mu-1}\exp(-k\lambda)}{\Gamma(k\mu)}}{ \frac{(k+1)^{k\mu+y}\lambda^{k\mu+y-1}\exp\{-(k+1)\lambda\}}{\Gamma(k\mu+y)}}\\
 &amp;= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}k^{k\mu} (k+1)^{-k\mu-y}\\&amp;= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}\left(1-\frac{1}{k+1}\right)^{k\mu} \left(\frac{1}{k+1}\right)^y
-\end{align*}\]</span> The marginal of <span class="math inline">\(Y\)</span> is negative binomial with prob. of success <span class="math inline">\(1/(k+1)\)</span>.</p>
+\end{align*}\]</span> Marginally, <span class="math inline">\(Y \sim \mathsf{neg. binom}(p)\)</span> where <span class="math inline">\(p=(k+1)^{-1}.\)</span></p>
+</section>
+<section id="change-of-variable-formula" class="slide level2">
+<h2>Change of variable formula</h2>
+<p>Consider an injective (one-to-one) differentiable function <span class="math inline">\(\boldsymbol{g}: \mathbb{R}^d \to \mathbb{R}^d,\)</span> with inverse <span class="math inline">\(g^{-1}.\)</span> Then, if <span class="math inline">\(\boldsymbol{Y}=\boldsymbol{g}(\boldsymbol{X}),\)</span> <span class="math display">\[\begin{align*}
+\Pr(\boldsymbol{Y} \leq \boldsymbol{y}) = \Pr\{\boldsymbol{g}(\boldsymbol{X}) \leq \boldsymbol{y}\} = \Pr\{\boldsymbol{X} \leq \boldsymbol{x} = \boldsymbol{g}^{-1}(\boldsymbol{y})\}.
+\end{align*}\]</span></p>
+<p>Using the chain rule, the density of <span class="math inline">\(\boldsymbol{Y}\)</span> is <span class="math display">\[\begin{align*}
+f_{\boldsymbol{Y}}(\boldsymbol{y}) = f_{\boldsymbol{X}}\left\{\boldsymbol{g}^{-1}(\boldsymbol{y})\right\} \left| \mathbf{J}_{\boldsymbol{g}^{-1}}(\boldsymbol{y})\right| = f_{\boldsymbol{X}}(\boldsymbol{x}) \left| \mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})\right|^{-1}
+\end{align*}\]</span> where <span class="math inline">\(\mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})\)</span> is the Jacobian matrix with <span class="math inline">\(i,j\)</span>th element <span class="math inline">\(\partial [\boldsymbol{g}(\boldsymbol{x})]_i / \partial x_j.\)</span></p>
+</section>
+<section id="gaussian-location-scale" class="slide level2">
+<h2>Gaussian location-scale</h2>
+<p>Consider <span class="math inline">\(d\)</span> independent standard Gaussian variates <span class="math inline">\(X_j \sim \mathsf{Gauss}(0, \sigma^2)\)</span> for <span class="math inline">\(j=1, \ldots, d,\)</span> with joint density function <span class="math display">\[\begin{align*}
+f_{\boldsymbol{X}}(\boldsymbol{x})= (2\pi)^{-d/2} \exp \left( - \frac{\boldsymbol{x}^\top\boldsymbol{x}}{2}\right).
+\end{align*}\]</span> Consider the transformation <span class="math inline">\(\boldsymbol{Y} = \mathbf{A}\boldsymbol{X}+\boldsymbol{b},\)</span> with <span class="math inline">\(\mathbf{A}\)</span> an invertible matrix.</p>
+</section>
+<section id="change-of-variable-for-gaussian" class="slide level2">
+<h2>Change of variable for Gaussian</h2>
+<ul>
+<li>The inverse transformation is <span class="math inline">\(\boldsymbol{g}^{-1}(\boldsymbol{y}) = \mathbf{A}^{-1}(\boldsymbol{y}-\boldsymbol{b}).\)</span></li>
+<li>The Jacobian <span class="math inline">\(\mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})\)</span> is simply <span class="math inline">\(\mathbf{A},\)</span> so the joint density of <span class="math inline">\(\boldsymbol{Y}\)</span> is <span class="math display">\[\begin{align*}
+(2\pi)^{-d/2} |\mathbf{A}|^{-1}\exp \left\{ - \frac{(\boldsymbol{y}-\boldsymbol{b})^\top\mathbf{A}^{-\top}\mathbf{A}^{-1}(\boldsymbol{y}-\boldsymbol{b})}{2}\right\}.
+\end{align*}\]</span> Since <span class="math inline">\(|\mathbf{A}^{-1}| = |\mathbf{A}|^{-1}\)</span> and <span class="math inline">\(\mathbf{A}^{-\top}\mathbf{A}^{-1} = (\mathbf{AA}^\top)^{-1},\)</span> we recover <span class="math inline">\(\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{b}, \mathbf{AA}^\top).\)</span></li>
+</ul>
+</section>
+<section id="partitioning-of-covariance-matrices" class="slide level2">
+<h2>Partitioning of covariance matrices</h2>
+<p>Let <span class="math inline">\(\boldsymbol{\Sigma}\)</span> be a <span class="math inline">\(d \times d\)</span> positive definite covariance matrix. We define the precision matrix <span class="math inline">\(\boldsymbol{Q} = \boldsymbol{\Sigma}^{-1}.\)</span> Suppose the matrices are partitioned into blocks, <span class="math display">\[\begin{align*}
+\boldsymbol{\Sigma}=
+\begin{pmatrix}
+\boldsymbol{\Sigma}_{11} &amp; \boldsymbol{\Sigma}_{12} \\
+\boldsymbol{\Sigma}_{21} &amp; \boldsymbol{\Sigma}_{22}
+\end{pmatrix} \text{ and }
+\boldsymbol{\Sigma}^{-1}= \boldsymbol{Q} =
+\begin{pmatrix}
+\boldsymbol{Q}_{11} &amp;\boldsymbol{Q}_{12}
+\\ \boldsymbol{Q}_{21} &amp; \boldsymbol{Q}_{22}
+\end{pmatrix}
+\end{align*}\]</span> with <span class="math inline">\(\dim(\boldsymbol{\Sigma}_{11})=k\times k\)</span> and <span class="math inline">\(\dim(\boldsymbol{\Sigma}_{22})=(d-k) \times (d-k).\)</span></p>
+</section>
+<section id="matrix-identities" class="slide level2">
+<h2>Matrix identities</h2>
+<p>The following relationships hold:</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}=-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}\)</span></li>
+<li><span class="math inline">\(\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}=\boldsymbol{Q}_{11}^{-1}\)</span></li>
+<li><span class="math inline">\(\det(\boldsymbol{\Sigma})=\det(\boldsymbol{\Sigma}_{22})\det(\boldsymbol{\Sigma}_{1|2})\)</span> where <span class="math inline">\(\boldsymbol{\Sigma}_{1|2}=\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}.\)</span></li>
+</ul>
+</section>
+<section id="gaussian-subvectors" class="slide level2">
+<h2>Gaussian subvectors</h2>
+<p>Let <span class="math inline">\(\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> and consider the partition <span class="math display">\[\begin{align*}
+\boldsymbol{Y} = \begin{pmatrix} \boldsymbol{Y}_1 \\ \boldsymbol{Y}_2\end{pmatrix}, \quad
+\boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2\end{pmatrix}, \quad
+\boldsymbol{\Sigma} = \begin{pmatrix} \boldsymbol{\Sigma}_{11} &amp; \boldsymbol{\Sigma}_{12}\\ \boldsymbol{\Sigma}_{21} &amp; \boldsymbol{\Sigma}_{22}\end{pmatrix},
+\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{Y}_1\)</span> is a <span class="math inline">\(k \times 1\)</span> and <span class="math inline">\(\boldsymbol{Y}_2\)</span> is a <span class="math inline">\((d-k) \times 1\)</span> vector for some <span class="math inline">\(1\leq k &lt; d.\)</span></p>
+</section>
+<section id="conditional-distribution-of-gaussian-vectors" class="slide level2">
+<h2>Conditional distribution of Gaussian vectors</h2>
+<p>Then, we have the conditional distribution <span class="math display">\[\begin{align*}
+\boldsymbol{Y}_1 \mid \boldsymbol{Y}_2 =\boldsymbol{y}_2 &amp;\sim \mathsf{Gauss}_k(\boldsymbol{\mu}_1+\boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{\Sigma}_{1|2})
+\\&amp; \sim  \mathsf{Gauss}_k(\boldsymbol{\mu}_1-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{Q}^{-1}_{11})
+\end{align*}\]</span> and <span class="math inline">\(\boldsymbol{\Sigma}_{1|2}=\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}\)</span> is the Schur complement of <span class="math inline">\(\boldsymbol{\Sigma}_{22}.\)</span></p>
 </section>
 <section id="likelihood" class="slide level2">
 <h2>Likelihood</h2>
@@ -493,26 +556,46 @@ i(\mu, \tau) &amp;= n\begin{pmatrix}
 \mathsf{Va}(Y) &amp;= \mathsf{E}_{\Lambda}\{\mathsf{Va}(Y \mid \Lambda)\} + \mathsf{Va}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda)\} \\&amp;= \mathsf{E}(\Lambda) + \mathsf{Va}(\Lambda) \\&amp;= \mu + \mu/k.
 \end{align*}\]</span> The marginal distribution of <span class="math inline">\(Y\)</span>, unconditionally, has a variance which exceeds its mean.</p>
 </section>
-<section id="monte-carlo-methods" class="slide level2">
-<h2>Monte Carlo methods</h2>
-<p>Suppose we can simulate <span class="math inline">\(B\)</span> i.i.d. variables with the same distribution, <span class="math inline">\(X_b \sim F\)</span> <span class="math inline">\((b=1, \ldots, B).\)</span></p>
-<p>We want to compute <span class="math inline">\(\mathsf{E}\{g(X)\}=\mu_g\)</span> for some functional <span class="math inline">\(g(\cdot)\)</span></p>
+<section id="estimation-of-integrals" class="slide level2">
+<h2>Estimation of integrals</h2>
+<p>Suppose we can simulate <span class="math inline">\(B\)</span> i.i.d. variables with the same distribution, <span class="math inline">\(x_1, \ldots, x_B\)</span> with distribution <span class="math inline">\(F\)</span>.</p>
+<p>We want to compute <span class="math inline">\(\mathsf{E}\{g(X)\}=\int g(x) f(x) \mathrm{d} x=\mu_g\)</span> for some functional <span class="math inline">\(g(\cdot)\)</span></p>
 <ul>
 <li><span class="math inline">\(g(x)=x\)</span> (posterior mean)</li>
 <li><span class="math inline">\(g(x) = \mathsf{I}(x \in A)\)</span> (probability of event)</li>
 <li>etc.</li>
 </ul>
 </section>
-<section id="monte-carlo-methods-1" class="slide level2">
-<h2>Monte Carlo methods</h2>
-<p>We substitute expected value by sample average <span class="math display">\[\widehat{\mu}_g = \frac{1}{B} \sum_{b=1}^B g(X_b), \qquad X_b \sim F\]</span></p>
+<section id="vanilla-monte-carlo-integration" class="slide level2">
+<h2>Vanilla Monte Carlo integration</h2>
+<p>We substitute expected value by sample average of <span class="math display">\[\begin{align*}
+\widehat{\mu}_g = \frac{1}{B} \sum_{b=1}^B g(x_b).
+\end{align*}\]</span></p>
 <ul>
 <li>law of large number guarantees convergence of <span class="math inline">\(\widehat{\mu}_g \to \mu_g\)</span> if the latter is finite.</li>
 <li>Under finite second moments, central limit theorem gives <span class="math display">\[\sqrt{B}(\widehat{\mu}_g - \mu_g) \sim \mathsf{No}(0, \sigma^2_g).\]</span></li>
 </ul>
 </section>
-<section id="ordinary-monte-carlo" class="slide level2">
-<h2>Ordinary Monte Carlo</h2>
+<section id="importance-sampling" class="slide level2">
+<h2>Importance sampling</h2>
+<p>Consider density <span class="math inline">\(q\)</span> instead with <span class="math inline">\(\mathrm{supp}(p) \subseteq \mathrm{supp}(q).\)</span> Then, <span class="math display">\[\begin{align*}
+\mathsf{E}\{g(X)\} = \int_{\mathcal{X}} g(x) \frac{p(x)}{q(x)} q(x) \mathrm{d} x
+\end{align*}\]</span> and we can proceed similarly by drawing samples from <span class="math inline">\(q\)</span>.</p>
+</section>
+<section id="importance-sampling-estimator" class="slide level2">
+<h2>Importance sampling estimator</h2>
+<p>An alternative Monte Carlo estimator uses the weighted average <span class="math display">\[\begin{align*}
+\widetilde{\mathsf{E}}\{g(X)\} =\frac{B^{-1} \sum_{b=1}^B w_b g(x_b) }{B^{-1}\sum_{b=1}^B w_b}.
+\end{align*}\]</span> with weights <span class="math inline">\(w_b = p(x_b)/q(x_b)\)</span>. The latter equal 1 on average, so one could omit the denominator without harm.</p>
+</section>
+<section id="standard-errors" class="slide level2">
+<h2>Standard errors</h2>
+<p>If the variance of <span class="math inline">\(g(X)\)</span> is finite, we can approximate the latter by the sample variance of the simple random sample and obtain the Monte Carlo standard error of the estimator <span class="math display">\[\begin{align*}
+\mathsf{se}^2[\widehat{\mathsf{E}}\{g(X)\}] = \frac{1}{B(B-1)} \sum_{b=1}^B \left[ g(x_b) -  \widehat{\mathsf{E}}\{g(X)\} \right]^2.
+\end{align*}\]</span></p>
+</section>
+<section id="precision-of-monte-carlo-integration" class="slide level2">
+<h2>Precision of Monte Carlo integration</h2>
 <p>We want to have an estimator as precise as possible.</p>
 <ul>
 <li>but we can’t control the variance of <span class="math inline">\(g(X)\)</span>, say <span class="math inline">\(\sigma_g^2\)</span></li>
@@ -852,9 +935,9 @@ Devroye, L. (1986). <em><span>Non-Uniform Random Variate Generation</span></em>.
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1200,
 
-        height: 700,
+        height: 900,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,

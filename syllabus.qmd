@@ -176,6 +176,8 @@ Week 12: **Final review**
 
 Your final grade will be based on weekly problem sets and check-ins, a midterm and a final examination. All evaluations are individual work.
 
+The midterm and final are closed book exams. Students are forbidden to use generative artificial intelligence (AI) tools. Any reference should be adequately cited.
+
 There will be weekly exercises pertaining to the class material, one of which must be handed in for credit. We will discuss the other exercises at the beginning of the next class.
 
 The midterm will take place on Monday, March 3rd from 15:30--18:30. The final is cumulative and will take place on Tuesday, April 15th from 18:30--21:30.
@@ -185,7 +187,7 @@ The midterm will take place on Monday, March 3rd from 15:30--18:30. The final is
 assignments <- tibble::tribble(
   ~Points,  ~Assignment,
   10 * 0.5 , "Weekly check-in (10 × 0.5 pt)",
-  10 * 3 ,   "Problem sets (10 x 3 pts)",
+  10 * 3 ,   "Assignments",
   30      ,  "Midterm examination (30 pts)",
   35      ,  "Final examination (35 pts)",
 )
@@ -198,6 +200,29 @@ grading <- tibble::tribble(
   "B+",  "75-80%",  "F",  "<60%"
 )
 ```
+
+## Weekly check-in
+
+Every week, after you finish working through the content, I want to hear about what you learned and what questions you still have. To facilitate this, and to encourage engagement with the course content, you’ll need to write a small feedback in *ZoneCours*. This should be ~150 words.
+
+You should answer the following three questions each week:
+
+- What was the most exciting thing you learned from the session? Why?
+- What was the muddiest thing from the session this week? What are you still wondering about?
+- Which activity did you find the most useful? What could have been skipped?
+
+The weekly check-in is an occasion for you to ask for clarification, highlight areas or topics for which examples could be added, or list superfluous activities and content. I will grade these before class, answer individually through the feedback form or at the beginning of class.
+
+
+
+I will grade these check-ins using a check system:
+
+- *110%*: Response shows phenomenal thought and engagement with the course content. I will not assign these often.
+- *100%*: Response is thoughtful, well-written, and shows engagement with the course content. This is the expected level of performance.
+- *50%*: Response is hastily composed, too short, and/or only cursorily engages with the course content. This grade signals that you need to improve next time. I will hopefully not assign these often.
+
+Notice that is essentially a pass/fail or completion-based system. I'm not grading your writing ability, I'm not counting the exact number of words you're writing, and I'm not looking for encyclopedic citations of every single reading to prove that you did indeed read everything. I'm looking for thoughtful engagement, that's all. Do good work and you'll get a ✔.
+
 
 <!--
 Team work counts towards your final grade only if you score more than 50% on individual evaluations.
