@@ -143,6 +143,33 @@ f_{\boldsymbol{X}, \boldsymbol{Y}}(\boldsymbol{x}, \boldsymbol{y}) = f_{\boldsym
 
 If two subvectors $\boldsymbol{X}$ and $\boldsymbol{Y}$ are independent, then the conditional density $f_{\boldsymbol{Y} \mid \boldsymbol{X}}(\boldsymbol{y}; \boldsymbol{x})$ equals the marginal $f_{\boldsymbol{Y}}(\boldsymbol{y})$.
 
+## Expected value
+
+If $\boldsymbol{Y}$ has density $f_{\boldsymbol{Y}},$ then
+\begin{align*}
+\mathsf{E}\{g(\boldsymbol{Y})\} = \int g(\boldsymbol{y}) f_{\boldsymbol{Y}}(\boldsymbol{y}) \mathrm{d} \boldsymbol{y}
+\end{align*}
+a weighted integral of $g$ with weight $f_{\boldsymbol{Y}}.$
+
+The identity function gives the expected value $\mathsf{E}(\boldsymbol{Y}).$
+
+## Covariance matrix
+
+We define the covariance matrix of $\boldsymbol{Y}$ as
+\begin{align*}
+\mathsf{Va}(\boldsymbol{Y}) = \mathsf{E}\left[\left\{\boldsymbol{Y} - \mathsf{E}(\boldsymbol{Y})\right\}\left\{\boldsymbol{Y} - \mathsf{E}(\boldsymbol{Y})\right\}^\top\right],
+\end{align*}
+which reduces in the unidimensional setting to $\mathsf{Va}(Y) = \mathsf{E}\{Y - \mathsf{E}(Y)\}^2 = \mathsf{E}(Y^2) - \mathsf{E}(Y)^2.$
+
+## Affine transformations
+
+If $\boldsymbol{Y}$ is $d$-dimensional and $\mathbf{A}$ is $p \times d$ and $\boldsymbol{b}$ is a $p$ vector, then
+
+\begin{align*}
+\mathsf{E}(\boldsymbol{AY} + \boldsymbol{b}) &= \boldsymbol{A}\mathsf{E}(\boldsymbol{Y}) + \boldsymbol{b},\\
+\mathsf{Va}(\boldsymbol{AY} + \boldsymbol{b}) &= \boldsymbol{A}\mathsf{Va}(\boldsymbol{Y})\boldsymbol{A}^\top.
+\end{align*}
+
 ## Law of iterated expectation and variance
 
 Let $\boldsymbol{Z}$ and $\boldsymbol{Y}$ be random vectors. The expected value of $\boldsymbol{Y}$ is
@@ -207,9 +234,20 @@ f(y) &= \frac{f(y,  \lambda)}{f(\lambda \mid y)} = \frac{\frac{\lambda^y\exp(-\l
 \end{align*}
 Marginally, $Y \sim \mathsf{neg. binom}(p)$ where $p=(k+1)^{-1}.$
 
+
+## Moments of negative binomial
+
+By the laws of iterated expectation and iterative variance,
+\begin{align*}
+\mathsf{E}(Y) &= \mathsf{E}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda\} \\& = \mathsf{E}(\Lambda) = \mu\\
+\mathsf{Va}(Y) &= \mathsf{E}_{\Lambda}\{\mathsf{Va}(Y \mid \Lambda)\} + \mathsf{Va}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda)\} \\&= \mathsf{E}(\Lambda) + \mathsf{Va}(\Lambda) \\&= \mu + \mu/k.
+\end{align*}
+The marginal distribution of $Y$, unconditionally, has a variance which exceeds its mean.
+
+
 ## Change of variable formula
 
-Consider an injective (one-to-one) differentiable function $\boldsymbol{g}: \mathbb{R}^d \to \mathbb{R}^d,$ with inverse $g^{-1}.$ Then, if $\boldsymbol{Y}=\boldsymbol{g}(\boldsymbol{X}),$
+Consider an injective (one-to-one) differentiable function $\boldsymbol{g}: \mathbb{R}^d \to \mathbb{R}^d,$ with inverse $\boldsymbol{g}^{-1}.$ Then, if $\boldsymbol{Y}=\boldsymbol{g}(\boldsymbol{X}),$
 \begin{align*}
 \Pr(\boldsymbol{Y} \leq \boldsymbol{y}) = \Pr\{\boldsymbol{g}(\boldsymbol{X}) \leq \boldsymbol{y}\} = \Pr\{\boldsymbol{X} \leq \boldsymbol{x} = \boldsymbol{g}^{-1}(\boldsymbol{y})\}.
 \end{align*}
@@ -222,7 +260,7 @@ where $\mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})$ is the Jacobian matrix with 
 
 ## Gaussian location-scale
 
-Consider $d$ independent standard Gaussian variates $X_j \sim \mathsf{Gauss}(0, \sigma^2)$ for $j=1, \ldots, d,$ with joint density function
+Consider $d$ independent standard Gaussian variates $X_j \sim \mathsf{Gauss}(0, 1)$ for $j=1, \ldots, d,$ with joint density function
 \begin{align*}
 f_{\boldsymbol{X}}(\boldsymbol{x})= (2\pi)^{-d/2} \exp \left( - \frac{\boldsymbol{x}^\top\boldsymbol{x}}{2}\right).
 \end{align*}
@@ -238,40 +276,13 @@ Consider the transformation $\boldsymbol{Y} = \mathbf{A}\boldsymbol{X}+\boldsymb
 Since $|\mathbf{A}^{-1}| = |\mathbf{A}|^{-1}$ and $\mathbf{A}^{-\top}\mathbf{A}^{-1} = (\mathbf{AA}^\top)^{-1},$ we recover $\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{b}, \mathbf{AA}^\top).$
 
 
-## Partitioning of covariance matrices
-
-Let $\boldsymbol{\Sigma}$ be a $d \times d$ positive definite covariance matrix. We define the precision matrix $\boldsymbol{Q} = \boldsymbol{\Sigma}^{-1}.$ Suppose the
-matrices are partitioned into blocks, 
-\begin{align*}
-\boldsymbol{\Sigma}= 
-\begin{pmatrix}
-\boldsymbol{\Sigma}_{11} & \boldsymbol{\Sigma}_{12} \\
-\boldsymbol{\Sigma}_{21} & \boldsymbol{\Sigma}_{22}
-\end{pmatrix} \text{ and }
-\boldsymbol{\Sigma}^{-1}= \boldsymbol{Q} = 
-\begin{pmatrix} 
-\boldsymbol{Q}_{11} &\boldsymbol{Q}_{12}
-\\ \boldsymbol{Q}_{21} & \boldsymbol{Q}_{22}
-\end{pmatrix}
-\end{align*}
-with $\dim(\boldsymbol{\Sigma}_{11})=k\times k$ and $\dim(\boldsymbol{\Sigma}_{22})=(d-k) \times (d-k).$
-
-## Matrix identities
-
-The following relationships hold:
-
-- $\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}=-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}$ 
-- $\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}=\boldsymbol{Q}_{11}^{-1}$
-- $\det(\boldsymbol{\Sigma})=\det(\boldsymbol{\Sigma}_{22})\det(\boldsymbol{\Sigma}_{1|2})$ 
-where $\boldsymbol{\Sigma}_{1|2}=\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}.$
-
 ## Gaussian subvectors
 
-Let $\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{\mu}, \boldsymbol{\Sigma})$ and consider the partition
+Let $\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{\mu}, \boldsymbol{Q}^{-1})$ and consider the partition
 \begin{align*}
  \boldsymbol{Y} = \begin{pmatrix} \boldsymbol{Y}_1 \\ \boldsymbol{Y}_2\end{pmatrix}, \quad 
  \boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2\end{pmatrix}, \quad 
- \boldsymbol{\Sigma} = \begin{pmatrix} \boldsymbol{\Sigma}_{11} & \boldsymbol{\Sigma}_{12}\\ \boldsymbol{\Sigma}_{21} & \boldsymbol{\Sigma}_{22}\end{pmatrix},
+ \boldsymbol{Q} = \begin{pmatrix} \boldsymbol{Q}_{11} & \boldsymbol{Q}_{12}\\ \boldsymbol{Q}_{21} & \boldsymbol{\Sigma}_{22}\end{pmatrix},
 \end{align*}
 where $\boldsymbol{Y}_1$ is a $k \times 1$ and $\boldsymbol{Y}_2$ is a $(d-k) \times 1$ vector for some $1\leq k < d.$
 
@@ -281,10 +292,10 @@ where $\boldsymbol{Y}_1$ is a $k \times 1$ and $\boldsymbol{Y}_2$ is a $(d-k) \t
 
 Then, we have the conditional distribution 
 \begin{align*}
-\boldsymbol{Y}_1 \mid \boldsymbol{Y}_2 =\boldsymbol{y}_2 &\sim \mathsf{Gauss}_k(\boldsymbol{\mu}_1+\boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{\Sigma}_{1|2})
+\boldsymbol{Y}_1 \mid \boldsymbol{Y}_2 =\boldsymbol{y}_2 &\sim
 \\& \sim  \mathsf{Gauss}_k(\boldsymbol{\mu}_1-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{Q}^{-1}_{11})
 \end{align*}
-and $\boldsymbol{\Sigma}_{1|2}=\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}$ is the Schur complement of $\boldsymbol{\Sigma}_{22}.$
+
 
 ## Likelihood
 
@@ -334,29 +345,6 @@ The information of an iid sample of size $n$is $n$ times that of a single observ
 - information accumulates at a linear rate.
 
 
-## Example: random right-censoring
-
-Consider a survival analysis problem for independent time-to-event data subject to (noninformative) random right-censoring. We observe
-
--  failure times $Y_i (i=1, \ldots, n)$ drawn from $F(\cdot; \boldsymbol{\theta})$ supported on $(0, \infty)$
-- independent binary censoring indicators $C_i \in \{0,1\}$, with $0$ indicating right-censoring and $C_i=1$ observed failure time. 
-
-## Likelihood contribution with censoring
-
-If individual observation $i$ has not experienced the event at the end of the collection period, then the likelihood contribution is $\Pr(Y > y) = 1-F(y; \boldsymbol{\theta})$, where $y_i$ is the maximum time observed for $Y_i$. We write the log likelihood
-\begin{align*}
-\ell(\boldsymbol{\theta}) = \sum_{i: c_i=0} \log \{1- F(y_i; \boldsymbol{\theta})\} + \sum_{i: c_i=1} \log f(y_i; \boldsymbol{\theta})
-\end{align*}
-
-## Censoring and exponential data
-
-Suppose for simplicity that $Y_i \sim \mathsf{expo}(\lambda)$ and let $m=c_1 + \cdots + c_n$ denote the number of observed failure times. Then, the log likelihood and the Fisher information are
-\begin{align*}
-\ell(\lambda) &= \lambda \sum_{i=1}^n y_i + \log \lambda m\\
-i(\lambda) &= m/\lambda^2
-\end{align*}
-and the right-censored observations for the exponential model do not contribute to the information.
-
 
 ## Information for the Gaussian distribution
 
@@ -379,6 +367,31 @@ i(\mu, \tau) &= n\begin{pmatrix}
 \end{pmatrix}
 \end{align*}
 Since $\mathsf{E}(Y_i) = \mu$, the expected value of the off-diagonal entries of the Fisher information matrix are zero.
+
+
+## Example: random right-censoring
+
+Consider a survival analysis problem for independent time-to-event data subject to (noninformative) random right-censoring. We observe
+
+-  failure times $Y_i (i=1, \ldots, n)$ drawn from $F(\cdot; \boldsymbol{\theta})$ supported on $(0, \infty)$
+- independent binary censoring indicators $C_i \in \{0,1\}$, with $0$ indicating right-censoring and $C_i=1$ observed failure time.
+
+## Likelihood contribution with censoring
+
+If individual observation $i$ has not experienced the event at the end of the collection period, then the likelihood contribution is $\Pr(Y > y) = 1-F(y; \boldsymbol{\theta})$, where $y_i$ is the maximum time observed for $Y_i$. We write the log likelihood
+\begin{align*}
+\ell(\boldsymbol{\theta}) = \sum_{i: c_i=0} \log \{1- F(y_i; \boldsymbol{\theta})\} + \sum_{i: c_i=1} \log f(y_i; \boldsymbol{\theta})
+\end{align*}
+
+## Censoring and exponential data
+
+Suppose for simplicity that $Y_i \sim \mathsf{expo}(\lambda)$ and let $m=c_1 + \cdots + c_n$ denote the number of observed failure times. Then, the log likelihood and the Fisher information are
+\begin{align*}
+\ell(\lambda) &= \lambda \sum_{i=1}^n y_i + \log \lambda m\\
+i(\lambda) &= m/\lambda^2
+\end{align*}
+and the right-censored observations for the exponential model do not contribute to the information.
+
 
 ## Example: first-order autoregressive process
 
@@ -415,22 +428,13 @@ so the log-likelihood is
 &\ell(\mu, \phi,\sigma^2)= -\frac{n}{2}\log(2\pi) - n\log \sigma + \frac{1}{2}\log(1-\phi^2) \\&\quad -\frac{(1-\phi^2)(y_1- \mu)^2}{2\sigma^2} - \sum_{i=2}^n \frac{(y_t - \mu(1-\phi)- \phi y_{t-1})^2}{2\sigma^2}
 \end{align*}
 
-## Moments
-
-By the laws of iterated expectation and iterative variance, 
-\begin{align*}
-\mathsf{E}(Y) &= \mathsf{E}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda\} \\& = \mathsf{E}(\Lambda) = \mu\\
-\mathsf{Va}(Y) &= \mathsf{E}_{\Lambda}\{\mathsf{Va}(Y \mid \Lambda)\} + \mathsf{Va}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda)\} \\&= \mathsf{E}(\Lambda) + \mathsf{Va}(\Lambda) \\&= \mu + \mu/k.
-\end{align*}
-The marginal distribution of $Y$, unconditionally, has a variance which exceeds its mean.
-
 ## Estimation of integrals
 
 Suppose we can simulate $B$ i.i.d. variables with the same distribution, $x_1, \ldots, x_B$ with distribution $F$.
 
 We want to compute $\mathsf{E}\{g(X)\}=\int g(x) f(x) \mathrm{d} x=\mu_g$ for some functional $g(\cdot)$
 
-- $g(x)=x$ (posterior mean)
+- $g(x)=x$ (mean)
 - $g(x) = \mathsf{I}(x \in A)$ (probability of event)
 - etc.
 
