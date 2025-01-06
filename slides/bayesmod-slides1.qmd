@@ -76,9 +76,9 @@ The **marginal distribution** of a subvector $\boldsymbol{X}_{1:k}=(X_1, \ldots,
 
 ## Marginal density
 
-The **marginal density** of an absolutely continuous subvector $\boldsymbol{X}_{1:k}=(X_1, \ldots, X_k)^\top$ is
+The **marginal density** $f_{\boldsymbol{X}_{1:k}}(\boldsymbol{x}_{1:k})$ of an absolutely continuous subvector $\boldsymbol{X}_{1:k}=(X_1, \ldots, X_k)^\top$ is
 \begin{align*}
- f_{\boldsymbol{X}_{1:k}}(\boldsymbol{x}_{1:k}) = \int_{-\infty}^\infty \cdots  \int_{-\infty}^\infty  f_{\boldsymbol{X}}(x_1, \ldots, x_k, z_{k+1}, \ldots, z_{d}) \mathrm{d} z_{k+1} \cdots \mathrm{d}z_d.
+ \int_{-\infty}^\infty \cdots  \int_{-\infty}^\infty  f_{\boldsymbol{X}}(x_1, \ldots, x_k, z_{k+1}, \ldots, z_{d}) \mathrm{d} z_{k+1} \cdots \mathrm{d}z_d.
 \end{align*}
 through integration from the joint density.
 
@@ -96,7 +96,7 @@ for any value of $\boldsymbol{x}$ in the support of $\boldsymbol{X}$.
 
 ## Conditional and marginal for contingency table
 
-Consider a bivariate distribution for $(Y_1, Y_2)$ supported on $\{1,2\} \times \{1, 2, 3\}$ whose joint probability mass function is given in @tbl-bivardiscrete
+Consider a bivariate distribution for $(Y_1, Y_2)$ supported on $\{1,2,3\} \times \{1, 2\}$ whose joint probability mass function is given in @tbl-bivardiscrete
 
 ```{r}
 #| eval: true
@@ -104,10 +104,10 @@ Consider a bivariate distribution for $(Y_1, Y_2)$ supported on $\{1,2\} \times 
 #| label: tbl-bivardiscrete
 #| tbl-cap: "Bivariate mass function with probability of each outcome for $(Y_1, Y_2)$."
 #| tbl-align: 'center'
-tab <- rbind(c(0.2, 0.3, 0.1), c(0.15, 0.2, 0.05))
-colnames(tab) <- c("$Y_1=1$","$Y_1=2$","$Y_1=3$")
-rownames(tab) <- c("$Y_2=1$","$Y_2=2$")
-knitr::kable(tab, escape = FALSE)
+tab <- rbind(c(0.2, 0.3, 0.1, 0.6), c(0.15, 0.2, 0.05, 0.4),c(0.35,0.5,0.15,1))
+colnames(tab) <- c("$Y_1=1$","$Y_1=2$","$Y_1=3$","row total")
+rownames(tab) <- c("$Y_2=1$","$Y_2=2$","col. total")
+knitr::kable(tab, escape = FALSE, )
 ```
 
 ## Calculations for the marginal distribution
@@ -141,8 +141,6 @@ f_{\boldsymbol{X}, \boldsymbol{Y}}(\boldsymbol{x}, \boldsymbol{y}) = f_{\boldsym
 
 If two subvectors $\boldsymbol{X}$ and $\boldsymbol{Y}$ are independent, then the conditional density $f_{\boldsymbol{Y} \mid \boldsymbol{X}}(\boldsymbol{y}; \boldsymbol{x})$ equals the marginal $f_{\boldsymbol{Y}}(\boldsymbol{y})$.
 
-
-
 ## Law of iterated expectation and variance
 
 Let $\boldsymbol{Z}$ and $\boldsymbol{Y}$ be random vectors. The expected value of $\boldsymbol{Y}$ is
@@ -173,7 +171,7 @@ A gamma distribution with shape $\alpha>0$ and rate $\beta>0$, denoted $Y \sim \
 \begin{align*}
 f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}\exp(-\beta x), \qquad x \in (0, \infty),
 \end{align*}
-where $\Gamma(\alpha)\coloneqq\int_0^\infty t^{\alpha-1}\exp(-t)\mathrm{d} t$ is the gamma function.
+where $\Gamma(\alpha)=\int_0^\infty t^{\alpha-1}\exp(-t)\mathrm{d} t$ is the gamma function.
 
 
 ## Poisson with random scale
@@ -181,13 +179,13 @@ where $\Gamma(\alpha)\coloneqq\int_0^\infty t^{\alpha-1}\exp(-t)\mathrm{d} t$ is
 To handle overdispersion in count data, take
 
 \begin{align*}
-Y \mid \Lambda = \lambda ^\sim \mathsf{Poisson}(\lambda)\\
+Y \mid \Lambda &= \lambda \sim \mathsf{Poisson}(\lambda)\\
 \Lambda &\sim \mathsf{Gamma}(k\mu, k).
 \end{align*}
 
-The joint density of $Y$ and $\Lambda$ is
+The joint density of $Y$ and $\Lambda$ on $\mathbb{N}=\{0,1,\ldots\} \times \mathbb{R}_{+}$ is
 \begin{align*}
-p(y, \lambda) &= p(y \mid \lambda)p(\lambda) \\
+f(y, \lambda) &= f(y \mid \lambda)f(\lambda) \\
 &= \frac{\lambda^y\exp(-\lambda)}{\Gamma(y+1)}  \frac{k^{k\mu}\lambda^{k\mu-1}\exp(-k\lambda)}{\Gamma(k\mu)}
 \end{align*}
 
@@ -195,18 +193,146 @@ p(y, \lambda) &= p(y \mid \lambda)p(\lambda) \\
 
 The conditional distribution of $\Lambda \mid Y=y$ can be found by considering only terms that are function of $\lambda$, whence
 \begin{align*}
-f(\lambda \mid Y=y) \stackrel{\lambda}{\propto}\lambda^{y+k\mu-1}\exp(-(k+1)\lambda)
+f(\lambda \mid Y=y) \stackrel{\lambda}{\propto}\lambda^{y+k\mu-1}\exp\{-(k+1)\lambda\}
 \end{align*}
 so $\Lambda \mid Y=y \sim \mathsf{gamma}(k\mu + y, k+1)$.
 
 ## Marginal density of Poisson mean mixture
 
-We can isolate the marginal density
 \begin{align*}
-p(y) &= \frac{p(y,  \lambda)}{p(\lambda \mid y)} \\&= \frac{\frac{\lambda^y\exp(-\lambda)}{\Gamma(y+1)}  \frac{k^{k\mu}\lambda^{k\mu-1}\exp(-k\lambda)}{\Gamma(k\mu)}}{ \frac{(k+1)^{k\mu+y}\lambda^{k\mu+y-1}\exp\{-(k+1)\lambda\}}{\Gamma(k\mu+y)}}\\
+f(y) &= \frac{f(y,  \lambda)}{f(\lambda \mid y)} = \frac{\frac{\lambda^y\exp(-\lambda)}{\Gamma(y+1)}  \frac{k^{k\mu}\lambda^{k\mu-1}\exp(-k\lambda)}{\Gamma(k\mu)}}{ \frac{(k+1)^{k\mu+y}\lambda^{k\mu+y-1}\exp\{-(k+1)\lambda\}}{\Gamma(k\mu+y)}}\\
 &= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}k^{k\mu} (k+1)^{-k\mu-y}\\&= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}\left(1-\frac{1}{k+1}\right)^{k\mu} \left(\frac{1}{k+1}\right)^y
 \end{align*}
-a negative binomial distribution with probability of success $1/(k+1)$. 
+The marginal of $Y$ is negative binomial with prob. of success $1/(k+1)$. 
+
+## Likelihood
+
+The **likelihood** $L(\boldsymbol{\theta})$ is a function of the parameter vector $\boldsymbol{\theta}$ that gives the 'density' of a sample under a postulated distribution, treating the observations as fixed,
+\begin{align*}
+L(\boldsymbol{\theta}; \boldsymbol{y}) = f(\boldsymbol{y}; \boldsymbol{\theta}).
+\end{align*}
+
+## Likelihood for independent observations
+
+If the joint density factorizes,
+\begin{align*}
+L(\boldsymbol{\theta}; \boldsymbol{y})=\prod_{i=1}^n f_i(y_i; \boldsymbol{\theta}) = f_1(y_1; \boldsymbol{\theta}) \times \cdots \times f_n(y_n; \boldsymbol{\theta}).
+\end{align*}
+The corresponding log likelihood function for independent and identically distributions observations is
+\begin{align*}
+\ell(\boldsymbol{\theta}; \boldsymbol{y}) = \sum_{i=1}^n \ln f(y_i; \boldsymbol{\theta})
+\end{align*}
+
+## Score
+
+Let $\ell(\boldsymbol{\theta}),$ $\boldsymbol{\theta} \in \boldsymbol{\Theta} \subseteq \mathbb{R}^p,$ be the log likelihood function. The gradient of the log likelihood, termed **score** is the $p$-vector
+$$U(\boldsymbol{\theta}) = \frac{\partial \ell(\boldsymbol{\theta})}{ \partial \boldsymbol{\theta}}.$$
+
+## Information matrix
+
+
+The **observed information matrix** is the hessian of the negative log likelihood,
+\begin{align*}
+j(\boldsymbol{\theta}; \boldsymbol{y})=-\frac{\partial^2 \ell(\boldsymbol{\theta}; \boldsymbol{y})}{\partial \boldsymbol{\theta} \partial \boldsymbol{\theta}^\top},
+\end{align*}
+evaluated at the maximum likelihood estimate $\widehat{\boldsymbol{\theta}},$ so $j(\widehat{\boldsymbol{\theta}}).$
+
+## Expected information
+
+Under regularity conditions, the **expected information**, also called **Fisher information** matrix, is
+\begin{align*}
+i(\boldsymbol{\theta}) = \mathsf{E}\left\{U(\boldsymbol{\theta}; \boldsymbol{Y}) U(\boldsymbol{\theta}; \boldsymbol{Y})^\top\right\} = \mathsf{E}\left\{j(\boldsymbol{\theta}; \boldsymbol{Y})\right\}
+\end{align*}
+
+## Note on information matrices 
+
+Information matrices are symmetric and provide information about the variability of $\widehat{\boldsymbol{\theta}}.$
+
+The information of an iid sample of size $n$is $n$ times that of a single observation 
+
+- information accumulates at a linear rate.
+
+
+## Example: random right-censoring
+
+Consider a survival analysis problem for independent time-to-event data subject to (noninformative) random right-censoring. We observe
+
+-  failure times $Y_i (i=1, \ldots, n)$ drawn from $F(\cdot; \boldsymbol{\theta})$ supported on $(0, \infty)$
+- independent binary censoring indicators $C_i \in \{0,1\}$, with $0$ indicating right-censoring and $C_i=1$ observed failure time. 
+
+## Likelihood contribution with censoring
+
+If individual observation $i$ has not experienced the event at the end of the collection period, then the likelihood contribution is $\Pr(Y > y) = 1-F(y; \boldsymbol{\theta})$, where $y_i$ is the maximum time observed for $Y_i$. We write the log likelihood
+\begin{align*}
+\ell(\boldsymbol{\theta}) = \sum_{i: c_i=0} \log \{1- F(y_i; \boldsymbol{\theta})\} + \sum_{i: c_i=1} \log f(y_i; \boldsymbol{\theta})
+\end{align*}
+
+## Censoring and exponential data
+
+Suppose for simplicity that $Y_i \sim \mathsf{expo}(\lambda)$ and let $m=c_1 + \cdots + c_n$ denote the number of observed failure times. Then, the log likelihood and the Fisher information are
+\begin{align*}
+\ell(\lambda) &= \lambda \sum_{i=1}^n y_i + \log \lambda m\\
+i(\lambda) &= m/\lambda^2
+\end{align*}
+and the right-censored observations for the exponential model do not contribute to the information.
+
+
+## Information for the Gaussian distribution
+
+Consider $Y \sim \mathsf{Gauss}(\mu, \tau^{-1})$, parametrized in terms of precision $\tau$. The likelihood contribution for an $n$ sample is, up to proportionality,
+\begin{align*}
+\ell(\mu, \tau) \propto \frac{n}{2}\log(\tau) - \frac{\tau}{2}\sum_{i=1}^n(Y_i^2-2\mu Y_i+\mu^2)
+\end{align*}
+
+## Gaussian information matrices
+
+The observed and Fisher information matrices are 
+\begin{align*}
+j(\mu, \tau) &= \begin{pmatrix}
+n\tau & -\sum_{i=1}^n (Y_i-\mu)\\
+-\sum_{i=1}^n (Y_i-\mu) & \frac{n}{2\tau^2}
+\end{pmatrix}, \\
+i(\mu, \tau) &= n\begin{pmatrix}
+\tau & 0\\
+0 & \frac{1}{2\tau^2}
+\end{pmatrix}
+\end{align*}
+Since $\mathsf{E}(Y_i) = \mu$, the expected value of the off-diagonal entries of the Fisher information matrix are zero.
+
+## Example: first-order autoregressive process
+
+Consider an $\mathsf{AR}(1)$ model of the form
+$$Y_t = \mu + \phi(Y_{t-1} - \mu) + \varepsilon_t,$$ where 
+
+- $\phi$ is the lag-one correlation, 
+- $\mu$ the global mean and 
+- $\varepsilon_t$ is an iid innovation with mean zero and variance $\sigma^2$. 
+
+If $|\phi| < 1$, the process is stationary, and the variance does not increase with $t$.
+
+## Markov property and likelihood decomposition
+
+The Markov property states that the current realization depends on the past, $Y_t \mid Y_1, \ldots, Y_{t-1},$ only through the most recent value $Y_{t-1}.$ The log likelihood thus becomes
+\begin{align*}
+\ell(\boldsymbol{\theta}) = \ln f(y_1) + \sum_{i=2}^n f(y_i \mid y_{i-1}).
+\end{align*}
+
+## Marginal of AR(1)
+
+
+The $\mathsf{AR}(1)$ stationarity process has unconditional moments
+$$\mathsf{E}(Y_t) = \mu, \qquad \mathsf{Var}(Y_t)=\sigma^2/(1-\phi^2).$$ 
+
+The $\mathsf{AR}(1)$ process is first-order Markov since the conditional distribution $f(Y_t \mid Y_{t-1}, \ldots, Y_{t-p})$ equals $f(Y_t \mid Y_{t-1})$. 
+
+## Log likelihood of AR(1)
+
+If innovations are Gaussian, we have
+$$Y_t \mid Y_{t-1}=y_{t-1} \sim \mathsf{Gauss}\{\mu(1-\phi)+ \phi y_{t-1}, \sigma^2\}, \qquad t>1.$$
+so the log-likelihood is
+\begin{align*}
+&\ell(\mu, \phi,\sigma^2)= -\frac{n}{2}\log(2\pi) - n\log \sigma + \frac{1}{2}\log(1-\phi^2) \\&\quad -\frac{(1-\phi^2)(y_1- \mu)^2}{2\sigma^2} - \sum_{i=2}^n \frac{(y_t - \mu(1-\phi)- \phi y_{t-1})^2}{2\sigma^2}
+\end{align*}
 
 ## Moments
 
@@ -215,10 +341,7 @@ By the laws of iterated expectation and iterative variance,
 \mathsf{E}(Y) &= \mathsf{E}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda\} \\& = \mathsf{E}(\Lambda) = \mu\\
 \mathsf{Va}(Y) &= \mathsf{E}_{\Lambda}\{\mathsf{Va}(Y \mid \Lambda)\} + \mathsf{Va}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda)\} \\&= \mathsf{E}(\Lambda) + \mathsf{Va}(\Lambda) \\&= \mu + \mu/k.
 \end{align*}
-The marginal distribution of $Y$, unconditionally, has a variance which exceeds its mean, as
-\begin{align*}
-\mathsf{E}(Y) = \mu, \qquad \mathsf{Va}(Y) = \mu (1+1/k).
-\end{align*}
+The marginal distribution of $Y$, unconditionally, has a variance which exceeds its mean.
 
 ## Monte Carlo methods
 

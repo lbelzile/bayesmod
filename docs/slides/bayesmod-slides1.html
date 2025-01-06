@@ -248,8 +248,8 @@ F_{\boldsymbol{X}_{1:k}}(\boldsymbol{x}_{1:k}) &amp;= \Pr(\boldsymbol{X}_{1:k} \
 </section>
 <section id="marginal-density" class="slide level2">
 <h2>Marginal density</h2>
-<p>The <strong>marginal density</strong> of an absolutely continuous subvector <span class="math inline">\(\boldsymbol{X}_{1:k}=(X_1, \ldots, X_k)^\top\)</span> is <span class="math display">\[\begin{align*}
-f_{\boldsymbol{X}_{1:k}}(\boldsymbol{x}_{1:k}) = \int_{-\infty}^\infty \cdots  \int_{-\infty}^\infty  f_{\boldsymbol{X}}(x_1, \ldots, x_k, z_{k+1}, \ldots, z_{d}) \mathrm{d} z_{k+1} \cdots \mathrm{d}z_d.
+<p>The <strong>marginal density</strong> <span class="math inline">\(f_{\boldsymbol{X}_{1:k}}(\boldsymbol{x}_{1:k})\)</span> of an absolutely continuous subvector <span class="math inline">\(\boldsymbol{X}_{1:k}=(X_1, \ldots, X_k)^\top\)</span> is <span class="math display">\[\begin{align*}
+\int_{-\infty}^\infty \cdots  \int_{-\infty}^\infty  f_{\boldsymbol{X}}(x_1, \ldots, x_k, z_{k+1}, \ldots, z_{d}) \mathrm{d} z_{k+1} \cdots \mathrm{d}z_d.
 \end{align*}\]</span> through integration from the joint density.</p>
 </section>
 <section id="conditional-distribution" class="slide level2">
@@ -260,7 +260,7 @@ f_{\boldsymbol{Y} \mid \boldsymbol{X}}(\boldsymbol{y}; \boldsymbol{x}) = \frac{f
 </section>
 <section id="conditional-and-marginal-for-contingency-table" class="slide level2">
 <h2>Conditional and marginal for contingency table</h2>
-<p>Consider a bivariate distribution for <span class="math inline">\((Y_1, Y_2)\)</span> supported on <span class="math inline">\(\{1,2\} \times \{1, 2, 3\}\)</span> whose joint probability mass function is given in <a href="#/tbl-bivardiscrete" class="quarto-xref">Table&nbsp;1</a></p>
+<p>Consider a bivariate distribution for <span class="math inline">\((Y_1, Y_2)\)</span> supported on <span class="math inline">\(\{1,2,3\} \times \{1, 2\}\)</span> whose joint probability mass function is given in <a href="#/tbl-bivardiscrete" class="quarto-xref">Table&nbsp;1</a></p>
 <div class="cell" data-tbl-align="center">
 <div id="tbl-bivardiscrete" class="cell quarto-float quarto-figure quarto-figure-center" data-tbl-align="center">
 <figure class="quarto-float quarto-float-tbl">
@@ -276,6 +276,7 @@ Table&nbsp;1: Bivariate mass function with probability of each outcome for <span
 <th style="text-align: right;"><span class="math inline">\(Y_1=1\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(Y_1=2\)</span></th>
 <th style="text-align: right;"><span class="math inline">\(Y_1=3\)</span></th>
+<th style="text-align: right;">row total</th>
 </tr>
 </thead>
 <tbody>
@@ -284,12 +285,21 @@ Table&nbsp;1: Bivariate mass function with probability of each outcome for <span
 <td style="text-align: right;">0.20</td>
 <td style="text-align: right;">0.3</td>
 <td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.6</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><span class="math inline">\(Y_2=2\)</span></td>
 <td style="text-align: right;">0.15</td>
 <td style="text-align: right;">0.2</td>
 <td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">col.&nbsp;total</td>
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">0.15</td>
+<td style="text-align: right;">1.0</td>
 </tr>
 </tbody>
 </table>
@@ -344,41 +354,144 @@ f(x)=\mathsf{Pr}(Y=x) = \frac{\exp(-\lambda)\lambda^y}{\Gamma(y+1)}, \quad x=0, 
 <h2>Gamma distribution</h2>
 <p>A gamma distribution with shape <span class="math inline">\(\alpha&gt;0\)</span> and rate <span class="math inline">\(\beta&gt;0\)</span>, denoted <span class="math inline">\(Y \sim \mathsf{gamma}(\alpha, \beta)\)</span>, has density <span class="math display">\[\begin{align*}
 f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}\exp(-\beta x), \qquad x \in (0, \infty),
-\end{align*}\]</span> where <span class="math inline">\(\Gamma(\alpha)\coloneqq\int_0^\infty t^{\alpha-1}\exp(-t)\mathrm{d} t\)</span> is the gamma function.</p>
+\end{align*}\]</span> where <span class="math inline">\(\Gamma(\alpha)=\int_0^\infty t^{\alpha-1}\exp(-t)\mathrm{d} t\)</span> is the gamma function.</p>
 </section>
 <section id="poisson-with-random-scale" class="slide level2">
 <h2>Poisson with random scale</h2>
 <p>To handle overdispersion in count data, take</p>
 <p><span class="math display">\[\begin{align*}
-Y \mid \Lambda = \lambda ^\sim \mathsf{Poisson}(\lambda)\\
+Y \mid \Lambda &amp;= \lambda \sim \mathsf{Poisson}(\lambda)\\
 \Lambda &amp;\sim \mathsf{Gamma}(k\mu, k).
 \end{align*}\]</span></p>
-<p>The joint density of <span class="math inline">\(Y\)</span> and <span class="math inline">\(\Lambda\)</span> is <span class="math display">\[\begin{align*}
-p(y, \lambda) &amp;= p(y \mid \lambda)p(\lambda) \\
+<p>The joint density of <span class="math inline">\(Y\)</span> and <span class="math inline">\(\Lambda\)</span> on <span class="math inline">\(\mathbb{N}=\{0,1,\ldots\} \times \mathbb{R}_{+}\)</span> is <span class="math display">\[\begin{align*}
+f(y, \lambda) &amp;= f(y \mid \lambda)f(\lambda) \\
 &amp;= \frac{\lambda^y\exp(-\lambda)}{\Gamma(y+1)}  \frac{k^{k\mu}\lambda^{k\mu-1}\exp(-k\lambda)}{\Gamma(k\mu)}
 \end{align*}\]</span></p>
 </section>
 <section id="conditional-distribution-2" class="slide level2">
 <h2>Conditional distribution</h2>
 <p>The conditional distribution of <span class="math inline">\(\Lambda \mid Y=y\)</span> can be found by considering only terms that are function of <span class="math inline">\(\lambda\)</span>, whence <span class="math display">\[\begin{align*}
-f(\lambda \mid Y=y) \stackrel{\lambda}{\propto}\lambda^{y+k\mu-1}\exp(-(k+1)\lambda)
+f(\lambda \mid Y=y) \stackrel{\lambda}{\propto}\lambda^{y+k\mu-1}\exp\{-(k+1)\lambda\}
 \end{align*}\]</span> so <span class="math inline">\(\Lambda \mid Y=y \sim \mathsf{gamma}(k\mu + y, k+1)\)</span>.</p>
 </section>
 <section id="marginal-density-of-poisson-mean-mixture" class="slide level2">
 <h2>Marginal density of Poisson mean mixture</h2>
-<p>We can isolate the marginal density <span class="math display">\[\begin{align*}
-p(y) &amp;= \frac{p(y,  \lambda)}{p(\lambda \mid y)} \\&amp;= \frac{\frac{\lambda^y\exp(-\lambda)}{\Gamma(y+1)}  \frac{k^{k\mu}\lambda^{k\mu-1}\exp(-k\lambda)}{\Gamma(k\mu)}}{ \frac{(k+1)^{k\mu+y}\lambda^{k\mu+y-1}\exp\{-(k+1)\lambda\}}{\Gamma(k\mu+y)}}\\
+<p><span class="math display">\[\begin{align*}
+f(y) &amp;= \frac{f(y,  \lambda)}{f(\lambda \mid y)} = \frac{\frac{\lambda^y\exp(-\lambda)}{\Gamma(y+1)}  \frac{k^{k\mu}\lambda^{k\mu-1}\exp(-k\lambda)}{\Gamma(k\mu)}}{ \frac{(k+1)^{k\mu+y}\lambda^{k\mu+y-1}\exp\{-(k+1)\lambda\}}{\Gamma(k\mu+y)}}\\
 &amp;= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}k^{k\mu} (k+1)^{-k\mu-y}\\&amp;= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}\left(1-\frac{1}{k+1}\right)^{k\mu} \left(\frac{1}{k+1}\right)^y
-\end{align*}\]</span> a negative binomial distribution with probability of success <span class="math inline">\(1/(k+1)\)</span>.</p>
+\end{align*}\]</span> The marginal of <span class="math inline">\(Y\)</span> is negative binomial with prob. of success <span class="math inline">\(1/(k+1)\)</span>.</p>
+</section>
+<section id="likelihood" class="slide level2">
+<h2>Likelihood</h2>
+<p>The <strong>likelihood</strong> <span class="math inline">\(L(\boldsymbol{\theta})\)</span> is a function of the parameter vector <span class="math inline">\(\boldsymbol{\theta}\)</span> that gives the ‘density’ of a sample under a postulated distribution, treating the observations as fixed, <span class="math display">\[\begin{align*}
+L(\boldsymbol{\theta}; \boldsymbol{y}) = f(\boldsymbol{y}; \boldsymbol{\theta}).
+\end{align*}\]</span></p>
+</section>
+<section id="likelihood-for-independent-observations" class="slide level2">
+<h2>Likelihood for independent observations</h2>
+<p>If the joint density factorizes, <span class="math display">\[\begin{align*}
+L(\boldsymbol{\theta}; \boldsymbol{y})=\prod_{i=1}^n f_i(y_i; \boldsymbol{\theta}) = f_1(y_1; \boldsymbol{\theta}) \times \cdots \times f_n(y_n; \boldsymbol{\theta}).
+\end{align*}\]</span> The corresponding log likelihood function for independent and identically distributions observations is <span class="math display">\[\begin{align*}
+\ell(\boldsymbol{\theta}; \boldsymbol{y}) = \sum_{i=1}^n \ln f(y_i; \boldsymbol{\theta})
+\end{align*}\]</span></p>
+</section>
+<section id="score" class="slide level2">
+<h2>Score</h2>
+<p>Let <span class="math inline">\(\ell(\boldsymbol{\theta}),\)</span> <span class="math inline">\(\boldsymbol{\theta} \in \boldsymbol{\Theta} \subseteq \mathbb{R}^p,\)</span> be the log likelihood function. The gradient of the log likelihood, termed <strong>score</strong> is the <span class="math inline">\(p\)</span>-vector <span class="math display">\[U(\boldsymbol{\theta}) = \frac{\partial \ell(\boldsymbol{\theta})}{ \partial \boldsymbol{\theta}}.\]</span></p>
+</section>
+<section id="information-matrix" class="slide level2">
+<h2>Information matrix</h2>
+<p>The <strong>observed information matrix</strong> is the hessian of the negative log likelihood, <span class="math display">\[\begin{align*}
+j(\boldsymbol{\theta}; \boldsymbol{y})=-\frac{\partial^2 \ell(\boldsymbol{\theta}; \boldsymbol{y})}{\partial \boldsymbol{\theta} \partial \boldsymbol{\theta}^\top},
+\end{align*}\]</span> evaluated at the maximum likelihood estimate <span class="math inline">\(\widehat{\boldsymbol{\theta}},\)</span> so <span class="math inline">\(j(\widehat{\boldsymbol{\theta}}).\)</span></p>
+</section>
+<section id="expected-information" class="slide level2">
+<h2>Expected information</h2>
+<p>Under regularity conditions, the <strong>expected information</strong>, also called <strong>Fisher information</strong> matrix, is <span class="math display">\[\begin{align*}
+i(\boldsymbol{\theta}) = \mathsf{E}\left\{U(\boldsymbol{\theta}; \boldsymbol{Y}) U(\boldsymbol{\theta}; \boldsymbol{Y})^\top\right\} = \mathsf{E}\left\{j(\boldsymbol{\theta}; \boldsymbol{Y})\right\}
+\end{align*}\]</span></p>
+</section>
+<section id="note-on-information-matrices" class="slide level2">
+<h2>Note on information matrices</h2>
+<p>Information matrices are symmetric and provide information about the variability of <span class="math inline">\(\widehat{\boldsymbol{\theta}}.\)</span></p>
+<p>The information of an iid sample of size <span class="math inline">\(n\)</span>is <span class="math inline">\(n\)</span> times that of a single observation</p>
+<ul>
+<li>information accumulates at a linear rate.</li>
+</ul>
+</section>
+<section id="example-random-right-censoring" class="slide level2">
+<h2>Example: random right-censoring</h2>
+<p>Consider a survival analysis problem for independent time-to-event data subject to (noninformative) random right-censoring. We observe</p>
+<ul>
+<li>failure times <span class="math inline">\(Y_i (i=1, \ldots, n)\)</span> drawn from <span class="math inline">\(F(\cdot; \boldsymbol{\theta})\)</span> supported on <span class="math inline">\((0, \infty)\)</span></li>
+<li>independent binary censoring indicators <span class="math inline">\(C_i \in \{0,1\}\)</span>, with <span class="math inline">\(0\)</span> indicating right-censoring and <span class="math inline">\(C_i=1\)</span> observed failure time.</li>
+</ul>
+</section>
+<section id="likelihood-contribution-with-censoring" class="slide level2">
+<h2>Likelihood contribution with censoring</h2>
+<p>If individual observation <span class="math inline">\(i\)</span> has not experienced the event at the end of the collection period, then the likelihood contribution is <span class="math inline">\(\Pr(Y &gt; y) = 1-F(y; \boldsymbol{\theta})\)</span>, where <span class="math inline">\(y_i\)</span> is the maximum time observed for <span class="math inline">\(Y_i\)</span>. We write the log likelihood <span class="math display">\[\begin{align*}
+\ell(\boldsymbol{\theta}) = \sum_{i: c_i=0} \log \{1- F(y_i; \boldsymbol{\theta})\} + \sum_{i: c_i=1} \log f(y_i; \boldsymbol{\theta})
+\end{align*}\]</span></p>
+</section>
+<section id="censoring-and-exponential-data" class="slide level2">
+<h2>Censoring and exponential data</h2>
+<p>Suppose for simplicity that <span class="math inline">\(Y_i \sim \mathsf{expo}(\lambda)\)</span> and let <span class="math inline">\(m=c_1 + \cdots + c_n\)</span> denote the number of observed failure times. Then, the log likelihood and the Fisher information are <span class="math display">\[\begin{align*}
+\ell(\lambda) &amp;= \lambda \sum_{i=1}^n y_i + \log \lambda m\\
+i(\lambda) &amp;= m/\lambda^2
+\end{align*}\]</span> and the right-censored observations for the exponential model do not contribute to the information.</p>
+</section>
+<section id="information-for-the-gaussian-distribution" class="slide level2">
+<h2>Information for the Gaussian distribution</h2>
+<p>Consider <span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \tau^{-1})\)</span>, parametrized in terms of precision <span class="math inline">\(\tau\)</span>. The likelihood contribution for an <span class="math inline">\(n\)</span> sample is, up to proportionality, <span class="math display">\[\begin{align*}
+\ell(\mu, \tau) \propto \frac{n}{2}\log(\tau) - \frac{\tau}{2}\sum_{i=1}^n(Y_i^2-2\mu Y_i+\mu^2)
+\end{align*}\]</span></p>
+</section>
+<section id="gaussian-information-matrices" class="slide level2">
+<h2>Gaussian information matrices</h2>
+<p>The observed and Fisher information matrices are <span class="math display">\[\begin{align*}
+j(\mu, \tau) &amp;= \begin{pmatrix}
+n\tau &amp; -\sum_{i=1}^n (Y_i-\mu)\\
+-\sum_{i=1}^n (Y_i-\mu) &amp; \frac{n}{2\tau^2}
+\end{pmatrix}, \\
+i(\mu, \tau) &amp;= n\begin{pmatrix}
+\tau &amp; 0\\
+0 &amp; \frac{1}{2\tau^2}
+\end{pmatrix}
+\end{align*}\]</span> Since <span class="math inline">\(\mathsf{E}(Y_i) = \mu\)</span>, the expected value of the off-diagonal entries of the Fisher information matrix are zero.</p>
+</section>
+<section id="example-first-order-autoregressive-process" class="slide level2">
+<h2>Example: first-order autoregressive process</h2>
+<p>Consider an <span class="math inline">\(\mathsf{AR}(1)\)</span> model of the form <span class="math display">\[Y_t = \mu + \phi(Y_{t-1} - \mu) + \varepsilon_t,\]</span> where</p>
+<ul>
+<li><span class="math inline">\(\phi\)</span> is the lag-one correlation,</li>
+<li><span class="math inline">\(\mu\)</span> the global mean and</li>
+<li><span class="math inline">\(\varepsilon_t\)</span> is an iid innovation with mean zero and variance <span class="math inline">\(\sigma^2\)</span>.</li>
+</ul>
+<p>If <span class="math inline">\(|\phi| &lt; 1\)</span>, the process is stationary, and the variance does not increase with <span class="math inline">\(t\)</span>.</p>
+</section>
+<section id="markov-property-and-likelihood-decomposition" class="slide level2">
+<h2>Markov property and likelihood decomposition</h2>
+<p>The Markov property states that the current realization depends on the past, <span class="math inline">\(Y_t \mid Y_1, \ldots, Y_{t-1},\)</span> only through the most recent value <span class="math inline">\(Y_{t-1}.\)</span> The log likelihood thus becomes <span class="math display">\[\begin{align*}
+\ell(\boldsymbol{\theta}) = \ln f(y_1) + \sum_{i=2}^n f(y_i \mid y_{i-1}).
+\end{align*}\]</span></p>
+</section>
+<section id="marginal-of-ar1" class="slide level2">
+<h2>Marginal of AR(1)</h2>
+<p>The <span class="math inline">\(\mathsf{AR}(1)\)</span> stationarity process has unconditional moments <span class="math display">\[\mathsf{E}(Y_t) = \mu, \qquad \mathsf{Var}(Y_t)=\sigma^2/(1-\phi^2).\]</span></p>
+<p>The <span class="math inline">\(\mathsf{AR}(1)\)</span> process is first-order Markov since the conditional distribution <span class="math inline">\(f(Y_t \mid Y_{t-1}, \ldots, Y_{t-p})\)</span> equals <span class="math inline">\(f(Y_t \mid Y_{t-1})\)</span>.</p>
+</section>
+<section id="log-likelihood-of-ar1" class="slide level2">
+<h2>Log likelihood of AR(1)</h2>
+<p>If innovations are Gaussian, we have <span class="math display">\[Y_t \mid Y_{t-1}=y_{t-1} \sim \mathsf{Gauss}\{\mu(1-\phi)+ \phi y_{t-1}, \sigma^2\}, \qquad t&gt;1.\]</span> so the log-likelihood is <span class="math display">\[\begin{align*}
+&amp;\ell(\mu, \phi,\sigma^2)= -\frac{n}{2}\log(2\pi) - n\log \sigma + \frac{1}{2}\log(1-\phi^2) \\&amp;\quad -\frac{(1-\phi^2)(y_1- \mu)^2}{2\sigma^2} - \sum_{i=2}^n \frac{(y_t - \mu(1-\phi)- \phi y_{t-1})^2}{2\sigma^2}
+\end{align*}\]</span></p>
 </section>
 <section id="moments" class="slide level2">
 <h2>Moments</h2>
 <p>By the laws of iterated expectation and iterative variance, <span class="math display">\[\begin{align*}
 \mathsf{E}(Y) &amp;= \mathsf{E}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda\} \\&amp; = \mathsf{E}(\Lambda) = \mu\\
 \mathsf{Va}(Y) &amp;= \mathsf{E}_{\Lambda}\{\mathsf{Va}(Y \mid \Lambda)\} + \mathsf{Va}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda)\} \\&amp;= \mathsf{E}(\Lambda) + \mathsf{Va}(\Lambda) \\&amp;= \mu + \mu/k.
-\end{align*}\]</span> The marginal distribution of <span class="math inline">\(Y\)</span>, unconditionally, has a variance which exceeds its mean, as <span class="math display">\[\begin{align*}
-\mathsf{E}(Y) = \mu, \qquad \mathsf{Va}(Y) = \mu (1+1/k).
-\end{align*}\]</span></p>
+\end{align*}\]</span> The marginal distribution of <span class="math inline">\(Y\)</span>, unconditionally, has a variance which exceeds its mean.</p>
 </section>
 <section id="monte-carlo-methods" class="slide level2">
 <h2>Monte Carlo methods</h2>

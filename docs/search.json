@@ -39,7 +39,7 @@
     "href": "syllabus.html#student-services",
     "title": "Outline",
     "section": "Student services",
-    "text": "Student services\nStudents with special needs should feel free to approach me so we can best discuss accommodations. Do check out HEC Montréal’s disabled students and [psychological] (https://www.hec.ca/en/students/support-resources/psychological-support/index.html) support services."
+    "text": "Student services\nStudents with special needs should feel free to approach me so we can best discuss accommodations. Do check out HEC Montréal’s disabled students and psychological support services."
   },
   {
     "objectID": "syllabus.html#harassment-and-sexual-violence",
@@ -746,7 +746,7 @@
     "href": "content/01-content.html#complementary-readings",
     "title": "Introduction",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nChapter 1 of Wood (2015)\nChapter 4 and 6.1 of Davison (2003)\nChapters 2 and 3 of Robert & Casella (n.d.)\nChapters 1–6 of Casella & Berger (2002)",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nChapter 1 of Wood (2015)\nChapter 4 and 6.1 of Davison (2003)\nChapters 2 and 3 of Robert & Casella (2004)\nChapters 1–6 of Casella & Berger (2002)",
     "crumbs": [
       "Content",
       "Course content",
@@ -1121,7 +1121,7 @@
     "href": "slides/bayesmod-slides1.html#marginal-density",
     "title": "Bayesian modelling",
     "section": "Marginal density",
-    "text": "Marginal density\nThe marginal density of an absolutely continuous subvector \\(\\boldsymbol{X}_{1:k}=(X_1, \\ldots, X_k)^\\top\\) is \\[\\begin{align*}\nf_{\\boldsymbol{X}_{1:k}}(\\boldsymbol{x}_{1:k}) = \\int_{-\\infty}^\\infty \\cdots  \\int_{-\\infty}^\\infty  f_{\\boldsymbol{X}}(x_1, \\ldots, x_k, z_{k+1}, \\ldots, z_{d}) \\mathrm{d} z_{k+1} \\cdots \\mathrm{d}z_d.\n\\end{align*}\\] through integration from the joint density."
+    "text": "Marginal density\nThe marginal density \\(f_{\\boldsymbol{X}_{1:k}}(\\boldsymbol{x}_{1:k})\\) of an absolutely continuous subvector \\(\\boldsymbol{X}_{1:k}=(X_1, \\ldots, X_k)^\\top\\) is \\[\\begin{align*}\n\\int_{-\\infty}^\\infty \\cdots  \\int_{-\\infty}^\\infty  f_{\\boldsymbol{X}}(x_1, \\ldots, x_k, z_{k+1}, \\ldots, z_{d}) \\mathrm{d} z_{k+1} \\cdots \\mathrm{d}z_d.\n\\end{align*}\\] through integration from the joint density."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#conditional-distribution",
@@ -1135,7 +1135,7 @@
     "href": "slides/bayesmod-slides1.html#conditional-and-marginal-for-contingency-table",
     "title": "Bayesian modelling",
     "section": "Conditional and marginal for contingency table",
-    "text": "Conditional and marginal for contingency table\nConsider a bivariate distribution for \\((Y_1, Y_2)\\) supported on \\(\\{1,2\\} \\times \\{1, 2, 3\\}\\) whose joint probability mass function is given in Table 1\n\n\n\n\nTable 1: Bivariate mass function with probability of each outcome for \\((Y_1, Y_2)\\).\n\n\n\n\n\n\n\n\\(Y_1=1\\)\n\\(Y_1=2\\)\n\\(Y_1=3\\)\n\n\n\n\n\\(Y_2=1\\)\n0.20\n0.3\n0.10\n\n\n\\(Y_2=2\\)\n0.15\n0.2\n0.05"
+    "text": "Conditional and marginal for contingency table\nConsider a bivariate distribution for \\((Y_1, Y_2)\\) supported on \\(\\{1,2,3\\} \\times \\{1, 2\\}\\) whose joint probability mass function is given in Table 1\n\n\n\n\nTable 1: Bivariate mass function with probability of each outcome for \\((Y_1, Y_2)\\).\n\n\n\n\n\n\n\n\\(Y_1=1\\)\n\\(Y_1=2\\)\n\\(Y_1=3\\)\nrow total\n\n\n\n\n\\(Y_2=1\\)\n0.20\n0.3\n0.10\n0.6\n\n\n\\(Y_2=2\\)\n0.15\n0.2\n0.05\n0.4\n\n\ncol. total\n0.35\n0.5\n0.15\n1.0"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#calculations-for-the-marginal-distribution",
@@ -1177,35 +1177,140 @@
     "href": "slides/bayesmod-slides1.html#gamma-distribution",
     "title": "Bayesian modelling",
     "section": "Gamma distribution",
-    "text": "Gamma distribution\nA gamma distribution with shape \\(\\alpha&gt;0\\) and rate \\(\\beta&gt;0\\), denoted \\(Y \\sim \\mathsf{gamma}(\\alpha, \\beta)\\), has density \\[\\begin{align*}\nf(x) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}\\exp(-\\beta x), \\qquad x \\in (0, \\infty),\n\\end{align*}\\] where \\(\\Gamma(\\alpha)\\coloneqq\\int_0^\\infty t^{\\alpha-1}\\exp(-t)\\mathrm{d} t\\) is the gamma function."
+    "text": "Gamma distribution\nA gamma distribution with shape \\(\\alpha&gt;0\\) and rate \\(\\beta&gt;0\\), denoted \\(Y \\sim \\mathsf{gamma}(\\alpha, \\beta)\\), has density \\[\\begin{align*}\nf(x) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}\\exp(-\\beta x), \\qquad x \\in (0, \\infty),\n\\end{align*}\\] where \\(\\Gamma(\\alpha)=\\int_0^\\infty t^{\\alpha-1}\\exp(-t)\\mathrm{d} t\\) is the gamma function."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#poisson-with-random-scale",
     "href": "slides/bayesmod-slides1.html#poisson-with-random-scale",
     "title": "Bayesian modelling",
     "section": "Poisson with random scale",
-    "text": "Poisson with random scale\nTo handle overdispersion in count data, take\n\\[\\begin{align*}\nY \\mid \\Lambda = \\lambda ^\\sim \\mathsf{Poisson}(\\lambda)\\\\\n\\Lambda &\\sim \\mathsf{Gamma}(k\\mu, k).\n\\end{align*}\\]\nThe joint density of \\(Y\\) and \\(\\Lambda\\) is \\[\\begin{align*}\np(y, \\lambda) &= p(y \\mid \\lambda)p(\\lambda) \\\\\n&= \\frac{\\lambda^y\\exp(-\\lambda)}{\\Gamma(y+1)}  \\frac{k^{k\\mu}\\lambda^{k\\mu-1}\\exp(-k\\lambda)}{\\Gamma(k\\mu)}\n\\end{align*}\\]"
+    "text": "Poisson with random scale\nTo handle overdispersion in count data, take\n\\[\\begin{align*}\nY \\mid \\Lambda &= \\lambda \\sim \\mathsf{Poisson}(\\lambda)\\\\\n\\Lambda &\\sim \\mathsf{Gamma}(k\\mu, k).\n\\end{align*}\\]\nThe joint density of \\(Y\\) and \\(\\Lambda\\) on \\(\\mathbb{N}=\\{0,1,\\ldots\\} \\times \\mathbb{R}_{+}\\) is \\[\\begin{align*}\nf(y, \\lambda) &= f(y \\mid \\lambda)f(\\lambda) \\\\\n&= \\frac{\\lambda^y\\exp(-\\lambda)}{\\Gamma(y+1)}  \\frac{k^{k\\mu}\\lambda^{k\\mu-1}\\exp(-k\\lambda)}{\\Gamma(k\\mu)}\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#conditional-distribution-2",
     "href": "slides/bayesmod-slides1.html#conditional-distribution-2",
     "title": "Bayesian modelling",
     "section": "Conditional distribution",
-    "text": "Conditional distribution\nThe conditional distribution of \\(\\Lambda \\mid Y=y\\) can be found by considering only terms that are function of \\(\\lambda\\), whence \\[\\begin{align*}\nf(\\lambda \\mid Y=y) \\stackrel{\\lambda}{\\propto}\\lambda^{y+k\\mu-1}\\exp(-(k+1)\\lambda)\n\\end{align*}\\] so \\(\\Lambda \\mid Y=y \\sim \\mathsf{gamma}(k\\mu + y, k+1)\\)."
+    "text": "Conditional distribution\nThe conditional distribution of \\(\\Lambda \\mid Y=y\\) can be found by considering only terms that are function of \\(\\lambda\\), whence \\[\\begin{align*}\nf(\\lambda \\mid Y=y) \\stackrel{\\lambda}{\\propto}\\lambda^{y+k\\mu-1}\\exp\\{-(k+1)\\lambda\\}\n\\end{align*}\\] so \\(\\Lambda \\mid Y=y \\sim \\mathsf{gamma}(k\\mu + y, k+1)\\)."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#marginal-density-of-poisson-mean-mixture",
     "href": "slides/bayesmod-slides1.html#marginal-density-of-poisson-mean-mixture",
     "title": "Bayesian modelling",
     "section": "Marginal density of Poisson mean mixture",
-    "text": "Marginal density of Poisson mean mixture\nWe can isolate the marginal density \\[\\begin{align*}\np(y) &= \\frac{p(y,  \\lambda)}{p(\\lambda \\mid y)} \\\\&= \\frac{\\frac{\\lambda^y\\exp(-\\lambda)}{\\Gamma(y+1)}  \\frac{k^{k\\mu}\\lambda^{k\\mu-1}\\exp(-k\\lambda)}{\\Gamma(k\\mu)}}{ \\frac{(k+1)^{k\\mu+y}\\lambda^{k\\mu+y-1}\\exp\\{-(k+1)\\lambda\\}}{\\Gamma(k\\mu+y)}}\\\\\n&= \\frac{\\Gamma(k\\mu+y)}{\\Gamma(k\\mu)\\Gamma(y+1)}k^{k\\mu} (k+1)^{-k\\mu-y}\\\\&= \\frac{\\Gamma(k\\mu+y)}{\\Gamma(k\\mu)\\Gamma(y+1)}\\left(1-\\frac{1}{k+1}\\right)^{k\\mu} \\left(\\frac{1}{k+1}\\right)^y\n\\end{align*}\\] a negative binomial distribution with probability of success \\(1/(k+1)\\)."
+    "text": "Marginal density of Poisson mean mixture\n\\[\\begin{align*}\nf(y) &= \\frac{f(y,  \\lambda)}{f(\\lambda \\mid y)} = \\frac{\\frac{\\lambda^y\\exp(-\\lambda)}{\\Gamma(y+1)}  \\frac{k^{k\\mu}\\lambda^{k\\mu-1}\\exp(-k\\lambda)}{\\Gamma(k\\mu)}}{ \\frac{(k+1)^{k\\mu+y}\\lambda^{k\\mu+y-1}\\exp\\{-(k+1)\\lambda\\}}{\\Gamma(k\\mu+y)}}\\\\\n&= \\frac{\\Gamma(k\\mu+y)}{\\Gamma(k\\mu)\\Gamma(y+1)}k^{k\\mu} (k+1)^{-k\\mu-y}\\\\&= \\frac{\\Gamma(k\\mu+y)}{\\Gamma(k\\mu)\\Gamma(y+1)}\\left(1-\\frac{1}{k+1}\\right)^{k\\mu} \\left(\\frac{1}{k+1}\\right)^y\n\\end{align*}\\] The marginal of \\(Y\\) is negative binomial with prob. of success \\(1/(k+1)\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#likelihood",
+    "href": "slides/bayesmod-slides1.html#likelihood",
+    "title": "Bayesian modelling",
+    "section": "Likelihood",
+    "text": "Likelihood\nThe likelihood \\(L(\\boldsymbol{\\theta})\\) is a function of the parameter vector \\(\\boldsymbol{\\theta}\\) that gives the ‘density’ of a sample under a postulated distribution, treating the observations as fixed, \\[\\begin{align*}\nL(\\boldsymbol{\\theta}; \\boldsymbol{y}) = f(\\boldsymbol{y}; \\boldsymbol{\\theta}).\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#likelihood-for-independent-observations",
+    "href": "slides/bayesmod-slides1.html#likelihood-for-independent-observations",
+    "title": "Bayesian modelling",
+    "section": "Likelihood for independent observations",
+    "text": "Likelihood for independent observations\nIf the joint density factorizes, \\[\\begin{align*}\nL(\\boldsymbol{\\theta}; \\boldsymbol{y})=\\prod_{i=1}^n f_i(y_i; \\boldsymbol{\\theta}) = f_1(y_1; \\boldsymbol{\\theta}) \\times \\cdots \\times f_n(y_n; \\boldsymbol{\\theta}).\n\\end{align*}\\] The corresponding log likelihood function for independent and identically distributions observations is \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}; \\boldsymbol{y}) = \\sum_{i=1}^n \\ln f(y_i; \\boldsymbol{\\theta})\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#score",
+    "href": "slides/bayesmod-slides1.html#score",
+    "title": "Bayesian modelling",
+    "section": "Score",
+    "text": "Score\nLet \\(\\ell(\\boldsymbol{\\theta}),\\) \\(\\boldsymbol{\\theta} \\in \\boldsymbol{\\Theta} \\subseteq \\mathbb{R}^p,\\) be the log likelihood function. The gradient of the log likelihood, termed score is the \\(p\\)-vector \\[U(\\boldsymbol{\\theta}) = \\frac{\\partial \\ell(\\boldsymbol{\\theta})}{ \\partial \\boldsymbol{\\theta}}.\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#information-matrix",
+    "href": "slides/bayesmod-slides1.html#information-matrix",
+    "title": "Bayesian modelling",
+    "section": "Information matrix",
+    "text": "Information matrix\nThe observed information matrix is the hessian of the negative log likelihood, \\[\\begin{align*}\nj(\\boldsymbol{\\theta}; \\boldsymbol{y})=-\\frac{\\partial^2 \\ell(\\boldsymbol{\\theta}; \\boldsymbol{y})}{\\partial \\boldsymbol{\\theta} \\partial \\boldsymbol{\\theta}^\\top},\n\\end{align*}\\] evaluated at the maximum likelihood estimate \\(\\widehat{\\boldsymbol{\\theta}},\\) so \\(j(\\widehat{\\boldsymbol{\\theta}}).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#expected-information",
+    "href": "slides/bayesmod-slides1.html#expected-information",
+    "title": "Bayesian modelling",
+    "section": "Expected information",
+    "text": "Expected information\nUnder regularity conditions, the expected information, also called Fisher information matrix, is \\[\\begin{align*}\ni(\\boldsymbol{\\theta}) = \\mathsf{E}\\left\\{U(\\boldsymbol{\\theta}; \\boldsymbol{Y}) U(\\boldsymbol{\\theta}; \\boldsymbol{Y})^\\top\\right\\} = \\mathsf{E}\\left\\{j(\\boldsymbol{\\theta}; \\boldsymbol{Y})\\right\\}\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#note-on-information-matrices",
+    "href": "slides/bayesmod-slides1.html#note-on-information-matrices",
+    "title": "Bayesian modelling",
+    "section": "Note on information matrices",
+    "text": "Note on information matrices\nInformation matrices are symmetric and provide information about the variability of \\(\\widehat{\\boldsymbol{\\theta}}.\\)\nThe information of an iid sample of size \\(n\\)is \\(n\\) times that of a single observation\n\ninformation accumulates at a linear rate."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#example-random-right-censoring",
+    "href": "slides/bayesmod-slides1.html#example-random-right-censoring",
+    "title": "Bayesian modelling",
+    "section": "Example: random right-censoring",
+    "text": "Example: random right-censoring\nConsider a survival analysis problem for independent time-to-event data subject to (noninformative) random right-censoring. We observe\n\nfailure times \\(Y_i (i=1, \\ldots, n)\\) drawn from \\(F(\\cdot; \\boldsymbol{\\theta})\\) supported on \\((0, \\infty)\\)\nindependent binary censoring indicators \\(C_i \\in \\{0,1\\}\\), with \\(0\\) indicating right-censoring and \\(C_i=1\\) observed failure time."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#likelihood-contribution-with-censoring",
+    "href": "slides/bayesmod-slides1.html#likelihood-contribution-with-censoring",
+    "title": "Bayesian modelling",
+    "section": "Likelihood contribution with censoring",
+    "text": "Likelihood contribution with censoring\nIf individual observation \\(i\\) has not experienced the event at the end of the collection period, then the likelihood contribution is \\(\\Pr(Y &gt; y) = 1-F(y; \\boldsymbol{\\theta})\\), where \\(y_i\\) is the maximum time observed for \\(Y_i\\). We write the log likelihood \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}) = \\sum_{i: c_i=0} \\log \\{1- F(y_i; \\boldsymbol{\\theta})\\} + \\sum_{i: c_i=1} \\log f(y_i; \\boldsymbol{\\theta})\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#censoring-and-exponential-data",
+    "href": "slides/bayesmod-slides1.html#censoring-and-exponential-data",
+    "title": "Bayesian modelling",
+    "section": "Censoring and exponential data",
+    "text": "Censoring and exponential data\nSuppose for simplicity that \\(Y_i \\sim \\mathsf{expo}(\\lambda)\\) and let \\(m=c_1 + \\cdots + c_n\\) denote the number of observed failure times. Then, the log likelihood and the Fisher information are \\[\\begin{align*}\n\\ell(\\lambda) &= \\lambda \\sum_{i=1}^n y_i + \\log \\lambda m\\\\\ni(\\lambda) &= m/\\lambda^2\n\\end{align*}\\] and the right-censored observations for the exponential model do not contribute to the information."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#information-for-the-gaussian-distribution",
+    "href": "slides/bayesmod-slides1.html#information-for-the-gaussian-distribution",
+    "title": "Bayesian modelling",
+    "section": "Information for the Gaussian distribution",
+    "text": "Information for the Gaussian distribution\nConsider \\(Y \\sim \\mathsf{Gauss}(\\mu, \\tau^{-1})\\), parametrized in terms of precision \\(\\tau\\). The likelihood contribution for an \\(n\\) sample is, up to proportionality, \\[\\begin{align*}\n\\ell(\\mu, \\tau) \\propto \\frac{n}{2}\\log(\\tau) - \\frac{\\tau}{2}\\sum_{i=1}^n(Y_i^2-2\\mu Y_i+\\mu^2)\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#gaussian-information-matrices",
+    "href": "slides/bayesmod-slides1.html#gaussian-information-matrices",
+    "title": "Bayesian modelling",
+    "section": "Gaussian information matrices",
+    "text": "Gaussian information matrices\nThe observed and Fisher information matrices are \\[\\begin{align*}\nj(\\mu, \\tau) &= \\begin{pmatrix}\nn\\tau & -\\sum_{i=1}^n (Y_i-\\mu)\\\\\n-\\sum_{i=1}^n (Y_i-\\mu) & \\frac{n}{2\\tau^2}\n\\end{pmatrix}, \\\\\ni(\\mu, \\tau) &= n\\begin{pmatrix}\n\\tau & 0\\\\\n0 & \\frac{1}{2\\tau^2}\n\\end{pmatrix}\n\\end{align*}\\] Since \\(\\mathsf{E}(Y_i) = \\mu\\), the expected value of the off-diagonal entries of the Fisher information matrix are zero."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#example-first-order-autoregressive-process",
+    "href": "slides/bayesmod-slides1.html#example-first-order-autoregressive-process",
+    "title": "Bayesian modelling",
+    "section": "Example: first-order autoregressive process",
+    "text": "Example: first-order autoregressive process\nConsider an \\(\\mathsf{AR}(1)\\) model of the form \\[Y_t = \\mu + \\phi(Y_{t-1} - \\mu) + \\varepsilon_t,\\] where\n\n\\(\\phi\\) is the lag-one correlation,\n\\(\\mu\\) the global mean and\n\\(\\varepsilon_t\\) is an iid innovation with mean zero and variance \\(\\sigma^2\\).\n\nIf \\(|\\phi| &lt; 1\\), the process is stationary, and the variance does not increase with \\(t\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#markov-property-and-likelihood-decomposition",
+    "href": "slides/bayesmod-slides1.html#markov-property-and-likelihood-decomposition",
+    "title": "Bayesian modelling",
+    "section": "Markov property and likelihood decomposition",
+    "text": "Markov property and likelihood decomposition\nThe Markov property states that the current realization depends on the past, \\(Y_t \\mid Y_1, \\ldots, Y_{t-1},\\) only through the most recent value \\(Y_{t-1}.\\) The log likelihood thus becomes \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}) = \\ln f(y_1) + \\sum_{i=2}^n f(y_i \\mid y_{i-1}).\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#marginal-of-ar1",
+    "href": "slides/bayesmod-slides1.html#marginal-of-ar1",
+    "title": "Bayesian modelling",
+    "section": "Marginal of AR(1)",
+    "text": "Marginal of AR(1)\nThe \\(\\mathsf{AR}(1)\\) stationarity process has unconditional moments \\[\\mathsf{E}(Y_t) = \\mu, \\qquad \\mathsf{Var}(Y_t)=\\sigma^2/(1-\\phi^2).\\]\nThe \\(\\mathsf{AR}(1)\\) process is first-order Markov since the conditional distribution \\(f(Y_t \\mid Y_{t-1}, \\ldots, Y_{t-p})\\) equals \\(f(Y_t \\mid Y_{t-1})\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#log-likelihood-of-ar1",
+    "href": "slides/bayesmod-slides1.html#log-likelihood-of-ar1",
+    "title": "Bayesian modelling",
+    "section": "Log likelihood of AR(1)",
+    "text": "Log likelihood of AR(1)\nIf innovations are Gaussian, we have \\[Y_t \\mid Y_{t-1}=y_{t-1} \\sim \\mathsf{Gauss}\\{\\mu(1-\\phi)+ \\phi y_{t-1}, \\sigma^2\\}, \\qquad t&gt;1.\\] so the log-likelihood is \\[\\begin{align*}\n&\\ell(\\mu, \\phi,\\sigma^2)= -\\frac{n}{2}\\log(2\\pi) - n\\log \\sigma + \\frac{1}{2}\\log(1-\\phi^2) \\\\&\\quad -\\frac{(1-\\phi^2)(y_1- \\mu)^2}{2\\sigma^2} - \\sum_{i=2}^n \\frac{(y_t - \\mu(1-\\phi)- \\phi y_{t-1})^2}{2\\sigma^2}\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#moments",
     "href": "slides/bayesmod-slides1.html#moments",
     "title": "Bayesian modelling",
     "section": "Moments",
-    "text": "Moments\nBy the laws of iterated expectation and iterative variance, \\[\\begin{align*}\n\\mathsf{E}(Y) &= \\mathsf{E}_{\\Lambda}\\{\\mathsf{E}(Y \\mid \\Lambda\\} \\\\& = \\mathsf{E}(\\Lambda) = \\mu\\\\\n\\mathsf{Va}(Y) &= \\mathsf{E}_{\\Lambda}\\{\\mathsf{Va}(Y \\mid \\Lambda)\\} + \\mathsf{Va}_{\\Lambda}\\{\\mathsf{E}(Y \\mid \\Lambda)\\} \\\\&= \\mathsf{E}(\\Lambda) + \\mathsf{Va}(\\Lambda) \\\\&= \\mu + \\mu/k.\n\\end{align*}\\] The marginal distribution of \\(Y\\), unconditionally, has a variance which exceeds its mean, as \\[\\begin{align*}\n\\mathsf{E}(Y) = \\mu, \\qquad \\mathsf{Va}(Y) = \\mu (1+1/k).\n\\end{align*}\\]"
+    "text": "Moments\nBy the laws of iterated expectation and iterative variance, \\[\\begin{align*}\n\\mathsf{E}(Y) &= \\mathsf{E}_{\\Lambda}\\{\\mathsf{E}(Y \\mid \\Lambda\\} \\\\& = \\mathsf{E}(\\Lambda) = \\mu\\\\\n\\mathsf{Va}(Y) &= \\mathsf{E}_{\\Lambda}\\{\\mathsf{Va}(Y \\mid \\Lambda)\\} + \\mathsf{Va}_{\\Lambda}\\{\\mathsf{E}(Y \\mid \\Lambda)\\} \\\\&= \\mathsf{E}(\\Lambda) + \\mathsf{Va}(\\Lambda) \\\\&= \\mu + \\mu/k.\n\\end{align*}\\] The marginal distribution of \\(Y\\), unconditionally, has a variance which exceeds its mean."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#monte-carlo-methods",
