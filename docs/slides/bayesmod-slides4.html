@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <meta name="dcterms.date" content="2025-01-01">
@@ -94,7 +94,27 @@
     code span.va { color: #111111; } /* Variable */
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-da069d641d4916e8549bf8dc2b95f825.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -194,7 +214,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Markov chain Monte Carlo</p>
+  <p class="subtitle">Introduction to Monte Carlo methods and the Metropolis–Hastings algorithm</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -214,6 +234,134 @@ Léo Belzile
 <li>deterministic methods: (integrated nested) Laplace approximations, variational Bayes, expectation propagation, etc.</li>
 </ul>
 <p>We focus on Monte Carlo methods.</p>
+</section>
+<section id="simulation-algorithms-inversion-method" class="slide level2">
+<h2>Simulation algorithms: inversion method</h2>
+<p>If <span class="math inline">\(F\)</span> is an absolutely continuous distribution function, then <span class="math display">\[F(X) \sim \mathsf{U}(0,1).\]</span> The inversion method consists in applying the quantile function <span class="math inline">\(F^{-1}\)</span> to <span class="math inline">\(U \sim \mathsf{U}(0,1)\)</span>, viz.&nbsp;<span class="math display">\[F^{-1}(U) \sim X.\]</span></p>
+</section>
+<section id="inversion-method-for-truncated-distributions" class="slide level2">
+<h2>Inversion method for truncated distributions</h2>
+<p>Consider a random variable <span class="math inline">\(Y\)</span> with distribution function <span class="math inline">\(F\)</span>.</p>
+<p>If <span class="math inline">\(X\)</span> follows the same distribution as <span class="math inline">\(Y\)</span>, but restricted over the interval <span class="math inline">\([a,b]\)</span>, then <span class="math display">\[\Pr(X \leq x) = \frac{F(x) - F(a)}{F(b)-F(a)}, \qquad a \leq x \leq b,\]</span></p>
+<p>Therefore, <span class="math display">\[F^{-1}[F(a) + \{F(b)-F(a)\}U] \sim X\]</span></p>
+</section>
+<section id="simulation-algorithms-accept-reject" class="slide level2">
+<h2>Simulation algorithms: accept-reject</h2>
+<ul>
+<li><strong>Target</strong>: sample from density <span class="math inline">\(p(x)\)</span> (hard to sample from)</li>
+<li><strong>Proposal</strong>: find a density <span class="math inline">\(q(x)\)</span> with nested support, <span class="math inline">\(\mathrm{supp}(p) \subseteq \mathrm{supp}(q)\)</span>, such that <span class="math display">\[\frac{p(x)}{q(x)} \leq C, \quad C \geq 1.\]</span></li>
+</ul>
+</section>
+<section id="rejection-sampling-algorithm" class="slide level2">
+<h2>Rejection sampling algorithm</h2>
+<ol type="1">
+<li>Generate <span class="math inline">\(X\)</span> from proposal with density <span class="math inline">\(q(x)\)</span>.</li>
+<li>Compute the ratio <span class="math inline">\(R \gets p(X)/ q(X)\)</span>.</li>
+<li>If <span class="math inline">\(CU \leq R\)</span> for <span class="math inline">\(U \sim \mathsf{U}(0,1)\)</span>, return <span class="math inline">\(X\)</span>, else go back to step 1.</li>
+</ol>
+</section>
+<section id="remarks-on-rejection-sampling" class="slide level2">
+<h2>Remarks on rejection sampling</h2>
+<ul>
+<li>Acceptance rate is <span class="math inline">\(1/C\)</span>
+<ul>
+<li>we need on average <span class="math inline">\(C\)</span> draws from <span class="math inline">\(q\)</span> to get one from <span class="math inline">\(p\)</span></li>
+</ul></li>
+<li><span class="math inline">\(q\)</span> must be more heavy-tailed than <span class="math inline">\(p\)</span>
+<ul>
+<li>e.g., <span class="math inline">\(q(x)\)</span> Student-<span class="math inline">\(t\)</span> for <span class="math inline">\(p(x)\)</span> Gaussian</li>
+</ul></li>
+<li><span class="math inline">\(q\)</span> should be cheap and easy to sample from!</li>
+</ul>
+</section>
+<section id="designing-a-good-proposal-density" class="slide level2">
+<h2>Designing a good proposal density</h2>
+<p>Good choices must satisfy the following constraints:</p>
+<ul>
+<li>pick a family <span class="math inline">\(q(x)\)</span> so that <span class="math display">\[C = \mathrm{sup}_x \frac{p(x)}{q(x)}\]</span> is as close to 1 as possible.</li>
+<li>you can use numerical optimization with <span class="math inline">\(f(x) =\log p(x) - \log q(x)\)</span> to find the mode <span class="math inline">\(x^\star\)</span> and the upper bound <span class="math inline">\(C = \exp f(x^\star)\)</span>.</li>
+</ul>
+</section>
+<section id="accept-reject-illustration" class="slide level2">
+<h2>Accept-reject illustration</h2>
+
+<img data-src="bayesmod-slides4_files/figure-revealjs/fig-acceptreject-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-acceptreject"><p class="caption">
+Figure&nbsp;1: Target density (full) and scaled proposal density (dashed): the vertical segment at <span class="math inline">\(x=1\)</span> shows the percentage of acceptance for a uniform slice under the scaled proposal, giving an acceptance ratio of 0.58.
+</p></section>
+<section id="truncated-gaussian-via-accept-reject" class="slide level2">
+<h2>Truncated Gaussian via accept-reject</h2>
+<p>Consider sampling <span class="math inline">\(Y \sim \mathsf{No}(\mu, \sigma^2)\)</span>, but truncated in the interval <span class="math inline">\((a, b)\)</span>. The target density is <span class="math display">\[\begin{align*}
+p(x; \mu, \sigma, a, b) = \frac{1}{\sigma}\frac{\phi\left(\frac{x-\mu}{\sigma}\right)}{\Phi(\beta)-\Phi(\alpha)}.
+\end{align*}\]</span> for <span class="math inline">\(\alpha= (a-\mu)/\sigma\)</span> and <span class="math inline">\(\beta = (b-\mu)/\sigma\)</span>. where <span class="math inline">\(\phi(\cdot), \Phi(\cdot)\)</span> are respectively the density and distribution function of the standard Gaussian distribution.</p>
+</section>
+<section id="accept-reject-crude-version" class="slide level2">
+<h2>Accept-reject (crude version)</h2>
+<ol type="1">
+<li>Simulate <span class="math inline">\(X \sim \mathsf{No}(\mu, \sigma^2)\)</span></li>
+<li>reject any draw if <span class="math inline">\(X &lt; a\)</span> or <span class="math inline">\(X&gt; b\)</span>.</li>
+</ol>
+<p>The acceptance rate is <span class="math inline">\(C^{-1} = \{\Phi(\beta) - \Phi(\alpha)\}\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># Standard Gaussian truncated on [0,1]</span></span>
+<span id="cb1-2"><a></a>candidate <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e5</span>)</span>
+<span id="cb1-3"><a></a>trunc_samp <span class="ot">&lt;-</span> candidate[candidate <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> candidate <span class="sc">&lt;=</span> <span class="dv">1</span>]</span>
+<span id="cb1-4"><a></a><span class="co"># Acceptance rate</span></span>
+<span id="cb1-5"><a></a><span class="fu">length</span>(trunc_samp)<span class="sc">/</span><span class="fl">1e5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.34289</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Theoretical acceptance rate</span></span>
+<span id="cb3-2"><a></a><span class="fu">pnorm</span>(<span class="dv">1</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3413447</code></pre>
+</div>
+</div>
+</section>
+<section id="accept-reject-for-truncated-gaussian" class="slide level2 smaller">
+<h2>Accept-reject for truncated Gaussian</h2>
+<p>Since the Gaussian is a location scale family, the inversion method gives <span class="math display">\[\begin{align*}
+X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\right]
+\end{align*}\]</span></p>
+<p>We however need to evaluate <span class="math inline">\(\Phi\)</span> numerically (no closed-form expression).</p>
+<p>The method fails for <em>rare event</em> simulation because the computer returns</p>
+<ul>
+<li><span class="math inline">\(\Phi(x) = 0\)</span> for <span class="math inline">\(x \leq -39\)</span></li>
+<li><span class="math inline">\(\Phi(x)=1\)</span> for <span class="math inline">\(x \geq 8.3\)</span>,</li>
+</ul>
+<p>implying that <span class="math inline">\(a \leq 8.3\)</span> for this approach to work <span class="citation" data-cites="LEcuyer.Botev:2017">(<a href="#/references" role="doc-biblioref" onclick="">Botev &amp; L’Écuyer, 2017</a>)</span>.</p>
+</section>
+<section id="simulating-tails-of-gaussian-variables" class="slide level2 smaller">
+<h2>Simulating tails of Gaussian variables</h2>
+<p>We consider simulation from a standard Gaussian truncated above <span class="math inline">\(a&gt;0\)</span></p>
+<p>Write the density of the truncated Gaussian as <span class="citation" data-cites="Devroye:1986">(<a href="#/references" role="doc-biblioref" onclick="">Devroye, 1986, p. 381</a>)</span><span class="math display">\[f(x) = \frac{\exp(-x^2/2)}{\int_{a}^{\infty}\exp(-z^2/2)\mathrm{d} z}  =\frac{\exp(-x^2/2)}{c_1}.\]</span></p>
+<p>Note that, for <span class="math inline">\(x \geq a\)</span>, <span class="math display">\[c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);\]</span> where <span class="math inline">\(g(x)\)</span> is the density of a Rayleigh variable shifted by <span class="math inline">\(a\)</span>.<sup>1</sup></p>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>The constant <span class="math inline">\(C= \exp(-a^2/2)(c_1a)^{-1}\)</span> approaches 1 quickly as <span class="math inline">\(a \to \infty\)</span> (asymptotically optimality). </p></li></ol></aside></section>
+<section id="accept-reject-truncated-gaussian-with-rayleigh" class="slide level2 smaller">
+<h2>Accept-reject: truncated Gaussian with Rayleigh</h2>
+<p>The shifted Rayleigh has distribution function <span class="math display">\[G(x) = 1-\exp\{(a^2-x^2)/2\}, x \geq a.\]</span></p>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Marsaglia algorithm</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li>Generate a shifted Rayleigh above <span class="math inline">\(a\)</span>, <span class="math inline">\(X \gets  \{a^2 - 2\log(U)\}^{1/2}\)</span> for <span class="math inline">\(U \sim \mathsf{U}(0,1)\)</span></li>
+<li>Accept <span class="math inline">\(X\)</span> if <span class="math inline">\(XV \leq a\)</span>, where <span class="math inline">\(V \sim \mathsf{U}(0,1)\)</span>.</li>
+</ol>
+</div>
+</div>
+</div>
+<p>For sampling on <span class="math inline">\([a,b]\)</span>, propose from a Rayleigh truncated above at <span class="math inline">\(b\)</span> <span class="citation" data-cites="LEcuyer.Botev:2017">(<a href="#/references" role="doc-biblioref" onclick="">Botev &amp; L’Écuyer, 2017</a>)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>a <span class="ot">&lt;-</span> <span class="fl">8.3</span></span>
+<span id="cb5-2"><a></a>niter <span class="ot">&lt;-</span> <span class="dv">1000</span>L</span>
+<span id="cb5-3"><a></a>X <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(a<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">rexp</span>(niter))</span>
+<span id="cb5-4"><a></a>samp <span class="ot">&lt;-</span> X[<span class="fu">runif</span>(niter)<span class="sc">*</span>X <span class="sc">&lt;=</span> a]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="markov-chains" class="slide level2">
 <h2>Markov chains</h2>
@@ -284,7 +432,7 @@ Léo Belzile
 <h2>Correlogram</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-correlograms-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-correlograms"><p class="caption">
-Figure&nbsp;1: Correlogram of two two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number.
+Figure&nbsp;2: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number.
 </p></section>
 <section id="variance-of-sample-mean-of-ar1" class="slide level2">
 <h2>Variance of sample mean of AR(1)</h2>
@@ -295,7 +443,7 @@ Figure&nbsp;1: Correlogram of two two Markov chains. These plots, often called a
 <h2>Inefficiency curve for AR(1)</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-ar1-variance-1.png" width="768" class="r-stretch quarto-figure-center" id="fig-ar1-variance"><p class="caption">
-Figure&nbsp;2: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with the same marginal variance (dashed). Right: variance ratio for positive correlations.
+Figure&nbsp;3: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with the same marginal variance (dashed). Right: variance ratio for positive correlations.
 </p><p>To get the same precision for the mean of <span class="math inline">\(\mathsf{AR}(1)\)</span> process with <span class="math inline">\(\phi \approx 0.75\)</span> than with i.i.d. data, we would need 9 times as many observations.</p>
 </section>
 <section id="morale-of-the-story" class="slide level2">
@@ -336,7 +484,7 @@ P_2 = \begin{pmatrix}
 <h2>Convergence of Markov chains</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-discrete-markov-chain-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-discrete-markov-chain"><p class="caption">
-Figure&nbsp;3: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).
+Figure&nbsp;4: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).
 </p></section>
 <section id="markov-chain-monte-carlo" class="slide level2">
 <h2>Markov chain Monte Carlo</h2>
@@ -391,86 +539,86 @@ Y_{i} &amp;\sim \mathsf{Po}(n_i\lambda_i), \qquad (i=1,2)\\
 <h2>Implementation details: data and containers</h2>
 <p>In regression models, scale inputs if possible.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb1-2"><a></a><span class="co"># Compute sufficient statistics</span></span>
-<span id="cb1-3"><a></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
-<span id="cb1-4"><a></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
-<span id="cb1-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
-<span id="cb1-6"><a></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
-<span id="cb1-7"><a></a><span class="co"># Create containers for MCMC</span></span>
-<span id="cb1-8"><a></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
-<span id="cb1-9"><a></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> <span class="dv">2</span>L)</span>
-<span id="cb1-10"><a></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb6-2"><a></a><span class="co"># Compute sufficient statistics</span></span>
+<span id="cb6-3"><a></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
+<span id="cb6-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
+<span id="cb6-6"><a></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
+<span id="cb6-7"><a></a><span class="co"># Create containers for MCMC</span></span>
+<span id="cb6-8"><a></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb6-9"><a></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> <span class="dv">2</span>L)</span>
+<span id="cb6-10"><a></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-log-posterior-function" class="slide level2">
 <h2>Implementation details: log posterior function</h2>
 <p>Perform all calculations on the log scale to avoid numerical overflow!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
-<span id="cb2-2"><a></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
-<span id="cb2-3"><a></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
-<span id="cb2-4"><a></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-5"><a></a>}</span>
-<span id="cb2-6"><a></a><span class="co"># Note common signature of function</span></span>
-<span id="cb2-7"><a></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb2-8"><a></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb2-9"><a></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-10"><a></a>}</span>
-<span id="cb2-11"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb2-12"><a></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
-<span id="cb2-13"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
+<span id="cb7-2"><a></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
+<span id="cb7-3"><a></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
+<span id="cb7-4"><a></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-5"><a></a>}</span>
+<span id="cb7-6"><a></a><span class="co"># Note common signature of function</span></span>
+<span id="cb7-7"><a></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb7-8"><a></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-10"><a></a>}</span>
+<span id="cb7-11"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb7-12"><a></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
+<span id="cb7-13"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-proposals" class="slide level2">
 <h2>Implementation details: proposals</h2>
 <p>Use good starting values for your Markov chains, such as maximum a posteriori.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
-<span id="cb3-2"><a></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
-<span id="cb3-3"><a></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
-<span id="cb3-4"><a></a>  <span class="at">fn =</span> logpost,</span>
-<span id="cb3-5"><a></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
-<span id="cb3-6"><a></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
-<span id="cb3-7"><a></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
-<span id="cb3-8"><a></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-9"><a></a><span class="co"># Use MAP as starting value</span></span>
-<span id="cb3-10"><a></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
-<span id="cb3-11"><a></a><span class="co"># Compute logpost_cur - we can keep track of this to reduce calculations</span></span>
-<span id="cb3-12"><a></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
-<span id="cb3-13"><a></a><span class="co"># Proposal covariance</span></span>
-<span id="cb3-14"><a></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
-<span id="cb3-15"><a></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
+<span id="cb8-2"><a></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb8-3"><a></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
+<span id="cb8-4"><a></a>  <span class="at">fn =</span> logpost,</span>
+<span id="cb8-5"><a></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb8-6"><a></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
+<span id="cb8-7"><a></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
+<span id="cb8-8"><a></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-9"><a></a><span class="co"># Use MAP as starting value</span></span>
+<span id="cb8-10"><a></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
+<span id="cb8-11"><a></a><span class="co"># Compute logpost_cur - we can keep track of this to reduce calculations</span></span>
+<span id="cb8-12"><a></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
+<span id="cb8-13"><a></a><span class="co"># Proposal covariance</span></span>
+<span id="cb8-14"><a></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
+<span id="cb8-15"><a></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-metropolishastings-algorithm" class="slide level2">
 <h2>Implementation details: Metropolis–Hastings algorithm</h2>
 <p>Use seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
-<span id="cb4-2"><a></a>naccept <span class="ot">&lt;-</span> <span class="dv">0</span>L</span>
-<span id="cb4-3"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
-<span id="cb4-4"><a></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
-<span id="cb4-5"><a></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
-<span id="cb4-6"><a></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
-<span id="cb4-7"><a></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
-<span id="cb4-8"><a></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
-<span id="cb4-9"><a></a>    cur <span class="ot">&lt;-</span> prop</span>
-<span id="cb4-10"><a></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
-<span id="cb4-11"><a></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> <span class="dv">1</span>L</span>
-<span id="cb4-12"><a></a>  }</span>
-<span id="cb4-13"><a></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
-<span id="cb4-14"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
+<span id="cb9-2"><a></a>naccept <span class="ot">&lt;-</span> <span class="dv">0</span>L</span>
+<span id="cb9-3"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
+<span id="cb9-4"><a></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
+<span id="cb9-5"><a></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
+<span id="cb9-6"><a></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
+<span id="cb9-7"><a></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
+<span id="cb9-8"><a></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
+<span id="cb9-9"><a></a>    cur <span class="ot">&lt;-</span> prop</span>
+<span id="cb9-10"><a></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
+<span id="cb9-11"><a></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> <span class="dv">1</span>L</span>
+<span id="cb9-12"><a></a>  }</span>
+<span id="cb9-13"><a></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
+<span id="cb9-14"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-analysis-of-output" class="slide level2">
 <h2>Implementation details: analysis of output</h2>
 <p>Need specialized methods to compute standard errors of the posterior mean.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># Posterior summaries</span></span>
-<span id="cb5-2"><a></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span>
-<span id="cb5-3"><a></a><span class="co"># Computing standard errors using batch means</span></span>
-<span id="cb5-4"><a></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(mcmc<span class="sc">::</span><span class="fu">olbm</span>(chain, <span class="at">batch.length =</span> niter<span class="sc">/</span><span class="dv">40</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Posterior summaries</span></span>
+<span id="cb10-2"><a></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span>
+<span id="cb10-3"><a></a><span class="co"># Computing standard errors using batch means</span></span>
+<span id="cb10-4"><a></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(mcmc<span class="sc">::</span><span class="fu">olbm</span>(chain, <span class="at">batch.length =</span> niter<span class="sc">/</span><span class="dv">40</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>1. Empirical mean and standard deviation for each variable,
    plus standard error of the mean:
@@ -485,11 +633,20 @@ kappa  0.07075 0.002033 2.033e-05      9.741e-05
 beta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929
 kappa  0.06673  0.06933  0.07077  0.07212  0.07463</code></pre>
 </section>
-<section id="references" class="slide level2">
+<section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-LEcuyer.Botev:2017" class="csl-entry" role="listitem">
+Botev, Z., &amp; L’Écuyer, P. (2017). Simulation from the normal distribution truncated to an interval in the tail. <em>Proceedings of the 10th EAI International Conference on Performance Evaluation Methodologies and Tools on 10th EAI International Conference on Performance Evaluation Methodologies and Tools</em>, 23–29. <a href="https://doi.org/10.4108/eai.25-10-2016.2266879">https://doi.org/10.4108/eai.25-10-2016.2266879</a>
+</div>
+<div id="ref-Devroye:1986" class="csl-entry" role="listitem">
+Devroye, L. (1986). <em><span>Non-Uniform Random Variate Generation</span></em>. Springer. <a href="http://www.nrbook.com/devroye/">http://www.nrbook.com/devroye/</a>
+</div>
+</div>
 </section>
+
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo"></p>
@@ -672,9 +829,9 @@ kappa  0.06673  0.06933  0.07077  0.07212  0.07463</code></pre>
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1200,
 
-        height: 700,
+        height: 900,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,

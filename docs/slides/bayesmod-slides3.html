@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <meta name="dcterms.date" content="2025-01-01">
@@ -216,14 +216,8 @@ Léo Belzile
 <li>are there sensible bounds for the range of the response?</li>
 </ul>
 </section>
-<section id="bixi-counts" class="slide level2">
-<h2>Bixi counts</h2>
-
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-bixi-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-bixi"><p class="caption">
-Figure&nbsp;1: Prior draws of the linear regression coefficients with observed data superimposed (left), and scatterplot of prior predictive draws (light gray) against observed data (right). There are 20 docks on the platform.
-</p></section>
-<section id="example-2---simple-linear-regression" class="slide level2">
-<h2>Example 2 - simple linear regression</h2>
+<section id="example---simple-linear-regression" class="slide level2">
+<h2>Example - simple linear regression</h2>
 <p>Consider the relationship between height (<span class="math inline">\(Y\)</span>, in cm) and weight (<span class="math inline">\(X\)</span>, in kg) among humans adults.<sup>1</sup></p>
 <p>Model using a simple linear regression</p>
 <p><span class="math display">\[\begin{align*}
@@ -237,15 +231,15 @@ h_i &amp;\sim \mathsf{No}(\mu_i, \sigma^2) \\
 <h2>Priors for the slope</h2>
 
 <img data-src="bayesmod-slides3_files/figure-revealjs/fig-priors-draw-height-weight-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-priors-draw-height-weight"><p class="caption">
-Figure&nbsp;2: Prior draws of linear regressions with different priors: vague <span class="math inline">\(\beta_1 \sim \mathsf{No}(0, 100)\)</span> (left) and lognormal <span class="math inline">\(\ln(\beta_1) \sim \mathsf{No}(0,1)\)</span> (right). Figure 4.5 of <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span>. The Guiness record for the world’s tallest person is 272cm.
+Figure&nbsp;1: Prior draws of linear regressions with different priors: vague <span class="math inline">\(\beta_1 \sim \mathsf{No}(0, 100)\)</span> (left) and lognormal <span class="math inline">\(\ln(\beta_1) \sim \mathsf{No}(0,1)\)</span> (right). Figure 4.5 of <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span>. The Guiness record for the world’s tallest person is 272cm.
 </p></section>
 <section id="conjugate-priors" class="slide level2">
 <h2>Conjugate priors</h2>
 <p>A prior density <span class="math inline">\(p(\boldsymbol{\theta})\)</span> is conjugate for likelihood <span class="math inline">\(L(\boldsymbol{\theta}; \boldsymbol{y})\)</span> if the product <span class="math inline">\(L(\boldsymbol{\theta}; \boldsymbol{y})p(\boldsymbol{\theta})\)</span>, after renormalization, is of the same parametric family as the prior.</p>
 <p>Distributions that are exponential family admit conjugate priors.<sup>1</sup></p>
 <aside><ol class="aside-footnotes"><li id="fn2"><p>A distribution is an exponential family if it’s density can be written <span class="math display">\[\begin{align*}
-f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_k(y) + D(\boldsymbol{\theta})\right\}.
-\end{align*}\]</span> The support of <span class="math inline">\(f\)</span> mustn’t depend on <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p></li></ol></aside></section>
+f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_k(y) + D(\boldsymbol{\theta}) + h(y)\right\}.
+\end{align*}\]</span> The support of <span class="math inline">\(f\)</span> must not depend on <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p></li></ol></aside></section>
 <section id="conjugate-priors-for-common-exponential-families" class="slide level2 smaller">
 <h2>Conjugate priors for common exponential families</h2>
 <table class="caption-top">
@@ -366,7 +360,7 @@ p(\mu, \sigma) &amp;\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}
 <h2>Posterior distributions for Sesame Street</h2>
 
 <img data-src="bayesmod-slides3_files/figure-revealjs/fig-upworthy-1.png" width="768" class="r-stretch quarto-figure-center" id="fig-upworthy"><p class="caption">
-Figure&nbsp;3: Gamma posterior of the conversion rate for the Upworthy Sesame street headline.
+Figure&nbsp;2: Gamma posterior of the conversion rate for the Upworthy Sesame street headline.
 </p></section>
 <section id="proper-priors" class="slide level2">
 <h2>Proper priors</h2>
@@ -417,7 +411,7 @@ Y_{ij} &amp;\sim \mathsf{No}(\mu_{ij}, \sigma^2) \\
 <p>The MDI prior leads to an improper posterior without modification.</p>
 
 <img data-src="bayesmod-slides3_files/figure-revealjs/fig-mdiprior-1.png" style="width:100.0%" class="r-stretch quarto-figure-center" id="fig-mdiprior"><p class="caption">
-Figure&nbsp;4: Unscaled maximum data information (MDI) prior density.
+Figure&nbsp;3: Unscaled maximum data information (MDI) prior density.
 </p><p>If we restrict the range of the MDI prior <span class="math inline">\(p(\xi)\)</span> to <span class="math inline">\(\xi \geq -1\)</span>, then <span class="math inline">\(p(\xi + 1) \sim \mathsf{Exp}(1)\)</span> and posterior is proper.</p>
 </section>
 <section id="flat-priors" class="slide level2">
@@ -544,7 +538,7 @@ p(\sigma) &amp;\propto \sigma^{-1}
 <h2>Sensitivity analysis for smartwatch data</h2>
 
 <img data-src="fig/fig-sensitivity.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-kappa"><p class="caption">
-Figure&nbsp;5: Posterior density of <span class="math inline">\(\zeta\)</span> for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.
+Figure&nbsp;4: Posterior density of <span class="math inline">\(\zeta\)</span> for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.
 </p><p>Basically indistinguishable results for the random scale..</p>
 </section>
 <section id="eight-schools-example" class="slide level2">
@@ -561,7 +555,7 @@ Y_i &amp;\sim \mathsf{No}(\mu + \eta_i, \sigma_i^2)\\
 <h2>Sensibility analysis for eight schools example</h2>
 
 <img data-src="fig/eightschools-stddev-raneff.png" width="600" class="r-stretch quarto-figure-center" id="fig-posterior-eightschool"><p class="caption">
-Figure&nbsp;6: Posterior density of the school-specific random effects standard deviation <span class="math inline">\(\tau\)</span> under different priors.
+Figure&nbsp;5: Posterior density of the school-specific random effects standard deviation <span class="math inline">\(\tau\)</span> under different priors.
 </p></section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
@@ -771,9 +765,9 @@ Simpson, D., Rue, H., Riebler, A., Martins, T. G., &amp; Sørbye, S. H. (2017). 
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1200,
 
-        height: 700,
+        height: 900,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,

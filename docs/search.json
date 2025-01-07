@@ -77,6 +77,90 @@
     "text": "Bayesian inference beyond conjugate models\nHow to circumvent the problem of intractable posteriors?\n\nsimulation-based methods: accept-reject, Markov chain Monte Carlo, particle filters, etc.\ndeterministic methods: (integrated nested) Laplace approximations, variational Bayes, expectation propagation, etc.\n\nWe focus on Monte Carlo methods."
   },
   {
+    "objectID": "slides/bayesmod-slides4.html#simulation-algorithms-inversion-method",
+    "href": "slides/bayesmod-slides4.html#simulation-algorithms-inversion-method",
+    "title": "Bayesian modelling",
+    "section": "Simulation algorithms: inversion method",
+    "text": "Simulation algorithms: inversion method\nIf \\(F\\) is an absolutely continuous distribution function, then \\[F(X) \\sim \\mathsf{U}(0,1).\\] The inversion method consists in applying the quantile function \\(F^{-1}\\) to \\(U \\sim \\mathsf{U}(0,1)\\), viz. \\[F^{-1}(U) \\sim X.\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#inversion-method-for-truncated-distributions",
+    "href": "slides/bayesmod-slides4.html#inversion-method-for-truncated-distributions",
+    "title": "Bayesian modelling",
+    "section": "Inversion method for truncated distributions",
+    "text": "Inversion method for truncated distributions\nConsider a random variable \\(Y\\) with distribution function \\(F\\).\nIf \\(X\\) follows the same distribution as \\(Y\\), but restricted over the interval \\([a,b]\\), then \\[\\Pr(X \\leq x) = \\frac{F(x) - F(a)}{F(b)-F(a)}, \\qquad a \\leq x \\leq b,\\]\nTherefore, \\[F^{-1}[F(a) + \\{F(b)-F(a)\\}U] \\sim X\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#simulation-algorithms-accept-reject",
+    "href": "slides/bayesmod-slides4.html#simulation-algorithms-accept-reject",
+    "title": "Bayesian modelling",
+    "section": "Simulation algorithms: accept-reject",
+    "text": "Simulation algorithms: accept-reject\n\nTarget: sample from density \\(p(x)\\) (hard to sample from)\nProposal: find a density \\(q(x)\\) with nested support, \\(\\mathrm{supp}(p) \\subseteq \\mathrm{supp}(q)\\), such that \\[\\frac{p(x)}{q(x)} \\leq C, \\quad C \\geq 1.\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#rejection-sampling-algorithm",
+    "href": "slides/bayesmod-slides4.html#rejection-sampling-algorithm",
+    "title": "Bayesian modelling",
+    "section": "Rejection sampling algorithm",
+    "text": "Rejection sampling algorithm\n\nGenerate \\(X\\) from proposal with density \\(q(x)\\).\nCompute the ratio \\(R \\gets p(X)/ q(X)\\).\nIf \\(CU \\leq R\\) for \\(U \\sim \\mathsf{U}(0,1)\\), return \\(X\\), else go back to step 1."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#remarks-on-rejection-sampling",
+    "href": "slides/bayesmod-slides4.html#remarks-on-rejection-sampling",
+    "title": "Bayesian modelling",
+    "section": "Remarks on rejection sampling",
+    "text": "Remarks on rejection sampling\n\nAcceptance rate is \\(1/C\\)\n\nwe need on average \\(C\\) draws from \\(q\\) to get one from \\(p\\)\n\n\\(q\\) must be more heavy-tailed than \\(p\\)\n\ne.g., \\(q(x)\\) Student-\\(t\\) for \\(p(x)\\) Gaussian\n\n\\(q\\) should be cheap and easy to sample from!"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#designing-a-good-proposal-density",
+    "href": "slides/bayesmod-slides4.html#designing-a-good-proposal-density",
+    "title": "Bayesian modelling",
+    "section": "Designing a good proposal density",
+    "text": "Designing a good proposal density\nGood choices must satisfy the following constraints:\n\npick a family \\(q(x)\\) so that \\[C = \\mathrm{sup}_x \\frac{p(x)}{q(x)}\\] is as close to 1 as possible.\nyou can use numerical optimization with \\(f(x) =\\log p(x) - \\log q(x)\\) to find the mode \\(x^\\star\\) and the upper bound \\(C = \\exp f(x^\\star)\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#accept-reject-illustration",
+    "href": "slides/bayesmod-slides4.html#accept-reject-illustration",
+    "title": "Bayesian modelling",
+    "section": "Accept-reject illustration",
+    "text": "Accept-reject illustration\n\n\nFigure 1: Target density (full) and scaled proposal density (dashed): the vertical segment at \\(x=1\\) shows the percentage of acceptance for a uniform slice under the scaled proposal, giving an acceptance ratio of 0.58."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#truncated-gaussian-via-accept-reject",
+    "href": "slides/bayesmod-slides4.html#truncated-gaussian-via-accept-reject",
+    "title": "Bayesian modelling",
+    "section": "Truncated Gaussian via accept-reject",
+    "text": "Truncated Gaussian via accept-reject\nConsider sampling \\(Y \\sim \\mathsf{No}(\\mu, \\sigma^2)\\), but truncated in the interval \\((a, b)\\). The target density is \\[\\begin{align*}\np(x; \\mu, \\sigma, a, b) = \\frac{1}{\\sigma}\\frac{\\phi\\left(\\frac{x-\\mu}{\\sigma}\\right)}{\\Phi(\\beta)-\\Phi(\\alpha)}.\n\\end{align*}\\] for \\(\\alpha= (a-\\mu)/\\sigma\\) and \\(\\beta = (b-\\mu)/\\sigma\\). where \\(\\phi(\\cdot), \\Phi(\\cdot)\\) are respectively the density and distribution function of the standard Gaussian distribution."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#accept-reject-crude-version",
+    "href": "slides/bayesmod-slides4.html#accept-reject-crude-version",
+    "title": "Bayesian modelling",
+    "section": "Accept-reject (crude version)",
+    "text": "Accept-reject (crude version)\n\nSimulate \\(X \\sim \\mathsf{No}(\\mu, \\sigma^2)\\)\nreject any draw if \\(X &lt; a\\) or \\(X&gt; b\\).\n\nThe acceptance rate is \\(C^{-1} = \\{\\Phi(\\beta) - \\Phi(\\alpha)\\}\\)\n\n# Standard Gaussian truncated on [0,1]\ncandidate &lt;- rnorm(1e5)\ntrunc_samp &lt;- candidate[candidate &gt;= 0 & candidate &lt;= 1]\n# Acceptance rate\nlength(trunc_samp)/1e5\n\n[1] 0.34289\n\n# Theoretical acceptance rate\npnorm(1)-pnorm(0)\n\n[1] 0.3413447"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#accept-reject-for-truncated-gaussian",
+    "href": "slides/bayesmod-slides4.html#accept-reject-for-truncated-gaussian",
+    "title": "Bayesian modelling",
+    "section": "Accept-reject for truncated Gaussian",
+    "text": "Accept-reject for truncated Gaussian\nSince the Gaussian is a location scale family, the inversion method gives \\[\\begin{align*}\nX \\sim \\mu + \\sigma\\Phi^{-1}\\left[\\Phi(\\alpha) + \\{\\Phi(\\beta)-\\Phi(\\alpha)\\}U\\right]\n\\end{align*}\\]\nWe however need to evaluate \\(\\Phi\\) numerically (no closed-form expression).\nThe method fails for rare event simulation because the computer returns\n\n\\(\\Phi(x) = 0\\) for \\(x \\leq -39\\)\n\\(\\Phi(x)=1\\) for \\(x \\geq 8.3\\),\n\nimplying that \\(a \\leq 8.3\\) for this approach to work (Botev & L’Écuyer, 2017)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#simulating-tails-of-gaussian-variables",
+    "href": "slides/bayesmod-slides4.html#simulating-tails-of-gaussian-variables",
+    "title": "Bayesian modelling",
+    "section": "Simulating tails of Gaussian variables",
+    "text": "Simulating tails of Gaussian variables\nWe consider simulation from a standard Gaussian truncated above \\(a&gt;0\\)\nWrite the density of the truncated Gaussian as (Devroye, 1986, p. 381)\\[f(x) = \\frac{\\exp(-x^2/2)}{\\int_{a}^{\\infty}\\exp(-z^2/2)\\mathrm{d} z}  =\\frac{\\exp(-x^2/2)}{c_1}.\\]\nNote that, for \\(x \\geq a\\), \\[c_1f(x) \\leq \\frac{x}{a}\\exp\\left(-\\frac{x^2}{2}\\right)= a^{-1}\\exp\\left(-\\frac{a^2}{2}\\right)g(x);\\] where \\(g(x)\\) is the density of a Rayleigh variable shifted by \\(a\\).1\nThe constant \\(C= \\exp(-a^2/2)(c_1a)^{-1}\\) approaches 1 quickly as \\(a \\to \\infty\\) (asymptotically optimality)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#accept-reject-truncated-gaussian-with-rayleigh",
+    "href": "slides/bayesmod-slides4.html#accept-reject-truncated-gaussian-with-rayleigh",
+    "title": "Bayesian modelling",
+    "section": "Accept-reject: truncated Gaussian with Rayleigh",
+    "text": "Accept-reject: truncated Gaussian with Rayleigh\nThe shifted Rayleigh has distribution function \\[G(x) = 1-\\exp\\{(a^2-x^2)/2\\}, x \\geq a.\\]\n\n\n\n\n\n\nMarsaglia algorithm\n\n\n\nGenerate a shifted Rayleigh above \\(a\\), \\(X \\gets  \\{a^2 - 2\\log(U)\\}^{1/2}\\) for \\(U \\sim \\mathsf{U}(0,1)\\)\nAccept \\(X\\) if \\(XV \\leq a\\), where \\(V \\sim \\mathsf{U}(0,1)\\).\n\n\n\n\nFor sampling on \\([a,b]\\), propose from a Rayleigh truncated above at \\(b\\) (Botev & L’Écuyer, 2017).\n\na &lt;- 8.3\nniter &lt;- 1000L\nX &lt;- sqrt(a^2 + 2*rexp(niter))\nsamp &lt;- X[runif(niter)*X &lt;= a]"
+  },
+  {
     "objectID": "slides/bayesmod-slides4.html#markov-chains",
     "href": "slides/bayesmod-slides4.html#markov-chains",
     "title": "Bayesian modelling",
@@ -130,7 +214,7 @@
     "href": "slides/bayesmod-slides4.html#correlogram",
     "title": "Bayesian modelling",
     "section": "Correlogram",
-    "text": "Correlogram\n\n\nFigure 1: Correlogram of two two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number."
+    "text": "Correlogram\n\n\nFigure 2: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#variance-of-sample-mean-of-ar1",
@@ -144,7 +228,7 @@
     "href": "slides/bayesmod-slides4.html#inefficiency-curve-for-ar1",
     "title": "Bayesian modelling",
     "section": "Inefficiency curve for AR(1)",
-    "text": "Inefficiency curve for AR(1)\n\n\nFigure 2: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with the same marginal variance (dashed). Right: variance ratio for positive correlations.\nTo get the same precision for the mean of \\(\\mathsf{AR}(1)\\) process with \\(\\phi \\approx 0.75\\) than with i.i.d. data, we would need 9 times as many observations."
+    "text": "Inefficiency curve for AR(1)\n\n\nFigure 3: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with the same marginal variance (dashed). Right: variance ratio for positive correlations.\nTo get the same precision for the mean of \\(\\mathsf{AR}(1)\\) process with \\(\\phi \\approx 0.75\\) than with i.i.d. data, we would need 9 times as many observations."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#morale-of-the-story",
@@ -172,7 +256,7 @@
     "href": "slides/bayesmod-slides4.html#convergence-of-markov-chains",
     "title": "Bayesian modelling",
     "section": "Convergence of Markov chains",
-    "text": "Convergence of Markov chains\n\n\nFigure 3: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right)."
+    "text": "Convergence of Markov chains\n\n\nFigure 4: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right)."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#markov-chain-monte-carlo",
@@ -256,7 +340,7 @@
     "href": "slides/bayesmod-slides4.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References"
+    "text": "References\n\n\n\n\nBotev, Z., & L’Écuyer, P. (2017). Simulation from the normal distribution truncated to an interval in the tail. Proceedings of the 10th EAI International Conference on Performance Evaluation Methodologies and Tools on 10th EAI International Conference on Performance Evaluation Methodologies and Tools, 23–29. https://doi.org/10.4108/eai.25-10-2016.2266879\n\n\nDevroye, L. (1986). Non-Uniform Random Variate Generation. Springer. http://www.nrbook.com/devroye/"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#probability-vs-frequency",
@@ -368,7 +452,7 @@
     "href": "slides/bayesmod-slides2.html#numerical-example-of-monte-carlo-integration",
     "title": "Bayesian modelling",
     "section": "Numerical example of (Monte Carlo) integration",
-    "text": "Numerical example of (Monte Carlo) integration\n\ny &lt;- 6L # number of successes \nn &lt;- 14L # number of trials\nalpha &lt;- beta &lt;- 1.5 # prior parameters\nunnormalized_posterior &lt;- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n\n1.066906e-05 with absolute error &lt; 1e-12\n\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n\n[1] 1.066906e-05\n\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n\n[1] 1.067821e-05"
+    "text": "Numerical example of (Monte Carlo) integration\n\ny &lt;- 6L # number of successes \nn &lt;- 14L # number of trials\nalpha &lt;- beta &lt;- 1.5 # prior parameters\nunnormalized_posterior &lt;- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n\n1.066906e-05 with absolute error &lt; 1e-12\n\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n\n[1] 1.066906e-05\n\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n\n[1] 1.061693e-05"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#marginal-posterior",
@@ -833,145 +917,181 @@
   {
     "objectID": "exercises/01-exercise.html",
     "href": "exercises/01-exercise.html",
-    "title": "Exercise 1",
+    "title": "Bayesian modelling",
     "section": "",
-    "text": "Exercise 1.1 - for credit\nConsider the geometric distribution with mass function \\[\\begin{align*}\nf(y; p) = p(1-p)^{y}, \\qquad y = 0, 1, 2, \\ldots;\n\\end{align*}\\] the latter is used to model the number of failures \\(Y\\) from independent trials until a first success, the latter with probability \\(p\\).\n\nIf \\(Y \\mid P=p \\sim \\mathsf{geom}(p)\\) and \\(P \\sim \\mathsf{beta}(\\alpha_1, \\alpha_2)\\), show that \\(P \\mid Y=y\\) is beta distributed and obtain the parameters of the latter.\nObtain the marginal distribution of \\(Y\\) and show that it is a special case of the beta-negative binomial distribution.\nUsing the tower property, compute the unconditional mean and variance of \\(Y\\).\nUse forward sampling (drawing first observations from \\(P\\), then from \\(Y \\mid P\\) to simulate observations from the marginal of \\(Y\\). Compare the distribution with that of \\(Y \\mid p\\) using a bar plot and verify the formulas for the expected value and variance derived previously using Monte Carlo integration.\n\n\n\nExercise 1.2\nLinear mixed effect regression model specifies that response vectors for individual \\(i\\), \\(\\boldsymbol{Y}_i \\in \\mathbb{R}^k\\), are Gaussian. The model includes model matrix \\(\\mathbf{X}_i\\) with fixed effect coefficients \\(\\boldsymbol{\\beta}\\), and another \\(k\\times l\\) model matrix \\(\\mathbf{Z}_i\\) with random effects. The hierarchical formulation of the model is \\[\\begin{align*}\n\\boldsymbol{Y}_i \\mid \\mathcal{B}_i=\\boldsymbol{b}_i &\\sim \\mathsf{Gauss}_k(\\mathbf{X}_i\\boldsymbol{\\beta} + \\mathbf{Z}_i\\boldsymbol{b}_i, \\sigma^2 \\mathbf{I}_k) \\\\\n\\mathcal{B}_i & \\sim \\mathsf{Gauss}_l(\\boldsymbol{0}_k, \\boldsymbol{\\Omega})\n\\end{align*}\\]\n\nUsing the tower property, derive the marginal mean and covariance matrix of \\(\\boldsymbol{Y}_i\\)\nHence obtain the parameters of the joint distribution of \\((\\boldsymbol{Y}_i^\\top, \\mathcal{B}_i^\\top)^\\top\\).\n\n\n\nExercise 1.3\nConsider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\). You may take for given that the expected value of the Wald distribution is \\(\\mathsf{E}(Y) = \\nu\\).\n\nWrite down the likelihood and show that it can be written in terms of the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\nDerive the Fisher information matrix",
+    "text": "For credit\nConsider the geometric distribution \\(\\mathsf{geom}(p)\\) with mass function \\[\\begin{align*}\nf(y; p) = p(1-p)^{y}, \\qquad y = 0, 1, 2, \\ldots;\n\\end{align*}\\] the latter is used to model the number of failures \\(Y\\) from independent trials until a first success, which occurs with probability \\(p\\).\n\nIf \\(Y \\mid P=p \\sim \\mathsf{geom}(p)\\) and \\(P \\sim \\mathsf{beta}(\\alpha_1, \\alpha_2)\\), show that \\(P \\mid Y=y\\) is beta distributed and obtain the parameters of the latter.\nObtain the marginal distribution of \\(Y\\) and show that it is a special case of the beta-negative binomial distribution.\nUsing the tower property, compute the unconditional mean and variance of \\(Y\\).\nUse forward sampling, draw 10 000 observations from \\(Y\\) by first drawing from \\(P\\), then from \\(Y \\mid P\\). Compare the distribution with that of \\(Y \\mid p\\) using a bar plot.\nVerify the formulas for the expected value and variance derived previously using Monte Carlo integration.",
     "crumbs": [
       "Exercises",
       "1. Introduction",
-      "Exercise 1"
+      "Exercise 1.1"
+    ]
+  },
+  {
+    "objectID": "exercises/01-exercise.html#exercise-1.1",
+    "href": "exercises/01-exercise.html#exercise-1.1",
+    "title": "Bayesian modelling",
+    "section": "",
+    "text": "For credit\nConsider the geometric distribution \\(\\mathsf{geom}(p)\\) with mass function \\[\\begin{align*}\nf(y; p) = p(1-p)^{y}, \\qquad y = 0, 1, 2, \\ldots;\n\\end{align*}\\] the latter is used to model the number of failures \\(Y\\) from independent trials until a first success, which occurs with probability \\(p\\).\n\nIf \\(Y \\mid P=p \\sim \\mathsf{geom}(p)\\) and \\(P \\sim \\mathsf{beta}(\\alpha_1, \\alpha_2)\\), show that \\(P \\mid Y=y\\) is beta distributed and obtain the parameters of the latter.\nObtain the marginal distribution of \\(Y\\) and show that it is a special case of the beta-negative binomial distribution.\nUsing the tower property, compute the unconditional mean and variance of \\(Y\\).\nUse forward sampling, draw 10 000 observations from \\(Y\\) by first drawing from \\(P\\), then from \\(Y \\mid P\\). Compare the distribution with that of \\(Y \\mid p\\) using a bar plot.\nVerify the formulas for the expected value and variance derived previously using Monte Carlo integration.",
+    "crumbs": [
+      "Exercises",
+      "1. Introduction",
+      "Exercise 1.1"
+    ]
+  },
+  {
+    "objectID": "exercises/01-exercise.html#exercise-1.2",
+    "href": "exercises/01-exercise.html#exercise-1.2",
+    "title": "Bayesian modelling",
+    "section": "Exercise 1.2",
+    "text": "Exercise 1.2\nLinear mixed effect regression model specifies that response vectors for individual \\(i\\), \\(\\boldsymbol{Y}_i \\in \\mathbb{R}^k\\), are Gaussian. The model includes model matrix \\(\\mathbf{X}_i\\) with fixed effect coefficients \\(\\boldsymbol{\\beta}\\), and another \\(k\\times l\\) model matrix \\(\\mathbf{Z}_i\\) with random effects. The hierarchical formulation of the model is \\[\\begin{align*}\n\\boldsymbol{Y}_i \\mid \\mathcal{B}_i=\\boldsymbol{b}_i &\\sim \\mathsf{Gauss}_k(\\mathbf{X}_i\\boldsymbol{\\beta} + \\mathbf{Z}_i\\boldsymbol{b}_i, \\sigma^2 \\mathbf{I}_k) \\\\\n\\mathcal{B}_i & \\sim \\mathsf{Gauss}_l(\\boldsymbol{0}_k, \\boldsymbol{\\Omega})\n\\end{align*}\\]\n\nUsing the tower property, derive the marginal mean and covariance matrix of \\(\\boldsymbol{Y}_i\\)\nHence obtain the parameters of the joint distribution of \\((\\boldsymbol{Y}_i^\\top, \\mathcal{B}_i^\\top)^\\top\\).",
+    "crumbs": [
+      "Exercises",
+      "1. Introduction",
+      "Exercise 1.1"
+    ]
+  },
+  {
+    "objectID": "exercises/01-exercise.html#exercise-1.3",
+    "href": "exercises/01-exercise.html#exercise-1.3",
+    "title": "Bayesian modelling",
+    "section": "Exercise 1.3",
+    "text": "Exercise 1.3\nConsider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\). You may take for given that the expected value of the Wald distribution is \\(\\mathsf{E}(Y) = \\nu\\).\n\nWrite down the likelihood and show that it can be written in terms of the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\nDerive the Fisher information matrix",
+    "crumbs": [
+      "Exercises",
+      "1. Introduction",
+      "Exercise 1.1"
     ]
   },
   {
     "objectID": "exercises/02-exercise.html",
     "href": "exercises/02-exercise.html",
-    "title": "Exercise 2",
+    "title": "Bayesian modelling",
     "section": "",
     "text": "You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.\nFor modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate \\(\\lambda&gt;0\\), with associated density \\(f(x) = \\lambda \\exp(-\\lambda x)\\).",
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2"
+      "Exercise 2.1"
     ]
   },
   {
     "objectID": "exercises/02-exercise.html#exercise-2.1",
     "href": "exercises/02-exercise.html#exercise-2.1",
-    "title": "Exercise 2",
+    "title": "Bayesian modelling",
     "section": "Exercise 2.1",
     "text": "Exercise 2.1\nCompute the marginal likelihood when the prior for \\(\\lambda\\) is\n\nan exponential distribution with rate \\(\\kappa&gt;0\\), with prior density \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\);\nsame, but truncated above at 1, so the density is \\(p(\\lambda) = \\kappa \\exp(-\\lambda\\kappa)\\mathrm{I}\\{\\lambda \\leq 1\\}\\); the indicator function \\(\\mathrm{I}(\\cdot)\\) equals one if the condition is true and zero otherwise.\n\\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta)\\), a gamma distribution with shape \\(\\alpha&gt;0\\) and rate \\(\\beta&gt;0\\), with prior density \\(p(\\lambda) = \\beta^\\alpha\\lambda^{\\alpha-1}\\exp(-\\beta \\lambda)/\\Gamma(\\alpha)\\).\n\nDeduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution.",
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2"
+      "Exercise 2.1"
     ]
   },
   {
     "objectID": "exercises/02-exercise.html#exercise-2.2",
     "href": "exercises/02-exercise.html#exercise-2.2",
-    "title": "Exercise 2",
+    "title": "Bayesian modelling",
     "section": "Exercise 2.2",
     "text": "Exercise 2.2\nConsider the following priors for the reciprocal expected waiting time, \\(\\lambda\\).\n\na gamma with rate \\(\\beta=100\\) and shape \\(\\alpha = 10\\)\nan exponential with rate \\(5\\)\na uniform prior on the unit interval \\([5,10]\\) for \\(1/\\lambda\\)\n\nAssociate each plot of the posterior with each of the priors. Which one seems most suitable for modelling?\nExplain what would happen to the posterior curve if we increased the sample size.\n\n\n\n\n\n\n\n\nFigure 1: Posteriors (full) and scaled likelihood (dashed) for exponential data, with different priors. The dashed vertical line indicates the maximum likelihood estimator.",
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2"
+      "Exercise 2.1"
     ]
   },
   {
     "objectID": "exercises/02-exercise.html#exercice-2.3",
     "href": "exercises/02-exercise.html#exercice-2.3",
-    "title": "Exercise 2",
+    "title": "Bayesian modelling",
     "section": "Exercice 2.3",
     "text": "Exercice 2.3\nThe purpose of this exercise is to show that even one-dimensional numerical integration requires some care. Consider a half Cauchy prior over the positive half line, with density \\(f(x) = 2\\pi^{-1}(1+x^2)^{-1}\\mathrm{I}(x \\geq 0)\\). Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes\\(^{-1}\\). Compare this approximation with that of quadrature methods via integrate and return the corresponding estimates of the normalizing constant. Indication: check the values and make sure the output is sensical. Modify the integrand if necessary.\nPlot the posterior distribution of \\(1/\\lambda\\), the average waiting time.",
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2"
+      "Exercise 2.1"
     ]
   },
   {
     "objectID": "exercises/02-exercise.html#exercice-2.4",
     "href": "exercises/02-exercise.html#exercice-2.4",
-    "title": "Exercise 2",
+    "title": "Bayesian modelling",
     "section": "Exercice 2.4",
     "text": "Exercice 2.4\nConsider \\(\\lambda \\sim \\mathsf{Ga}(\\alpha = 1.4, \\beta=0.2)\\).\n\nReturn the posterior mean, posterior median and maximum a posteriori (MAP).\nReturn the 89% equitailed percentile credible interval.\nReturn the 50% highest posterior density (HPD) interval (harder).\n\nNext, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.\nWould the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all.",
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2"
+      "Exercise 2.1"
     ]
   },
   {
     "objectID": "exercises/03-exercise.html",
     "href": "exercises/03-exercise.html",
-    "title": "Exercise 3",
+    "title": "Bayesian modelling",
     "section": "",
     "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{Ga}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{No}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).",
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3"
+      "Exercise 3.1"
     ]
   },
   {
     "objectID": "exercises/03-exercise.html#exercise-3.1",
     "href": "exercises/03-exercise.html#exercise-3.1",
-    "title": "Exercise 3",
+    "title": "Bayesian modelling",
     "section": "",
     "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{Ga}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{No}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).",
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3"
+      "Exercise 3.1"
     ]
   },
   {
     "objectID": "exercises/03-exercise.html#exercise-3.2",
     "href": "exercises/03-exercise.html#exercise-3.2",
-    "title": "Exercise 3",
+    "title": "Bayesian modelling",
     "section": "Exercise 3.2",
     "text": "Exercise 3.2\nConsider the Rayleigh distribution with scale \\(\\sigma&gt;0\\). It’s density is \\[f(y; \\sigma) = \\frac{y}{\\sigma^2} \\exp\\left(-\\frac{y^2}{2\\sigma^2}\\right)\\mathrm{I}(x \\geq 0).\\]\nDerive the Fisher information matrix and use it to obtain Jeffrey’s prior for \\(\\sigma\\). Determine whether the prior is proper.",
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3"
+      "Exercise 3.1"
     ]
   },
   {
     "objectID": "exercises/03-exercise.html#exercise-3.3",
     "href": "exercises/03-exercise.html#exercise-3.3",
-    "title": "Exercise 3",
+    "title": "Bayesian modelling",
     "section": "Exercise 3.3",
     "text": "Exercise 3.3\nConsider a binomial model with an unknown probability of successes \\(\\theta \\in [0,1]\\) model. Suppose your prior guess for \\(\\theta\\) has mean \\(0.1\\) and standard deviation \\(0.2\\)\nUsing moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.\nPlot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location \\(\\mu=0.1\\) and scale \\(\\sigma=0.2\\).1",
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3"
+      "Exercise 3.1"
     ]
   },
   {
     "objectID": "exercises/03-exercise.html#exercise-3.4",
     "href": "exercises/03-exercise.html#exercise-3.4",
-    "title": "Exercise 3",
+    "title": "Bayesian modelling",
     "section": "Exercise 3.4",
     "text": "Exercise 3.4\nReproduce the analysis of Example 3.5 (Should you phrase your headline as a question?) of the course notes using the upworthy_question data from the hecbayes package.",
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3"
+      "Exercise 3.1"
     ]
   },
   {
     "objectID": "exercises/03-exercise.html#footnotes",
     "href": "exercises/03-exercise.html#footnotes",
-    "title": "Exercise 3",
+    "title": "Bayesian modelling",
     "section": "Footnotes",
     "text": "Footnotes\n\n\nNote that the parameters of the truncated Gaussian distribution do not correspond to moments!↩︎",
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3"
+      "Exercise 3.1"
     ]
   },
   {
@@ -1013,37 +1133,37 @@
   {
     "objectID": "exercises/05-exercise.html",
     "href": "exercises/05-exercise.html",
-    "title": "Exercise 5",
+    "title": "Bayesian modelling",
     "section": "",
     "text": "The Pareto distribution with shape \\(\\alpha&gt;0\\) and scale \\(\\tau&gt;0\\) has density \\[\nf(x; \\alpha, \\tau) = \\alpha x^{-\\alpha-1}\\tau^\\alpha \\mathsf{I}(x &gt; \\tau).\n\\] It can be used to model power laws in insurance and finance, or in demography. The uscitypopn data set in the hecbayes package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.\n\nUsing improper priors, write the joint posterior for a simple random sample of size \\(n\\) and derive the conditional distributions \\(p(\\alpha \\mid \\boldsymbol{y}, \\tau)\\) and \\(p(\\tau \\mid \\alpha, \\boldsymbol{y})\\). Hint: the conditional density \\(p(\\alpha \\mid \\boldsymbol{y}, \\tau)\\) is that of a gamma; use the fact that \\(m^\\alpha=\\exp\\{\\alpha\\log(m)\\}\\) for \\(m&gt;0\\).\nThe mononomial distribution \\(\\mathsf{Mono}(a,b)\\) has density \\(p(x) \\propto x^{a-1}\\mathsf{I}(0 \\leq x \\leq b)\\) for \\(a, b &gt; 0\\). Find the normalizing constant for the distribution and obtain the quantile function to derive a random number generator.\nImplement Gibbs sampling for this problem for the uscitypopn data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates.",
     "crumbs": [
       "Exercises",
       "5. Gibbs sampling",
-      "Exercise 5"
+      "Exercise 5.1"
     ]
   },
   {
     "objectID": "exercises/05-exercise.html#exercise-5.1",
     "href": "exercises/05-exercise.html#exercise-5.1",
-    "title": "Exercise 5",
+    "title": "Bayesian modelling",
     "section": "",
     "text": "The Pareto distribution with shape \\(\\alpha&gt;0\\) and scale \\(\\tau&gt;0\\) has density \\[\nf(x; \\alpha, \\tau) = \\alpha x^{-\\alpha-1}\\tau^\\alpha \\mathsf{I}(x &gt; \\tau).\n\\] It can be used to model power laws in insurance and finance, or in demography. The uscitypopn data set in the hecbayes package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.\n\nUsing improper priors, write the joint posterior for a simple random sample of size \\(n\\) and derive the conditional distributions \\(p(\\alpha \\mid \\boldsymbol{y}, \\tau)\\) and \\(p(\\tau \\mid \\alpha, \\boldsymbol{y})\\). Hint: the conditional density \\(p(\\alpha \\mid \\boldsymbol{y}, \\tau)\\) is that of a gamma; use the fact that \\(m^\\alpha=\\exp\\{\\alpha\\log(m)\\}\\) for \\(m&gt;0\\).\nThe mononomial distribution \\(\\mathsf{Mono}(a,b)\\) has density \\(p(x) \\propto x^{a-1}\\mathsf{I}(0 \\leq x \\leq b)\\) for \\(a, b &gt; 0\\). Find the normalizing constant for the distribution and obtain the quantile function to derive a random number generator.\nImplement Gibbs sampling for this problem for the uscitypopn data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates.",
     "crumbs": [
       "Exercises",
       "5. Gibbs sampling",
-      "Exercise 5"
+      "Exercise 5.1"
     ]
   },
   {
     "objectID": "exercises/05-exercise.html#exercise-5.2",
     "href": "exercises/05-exercise.html#exercise-5.2",
-    "title": "Exercise 5",
+    "title": "Bayesian modelling",
     "section": "Exercise 5.2",
     "text": "Exercise 5.2\nImplement the Bayesian LASSO for the diabetes cancer surgery from package lars. Check Park & Casella (2008) for the details of the Gibbs sampling.\n\nFit the model for a range of values of \\(\\lambda\\) and produce parameter estimate paths to replicate Figure 2 of the paper.\nCheck the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?\nImplement the method of section 3.1 from Park & Casella (2008) by adding \\(\\lambda\\) as a parameter.\nFor three models with different values of \\(\\lambda\\), compute the widely applicable information criterion (WAIC) and use it to assess predictive performance.",
     "crumbs": [
       "Exercises",
       "5. Gibbs sampling",
-      "Exercise 5"
+      "Exercise 5.1"
     ]
   },
   {
@@ -1218,18 +1338,11 @@
     "text": "Change of variable for Gaussian\n\nThe inverse transformation is \\(\\boldsymbol{g}^{-1}(\\boldsymbol{y}) = \\mathbf{A}^{-1}(\\boldsymbol{y}-\\boldsymbol{b}).\\)\nThe Jacobian \\(\\mathbf{J}_{\\boldsymbol{g}}(\\boldsymbol{x})\\) is simply \\(\\mathbf{A},\\) so the joint density of \\(\\boldsymbol{Y}\\) is \\[\\begin{align*}\n(2\\pi)^{-d/2} |\\mathbf{A}|^{-1}\\exp \\left\\{ - \\frac{(\\boldsymbol{y}-\\boldsymbol{b})^\\top\\mathbf{A}^{-\\top}\\mathbf{A}^{-1}(\\boldsymbol{y}-\\boldsymbol{b})}{2}\\right\\}.\n\\end{align*}\\] Since \\(|\\mathbf{A}^{-1}| = |\\mathbf{A}|^{-1}\\) and \\(\\mathbf{A}^{-\\top}\\mathbf{A}^{-1} = (\\mathbf{AA}^\\top)^{-1},\\) we recover \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{b}, \\mathbf{AA}^\\top).\\)"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#gaussian-subvectors",
-    "href": "slides/bayesmod-slides1.html#gaussian-subvectors",
+    "objectID": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-subvectors",
+    "href": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-subvectors",
     "title": "Bayesian modelling",
-    "section": "Gaussian subvectors",
-    "text": "Gaussian subvectors\nLet \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{\\mu}, \\boldsymbol{Q}^{-1})\\) and consider the partition \\[\\begin{align*}\n\\boldsymbol{Y} = \\begin{pmatrix} \\boldsymbol{Y}_1 \\\\ \\boldsymbol{Y}_2\\end{pmatrix}, \\quad\n\\boldsymbol{\\mu} = \\begin{pmatrix} \\boldsymbol{\\mu}_1 \\\\ \\boldsymbol{\\mu}_2\\end{pmatrix}, \\quad\n\\boldsymbol{Q} = \\begin{pmatrix} \\boldsymbol{Q}_{11} & \\boldsymbol{Q}_{12}\\\\ \\boldsymbol{Q}_{21} & \\boldsymbol{\\Sigma}_{22}\\end{pmatrix},\n\\end{align*}\\] where \\(\\boldsymbol{Y}_1\\) is a \\(k \\times 1\\) and \\(\\boldsymbol{Y}_2\\) is a \\((d-k) \\times 1\\) vector for some \\(1\\leq k &lt; d.\\)"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-vectors",
-    "href": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-vectors",
-    "title": "Bayesian modelling",
-    "section": "Conditional distribution of Gaussian vectors",
-    "text": "Conditional distribution of Gaussian vectors\nThen, we have the conditional distribution \\[\\begin{align*}\n\\boldsymbol{Y}_1 \\mid \\boldsymbol{Y}_2 =\\boldsymbol{y}_2 &\\sim\n\\\\& \\sim  \\mathsf{Gauss}_k(\\boldsymbol{\\mu}_1-\\boldsymbol{Q}_{11}^{-1}\\boldsymbol{Q}_{12}(\\boldsymbol{y}_2-\\boldsymbol{\\mu}_2), \\boldsymbol{Q}^{-1}_{11})\n\\end{align*}\\]"
+    "section": "Conditional distribution of Gaussian subvectors",
+    "text": "Conditional distribution of Gaussian subvectors\nLet \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{\\mu}, \\boldsymbol{Q}^{-1})\\) and consider the partition \\[\\begin{align*}\n\\boldsymbol{Y} = \\begin{pmatrix} \\boldsymbol{Y}_1 \\\\ \\boldsymbol{Y}_2\\end{pmatrix}, \\quad\n\\boldsymbol{\\mu} = \\begin{pmatrix} \\boldsymbol{\\mu}_1 \\\\ \\boldsymbol{\\mu}_2\\end{pmatrix}, \\quad\n\\boldsymbol{Q} = \\begin{pmatrix} \\boldsymbol{Q}_{11} & \\boldsymbol{Q}_{12}\\\\ \\boldsymbol{Q}_{21} & \\boldsymbol{\\Sigma}_{22}\\end{pmatrix},\n\\end{align*}\\] where \\(\\boldsymbol{Y}_1\\) is a \\(k \\times 1\\) and \\(\\boldsymbol{Y}_2\\) is a \\((d-k) \\times 1\\) vector for some \\(1\\leq k &lt; d.\\)\nThen, we have the conditional distribution \\[\\begin{align*}\n\\boldsymbol{Y}_1 \\mid \\boldsymbol{Y}_2 =\\boldsymbol{y}_2 &\\sim \\mathsf{Gauss}_k(\\boldsymbol{\\mu}_1-\\boldsymbol{Q}_{11}^{-1}\\boldsymbol{Q}_{12}(\\boldsymbol{y}_2-\\boldsymbol{\\mu}_2), \\boldsymbol{Q}^{-1}_{11})\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#likelihood",
@@ -1386,95 +1499,11 @@
     "text": "Example: functionals of gamma distribution\n\n\nFigure 1: Running mean trace plots for \\(g(x)=\\mathrm{I}(x&lt;1)\\) (left), \\(g(x)=x\\) (middle) and \\(g(x)=1/x\\) (right) for a Gamma distribution with shape 0.5 and rate 2, as a function of the Monte Carlo sample size."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#simulation-algorithms-inversion-method",
-    "href": "slides/bayesmod-slides1.html#simulation-algorithms-inversion-method",
+    "objectID": "slides/bayesmod-slides1.html#recap",
+    "href": "slides/bayesmod-slides1.html#recap",
     "title": "Bayesian modelling",
-    "section": "Simulation algorithms: inversion method",
-    "text": "Simulation algorithms: inversion method\nIf \\(F\\) is an absolutely continuous distribution function, then \\[F(X) \\sim \\mathsf{U}(0,1).\\] The inversion method consists in applying the quantile function \\(F^{-1}\\) to \\(U \\sim \\mathsf{U}(0,1)\\), viz. \\[F^{-1}(U) \\sim X.\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#inversion-method-for-truncated-distributions",
-    "href": "slides/bayesmod-slides1.html#inversion-method-for-truncated-distributions",
-    "title": "Bayesian modelling",
-    "section": "Inversion method for truncated distributions",
-    "text": "Inversion method for truncated distributions\nConsider a random variable \\(Y\\) with distribution function \\(F\\).\nIf \\(X\\) follows the same distribution as \\(Y\\), but restricted over the interval \\([a,b]\\), then \\[\\Pr(X \\leq x) = \\frac{F(x) - F(a)}{F(b)-F(a)}, \\qquad a \\leq x \\leq b,\\]\nTherefore, \\[F^{-1}[F(a) + \\{F(b)-F(a)\\}U] \\sim X\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#simulation-algorithms-accept-reject",
-    "href": "slides/bayesmod-slides1.html#simulation-algorithms-accept-reject",
-    "title": "Bayesian modelling",
-    "section": "Simulation algorithms: accept-reject",
-    "text": "Simulation algorithms: accept-reject\n\nTarget: sample from density \\(p(x)\\) (hard to sample from)\nProposal: find a density \\(q(x)\\) with nested support, \\(\\mathrm{supp}(p) \\subseteq \\mathrm{supp}(q)\\), such that \\[\\frac{p(x)}{q(x)} \\leq C, \\quad C \\geq 1.\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#rejection-sampling-algorithm",
-    "href": "slides/bayesmod-slides1.html#rejection-sampling-algorithm",
-    "title": "Bayesian modelling",
-    "section": "Rejection sampling algorithm",
-    "text": "Rejection sampling algorithm\n\nGenerate \\(X\\) from proposal with density \\(q(x)\\).\nCompute the ratio \\(R \\gets p(X)/ q(X)\\).\nIf \\(CU \\leq R\\) for \\(U \\sim \\mathsf{U}(0,1)\\), return \\(X\\), else go back to step 1."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#remarks-on-rejection-sampling",
-    "href": "slides/bayesmod-slides1.html#remarks-on-rejection-sampling",
-    "title": "Bayesian modelling",
-    "section": "Remarks on rejection sampling",
-    "text": "Remarks on rejection sampling\n\nAcceptance rate is \\(1/C\\)\n\nwe need on average \\(C\\) draws from \\(q\\) to get one from \\(p\\)\n\n\\(q\\) must be more heavy-tailed than \\(p\\)\n\ne.g., \\(q(x)\\) Student-\\(t\\) for \\(p(x)\\) Gaussian\n\n\\(q\\) should be cheap and easy to sample from!"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#designing-a-good-proposal-density",
-    "href": "slides/bayesmod-slides1.html#designing-a-good-proposal-density",
-    "title": "Bayesian modelling",
-    "section": "Designing a good proposal density",
-    "text": "Designing a good proposal density\nGood choices must satisfy the following constraints:\n\npick a family \\(q(x)\\) so that \\[C = \\mathrm{sup}_x \\frac{p(x)}{q(x)}\\] is as close to 1 as possible.\nyou can use numerical optimization with \\(f(x) =\\log p(x) - \\log q(x)\\) to find the mode \\(x^\\star\\) and the upper bound \\(C = \\exp f(x^\\star)\\)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#accept-reject-illustration",
-    "href": "slides/bayesmod-slides1.html#accept-reject-illustration",
-    "title": "Bayesian modelling",
-    "section": "Accept-reject illustration",
-    "text": "Accept-reject illustration\n\n\nFigure 2: Target density (full) and scaled proposal density (dashed): the vertical segment at \\(x=1\\) shows the percentage of acceptance for a uniform slice under the scaled proposal, giving an acceptance ratio of 0.58."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#truncated-gaussian-via-accept-reject",
-    "href": "slides/bayesmod-slides1.html#truncated-gaussian-via-accept-reject",
-    "title": "Bayesian modelling",
-    "section": "Truncated Gaussian via accept-reject",
-    "text": "Truncated Gaussian via accept-reject\nConsider sampling \\(Y \\sim \\mathsf{No}(\\mu, \\sigma^2)\\), but truncated in the interval \\((a, b)\\). The target density is \\[\\begin{align*}\np(x; \\mu, \\sigma, a, b) = \\frac{1}{\\sigma}\\frac{\\phi\\left(\\frac{x-\\mu}{\\sigma}\\right)}{\\Phi(\\beta)-\\Phi(\\alpha)}.\n\\end{align*}\\] for \\(\\alpha= (a-\\mu)/\\sigma\\) and \\(\\beta = (b-\\mu)/\\sigma\\). where \\(\\phi(\\cdot), \\Phi(\\cdot)\\) are respectively the density and distribution function of the standard Gaussian distribution."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#accept-reject-crude-version",
-    "href": "slides/bayesmod-slides1.html#accept-reject-crude-version",
-    "title": "Bayesian modelling",
-    "section": "Accept-reject (crude version)",
-    "text": "Accept-reject (crude version)\n\nSimulate \\(X \\sim \\mathsf{No}(\\mu, \\sigma^2)\\)\nreject any draw if \\(X &lt; a\\) or \\(X&gt; b\\).\n\nThe acceptance rate is \\(C^{-1} = \\{\\Phi(\\beta) - \\Phi(\\alpha)\\}\\)\n\n# Standard Gaussian truncated on [0,1]\ncandidate &lt;- rnorm(1e5)\ntrunc_samp &lt;- candidate[candidate &gt;= 0 & candidate &lt;= 1]\n# Acceptance rate\nlength(trunc_samp)/1e5\n\n[1] 0.34242\n\n# Theoretical acceptance rate\npnorm(1)-pnorm(0)\n\n[1] 0.3413447"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#accept-reject-for-truncated-gaussian",
-    "href": "slides/bayesmod-slides1.html#accept-reject-for-truncated-gaussian",
-    "title": "Bayesian modelling",
-    "section": "Accept-reject for truncated Gaussian",
-    "text": "Accept-reject for truncated Gaussian\nSince the Gaussian is a location scale family, the inversion method gives \\[\\begin{align*}\nX \\sim \\mu + \\sigma\\Phi^{-1}\\left[\\Phi(\\alpha) + \\{\\Phi(\\beta)-\\Phi(\\alpha)\\}U\\right]\n\\end{align*}\\]\nWe however need to evaluate \\(\\Phi\\) numerically (no closed-form expression).\nThe method fails for rare event simulation because the computer returns\n\n\\(\\Phi(x) = 0\\) for \\(x \\leq -39\\)\n\\(\\Phi(x)=1\\) for \\(x \\geq 8.3\\),\n\nimplying that \\(a \\leq 8.3\\) for this approach to work (Botev & L’Écuyer, 2017)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#simulating-tails-of-gaussian-variables",
-    "href": "slides/bayesmod-slides1.html#simulating-tails-of-gaussian-variables",
-    "title": "Bayesian modelling",
-    "section": "Simulating tails of Gaussian variables",
-    "text": "Simulating tails of Gaussian variables\nWe consider simulation from a standard Gaussian truncated above \\(a&gt;0\\)\nWrite the density of the truncated Gaussian as (Devroye, 1986, p. 381)\\[f(x) = \\frac{\\exp(-x^2/2)}{\\int_{a}^{\\infty}\\exp(-z^2/2)\\mathrm{d} z}  =\\frac{\\exp(-x^2/2)}{c_1}.\\]\nNote that, for \\(x \\geq a\\), \\[c_1f(x) \\leq \\frac{x}{a}\\exp\\left(-\\frac{x^2}{2}\\right)= a^{-1}\\exp\\left(-\\frac{a^2}{2}\\right)g(x);\\] where \\(g(x)\\) is the density of a Rayleigh variable shifted by \\(a\\).1\nThe constant \\(C= \\exp(-a^2/2)(c_1a)^{-1}\\) approaches 1 quickly as \\(a \\to \\infty\\) (asymptotically optimality)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#accept-reject-truncated-gaussian-with-rayleigh",
-    "href": "slides/bayesmod-slides1.html#accept-reject-truncated-gaussian-with-rayleigh",
-    "title": "Bayesian modelling",
-    "section": "Accept-reject: truncated Gaussian with Rayleigh",
-    "text": "Accept-reject: truncated Gaussian with Rayleigh\nThe shifted Rayleigh has distribution function \\[G(x) = 1-\\exp\\{(a^2-x^2)/2\\}, x \\geq a.\\]\n\n\n\n\n\n\nMarsaglia algorithm\n\n\n\nGenerate a shifted Rayleigh above \\(a\\), \\(X \\gets  \\{a^2 - 2\\log(U)\\}^{1/2}\\) for \\(U \\sim \\mathsf{U}(0,1)\\)\nAccept \\(X\\) if \\(XV \\leq a\\), where \\(V \\sim \\mathsf{U}(0,1)\\).\n\n\n\n\nFor sampling on \\([a,b]\\), propose from a Rayleigh truncated above at \\(b\\) (Botev & L’Écuyer, 2017).\n\na &lt;- 8.3\nniter &lt;- 1000L\nX &lt;- sqrt(a^2 + 2*rexp(niter))\nsamp &lt;- X[runif(niter)*X &lt;= a]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#references",
-    "href": "slides/bayesmod-slides1.html#references",
-    "title": "Bayesian modelling",
-    "section": "References",
-    "text": "References\n\n\n\n\nBotev, Z., & L’Écuyer, P. (2017). Simulation from the normal distribution truncated to an interval in the tail. Proceedings of the 10th EAI International Conference on Performance Evaluation Methodologies and Tools on 10th EAI International Conference on Performance Evaluation Methodologies and Tools, 23–29. https://doi.org/10.4108/eai.25-10-2016.2266879\n\n\nDevroye, L. (1986). Non-Uniform Random Variate Generation. Springer. http://www.nrbook.com/devroye/"
+    "section": "Recap",
+    "text": "Recap\n\nWe can specify distribution using hierarchies, with marginal \\(\\times\\) conditional.\nMost density and mass functions for \\(\\boldsymbol{Y}\\) can be identified from their support and their kernel, i.e., terms that depend on \\(\\boldsymbol{y}\\), ignoring normalizing constants. We then match expressions.\nExpectations can be calculated analytically, or approximated via Monte Carlo simulations."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors",
@@ -1519,32 +1548,25 @@
     "text": "Example of simple linear regression\nWorking with standardized response and inputs \\[x_i \\mapsto (x_i - \\overline{x})/\\mathrm{sd}(\\boldsymbol{x}),\\]\n\nthe slope is the correlation between explanatory \\(\\mathrm{X}\\) and response \\(Y\\)\nthe intercept should be mean zero\nare there sensible bounds for the range of the response?"
   },
   {
-    "objectID": "slides/bayesmod-slides3.html#bixi-counts",
-    "href": "slides/bayesmod-slides3.html#bixi-counts",
+    "objectID": "slides/bayesmod-slides3.html#example---simple-linear-regression",
+    "href": "slides/bayesmod-slides3.html#example---simple-linear-regression",
     "title": "Bayesian modelling",
-    "section": "Bixi counts",
-    "text": "Bixi counts\n\n\nFigure 1: Prior draws of the linear regression coefficients with observed data superimposed (left), and scatterplot of prior predictive draws (light gray) against observed data (right). There are 20 docks on the platform."
-  },
-  {
-    "objectID": "slides/bayesmod-slides3.html#example-2---simple-linear-regression",
-    "href": "slides/bayesmod-slides3.html#example-2---simple-linear-regression",
-    "title": "Bayesian modelling",
-    "section": "Example 2 - simple linear regression",
-    "text": "Example 2 - simple linear regression\nConsider the relationship between height (\\(Y\\), in cm) and weight (\\(X\\), in kg) among humans adults.1\nModel using a simple linear regression\n\\[\\begin{align*}\nh_i &\\sim \\mathsf{No}(\\mu_i, \\sigma^2) \\\\\n\\mu_i &= \\beta_0 + \\beta_1(\\mathrm{x}_i - \\overline{x}) \\\\\n\\beta_0 &\\sim \\mathsf{No}(178, 20^2) \\\\\n\\sigma &\\sim \\mathsf{U}(0, 50)\n\\end{align*}\\]\nSection 4.4.1 of McElreath (2020)"
+    "section": "Example - simple linear regression",
+    "text": "Example - simple linear regression\nConsider the relationship between height (\\(Y\\), in cm) and weight (\\(X\\), in kg) among humans adults.1\nModel using a simple linear regression\n\\[\\begin{align*}\nh_i &\\sim \\mathsf{No}(\\mu_i, \\sigma^2) \\\\\n\\mu_i &= \\beta_0 + \\beta_1(\\mathrm{x}_i - \\overline{x}) \\\\\n\\beta_0 &\\sim \\mathsf{No}(178, 20^2) \\\\\n\\sigma &\\sim \\mathsf{U}(0, 50)\n\\end{align*}\\]\nSection 4.4.1 of McElreath (2020)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors-for-the-slope",
     "href": "slides/bayesmod-slides3.html#priors-for-the-slope",
     "title": "Bayesian modelling",
     "section": "Priors for the slope",
-    "text": "Priors for the slope\n\n\nFigure 2: Prior draws of linear regressions with different priors: vague \\(\\beta_1 \\sim \\mathsf{No}(0, 100)\\) (left) and lognormal \\(\\ln(\\beta_1) \\sim \\mathsf{No}(0,1)\\) (right). Figure 4.5 of McElreath (2020). The Guiness record for the world’s tallest person is 272cm."
+    "text": "Priors for the slope\n\n\nFigure 1: Prior draws of linear regressions with different priors: vague \\(\\beta_1 \\sim \\mathsf{No}(0, 100)\\) (left) and lognormal \\(\\ln(\\beta_1) \\sim \\mathsf{No}(0,1)\\) (right). Figure 4.5 of McElreath (2020). The Guiness record for the world’s tallest person is 272cm."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-priors",
     "href": "slides/bayesmod-slides3.html#conjugate-priors",
     "title": "Bayesian modelling",
     "section": "Conjugate priors",
-    "text": "Conjugate priors\nA prior density \\(p(\\boldsymbol{\\theta})\\) is conjugate for likelihood \\(L(\\boldsymbol{\\theta}; \\boldsymbol{y})\\) if the product \\(L(\\boldsymbol{\\theta}; \\boldsymbol{y})p(\\boldsymbol{\\theta})\\), after renormalization, is of the same parametric family as the prior.\nDistributions that are exponential family admit conjugate priors.1\nA distribution is an exponential family if it’s density can be written \\[\\begin{align*}\nf(y; \\boldsymbol{\\theta}) = \\exp\\left\\{ \\sum_{k=1}^K Q_k(\\boldsymbol{\\theta}) t_k(y) + D(\\boldsymbol{\\theta})\\right\\}.\n\\end{align*}\\] The support of \\(f\\) mustn’t depend on \\(\\boldsymbol{\\theta}\\)."
+    "text": "Conjugate priors\nA prior density \\(p(\\boldsymbol{\\theta})\\) is conjugate for likelihood \\(L(\\boldsymbol{\\theta}; \\boldsymbol{y})\\) if the product \\(L(\\boldsymbol{\\theta}; \\boldsymbol{y})p(\\boldsymbol{\\theta})\\), after renormalization, is of the same parametric family as the prior.\nDistributions that are exponential family admit conjugate priors.1\nA distribution is an exponential family if it’s density can be written \\[\\begin{align*}\nf(y; \\boldsymbol{\\theta}) = \\exp\\left\\{ \\sum_{k=1}^K Q_k(\\boldsymbol{\\theta}) t_k(y) + D(\\boldsymbol{\\theta}) + h(y)\\right\\}.\n\\end{align*}\\] The support of \\(f\\) must not depend on \\(\\boldsymbol{\\theta}\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-priors-for-common-exponential-families",
@@ -1586,7 +1608,7 @@
     "href": "slides/bayesmod-slides3.html#posterior-distributions-for-sesame-street",
     "title": "Bayesian modelling",
     "section": "Posterior distributions for Sesame Street",
-    "text": "Posterior distributions for Sesame Street\n\n\nFigure 3: Gamma posterior of the conversion rate for the Upworthy Sesame street headline."
+    "text": "Posterior distributions for Sesame Street\n\n\nFigure 2: Gamma posterior of the conversion rate for the Upworthy Sesame street headline."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#proper-priors",
@@ -1628,7 +1650,7 @@
     "href": "slides/bayesmod-slides3.html#truncated-mdi-for-generalized-pareto-distribution",
     "title": "Bayesian modelling",
     "section": "Truncated MDI for generalized Pareto distribution",
-    "text": "Truncated MDI for generalized Pareto distribution\nThe MDI prior leads to an improper posterior without modification.\n\n\nFigure 4: Unscaled maximum data information (MDI) prior density.\nIf we restrict the range of the MDI prior \\(p(\\xi)\\) to \\(\\xi \\geq -1\\), then \\(p(\\xi + 1) \\sim \\mathsf{Exp}(1)\\) and posterior is proper."
+    "text": "Truncated MDI for generalized Pareto distribution\nThe MDI prior leads to an improper posterior without modification.\n\n\nFigure 3: Unscaled maximum data information (MDI) prior density.\nIf we restrict the range of the MDI prior \\(p(\\xi)\\) to \\(\\xi \\geq -1\\), then \\(p(\\xi + 1) \\sim \\mathsf{Exp}(1)\\) and posterior is proper."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#flat-priors",
@@ -1754,7 +1776,7 @@
     "href": "slides/bayesmod-slides3.html#sensitivity-analysis-for-smartwatch-data",
     "title": "Bayesian modelling",
     "section": "Sensitivity analysis for smartwatch data",
-    "text": "Sensitivity analysis for smartwatch data\n\n\nFigure 5: Posterior density of \\(\\zeta\\) for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.\nBasically indistinguishable results for the random scale.."
+    "text": "Sensitivity analysis for smartwatch data\n\n\nFigure 4: Posterior density of \\(\\zeta\\) for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.\nBasically indistinguishable results for the random scale.."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#eight-schools-example",
@@ -1768,7 +1790,7 @@
     "href": "slides/bayesmod-slides3.html#sensibility-analysis-for-eight-schools-example",
     "title": "Bayesian modelling",
     "section": "Sensibility analysis for eight schools example",
-    "text": "Sensibility analysis for eight schools example\n\n\nFigure 6: Posterior density of the school-specific random effects standard deviation \\(\\tau\\) under different priors."
+    "text": "Sensibility analysis for eight schools example\n\n\nFigure 5: Posterior density of the school-specific random effects standard deviation \\(\\tau\\) under different priors."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#references",

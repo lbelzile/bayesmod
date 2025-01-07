@@ -1,12 +1,14 @@
 ---
 title: "Bayesian modelling"
 author: "Léo Belzile"
-subtitle: "Markov chain Monte Carlo"
+subtitle: "Introduction to Monte Carlo methods and the Metropolis--Hastings algorithm"
 date: today
 date-format: YYYY
 eval: true
 echo: true
 cache: true
+width: 1200
+height: 900
 bibliography: MATH80601A.bib
 format:
   revealjs:
@@ -53,6 +55,172 @@ How to circumvent the problem of intractable posteriors?
 - deterministic methods: (integrated nested) Laplace approximations, variational Bayes, expectation propagation, etc.
 
 We focus on Monte Carlo methods.
+
+
+## Simulation algorithms: inversion method
+
+If $F$ is an absolutely continuous distribution function, then 
+$$F(X) \sim \mathsf{U}(0,1).$$
+The inversion method consists in applying the quantile function $F^{-1}$ to $U \sim \mathsf{U}(0,1)$, viz. $$F^{-1}(U) \sim X.$$
+
+## Inversion method for truncated distributions
+
+Consider a random variable $Y$ with distribution function $F$.
+
+If $X$ follows the same distribution as $Y$, but restricted over the interval $[a,b]$, then 
+$$\Pr(X \leq x) = \frac{F(x) - F(a)}{F(b)-F(a)}, \qquad a \leq x \leq b,$$
+
+Therefore, $$F^{-1}[F(a) + \{F(b)-F(a)\}U] \sim X$$
+
+
+
+## Simulation algorithms: accept-reject
+
+- **Target**: sample from density $p(x)$ (hard to sample from)
+- **Proposal**: find a density $q(x)$ with nested support, $\mathrm{supp}(p) \subseteq \mathrm{supp}(q)$, such that 
+$$\frac{p(x)}{q(x)} \leq C, \quad C \geq 1.$$
+
+## Rejection sampling algorithm
+
+1. Generate $X$ from proposal with density $q(x)$.
+2. Compute the ratio $R \gets p(X)/ q(X)$.
+3. If $CU \leq R$ for $U \sim \mathsf{U}(0,1)$, return $X$, else go back to step 1.
+
+
+## Remarks on rejection sampling
+
+- Acceptance rate is $1/C$
+   - we need on average $C$ draws from $q$ to get one from $p$
+- $q$ must be more heavy-tailed than $p$
+   - e.g., $q(x)$ Student-$t$ for $p(x)$ Gaussian
+- $q$ should be cheap and easy to sample from!
+
+## Designing a good proposal density
+
+Good choices must satisfy the following constraints: 
+
+- pick a family $q(x)$ so that $$C = \mathrm{sup}_x \frac{p(x)}{q(x)}$$ is as close to 1 as possible.
+- you can use numerical optimization with $f(x) =\log p(x) - \log q(x)$ to find the mode $x^\star$ and the upper bound $C = \exp f(x^\star)$.
+
+## Accept-reject illustration
+
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-acceptreject
+#| fig-cap: "Target density (full) and scaled proposal density (dashed): the vertical segment at $x=1$ shows the percentage of acceptance for a uniform slice under the scaled proposal, giving an acceptance ratio of 0.58."
+ptarget <- function(x){
+  0.3*TruncatedNormal::dtmvnorm(x = cbind(x), mu = 2, sigma = matrix(0.25),lb = 0) + 
+    0.4*TruncatedNormal::dtmvnorm(x = cbind(x), mu = 0, sigma = matrix(0.5),lb = 0, ub = 3) + 0.3*TruncatedNormal::dtmvnorm(x = cbind(x), mu = 0, sigma = matrix(4),lb = 0, ub = 5)
+}
+
+Cst <- dgamma(x = 4, shape = 4, rate = 1/0.75)/ptarget(2)
+qprop <- function(x){1.02*dgamma(x = x+2, shape = 4, rate = 1/0.75)/Cst}
+# curve(ptarget, from = -0.2, to = 4, n = 1001, ylim = c(0, 2))
+# curve(qprop, from = 0, to = 4, add = TRUE, lty = 2)
+ggplot() +
+  stat_function(fun = ptarget, n = 1001, xlim = c(0, 5)) +
+  stat_function(fun = qprop, n = 1001, xlim = c(0, 5), linetype = "dashed") +
+  geom_segment(data = data.frame(
+    x0 = 1, x1 = 1, y0 = 0, y1 = qprop(1)),
+               mapping = aes(
+                 x = x0, y = y0, xend = x1, yend = y1), 
+    linewidth = 2) +
+  geom_segment(data = data.frame(
+    x0 = 1, x1 = 1, y0 = 0, y1 = ptarget(1)),
+               mapping = aes(
+                 x = x0, y = y0, xend = x1, yend = y1),
+    linewidth = 2, col = "grey") +
+  labs(x = "x", 
+       y = "", 
+       subtitle = "scaled proposal and target densities") +
+    scale_y_continuous(limits = c(0, 0.62), expand = c(0,0)) + 
+    scale_x_continuous(expand = c(0,0)) + 
+  theme_classic() 
+```
+
+## Truncated Gaussian via accept-reject
+
+Consider sampling $Y \sim \mathsf{No}(\mu, \sigma^2)$, but truncated in the interval $(a, b)$. The target density is
+\begin{align*}
+p(x; \mu, \sigma, a, b) = \frac{1}{\sigma}\frac{\phi\left(\frac{x-\mu}{\sigma}\right)}{\Phi(\beta)-\Phi(\alpha)}.
+\end{align*}
+for $\alpha= (a-\mu)/\sigma$ and $\beta = (b-\mu)/\sigma$.
+where $\phi(\cdot), \Phi(\cdot)$ are respectively the density and distribution function of the standard Gaussian distribution.
+
+## Accept-reject (crude version)
+
+1. Simulate $X \sim \mathsf{No}(\mu, \sigma^2)$
+2. reject any draw if $X < a$ or $X> b$. 
+
+The acceptance rate is $C^{-1} = \{\Phi(\beta) - \Phi(\alpha)\}$
+
+```{r}
+#| eval: true
+#| echo: true
+# Standard Gaussian truncated on [0,1]
+candidate <- rnorm(1e5)
+trunc_samp <- candidate[candidate >= 0 & candidate <= 1]
+# Acceptance rate
+length(trunc_samp)/1e5
+# Theoretical acceptance rate
+pnorm(1)-pnorm(0)
+```
+
+## Accept-reject for truncated Gaussian  {.smaller}
+
+Since the Gaussian is a location scale family, the inversion method gives
+\begin{align*}
+X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\right]
+\end{align*}
+
+We however need to evaluate $\Phi$ numerically (no closed-form expression).
+
+The method fails for *rare event* simulation because the computer returns
+
+- $\Phi(x) = 0$ for $x \leq -39$
+- $\Phi(x)=1$ for $x \geq 8.3$,
+
+implying that $a \leq 8.3$ for this approach to work [@LEcuyer.Botev:2017].
+
+## Simulating tails of Gaussian variables {.smaller}
+
+We consider simulation from a standard Gaussian truncated above $a>0$
+
+Write the density of the truncated Gaussian as  [@Devroye:1986, p.381]$$f(x) = \frac{\exp(-x^2/2)}{\int_{a}^{\infty}\exp(-z^2/2)\mathrm{d} z}  =\frac{\exp(-x^2/2)}{c_1}.$$
+
+Note that, for $x \geq a$, 
+$$c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);$$
+where $g(x)$ is the density of a Rayleigh variable shifted by $a$.^[The constant $C= \exp(-a^2/2)(c_1a)^{-1}$ approaches 1 quickly as $a \to \infty$ (asymptotically optimality). ]
+
+## Accept-reject: truncated Gaussian with Rayleigh  {.smaller}
+
+The shifted Rayleigh has distribution function $$G(x) = 1-\exp\{(a^2-x^2)/2\}, x \geq a.$$ 
+
+
+
+
+:::{.callout-important}
+
+## Marsaglia algorithm
+1. Generate a shifted Rayleigh  above $a$, $X \gets  \{a^2 - 2\log(U)\}^{1/2}$ for $U \sim \mathsf{U}(0,1)$
+2. Accept $X$ if $XV \leq a$, where $V \sim \mathsf{U}(0,1)$.
+:::
+
+For sampling on $[a,b]$, propose from a Rayleigh truncated above at $b$ [@LEcuyer.Botev:2017].
+
+```{r}
+#| eval: true
+#| echo: true
+#| label: marsaglia-algo
+a <- 8.3
+niter <- 1000L
+X <- sqrt(a^2 + 2*rexp(niter))
+samp <- X[runif(niter)*X <= a]
+```
+
+
 
 
 ## Markov chains
@@ -136,11 +304,11 @@ which is a function of
 #| fig-height: 4
 #| fig-width: 10
 #| label: fig-correlograms
-#| fig-cap: "Correlogram of two two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number."
+#| fig-cap: "Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number."
 chains <- cbind("chain 1" = arima.sim(model = list(ar = c(0.5,-0.1), 
                                        ma = c(0.4)), n = 10000),
                 "chain 2" = arima.sim(model = list(ar = 0.99), n = 10000))
-bayesplot::mcmc_acf(x = coda::as.mcmc(chains))
+bayesplot::mcmc_acf(x = coda::as.mcmc(chains)) + theme_classic()
 ```
 
 ## Variance of sample mean of AR(1)

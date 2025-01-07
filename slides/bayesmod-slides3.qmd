@@ -7,6 +7,8 @@ date-format: YYYY
 eval: true
 echo: true
 cache: true
+width: 1200
+height: 900
 format:
   revealjs:
     slide-number: true
@@ -98,53 +100,7 @@ Working with standardized response and inputs $$x_i \mapsto (x_i - \overline{x})
 - are there sensible bounds for the range of the response?
 
 
-## Bixi counts
-
-
-```{r}
-#| eval: true
-#| echo: false
-#| label: fig-bixi
-#| fig-cap: "Prior draws of the linear regression coefficients with observed data superimposed (left), and scatterplot of prior predictive draws (light gray) against observed data (right). There are 20 docks on the platform."
-data(bixi, package = "hecstatmod")
-set.seed(1234)
-nsamp <- 500
-sigma_prior <- rexp(n = nsamp, rate = 3)
-beta0_prior <- rnorm(n = nsamp, 
-                     mean = mean(log(bixi$nusers)), 
-                     sd = 0.5)
-beta1_prior <- TruncatedNormal::rtnorm(n = nsamp, mu = 0, sd = 0.05, lb = -Inf, ub = Inf)
-
-xsamp <- sample(bixi$temp, nsamp)
-postpriorsamp <- TruncatedNormal::rtnorm(
-  n = 1, 
-  mu = beta0_prior + (xsamp - 20)*beta1_prior, 
-  sd = sigma_prior, lb = 0, ub = Inf)
-g1 <- ggplot(data = bixi,
-       mapping = aes(y = log(nusers),
-                     x = temp - 20)) +
-  geom_point() +
-  geom_abline(intercept = beta0_prior,
-              slope = beta1_prior,
-              alpha = 0.1) +
-  scale_y_continuous(limits = c(0,5), expand = c(0,0)) + 
-  labs(x = "temperature - 20 (in Celsius)",
-       y = "", 
-       subtitle = "Log number of Bixi rentals") +
-  theme_classic()
-g2 <- ggplot() +
-  geom_point(data = bixi,
-             mapping = aes(x = temp, y = log(nusers))) + 
-  geom_point(data = data.frame(x = xsamp, y = postpriorsamp),
-             mapping = aes(x = x, y = y), col = "grey") +
-  labs(x = "temperature (in Celsius)",
-       y = "",
-       subtitle = "Simulated and observed number of rentals\n (log scale)") +
-  theme_classic()
-g1 + g2
-```
-
-##  Example 2 - simple linear regression
+##  Example - simple linear regression
 
 Consider the relationship between height ($Y$, in cm) and weight ($X$, in kg) among humans adults.^[Section 4.4.1 of @McElreath:2020]
 
@@ -214,9 +170,9 @@ A prior density $p(\boldsymbol{\theta})$ is conjugate for likelihood $L(\boldsym
 
 Distributions that are exponential family admit conjugate priors.^[A distribution is an exponential family if it's density can be written
 \begin{align*}
-f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_k(y) + D(\boldsymbol{\theta})\right\}.
+f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_k(y) + D(\boldsymbol{\theta}) + h(y)\right\}.
 \end{align*}
-The support of $f$ mustn't depend on $\boldsymbol{\theta}$.]
+The support of $f$ must not depend on $\boldsymbol{\theta}$.]
 
 
 
