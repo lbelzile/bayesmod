@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.1">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.3">
 
   <meta name="author" content="Léo Belzile, HEC Montréal">
   <meta name="dcterms.date" content="2025-01-01">
@@ -334,6 +334,27 @@ f_{\boldsymbol{X}, \boldsymbol{Y}}(\boldsymbol{x}, \boldsymbol{y}) = f_{\boldsym
 \end{align*}\]</span></p>
 <p>If two subvectors <span class="math inline">\(\boldsymbol{X}\)</span> and <span class="math inline">\(\boldsymbol{Y}\)</span> are independent, then the conditional density <span class="math inline">\(f_{\boldsymbol{Y} \mid \boldsymbol{X}}(\boldsymbol{y}; \boldsymbol{x})\)</span> equals the marginal <span class="math inline">\(f_{\boldsymbol{Y}}(\boldsymbol{y})\)</span>.</p>
 </section>
+<section id="expected-value" class="slide level2">
+<h2>Expected value</h2>
+<p>If <span class="math inline">\(\boldsymbol{Y}\)</span> has density <span class="math inline">\(f_{\boldsymbol{Y}},\)</span> then <span class="math display">\[\begin{align*}
+\mathsf{E}\{g(\boldsymbol{Y})\} = \int g(\boldsymbol{y}) f_{\boldsymbol{Y}}(\boldsymbol{y}) \mathrm{d} \boldsymbol{y}
+\end{align*}\]</span> a weighted integral of <span class="math inline">\(g\)</span> with weight <span class="math inline">\(f_{\boldsymbol{Y}}.\)</span></p>
+<p>The identity function gives the expected value <span class="math inline">\(\mathsf{E}(\boldsymbol{Y}).\)</span></p>
+</section>
+<section id="covariance-matrix" class="slide level2">
+<h2>Covariance matrix</h2>
+<p>We define the covariance matrix of <span class="math inline">\(\boldsymbol{Y}\)</span> as <span class="math display">\[\begin{align*}
+\mathsf{Va}(\boldsymbol{Y}) = \mathsf{E}\left[\left\{\boldsymbol{Y} - \mathsf{E}(\boldsymbol{Y})\right\}\left\{\boldsymbol{Y} - \mathsf{E}(\boldsymbol{Y})\right\}^\top\right],
+\end{align*}\]</span> which reduces in the unidimensional setting to <span class="math inline">\(\mathsf{Va}(Y) = \mathsf{E}\{Y - \mathsf{E}(Y)\}^2 = \mathsf{E}(Y^2) - \mathsf{E}(Y)^2.\)</span></p>
+</section>
+<section id="affine-transformations" class="slide level2">
+<h2>Affine transformations</h2>
+<p>If <span class="math inline">\(\boldsymbol{Y}\)</span> is <span class="math inline">\(d\)</span>-dimensional and <span class="math inline">\(\mathbf{A}\)</span> is <span class="math inline">\(p \times d\)</span> and <span class="math inline">\(\boldsymbol{b}\)</span> is a <span class="math inline">\(p\)</span> vector, then</p>
+<p><span class="math display">\[\begin{align*}
+\mathsf{E}(\boldsymbol{AY} + \boldsymbol{b}) &amp;= \boldsymbol{A}\mathsf{E}(\boldsymbol{Y}) + \boldsymbol{b},\\
+\mathsf{Va}(\boldsymbol{AY} + \boldsymbol{b}) &amp;= \boldsymbol{A}\mathsf{Va}(\boldsymbol{Y})\boldsymbol{A}^\top.
+\end{align*}\]</span></p>
+</section>
 <section id="law-of-iterated-expectation-and-variance" class="slide level2">
 <h2>Law of iterated expectation and variance</h2>
 <p>Let <span class="math inline">\(\boldsymbol{Z}\)</span> and <span class="math inline">\(\boldsymbol{Y}\)</span> be random vectors. The expected value of <span class="math inline">\(\boldsymbol{Y}\)</span> is <span class="math display">\[\begin{align*}
@@ -381,9 +402,16 @@ f(y) &amp;= \frac{f(y,  \lambda)}{f(\lambda \mid y)} = \frac{\frac{\lambda^y\exp
 &amp;= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}k^{k\mu} (k+1)^{-k\mu-y}\\&amp;= \frac{\Gamma(k\mu+y)}{\Gamma(k\mu)\Gamma(y+1)}\left(1-\frac{1}{k+1}\right)^{k\mu} \left(\frac{1}{k+1}\right)^y
 \end{align*}\]</span> Marginally, <span class="math inline">\(Y \sim \mathsf{neg. binom}(p)\)</span> where <span class="math inline">\(p=(k+1)^{-1}.\)</span></p>
 </section>
+<section id="moments-of-negative-binomial" class="slide level2">
+<h2>Moments of negative binomial</h2>
+<p>By the laws of iterated expectation and iterative variance, <span class="math display">\[\begin{align*}
+\mathsf{E}(Y) &amp;= \mathsf{E}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda\} \\&amp; = \mathsf{E}(\Lambda) = \mu\\
+\mathsf{Va}(Y) &amp;= \mathsf{E}_{\Lambda}\{\mathsf{Va}(Y \mid \Lambda)\} + \mathsf{Va}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda)\} \\&amp;= \mathsf{E}(\Lambda) + \mathsf{Va}(\Lambda) \\&amp;= \mu + \mu/k.
+\end{align*}\]</span> The marginal distribution of <span class="math inline">\(Y\)</span>, unconditionally, has a variance which exceeds its mean.</p>
+</section>
 <section id="change-of-variable-formula" class="slide level2">
 <h2>Change of variable formula</h2>
-<p>Consider an injective (one-to-one) differentiable function <span class="math inline">\(\boldsymbol{g}: \mathbb{R}^d \to \mathbb{R}^d,\)</span> with inverse <span class="math inline">\(g^{-1}.\)</span> Then, if <span class="math inline">\(\boldsymbol{Y}=\boldsymbol{g}(\boldsymbol{X}),\)</span> <span class="math display">\[\begin{align*}
+<p>Consider an injective (one-to-one) differentiable function <span class="math inline">\(\boldsymbol{g}: \mathbb{R}^d \to \mathbb{R}^d,\)</span> with inverse <span class="math inline">\(\boldsymbol{g}^{-1}.\)</span> Then, if <span class="math inline">\(\boldsymbol{Y}=\boldsymbol{g}(\boldsymbol{X}),\)</span> <span class="math display">\[\begin{align*}
 \Pr(\boldsymbol{Y} \leq \boldsymbol{y}) = \Pr\{\boldsymbol{g}(\boldsymbol{X}) \leq \boldsymbol{y}\} = \Pr\{\boldsymbol{X} \leq \boldsymbol{x} = \boldsymbol{g}^{-1}(\boldsymbol{y})\}.
 \end{align*}\]</span></p>
 <p>Using the chain rule, the density of <span class="math inline">\(\boldsymbol{Y}\)</span> is <span class="math display">\[\begin{align*}
@@ -392,7 +420,7 @@ f_{\boldsymbol{Y}}(\boldsymbol{y}) = f_{\boldsymbol{X}}\left\{\boldsymbol{g}^{-1
 </section>
 <section id="gaussian-location-scale" class="slide level2">
 <h2>Gaussian location-scale</h2>
-<p>Consider <span class="math inline">\(d\)</span> independent standard Gaussian variates <span class="math inline">\(X_j \sim \mathsf{Gauss}(0, \sigma^2)\)</span> for <span class="math inline">\(j=1, \ldots, d,\)</span> with joint density function <span class="math display">\[\begin{align*}
+<p>Consider <span class="math inline">\(d\)</span> independent standard Gaussian variates <span class="math inline">\(X_j \sim \mathsf{Gauss}(0, 1)\)</span> for <span class="math inline">\(j=1, \ldots, d,\)</span> with joint density function <span class="math display">\[\begin{align*}
 f_{\boldsymbol{X}}(\boldsymbol{x})= (2\pi)^{-d/2} \exp \left( - \frac{\boldsymbol{x}^\top\boldsymbol{x}}{2}\right).
 \end{align*}\]</span> Consider the transformation <span class="math inline">\(\boldsymbol{Y} = \mathbf{A}\boldsymbol{X}+\boldsymbol{b},\)</span> with <span class="math inline">\(\mathbf{A}\)</span> an invertible matrix.</p>
 </section>
@@ -405,44 +433,20 @@ f_{\boldsymbol{X}}(\boldsymbol{x})= (2\pi)^{-d/2} \exp \left( - \frac{\boldsymbo
 \end{align*}\]</span> Since <span class="math inline">\(|\mathbf{A}^{-1}| = |\mathbf{A}|^{-1}\)</span> and <span class="math inline">\(\mathbf{A}^{-\top}\mathbf{A}^{-1} = (\mathbf{AA}^\top)^{-1},\)</span> we recover <span class="math inline">\(\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{b}, \mathbf{AA}^\top).\)</span></li>
 </ul>
 </section>
-<section id="partitioning-of-covariance-matrices" class="slide level2">
-<h2>Partitioning of covariance matrices</h2>
-<p>Let <span class="math inline">\(\boldsymbol{\Sigma}\)</span> be a <span class="math inline">\(d \times d\)</span> positive definite covariance matrix. We define the precision matrix <span class="math inline">\(\boldsymbol{Q} = \boldsymbol{\Sigma}^{-1}.\)</span> Suppose the matrices are partitioned into blocks, <span class="math display">\[\begin{align*}
-\boldsymbol{\Sigma}=
-\begin{pmatrix}
-\boldsymbol{\Sigma}_{11} &amp; \boldsymbol{\Sigma}_{12} \\
-\boldsymbol{\Sigma}_{21} &amp; \boldsymbol{\Sigma}_{22}
-\end{pmatrix} \text{ and }
-\boldsymbol{\Sigma}^{-1}= \boldsymbol{Q} =
-\begin{pmatrix}
-\boldsymbol{Q}_{11} &amp;\boldsymbol{Q}_{12}
-\\ \boldsymbol{Q}_{21} &amp; \boldsymbol{Q}_{22}
-\end{pmatrix}
-\end{align*}\]</span> with <span class="math inline">\(\dim(\boldsymbol{\Sigma}_{11})=k\times k\)</span> and <span class="math inline">\(\dim(\boldsymbol{\Sigma}_{22})=(d-k) \times (d-k).\)</span></p>
-</section>
-<section id="matrix-identities" class="slide level2">
-<h2>Matrix identities</h2>
-<p>The following relationships hold:</p>
-<ul>
-<li><span class="math inline">\(\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}=-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}\)</span></li>
-<li><span class="math inline">\(\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}=\boldsymbol{Q}_{11}^{-1}\)</span></li>
-<li><span class="math inline">\(\det(\boldsymbol{\Sigma})=\det(\boldsymbol{\Sigma}_{22})\det(\boldsymbol{\Sigma}_{1|2})\)</span> where <span class="math inline">\(\boldsymbol{\Sigma}_{1|2}=\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}.\)</span></li>
-</ul>
-</section>
 <section id="gaussian-subvectors" class="slide level2">
 <h2>Gaussian subvectors</h2>
-<p>Let <span class="math inline">\(\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> and consider the partition <span class="math display">\[\begin{align*}
+<p>Let <span class="math inline">\(\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{\mu}, \boldsymbol{Q}^{-1})\)</span> and consider the partition <span class="math display">\[\begin{align*}
 \boldsymbol{Y} = \begin{pmatrix} \boldsymbol{Y}_1 \\ \boldsymbol{Y}_2\end{pmatrix}, \quad
 \boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2\end{pmatrix}, \quad
-\boldsymbol{\Sigma} = \begin{pmatrix} \boldsymbol{\Sigma}_{11} &amp; \boldsymbol{\Sigma}_{12}\\ \boldsymbol{\Sigma}_{21} &amp; \boldsymbol{\Sigma}_{22}\end{pmatrix},
+\boldsymbol{Q} = \begin{pmatrix} \boldsymbol{Q}_{11} &amp; \boldsymbol{Q}_{12}\\ \boldsymbol{Q}_{21} &amp; \boldsymbol{\Sigma}_{22}\end{pmatrix},
 \end{align*}\]</span> where <span class="math inline">\(\boldsymbol{Y}_1\)</span> is a <span class="math inline">\(k \times 1\)</span> and <span class="math inline">\(\boldsymbol{Y}_2\)</span> is a <span class="math inline">\((d-k) \times 1\)</span> vector for some <span class="math inline">\(1\leq k &lt; d.\)</span></p>
 </section>
 <section id="conditional-distribution-of-gaussian-vectors" class="slide level2">
 <h2>Conditional distribution of Gaussian vectors</h2>
 <p>Then, we have the conditional distribution <span class="math display">\[\begin{align*}
-\boldsymbol{Y}_1 \mid \boldsymbol{Y}_2 =\boldsymbol{y}_2 &amp;\sim \mathsf{Gauss}_k(\boldsymbol{\mu}_1+\boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{\Sigma}_{1|2})
+\boldsymbol{Y}_1 \mid \boldsymbol{Y}_2 =\boldsymbol{y}_2 &amp;\sim
 \\&amp; \sim  \mathsf{Gauss}_k(\boldsymbol{\mu}_1-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{Q}^{-1}_{11})
-\end{align*}\]</span> and <span class="math inline">\(\boldsymbol{\Sigma}_{1|2}=\boldsymbol{\Sigma}_{11}-\boldsymbol{\Sigma}_{12}\boldsymbol{\Sigma}_{22}^{-1}\boldsymbol{\Sigma}_{21}\)</span> is the Schur complement of <span class="math inline">\(\boldsymbol{\Sigma}_{22}.\)</span></p>
+\end{align*}\]</span></p>
 </section>
 <section id="likelihood" class="slide level2">
 <h2>Likelihood</h2>
@@ -482,6 +486,25 @@ i(\boldsymbol{\theta}) = \mathsf{E}\left\{U(\boldsymbol{\theta}; \boldsymbol{Y})
 <li>information accumulates at a linear rate.</li>
 </ul>
 </section>
+<section id="information-for-the-gaussian-distribution" class="slide level2">
+<h2>Information for the Gaussian distribution</h2>
+<p>Consider <span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \tau^{-1})\)</span>, parametrized in terms of precision <span class="math inline">\(\tau\)</span>. The likelihood contribution for an <span class="math inline">\(n\)</span> sample is, up to proportionality, <span class="math display">\[\begin{align*}
+\ell(\mu, \tau) \propto \frac{n}{2}\log(\tau) - \frac{\tau}{2}\sum_{i=1}^n(Y_i^2-2\mu Y_i+\mu^2)
+\end{align*}\]</span></p>
+</section>
+<section id="gaussian-information-matrices" class="slide level2">
+<h2>Gaussian information matrices</h2>
+<p>The observed and Fisher information matrices are <span class="math display">\[\begin{align*}
+j(\mu, \tau) &amp;= \begin{pmatrix}
+n\tau &amp; -\sum_{i=1}^n (Y_i-\mu)\\
+-\sum_{i=1}^n (Y_i-\mu) &amp; \frac{n}{2\tau^2}
+\end{pmatrix}, \\
+i(\mu, \tau) &amp;= n\begin{pmatrix}
+\tau &amp; 0\\
+0 &amp; \frac{1}{2\tau^2}
+\end{pmatrix}
+\end{align*}\]</span> Since <span class="math inline">\(\mathsf{E}(Y_i) = \mu\)</span>, the expected value of the off-diagonal entries of the Fisher information matrix are zero.</p>
+</section>
 <section id="example-random-right-censoring" class="slide level2">
 <h2>Example: random right-censoring</h2>
 <p>Consider a survival analysis problem for independent time-to-event data subject to (noninformative) random right-censoring. We observe</p>
@@ -502,25 +525,6 @@ i(\boldsymbol{\theta}) = \mathsf{E}\left\{U(\boldsymbol{\theta}; \boldsymbol{Y})
 \ell(\lambda) &amp;= \lambda \sum_{i=1}^n y_i + \log \lambda m\\
 i(\lambda) &amp;= m/\lambda^2
 \end{align*}\]</span> and the right-censored observations for the exponential model do not contribute to the information.</p>
-</section>
-<section id="information-for-the-gaussian-distribution" class="slide level2">
-<h2>Information for the Gaussian distribution</h2>
-<p>Consider <span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \tau^{-1})\)</span>, parametrized in terms of precision <span class="math inline">\(\tau\)</span>. The likelihood contribution for an <span class="math inline">\(n\)</span> sample is, up to proportionality, <span class="math display">\[\begin{align*}
-\ell(\mu, \tau) \propto \frac{n}{2}\log(\tau) - \frac{\tau}{2}\sum_{i=1}^n(Y_i^2-2\mu Y_i+\mu^2)
-\end{align*}\]</span></p>
-</section>
-<section id="gaussian-information-matrices" class="slide level2">
-<h2>Gaussian information matrices</h2>
-<p>The observed and Fisher information matrices are <span class="math display">\[\begin{align*}
-j(\mu, \tau) &amp;= \begin{pmatrix}
-n\tau &amp; -\sum_{i=1}^n (Y_i-\mu)\\
--\sum_{i=1}^n (Y_i-\mu) &amp; \frac{n}{2\tau^2}
-\end{pmatrix}, \\
-i(\mu, \tau) &amp;= n\begin{pmatrix}
-\tau &amp; 0\\
-0 &amp; \frac{1}{2\tau^2}
-\end{pmatrix}
-\end{align*}\]</span> Since <span class="math inline">\(\mathsf{E}(Y_i) = \mu\)</span>, the expected value of the off-diagonal entries of the Fisher information matrix are zero.</p>
 </section>
 <section id="example-first-order-autoregressive-process" class="slide level2">
 <h2>Example: first-order autoregressive process</h2>
@@ -549,19 +553,12 @@ i(\mu, \tau) &amp;= n\begin{pmatrix}
 &amp;\ell(\mu, \phi,\sigma^2)= -\frac{n}{2}\log(2\pi) - n\log \sigma + \frac{1}{2}\log(1-\phi^2) \\&amp;\quad -\frac{(1-\phi^2)(y_1- \mu)^2}{2\sigma^2} - \sum_{i=2}^n \frac{(y_t - \mu(1-\phi)- \phi y_{t-1})^2}{2\sigma^2}
 \end{align*}\]</span></p>
 </section>
-<section id="moments" class="slide level2">
-<h2>Moments</h2>
-<p>By the laws of iterated expectation and iterative variance, <span class="math display">\[\begin{align*}
-\mathsf{E}(Y) &amp;= \mathsf{E}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda\} \\&amp; = \mathsf{E}(\Lambda) = \mu\\
-\mathsf{Va}(Y) &amp;= \mathsf{E}_{\Lambda}\{\mathsf{Va}(Y \mid \Lambda)\} + \mathsf{Va}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda)\} \\&amp;= \mathsf{E}(\Lambda) + \mathsf{Va}(\Lambda) \\&amp;= \mu + \mu/k.
-\end{align*}\]</span> The marginal distribution of <span class="math inline">\(Y\)</span>, unconditionally, has a variance which exceeds its mean.</p>
-</section>
 <section id="estimation-of-integrals" class="slide level2">
 <h2>Estimation of integrals</h2>
 <p>Suppose we can simulate <span class="math inline">\(B\)</span> i.i.d. variables with the same distribution, <span class="math inline">\(x_1, \ldots, x_B\)</span> with distribution <span class="math inline">\(F\)</span>.</p>
 <p>We want to compute <span class="math inline">\(\mathsf{E}\{g(X)\}=\int g(x) f(x) \mathrm{d} x=\mu_g\)</span> for some functional <span class="math inline">\(g(\cdot)\)</span></p>
 <ul>
-<li><span class="math inline">\(g(x)=x\)</span> (posterior mean)</li>
+<li><span class="math inline">\(g(x)=x\)</span> (mean)</li>
 <li><span class="math inline">\(g(x) = \mathsf{I}(x \in A)\)</span> (probability of event)</li>
 <li>etc.</li>
 </ul>

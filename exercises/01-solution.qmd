@@ -1,24 +1,58 @@
 ---
 title: "Solution 1"
-draft: true
+draft: false
 ---
 
 
-# Exercise 1.1
-
-Consider $\boldsymbol{Y}=(Y_1, \ldots, Y_3)^\top \in \mathbb{S}_{2}$ a trivariate vector, where $\boldsymbol{Y} \sim \mathsf{Dir}(\alpha_1, \alpha_2, \alpha_3)$
-
-a. Derive the marginal distribution of $(Y_1, Y_2)$.
-b. Derive the conditional distribution of $Y_3 \mid (Y_1, Y_2)$.
-
 # Exercise 1.2
+
+Linear mixed effect regression model specifies that response vectors for individual $i$, $\boldsymbol{Y}_i \in \mathbb{R}^k$, are Gaussian. The model includes model matrix $\mathbf{X}_i$ with fixed effect coefficients $\boldsymbol{\beta}$, and another $k\times l$ model matrix  $\mathbf{Z}_i$ with random effects. The hierarchical formulation of the model is
+\begin{align*}
+\boldsymbol{Y}_i \mid \mathcal{B}_i=\boldsymbol{b}_i &\sim \mathsf{Gauss}_k(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\boldsymbol{b}_i, \sigma^2 \mathbf{I}_k) \\
+\mathcal{B}_i & \sim \mathsf{Gauss}_l(\boldsymbol{0}_k, \boldsymbol{\Omega})
+\end{align*}
+
+
+a. Using the tower property, derive the marginal mean and covariance matrix of $\boldsymbol{Y}_i$
+b. Hence obtain the parameters of the joint distribution of $(\boldsymbol{Y}_i^\top, \mathcal{B}_i^\top)^\top$.
+
+::: {.solution}
+
+Using the law of iterated expectation and variance
+
+\begin{align*}
+\mathsf{E}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i) & =\mathsf{E}_{\mathcal{B}_i}\left\{\mathsf{E}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}(\boldsymbol{Y}_i)\right\} \\&=  \mathsf{E}_{\mathcal{B}_i}(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\mathcal{B}_i) \\&= \mathbf{X}_i\boldsymbol{\beta}
+\end{align*}
+
+\begin{align*}
+\mathsf{Va}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i) & =\mathsf{Va}_{\mathcal{B}_i}\left\{\mathsf{E}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}(\boldsymbol{Y}_i)\right\} + \mathsf{E}_{\mathcal{B}_i}\left\{\mathsf{Va}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}(\boldsymbol{Y}_i)\right\} \\&=  \mathsf{Va}_{\mathcal{B}_i}(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\mathcal{B}_i) +\mathsf{E}_{\mathcal{B}_i}(\sigma^2\mathbf{I}_k) \\&= \mathbf{Z}_i\boldsymbol{\Omega}\boldsymbol{Z}_i^\top + \sigma^2\mathbf{I}_k.
+\end{align*}
+
+Since the conditional and marginal are Gaussian, and the product of their density functions is also $\exp(-\cdot)$, with $\cdot$ quadratic in $\boldsymbol{Y}_i$ and $\mathcal{B}_i$, it must be multivariate Gaussian. As the latter is fully characterized by the mean and variance, it suffices to derive the covariance between $\boldsymbol{Y}_i$ and $\mathcal{B}_i$, which is the only missing piece of information. The latter is by definition
+
+\begin{align*}
+\mathsf{Co}(\boldsymbol{Y}_i,\mathcal{B}_i) & = \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\left[\left\{\boldsymbol{Y}_i - \mathsf{E}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i\right\}\left\{\mathcal{B}_i - \mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i)\right\}^\top\right]
+\\&= \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\{(\boldsymbol{Y}_i - \mathbf{X}_i\boldsymbol{\beta})\mathcal{B}_i^\top\}
+\\&= \mathsf{E}_{\mathcal{B}_i}\left[\mathsf{E}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}\{(\boldsymbol{Y}_i - \mathbf{X}_i\boldsymbol{\beta})\mathcal{B}_i^\top\}\right]
+\\&= \mathbf{Z}_i\mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i\mathcal{B}_i^\top) 
+\\&=\mathbf{Z}_i\boldsymbol{\Omega}
+\end{align*}
+
+and so we find
+\begin{align*}
+\begin{pmatrix}\boldsymbol{Y}_i \\ \mathcal{B}_i
+\end{pmatrix}\sim \mathsf{Gauss}_{k+l} \left\{ \begin{pmatrix} \mathbf{X}_i \boldsymbol{\beta} \\ \boldsymbol{0}_l \end{pmatrix}, \begin{pmatrix} \mathbf{Z}_i\boldsymbol{\Omega}\boldsymbol{Z}_i^\top + \sigma^2\mathbf{I}_k & \mathbf{Z}_i\boldsymbol{\Omega} \\ \boldsymbol{\Omega}\mathbf{Z}_i^\top & \boldsymbol{\Omega}\end{pmatrix}\right\}.
+\end{align*}
+
+:::
+
+# Exercise 1.3
 
 Consider a simple random sample of size $n$ from the Wald distribution, with density
 \begin{align*}
 f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y > 0)
 \end{align*}
-for location $\nu >0$ and shape $\tau>0$.
-
+for location $\nu >0$ and shape $\tau>0$. You may take for given that the expected value of the Wald distribution is $\mathsf{E}(Y) = \nu$.
 
 Write down the likelihood and show that it can be written in terms of the sufficient statistics $\sum_{i=1}^n y_i$ and $\sum_{i=1} y_i^{-1}$.
 
@@ -26,59 +60,42 @@ Write down the likelihood and show that it can be written in terms of the suffic
 
 The log likelihood for an independent and identically distributed sample is, up to terms not depending on the parameters,
 \begin{align*}
-\ell(\nu, \lambda) \stackrel{\nu, \lambda}{\propto} \frac{n}{2} \ln(\lambda) -  - \frac{\lambda}{2\nu^2} \sum_{i=1}^n (y_i - 2\nu + \nu^2/y_i)
+\ell(\nu, \lambda) \stackrel{\nu, \lambda}{\propto} \frac{n}{2} \ln(\lambda) -  \frac{\lambda}{2\nu^2} \sum_{i=1}^n y_i + \frac{n\lambda}{\nu} - \frac{\lambda}{2} \sum_{i=1}^n \frac{1}{y_i}
 \end{align*}
 and we readily see that the model is an exponential family with sufficient statistics $t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i$ and $t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}$.
 
+We derive the score vector and information,
+\begin{align*}
+U(\nu, \lambda) &= \begin{pmatrix} \frac{\partial \ell(\nu, \lambda)}{\partial \nu} \\\frac{\partial \ell(\nu, \lambda)}{\partial \lambda} \end{pmatrix}
+\\&= \begin{pmatrix}
+\frac{\lambda \sum_{i=1}^n y_i}{\nu^3} - \frac{n\lambda}{\nu^2} \\
+\frac{n}{2\lambda} +  \frac{\sum_{i=1}^n y_i}{2\nu^2}  + \frac{n}{\nu} - \frac{\sum_{i=1}^n y_i^{-1}}{2} 
+\end{pmatrix}
+\end{align*}
+and 
+\begin{align*}
+j(\nu, \lambda) &= -\begin{pmatrix} \frac{\partial^2 \ell(\nu, \lambda)}{\partial \nu^2} & \frac{\partial^2 \ell(\nu, \lambda)}{\partial \nu \partial \lambda} \\ \frac{\partial^2 \ell(\nu, \lambda)}{\partial \lambda \partial \nu } & \frac{\partial^2 \ell(\nu, \lambda)}{\partial \lambda^2} \end{pmatrix}
+\\&= \begin{pmatrix}
+\frac{3\lambda \sum_{i=1}^n y_i}{\nu^4} - \frac{2n\lambda}{\nu^3} & -\frac{\sum_{i=1}^n y_i}{\nu^3} + \frac{n}{\nu^2} \\
+ -\frac{\sum_{i=1}^n y_i}{\nu^3} + \frac{n}{\nu^2} &\frac{n}{2\lambda^2}
+\end{pmatrix}
+\end{align*}
+To compute the expected information, we need to consider the random counterpart of this and replace values of $Y_i$ by their $\mathsf{E}(Y_i)=\nu$, so
+\begin{align*}
+i(\nu, \lambda) = \begin{pmatrix}
+\frac{n\lambda}{\nu^3} & 0 \\
+ 0 &\frac{n}{2\lambda^2}
+\end{pmatrix}
+\end{align*}
+and the parameters are asymptotically independent.
+<!--
 The joint prior is of the form
 \begin{align*}
 p(\lambda) &\propto \lambda^{\alpha-1}\exp(-\lambda \beta) \\
 p(\nu \mid \lambda) & \propto \frac{(\lambda \tau)^{1/2}}{\nu^2}\exp\left\{-\frac{\lambda\tau }{2}(\nu^{-1}-\mu)^2\right\},
 \end{align*}
 where the last step follows from a change of variable.
-
+-->
 
 :::
 
-
-## Exercise 1.3
-
-Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
-\begin{align*}
-g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau > 0
-\end{align*}
-as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
-
-1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau)$.
-2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
-3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
- degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
-4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
-
-## Exercise 1.4
-
-The ratio-of-uniform method, implemented in the [`rust` **R** package](https://paulnorthrop.github.io/rust/index.html), can be used to simulate independent draws from an unnormalized density function assuming the latter is bounded after use of a Box--Cox transformation.
-
-The following code produces independent draws from a univeriate distribution
-```{r}
-#| eval: true
-#| echo: true
-set.seed(80601)
-nobs <- 10L # number of observations
-ybar <- 8   # average waiting time
-B <- 1000L  # number of draws
-# Un-normalized log posterior: scaled log likelihood + log prior
-upost <- function(x){
-  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +
-    log(2) + dt(x = x, df = 1, log = TRUE)}
-post_samp <- rust::ru(logf = upost,
-                      n = B,
-                      d = 1,  # dimension of parameter (scalar)
-                      init = nobs/ybar)$sim_vals # initial value of mode
-```
-
-Estimate using the Monte Carlo sample:
-
-1. the probability that the waiting time is between 3 and 15 minutes
-2. the average waiting time
-3. the standard deviation of the waiting time

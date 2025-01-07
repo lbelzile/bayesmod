@@ -4,8 +4,20 @@ title: "Exercise 4"
 
 
 
+## Exercise 4.1
 
-Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.
+Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
+\begin{align*}
+g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau > 0
+\end{align*}
+as a candidate distribution for rejection sampling from $\mathsf{No}(0,1).$
+
+1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau).$
+2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
+3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
+ degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
+4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
+
 
 ## Exercise 4.2
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,10 +34,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -181,6 +181,12 @@ window.Quarto = {
  <span class="menu-text">Exercise 1</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Solution 1</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -261,13 +267,9 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-1.1" id="toc-exercise-1.1" class="nav-link active" data-scroll-target="#exercise-1.1">Exercise 1.1</a></li>
+  <li><a href="#exercise-1.1---for-credit" id="toc-exercise-1.1---for-credit" class="nav-link active" data-scroll-target="#exercise-1.1---for-credit">Exercise 1.1 - <strong>for credit</strong></a></li>
   <li><a href="#exercise-1.2" id="toc-exercise-1.2" class="nav-link" data-scroll-target="#exercise-1.2">Exercise 1.2</a></li>
   <li><a href="#exercise-1.3" id="toc-exercise-1.3" class="nav-link" data-scroll-target="#exercise-1.3">Exercise 1.3</a></li>
-  <li><a href="#exercise-1.4" id="toc-exercise-1.4" class="nav-link" data-scroll-target="#exercise-1.4">Exercise 1.4</a>
-  <ul class="collapse">
-  <li><a href="#exercise-1.5" id="toc-exercise-1.5" class="nav-link" data-scroll-target="#exercise-1.5">Exercise 1.5</a></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -293,27 +295,20 @@ window.Quarto = {
 </header>
 
 
-<section id="exercise-1.1" class="level1">
-<h1>Exercise 1.1</h1>
-<p>Consider <span class="math inline">\(\boldsymbol{Y}=(Y_1, \ldots, Y_3)^\top \in \mathbb{S}_{2}\)</span> a trivariate vector, where <span class="math inline">\(\boldsymbol{Y} \sim \mathsf{Dirichlet}(\alpha_1, \alpha_2, \alpha_3)\)</span></p>
+<section id="exercise-1.1---for-credit" class="level1">
+<h1>Exercise 1.1 - <strong>for credit</strong></h1>
+<p>Consider the geometric distribution with mass function <span class="math display">\[\begin{align*}
+f(y; p) = p(1-p)^{y}, \qquad y = 0, 1, 2, \ldots;
+\end{align*}\]</span> the latter is used to model the number of failures <span class="math inline">\(Y\)</span> from independent trials until a first success, the latter with probability <span class="math inline">\(p\)</span>.</p>
 <ol type="a">
-<li>Derive the marginal distribution of <span class="math inline">\((Y_1, Y_2)\)</span>.</li>
-<li>Derive the conditional distribution of <span class="math inline">\(Y_3 \mid (Y_1, Y_2)\)</span>.</li>
+<li>If <span class="math inline">\(Y \mid P=p \sim \mathsf{geom}(p)\)</span> and <span class="math inline">\(P \sim \mathsf{beta}(\alpha_1, \alpha_2)\)</span>, show that <span class="math inline">\(P \mid Y=y\)</span> is beta distributed and obtain the parameters of the latter.</li>
+<li>Obtain the marginal distribution of <span class="math inline">\(Y\)</span> and show that it is a special case of the beta-negative binomial distribution.</li>
+<li>Using the tower property, compute the unconditional mean and variance of <span class="math inline">\(Y\)</span>.</li>
+<li>Use forward sampling (drawing first observations from <span class="math inline">\(P\)</span>, then from <span class="math inline">\(Y \mid P\)</span> to simulate observations from the marginal of <span class="math inline">\(Y\)</span>. Compare the distribution with that of <span class="math inline">\(Y \mid p\)</span> using a bar plot and verify the formulas for the expected value and variance derived previously using Monte Carlo integration.</li>
 </ol>
 </section>
 <section id="exercise-1.2" class="level1">
 <h1>Exercise 1.2</h1>
-<p>Consider the geometric distribution with mass function <span class="math display">\[\begin{align*}
-f(y; p) = p(1-p)^{y-1}, \qquad y = 1, 2, \ldots;
-\end{align*}\]</span> the latter is used to model the number of independent trials <span class="math inline">\(Y\)</span> until a first success, the latter with probability <span class="math inline">\(p\)</span>.</p>
-<ol type="a">
-<li>Show that the geometric distribution <span class="math inline">\(\mathsf{geom}(p)\)</span> is an exponential family.</li>
-<li>Show that the <span class="math inline">\(\mathsf{beta}(\alpha_1, \alpha_2)\)</span> distribution is conjugate to the geometric distribution.</li>
-<li>If <span class="math inline">\(Y \mid P=p \sim \mathsf{geom}(p)\)</span> and <span class="math inline">\(P \sim \mathsf{beta}(\alpha_1, \alpha_2)\)</span>, show that <span class="math inline">\(P \mid Y=y\)</span> is beta distributed and obtain the parameters of the latter.</li>
-</ol>
-</section>
-<section id="exercise-1.3" class="level1">
-<h1>Exercise 1.3</h1>
 <p>Linear mixed effect regression model specifies that response vectors for individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\boldsymbol{Y}_i \in \mathbb{R}^k\)</span>, are Gaussian. The model includes model matrix <span class="math inline">\(\mathbf{X}_i\)</span> with fixed effect coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>, and another <span class="math inline">\(k\times l\)</span> model matrix <span class="math inline">\(\mathbf{Z}_i\)</span> with random effects. The hierarchical formulation of the model is <span class="math display">\[\begin{align*}
 \boldsymbol{Y}_i \mid \mathcal{B}_i=\boldsymbol{b}_i &amp;\sim \mathsf{Gauss}_k(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\boldsymbol{b}_i, \sigma^2 \mathbf{I}_k) \\
 \mathcal{B}_i &amp; \sim \mathsf{Gauss}_l(\boldsymbol{0}_k, \boldsymbol{\Omega})
@@ -323,29 +318,17 @@ f(y; p) = p(1-p)^{y-1}, \qquad y = 1, 2, \ldots;
 <li>Hence obtain the parameters of the joint distribution of <span class="math inline">\((\boldsymbol{Y}_i^\top, \mathcal{B}_i^\top)^\top\)</span>.</li>
 </ol>
 </section>
-<section id="exercise-1.4" class="level1">
-<h1>Exercise 1.4</h1>
+<section id="exercise-1.3" class="level1">
+<h1>Exercise 1.3</h1>
 <p>Consider a simple random sample of size <span class="math inline">\(n\)</span> from the Wald distribution, with density <span class="math display">\[\begin{align*}
 f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y &gt; 0)
-\end{align*}\]</span> for location <span class="math inline">\(\nu &gt;0\)</span> and shape <span class="math inline">\(\tau&gt;0\)</span>.</p>
+\end{align*}\]</span> for location <span class="math inline">\(\nu &gt;0\)</span> and shape <span class="math inline">\(\tau&gt;0\)</span>. You may take for given that the expected value of the Wald distribution is <span class="math inline">\(\mathsf{E}(Y) = \nu\)</span>.</p>
 <ol type="a">
 <li>Write down the likelihood and show that it can be written in terms of the sufficient statistics <span class="math inline">\(\sum_{i=1}^n y_i\)</span> and <span class="math inline">\(\sum_{i=1} y_i^{-1}\)</span>.</li>
 <li>Derive the Fisher information matrix</li>
 </ol>
-<section id="exercise-1.5" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-1.5">Exercise 1.5</h2>
-<p>Consider the Laplace family of distribution, <span class="math inline">\(\mathsf{La}(\nu, \tau)\)</span>, with density <span class="math display">\[\begin{align*}
-g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau &gt; 0
-\end{align*}\]</span> as a candidate distribution for rejection sampling from <span class="math inline">\(\mathsf{No}(0,1)\)</span>.</p>
-<ol type="1">
-<li>Provide an inversion sampling algorithm to generate from <span class="math inline">\(\mathsf{La}(\nu, \tau)\)</span>.</li>
-<li>Can you use the proposal to generate from a standard Gaussian? for Student-<span class="math inline">\(t\)</span> with 1 degree of freedom? Justify your answer.</li>
-<li>Consider as proposal a location-scale version of the Student-t with <span class="math inline">\(\nu=3\)</span> degrees of freedom. Find the optimal location and scale parameters and the upper bound <span class="math inline">\(C\)</span> for your choice.</li>
-<li>Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.</li>
-</ol>
 <!--
 The ratio-of-uniform method, implemented in the [`rust` **R** package](https://paulnorthrop.github.io/rust/index.html), can be used to simulate independent draws from an unnormalized density function assuming the latter is bounded after use of a Box--Cox transformation.
-
 
 
 
@@ -371,7 +354,6 @@ post_samp <- rust::ru(logf = upost,
 
 
 
-
 Estimate using the Monte Carlo sample:
 
 1. the probability that the waiting time is between 20 and 40 seconds
@@ -381,7 +363,6 @@ Estimate using the Monte Carlo sample:
 -->
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
