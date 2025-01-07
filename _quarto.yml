@@ -74,23 +74,29 @@ website:
         - exercises/index.qmd
         - section: "1. Introduction"
           contents:
-             - exercises/01-exercise.qmd
-             - exercises/01-solution.qmd
+             - text: "Exercise"
+               file: exercises/01-exercise.qmd
+             - text: "Solution"
+               file: exercises/01-solution.qmd
         - section: "2. Bayesics"
           contents:
-             - exercises/02-exercise.qmd
+             - text: "Exercise"
+               file: exercises/02-exercise.qmd
              #- exercises/02-solution.qmd
         - section: "3. Priors"
           contents:
-             - exercises/03-exercise.qmd
+             - text: "Exercise"
+               file: exercises/03-exercise.qmd
              #- exercises/03-solution.qmd
         - section: "4. Metropolis--Hastings"
           contents:
-             - exercises/04-exercise.qmd
+             - text: "Exercise"
+               file: exercises/04-exercise.qmd
              #- exercises/04-solution.qmd
         - section: "5. Gibbs sampling"
           contents:
-             - exercises/05-exercise.qmd        
+             - text: "Exercise"
+               file: exercises/05-exercise.qmd        
              #- exercises/05-solution.qmd
   page-footer:
     left: |

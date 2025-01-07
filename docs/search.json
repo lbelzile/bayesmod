@@ -644,18 +644,6 @@
     "text": "Exercise 5.2\nImplement the Bayesian LASSO for the diabetes cancer surgery from package lars. Check Park & Casella (2008) for the details of the Gibbs sampling.\n\nFit the model for a range of values of \\(\\lambda\\) and produce parameter estimate paths to replicate Figure 2 of the paper.\nCheck the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?\nImplement the method of section 3.1 from Park & Casella (2008) by adding \\(\\lambda\\) as a parameter.\nFor three models with different values of \\(\\lambda\\), compute the widely applicable information criterion (WAIC) and use it to assess predictive performance.\n\n\nSolution. We first setup a Gibbs sampler for a given value of \\(\\lambda\\), or using the empirical Bayes estimator provided in section 3.1. The effective sampling size for fixed \\(\\lambda\\) is good. If we let the parameter varies, the performance degrades and we obtain an effective size shy of 1000 for 10K iterations for \\(\\lambda\\), and comfortably above 5000 for others.\n\ndata(diabetes, package = \"lars\")\nbayeslasso &lt;- function(lambda = NULL, \n                       B = 1e4L,\n                       x = diabetes$x, \n                       y = diabetes$y){\n  stopifnot(is.matrix(x), is.vector(y))\n  # Scale inputs in case\n  x &lt;- scale(x, center = TRUE, scale = FALSE)\n  y &lt;- y - mean(y)\n  # Check method\n  if(is.null(lambda)){\n    method &lt;- \"empbayes\"\n  } else{\n    method &lt;- \"fixed\" \n  }\n  burnin &lt;- 250L\n  # Precompute quantities and dimensions\n  xtx &lt;- crossprod(x)\n  p &lt;- ncol(x)\n  n &lt;- nrow(x)\n  # Obtain initial estimates\n  linmod &lt;- lm(y ~ x - 1)\n  betaols &lt;- coef(linmod)\n  beta.curr &lt;- betaols\n  sigmasq.curr &lt;- mean(residuals(linmod)^2)\n  tausqinv.curr &lt;- rep(1, p)\n  # Value reported in the text for the optimal parameter: lambda = 0.237\n  beta.ind &lt;- 1:p\n  sigmasq.ind &lt;- p + 1L\n  tausq.ind &lt;- seq(from = p + 2L, length.out = p, by = 1L)\n  chains &lt;- matrix(0, nrow = B, ncol = p + 1 + p + \n                     ifelse(method == \"fixed\", 0,1))\n  if(method == \"fixed\"){\n    colnames(chains) &lt;- c(paste0(\"beta\", 1:p), \"sigmasq\",\n                          paste0(\"tausq\", 1:p))\n    lambdasq.curr &lt;- lambda[1]^2\n  } else{\n    colnames(chains) &lt;- c(paste0(\"beta\", 1:p), \"sigmasq\", \n                          paste0(\"tausq\", 1:p), \"lambda\")\n    lambdasq.curr &lt;- p*sqrt(sigmasq.curr)/sum(abs(betaols))\n    lambdasq.ind &lt;- ncol(chains)\n  }\n# MCMC loop\nfor(b in seq_len(B + burnin)){\n  ind &lt;- pmax(1, b-burnin)\n  Ainv &lt;- solve(xtx + diag(tausqinv.curr))\n  beta.curr &lt;- chains[ind,beta.ind] &lt;- as.numeric(\n    mvtnorm::rmvnorm(\n      n = 1, \n      mean = as.numeric(Ainv %*% t(x) %*% y), \n      sigma = sigmasq.curr*Ainv))\n  sigmasq.curr &lt;- chains[ind, sigmasq.ind] &lt;- 1/rgamma(\n    n = 1, \n    shape = (n-1+p)/2,\n    rate = sum((y-x %*% beta.curr)^2)/2 + \n      sum(beta.curr^2*tausqinv.curr)/2)\n  # Compute marginal posterior mean for lambda, using section 3.1\n  sumexpect &lt;- 0\n  for(j in 1:p){\n    tausqinv.curr[j] &lt;- actuar::rinvgauss(\n      n = 1, \n      mean = sqrt(lambdasq.curr*sigmasq.curr)/abs(beta.curr[j]),\n      dispersion = 1/lambdasq.curr)\n    if(method != \"fixed\"){\n    sumexpect &lt;- sumexpect + mean(1/actuar::rinvgauss(\n      n = 1000, \n      mean = sqrt(lambdasq.curr*sigmasq.curr)/abs(beta.curr[j]),\n      dispersion = 1/lambdasq.curr))\n    }\n  }\n  chains[ind, tausq.ind] &lt;- 1/tausqinv.curr\n  if(method != \"fixed\"){\n    lambdasq.curr &lt;- chains[ind, lambdasq.ind] &lt;- 2*p/sumexpect\n  }\n}\n  if(method != \"fixed\"){\n  chains[, lambdasq.ind] &lt;- sqrt(chains[, lambdasq.ind])\n}\n# Cast Markov chains to mcmc class object.\nchains.mcmc &lt;- coda::as.mcmc(chains)\n# Effective sample size\ness &lt;- as.integer(round(coda::effectiveSize(chains.mcmc), 0))\n\n# Compute WAIC from log pointwise density\nlppd &lt;- 0\npenalty &lt;- 0\nfor(i in seq_len(n)){\n  lppd_i &lt;- dnorm(\n    x = y[i], \n    mean = as.numeric(chains[,beta.ind] %*% c(x[i,])), \n    sd = sqrt(chains[,sigmasq.ind]), \n    log = TRUE)\n  lppd &lt;- lppd + mean(lppd_i)\n  penalty &lt;- penalty + var(lppd_i)\n}\nwaic &lt;- (-lppd + penalty)/n\nl1norm &lt;- mean(rowSums(abs(chains[,beta.ind])))\n\n# Parameter estimates and 95% equitailed credible intervals\nquant &lt;- t(apply(chains, 2, \n                quantile, prob = c(0.025, 0.5, 0.975)))\nregpar &lt;- as.data.frame(cbind(quant,\n                colMeans(chains),\n                coda::batchSE(chains.mcmc),\n                ess))\nregpar$pars &lt;- rownames(quant)\nrownames(regpar) &lt;- NULL\ncolnames(regpar) &lt;- c(\"lower\", \"median\", \"upper\", \n                      \"mean\", \"se\", \"ess\", \"par\")\nregpar &lt;- regpar[,c(7,4:5,1:3,6)]\nattr(regpar, \"waic\") &lt;- waic\nattr(regpar, \"l1norm\") &lt;- l1norm\n return(regpar)\n}\n\n# Call the MCMC sampler\nset.seed(2023)\nlasso_empbayes &lt;- bayeslasso(lambda = NULL)\n# Extract the value of WAIC\nwaic &lt;- attr(lasso_empbayes, \"waic\")\n\n\n\n\n\n\n\n\n\nFigure 1: Standardized median posterior estimates of the coefficients for the Bayesian LASSO with 95 percent equitailed credible intervals, with \\(\\lambda\\) estimated using empirical Bayes. Ordinary least square estimates are denoted by crosses.\n\n\n\n\n\nThe plot corresponds to Figure 2 of Park & Casella (2008) and the posterior summaries, reported in Table 1, are also in line with those of the paper.\n\n\n\n\nTable 1: Estimates posterior summaries from the Bayesian LASSO, based on 10K draws. Posterior means and adjusted standard errors, posterior median and equitailed 95 percent credible intervals, effective sample.\n\n\n\n\n\n\npar\nmean\nse\nlower\nmedian\nupper\ness\n\n\n\n\nbeta1\n-3.14\n0.58\n-112.92\n-2.34\n105.68\n10000\n\n\nbeta2\n-214.04\n0.58\n-331.89\n-213.49\n-97.58\n9012\n\n\nbeta3\n523.41\n0.76\n393.47\n523.87\n656.33\n9062\n\n\nbeta4\n307.64\n0.72\n177.38\n307.69\n439.33\n8957\n\n\nbeta5\n-187.12\n2.60\n-587.60\n-170.71\n125.58\n5089\n\n\nbeta6\n7.79\n1.92\n-272.14\n-1.62\n344.59\n6056\n\n\nbeta7\n-154.43\n1.62\n-385.12\n-153.23\n72.40\n5259\n\n\nbeta8\n96.44\n1.60\n-131.62\n87.10\n353.40\n6460\n\n\nbeta9\n524.09\n1.26\n331.93\n520.90\n727.05\n6630\n\n\nbeta10\n64.21\n0.69\n-49.05\n61.87\n188.78\n8897\n\n\nsigmasq\n2952.78\n2.00\n2585.93\n2945.02\n3370.20\n9511\n\n\ntausq1\n20.55\n0.26\n0.24\n11.13\n93.70\n10000\n\n\ntausq2\n34.75\n0.33\n3.42\n25.19\n122.06\n8868\n\n\ntausq3\n58.44\n0.36\n13.42\n49.09\n155.41\n9375\n\n\ntausq4\n41.99\n0.39\n6.09\n32.35\n133.19\n8972\n\n\ntausq5\n34.17\n0.45\n1.03\n24.45\n122.56\n5159\n\n\ntausq6\n26.82\n0.38\n0.57\n17.18\n105.39\n7441\n\n\ntausq7\n31.06\n0.35\n1.04\n21.46\n118.21\n8954\n\n\ntausq8\n27.47\n0.33\n0.56\n17.94\n107.05\n8551\n\n\ntausq9\n59.02\n0.47\n12.95\n49.73\n160.42\n7805\n\n\ntausq10\n23.35\n0.30\n0.40\n13.66\n102.21\n9703\n\n\nlambda\n0.24\n0.00\n0.21\n0.24\n0.26\n1038\n\n\n\n\n\n\n\n\nFor the last part, we can simply run the MCMC and find the value of \\(\\lambda\\) that yields the lowest value of WAIC.\n\nset.seed(2023)\nblasso1 &lt;- bayeslasso(lambda = 0.1)\nblasso2 &lt;- bayeslasso(lambda = 0.2)\nblasso3 &lt;- bayeslasso(lambda = 1)\n2*length(diabetes$y)*c(attr(blasso1, \"waic\"), attr(blasso2, \"waic\"), attr(blasso3, \"waic\"))\n\n[1] 4802.449 4801.923 4804.496"
   },
   {
-    "objectID": "exercises/01-solution.html",
-    "href": "exercises/01-solution.html",
-    "title": "Solution 1",
-    "section": "",
-    "text": "Exercise 1.2\nLinear mixed effect regression model specifies that response vectors for individual \\(i\\), \\(\\boldsymbol{Y}_i \\in \\mathbb{R}^k\\), are Gaussian. The model includes model matrix \\(\\mathbf{X}_i\\) with fixed effect coefficients \\(\\boldsymbol{\\beta}\\), and another \\(k\\times l\\) model matrix \\(\\mathbf{Z}_i\\) with random effects. The hierarchical formulation of the model is \\[\\begin{align*}\n\\boldsymbol{Y}_i \\mid \\mathcal{B}_i=\\boldsymbol{b}_i &\\sim \\mathsf{Gauss}_k(\\mathbf{X}_i\\boldsymbol{\\beta} + \\mathbf{Z}_i\\boldsymbol{b}_i, \\sigma^2 \\mathbf{I}_k) \\\\\n\\mathcal{B}_i & \\sim \\mathsf{Gauss}_l(\\boldsymbol{0}_k, \\boldsymbol{\\Omega})\n\\end{align*}\\]\n\nUsing the tower property, derive the marginal mean and covariance matrix of \\(\\boldsymbol{Y}_i\\)\nHence obtain the parameters of the joint distribution of \\((\\boldsymbol{Y}_i^\\top, \\mathcal{B}_i^\\top)^\\top\\).\n\n\nSolution. Using the law of iterated expectation and variance\n\\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{Y}_i}(\\boldsymbol{Y}_i) & =\\mathsf{E}_{\\mathcal{B}_i}\\left\\{\\mathsf{E}_{\\boldsymbol{Y}_i \\mid \\mathcal{B}_i}(\\boldsymbol{Y}_i)\\right\\} \\\\&=  \\mathsf{E}_{\\mathcal{B}_i}(\\mathbf{X}_i\\boldsymbol{\\beta} + \\mathbf{Z}_i\\mathcal{B}_i) \\\\&= \\mathbf{X}_i\\boldsymbol{\\beta}\n\\end{align*}\\]\n\\[\\begin{align*}\n\\mathsf{Va}_{\\boldsymbol{Y}_i}(\\boldsymbol{Y}_i) & =\\mathsf{Va}_{\\mathcal{B}_i}\\left\\{\\mathsf{E}_{\\boldsymbol{Y}_i \\mid \\mathcal{B}_i}(\\boldsymbol{Y}_i)\\right\\} + \\mathsf{E}_{\\mathcal{B}_i}\\left\\{\\mathsf{Va}_{\\boldsymbol{Y}_i \\mid \\mathcal{B}_i}(\\boldsymbol{Y}_i)\\right\\} \\\\&=  \\mathsf{Va}_{\\mathcal{B}_i}(\\mathbf{X}_i\\boldsymbol{\\beta} + \\mathbf{Z}_i\\mathcal{B}_i) +\\mathsf{E}_{\\mathcal{B}_i}(\\sigma^2\\mathbf{I}_k) \\\\&= \\mathbf{Z}_i\\boldsymbol{\\Omega}\\boldsymbol{Z}_i^\\top + \\sigma^2\\mathbf{I}_k.\n\\end{align*}\\]\nSince the conditional and marginal are Gaussian, and the product of their density functions is also \\(\\exp(-\\cdot)\\), with \\(\\cdot\\) quadratic in \\(\\boldsymbol{Y}_i\\) and \\(\\mathcal{B}_i\\), it must be multivariate Gaussian. As the latter is fully characterized by the mean and variance, it suffices to derive the covariance between \\(\\boldsymbol{Y}_i\\) and \\(\\mathcal{B}_i\\), which is the only missing piece of information. The latter is by definition\n\\[\\begin{align*}\n\\mathsf{Co}(\\boldsymbol{Y}_i,\\mathcal{B}_i) & = \\mathsf{E}_{\\boldsymbol{Y}_i,\\mathcal{B}_i}\\left[\\left\\{\\boldsymbol{Y}_i - \\mathsf{E}_{\\boldsymbol{Y}_i}(\\boldsymbol{Y}_i\\right\\}\\left\\{\\mathcal{B}_i - \\mathsf{E}_{\\mathcal{B}_i}(\\mathcal{B}_i)\\right\\}^\\top\\right]\n\\\\&= \\mathsf{E}_{\\boldsymbol{Y}_i,\\mathcal{B}_i}\\{(\\boldsymbol{Y}_i - \\mathbf{X}_i\\boldsymbol{\\beta})\\mathcal{B}_i^\\top\\}\n\\\\&= \\mathsf{E}_{\\mathcal{B}_i}\\left[\\mathsf{E}_{\\boldsymbol{Y}_i \\mid \\mathcal{B}_i}\\{(\\boldsymbol{Y}_i - \\mathbf{X}_i\\boldsymbol{\\beta})\\mathcal{B}_i^\\top\\}\\right]\n\\\\&= \\mathbf{Z}_i\\mathsf{E}_{\\mathcal{B}_i}(\\mathcal{B}_i\\mathcal{B}_i^\\top)\n\\\\&=\\mathbf{Z}_i\\boldsymbol{\\Omega}\n\\end{align*}\\]\nand so we find \\[\\begin{align*}\n\\begin{pmatrix}\\boldsymbol{Y}_i \\\\ \\mathcal{B}_i\n\\end{pmatrix}\\sim \\mathsf{Gauss}_{k+l} \\left\\{ \\begin{pmatrix} \\mathbf{X}_i \\boldsymbol{\\beta} \\\\ \\boldsymbol{0}_l \\end{pmatrix}, \\begin{pmatrix} \\mathbf{Z}_i\\boldsymbol{\\Omega}\\boldsymbol{Z}_i^\\top + \\sigma^2\\mathbf{I}_k & \\mathbf{Z}_i\\boldsymbol{\\Omega} \\\\ \\boldsymbol{\\Omega}\\mathbf{Z}_i^\\top & \\boldsymbol{\\Omega}\\end{pmatrix}\\right\\}.\n\\end{align*}\\]\n\n\n\nExercise 1.3\nConsider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\). You may take for given that the expected value of the Wald distribution is \\(\\mathsf{E}(Y) = \\nu\\).\nWrite down the likelihood and show that it can be written in terms of the sufficient statistics \\(\\sum_{i=1}^n y_i\\) and \\(\\sum_{i=1} y_i^{-1}\\).\n\nSolution. The log likelihood for an independent and identically distributed sample is, up to terms not depending on the parameters, \\[\\begin{align*}\n\\ell(\\nu, \\lambda) \\stackrel{\\nu, \\lambda}{\\propto} \\frac{n}{2} \\ln(\\lambda) -  \\frac{\\lambda}{2\\nu^2} \\sum_{i=1}^n y_i + \\frac{n\\lambda}{\\nu} - \\frac{\\lambda}{2} \\sum_{i=1}^n \\frac{1}{y_i}\n\\end{align*}\\] and we readily see that the model is an exponential family with sufficient statistics \\(t_1(\\boldsymbol{y}) = \\sum_{i=1}^n y_i\\) and \\(t_2(\\boldsymbol{y}) = \\sum_{i=1}^n y_i^{-1}\\).\nWe derive the score vector and information, \\[\\begin{align*}\nU(\\nu, \\lambda) &= \\begin{pmatrix} \\frac{\\partial \\ell(\\nu, \\lambda)}{\\partial \\nu} \\\\\\frac{\\partial \\ell(\\nu, \\lambda)}{\\partial \\lambda} \\end{pmatrix}\n\\\\&= \\begin{pmatrix}\n\\frac{\\lambda \\sum_{i=1}^n y_i}{\\nu^3} - \\frac{n\\lambda}{\\nu^2} \\\\\n\\frac{n}{2\\lambda} +  \\frac{\\sum_{i=1}^n y_i}{2\\nu^2}  + \\frac{n}{\\nu} - \\frac{\\sum_{i=1}^n y_i^{-1}}{2}\n\\end{pmatrix}\n\\end{align*}\\] and \\[\\begin{align*}\nj(\\nu, \\lambda) &= -\\begin{pmatrix} \\frac{\\partial^2 \\ell(\\nu, \\lambda)}{\\partial \\nu^2} & \\frac{\\partial^2 \\ell(\\nu, \\lambda)}{\\partial \\nu \\partial \\lambda} \\\\ \\frac{\\partial^2 \\ell(\\nu, \\lambda)}{\\partial \\lambda \\partial \\nu } & \\frac{\\partial^2 \\ell(\\nu, \\lambda)}{\\partial \\lambda^2} \\end{pmatrix}\n\\\\&= \\begin{pmatrix}\n\\frac{3\\lambda \\sum_{i=1}^n y_i}{\\nu^4} - \\frac{2n\\lambda}{\\nu^3} & -\\frac{\\sum_{i=1}^n y_i}{\\nu^3} + \\frac{n}{\\nu^2} \\\\\n-\\frac{\\sum_{i=1}^n y_i}{\\nu^3} + \\frac{n}{\\nu^2} &\\frac{n}{2\\lambda^2}\n\\end{pmatrix}\n\\end{align*}\\] To compute the expected information, we need to consider the random counterpart of this and replace values of \\(Y_i\\) by their \\(\\mathsf{E}(Y_i)=\\nu\\), so \\[\\begin{align*}\ni(\\nu, \\lambda) = \\begin{pmatrix}\n\\frac{n\\lambda}{\\nu^3} & 0 \\\\\n0 &\\frac{n}{2\\lambda^2}\n\\end{pmatrix}\n\\end{align*}\\] and the parameters are asymptotically independent.",
-    "crumbs": [
-      "Exercises",
-      "1. Introduction",
-      "Solution 1"
-    ]
-  },
-  {
     "objectID": "example/installation.html",
     "href": "example/installation.html",
     "title": "Installing R and RStudio",
@@ -923,7 +911,7 @@
     "crumbs": [
       "Exercises",
       "1. Introduction",
-      "Exercise 1.1"
+      "Exercise"
     ]
   },
   {
@@ -935,7 +923,7 @@
     "crumbs": [
       "Exercises",
       "1. Introduction",
-      "Exercise 1.1"
+      "Exercise"
     ]
   },
   {
@@ -947,7 +935,7 @@
     "crumbs": [
       "Exercises",
       "1. Introduction",
-      "Exercise 1.1"
+      "Exercise"
     ]
   },
   {
@@ -959,7 +947,7 @@
     "crumbs": [
       "Exercises",
       "1. Introduction",
-      "Exercise 1.1"
+      "Exercise"
     ]
   },
   {
@@ -971,7 +959,7 @@
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2.1"
+      "Exercise"
     ]
   },
   {
@@ -983,7 +971,7 @@
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2.1"
+      "Exercise"
     ]
   },
   {
@@ -995,7 +983,7 @@
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2.1"
+      "Exercise"
     ]
   },
   {
@@ -1007,7 +995,7 @@
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2.1"
+      "Exercise"
     ]
   },
   {
@@ -1019,7 +1007,7 @@
     "crumbs": [
       "Exercises",
       "2. Bayesics",
-      "Exercise 2.1"
+      "Exercise"
     ]
   },
   {
@@ -1031,7 +1019,7 @@
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3.1"
+      "Exercise"
     ]
   },
   {
@@ -1043,7 +1031,7 @@
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3.1"
+      "Exercise"
     ]
   },
   {
@@ -1055,7 +1043,7 @@
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3.1"
+      "Exercise"
     ]
   },
   {
@@ -1067,7 +1055,7 @@
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3.1"
+      "Exercise"
     ]
   },
   {
@@ -1079,7 +1067,7 @@
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3.1"
+      "Exercise"
     ]
   },
   {
@@ -1091,7 +1079,7 @@
     "crumbs": [
       "Exercises",
       "3. Priors",
-      "Exercise 3.1"
+      "Exercise"
     ]
   },
   {
@@ -1103,7 +1091,7 @@
     "crumbs": [
       "Exercises",
       "4. Metropolis--Hastings",
-      "Exercise 4"
+      "Exercise"
     ]
   },
   {
@@ -1115,7 +1103,7 @@
     "crumbs": [
       "Exercises",
       "4. Metropolis--Hastings",
-      "Exercise 4"
+      "Exercise"
     ]
   },
   {
@@ -1127,7 +1115,7 @@
     "crumbs": [
       "Exercises",
       "4. Metropolis--Hastings",
-      "Exercise 4"
+      "Exercise"
     ]
   },
   {
@@ -1139,7 +1127,7 @@
     "crumbs": [
       "Exercises",
       "5. Gibbs sampling",
-      "Exercise 5.1"
+      "Exercise"
     ]
   },
   {
@@ -1151,7 +1139,7 @@
     "crumbs": [
       "Exercises",
       "5. Gibbs sampling",
-      "Exercise 5.1"
+      "Exercise"
     ]
   },
   {
@@ -1163,7 +1151,7 @@
     "crumbs": [
       "Exercises",
       "5. Gibbs sampling",
-      "Exercise 5.1"
+      "Exercise"
     ]
   },
   {
