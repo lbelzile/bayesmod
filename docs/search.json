@@ -420,11 +420,18 @@
     "text": "Density versus likelihood\nThe binomial distribution is discrete with support \\(0, \\ldots, n\\), whereas the likelihood is continuous over \\(\\theta \\in [0,1]\\).\n\n\n\n\n\n\n\n\nFigure 1: Binomial density function (left) and scaled likelihood function (right).\n\n\n\n\n\n\n\nIf the density or mass function integrates to 1 over the range of \\(Y\\), the integral of the likelihood over \\(\\theta\\) does not."
   },
   {
-    "objectID": "slides/bayesmod-slides2.html#proportionality",
-    "href": "slides/bayesmod-slides2.html#proportionality",
+    "objectID": "slides/bayesmod-slides2.html#posterior-density-and-proportionality",
+    "href": "slides/bayesmod-slides2.html#posterior-density-and-proportionality",
     "title": "Bayesian modelling",
-    "section": "Proportionality",
-    "text": "Proportionality\nAny term not a function of \\(\\theta\\) can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to\n\\[\\begin{align*}\nL(\\theta; y)p(\\theta) & \\stackrel{\\theta}{\\propto} \\theta^{y}(1-\\theta)^{n-y} \\times \\theta^{\\alpha-1} (1-\\theta)^{\\beta-1}\n\\\\& =\\theta^{y + \\alpha - 1}(1-\\theta)^{n-y + \\beta - 1}\n\\end{align*}\\] the kernel of a beta density with shape parameters \\(y + \\alpha\\) and \\(n-y + \\beta\\).\n\n\nThe symbol \\(\\propto\\), for proportionality, means dropping all terms not an argument of the left hand side."
+    "section": "Posterior density and proportionality",
+    "text": "Posterior density and proportionality\nAny term not a function of \\(\\theta\\) can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to\n\\[\\begin{align*}\nL(\\theta; y)p(\\theta) & \\stackrel{\\theta}{\\propto} \\theta^{y}(1-\\theta)^{n-y} \\times \\theta^{\\alpha-1} (1-\\theta)^{\\beta-1}\n\\\\& =\\theta^{y + \\alpha - 1}(1-\\theta)^{n-y + \\beta - 1}\n\\end{align*}\\] the kernel of a beta density with shape parameters \\(y + \\alpha\\) and \\(n-y + \\beta\\).\n\n\nThe symbol \\(\\propto\\), for proportionality, means dropping all terms not an argument of the left hand side."
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#marginal-likelihood",
+    "href": "slides/bayesmod-slides2.html#marginal-likelihood",
+    "title": "Bayesian modelling",
+    "section": "Marginal likelihood",
+    "text": "Marginal likelihood\nThe marginal likelihood for the \\(Y \\mid P=p \\sim \\mathsf{binom}(n,p)\\) model with prior \\(P \\sim \\mathsf{beta}(\\alpha, \\beta)\\) is \\[\\begin{align*}\np_{Y}(y) = \\binom{n}{y} \\frac{\\mathrm{beta}(\\alpha + y, \\beta + n - y)}{\\mathrm{beta}(\\alpha, \\beta)}, \\quad y \\in\\{0, \\ldots,n\\}.\n\\end{align*}\\] where \\(\\mathrm{beta}(\\alpha, \\beta) = \\Gamma(\\alpha)\\Gamma(\\beta)/\\Gamma(\\alpha+\\beta)\\) is the beta function."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#experiments-and-likelihoods",
@@ -502,6 +509,27 @@
     "title": "Bayesian modelling",
     "section": "Posterior concentration",
     "text": "Posterior concentration\nExcept for stubborn priors, the likelihood contribution dominates in large samples. The impact of the prior is then often negligible.\n\n\nFigure 4: Beta posterior and binomial likelihood with a uniform prior for increasing number of observations (from left to right)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#model-comparison",
+    "href": "slides/bayesmod-slides2.html#model-comparison",
+    "title": "Bayesian modelling",
+    "section": "Model comparison",
+    "text": "Model comparison\nSuppose that we have models \\(\\mathcal{M}_m\\) \\((m=1, \\ldots, M)\\) to be compared, with parameter vectors \\(\\boldsymbol{\\theta}^{(m)}\\) and data vector \\(\\boldsymbol{y}\\) and prior probability \\(\\Pr(\\mathcal{M}_m)\\).\nThe \\(\\color{#c38f16}{\\text{posterior odds}}\\) for models \\(\\mathcal{M}_i\\) vs \\(\\mathcal{M}_j\\) is \\[\\begin{align*}\n\\color{#c38f16}{\\frac{\\Pr(\\mathcal{M}_i \\mid \\boldsymbol{y})}{\\Pr(\\mathcal{M}_j \\mid \\boldsymbol{y})}} =\n\\color{#6e948c}{\\frac{p(\\boldsymbol{y} \\mid \\mathcal{M}_i)}{p(\\boldsymbol{y} \\mid \\mathcal{M}_j)}}\n\\color{#122c43}{\\frac{\\Pr(\\mathcal{M}_i)}{\\Pr(\\mathcal{M}_j)}}\n\\end{align*}\\] equal to the \\(\\color{#6e948c}{\\text{Bayes factor}}\\) \\(\\mathsf{BF}_{ij}\\) times the \\(\\color{#122c43}{\\text{prior odds}}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#bayes-factors",
+    "href": "slides/bayesmod-slides2.html#bayes-factors",
+    "title": "Bayesian modelling",
+    "section": "Bayes factors",
+    "text": "Bayes factors\nThe \\(\\color{#6e948c}{\\text{Bayes factor}}\\) is the ratio of marginal likelihoods, as \\[\\begin{align*}\np(\\boldsymbol{y} \\mid \\mathcal{M}_i) = \\int p(y \\mid \\boldsymbol{\\theta}^{(i)}, \\mathcal{M}_i) p( \\boldsymbol{\\theta}^{(i)} \\mid \\mathcal{M}_i) \\mathrm{d}  \\boldsymbol{\\theta}^{(i)}.\n\\end{align*}\\] Values of \\(\\mathsf{BF}_{ij}&gt;1\\) correspond to model \\(\\mathcal{M}_i\\) being more likely than \\(\\mathcal{M}_j\\).\n\nStrong dependence on the prior \\(p(\\boldsymbol{\\theta}^{(i)} \\mid \\mathcal{M}_i)\\).\nMust use proper priors."
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#bayes-factor-for-the-binomial-model",
+    "href": "slides/bayesmod-slides2.html#bayes-factor-for-the-binomial-model",
+    "title": "Bayesian modelling",
+    "section": "Bayes factor for the binomial model",
+    "text": "Bayes factor for the binomial model\nConsider two models with \\(Y \\mid P^{(i)}=p \\sim \\mathsf{binom}(n, p)\\) and\n\n\\(P^{(1)}\\sim \\mathsf{unif}(0,1)\\)\n\\(P^{(2)}\\sim \\mathsf{1}_{p=0.5}\\)."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#summarizing-posterior-distributions",

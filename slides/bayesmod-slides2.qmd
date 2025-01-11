@@ -269,7 +269,7 @@ If the density or mass function integrates to 1 over the range of $Y$, the integ
 :::
 
 
-## Proportionality
+## Posterior density and proportionality
 
 Any term not a function of $\theta$ can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to
 
@@ -284,6 +284,17 @@ the kernel of a beta density with shape parameters $y + \alpha$ and $n-y + \beta
 The symbol $\propto$, for proportionality, means dropping all terms not an argument of the left hand side.
 
 :::
+
+
+## Marginal likelihood
+
+
+The marginal likelihood for the $Y \mid P=p \sim \mathsf{binom}(n,p)$ model with prior $P \sim \mathsf{beta}(\alpha, \beta)$ is
+\begin{align*}
+p_{Y}(y) = \binom{n}{y} \frac{\mathrm{beta}(\alpha + y, \beta + n - y)}{\mathrm{beta}(\alpha, \beta)}, \quad y \in\{0, \ldots,n\}.
+\end{align*}
+where $\mathrm{beta}(\alpha, \beta) = \Gamma(\alpha)\Gamma(\beta)/\Gamma(\alpha+\beta)$ is the beta function.
+
 
 ## Experiments and likelihoods {.smaller}
 
@@ -709,6 +720,69 @@ g3 <- ggplot() +
     theme_classic()
 g1 + g2 + g3 + plot_layout(guides = 'collect') & theme(legend.position = "bottom")
 ```
+
+
+
+## Model comparison
+
+Suppose that we have models $\mathcal{M}_m$ $(m=1, \ldots, M)$ to be compared, with parameter vectors $\boldsymbol{\theta}^{(m)}$ and data vector $\boldsymbol{y}$ and prior probability $\Pr(\mathcal{M}_m)$. 
+
+The $\color{#c38f16}{\text{posterior odds}}$ for models $\mathcal{M}_i$ vs $\mathcal{M}_j$ is
+\begin{align*}
+\color{#c38f16}{\frac{\Pr(\mathcal{M}_i \mid \boldsymbol{y})}{\Pr(\mathcal{M}_j \mid \boldsymbol{y})}} = 
+\color{#6e948c}{\frac{p(\boldsymbol{y} \mid \mathcal{M}_i)}{p(\boldsymbol{y} \mid \mathcal{M}_j)}} 
+\color{#122c43}{\frac{\Pr(\mathcal{M}_i)}{\Pr(\mathcal{M}_j)}}
+\end{align*}
+equal to the $\color{#6e948c}{\text{Bayes factor}}$  $\mathsf{BF}_{ij}$ times the $\color{#122c43}{\text{prior odds}}$. 
+
+## Bayes factors 
+
+The $\color{#6e948c}{\text{Bayes factor}}$ is the ratio of marginal likelihoods, as
+\begin{align*}
+p(\boldsymbol{y} \mid \mathcal{M}_i) = \int p(y \mid \boldsymbol{\theta}^{(i)}, \mathcal{M}_i) p( \boldsymbol{\theta}^{(i)} \mid \mathcal{M}_i) \mathrm{d}  \boldsymbol{\theta}^{(i)}.
+\end{align*}
+Values of $\mathsf{BF}_{ij}>1$ correspond to model $\mathcal{M}_i$ being more likely than $\mathcal{M}_j$.
+
+- Strong dependence on the prior $p(\boldsymbol{\theta}^{(i)} \mid \mathcal{M}_i)$.
+- Must use proper priors.
+
+
+
+## Bayes factor for the binomial model
+
+
+Consider two models with $Y \mid P^{(i)}=p \sim \mathsf{binom}(n, p)$ and
+
+- $P^{(1)}\sim \mathsf{unif}(0,1)$
+- $P^{(2)}\sim \mathsf{1}_{p=0.5}$. 
+
+
+
+```{r}
+#| eval: true
+#| echo: false 
+#| fig-align: 'center'
+n <- 14
+ys <- 0:14
+# Log of marginal posterior for binom with beta prior (default is uniform)
+log_marg_post_beta <- function(n, y, alpha = 1, beta = 1){
+  lchoose(n, y) + lbeta(alpha + y, beta + n - y) - lbeta(alpha, beta)
+}
+# Log of Bayes factor
+logBF2vs3 <- function(y, n){ # model 2 (beta(1.5,1.5) vs 3 (point mass at 0.5)
+  log_marg_post_beta(n = n, y = y, alpha = 1, beta = 1) - dbinom(x = y, size = n, prob = 0.5, log = TRUE)
+}
+BFs23 <- sapply(ys, function(y){logBF2vs3(y = y, n = n)})
+ggplot(data = data.frame(
+            x = ys, 
+            y = BFs23),
+       mapping = aes(x = x, y = y)) +
+   geom_hline(yintercept = 0, linetype = "dashed") +
+   geom_line(alpha = 0.5) +
+   geom_point(mapping = aes(color = factor(y < 0)), show.legend = FALSE) +
+   labs(x = "number of successes out of 14 trials", y = "", subtitle = "log of Bayes factor") + theme_minimal()
+# plot(ys, BFs, bty = "l", type = "b", ylab = "Bayes factor")
+```  
 
 
 ## Summarizing posterior distributions
