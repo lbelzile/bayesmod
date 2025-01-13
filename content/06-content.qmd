@@ -7,17 +7,18 @@ draft: true
 ## Content
 
 
-- Gibbs sampling
-- Data augmentation
-- Reversible jump
-- Hamiltonian Monte Carlo
+- Bayesian workflow
+- Model comparison and Bayes factors
+- Model diagnostics (WAIC, LOO-CV, etc.)
 
 ## Learning objectives
 
 At the end of the chapter, students should be able to
 
-- implement Gibbs sampling
-- derive the conditional distributions of a model for Gibbs sampling
+- choose suitable test statistics to evaluate model adequacy
+- assess convergence and effective sample size
+- perform model comparisons using Bayes factor or predictive measures
+- diagnose performance of MCMC algorithms and implement potential remedies
 
 
 
@@ -30,8 +31,8 @@ These readings should be completed before class, to ensure timely understanding 
 :::
 
 
-- [Chapter 3 of the course notes](https://lbelzile.github.io/MATH80601A/mcmc.html)
-
+- @Gelman:2020 
+- @Gelman:2014, chapters 6 and 7
 
 ## Complementary readings
 
@@ -39,8 +40,8 @@ These readings should be completed before class, to ensure timely understanding 
 Complementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.
 :::
 
-- @Albert:2009, chapters 6 and 10 (several examples)
-- @McElreath:2020, chapter 9 (non technical)
+
+- @McElreath:2020, chapter 9.5 
 
 
 ## Slides
