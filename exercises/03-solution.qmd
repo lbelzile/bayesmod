@@ -156,16 +156,19 @@ The beta distribution, while matching the moments, is implying very low chance o
 
 :::
 
-## Exercise 3.4
 
-Reproduce the analysis of Example 3.5 (Should you phrase your headline as a question?) of the [course notes](https://lbelzile.github.io/MATH80601A/priors.html#exm-poisson-upworthy-question) using the `upworthy_question` data from the [`hecbayes` package](https://github.com/lbelzile/hecbayes).
+<!-- ## Exercise 3.4 -->
+
+<!-- Reproduce the analysis of Example 3.5 (Should you phrase your headline as a question?) of the [course notes](https://lbelzile.github.io/MATH80601A/priors.html#exm-poisson-upworthy-question) using the `upworthy_question` data from the [`hecbayes` package](https://github.com/lbelzile/hecbayes). -->
 
 
 
-:::{.solution}
+<!-- :::{.solution} -->
 
 ```{r}
 #| message: false
+#| eval: false
+#| echo: false
 data(upworthy_question, package = "hecbayes")
 # Prior parameters
 alpha <- 2.5 # shape
@@ -207,4 +210,4 @@ post_mean <- with(post_data_upworthy_question, mean(yes/no))
 post_mean
 ```
 
-:::
+<!-- ::: -->

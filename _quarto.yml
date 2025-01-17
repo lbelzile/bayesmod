@@ -35,8 +35,8 @@ website:
         file: content/index.qmd
       - text: "Exercises"
         file: exercises/index.qmd
-      - text: "News"
-        file: news/index.qmd
+      - text: "Evaluations"
+        file: evaluations/index.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/MATH80601A/"
  #     - icon: box
@@ -55,7 +55,9 @@ website:
         - section: "Installation"
           contents:
             - text: "**R** and RStudio"
-              file: example/installation.qmd    
+              file: content/installation.qmd
+            - text: "**R** packages"
+              file: content/rpackages.qmd
         - section: "Course content"
           contents:
             - text: "1: Introduction"
@@ -72,32 +74,37 @@ website:
       foreground: "#000000"
       contents:
         - exercises/index.qmd
-        - section: "1. Introduction"
+        - section: "Exercises"
           contents:
-             - text: "Exercise"
+             - text: "1. Introduction"
                file: exercises/01-exercise.qmd
-             - text: "Solution"
-               file: exercises/01-solution.qmd
-        - section: "2. Bayesics"
-          contents:
-             - text: "Exercise"
+             - text: "2. Bayesics"
                file: exercises/02-exercise.qmd
-             #- exercises/02-solution.qmd
-        - section: "3. Priors"
-          contents:
-             - text: "Exercise"
+             - text: "3. Priors"
                file: exercises/03-exercise.qmd
-             #- exercises/03-solution.qmd
-        - section: "4. Metropolis--Hastings"
-          contents:
-             - text: "Exercise"
+             - text: "4. Metropolis-Hastings"
                file: exercises/04-exercise.qmd
-             #- exercises/04-solution.qmd
-        - section: "5. Gibbs sampling"
+             - text: "5. Gibbs sampling"
+               file: exercises/04-exercise.qmd
+        - section: "Solutions"
           contents:
-             - text: "Exercise"
-               file: exercises/05-exercise.qmd        
-             #- exercises/05-solution.qmd
+             - text: "1. Introduction"
+               file: exercises/01-solution.qmd
+             - text: "2. Bayesics"
+               file: exercises/02-solution.qmd
+#             - text: "3. Priors"
+#               file: exercises/03-solution.qmd
+#             - text: "4. Metropolis-Hastings"
+#               file: exercises/04-solution.qmd
+    - title: "Evaluations"
+      style: "docked"
+      search: false
+      foreground: "#000000"
+      contents:
+        - evaluations/index.qmd
+        - text: "Weekly check-in"
+          file: evaluations/weekly-check-in.qmd
+        - evaluations/01-assignment.qmd
   page-footer:
     left: |
       Content {{< fa brands creative-commons >}} {{< var course.copyright_year >}} by [{{< var instructor.name_no_title >}}]({{< var instructor.url >}})<br>

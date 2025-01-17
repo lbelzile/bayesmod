@@ -6,16 +6,16 @@ draft: true
 
 You consider the waiting times between buses coming to HEC. Your bus line has frequent buses, but you decide to check the frequency. From your prior experience, you know that measured waiting times range between 3 and 15 minutes. You collect data over the two first week of classes and get an average of 8 minutes based on 10 observations.
 
-For modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate $\lambda>0$, with associated density $f(x) = \lambda \exp(-\lambda x)$.
+For modelling, we consider data to arise an independent and identically distributed sample from an exponential distribution with rate $\lambda>0,$ with associated density $f(x) = \lambda \exp(-\lambda x).$
 
 ## Exercise 2.1
 
 
 Compute the marginal likelihood when the prior for $\lambda$ is 
 
-1. an exponential distribution with rate $\kappa>0$, with prior density $p(\lambda) = \kappa \exp(-\lambda\kappa)$;
+1. an exponential distribution with rate $\kappa>0,$ with prior density $p(\lambda) = \kappa \exp(-\lambda\kappa)$;
 2. same, but truncated above at 1, so the density is $p(\lambda) = \kappa \exp(-\lambda\kappa)\mathrm{I}\{\lambda \leq 1\}$; the indicator function $\mathrm{I}(\cdot)$ equals one if the condition is true and zero otherwise.
-3. $\lambda \sim \mathsf{Ga}(\alpha, \beta)$, a gamma distribution with shape $\alpha>0$ and rate $\beta>0$, with prior density $p(\lambda) = \beta^\alpha\lambda^{\alpha-1}\exp(-\beta \lambda)/\Gamma(\alpha)$.
+3. $\lambda \sim \mathsf{Ga}(\alpha, \beta),$ a gamma distribution with shape $\alpha>0$ and rate $\beta>0,$ with prior density $p(\lambda) = \beta^\alpha\lambda^{\alpha-1}\exp(-\beta \lambda)/\Gamma(\alpha).$
 
 Deduce that, in all cases above and up to truncation, the posterior distribution is a gamma distribution.
 
@@ -26,7 +26,7 @@ L(\lambda) = \prod_{i=1}^n \lambda \exp(-\lambda y_i) = \lambda^n \exp(-\lambda 
 \end{align*}
 where $\overline{y}=8$ is the sample mean and $n=10$ the number of observations.
 
-The exponential distribution is a special case of the gamma, where $\lambda \sim \mathsf{Exp}(\kappa) \equiv \mathsf{Ga}(1, \kappa)$.
+The exponential distribution is a special case of the gamma, where $\lambda \sim \mathsf{Exp}(\kappa) \equiv \mathsf{Ga}(1, \kappa).$
 
 The posterior densities are equal, up to proportionality, to
 \begin{align*}
@@ -34,7 +34,7 @@ p_1(\lambda \mid y) &\propto\lambda^{n}\exp\{-(n\overline{y}+\kappa)\lambda\} \\
 p_2(\lambda \mid y) &\propto\lambda^{n}\exp\{-(n\overline{y}+\kappa)\lambda\}\mathrm{I}\{\lambda \geq 1\} \\
 p_3(\lambda \mid y) &\propto\lambda^{n+\alpha-1}\exp\{-(n\overline{y}+\beta)\lambda\}
 \end{align*}
-so these are $\mathsf{Ga}(n+1, n\overline{y} + \kappa)$, $\mathsf{Ga}(n+1, n\overline{y} + \kappa)$ truncated over $[0,1]$ and $\mathsf{Ga}(n+\alpha, n\overline{y} + \beta)$.
+so these are $\mathsf{Ga}(n+1, n\overline{y} + \kappa),$ $\mathsf{Ga}(n+1, n\overline{y} + \kappa)$ truncated over $[0,1]$ and $\mathsf{Ga}(n+\alpha, n\overline{y} + \beta).$
 
 Let $\Gamma(\cdot)$ denote the gamma function and $\gamma(a, x)$ the lower incomplete gamma function, $\gamma(a, x= \int_0^x t^{a-1}\exp(-t) \mathrm{d} t.$ The **marginal likelihood** can be obtained either by integrating the product of the likelihood and prior, or upon noting that  
 \begin{align*}
@@ -75,14 +75,14 @@ integrate(f = function(rate){
 
 ## Exercise 2.2
 
-<!-- Specifying priors for the rate is complicated because the units of $\lambda$ are $\text{minutes}^{-1}$. Rather, it makes sense to look at it's reciprocal: if $\lambda \sim \mathsf{Ga}(\alpha, \beta)$, then it's reciprocal $\omega=1/\lambda$ has an inverse gamma distribution, denoted $\omega \sim \mathsf{IGa}(\alpha, \beta)$, -->
+<!-- Specifying priors for the rate is complicated because the units of $\lambda$ are $\text{minutes}^{-1}.$ Rather, it makes sense to look at it's reciprocal: if $\lambda \sim \mathsf{Ga}(\alpha, \beta),$ then it's reciprocal $\omega=1/\lambda$ has an inverse gamma distribution, denoted $\omega \sim \mathsf{IGa}(\alpha, \beta),$ -->
 <!-- with density -->
 <!-- \begin{align*} -->
 <!-- f(y; \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} y^{-\alpha-1} \exp(-\beta/y) -->
 <!-- \end{align*} -->
-<!-- with $\mathsf{E}(\omega) = \beta/(\alpha-1)$ for $\alpha>1$ and $\beta > 0$. -->
+<!-- with $\mathsf{E}(\omega) = \beta/(\alpha-1)$ for $\alpha>1$ and $\beta > 0.$ -->
 
-<!-- Consider the following priors for the expected waiting time, $Y=1/\lambda$. -->
+<!-- Consider the following priors for the expected waiting time, $Y=1/\lambda.$ -->
 
 <!-- 1. an inverse gamma with scale $\beta=50$ and shape $\alpha = 10$ -->
 <!-- 2. an inverse gamma with scale $\beta=5$ and shape $\alpha=1$ (meaning $\lambda \sim \mathsf{Exp}(0.2)$) -->
@@ -91,7 +91,7 @@ integrate(f = function(rate){
 
 
 
-Consider the following priors for the reciprocal expected waiting time, $\lambda$.
+Consider the following priors for the reciprocal expected waiting time, $\lambda.$
 
 1. a gamma with rate $\beta=100$ and shape $\alpha = 10$
 2. an exponential with rate $5$
@@ -181,11 +181,11 @@ g4 <- ggplot() +
 ::: {.solution}
 
 
-As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimate, $\widehat{\lambda}=1/8$, regardless of the prior function (if it is untruncated).
+As the sample size increase, the curve becomes more concentrated around the maximum a posteriori value, which approaches the maximum likelihood estimate, $\widehat{\lambda}=1/8,$ regardless of the prior function (if it is untruncated).
 
-The mode of a gamma distribution with rate $\beta$ and shape $\alpha$ is $(\alpha-1)/\beta$ for $\alpha>1$.
+The mode of a gamma distribution with rate $\beta$ and shape $\alpha$ is $(\alpha-1)/\beta$ for $\alpha>1.$
 
-The truncated distribution (bottom left) is clearly identified from the "stubborn" prior, which is $p(\lambda) \propto \mathrm{I}(1/10 < \lambda < 1/5)/\lambda^2$, so 3C. Prior 1 has an average of 1/10 (less than the MLE) and provides nearly as much information as the data, so it is the more peaked posterior, so 1B. The exponential, or  $\mathsf{Ga}(1,5)$, is much less informative than the likelihood and posterior should be only slightly different for the other, so 2A.
+The truncated distribution (bottom left) is clearly identified from the "stubborn" prior, which is $p(\lambda) \propto \mathrm{I}(1/10 < \lambda < 1/5)/\lambda^2,$ so 3C. Prior 1 has an average of 1/10 (less than the MLE) and provides nearly as much information as the data, so it is the more peaked posterior, so 1B. The exponential, or  $\mathsf{Ga}(1,5),$ is much less informative than the likelihood and posterior should be only slightly different for the other, so 2A.
 
 :::
 
@@ -195,16 +195,18 @@ The truncated distribution (bottom left) is clearly identified from the "stubbor
 
 
 The purpose of this exercise is to show that even one-dimensional numerical integration requires some care.
-Consider a half Cauchy prior over the positive half line, with density $f(x) = 2\pi^{-1}(1+x^2)^{-1}\mathrm{I}(x \geq 0)$. Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes$^{-1}$. Compare this approximation with that of quadrature methods via `integrate` and return the corresponding estimates of the normalizing constant. *Indication*: check the values and make sure the output is sensical. Modify the integrand if necessary.
+Consider a half Cauchy prior over the positive half line, with density 
+$$f(x) = 2\pi^{-1}(1+x^2)^{-1}\mathrm{I}(x \geq 0).$$
+Using a grid approximation in increments of 0.01, evaluate the unnormalized posterior density from 0 until 30 minutes$^{-1}.$ Compare this approximation with that of quadrature methods via `integrate` and return the corresponding estimates of the normalizing constant. *Indication*: check the values and make sure the output is sensical. Modify the integrand if necessary.
 
-Plot the posterior distribution of $\omega = 1/\lambda$, the average waiting time.
+Plot the posterior distribution of $\omega = 1/\lambda,$ the average waiting time.
 
 
 ::: {.solution}
 
-For an unnormalized density $g(x)$ such that $\int g(x) \mathrm{d} x = c$, the normalizing constant is $1/c$.
+For an unnormalized density $g(x)$ such that $\int g(x) \mathrm{d} x = c,$ the normalizing constant is $1/c.$
 
-First, remember that the density function of the scale $\omega = \lambda^{-1}$ is related to the one of the rate $\lambda$ through a change of variable, with Jacobian $\omega^{-2}$.
+First, remember that the density function of the scale $\omega = \lambda^{-1}$ is related to the one of the rate $\lambda$ through a change of variable, with Jacobian $\omega^{-2}.$
 
 ```{r}
 #| eval: true
@@ -229,7 +231,7 @@ cst_test <- integrate(f = function(x){unnorm_post(x)/icst_lambda$value},
 
 Ouch! The integral is nearly zero, and there is significant risk of numerical underflow and the reciprocal of the integrals are one order of magnitude apart, even when the sample size is not large. The normalizing constant, the reciprocal of the marginal likelihood, is not well estimated.  The absolute error is of higher order than the estimate  of the marginal likelihood, and this will be more problematic in higher dimensions.
 
-To palliate to this, we could slightly modify the integrand by scaling the likelihood by $(n\overline{y} )^{n+1}/n!$, the normalizing constant of the gamma integral, which is around $2.4 \times 10^{14}$. This fixes the issue below.
+To palliate to this, we could slightly modify the integrand by scaling the likelihood by $(n\overline{y} )^{n+1}/n!,$ the normalizing constant of the gamma integral, which is around $2.4 \times 10^{14}.$ This fixes the issue below.
 
 ```{r}
 #| eval: true
@@ -253,7 +255,7 @@ norm_cst <- 1/marglik_grid
 The prior normalizing by a known constant fixes the numerical issues. Generally, one would tend to build an approximation only at the mode and match the curvature of the posterior there (using, e.g., a quadratic approximation to the posterior density).
 
 
-For the posterior density, we can simply use the approximation with $p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\lambda)p(\lambda)$. The posterior density for the reciprocal rate is $p(\omega \mid \boldsymbol{y}) \approx \widehat{c} L(\omega^{-1})p(\omega^{-1})\omega^{-2}$ (don't forget the Jacobian)!
+For the posterior density, we can simply use the approximation with $p(\lambda \mid \boldsymbol{y}) \approx \widehat{c} L(\lambda)p(\lambda).$ The posterior density for the reciprocal rate is $p(\omega \mid \boldsymbol{y}) \approx \widehat{c} L(\omega^{-1})p(\omega^{-1})\omega^{-2}$ (don't forget the Jacobian)!
 
 ```{r}
 #| eval: true
@@ -279,7 +281,7 @@ ggplot() +
 
 ## Exercice 2.4
 
-Consider $\lambda \sim \mathsf{Ga}(\alpha = 1.4, \beta=0.2)$.
+Consider $\lambda \sim \mathsf{Ga}(\alpha = 1.4, \beta=0.2).$
 
 1. Return the posterior mean, posterior median and maximum a posteriori (MAP).
 2. Return the 89% equitailed percentile credible interval.
@@ -291,7 +293,7 @@ Would the posterior predictive change if you gathered more data? Justify your an
 
 ::: {.solution}
 
-We have already determined that the posterior is a Gamma distribution $\mathsf{Ga}(a, b)$, where $a= \alpha+ n= 11.4$ and $b=n\overline{y} + \beta = 80.2$. We can query the moments directly: the mode is $(a-1)/b$ and the mean $a/b$, while the median must be found numerically using the quantile function.
+We have already determined that the posterior is a Gamma distribution $\mathsf{Ga}(a, b),$ where $a= \alpha+ n= 11.4$ and $b=n\overline{y} + \beta = 80.2.$ We can query the moments directly: the mode is $(a-1)/b$ and the mean $a/b,$ while the median must be found numerically using the quantile function.
 
 ```{r}
 #| eval: true

@@ -1,0 +1,37 @@
+---
+title: "Evaluations"
+---
+
+
+The main goals of this class are to help you understand the steps require to design and analyse the results of an experiment. 
+
+
+# Evaluations
+
+
+Your final grade will be based on assignments and check-ins, a midterm and a final examination. All evaluations are individual work.
+
+The midterm and final are closed book exams. Students are forbidden to use generative artificial intelligence (AI) tools. Any reference should be adequately cited.
+
+There will be weekly exercises pertaining to the class material, one of which must be handed in for credit. We will discuss the other exercises at the beginning of the next class. The assignment problem will be released weekly, but will have to be handed in bundles.
+
+The midterm will take place on Monday, March 3rd from 15:30--18:30. The final is cumulative and will take place on Tuesday, April 15th from 18:30--21:30.
+
+
+```{r assignments-grades, include=FALSE}
+assignments <- tibble::tribble(
+  ~Points,  ~Assignment,
+  10 * 0.5 , "Weekly check-in (10 × 0.5 pt)",
+  10 * 3 ,   "Assignments",
+  30      ,  "Midterm examination (30 pts)",
+  35      ,  "Final examination (35 pts)",
+)
+
+grading <- tibble::tribble(
+  ~Grade, ~Range,  ~Grade1, ~Range1,
+  "A+",  "90-100%", "B",  "70-75%",
+  "A", "85–90%",  "B-", "65-70%",
+  "A-", "80–85%",  "C+", "60-65%",
+  "B+",  "75-80%",  "F",  "<60%"
+)
+```

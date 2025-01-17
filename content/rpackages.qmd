@@ -1,0 +1,29 @@
+---
+title: "R packages"
+---
+
+To install all **R** packages used throughout the course, use the command
+```{r, eval=FALSE, echo=TRUE}
+install.packages("cmdstanr",
+                 repos = c("https://mc-stan.org/r-packages/",
+                           getOption("repos")))
+
+packages <- c("coda", "mvtnorm", "remotes", "loo", "dagitty", "shape", "rust")
+for(i in seq_along(packages)){
+  if(!packages[i] %in% installed.packages()[,"Package"]){
+ install.packages(packages[i])
+  }
+}
+remotes::install_github("rmcelreath/rethinking")
+
+install.packages(c("BiocManager","remotes"))
+BiocManager::install("graph")
+BiocManager::install("Rgraphviz")
+install.packages(
+  "INLA",
+  repos = c(getOption("repos"),
+            INLA = "https://inla.r-inla-download.org/R/stable"),
+  dep = TRUE)
+# Download databases for course
+remotes::install_github("lbelzile/hecbayes")
+```
