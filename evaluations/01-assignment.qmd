@@ -2,7 +2,7 @@
 title: "Assignment 1"
 ---
 
-These problems are for credit and to be handed in by the beginning of class 5.
+These problems are for credit and to be handed in on February 2nd at the latest.
 
 ## Problem 1.1
 
@@ -26,9 +26,10 @@ e. Verify the formulas for the expected value and variance derived previously us
 
 ## Problem 1.2
 
-The `sweden` data contains the number of accidents $Y$ per day in Sweden for 1961--1962. Some days, a speed `limit` was in place on specified days (`day`) of each year. We write the mean model as
+The [`sweden` dataset](/files/data/sweden.csv) contains the number of accidents $Y$ per day in Sweden for 1961--1962. Some days, a speed `limit` was in place on specified days (`day`) of each year. We write the mean model as
 \begin{align*}
-\mathsf{E}(Y_i; \lambda_0, \lambda_1) = \exp(\beta_0 + \beta_1\texttt{limit}_i) = \begin{cases} \lambda_0 & \texttt{limit}_i=0 \\ \lambda_1 & \texttt{limit}_i=1.
+\mathsf{E}(Y_i; \lambda_0, \lambda_1) &= \exp(\beta_0 + \beta_1\texttt{limit}_i)
+\\&= \begin{cases} \lambda_0 & \texttt{limit}_i=0 \\ \lambda_1 & \texttt{limit}_i=1.\end{cases}
 \end{align*}
 
 Assume each of the 184 observations are independent from two Poisson populations with mean $\lambda_0$ and $\lambda_1$, when `limit=0` and `limit=1`, respectively. Check Example 3.5 (Should you phrase your headline as a question?) of the [course notes](https://lbelzile.github.io/MATH80601A/priors.html#exm-poisson-upworthy-question)
@@ -39,22 +40,14 @@ Assume each of the 184 observations are independent from two Poisson populations
 
 ## Problem 1.3
 
-The `waiting` time dataset contains waiting time in seconds.
+The [`waiting` dataset](/files/data/waiting.csv) contains waiting times (in seconds) from 17:59 until the departure of the next metro at the Universite de Montreal station during week-days over three consecutive months.
 
-1. Assume that the waiting time are exponential. 
-  a. Use a conjugate gamma prior with mean 30 seconds and std. deviation 30 seconds. Give the values of the corresponding shape and rate parameters.
-  b. Plot an histogram of prior predictive draws
-  c. Derive the posterior distribution and give its parameter values.
-  d. Calculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo.
-2. The [`post_waiting_weibull`]() contains 10K random samples from the posterior of a Weibull model $\mathsf{Weibull}(\lambda, \alpha)$ with a penalized-complexity prior for the shape parameter with $\alpha \sim \mathsf{PC}(\theta=0.5)$ [@vanNiekerk:2021] and  $\lambda \sim \mathsf{inv. gamma}(\gamma, \omega)$ with scale $\gamma=90$ and shape $\omega=4$.
-   a. Draw 10K samples from the posterior predictive and plot their density. Compare with that obtained from the exponential model.
-   b. Draw next $B=1000$ posterior predictive samples of size $n=62$ from the Weibull and exponential models.
-   c. For each, compute (i) the sample mean, (ii) the sample std. deviation and (c) the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original `waiting` sample. Hence comment on the adequacy (or lack thereof) of the two models.
-
-
-```{r}
-#| eval: false
-#| echo: false
-with(DA23_E1, table(format, purchased))
-```
+1. Assume first that the waiting time are independent and identically distributed as exponential. 
+   a. Use a conjugate gamma prior with mean 30 seconds and std. deviation 30 seconds. Give the values of the corresponding shape and rate parameters of the prior.
+   b. Plot an histogram of prior predictive draws.
+   c. Derive the posterior distribution and report its parameter values.
+   d. Calculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.
+2. The [`post_waiting_weibull`](/files/data/post_waiting_weibull.csv) contains 10K random samples from the posterior of a Weibull model $\mathsf{Weibull}(\lambda, \alpha)$ with a penalized-complexity prior for the shape parameter with $\alpha \sim \mathsf{PC}(\theta=0.5)$ [@vanNiekerk:2021] and  $\lambda \sim \mathsf{inv. gamma}(\gamma, \omega)$ with scale $\gamma=90$ and shape $\omega=4$.
+    a. Draw $B=1000$ posterior predictive samples of size $n=62$ from the Weibull and exponential models. *Each draw should use different parameter values.*
+    b. For each, compute (i) the sample mean, (ii) the sample std. deviation and (iii) the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original `waiting` sample. Hence comment on the adequacy (or lack thereof) of the two models.
 

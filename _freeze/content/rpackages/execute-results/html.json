@@ -1,0 +1,15 @@
+{
+  "hash": "d5d961935cb200ffcd156907f94993f6",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"R packages\"\n---\n\n\n\n\nTo install all **R** packages used throughout the course, use the command\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ninstall.packages(\"cmdstanr\",\n                 repos = c(\"https://mc-stan.org/r-packages/\",\n                           getOption(\"repos\")))\n\npackages <- c(\"coda\", \"mvtnorm\", \"remotes\", \"loo\", \"dagitty\", \"shape\", \"rust\")\nfor(i in seq_along(packages)){\n  if(!packages[i] %in% installed.packages()[,\"Package\"]){\n install.packages(packages[i])\n  }\n}\nremotes::install_github(\"rmcelreath/rethinking\")\n\ninstall.packages(c(\"BiocManager\",\"remotes\"))\nBiocManager::install(\"graph\")\nBiocManager::install(\"Rgraphviz\")\ninstall.packages(\n  \"INLA\",\n  repos = c(getOption(\"repos\"),\n            INLA = \"https://inla.r-inla-download.org/R/stable\"),\n  dep = TRUE)\n# Download databases for course\nremotes::install_github(\"lbelzile/hecbayes\")\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

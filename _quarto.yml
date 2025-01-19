@@ -73,7 +73,6 @@ website:
       search: false
       foreground: "#000000"
       contents:
-        - exercises/index.qmd
         - section: "Exercises"
           contents:
              - text: "1. Introduction"
@@ -101,10 +100,12 @@ website:
       search: false
       foreground: "#000000"
       contents:
-        - evaluations/index.qmd
-        - text: "Weekly check-in"
-          file: evaluations/weekly-check-in.qmd
-        - evaluations/01-assignment.qmd
+         - evaluations/index.qmd
+         - text: "Weekly check-in"
+           file: evaluations/weekly-check-in.qmd
+         - section: "Assignments"
+           contents:
+              - evaluations/01-assignment.qmd
   page-footer:
     left: |
       Content {{< fa brands creative-commons >}} {{< var course.copyright_year >}} by [{{< var instructor.name_no_title >}}]({{< var instructor.url >}})<br>
