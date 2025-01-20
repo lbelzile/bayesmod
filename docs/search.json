@@ -1683,14 +1683,14 @@
     "href": "slides/bayesmod-slides3.html#example---simple-linear-regression",
     "title": "Bayesian modelling",
     "section": "Example - simple linear regression",
-    "text": "Example - simple linear regression\nConsider the relationship between height (\\(Y\\), in cm) and weight (\\(X\\), in kg) among humans adults.1\nModel using a simple linear regression\n\\[\\begin{align*}\nh_i &\\sim \\mathsf{No}(\\mu_i, \\sigma^2) \\\\\n\\mu_i &= \\beta_0 + \\beta_1(\\mathrm{x}_i - \\overline{x}) \\\\\n\\beta_0 &\\sim \\mathsf{No}(178, 20^2) \\\\\n\\sigma &\\sim \\mathsf{U}(0, 50)\n\\end{align*}\\]\nSection 4.4.1 of McElreath (2020)"
+    "text": "Example - simple linear regression\nConsider the relationship between height (\\(Y\\), in cm) and weight (\\(X\\), in kg) among humans adults.1\nModel using a simple linear regression\n\\[\\begin{align*}\nh_i &\\sim \\mathsf{Gauss}(\\mu_i, \\sigma^2) \\\\\n\\mu_i &= \\beta_0 + \\beta_1(\\mathrm{x}_i - \\overline{x}) \\\\\n\\beta_0 &\\sim \\mathsf{Gauss}(178, 20^2) \\\\\n\\sigma &\\sim \\mathsf{U}(0, 50)\n\\end{align*}\\]\nSection 4.4.1 of McElreath (2020)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors-for-the-slope",
     "href": "slides/bayesmod-slides3.html#priors-for-the-slope",
     "title": "Bayesian modelling",
     "section": "Priors for the slope",
-    "text": "Priors for the slope\n\n\nFigure 1: Prior draws of linear regressions with different priors: vague \\(\\beta_1 \\sim \\mathsf{No}(0, 100)\\) (left) and lognormal \\(\\ln(\\beta_1) \\sim \\mathsf{No}(0,1)\\) (right). Figure 4.5 of McElreath (2020). The Guiness record for the world’s tallest person is 272cm."
+    "text": "Priors for the slope\n\n\nFigure 1: Prior draws of linear regressions with different priors: vague \\(\\beta_1 \\sim \\mathsf{Gauss}(0, 100)\\) (left) and lognormal \\(\\ln(\\beta_1) \\sim \\mathsf{Gauss}(0,1)\\) (right). Figure 4.5 of McElreath (2020). The Guiness record for the world’s tallest person is 272cm."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-priors",
@@ -1704,7 +1704,7 @@
     "href": "slides/bayesmod-slides3.html#conjugate-priors-for-common-exponential-families",
     "title": "Bayesian modelling",
     "section": "Conjugate priors for common exponential families",
-    "text": "Conjugate priors for common exponential families\n\n\n\n\n\n\n\n\ndistribution\nunknown parameter\nconjugate prior\n\n\n\n\n\\(Y \\sim \\mathsf{Exp}(\\lambda)\\)\n\\(\\lambda\\)\n\\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Po}(\\mu)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Bin}(n, \\theta)\\)\n\\(\\theta\\)\n\\(\\theta \\sim \\mathsf{Be}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{No}(\\mu, \\sigma^2)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{No}(\\nu, \\omega^2)\\)\n\n\n\\(Y \\sim \\mathsf{No}(\\mu, \\sigma^2)\\)\n\\(\\sigma\\)\n\\(\\sigma^{-2} \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{No}(\\mu, \\sigma^2)\\)\n\\(\\mu, \\sigma\\)\n\\(\\mu \\mid \\sigma^2 \\sim \\mathsf{No}(\\nu, \\omega \\sigma^2)\\), \\(\\sigma^{-2} \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)"
+    "text": "Conjugate priors for common exponential families\n\n\n\n\n\n\n\n\ndistribution\nunknown parameter\nconjugate prior\n\n\n\n\n\\(Y \\sim \\mathsf{Exp}(\\lambda)\\)\n\\(\\lambda\\)\n\\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Po}(\\mu)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Bin}(n, \\theta)\\)\n\\(\\theta\\)\n\\(\\theta \\sim \\mathsf{Be}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{Gauss}(\\nu, \\omega^2)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\sigma\\)\n\\(\\sigma^{-2} \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu, \\sigma\\)\n\\(\\mu \\mid \\sigma^2 \\sim \\mathsf{Gauss}(\\nu, \\omega \\sigma^2)\\), \\(\\sigma^{-2} \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-prior-for-the-poisson",
@@ -1718,7 +1718,7 @@
     "href": "slides/bayesmod-slides3.html#conjugate-prior-for-gaussian-known-variance",
     "title": "Bayesian modelling",
     "section": "Conjugate prior for Gaussian (known variance)",
-    "text": "Conjugate prior for Gaussian (known variance)\nConsider an iid sample, \\(Y_i \\sim \\mathsf{No}(\\mu, \\sigma^2)\\) and let \\(\\mu \\mid \\sigma \\sim \\mathsf{No}(\\nu, \\sigma^2\\tau^2)\\). Then, \\[\\begin{align*}\np(\\mu, \\sigma) &\\propto \\frac{p(\\sigma)}{\\sigma^{n+1}} \\exp\\left\\{ -\\frac{1}{2\\sigma^2}\\sum_{i=1}^n (y_{i}-\\mu)^2\\right\\} \\exp\\left\\{-\\frac{1}{2\\sigma^2\\tau^2}(\\mu - \\nu)^2\\right\\}\n\\\\&\\propto \\frac{p(\\sigma)}{\\sigma^{n+1}} \\exp\\left\\{\\left(\\sum_{i=1}^n y_{i} + \\frac{\\nu}{\\tau^2}\\right)\\frac{\\mu}{\\sigma^2} - \\left( \\frac{n}{2} +\\frac{1}{2\\tau^2}\\right)\\frac{\\mu^2}{\\sigma^2}\\right\\}.\n\\end{align*}\\]\nThe conditional posterior \\(p(\\mu \\mid \\sigma)\\) is Gaussian with\n\nmean \\((n\\overline{y}\\tau^2 + \\nu)/(n\\tau^2 + 1)\\) and\nprecision (reciprocal variance) \\((n + 1/\\tau^2)/\\sigma^2\\)."
+    "text": "Conjugate prior for Gaussian (known variance)\nConsider an iid sample, \\(Y_i \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\) and let \\(\\mu \\mid \\sigma \\sim \\mathsf{Gauss}(\\nu, \\sigma^2\\tau^2)\\). Then, \\[\\begin{align*}\np(\\mu, \\sigma) &\\propto \\frac{p(\\sigma)}{\\sigma^{n+1}} \\exp\\left\\{ -\\frac{1}{2\\sigma^2}\\sum_{i=1}^n (y_{i}-\\mu)^2\\right\\} \\exp\\left\\{-\\frac{1}{2\\sigma^2\\tau^2}(\\mu - \\nu)^2\\right\\}\n\\\\&\\propto \\frac{p(\\sigma)}{\\sigma^{n+1}} \\exp\\left\\{\\left(\\sum_{i=1}^n y_{i} + \\frac{\\nu}{\\tau^2}\\right)\\frac{\\mu}{\\sigma^2} - \\left( \\frac{n}{2} +\\frac{1}{2\\tau^2}\\right)\\frac{\\mu^2}{\\sigma^2}\\right\\}.\n\\end{align*}\\]\nThe conditional posterior \\(p(\\mu \\mid \\sigma)\\) is Gaussian with\n\nmean \\((n\\overline{y}\\tau^2 + \\nu)/(n\\tau^2 + 1)\\) and\nprecision (reciprocal variance) \\((n + 1/\\tau^2)/\\sigma^2\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#upworthy-examples",
@@ -1753,7 +1753,7 @@
     "href": "slides/bayesmod-slides3.html#proper-posterior-in-a-random-effect-model",
     "title": "Bayesian modelling",
     "section": "Proper posterior in a random effect model",
-    "text": "Proper posterior in a random effect model\nConsider a Gaussian random effect model with \\(n\\) independent observations in \\(J\\) groups\nThe \\(i\\)th observation in group \\(j\\) is \\[\\begin{align*}\nY_{ij} &\\sim \\mathsf{No}(\\mu_{ij}, \\sigma^2) \\\\\n\\mu_{ij}&= \\mathbf{X}_i \\boldsymbol{\\beta} + \\alpha_j,  \\\\\n\\alpha_j &\\sim \\mathsf{No}(0, \\tau^2)\\\\\n...\n\\end{align*}\\]"
+    "text": "Proper posterior in a random effect model\nConsider a Gaussian random effect model with \\(n\\) independent observations in \\(J\\) groups\nThe \\(i\\)th observation in group \\(j\\) is \\[\\begin{align*}\nY_{ij} &\\sim \\mathsf{Gauss}(\\mu_{ij}, \\sigma^2) \\\\\n\\mu_{ij}&= \\mathbf{X}_i \\boldsymbol{\\beta} + \\alpha_j,  \\\\\n\\alpha_j &\\sim \\mathsf{Gauss}(0, \\tau^2)\\\\\n...\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conditions-for-a-proper-posterior",
@@ -1802,7 +1802,7 @@
     "href": "slides/bayesmod-slides3.html#vague-priors",
     "title": "Bayesian modelling",
     "section": "Vague priors",
-    "text": "Vague priors\nVague priors are very diffuse proper prior.\nFor example, a vague Gaussian prior for regression coefficients on standardized data, \\[\\boldsymbol{\\beta} \\sim \\mathsf{No}_p(\\mathbf{0}_p, 100\\mathbf{I}_p).\\]\n\nif we consider a logistic regression with a binary variable \\(\\mathrm{X}_j \\in \\{0,1\\}\\), then \\(\\beta_j =5\\) gives odds ratios of 150, and \\(\\beta_j=10\\) of around 22K…"
+    "text": "Vague priors\nVague priors are very diffuse proper prior.\nFor example, a vague Gaussian prior for regression coefficients on standardized data, \\[\\boldsymbol{\\beta} \\sim \\mathsf{Gauss}_p(\\mathbf{0}_p, 100\\mathbf{I}_p).\\]\n\nif we consider a logistic regression with a binary variable \\(\\mathrm{X}_j \\in \\{0,1\\}\\), then \\(\\beta_j =5\\) gives odds ratios of 150, and \\(\\beta_j=10\\) of around 22K…"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#invariance-and-jeffreys-prior",
@@ -1830,7 +1830,7 @@
     "href": "slides/bayesmod-slides3.html#penalized-complexity-priors",
     "title": "Bayesian modelling",
     "section": "Penalized complexity priors",
-    "text": "Penalized complexity priors\nSimpson et al. (2017) consider a principled way of constructing priors that penalized model complexity for stable inference and limit over-specification.\nSuppose that the restriction of the parameter creates a simpler base version.\n\ne.g., if we have a random effect \\(\\alpha \\sim \\mathsf{No}(0, \\zeta^2)\\), the value \\(\\zeta=0\\) corresponds to no group variability."
+    "text": "Penalized complexity priors\nSimpson et al. (2017) consider a principled way of constructing priors that penalized model complexity for stable inference and limit over-specification.\nSuppose that the restriction of the parameter creates a simpler base version.\n\ne.g., if we have a random effect \\(\\alpha \\sim \\mathsf{Gauss}(0, \\zeta^2)\\), the value \\(\\zeta=0\\) corresponds to no group variability."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#ingredients-of-penalized-complexity-priors",
@@ -1858,7 +1858,7 @@
     "href": "slides/bayesmod-slides3.html#penalized-complexity-prior-for-random-effect-scale",
     "title": "Bayesian modelling",
     "section": "Penalized complexity prior for random effect scale",
-    "text": "Penalized complexity prior for random effect scale\nIf \\(\\alpha_j \\sim \\mathsf{No}(0, \\zeta^2)\\), the penalized complexity prior is exponential with rate \\(\\lambda\\).\nGiven \\(Q\\) a high quantile of the standard deviation \\(\\zeta\\), set \\(\\lambda = -\\ln(\\alpha/Q)\\)."
+    "text": "Penalized complexity prior for random effect scale\nIf \\(\\alpha_j \\sim \\mathsf{Gauss}(0, \\zeta^2)\\), the penalized complexity prior is exponential with rate \\(\\lambda\\).\nGiven \\(Q\\) a high quantile of the standard deviation \\(\\zeta\\), set \\(\\lambda = -\\ln(\\alpha/Q)\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors-for-scale-of-random-effects",
@@ -1893,7 +1893,7 @@
     "href": "slides/bayesmod-slides3.html#poisson-mixed-model",
     "title": "Bayesian modelling",
     "section": "Poisson mixed model",
-    "text": "Poisson mixed model\nWe model the number of violations, nviolation as a function of distraction type (task) and participant id.1 \\[\\begin{align*}\n\\texttt{nviolation}_{ij} &\\sim \\mathsf{Po}(\\mu_{ij})\\\\\n\\mu_{ij} &= \\exp(\\beta_{j} + \\alpha_i),\\\\\n\\beta_j &\\sim \\mathsf{No}(0, 100), \\\\\n\\alpha_i &\\sim \\mathsf{No}(0, \\kappa^2).\n\\end{align*}\\]\nSpecifically, \\(\\beta_j\\) is the coefficient for task \\(j\\) (distraction type) and \\(\\alpha_i\\) is the random effect of participant \\(i\\)."
+    "text": "Poisson mixed model\nWe model the number of violations, nviolation as a function of distraction type (task) and participant id.1 \\[\\begin{align*}\n\\texttt{nviolation}_{ij} &\\sim \\mathsf{Po}(\\mu_{ij})\\\\\n\\mu_{ij} &= \\exp(\\beta_{j} + \\alpha_i),\\\\\n\\beta_j &\\sim \\mathsf{Gauss}(0, 100), \\\\\n\\alpha_i &\\sim \\mathsf{Gauss}(0, \\kappa^2).\n\\end{align*}\\]\nSpecifically, \\(\\beta_j\\) is the coefficient for task \\(j\\) (distraction type) and \\(\\alpha_i\\) is the random effect of participant \\(i\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors-for-random-effect-scale",
@@ -1914,7 +1914,7 @@
     "href": "slides/bayesmod-slides3.html#eight-schools-example",
     "title": "Bayesian modelling",
     "section": "Eight schools example",
-    "text": "Eight schools example\nAverage results on SAT program, for eight schools (Rubin, 1981).\nThe hierarchical model is\n\\[\\begin{align*}\nY_i &\\sim \\mathsf{No}(\\mu + \\eta_i, \\sigma_i^2)\\\\\n\\mu &\\sim \\mathsf{No}(0, 100)\\\\\n\\eta_i & \\sim \\mathsf{No}(0, \\tau^2)\n\\end{align*}\\] Given the large sample in each school, we treat \\(\\sigma_i\\) as fixed data."
+    "text": "Eight schools example\nAverage results on SAT program, for eight schools (Rubin, 1981).\nThe hierarchical model is\n\\[\\begin{align*}\nY_i &\\sim \\mathsf{Gauss}(\\mu + \\eta_i, \\sigma_i^2)\\\\\n\\mu &\\sim \\mathsf{Gauss}(0, 100)\\\\\n\\eta_i & \\sim \\mathsf{Gauss}(0, \\tau^2)\n\\end{align*}\\] Given the large sample in each school, we treat \\(\\sigma_i\\) as fixed data."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#sensibility-analysis-for-eight-schools-example",

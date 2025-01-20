@@ -3,7 +3,7 @@ title: "Bayesian modelling"
 author: "Léo Belzile"
 subtitle: "Priors"
 date: today
-date-format: YYYY
+date-format: "[Last compiled] dddd MMM D, YYYY"
 eval: true
 echo: true
 cache: true
@@ -107,9 +107,9 @@ Consider the relationship between height ($Y$, in cm) and weight ($X$, in kg) am
 Model using a simple linear regression
 
 \begin{align*}
-h_i &\sim \mathsf{No}(\mu_i, \sigma^2) \\
+h_i &\sim \mathsf{Gauss}(\mu_i, \sigma^2) \\
 \mu_i &= \beta_0 + \beta_1(\mathrm{x}_i - \overline{x}) \\
-\beta_0 &\sim \mathsf{No}(178, 20^2) \\
+\beta_0 &\sim \mathsf{Gauss}(178, 20^2) \\
 \sigma &\sim \mathsf{U}(0, 50)
 \end{align*}
 
@@ -121,7 +121,7 @@ h_i &\sim \mathsf{No}(\mu_i, \sigma^2) \\
 #| eval: true
 #| echo: false
 #| label: fig-priors-draw-height-weight
-#| fig-cap: "Prior draws of linear regressions with different priors: vague $\\beta_1 \\sim \\mathsf{No}(0, 100)$ (left) and lognormal $\\ln(\\beta_1) \\sim \\mathsf{No}(0,1)$ (right). Figure 4.5 of @McElreath:2020. The Guiness record for the world's tallest person is 272cm."
+#| fig-cap: "Prior draws of linear regressions with different priors: vague $\\beta_1 \\sim \\mathsf{Gauss}(0, 100)$ (left) and lognormal $\\ln(\\beta_1) \\sim \\mathsf{Gauss}(0,1)$ (right). Figure 4.5 of @McElreath:2020. The Guiness record for the world's tallest person is 272cm."
 data(Howell1, package = "rethinking") 
 hwdata <- Howell1 |> dplyr::filter(age >= 18)
 alpha <- rnorm(n = 100, mean = 178, sd = 20)
@@ -183,9 +183,9 @@ The support of $f$ must not depend on $\boldsymbol{\theta}$.]
 | $Y \sim \mathsf{Exp}(\lambda)$ | $\lambda$ | $\lambda \sim \mathsf{Ga}(\alpha, \beta)$ |
 |  $Y \sim \mathsf{Po}(\mu)$ | $\mu$|  $\mu \sim \mathsf{Ga}(\alpha, \beta)$  |
 | $Y \sim \mathsf{Bin}(n, \theta)$ | $\theta$ | $\theta \sim \mathsf{Be}(\alpha, \beta)$ |
-| $Y \sim \mathsf{No}(\mu, \sigma^2)$ | $\mu$ | $\mu \sim \mathsf{No}(\nu, \omega^2)$ |
-| $Y \sim \mathsf{No}(\mu, \sigma^2)$ | $\sigma$ | $\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)$ |
-| $Y \sim \mathsf{No}(\mu, \sigma^2)$ | $\mu, \sigma$ | $\mu \mid \sigma^2 \sim \mathsf{No}(\nu, \omega \sigma^2)$, $\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)$ |
+| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu$ | $\mu \sim \mathsf{Gauss}(\nu, \omega^2)$ |
+| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\sigma$ | $\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)$ |
+| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu, \sigma$ | $\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2)$, $\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)$ |
 
 ## Conjugate prior for the Poisson 
 
@@ -200,7 +200,7 @@ so must be gamma $\mathsf{Ga}(n\overline{y} + \alpha, n\overline{y} + \beta)$.
 
 ## Conjugate prior for Gaussian (known variance) {.smaller}
 
-Consider an iid sample, $Y_i \sim \mathsf{No}(\mu, \sigma^2)$ and let $\mu \mid \sigma \sim \mathsf{No}(\nu, \sigma^2\tau^2)$. Then,
+Consider an iid sample, $Y_i \sim \mathsf{Gauss}(\mu, \sigma^2)$ and let $\mu \mid \sigma \sim \mathsf{Gauss}(\nu, \sigma^2\tau^2)$. Then,
 \begin{align*}
 p(\mu, \sigma) &\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^n (y_{i}-\mu)^2\right\} \exp\left\{-\frac{1}{2\sigma^2\tau^2}(\mu - \nu)^2\right\}
 \\&\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{\left(\sum_{i=1}^n y_{i} + \frac{\nu}{\tau^2}\right)\frac{\mu}{\sigma^2} - \left( \frac{n}{2} +\frac{1}{2\tau^2}\right)\frac{\mu^2}{\sigma^2}\right\}.
@@ -299,9 +299,9 @@ Consider a Gaussian random effect model with $n$ independent observations in $J$
 
 The $i$th observation  in group $j$ is
 \begin{align*}
-Y_{ij} &\sim \mathsf{No}(\mu_{ij}, \sigma^2) \\
+Y_{ij} &\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
 \mu_{ij}&= \mathbf{X}_i \boldsymbol{\beta} + \alpha_j,  \\
-\alpha_j &\sim \mathsf{No}(0, \tau^2)\\
+\alpha_j &\sim \mathsf{Gauss}(0, \tau^2)\\
 ...
 \end{align*}
 
@@ -375,7 +375,7 @@ Consider a scale parameter $\sigma > 0$.
 
 Vague priors are very diffuse proper prior.
 
-For example, a vague Gaussian prior for regression coefficients on standardized data, $$\boldsymbol{\beta} \sim \mathsf{No}_p(\mathbf{0}_p, 100\mathbf{I}_p).$$ 
+For example, a vague Gaussian prior for regression coefficients on standardized data, $$\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\mathbf{0}_p, 100\mathbf{I}_p).$$
 
 - if we consider a logistic regression with a binary variable $\mathrm{X}_j \in \{0,1\}$, then $\beta_j =5$ gives odds ratios of 150, and $\beta_j=10$ of around 22K... 
 
@@ -414,7 +414,7 @@ The results are invariant to affine transformations of the units, $\vartheta = a
 
 Suppose that the restriction of the parameter creates a simpler base version.
 
-- e.g., if we have a random effect $\alpha \sim \mathsf{No}(0, \zeta^2)$, the value $\zeta=0$ corresponds to no group variability.
+- e.g., if we have a random effect $\alpha \sim \mathsf{Gauss}(0, \zeta^2)$, the value $\zeta=0$ corresponds to no group variability.
  
 ## Ingredients of penalized complexity priors
 
@@ -441,7 +441,7 @@ $$\Pr\{g(\zeta) > Q\} = \alpha.$$
  
 ## Penalized complexity prior for random effect scale
 
-If $\alpha_j \sim \mathsf{No}(0, \zeta^2)$, the penalized complexity prior is exponential with rate $\lambda$.
+If $\alpha_j \sim \mathsf{Gauss}(0, \zeta^2)$, the penalized complexity prior is exponential with rate $\lambda$.
 
 Given $Q$ a high quantile of the standard deviation $\zeta$, set $\lambda = -\ln(\alpha/Q)$.
 
@@ -485,8 +485,8 @@ We model the number of violations, `nviolation` as a function of distraction typ
 \begin{align*}
 \texttt{nviolation}_{ij} &\sim \mathsf{Po}(\mu_{ij})\\
 \mu_{ij} &= \exp(\beta_{j} + \alpha_i),\\
-\beta_j &\sim \mathsf{No}(0, 100), \\
-\alpha_i &\sim \mathsf{No}(0, \kappa^2).
+\beta_j &\sim \mathsf{Gauss}(0, 100), \\
+\alpha_i &\sim \mathsf{Gauss}(0, \kappa^2).
 \end{align*}
 
 ## Priors for random effect scale
@@ -517,9 +517,9 @@ Average results on SAT program, for eight schools [@Rubin:1981].
 The hierarchical model is
 
 \begin{align*}
-Y_i &\sim \mathsf{No}(\mu + \eta_i, \sigma_i^2)\\
-\mu &\sim \mathsf{No}(0, 100)\\
-\eta_i & \sim \mathsf{No}(0, \tau^2)
+Y_i &\sim \mathsf{Gauss}(\mu + \eta_i, \sigma_i^2)\\
+\mu &\sim \mathsf{Gauss}(0, 100)\\
+\eta_i & \sim \mathsf{Gauss}(0, \tau^2)
 \end{align*}
 Given the large sample in each school, we treat $\sigma_i$ as fixed data.
 

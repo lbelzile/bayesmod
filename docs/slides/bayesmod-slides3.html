@@ -10,7 +10,6 @@
   <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
-  <meta name="dcterms.date" content="2025-01-01">
   <title>Bayesian modelling</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -159,7 +158,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">2025</p>
+  <p class="date">Last compiled Monday Jan 20, 2025</p>
 </section>
 <section id="priors" class="slide level2">
 <h2>Priors</h2>
@@ -221,9 +220,9 @@ Léo Belzile
 <p>Consider the relationship between height (<span class="math inline">\(Y\)</span>, in cm) and weight (<span class="math inline">\(X\)</span>, in kg) among humans adults.<sup>1</sup></p>
 <p>Model using a simple linear regression</p>
 <p><span class="math display">\[\begin{align*}
-h_i &amp;\sim \mathsf{No}(\mu_i, \sigma^2) \\
+h_i &amp;\sim \mathsf{Gauss}(\mu_i, \sigma^2) \\
 \mu_i &amp;= \beta_0 + \beta_1(\mathrm{x}_i - \overline{x}) \\
-\beta_0 &amp;\sim \mathsf{No}(178, 20^2) \\
+\beta_0 &amp;\sim \mathsf{Gauss}(178, 20^2) \\
 \sigma &amp;\sim \mathsf{U}(0, 50)
 \end{align*}\]</span></p>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>Section 4.4.1 of <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span></p></li></ol></aside></section>
@@ -231,7 +230,7 @@ h_i &amp;\sim \mathsf{No}(\mu_i, \sigma^2) \\
 <h2>Priors for the slope</h2>
 
 <img data-src="bayesmod-slides3_files/figure-revealjs/fig-priors-draw-height-weight-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-priors-draw-height-weight"><p class="caption">
-Figure&nbsp;1: Prior draws of linear regressions with different priors: vague <span class="math inline">\(\beta_1 \sim \mathsf{No}(0, 100)\)</span> (left) and lognormal <span class="math inline">\(\ln(\beta_1) \sim \mathsf{No}(0,1)\)</span> (right). Figure 4.5 of <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span>. The Guiness record for the world’s tallest person is 272cm.
+Figure&nbsp;1: Prior draws of linear regressions with different priors: vague <span class="math inline">\(\beta_1 \sim \mathsf{Gauss}(0, 100)\)</span> (left) and lognormal <span class="math inline">\(\ln(\beta_1) \sim \mathsf{Gauss}(0,1)\)</span> (right). Figure 4.5 of <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span>. The Guiness record for the world’s tallest person is 272cm.
 </p></section>
 <section id="conjugate-priors" class="slide level2">
 <h2>Conjugate priors</h2>
@@ -272,19 +271,19 @@ f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_
 <td style="text-align: left;"><span class="math inline">\(\theta \sim \mathsf{Be}(\alpha, \beta)\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(Y \sim \mathsf{No}(\mu, \sigma^2)\)</span></td>
+<td><span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \sigma^2)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\mu\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\mu \sim \mathsf{No}(\nu, \omega^2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mu \sim \mathsf{Gauss}(\nu, \omega^2)\)</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(Y \sim \mathsf{No}(\mu, \sigma^2)\)</span></td>
+<td><span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \sigma^2)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\sigma\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(Y \sim \mathsf{No}(\mu, \sigma^2)\)</span></td>
+<td><span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \sigma^2)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\mu, \sigma\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\mu \mid \sigma^2 \sim \mathsf{No}(\nu, \omega \sigma^2)\)</span>, <span class="math inline">\(\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2)\)</span>, <span class="math inline">\(\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)\)</span></td>
 </tr>
 </tbody>
 </table>
@@ -299,7 +298,7 @@ p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\overl
 </section>
 <section id="conjugate-prior-for-gaussian-known-variance" class="slide level2 smaller">
 <h2>Conjugate prior for Gaussian (known variance)</h2>
-<p>Consider an iid sample, <span class="math inline">\(Y_i \sim \mathsf{No}(\mu, \sigma^2)\)</span> and let <span class="math inline">\(\mu \mid \sigma \sim \mathsf{No}(\nu, \sigma^2\tau^2)\)</span>. Then, <span class="math display">\[\begin{align*}
+<p>Consider an iid sample, <span class="math inline">\(Y_i \sim \mathsf{Gauss}(\mu, \sigma^2)\)</span> and let <span class="math inline">\(\mu \mid \sigma \sim \mathsf{Gauss}(\nu, \sigma^2\tau^2)\)</span>. Then, <span class="math display">\[\begin{align*}
 p(\mu, \sigma) &amp;\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^n (y_{i}-\mu)^2\right\} \exp\left\{-\frac{1}{2\sigma^2\tau^2}(\mu - \nu)^2\right\}
 \\&amp;\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{\left(\sum_{i=1}^n y_{i} + \frac{\nu}{\tau^2}\right)\frac{\mu}{\sigma^2} - \left( \frac{n}{2} +\frac{1}{2\tau^2}\right)\frac{\mu^2}{\sigma^2}\right\}.
 \end{align*}\]</span></p>
@@ -376,9 +375,9 @@ Figure&nbsp;2: Gamma posterior of the conversion rate for the Upworthy Sesame st
 <h2>Proper posterior in a random effect model</h2>
 <p>Consider a Gaussian random effect model with <span class="math inline">\(n\)</span> independent observations in <span class="math inline">\(J\)</span> groups</p>
 <p>The <span class="math inline">\(i\)</span>th observation in group <span class="math inline">\(j\)</span> is <span class="math display">\[\begin{align*}
-Y_{ij} &amp;\sim \mathsf{No}(\mu_{ij}, \sigma^2) \\
+Y_{ij} &amp;\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
 \mu_{ij}&amp;= \mathbf{X}_i \boldsymbol{\beta} + \alpha_j,  \\
-\alpha_j &amp;\sim \mathsf{No}(0, \tau^2)\\
+\alpha_j &amp;\sim \mathsf{Gauss}(0, \tau^2)\\
 ...
 \end{align*}\]</span></p>
 </section>
@@ -430,7 +429,7 @@ Figure&nbsp;3: Unscaled maximum data information (MDI) prior density.
 <section id="vague-priors" class="slide level2">
 <h2>Vague priors</h2>
 <p>Vague priors are very diffuse proper prior.</p>
-<p>For example, a vague Gaussian prior for regression coefficients on standardized data, <span class="math display">\[\boldsymbol{\beta} \sim \mathsf{No}_p(\mathbf{0}_p, 100\mathbf{I}_p).\]</span></p>
+<p>For example, a vague Gaussian prior for regression coefficients on standardized data, <span class="math display">\[\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\mathbf{0}_p, 100\mathbf{I}_p).\]</span></p>
 <ul>
 <li>if we consider a logistic regression with a binary variable <span class="math inline">\(\mathrm{X}_j \in \{0,1\}\)</span>, then <span class="math inline">\(\beta_j =5\)</span> gives odds ratios of 150, and <span class="math inline">\(\beta_j=10\)</span> of around 22K…</li>
 </ul>
@@ -459,7 +458,7 @@ p(\sigma) &amp;\propto \sigma^{-1}
 <p><span class="citation" data-cites="Simpson:2017">Simpson et al. (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> consider a principled way of constructing priors that penalized model complexity for stable inference and limit over-specification.</p>
 <p>Suppose that the restriction of the parameter creates a simpler base version.</p>
 <ul>
-<li>e.g., if we have a random effect <span class="math inline">\(\alpha \sim \mathsf{No}(0, \zeta^2)\)</span>, the value <span class="math inline">\(\zeta=0\)</span> corresponds to no group variability.</li>
+<li>e.g., if we have a random effect <span class="math inline">\(\alpha \sim \mathsf{Gauss}(0, \zeta^2)\)</span>, the value <span class="math inline">\(\zeta=0\)</span> corresponds to no group variability.</li>
 </ul>
 </section>
 <section id="ingredients-of-penalized-complexity-priors" class="slide level2">
@@ -480,7 +479,7 @@ p(\sigma) &amp;\propto \sigma^{-1}
 </section>
 <section id="penalized-complexity-prior-for-random-effect-scale" class="slide level2">
 <h2>Penalized complexity prior for random effect scale</h2>
-<p>If <span class="math inline">\(\alpha_j \sim \mathsf{No}(0, \zeta^2)\)</span>, the penalized complexity prior is exponential with rate <span class="math inline">\(\lambda\)</span>.</p>
+<p>If <span class="math inline">\(\alpha_j \sim \mathsf{Gauss}(0, \zeta^2)\)</span>, the penalized complexity prior is exponential with rate <span class="math inline">\(\lambda\)</span>.</p>
 <p>Given <span class="math inline">\(Q\)</span> a high quantile of the standard deviation <span class="math inline">\(\zeta\)</span>, set <span class="math inline">\(\lambda = -\ln(\alpha/Q)\)</span>.</p>
 </section>
 <section id="priors-for-scale-of-random-effects" class="slide level2">
@@ -520,8 +519,8 @@ p(\sigma) &amp;\propto \sigma^{-1}
 <p>We model the number of violations, <code>nviolation</code> as a function of distraction type (<code>task</code>) and participant <code>id</code>.<sup>1</sup> <span class="math display">\[\begin{align*}
 \texttt{nviolation}_{ij} &amp;\sim \mathsf{Po}(\mu_{ij})\\
 \mu_{ij} &amp;= \exp(\beta_{j} + \alpha_i),\\
-\beta_j &amp;\sim \mathsf{No}(0, 100), \\
-\alpha_i &amp;\sim \mathsf{No}(0, \kappa^2).
+\beta_j &amp;\sim \mathsf{Gauss}(0, 100), \\
+\alpha_i &amp;\sim \mathsf{Gauss}(0, \kappa^2).
 \end{align*}\]</span></p>
 <aside><ol class="aside-footnotes"><li id="fn3"><p>Specifically, <span class="math inline">\(\beta_j\)</span> is the coefficient for <code>task</code> <span class="math inline">\(j\)</span> (distraction type) and <span class="math inline">\(\alpha_i\)</span> is the random effect of participant <span class="math inline">\(i\)</span>.</p></li></ol></aside></section>
 <section id="priors-for-random-effect-scale" class="slide level2">
@@ -546,9 +545,9 @@ Figure&nbsp;4: Posterior density of <span class="math inline">\(\zeta\)</span> f
 <p>Average results on SAT program, for eight schools <span class="citation" data-cites="Rubin:1981">(<a href="#/references" role="doc-biblioref" onclick="">Rubin, 1981</a>)</span>.</p>
 <p>The hierarchical model is</p>
 <p><span class="math display">\[\begin{align*}
-Y_i &amp;\sim \mathsf{No}(\mu + \eta_i, \sigma_i^2)\\
-\mu &amp;\sim \mathsf{No}(0, 100)\\
-\eta_i &amp; \sim \mathsf{No}(0, \tau^2)
+Y_i &amp;\sim \mathsf{Gauss}(\mu + \eta_i, \sigma_i^2)\\
+\mu &amp;\sim \mathsf{Gauss}(0, 100)\\
+\eta_i &amp; \sim \mathsf{Gauss}(0, \tau^2)
 \end{align*}\]</span> Given the large sample in each school, we treat <span class="math inline">\(\sigma_i\)</span> as fixed data.</p>
 </section>
 <section id="sensibility-analysis-for-eight-schools-example" class="slide level2">
