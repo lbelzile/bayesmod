@@ -617,7 +617,7 @@ p(y_{\text{new}}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol
 <section id="analytical-derivation-of-predictive-distribution" class="slide level2">
 <h2>Analytical derivation of predictive distribution</h2>
 <p>Given the <span class="math inline">\(\mathsf{Be}(a, b)\)</span> prior or posterior, the predictive for <span class="math inline">\(n_{\text{new}}\)</span> trials is beta-binomial with density <span class="math display">\[\begin{align*}
-p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\theta^{a + y_{\text{new}}-1}(1-\theta)^{b + k - y_{\text{new}}-1}}{
+p(y_{\text{new}}\mid y) &amp;= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\theta^{a + y_{\text{new}}-1}(1-\theta)^{b + n_{\text{new}} - y_{\text{new}}-1}}{
 \mathrm{Be}(a, b)}\mathrm{d} \theta
 \\&amp;= \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\mathrm{Be}(a + y_{\text{new}}, b + n_{\text{new}} - y_{\text{new}})}{\mathrm{Be}(a, b)}
 \end{align*}\]</span></p>

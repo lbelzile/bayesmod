@@ -317,7 +317,7 @@ Figure&nbsp;1: Posteriors (full) and scaled likelihood (dashed) for exponential 
 <ol type="1">
 <li>Return the posterior mean, posterior median and maximum a posteriori (MAP).</li>
 <li>Return the 89% equitailed percentile credible interval.</li>
-<li>Return the 50% highest posterior density (HPD) interval (harder).</li>
+<li>Return the 50% highest posterior density (HPD) interval (harder). <em>Hint</em>: the <code>hdi</code> function from pacakge <code>HDInterval</code> may be useful for this.</li>
 </ol>
 <p>Next, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.</p>
 <p>Would the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all.</p>

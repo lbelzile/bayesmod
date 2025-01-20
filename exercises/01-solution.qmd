@@ -14,7 +14,7 @@ Linear mixed effect regression model specifies that response vectors for individ
 
 
 a. Using the tower property, derive the marginal mean and covariance matrix of $\boldsymbol{Y}_i$
-b. Hence obtain the parameters of the joint distribution of $(\boldsymbol{Y}_i^\top, \mathcal{B}_i^\top)^\top$.
+b. Hence obtain the parameters of the joint distribution of $(\boldsymbol{Y}_i^\top, \mathcal{B}_i^\top)^\top.$
 
 ::: {.solution}
 
@@ -31,7 +31,7 @@ Using the law of iterated expectation and variance
 Since the conditional and marginal are Gaussian, and the product of their density functions is also $\exp(-\cdot)$, with $\cdot$ quadratic in $\boldsymbol{Y}_i$ and $\mathcal{B}_i$, it must be multivariate Gaussian. As the latter is fully characterized by the mean and variance, it suffices to derive the covariance between $\boldsymbol{Y}_i$ and $\mathcal{B}_i$, which is the only missing piece of information. The latter is by definition
 
 \begin{align*}
-\mathsf{Co}(\boldsymbol{Y}_i,\mathcal{B}_i) & = \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\left[\left\{\boldsymbol{Y}_i - \mathsf{E}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i\right\}\left\{\mathcal{B}_i - \mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i)\right\}^\top\right]
+\mathsf{Co}(\boldsymbol{Y}_i,\mathcal{B}_i) & = \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\left[\left\{\boldsymbol{Y}_i - \mathsf{E}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i)\right\}\left\{\mathcal{B}_i - \mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i)\right\}^\top\right]
 \\&= \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\{(\boldsymbol{Y}_i - \mathbf{X}_i\boldsymbol{\beta})\mathcal{B}_i^\top\}
 \\&= \mathsf{E}_{\mathcal{B}_i}\left[\mathsf{E}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}\{(\boldsymbol{Y}_i - \mathbf{X}_i\boldsymbol{\beta})\mathcal{B}_i^\top\}\right]
 \\&= \mathbf{Z}_i\mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i\mathcal{B}_i^\top) 
@@ -52,9 +52,9 @@ Consider a simple random sample of size $n$ from the Wald distribution, with den
 \begin{align*}
 f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y > 0)
 \end{align*}
-for location $\nu >0$ and shape $\tau>0$. You may take for given that the expected value of the Wald distribution is $\mathsf{E}(Y) = \nu$.
+for location $\nu >0$ and shape $\tau>0.$ You may take for given that the expected value of the Wald distribution is $\mathsf{E}(Y) = \nu.$
 
-Write down the likelihood and show that it can be written in terms of the sufficient statistics $\sum_{i=1}^n y_i$ and $\sum_{i=1} y_i^{-1}$.
+Write down the likelihood and show that it can be written in terms of the sufficient statistics $\sum_{i=1}^n y_i$ and $\sum_{i=1} y_i^{-1}.$
 
 ::: {.solution}
 
@@ -62,7 +62,7 @@ The log likelihood for an independent and identically distributed sample is, up 
 \begin{align*}
 \ell(\nu, \lambda) \stackrel{\nu, \lambda}{\propto} \frac{n}{2} \ln(\lambda) -  \frac{\lambda}{2\nu^2} \sum_{i=1}^n y_i + \frac{n\lambda}{\nu} - \frac{\lambda}{2} \sum_{i=1}^n \frac{1}{y_i}
 \end{align*}
-and we readily see that the model is an exponential family with sufficient statistics $t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i$ and $t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}$.
+and we readily see that the model is an exponential family with sufficient statistics $t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i$ and $t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}.$
 
 We derive the score vector and information,
 \begin{align*}

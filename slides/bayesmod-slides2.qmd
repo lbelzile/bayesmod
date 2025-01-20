@@ -829,7 +829,7 @@ is useful for determining whether the prior is sensical.
 
 Given the $\mathsf{Be}(a, b)$ prior or posterior, the predictive for $n_{\text{new}}$ trials is beta-binomial with density
 \begin{align*}
-p(y_{\text{new}}\mid y) &= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\theta^{a + y_{\text{new}}-1}(1-\theta)^{b + k - y_{\text{new}}-1}}{
+p(y_{\text{new}}\mid y) &= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\theta^{a + y_{\text{new}}-1}(1-\theta)^{b + n_{\text{new}} - y_{\text{new}}-1}}{
 \mathrm{Be}(a, b)}\mathrm{d} \theta
 \\&= \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\mathrm{Be}(a + y_{\text{new}}, b + n_{\text{new}} - y_{\text{new}})}{\mathrm{Be}(a, b)}
 \end{align*}

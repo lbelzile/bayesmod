@@ -122,10 +122,9 @@ Consider $\lambda \sim \mathsf{Ga}(\alpha = 1.4, \beta=0.2).$
 
 1. Return the posterior mean, posterior median and maximum a posteriori (MAP).
 2. Return the 89% equitailed percentile credible interval.
-3. Return the 50% highest posterior density (HPD) interval (harder).
+3. Return the 50% highest posterior density (HPD) interval (harder). *Hint*: the `hdi` function from pacakge `HDInterval` may be useful for this.
 
 Next, draw 1000 observations from the posterior predictive distribution and plot a histogram of the latter. Compare it to the exponential distribution of observations.
 
 Would the posterior predictive change if you gathered more data? Justify your answer and explain how it would change, if at all.
-
 

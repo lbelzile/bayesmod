@@ -275,7 +275,7 @@ window.Quarto = {
 \end{align*}\]</span></p>
 <ol type="a">
 <li>Using the tower property, derive the marginal mean and covariance matrix of <span class="math inline">\(\boldsymbol{Y}_i\)</span></li>
-<li>Hence obtain the parameters of the joint distribution of <span class="math inline">\((\boldsymbol{Y}_i^\top, \mathcal{B}_i^\top)^\top\)</span>.</li>
+<li>Hence obtain the parameters of the joint distribution of <span class="math inline">\((\boldsymbol{Y}_i^\top, \mathcal{B}_i^\top)^\top.\)</span></li>
 </ol>
 <div class="proof solution">
 <p><span class="proof-title"><em>Solution</em>. </span>Using the law of iterated expectation and variance</p>
@@ -287,7 +287,7 @@ window.Quarto = {
 \end{align*}\]</span></p>
 <p>Since the conditional and marginal are Gaussian, and the product of their density functions is also <span class="math inline">\(\exp(-\cdot)\)</span>, with <span class="math inline">\(\cdot\)</span> quadratic in <span class="math inline">\(\boldsymbol{Y}_i\)</span> and <span class="math inline">\(\mathcal{B}_i\)</span>, it must be multivariate Gaussian. As the latter is fully characterized by the mean and variance, it suffices to derive the covariance between <span class="math inline">\(\boldsymbol{Y}_i\)</span> and <span class="math inline">\(\mathcal{B}_i\)</span>, which is the only missing piece of information. The latter is by definition</p>
 <p><span class="math display">\[\begin{align*}
-\mathsf{Co}(\boldsymbol{Y}_i,\mathcal{B}_i) &amp; = \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\left[\left\{\boldsymbol{Y}_i - \mathsf{E}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i\right\}\left\{\mathcal{B}_i - \mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i)\right\}^\top\right]
+\mathsf{Co}(\boldsymbol{Y}_i,\mathcal{B}_i) &amp; = \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\left[\left\{\boldsymbol{Y}_i - \mathsf{E}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i)\right\}\left\{\mathcal{B}_i - \mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i)\right\}^\top\right]
 \\&amp;= \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\{(\boldsymbol{Y}_i - \mathbf{X}_i\boldsymbol{\beta})\mathcal{B}_i^\top\}
 \\&amp;= \mathsf{E}_{\mathcal{B}_i}\left[\mathsf{E}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}\{(\boldsymbol{Y}_i - \mathbf{X}_i\boldsymbol{\beta})\mathcal{B}_i^\top\}\right]
 \\&amp;= \mathbf{Z}_i\mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i\mathcal{B}_i^\top)
@@ -303,12 +303,12 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="exercise-1.2">Exercise 1.2</h2>
 <p>Consider a simple random sample of size <span class="math inline">\(n\)</span> from the Wald distribution, with density <span class="math display">\[\begin{align*}
 f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y &gt; 0)
-\end{align*}\]</span> for location <span class="math inline">\(\nu &gt;0\)</span> and shape <span class="math inline">\(\tau&gt;0\)</span>. You may take for given that the expected value of the Wald distribution is <span class="math inline">\(\mathsf{E}(Y) = \nu\)</span>.</p>
-<p>Write down the likelihood and show that it can be written in terms of the sufficient statistics <span class="math inline">\(\sum_{i=1}^n y_i\)</span> and <span class="math inline">\(\sum_{i=1} y_i^{-1}\)</span>.</p>
+\end{align*}\]</span> for location <span class="math inline">\(\nu &gt;0\)</span> and shape <span class="math inline">\(\tau&gt;0.\)</span> You may take for given that the expected value of the Wald distribution is <span class="math inline">\(\mathsf{E}(Y) = \nu.\)</span></p>
+<p>Write down the likelihood and show that it can be written in terms of the sufficient statistics <span class="math inline">\(\sum_{i=1}^n y_i\)</span> and <span class="math inline">\(\sum_{i=1} y_i^{-1}.\)</span></p>
 <div class="proof solution">
 <p><span class="proof-title"><em>Solution</em>. </span>The log likelihood for an independent and identically distributed sample is, up to terms not depending on the parameters, <span class="math display">\[\begin{align*}
 \ell(\nu, \lambda) \stackrel{\nu, \lambda}{\propto} \frac{n}{2} \ln(\lambda) -  \frac{\lambda}{2\nu^2} \sum_{i=1}^n y_i + \frac{n\lambda}{\nu} - \frac{\lambda}{2} \sum_{i=1}^n \frac{1}{y_i}
-\end{align*}\]</span> and we readily see that the model is an exponential family with sufficient statistics <span class="math inline">\(t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i\)</span> and <span class="math inline">\(t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}\)</span>.</p>
+\end{align*}\]</span> and we readily see that the model is an exponential family with sufficient statistics <span class="math inline">\(t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i\)</span> and <span class="math inline">\(t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}.\)</span></p>
 <p>We derive the score vector and information, <span class="math display">\[\begin{align*}
 U(\nu, \lambda) &amp;= \begin{pmatrix} \frac{\partial \ell(\nu, \lambda)}{\partial \nu} \\\frac{\partial \ell(\nu, \lambda)}{\partial \lambda} \end{pmatrix}
 \\&amp;= \begin{pmatrix}
