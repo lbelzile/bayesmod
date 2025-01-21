@@ -455,34 +455,28 @@ Suppose that the restriction of the parameter creates a simpler base version.
 
 - e.g., if we have a random effect $\alpha \sim \mathsf{Gauss}(0, \zeta^2)$, the value $\zeta=0$ corresponds to no group variability.
  
-## Ingredients of penalized complexity priors
+## Rationale penalized complexity priors
 
 Consider a penalized complexity prior for parameter $\zeta$.
 
 **Occam's razor** states that the simpler base model should be preferred if there is not enough evidence in favor of the full model.
 
-We measure the complexity of the full model with density $f$ using the Kullback--Leibler divergence between $f$ and base model $f_0$ densities.
+We measure the complexity of the full model with density $f$ using the Kullback--Leibler divergence between $f$ and base model $f_0$ densities. 
 This is transformed into a distance $$d=\sqrt{2\mathsf{KL}(f || f_0)}.$$
 
 ## Penalized complexity prior construction
 
 Using a constant rate penalization from base model gives an exponential prior $p(d) = \lambda \exp(-\lambda d)$ on the distance scale, with a mode at $d=0$, corresponding to the base model. 
 
-Backtransform to parameter space to get $p(\zeta)$, truncate above if $d$ is upper bounded,
+Back-transform to parameter space to get $p(\zeta)$, 
 $$p(\zeta) = \lambda \exp\{-\lambda \cdot d(\zeta)\} \left| \frac{\partial d(\zeta)}{\partial \zeta}\right|.$$
 
-## Fixing penalized complexity hyperparameter
- 
-Pick rate $\lambda$ to control prior density in the tail, by specifying a value for (a transformation of) the parameter, say $g(\zeta)$, which is interpretable. 
-
-Elicit values of $Q$ and small probability $\alpha$ such that the tail probability 
-$$\Pr\{g(\zeta) > Q\} = \alpha.$$
  
 ## Penalized complexity prior for random effect scale
 
 If $\alpha_j \sim \mathsf{Gauss}(0, \zeta^2)$, the penalized complexity prior is exponential with rate $\lambda$.
 
-Given $Q$ a high quantile of the standard deviation $\zeta$, set $\lambda = -\ln(\alpha/Q)$.
+Elicit $Q$, a high quantile of the standard deviation $\zeta$ with tail probability $\alpha$ and set $\lambda = -\ln(\alpha/Q)$.
 
 
  
