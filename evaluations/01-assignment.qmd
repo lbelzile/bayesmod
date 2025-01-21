@@ -17,11 +17,11 @@ a. If $Y \mid P=p \sim \mathsf{geom}(p)$ and $P \sim \mathsf{beta}(\alpha_1, \al
 b. Obtain the marginal distribution of $Y$ and show that it is a special case of the beta-negative binomial distribution.
 c. Using the tower property, compute the unconditional mean and variance of $Y$. **Hint**: the formulae will depend on the reciprocal moments of a beta distribution,  $\mathsf{E}_P(P^{-1})$ and $\mathsf{E}_P(P^{-2})$. Complete the kernel to obtain these using the property $\Gamma(\alpha+1) = \alpha \Gamma(\alpha)$.
 d. **Forward sampling**: generate data from the marginal of $Y$ as follows
-   1. Pick values for $(\alpha_1, \alpha_2)$.
+   1. Pick values for $(\alpha_1, \alpha_2)$.^[Take $\alpha_1 > 3$ for part e.]
    2. Draw 10 000 observations from $Y$ by first simulating from $P$, then from $Y \mid P$. 
    3. Discard the values of $P$ and keep only those for $Y$. 
-   4. Compare the distribution with that of $Y \mid p$ using a bar plot.
-e. Verify the formulas for the expected value and variance derived previously using Monte Carlo integration (need $\alpha_1 > 3$).
+   4. Plot the marginal distribution of $Y$ using a bar plot.
+e. Verify the formulas for the expected value and variance derived previously using Monte Carlo integration.
 
 
 ## Problem 1.2

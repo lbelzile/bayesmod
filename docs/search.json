@@ -151,7 +151,7 @@
     "href": "slides/bayesmod-slides4.html#simulating-tails-of-gaussian-variables",
     "title": "Bayesian modelling",
     "section": "Simulating tails of Gaussian variables",
-    "text": "Simulating tails of Gaussian variables\nWe consider simulation from a standard Gaussian truncated above \\(a&gt;0\\)\nWrite the density of the truncated Gaussian as (Devroye, 1986, p. 381)\\[f(x) = \\frac{\\exp(-x^2/2)}{\\int_{a}^{\\infty}\\exp(-z^2/2)\\mathrm{d} z}  =\\frac{\\exp(-x^2/2)}{c_1}.\\]\nNote that, for \\(x \\geq a\\), \\[c_1f(x) \\leq \\frac{x}{a}\\exp\\left(-\\frac{x^2}{2}\\right)= a^{-1}\\exp\\left(-\\frac{a^2}{2}\\right)g(x);\\] where \\(g(x)\\) is the density of a Rayleigh variable shifted by \\(a\\).1\nThe constant \\(C= \\exp(-a^2/2)(c_1a)^{-1}\\) approaches 1 quickly as \\(a \\to \\infty\\) (asymptotically optimality)."
+    "text": "Simulating tails of Gaussian variables\nWe consider simulation from a standard Gaussian truncated above \\(a&gt;0\\)\nWrite the density of the truncated Gaussian as (Devroye, 1986, p. 381)\\[f(x) = \\frac{\\exp(-x^2/2)}{\\int_{a}^{\\infty}\\exp(-z^2/2)\\mathrm{d} z}  =\\frac{\\exp(-x^2/2)}{c_1}.\\]\nNote that, for \\(x \\geq a\\), \\[c_1f(x) \\leq \\frac{x}{a}\\exp\\left(-\\frac{x^2}{2}\\right)= a^{-1}\\exp\\left(-\\frac{a^2}{2}\\right)g(x);\\] where \\(g(x)\\) is the density of a Rayleigh variable shifted by \\(a\\).\n\nThe constant \\(C= \\exp(-a^2/2)(c_1a)^{-1}\\) approaches 1 quickly as \\(a \\to \\infty\\) (asymptotically optimality)."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#accept-reject-truncated-gaussian-with-rayleigh",
@@ -382,7 +382,7 @@
     "href": "slides/bayesmod-slides2.html#posterior",
     "title": "Bayesian modelling",
     "section": "Posterior",
-    "text": "Posterior\nUsing Bayes’ theorem, the posterior density is\n\\[\\begin{align*}\n\\color{#D55E00}{p(\\boldsymbol{\\theta} \\mid \\boldsymbol{Y})} = \\frac{\\color{#0072B2}{p(\\boldsymbol{Y} \\mid \\boldsymbol{\\theta})} \\times  \\color{#56B4E9}{p(\\boldsymbol{\\theta})}}{\\color{#E69F00}{\\int p(\\boldsymbol{Y} \\mid \\boldsymbol{\\theta}) p(\\boldsymbol{\\theta})\\mathrm{d} \\boldsymbol{\\theta}}},\n\\end{align*}\\]\nmeaning that \\[\\color{#D55E00}{\\text{posterior}} \\propto \\color{#0072B2}{\\text{likelihood}} \\times \\color{#56B4E9}{\\text{prior}}\\]\n\n\n\nEvaluating the marginal likelihood \\(\\color{#E69F00}{p(\\boldsymbol{Y})}\\), is challenging when \\(\\boldsymbol{\\theta}\\) is high-dimensional."
+    "text": "Posterior\nUsing Bayes’ theorem, the posterior density is\n\\[\\begin{align*}\n\\color{#D55E00}{p(\\boldsymbol{\\theta} \\mid \\boldsymbol{Y})} = \\frac{\\color{#0072B2}{p(\\boldsymbol{Y} \\mid \\boldsymbol{\\theta})} \\times  \\color{#56B4E9}{p(\\boldsymbol{\\theta})}}{\\color{#E69F00}{\\int p(\\boldsymbol{Y} \\mid \\boldsymbol{\\theta}) p(\\boldsymbol{\\theta})\\mathrm{d} \\boldsymbol{\\theta}}},\n\\end{align*}\\]\nmeaning that \\[\\color{#D55E00}{\\text{posterior}} \\propto \\color{#0072B2}{\\text{likelihood}} \\times \\color{#56B4E9}{\\text{prior}}\\]\n\nEvaluating the marginal likelihood \\(\\color{#E69F00}{p(\\boldsymbol{Y})}\\), is challenging when \\(\\boldsymbol{\\theta}\\) is high-dimensional."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#updating-beliefs-and-sequentiality",
@@ -396,35 +396,35 @@
     "href": "slides/bayesmod-slides2.html#binomial-distribution",
     "title": "Bayesian modelling",
     "section": "Binomial distribution",
-    "text": "Binomial distribution\nA binomial variable with probability of success \\(\\theta \\in [0,1]\\) has mass function \\[\\begin{align*}\nf(y; \\theta) = \\binom{n}{y} \\theta^y (1-\\theta)^{n-y}, \\qquad y = 0, \\ldots, n.\n\\end{align*}\\] Moments of the number of successes out of \\(n\\) trials are \\[\\mathsf{E}(Y \\mid \\theta) = n \\theta, \\quad \\mathsf{Va}(Y \\mid \\theta) = n \\theta(1-\\theta).\\]\n\n\nThe binomial coefficient \\(\\binom{n}{y}=n!/\\{(n-y)!y!\\}\\), where \\(n!=\\Gamma(n+1)\\)."
+    "text": "Binomial distribution\nA binomial variable with probability of success \\(\\theta \\in [0,1]\\) has mass function \\[\\begin{align*}\nf(y; \\theta) = \\binom{n}{y} \\theta^y (1-\\theta)^{n-y}, \\qquad y = 0, \\ldots, n.\n\\end{align*}\\] Moments of the number of successes out of \\(n\\) trials are \\[\\mathsf{E}(Y \\mid \\theta) = n \\theta, \\quad \\mathsf{Va}(Y \\mid \\theta) = n \\theta(1-\\theta).\\]\n\nThe binomial coefficient \\(\\binom{n}{y}=n!/\\{(n-y)!y!\\}\\), where \\(n!=\\Gamma(n+1)\\)."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#beta-distribution",
     "href": "slides/bayesmod-slides2.html#beta-distribution",
     "title": "Bayesian modelling",
     "section": "Beta distribution",
-    "text": "Beta distribution\nThe beta distribution with shapes \\(\\alpha&gt;0\\) and \\(\\beta&gt;0\\), denoted \\(\\mathsf{Be}(\\alpha,\\beta)\\), has density \\[f(y) = \\frac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}y^{\\alpha - 1}(1-y)^{\\beta - 1}, \\qquad y \\in [0,1]\\]\n\nexpectation: \\(\\alpha/(\\alpha+\\beta)\\);\nmode \\((\\alpha-1)/(\\alpha+\\beta-2)\\) if \\(\\alpha, \\beta&gt;1\\), else, \\(0\\), \\(1\\) or none;\nvariance: \\(\\alpha\\beta/\\{(\\alpha+\\beta)^2(\\alpha+\\beta+1)\\}\\).\n\n\nIt is a continuous distribution over the unit interval.\nThe uniform is a special case when both shapes are unity."
+    "text": "Beta distribution\nThe beta distribution with shapes \\(\\alpha&gt;0\\) and \\(\\beta&gt;0\\), denoted \\(\\mathsf{beta}(\\alpha,\\beta)\\), has density \\[f(y) = \\frac{\\Gamma(\\alpha+\\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)}y^{\\alpha - 1}(1-y)^{\\beta - 1}, \\qquad y \\in [0,1]\\]\n\nexpectation: \\(\\alpha/(\\alpha+\\beta)\\);\nmode \\((\\alpha-1)/(\\alpha+\\beta-2)\\) if \\(\\alpha, \\beta&gt;1\\), else, \\(0\\), \\(1\\) or none;\nvariance: \\(\\alpha\\beta/\\{(\\alpha+\\beta)^2(\\alpha+\\beta+1)\\}\\).\n\n\nIt is a continuous distribution over the unit interval.\nThe uniform is a special case when both shapes are unity."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#beta-binomial-example",
     "href": "slides/bayesmod-slides2.html#beta-binomial-example",
     "title": "Bayesian modelling",
     "section": "Beta-binomial example",
-    "text": "Beta-binomial example\nWe write \\(Y \\sim \\mathsf{Bin}(n, \\theta)\\) for \\(\\theta \\in [0,1]\\); the likelihood is \\[L(\\theta; y) = \\binom{n}{y} \\theta^y(1-\\theta)^{n-y}.\\]\nConsider a beta prior, \\(\\theta \\sim \\mathsf{Be}(\\alpha, \\beta)\\), with density \\[\np(\\theta) = \\frac{\\Gamma(\\alpha + \\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta) }\\theta^{\\alpha-1}(1-\\theta)^{\\beta - 1}.\n\\]"
+    "text": "Beta-binomial example\nWe write \\(Y \\sim \\mathsf{binom}(n, \\theta)\\) for \\(\\theta \\in [0,1]\\); the likelihood is \\[L(\\theta; y) = \\binom{n}{y} \\theta^y(1-\\theta)^{n-y}.\\]\nConsider a beta prior, \\(\\theta \\sim \\mathsf{beta}(\\alpha, \\beta)\\), with density \\[\np(\\theta) = \\frac{\\Gamma(\\alpha + \\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta) }\\theta^{\\alpha-1}(1-\\theta)^{\\beta - 1}.\n\\]"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#density-versus-likelihood",
     "href": "slides/bayesmod-slides2.html#density-versus-likelihood",
     "title": "Bayesian modelling",
     "section": "Density versus likelihood",
-    "text": "Density versus likelihood\nThe binomial distribution is discrete with support \\(0, \\ldots, n\\), whereas the likelihood is continuous over \\(\\theta \\in [0,1]\\).\n\n\n\n\n\n\n\n\nFigure 1: Binomial density function (left) and scaled likelihood function (right).\n\n\n\n\n\n\n\nIf the density or mass function integrates to 1 over the range of \\(Y\\), the integral of the likelihood over \\(\\theta\\) does not."
+    "text": "Density versus likelihood\nThe binomial distribution is discrete with support \\(0, \\ldots, n\\), whereas the likelihood is continuous over \\(\\theta \\in [0,1]\\).\n\n\nFigure 1: Binomial density function (left) and scaled likelihood function (right).\n\nIf the density or mass function integrates to 1 over the range of \\(Y\\), the integral of the likelihood over \\(\\theta\\) does not."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#posterior-density-and-proportionality",
     "href": "slides/bayesmod-slides2.html#posterior-density-and-proportionality",
     "title": "Bayesian modelling",
     "section": "Posterior density and proportionality",
-    "text": "Posterior density and proportionality\nAny term not a function of \\(\\theta\\) can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to\n\\[\\begin{align*}\nL(\\theta; y)p(\\theta) & \\stackrel{\\theta}{\\propto} \\theta^{y}(1-\\theta)^{n-y} \\times \\theta^{\\alpha-1} (1-\\theta)^{\\beta-1}\n\\\\& =\\theta^{y + \\alpha - 1}(1-\\theta)^{n-y + \\beta - 1}\n\\end{align*}\\] the kernel of a beta density with shape parameters \\(y + \\alpha\\) and \\(n-y + \\beta\\).\n\n\nThe symbol \\(\\propto\\), for proportionality, means dropping all terms not an argument of the left hand side."
+    "text": "Posterior density and proportionality\nAny term not a function of \\(\\theta\\) can be dropped, since it will absorbed by the normalizing constant. The posterior density is proportional to\n\\[\\begin{align*}\nL(\\theta; y)p(\\theta) & \\stackrel{\\theta}{\\propto} \\theta^{y}(1-\\theta)^{n-y} \\times \\theta^{\\alpha-1} (1-\\theta)^{\\beta-1}\n\\\\& =\\theta^{y + \\alpha - 1}(1-\\theta)^{n-y + \\beta - 1}\n\\end{align*}\\] the kernel of a beta density with shape parameters \\(y + \\alpha\\) and \\(n-y + \\beta\\).\n\nThe symbol \\(\\propto\\), for proportionality, means dropping all terms not an argument of the left hand side."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#marginal-likelihood",
@@ -445,14 +445,14 @@
     "href": "slides/bayesmod-slides2.html#likelihood-principle",
     "title": "Bayesian modelling",
     "section": "Likelihood principle",
-    "text": "Likelihood principle\nTwo likelihoods that are proportional, up to a constant not depending on unknown parameters, yield the same evidence.\nIn all cases, \\(L(\\theta; y) \\stackrel{\\theta}{\\propto} \\theta^k(1-\\theta)^{n-k}\\), so these yield the same inference for Bayesian.\n\n\nFor a more in-depth discussion, see Section 6.3.2 of Casella & Berger (2002)"
+    "text": "Likelihood principle\nTwo likelihoods that are proportional, up to a constant not depending on unknown parameters, yield the same evidence.\nIn all cases, \\(L(\\theta; y) \\stackrel{\\theta}{\\propto} \\theta^k(1-\\theta)^{n-k}\\), so these yield the same inference for Bayesian.\n\nFor a more in-depth discussion, see Section 6.3.2 of Casella & Berger (2002)"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#integration",
     "href": "slides/bayesmod-slides2.html#integration",
     "title": "Bayesian modelling",
     "section": "Integration",
-    "text": "Integration\nWe could approximate the \\(\\color{#E69F00}{\\text{marginal likelihood}}\\) through either\n\nnumerical integration (cubature)\nMonte Carlo simulations\n\nIn more complicated models, we will try to sample observations by bypassing completely this calculation.\n\n\nThe likelihood terms can be small (always less than one and decreasing for discrete data), so watch out for numerical overflow when evaluating normalizing constants."
+    "text": "Integration\nWe could approximate the \\(\\color{#E69F00}{\\text{marginal likelihood}}\\) through either\n\nnumerical integration (cubature)\nMonte Carlo simulations\n\nIn more complicated models, we will try to sample observations by bypassing completely this calculation.\n\nThe likelihood terms can be small (always less than one and decreasing for discrete data), so watch out for numerical overflow when evaluating normalizing constants."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#numerical-example-of-monte-carlo-integration",
@@ -466,14 +466,14 @@
     "href": "slides/bayesmod-slides2.html#marginal-posterior",
     "title": "Bayesian modelling",
     "section": "Marginal posterior",
-    "text": "Marginal posterior\nIn multi-parameter models, additional integration is needed to get the marginal posterior\n\\[p(\\theta_j \\mid \\boldsymbol{y}) = \\int p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}_{-j}.\\]\n\n\nMarginalization is trivial when we have a joint sample: simply keep the column corresponding to \\(\\theta_j\\)."
+    "text": "Marginal posterior\nIn multi-parameter models, additional integration is needed to get the marginal posterior\n\\[p(\\theta_j \\mid \\boldsymbol{y}) = \\int p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}_{-j}.\\]\n\nMarginalization is trivial when we have a joint sample: simply keep the column corresponding to \\(\\theta_j\\)."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#prior-likelihood-and-posterior",
     "href": "slides/bayesmod-slides2.html#prior-likelihood-and-posterior",
     "title": "Bayesian modelling",
     "section": "Prior, likelihood and posterior",
-    "text": "Prior, likelihood and posterior\n\n\nFigure 2: Scaled Binomial likelihood for six successes out of 14 trials, \\(\\mathsf{Beta}(3/2, 3/2)\\) prior and corresponding posterior distribution from a beta-binomial model."
+    "text": "Prior, likelihood and posterior\n\n\nFigure 2: Scaled Binomial likelihood for six successes out of 14 trials, \\(\\mathsf{beta}(3/2, 3/2)\\) prior and corresponding posterior distribution from a beta-binomial model."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#proper-prior",
@@ -494,7 +494,7 @@
     "href": "slides/bayesmod-slides2.html#different-priors-give-different-posteriors",
     "title": "Bayesian modelling",
     "section": "Different priors give different posteriors",
-    "text": "Different priors give different posteriors\n\n\nFigure 3: Scaled binomial likelihood for six successes out of 14 trials, with \\(\\mathsf{Beta}(3/2, 3/2)\\) prior (left), \\(\\mathsf{Beta}(1/4, 1/4)\\) (middle) and truncated uniform on \\([0,1/2]\\) (right), with the corresponding posterior distributions."
+    "text": "Different priors give different posteriors\n\n\nFigure 3: Scaled binomial likelihood for six successes out of 14 trials, with \\(\\mathsf{beta}(3/2, 3/2)\\) (left), \\(\\mathsf{beta}(1/4, 1/4)\\) (middle) and \\(\\mathsf{unif}[0,1/2]\\) (right) priors and posterior density."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#role-of-the-prior",
@@ -557,7 +557,7 @@
     "href": "slides/bayesmod-slides2.html#analytical-derivation-of-predictive-distribution",
     "title": "Bayesian modelling",
     "section": "Analytical derivation of predictive distribution",
-    "text": "Analytical derivation of predictive distribution\nGiven the \\(\\mathsf{Be}(a, b)\\) prior or posterior, the predictive for \\(n_{\\text{new}}\\) trials is beta-binomial with density \\[\\begin{align*}\np(y_{\\text{new}}\\mid y) &= \\int_0^1 \\binom{n_{\\text{new}}}{y_{\\text{new}}} \\frac{\\theta^{a + y_{\\text{new}}-1}(1-\\theta)^{b + n_{\\text{new}} - y_{\\text{new}}-1}}{\n\\mathrm{Be}(a, b)}\\mathrm{d} \\theta\n\\\\&= \\binom{n_{\\text{new}}}{y_{\\text{new}}} \\frac{\\mathrm{Be}(a + y_{\\text{new}}, b + n_{\\text{new}} - y_{\\text{new}})}{\\mathrm{Be}(a, b)}\n\\end{align*}\\]\nReplace \\(a=y + \\alpha\\) and \\(b=n-y + \\beta\\) to get the posterior predictive distribution."
+    "text": "Analytical derivation of predictive distribution\nGiven the \\(\\mathsf{beta}(a, b)\\) prior or posterior, the predictive for \\(n_{\\text{new}}\\) trials is beta-binomial with density \\[\\begin{align*}\np(y_{\\text{new}}\\mid y) &= \\int_0^1 \\binom{n_{\\text{new}}}{y_{\\text{new}}} \\frac{\\theta^{a + y_{\\text{new}}-1}(1-\\theta)^{b + n_{\\text{new}} - y_{\\text{new}}-1}}{\n\\mathrm{Be}(a, b)}\\mathrm{d} \\theta\n\\\\&= \\binom{n_{\\text{new}}}{y_{\\text{new}}} \\frac{\\mathrm{Be}(a + y_{\\text{new}}, b + n_{\\text{new}} - y_{\\text{new}})}{\\mathrm{Be}(a, b)}\n\\end{align*}\\]\nReplace \\(a=y + \\alpha\\) and \\(b=n-y + \\beta\\) to get the posterior predictive distribution."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#posterior-predictive-distribution",
@@ -571,7 +571,7 @@
     "href": "slides/bayesmod-slides2.html#posterior-predictive-distribution-via-simulation",
     "title": "Bayesian modelling",
     "section": "Posterior predictive distribution via simulation",
-    "text": "Posterior predictive distribution via simulation\nThe posterior predictive carries over the parameter uncertainty so will typically be wider and overdispersed relative to the corresponding distribution.\nGiven a draw \\(\\theta^*\\) from the posterior, simulate a new observation from the distribution \\(f(y_{\\text{new}}; \\theta^*)\\).\n\nnpost &lt;- 1e4L\n# Sample draws from the posterior distribution\npost_samp &lt;- rbeta(n = npost, y + alpha, n - y + beta)\n# For each draw, sample new observation\npost_pred &lt;- rbinom(n = npost, size = n, prob = post_samp)\n\n\n\nThe beta-binomial is used to model overdispersion in binary regression models."
+    "text": "Posterior predictive distribution via simulation\nThe posterior predictive carries over the parameter uncertainty so will typically be wider and overdispersed relative to the corresponding distribution.\nGiven a draw \\(\\theta^*\\) from the posterior, simulate a new observation from the distribution \\(f(y_{\\text{new}}; \\theta^*)\\).\n\nnpost &lt;- 1e4L\n# Sample draws from the posterior distribution\npost_samp &lt;- rbeta(n = npost, y + alpha, n - y + beta)\n# For each draw, sample new observation\npost_pred &lt;- rbinom(n = npost, size = n, prob = post_samp)\n\n\nThe beta-binomial is used to model overdispersion in binary regression models."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#summarizing-posterior-distributions-1",
@@ -620,7 +620,7 @@
     "href": "slides/bayesmod-slides2.html#which-credible-intervals",
     "title": "Bayesian modelling",
     "section": "Which credible intervals?",
-    "text": "Which credible intervals?\nMultiple \\(1-\\alpha\\) intervals, most common are\n\nequitailed: region \\(\\alpha/2\\) and \\(1-\\alpha/2\\) quantiles and\nhighest posterior density interval (HPDI), which gives the smallest interval \\((1-\\alpha)\\) probability\n\n\n\nIf we accept to have more than a single interval, the highest posterior density region can be a set of disjoint intervals. The HDPI is more sensitive to the number of draws and more computationally intensive (see R package HDinterval)"
+    "text": "Which credible intervals?\nMultiple \\(1-\\alpha\\) intervals, most common are\n\nequitailed: region \\(\\alpha/2\\) and \\(1-\\alpha/2\\) quantiles and\nhighest posterior density interval (HPDI), which gives the smallest interval \\((1-\\alpha)\\) probability\n\n\nIf we accept to have more than a single interval, the highest posterior density region can be a set of disjoint intervals. The HDPI is more sensitive to the number of draws and more computationally intensive (see R package HDinterval). See Hyndman (1996) for computations."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#illustration-of-credible-regions",
@@ -630,11 +630,18 @@
     "text": "Illustration of credible regions\n\n\nFigure 8: Density plots with 89% (top) and 50% (bottom) equitailed or central credible (left) and highest posterior density (right) regions for two data sets, highlighted in grey."
   },
   {
+    "objectID": "slides/bayesmod-slides2.html#computations-of-credible-intervals",
+    "href": "slides/bayesmod-slides2.html#computations-of-credible-intervals",
+    "title": "Bayesian modelling",
+    "section": "Computations of credible intervals",
+    "text": "Computations of credible intervals\n\nset.seed(2023)\npostsamp &lt;- rbeta(n = 1000, shape1 = 0.5, shape2 = 0.2)\nalpha &lt;- 0.11\n# Compute equitailed interval bounds\nquantile(postsamp, probs = c(alpha/2, 1-alpha/2))\n\n     5.5%     94.5% \n0.0246807 0.9999980 \n\n# Analytical (true) values\nqbeta(c(alpha/2, 1-alpha/2), shape1 = 0.5, shape2 = 0.2)\n\n[1] 0.02925205 0.99999844\n\n# Highest posterior density intervals - note values are outside of the support!\n(hdiD &lt;- HDInterval::hdi(density(postsamp), credMass = 1-alpha, allowSplit = TRUE))\n\n           begin       end\n[1,] -0.04331573 0.2800577\n[2,]  0.47816030 1.1423868\nattr(,\"credMass\")\n[1] 0.89\nattr(,\"height\")\n[1] 0.3898784"
+  },
+  {
     "objectID": "slides/bayesmod-slides2.html#references",
     "href": "slides/bayesmod-slides2.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nCasella, G., & Berger, R. L. (2002). Statistical inference (2nd ed.). Duxbury.\n\n\nFinetti, B. de. (1974). Theory of probability: A critical introductory treatment (Vol. 1). Wiley.\n\n\nMcElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and STAN (2nd ed.). Chapman; Hall/CRC."
+    "text": "References\n\n\n\n\nCasella, G., & Berger, R. L. (2002). Statistical inference (2nd ed.). Duxbury.\n\n\nFinetti, B. de. (1974). Theory of probability: A critical introductory treatment (Vol. 1). Wiley.\n\n\nHyndman, R. J. (1996). Computing and graphing highest density regions. The American Statistician, 50(2), 120–126. https://doi.org/10.1080/00031305.1996.10474359\n\n\nMcElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and STAN (2nd ed.). Chapman; Hall/CRC."
   },
   {
     "objectID": "news/index.html",
@@ -1138,7 +1145,7 @@
     "href": "evaluations/01-assignment.html#problem-1.1",
     "title": "Assignment 1",
     "section": "Problem 1.1",
-    "text": "Problem 1.1\nConsider the geometric distribution \\(\\mathsf{geom}(p)\\) with mass function \\[\\begin{align*}\nf(y; p) = p(1-p)^{y}, \\qquad y = 0, 1, 2, \\ldots;\n\\end{align*}\\] the latter is used to model the number of failures \\(Y\\) from independent trials until a first success, which occurs with probability \\(p\\).\n\nIf \\(Y \\mid P=p \\sim \\mathsf{geom}(p)\\) and \\(P \\sim \\mathsf{beta}(\\alpha_1, \\alpha_2)\\), show that \\(P \\mid Y=y\\) is beta distributed and obtain the parameters of the latter.\nObtain the marginal distribution of \\(Y\\) and show that it is a special case of the beta-negative binomial distribution.\nUsing the tower property, compute the unconditional mean and variance of \\(Y\\). Hint: the formulae will depend on the reciprocal moments of a beta distribution, \\(\\mathsf{E}_P(P^{-1})\\) and \\(\\mathsf{E}_P(P^{-2})\\). Complete the kernel to obtain these using the property \\(\\Gamma(\\alpha+1) = \\alpha \\Gamma(\\alpha)\\).\nForward sampling: generate data from the marginal of \\(Y\\) as follows\n\nPick values for \\((\\alpha_1, \\alpha_2)\\).\nDraw 10 000 observations from \\(Y\\) by first simulating from \\(P\\), then from \\(Y \\mid P\\).\nDiscard the values of \\(P\\) and keep only those for \\(Y\\).\nCompare the distribution with that of \\(Y \\mid p\\) using a bar plot.\n\nVerify the formulas for the expected value and variance derived previously using Monte Carlo integration (need \\(\\alpha_1 &gt; 3\\)).",
+    "text": "Problem 1.1\nConsider the geometric distribution \\(\\mathsf{geom}(p)\\) with mass function \\[\\begin{align*}\nf(y; p) = p(1-p)^{y}, \\qquad y = 0, 1, 2, \\ldots;\n\\end{align*}\\] the latter is used to model the number of failures \\(Y\\) from independent trials until a first success, which occurs with probability \\(p\\).\n\nIf \\(Y \\mid P=p \\sim \\mathsf{geom}(p)\\) and \\(P \\sim \\mathsf{beta}(\\alpha_1, \\alpha_2)\\), show that \\(P \\mid Y=y\\) is beta distributed and obtain the parameters of the latter.\nObtain the marginal distribution of \\(Y\\) and show that it is a special case of the beta-negative binomial distribution.\nUsing the tower property, compute the unconditional mean and variance of \\(Y\\). Hint: the formulae will depend on the reciprocal moments of a beta distribution, \\(\\mathsf{E}_P(P^{-1})\\) and \\(\\mathsf{E}_P(P^{-2})\\). Complete the kernel to obtain these using the property \\(\\Gamma(\\alpha+1) = \\alpha \\Gamma(\\alpha)\\).\nForward sampling: generate data from the marginal of \\(Y\\) as follows\n\nPick values for \\((\\alpha_1, \\alpha_2)\\).1\nDraw 10 000 observations from \\(Y\\) by first simulating from \\(P\\), then from \\(Y \\mid P\\).\nDiscard the values of \\(P\\) and keep only those for \\(Y\\).\nPlot the marginal distribution of \\(Y\\) using a bar plot.\n\nVerify the formulas for the expected value and variance derived previously using Monte Carlo integration.",
     "crumbs": [
       "Evaluations",
       "Assignments",
@@ -1163,6 +1170,18 @@
     "title": "Assignment 1",
     "section": "Problem 1.3",
     "text": "Problem 1.3\nThe waiting dataset contains waiting times (in seconds) from 17:59 until the departure of the next metro at the Universite de Montreal station during week-days over three consecutive months.\n\nAssume first that the waiting time are independent and identically distributed as exponential.\n\nUse a conjugate gamma prior with mean 30 seconds and std. deviation 30 seconds. Give the values of the corresponding shape and rate parameters of the prior.\nPlot an histogram of prior predictive draws.\nDerive the posterior distribution and report its parameter values.\nCalculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.\n\nThe post_waiting_weibull contains 10K random samples from the posterior of a Weibull model \\(\\mathsf{Weibull}(\\lambda, \\alpha)\\) with a penalized-complexity prior for the shape parameter with \\(\\alpha \\sim \\mathsf{PC}(\\theta=0.5)\\) (Niekerk et al., 2021) and \\(\\lambda \\sim \\mathsf{inv. gamma}(\\gamma, \\omega)\\) with scale \\(\\gamma=90\\) and shape \\(\\omega=4\\).\n\nDraw \\(B=1000\\) posterior predictive samples of size \\(n=62\\) from the Weibull and exponential models. Each draw should use different parameter values.\nFor each, compute (i) the sample mean, (ii) the sample std. deviation and (iii) the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original waiting sample. Hence comment on the adequacy (or lack thereof) of the two models.",
+    "crumbs": [
+      "Evaluations",
+      "Assignments",
+      "Assignment 1"
+    ]
+  },
+  {
+    "objectID": "evaluations/01-assignment.html#footnotes",
+    "href": "evaluations/01-assignment.html#footnotes",
+    "title": "Assignment 1",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nTake \\(\\alpha_1 &gt; 3\\) for part e.↩︎",
     "crumbs": [
       "Evaluations",
       "Assignments",
@@ -1669,7 +1688,7 @@
     "href": "slides/bayesmod-slides3.html#determining-hyperparameters",
     "title": "Bayesian modelling",
     "section": "Determining hyperparameters",
-    "text": "Determining hyperparameters\nWe term hyperparameters the parameters of the (hyper)priors.\nHow to elicit reasonable values for them?\n\nuse moment matching to get sensible values\ntrial-and-error using the prior predictive"
+    "text": "Determining hyperparameters\nWe term hyperparameters the parameters of the (hyper)priors.\nHow to elicit reasonable values for them?\n\nuse moment matching to get sensible values\ntrial-and-error using the prior predictive\n\ndraw a parameter value from the prior \\(\\boldsymbol{\\theta}_0\\)\nfor each, generate a new observation from the model \\(f(y_{\\text{new}} \\mid \\boldsymbol{\\theta}_0)\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#example-of-simple-linear-regression",
@@ -1683,7 +1702,7 @@
     "href": "slides/bayesmod-slides3.html#example---simple-linear-regression",
     "title": "Bayesian modelling",
     "section": "Example - simple linear regression",
-    "text": "Example - simple linear regression\nConsider the relationship between height (\\(Y\\), in cm) and weight (\\(X\\), in kg) among humans adults.1\nModel using a simple linear regression\n\\[\\begin{align*}\nh_i &\\sim \\mathsf{Gauss}(\\mu_i, \\sigma^2) \\\\\n\\mu_i &= \\beta_0 + \\beta_1(\\mathrm{x}_i - \\overline{x}) \\\\\n\\beta_0 &\\sim \\mathsf{Gauss}(178, 20^2) \\\\\n\\sigma &\\sim \\mathsf{U}(0, 50)\n\\end{align*}\\]\nSection 4.4.1 of McElreath (2020)"
+    "text": "Example - simple linear regression\nConsider the relationship between height (\\(Y\\), in cm) and weight (\\(X\\), in kg) among humans adults.1\nModel using a simple linear regression\n\\[\\begin{align*}\nY_i &\\sim \\mathsf{Gauss}(\\mu_i, \\sigma^2) \\\\\n\\mu_i &= \\beta_0 + \\beta_1(\\mathrm{x}_i - \\overline{x}) \\\\\n\\beta_0 &\\sim \\mathsf{Gauss}(178, 20^2) \\\\\n\\sigma &\\sim \\mathsf{unif}(0, 50)\n\\end{align*}\\] What about the slope parameter prior \\(p(\\beta_1)\\)?\nSection 4.4.1 of McElreath (2020)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors-for-the-slope",
@@ -1697,21 +1716,21 @@
     "href": "slides/bayesmod-slides3.html#conjugate-priors",
     "title": "Bayesian modelling",
     "section": "Conjugate priors",
-    "text": "Conjugate priors\nA prior density \\(p(\\boldsymbol{\\theta})\\) is conjugate for likelihood \\(L(\\boldsymbol{\\theta}; \\boldsymbol{y})\\) if the product \\(L(\\boldsymbol{\\theta}; \\boldsymbol{y})p(\\boldsymbol{\\theta})\\), after renormalization, is of the same parametric family as the prior.\nDistributions that are exponential family admit conjugate priors.1\nA distribution is an exponential family if it’s density can be written \\[\\begin{align*}\nf(y; \\boldsymbol{\\theta}) = \\exp\\left\\{ \\sum_{k=1}^K Q_k(\\boldsymbol{\\theta}) t_k(y) + D(\\boldsymbol{\\theta}) + h(y)\\right\\}.\n\\end{align*}\\] The support of \\(f\\) must not depend on \\(\\boldsymbol{\\theta}\\)."
+    "text": "Conjugate priors\nA prior density \\(p(\\boldsymbol{\\theta})\\) is conjugate for likelihood \\(L(\\boldsymbol{\\theta}; \\boldsymbol{y})\\) if the product \\(L(\\boldsymbol{\\theta}; \\boldsymbol{y})p(\\boldsymbol{\\theta})\\), after renormalization, is of the same parametric family as the prior.\nDistributions that are exponential family admit conjugate priors.\n\nA distribution is an exponential family if it’s density can be written \\[\\begin{align*}\nf(y; \\boldsymbol{\\theta}) = \\exp\\left\\{ \\sum_{k=1}^K Q_k(\\boldsymbol{\\theta}) t_k(y) + D(\\boldsymbol{\\theta}) + h(y)\\right\\}.\n\\end{align*}\\] The support of \\(f\\) must not depend on \\(\\boldsymbol{\\theta}\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-priors-for-common-exponential-families",
     "href": "slides/bayesmod-slides3.html#conjugate-priors-for-common-exponential-families",
     "title": "Bayesian modelling",
     "section": "Conjugate priors for common exponential families",
-    "text": "Conjugate priors for common exponential families\n\n\n\n\n\n\n\n\ndistribution\nunknown parameter\nconjugate prior\n\n\n\n\n\\(Y \\sim \\mathsf{Exp}(\\lambda)\\)\n\\(\\lambda\\)\n\\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Po}(\\mu)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Bin}(n, \\theta)\\)\n\\(\\theta\\)\n\\(\\theta \\sim \\mathsf{Be}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{Gauss}(\\nu, \\omega^2)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\sigma\\)\n\\(\\sigma^{-2} \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu, \\sigma\\)\n\\(\\mu \\mid \\sigma^2 \\sim \\mathsf{Gauss}(\\nu, \\omega \\sigma^2)\\), \\(\\sigma^{-2} \\sim \\mathsf{Ga}(\\alpha, \\beta)\\)"
+    "text": "Conjugate priors for common exponential families\n\n\n\n\n\n\n\n\ndistribution\nunknown parameter\nconjugate prior\n\n\n\n\n\\(Y \\sim \\mathsf{expo}(\\lambda)\\)\n\\(\\lambda\\)\n\\(\\lambda \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Poisson}(\\mu)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{binom}(n, \\theta)\\)\n\\(\\theta\\)\n\\(\\theta \\sim \\mathsf{Be}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{Gauss}(\\nu, \\omega^2)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\sigma\\)\n\\(\\sigma^{-2} \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu, \\sigma\\)\n\\(\\mu \\mid \\sigma^2 \\sim \\mathsf{Gauss}(\\nu, \\omega \\sigma^2)\\), \\(\\sigma^{-2} \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-prior-for-the-poisson",
     "href": "slides/bayesmod-slides3.html#conjugate-prior-for-the-poisson",
     "title": "Bayesian modelling",
     "section": "Conjugate prior for the Poisson",
-    "text": "Conjugate prior for the Poisson\nIf \\(Y \\sim \\mathsf{Po}(\\mu)\\) with density \\(f(y) = \\mu^x\\exp(-\\mu x)/x!\\), then for \\(\\mu \\sim \\mathsf{Ga}(\\alpha, \\beta)\\) with \\(\\alpha, \\beta\\) fixed. Consider an i.i.d. sample with mean \\(\\overline{y}\\). The posterior density is\n\\[\np(\\mu \\mid y) \\stackrel{\\mu}{\\propto} \\mu^{n\\overline{y}} \\exp\\left(-\\mu n\\overline{y}\\right) \\mu^{\\alpha-1} \\exp(-\\beta \\mu)\n\\] so must be gamma \\(\\mathsf{Ga}(n\\overline{y} + \\alpha, n\\overline{y} + \\beta)\\).\nParameter interpretation: \\(\\alpha\\) events in \\(\\beta\\) time intervals."
+    "text": "Conjugate prior for the Poisson\nIf \\(Y \\sim \\mathsf{Poisson}(\\mu)\\) with density \\(f(y) = \\mu^x\\exp(-\\mu x)/x!\\), then for \\(\\mu \\sim \\mathsf{gamma}(\\alpha, \\beta)\\) with \\(\\alpha, \\beta\\) fixed. Consider an i.i.d. sample with mean \\(\\overline{y}\\). The posterior density is\n\\[\np(\\mu \\mid y) \\stackrel{\\mu}{\\propto} \\mu^{n\\overline{y}} \\exp\\left(-\\mu n\\overline{y}\\right) \\mu^{\\alpha-1} \\exp(-\\beta \\mu)\n\\] so must be gamma \\(\\mathsf{gamma}(n\\overline{y} + \\alpha, n\\overline{y} + \\beta)\\).\nParameter interpretation: \\(\\alpha\\) events in \\(\\beta\\) time intervals."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-prior-for-gaussian-known-variance",
@@ -1725,14 +1744,28 @@
     "href": "slides/bayesmod-slides3.html#upworthy-examples",
     "title": "Bayesian modelling",
     "section": "Upworthy examples",
-    "text": "Upworthy examples\n\nThe Upworthy Research Archive (Matias et al., 2021) contains results for 22743 experiments, with a click through rate of 1.58% on average and a standard deviation of 1.23%.\nWe consider an A/B test that compared four different headlines for a story.\nWe model the conversion rate for each using \\(\\texttt{click}_i \\sim \\mathsf{Po}(\\lambda_i\\texttt{impression}_i)\\)"
+    "text": "Upworthy examples\n\nThe Upworthy Research Archive (Matias et al., 2021) contains results for 22743 experiments, with a click through rate of 1.58% on average and a standard deviation of 1.23%.\nWe consider an A/B test that compared four different headlines for a story.\nWe model the conversion rate for each using \\(\\texttt{click}_i \\sim \\mathsf{Poisson}(\\lambda_i\\texttt{impression}_i)\\).\n\nWe treat \\(\\texttt{impression}\\) as a known offset."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#headlines",
+    "href": "slides/bayesmod-slides3.html#headlines",
+    "title": "Bayesian modelling",
+    "section": "Headlines",
+    "text": "Headlines\nConsider an A/B test from November 23st, 2014, that compared four different headlines for a story on Sesame Street workshop with interviews of children whose parents were in jail and visiting them in prisons. The headlines tested were:\n\nSome Don’t Like It When He Sees His Mom. But To Him? Pure Joy. Why Keep Her From Him?\nThey’re Not In Danger. They’re Right. See True Compassion From The Children Of The Incarcerated.\nKids Have No Place In Jail … But In This Case, They Totally Deserve It.\nGoing To Jail Should Be The Worst Part Of Their Life. It’s So Not. Not At All."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#ab-test-sesame-street-example",
     "href": "slides/bayesmod-slides3.html#ab-test-sesame-street-example",
     "title": "Bayesian modelling",
     "section": "A/B test: Sesame street example",
-    "text": "A/B test: Sesame street example\n\n\n\n\n\nheadline\nimpressions\nclicks\n\n\n\n\nH1\n3060\n49\n\n\nH2\n2982\n20\n\n\nH3\n3112\n31\n\n\nH4\n3083\n9\n\n\n\n\n\nConjugate prior: moment matching for \\(\\lambda \\sim \\mathsf{Ga}(\\alpha, \\beta )\\) gives \\(\\alpha = 1.64\\) and \\(\\beta = 0.01\\), as \\(\\beta = \\mathsf{Va}_0(\\lambda)/\\mathsf{E}_0(\\lambda)\\)."
+    "text": "A/B test: Sesame street example\n\n\n\n\n\nheadline\nimpressions\nclicks\n\n\n\n\nH1\n3060\n49\n\n\nH2\n2982\n20\n\n\nH3\n3112\n31\n\n\nH4\n3083\n9"
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#moment-matching-for-gamma-distribution",
+    "href": "slides/bayesmod-slides3.html#moment-matching-for-gamma-distribution",
+    "title": "Bayesian modelling",
+    "section": "Moment matching for gamma distribution",
+    "text": "Moment matching for gamma distribution\nFor \\(Y \\sim \\mathsf{gamma}(\\alpha, \\beta)\\) with \\(\\beta\\) the rate parameter, we have \\[\\begin{align*}\n\\mathsf{E}(Y)=alpha/\\beta, \\qquad \\mathsf{Va}(Y)=alpha/\\beta^2.\n\\end{align*}\\] We can solve for \\(\\beta =\\mathsf{E}_0(\\lambda)/\\mathsf{Va}_0(\\lambda)\\) and then use the mean relationship to retrieve $.\n\nmu &lt;- 0.0158; sd &lt;- 0.0123\n(beta &lt;- mu/sd^2)\n\n[1] 104.4352\n\n(alpha &lt;- mu * beta)\n\n[1] 1.650076\n\n\nMoment matching gives \\(\\alpha = 1.65\\) and \\(\\beta = 104.44\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#posterior-distributions-for-sesame-street",
@@ -1760,14 +1793,14 @@
     "href": "slides/bayesmod-slides3.html#conditions-for-a-proper-posterior",
     "title": "Bayesian modelling",
     "section": "Conditions for a proper posterior",
-    "text": "Conditions for a proper posterior\n\nfor \\(\\tau \\sim \\mathsf{U}(0, \\infty)\\), we need at least \\(J \\geq 3\\) ‘groups’ for the posterior to be proper.\nif we take \\(p(\\tau) \\propto \\tau^{-1}\\), the posterior is never proper.\n\nAs Gelman (2006) states:\n\nin a hierarchical model the data can never rule out a group-level variance of zero, and so [a] prior distribution cannot put an infinite mass in this area"
+    "text": "Conditions for a proper posterior\n\nfor \\(\\tau \\sim \\mathsf{unif}(0, \\infty)\\), we need at least \\(J \\geq 3\\) ‘groups’ for the posterior to be proper.\nif we take \\(p(\\tau) \\propto \\tau^{-1}\\), the posterior is never proper.\n\nAs Gelman (2006) states:\n\nin a hierarchical model the data can never rule out a group-level variance of zero, and so [a] prior distribution cannot put an infinite mass in this area"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#improper-priors-as-limiting-cases",
     "href": "slides/bayesmod-slides3.html#improper-priors-as-limiting-cases",
     "title": "Bayesian modelling",
     "section": "Improper priors as limiting cases",
-    "text": "Improper priors as limiting cases\nWe can view the improper prior as a limiting case \\[\\sigma \\sim \\mathsf{U}(0, t), \\qquad t \\to \\infty.\\]\nThe Haldane prior for \\(\\theta\\) in a binomial model is \\(\\theta^{-1}(1-\\theta)^{-1}\\), a limiting \\(\\mathsf{Be}(0,0)\\) distribution.\nThe improper prior \\(p(\\sigma) \\propto \\sigma^{-1}\\) is equivalent to an inverse gamma \\(\\mathsf{IGa}(\\epsilon, \\epsilon)\\) when \\(\\epsilon \\to 0\\).\nThe limiting posterior is thus improper for random effects scales, so the value of \\(\\epsilon\\) matters."
+    "text": "Improper priors as limiting cases\nWe can view the improper prior as a limiting case \\[\\sigma \\sim \\mathsf{unif}(0, t), \\qquad t \\to \\infty.\\]\nThe Haldane prior for \\(\\theta\\) in a binomial model is \\(\\theta^{-1}(1-\\theta)^{-1}\\), a limiting \\(\\mathsf{Be}(0,0)\\) distribution.\nThe improper prior \\(p(\\sigma) \\propto \\sigma^{-1}\\) is equivalent to an inverse gamma \\(\\mathsf{inv. gamma}(\\epsilon, \\epsilon)\\) when \\(\\epsilon \\to 0\\).\nThe limiting posterior is thus improper for random effects scales, so the value of \\(\\epsilon\\) matters."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#mdi-prior-for-generalized-pareto",
@@ -1781,7 +1814,7 @@
     "href": "slides/bayesmod-slides3.html#truncated-mdi-for-generalized-pareto-distribution",
     "title": "Bayesian modelling",
     "section": "Truncated MDI for generalized Pareto distribution",
-    "text": "Truncated MDI for generalized Pareto distribution\nThe MDI prior leads to an improper posterior without modification.\n\n\nFigure 3: Unscaled maximum data information (MDI) prior density.\nIf we restrict the range of the MDI prior \\(p(\\xi)\\) to \\(\\xi \\geq -1\\), then \\(p(\\xi + 1) \\sim \\mathsf{Exp}(1)\\) and posterior is proper."
+    "text": "Truncated MDI for generalized Pareto distribution\nThe MDI prior leads to an improper posterior without modification.\n\n\nFigure 3: Unscaled maximum data information (MDI) prior density.\nIf we restrict the range of the MDI prior \\(p(\\xi)\\) to \\(\\xi \\geq -1\\), then \\(p(\\xi + 1) \\sim \\mathsf{expo}(1)\\) and posterior is proper."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#flat-priors",
@@ -1795,7 +1828,7 @@
     "href": "slides/bayesmod-slides3.html#flat-priors-for-scale-parameters",
     "title": "Bayesian modelling",
     "section": "Flat priors for scale parameters",
-    "text": "Flat priors for scale parameters\nConsider a scale parameter \\(\\sigma &gt; 0\\).\n\nWe could truncate the range, e.g., \\(\\sigma \\sim \\mathsf{U}(0, 50)\\), but this is not ‘uninformative’, as extreme values of \\(\\sigma\\) are as likely as small ones.\nThese priors are not invariant: if \\(p\\{\\log(\\sigma)\\} \\propto 1\\) implies \\(p(\\sigma) \\propto \\sigma^{-1}\\) so can be informative on another scale."
+    "text": "Flat priors for scale parameters\nConsider a scale parameter \\(\\sigma &gt; 0\\).\n\nWe could truncate the range, e.g., \\(\\sigma \\sim \\mathsf{unif}(0, 50)\\), but this is not ‘uninformative’, as extreme values of \\(\\sigma\\) are as likely as small ones.\nThese priors are not invariant: if \\(p\\{\\log(\\sigma)\\} \\propto 1\\) implies \\(p(\\sigma) \\propto \\sigma^{-1}\\) so can be informative on another scale."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#vague-priors",
@@ -1816,7 +1849,7 @@
     "href": "slides/bayesmod-slides3.html#jeffreys-prior-for-the-binomial-distribution",
     "title": "Bayesian modelling",
     "section": "Jeffrey’s prior for the binomial distribution",
-    "text": "Jeffrey’s prior for the binomial distribution\nConsider \\(Y \\sim \\mathsf{Bin}(1, \\theta)\\). The negative of the second derivative of the log likelihood with respect to \\(p\\) is \\[\n\\jmath(\\theta) = - \\partial^2 \\ell(\\theta; y) / \\partial \\theta^2 = y/\\theta^2 + (1-y)/(1-\\theta)^2.\n\\]\nSince \\(\\mathsf{E}(Y)=\\theta\\), the Fisher information is \\[\\imath(\\vartheta) = \\mathsf{E}\\{\\jmath(\\theta)\\}=1/\\theta + 1/(1-\\theta) = n/\\{\\theta(1-\\theta)\\}.\\] Jeffrey’s prior is therefore \\(p(\\theta) \\propto \\theta^{-1/2}(1-\\theta)^{-1/2}\\), a conjugate Beta prior \\(\\mathsf{Be}(0.5,0.5)\\)."
+    "text": "Jeffrey’s prior for the binomial distribution\nConsider \\(Y \\sim \\mathsf{binom}(1, \\theta)\\). The negative of the second derivative of the log likelihood with respect to \\(p\\) is \\[\n\\jmath(\\theta) = - \\partial^2 \\ell(\\theta; y) / \\partial \\theta^2 = y/\\theta^2 + (1-y)/(1-\\theta)^2.\n\\]\nSince \\(\\mathsf{E}(Y)=\\theta\\), the Fisher information is \\[\\imath(\\vartheta) = \\mathsf{E}\\{\\jmath(\\theta)\\}=1/\\theta + 1/(1-\\theta) = 1/\\{\\theta(1-\\theta)\\}.\\] Jeffrey’s prior is therefore \\(p(\\theta) \\propto \\theta^{-1/2}(1-\\theta)^{-1/2}\\), a conjugate Beta prior \\(\\mathsf{Be}(0.5,0.5)\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#invariant-priors-for-location-scale-families",
@@ -1865,7 +1898,7 @@
     "href": "slides/bayesmod-slides3.html#priors-for-scale-of-random-effects",
     "title": "Bayesian modelling",
     "section": "Priors for scale of random effects",
-    "text": "Priors for scale of random effects\nThe conjugate inverse gamma prior \\(p(1/\\zeta) \\sim \\mathsf{Ga}(\\alpha, \\beta)\\) is such that the mode for \\(\\zeta\\) is \\(\\beta/(1+\\alpha)\\).\nOften, we take \\(\\beta=\\alpha = 0.01\\) or \\(0.001\\), but this leads to near-improper priors, so small values of the parameters are not optimal for ‘random effects’.\nThe inverse gamma prior cannot provide shrinkage or allow for no variability between groups."
+    "text": "Priors for scale of random effects\nThe conjugate inverse gamma prior \\(p(\\zeta) \\sim \\mathsf{inv. gamma}(\\alpha, \\beta)\\) is such that the mode for \\(\\zeta\\) is \\(\\beta/(1+\\alpha)\\).\nOften, we take \\(\\beta=\\alpha = 0.01\\) or \\(0.001\\), but this leads to near-improper priors, so small values of the parameters are not optimal for ‘random effects’.\nThe inverse gamma prior cannot provide shrinkage or allow for no variability between groups."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors-for-scale-of-random-effects-1",
@@ -1893,28 +1926,28 @@
     "href": "slides/bayesmod-slides3.html#poisson-mixed-model",
     "title": "Bayesian modelling",
     "section": "Poisson mixed model",
-    "text": "Poisson mixed model\nWe model the number of violations, nviolation as a function of distraction type (task) and participant id.1 \\[\\begin{align*}\n\\texttt{nviolation}_{ij} &\\sim \\mathsf{Po}(\\mu_{ij})\\\\\n\\mu_{ij} &= \\exp(\\beta_{j} + \\alpha_i),\\\\\n\\beta_j &\\sim \\mathsf{Gauss}(0, 100), \\\\\n\\alpha_i &\\sim \\mathsf{Gauss}(0, \\kappa^2).\n\\end{align*}\\]\nSpecifically, \\(\\beta_j\\) is the coefficient for task \\(j\\) (distraction type) and \\(\\alpha_i\\) is the random effect of participant \\(i\\)."
+    "text": "Poisson mixed model\nWe model the number of violations, nviolation as a function of distraction type (task) and participant id. \\[\\begin{align*}\n\\texttt{nviolation}_{ij} &\\sim \\mathsf{Poisson}(\\mu_{ij})\\\\\n\\mu_{ij} &= \\exp(\\beta_{j} + \\alpha_i),\\\\\n\\beta_j &\\sim \\mathsf{Gauss}(0, 100), \\\\\n\\alpha_i &\\sim \\mathsf{Gauss}(0, \\tau^2).\n\\end{align*}\\]\nSpecifically,\n\n\\(\\beta_j\\) is the coefficient for task \\(j\\) (distraction type),\n\\(\\alpha_i\\) is the random effect of participant \\(i\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors-for-random-effect-scale",
     "href": "slides/bayesmod-slides3.html#priors-for-random-effect-scale",
     "title": "Bayesian modelling",
     "section": "Priors for random effect scale",
-    "text": "Priors for random effect scale\nConsider different priors for \\(\\kappa\\)\n\nflat uniform prior \\(\\mathsf{U}(0,10)\\)\nconjugate inverse gamma \\(\\mathsf{IG}(0.01, 0.01)\\) prior\na Student-\\(t\\) with \\(\\nu=3\\) degrees of freedom\na penalized complexity prior such that the 0.95 percentile of the scale is 5, corresponding to \\(\\mathsf{Exp}(0.6)\\)."
+    "text": "Priors for random effect scale\nConsider different priors for \\(\\tau\\)\n\nflat uniform prior \\(\\mathsf{unif}(0,10)\\)\nconjugate inverse gamma \\(\\mathsf{inv. gamma}(0.01, 0.01)\\) prior\na truncated Student-\\(t\\) on \\([0, \\infty)\\) with \\(\\nu=3\\) degrees of freedom, \\(\\mathsf{Student}_{+}(0,1,3)\\)\na penalized complexity prior such that the 0.95 percentile of the scale is 5, corresponding to \\(\\mathsf{expo}(0.6)\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#sensitivity-analysis-for-smartwatch-data",
     "href": "slides/bayesmod-slides3.html#sensitivity-analysis-for-smartwatch-data",
     "title": "Bayesian modelling",
     "section": "Sensitivity analysis for smartwatch data",
-    "text": "Sensitivity analysis for smartwatch data\n\n\nFigure 4: Posterior density of \\(\\zeta\\) for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.\nBasically indistinguishable results for the random scale.."
+    "text": "Sensitivity analysis for smartwatch data\n\n\nFigure 4: Posterior density of \\(\\tau\\) for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.\nBasically indistinguishable results for the random scale.."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#eight-schools-example",
     "href": "slides/bayesmod-slides3.html#eight-schools-example",
     "title": "Bayesian modelling",
     "section": "Eight schools example",
-    "text": "Eight schools example\nAverage results on SAT program, for eight schools (Rubin, 1981).\nThe hierarchical model is\n\\[\\begin{align*}\nY_i &\\sim \\mathsf{Gauss}(\\mu + \\eta_i, \\sigma_i^2)\\\\\n\\mu &\\sim \\mathsf{Gauss}(0, 100)\\\\\n\\eta_i & \\sim \\mathsf{Gauss}(0, \\tau^2)\n\\end{align*}\\] Given the large sample in each school, we treat \\(\\sigma_i\\) as fixed data."
+    "text": "Eight schools example\nAverage results on SAT program, for eight schools (Rubin, 1981).\nThe hierarchical model is\n\\[\\begin{align*}\nY_i &\\sim \\mathsf{Gauss}(\\mu + \\eta_i, \\sigma_i^2)\\\\\n\\mu &\\sim \\mathsf{Gauss}(0, 100)\\\\\n\\eta_i & \\sim \\mathsf{Gauss}(0, \\tau^2)\n\\end{align*}\\] Given the large sample in each school, we treat \\(\\sigma_i\\) as fixed data by using the sample standard deviation."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#sensibility-analysis-for-eight-schools-example",

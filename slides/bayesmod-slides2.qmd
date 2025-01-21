@@ -131,7 +131,7 @@ Using Bayes' theorem, the posterior density is
 meaning that 
 $$\color{#D55E00}{\text{posterior}} \propto \color{#0072B2}{\text{likelihood}} \times \color{#56B4E9}{\text{prior}}$$
 
-::: aside
+::: {style="font-size: 65%;"}
 Evaluating the **marginal likelihood** $\color{#E69F00}{p(\boldsymbol{Y})}$, is challenging when $\boldsymbol{\theta}$ is high-dimensional.
 
 :::
@@ -185,14 +185,14 @@ f(y; \theta) = \binom{n}{y} \theta^y (1-\theta)^{n-y}, \qquad y = 0, \ldots, n.
 \end{align*}
 Moments of the number of successes  out of $n$ trials are $$\mathsf{E}(Y \mid \theta) = n \theta, \quad \mathsf{Va}(Y \mid \theta) = n \theta(1-\theta).$$
 
-::: aside
+::: {style="font-size: 65%;"}
 
 The binomial coefficient $\binom{n}{y}=n!/\{(n-y)!y!\}$, where $n!=\Gamma(n+1)$.
 :::
 
 ## Beta distribution
 
-The beta distribution with shapes $\alpha>0$ and $\beta>0$, denoted $\mathsf{Be}(\alpha,\beta)$, has density
+The beta distribution with shapes $\alpha>0$ and $\beta>0$, denoted $\mathsf{beta}(\alpha,\beta)$, has density
 $$f(y) = \frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)}y^{\alpha - 1}(1-y)^{\beta - 1}, \qquad y \in [0,1]$$
 
 
@@ -215,9 +215,9 @@ The uniform is a special case when both shapes are unity.
 
 
 
-We write $Y \sim \mathsf{Bin}(n, \theta)$ for $\theta \in [0,1]$; the likelihood is $$L(\theta; y) = \binom{n}{y} \theta^y(1-\theta)^{n-y}.$$
+We write $Y \sim \mathsf{binom}(n, \theta)$ for $\theta \in [0,1]$; the likelihood is $$L(\theta; y) = \binom{n}{y} \theta^y(1-\theta)^{n-y}.$$
 
-Consider a beta prior, $\theta \sim \mathsf{Be}(\alpha, \beta)$, with density
+Consider a beta prior, $\theta \sim \mathsf{beta}(\alpha, \beta)$, with density
 $$
 p(\theta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta) }\theta^{\alpha-1}(1-\theta)^{\beta - 1}.
 $$
@@ -263,7 +263,7 @@ g2 <- ggplot() +
 g2 + g1
 ```
 
-::: aside
+::: {style="font-size: 65%;"}
 If the density or mass function integrates to 1 over the range of $Y$, the integral of the likelihood over $\theta$ does not.
 
 :::
@@ -279,7 +279,7 @@ L(\theta; y)p(\theta) & \stackrel{\theta}{\propto} \theta^{y}(1-\theta)^{n-y} \t
 \end{align*}
 the kernel of a beta density with shape parameters $y + \alpha$ and $n-y + \beta$.
 
-::: aside
+::: {style="font-size: 65%;"}
 
 The symbol $\propto$, for proportionality, means dropping all terms not an argument of the left hand side.
 
@@ -312,7 +312,7 @@ Two likelihoods that are proportional, up to a constant not depending on unknown
 In all cases, $L(\theta; y) \stackrel{\theta}{\propto} \theta^k(1-\theta)^{n-k}$, so these yield the same inference for Bayesian.
 
 
-::: aside
+::: {style="font-size: 65%;"}
 For a more in-depth discussion, see Section 6.3.2 of @Casella.Berger:2002
 :::
 
@@ -326,7 +326,7 @@ We could approximate the $\color{#E69F00}{\text{marginal likelihood}}$ through e
 
 In more complicated models, we will try to sample observations by bypassing completely this calculation.
 
-::: aside
+::: {style="font-size: 65%;"}
 
 The likelihood terms can be small (always less than one and decreasing for discrete data), so watch out for numerical overflow when evaluating normalizing constants.
 
@@ -363,7 +363,7 @@ In multi-parameter models, additional integration is needed to get the marginal 
 $$p(\theta_j \mid \boldsymbol{y}) = \int p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}_{-j}.$$
 
 
-::: aside
+::: {style="font-size: 65%;"}
 Marginalization is trivial when we have a joint sample: simply keep the column corresponding to $\theta_j$.
 :::
 
@@ -376,7 +376,7 @@ Marginalization is trivial when we have a joint sample: simply keep the column c
 #| eval: true
 #| echo: false
 #| cache: true
-#| fig-cap: "Scaled Binomial likelihood for six successes out of 14 trials, $\\mathsf{Beta}(3/2, 3/2)$ prior and corresponding posterior distribution from a beta-binomial model."
+#| fig-cap: "Scaled Binomial likelihood for six successes out of 14 trials, $\\mathsf{beta}(3/2, 3/2)$ prior and corresponding posterior distribution from a beta-binomial model."
 library(ggplot2)
 library(MetBrewer)
 library(patchwork)
@@ -454,7 +454,7 @@ For example,
 #| label: fig-betabinom
 #| eval: true
 #| echo: false
-#| fig-cap: "Scaled binomial likelihood for six successes out of 14 trials, with $\\mathsf{Beta}(3/2, 3/2)$ prior (left), $\\mathsf{Beta}(1/4, 1/4)$ (middle) and truncated uniform on $[0,1/2]$ (right), with the corresponding posterior distributions."
+#| fig-cap: "Scaled binomial likelihood for six successes out of 14 trials, with $\\mathsf{beta}(3/2, 3/2)$ (left), $\\mathsf{beta}(1/4, 1/4)$ (middle) and $\\mathsf{unif}[0,1/2]$ (right) priors and posterior density."
 library(ggplot2)
 library(MetBrewer)
 library(patchwork)
@@ -827,7 +827,7 @@ is useful for determining whether the prior is sensical.
 
 ## Analytical derivation of predictive distribution
 
-Given the $\mathsf{Be}(a, b)$ prior or posterior, the predictive for $n_{\text{new}}$ trials is beta-binomial with density
+Given the $\mathsf{beta}(a, b)$ prior or posterior, the predictive for $n_{\text{new}}$ trials is beta-binomial with density
 \begin{align*}
 p(y_{\text{new}}\mid y) &= \int_0^1 \binom{n_{\text{new}}}{y_{\text{new}}} \frac{\theta^{a + y_{\text{new}}-1}(1-\theta)^{b + n_{\text{new}} - y_{\text{new}}-1}}{
 \mathrm{Be}(a, b)}\mathrm{d} \theta
@@ -922,7 +922,7 @@ post_pred <- rbinom(n = npost, size = n, prob = post_samp)
 
 
 
-::: aside
+::: {style="font-size: 65%;"}
 
 
 The beta-binomial is used to model overdispersion in binary regression models.
@@ -1144,11 +1144,11 @@ Caveat: @McElreath:2020 suggests the term 'compatibility', as it
 Multiple $1-\alpha$ intervals, most common are 
 
 - equitailed: region $\alpha/2$ and $1-\alpha/2$ quantiles and 
-- **highest posterior density interval** (HPDI), which gives the smallest interval $(1-\alpha)$ probability
+- **highest posterior density interval** (HPDI), which gives the smallest interval $(1-\alpha)$ probability 
 
-::: aside
+::: {style="font-size: 65%;"}
 
-If we accept to have more than a single interval, the highest posterior density region can be a set of disjoint intervals. The HDPI is more sensitive to the number of draws and more computationally intensive (see **R** package `HDinterval`)
+If we accept to have more than a single interval, the highest posterior density region can be a set of disjoint intervals. The HDPI is more sensitive to the number of draws and more computationally intensive (see **R** package `HDinterval`). See @Hyndman:1996 for computations.
 
 :::
 
@@ -1252,6 +1252,22 @@ g4 <- ggplot() +
   scale_y_continuous(limits = c(0,5), expand = c(0,0)) +
   theme_classic()
 (g1 + g2) / (g4 + g3)
+```
+
+## Computations of credible intervals
+
+```{r}
+#| eval: true
+#| echo: true
+set.seed(2023)
+postsamp <- rbeta(n = 1000, shape1 = 0.5, shape2 = 0.2)
+alpha <- 0.11
+# Compute equitailed interval bounds
+quantile(postsamp, probs = c(alpha/2, 1-alpha/2))
+# Analytical (true) values
+qbeta(c(alpha/2, 1-alpha/2), shape1 = 0.5, shape2 = 0.2)
+# Highest posterior density intervals - note values are outside of the support!
+(hdiD <- HDInterval::hdi(density(postsamp), credMass = 1-alpha, allowSplit = TRUE))
 ```
 
 ## References

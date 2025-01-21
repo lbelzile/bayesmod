@@ -333,8 +333,11 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <h2>Simulating tails of Gaussian variables</h2>
 <p>We consider simulation from a standard Gaussian truncated above <span class="math inline">\(a&gt;0\)</span></p>
 <p>Write the density of the truncated Gaussian as <span class="citation" data-cites="Devroye:1986">(<a href="#/references" role="doc-biblioref" onclick="">Devroye, 1986, p. 381</a>)</span><span class="math display">\[f(x) = \frac{\exp(-x^2/2)}{\int_{a}^{\infty}\exp(-z^2/2)\mathrm{d} z}  =\frac{\exp(-x^2/2)}{c_1}.\]</span></p>
-<p>Note that, for <span class="math inline">\(x \geq a\)</span>, <span class="math display">\[c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);\]</span> where <span class="math inline">\(g(x)\)</span> is the density of a Rayleigh variable shifted by <span class="math inline">\(a\)</span>.<sup>1</sup></p>
-<aside><ol class="aside-footnotes"><li id="fn1"><p>The constant <span class="math inline">\(C= \exp(-a^2/2)(c_1a)^{-1}\)</span> approaches 1 quickly as <span class="math inline">\(a \to \infty\)</span> (asymptotically optimality). </p></li></ol></aside></section>
+<p>Note that, for <span class="math inline">\(x \geq a\)</span>, <span class="math display">\[c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);\]</span> where <span class="math inline">\(g(x)\)</span> is the density of a Rayleigh variable shifted by <span class="math inline">\(a\)</span>.</p>
+<div style="font-size: 50%;">
+<p>The constant <span class="math inline">\(C= \exp(-a^2/2)(c_1a)^{-1}\)</span> approaches 1 quickly as <span class="math inline">\(a \to \infty\)</span> (asymptotically optimality).</p>
+</div>
+</section>
 <section id="accept-reject-truncated-gaussian-with-rayleigh" class="slide level2 smaller">
 <h2>Accept-reject: truncated Gaussian with Rayleigh</h2>
 <p>The shifted Rayleigh has distribution function <span class="math display">\[G(x) = 1-\exp\{(a^2-x^2)/2\}, x \geq a.\]</span></p>
@@ -645,7 +648,6 @@ Devroye, L. (1986). <em><span>Non-Uniform Random Variate Generation</span></em>.
 </div>
 </div>
 </section>
-
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo"></p>

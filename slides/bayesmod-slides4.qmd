@@ -192,7 +192,14 @@ Write the density of the truncated Gaussian as  [@Devroye:1986, p.381]$$f(x) = \
 
 Note that, for $x \geq a$, 
 $$c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);$$
-where $g(x)$ is the density of a Rayleigh variable shifted by $a$.^[The constant $C= \exp(-a^2/2)(c_1a)^{-1}$ approaches 1 quickly as $a \to \infty$ (asymptotically optimality). ]
+where $g(x)$ is the density of a Rayleigh variable shifted by $a$.
+
+::: {style="font-size: 50%;"}
+
+The constant $C= \exp(-a^2/2)(c_1a)^{-1}$ approaches 1 quickly as $a \to \infty$ (asymptotically optimality).
+
+
+:::
 
 ## Accept-reject: truncated Gaussian with Rayleigh  {.smaller}
 

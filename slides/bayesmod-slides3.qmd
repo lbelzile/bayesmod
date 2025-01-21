@@ -90,6 +90,8 @@ How to elicit reasonable values for them?
 
 - use moment matching to get sensible values
 - trial-and-error using the prior predictive
+   - draw a parameter value from the prior $\boldsymbol{\theta}_0$
+   - for each, generate a new observation from the model $f(y_{\text{new}} \mid \boldsymbol{\theta}_0)$
 
 ## Example of simple linear regression
 
@@ -107,12 +109,12 @@ Consider the relationship between height ($Y$, in cm) and weight ($X$, in kg) am
 Model using a simple linear regression
 
 \begin{align*}
-h_i &\sim \mathsf{Gauss}(\mu_i, \sigma^2) \\
+Y_i &\sim \mathsf{Gauss}(\mu_i, \sigma^2) \\
 \mu_i &= \beta_0 + \beta_1(\mathrm{x}_i - \overline{x}) \\
 \beta_0 &\sim \mathsf{Gauss}(178, 20^2) \\
-\sigma &\sim \mathsf{U}(0, 50)
+\sigma &\sim \mathsf{unif}(0, 50)
 \end{align*}
-
+What about the slope parameter prior $p(\beta_1)$?
 
 
 ## Priors for the slope {.smaller}
@@ -168,33 +170,37 @@ g1 + g2
 A prior density $p(\boldsymbol{\theta})$ is conjugate for likelihood $L(\boldsymbol{\theta}; \boldsymbol{y})$ if the product $L(\boldsymbol{\theta}; \boldsymbol{y})p(\boldsymbol{\theta})$, after renormalization, is of the same parametric family as the prior.
 
 
-Distributions that are exponential family admit conjugate priors.^[A distribution is an exponential family if it's density can be written
+Distributions that are exponential family admit conjugate priors.
+
+::: {style="font-size: 65%;"}
+A distribution is an exponential family if it's density can be written
 \begin{align*}
 f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_k(y) + D(\boldsymbol{\theta}) + h(y)\right\}.
 \end{align*}
-The support of $f$ must not depend on $\boldsymbol{\theta}$.]
+The support of $f$ must not depend on $\boldsymbol{\theta}$.
 
+:::
 
 
 ## Conjugate priors for common exponential families {.smaller}
 
 | distribution | unknown parameter |  conjugate prior |
 |-------------------|:-----------------|:-----------------|
-| $Y \sim \mathsf{Exp}(\lambda)$ | $\lambda$ | $\lambda \sim \mathsf{Ga}(\alpha, \beta)$ |
-|  $Y \sim \mathsf{Po}(\mu)$ | $\mu$|  $\mu \sim \mathsf{Ga}(\alpha, \beta)$  |
-| $Y \sim \mathsf{Bin}(n, \theta)$ | $\theta$ | $\theta \sim \mathsf{Be}(\alpha, \beta)$ |
+| $Y \sim \mathsf{expo}(\lambda)$ | $\lambda$ | $\lambda \sim \mathsf{gamma}(\alpha, \beta)$ |
+|  $Y \sim \mathsf{Poisson}(\mu)$ | $\mu$|  $\mu \sim \mathsf{gamma}(\alpha, \beta)$  |
+| $Y \sim \mathsf{binom}(n, \theta)$ | $\theta$ | $\theta \sim \mathsf{Be}(\alpha, \beta)$ |
 | $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu$ | $\mu \sim \mathsf{Gauss}(\nu, \omega^2)$ |
-| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\sigma$ | $\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)$ |
-| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu, \sigma$ | $\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2)$, $\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)$ |
+| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\sigma$ | $\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)$ |
+| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu, \sigma$ | $\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2)$, $\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)$ |
 
 ## Conjugate prior for the Poisson 
 
-If $Y \sim \mathsf{Po}(\mu)$ with density $f(y) = \mu^x\exp(-\mu x)/x!$, then for $\mu \sim \mathsf{Ga}(\alpha, \beta)$ with $\alpha, \beta$ fixed. Consider an i.i.d. sample with mean $\overline{y}$. The posterior density is
+If $Y \sim \mathsf{Poisson}(\mu)$ with density $f(y) = \mu^x\exp(-\mu x)/x!$, then for $\mu \sim \mathsf{gamma}(\alpha, \beta)$ with $\alpha, \beta$ fixed. Consider an i.i.d. sample with mean $\overline{y}$. The posterior density is
 
 $$
 p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\overline{y}\right) \mu^{\alpha-1} \exp(-\beta \mu)
 $$
-so must be gamma $\mathsf{Ga}(n\overline{y} + \alpha, n\overline{y} + \beta)$.
+so must be gamma $\mathsf{gamma}(n\overline{y} + \alpha, n\overline{y} + \beta)$.
 
 *Parameter interpretation*: $\alpha$ events in $\beta$ time intervals.
 
@@ -215,7 +221,22 @@ The conditional posterior $p(\mu \mid \sigma)$ is Gaussian with
 
 - The Upworthy Research Archive [@Matias:2021] contains results for 22743 experiments, with a click through rate of 1.58% on average and a standard deviation of 1.23%.
 - We consider an A/B test that compared four different headlines for a story.
-- We model the conversion **rate** for each using $\texttt{click}_i \sim \mathsf{Po}(\lambda_i\texttt{impression}_i)$
+- We model the conversion **rate** for each using $\texttt{click}_i \sim \mathsf{Poisson}(\lambda_i\texttt{impression}_i)$.
+
+
+We treat $\texttt{impression}$ as a known offset.
+
+
+## Headlines
+
+Consider an A/B test from November 23st, 2014, that compared four different headlines for a story on Sesame Street workshop with interviews of children whose parents were in jail and visiting them in prisons. The headlines tested were:
+
+> 1. Some Don't Like It When He Sees His Mom. But To Him? Pure Joy. Why Keep Her From Him?
+> 2. They're Not In Danger. They're Right. See True Compassion From The Children Of The Incarcerated.
+> 3. Kids Have No Place In Jail ... But In This Case, They *Totally* Deserve It.
+> 4. Going To Jail *Should* Be The Worst Part Of Their Life. It's So Not. Not At All.
+
+
 
 ## A/B test: Sesame street example
 
@@ -230,7 +251,25 @@ abtest <- tibble::tibble(
 knitr::kable(abtest)
 ```
 
-Conjugate prior: moment matching for $\lambda \sim \mathsf{Ga}(\alpha, \beta )$ gives $\alpha = 1.64$ and $\beta = 0.01$, as $\beta = \mathsf{Va}_0(\lambda)/\mathsf{E}_0(\lambda)$.
+
+
+## Moment matching for gamma distribution
+
+For $Y \sim \mathsf{gamma}(\alpha, \beta)$ with $\beta$ the rate parameter, we have
+\begin{align*}
+\mathsf{E}(Y)=alpha/\beta, \qquad \mathsf{Va}(Y)=alpha/\beta^2.
+\end{align*}
+We can solve for $\beta =\mathsf{E}_0(\lambda)/\mathsf{Va}_0(\lambda)$ and then use the mean relationship to retrieve $\alpha.
+
+```{r}
+#| eval: true
+#| echo: true
+mu <- 0.0158; sd <- 0.0123
+(beta <- mu/sd^2)
+(alpha <- mu * beta)
+```
+
+Moment matching gives $\alpha = 1.65$ and $\beta = 104.44$.
 
 ## Posterior distributions for Sesame Street
 
@@ -248,22 +287,22 @@ names(cols) <- paste0("H", 1:4)
 library(ggplot2)
 ggplot() + 
    geom_function(fun = dgamma, 
-                 args = list(shape = 0.01 + 49, rate = 3060 + 1.64), 
+                 args = list(shape = 1.65 + 49, rate = 3060 + 104.44),
                  xlim = c(0, 0.03),
                  mapping = aes(col = "H1"),
                  n = 1e3) + 
    stat_function(fun = dgamma, 
-                 args = list(shape = 0.01 + 20, rate = 2982 + 1.64), 
+                 args = list(shape = 1.65 + 20, rate = 2982 + 104.44),
                  xlim = c(0, 0.03),
                  mapping = aes(col = "H2"),
                  n = 1e3) + 
    stat_function(fun = dgamma, 
-                 args = list(shape = 0.01 + 31, rate = 3112 + 1.64), 
+                 args = list(shape = 1.65 + 31, rate = 3112 + 104.44),
                  xlim = c(0, 0.03),
                  mapping = aes(col = "H3"),
                  n = 1e3) + 
    stat_function(fun = dgamma, 
-                 args = list(shape = 0.01 + 9, rate = 3083 + 1.64), 
+                 args = list(shape = 1.65 + 9, rate = 3083 + 104.44),
                  xlim = c(0, 0.03),
                  mapping = aes(col = "H4"),
                  n = 1e3) +
@@ -307,7 +346,7 @@ Y_{ij} &\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
 
 ## Conditions for a proper posterior
 
-- for $\tau \sim \mathsf{U}(0, \infty)$, we need at least $J \geq 3$ 'groups' for the posterior to be proper.
+- for $\tau \sim \mathsf{unif}(0, \infty)$, we need at least $J \geq 3$ 'groups' for the posterior to be proper.
 - if we take $p(\tau) \propto \tau^{-1}$, the posterior is never proper. 
 
 As @Gelman:2006 states: 
@@ -317,11 +356,11 @@ As @Gelman:2006 states:
 
 ## Improper priors as limiting cases
 
-We can view the improper prior as a limiting case $$\sigma \sim \mathsf{U}(0, t), \qquad t \to \infty.$$
+We can view the improper prior as a limiting case $$\sigma \sim \mathsf{unif}(0, t), \qquad t \to \infty.$$
 
 The Haldane prior for $\theta$ in a binomial model is $\theta^{-1}(1-\theta)^{-1}$, a limiting $\mathsf{Be}(0,0)$ distribution. 
 
-The improper prior $p(\sigma) \propto \sigma^{-1}$ is equivalent to an inverse gamma $\mathsf{IGa}(\epsilon, \epsilon)$ when $\epsilon \to 0$. 
+The improper prior $p(\sigma) \propto \sigma^{-1}$ is equivalent to an inverse gamma $\mathsf{inv. gamma}(\epsilon, \epsilon)$ when $\epsilon \to 0$.
 
 The limiting posterior is thus improper for random effects scales, so the value of $\epsilon$ matters.
 
@@ -356,7 +395,7 @@ ggplot() +
        subtitle = "unscaled prior density")
 ```
 
-If we restrict the range of the MDI prior $p(\xi)$ to $\xi \geq -1$, then $p(\xi + 1) \sim \mathsf{Exp}(1)$ and posterior is proper.
+If we restrict the range of the MDI prior $p(\xi)$ to $\xi \geq -1$, then $p(\xi + 1) \sim \mathsf{expo}(1)$ and posterior is proper.
 
 ## Flat priors
 
@@ -368,7 +407,7 @@ Improper prior unless $\theta \in [a,b]$ for finite $a, b$.
 
 Consider a scale parameter $\sigma > 0$.
 
-- We could truncate the range, e.g., $\sigma \sim \mathsf{U}(0, 50)$, but this is not 'uninformative', as extreme values of $\sigma$ are as likely as small ones.
+- We could truncate the range, e.g., $\sigma \sim \mathsf{unif}(0, 50)$, but this is not 'uninformative', as extreme values of $\sigma$ are as likely as small ones.
 - These priors are not invariant: if $p\{\log(\sigma)\} \propto 1$ implies $p(\sigma) \propto \sigma^{-1}$ so can be informative on another scale.
 
 ## Vague priors
@@ -386,12 +425,12 @@ In single-parameter models, the **Jeffrey's prior** $$p(\theta) \propto |\imath(
 
 ## Jeffrey's prior for the binomial distribution
 
-Consider $Y \sim \mathsf{Bin}(1, \theta)$. The negative of the second derivative of the log likelihood with respect to $p$ is 
+Consider $Y \sim \mathsf{binom}(1, \theta)$. The negative of the second derivative of the log likelihood with respect to $p$ is
 $$
 \jmath(\theta) = - \partial^2 \ell(\theta; y) / \partial \theta^2 = y/\theta^2 + (1-y)/(1-\theta)^2.
 $$
 
-Since $\mathsf{E}(Y)=\theta$, the Fisher information is $$\imath(\vartheta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = n/\{\theta(1-\theta)\}.$$
+Since $\mathsf{E}(Y)=\theta$, the Fisher information is $$\imath(\vartheta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = 1/\{\theta(1-\theta)\}.$$
 Jeffrey's prior is therefore $p(\theta) \propto \theta^{-1/2}(1-\theta)^{-1/2}$, a conjugate Beta prior $\mathsf{Be}(0.5,0.5)$.
 
 
@@ -449,7 +488,7 @@ Given $Q$ a high quantile of the standard deviation $\zeta$, set $\lambda = -\ln
  
 ## Priors for scale of random effects
 
-The conjugate inverse gamma prior $p(1/\zeta) \sim \mathsf{Ga}(\alpha, \beta)$ is such that the mode for $\zeta$ is $\beta/(1+\alpha)$.
+The conjugate inverse gamma prior $p(\zeta) \sim \mathsf{inv. gamma}(\alpha, \beta)$ is such that the mode for $\zeta$ is $\beta/(1+\alpha)$.
 
 Often, we take $\beta=\alpha = 0.01$ or $0.001$, but this leads to near-improper priors, so small values of the parameters are not optimal for 'random effects'.
 
@@ -481,30 +520,36 @@ We consider an experimental study conducted at Tech3Lab on road safety.
 
 ## Poisson mixed model
 
-We model the number of violations, `nviolation` as a function of distraction type (`task`) and participant `id`.^[Specifically, $\beta_j$ is the coefficient for `task` $j$ (distraction type) and $\alpha_i$ is the random effect of participant $i$.]
+We model the number of violations, `nviolation` as a function of distraction type (`task`) and participant `id`.
 \begin{align*}
-\texttt{nviolation}_{ij} &\sim \mathsf{Po}(\mu_{ij})\\
+\texttt{nviolation}_{ij} &\sim \mathsf{Poisson}(\mu_{ij})\\
 \mu_{ij} &= \exp(\beta_{j} + \alpha_i),\\
 \beta_j &\sim \mathsf{Gauss}(0, 100), \\
-\alpha_i &\sim \mathsf{Gauss}(0, \kappa^2).
+\alpha_i &\sim \mathsf{Gauss}(0, \tau^2).
 \end{align*}
+
+Specifically,
+
+- $\beta_j$ is the coefficient for `task` $j$ (distraction type),
+- $\alpha_i$ is the random effect of participant $i$.
+
 
 ## Priors for random effect scale
 
-Consider different priors for $\kappa$
+Consider different priors for $\tau$
 
-- flat uniform prior $\mathsf{U}(0,10)$
-- conjugate inverse gamma $\mathsf{IG}(0.01, 0.01)$ prior
-- a Student-$t$ with $\nu=3$ degrees of freedom
-- a penalized complexity prior such that the 0.95 percentile of the scale is 5, corresponding to $\mathsf{Exp}(0.6)$. 
+- flat uniform prior $\mathsf{unif}(0,10)$
+- conjugate inverse gamma $\mathsf{inv. gamma}(0.01, 0.01)$ prior
+- a truncated Student-$t$ on $[0, \infty)$ with $\nu=3$ degrees of freedom, $\mathsf{Student}_{+}(0,1,3)$
+- a penalized complexity prior such that the 0.95 percentile of the scale is 5, corresponding to $\mathsf{expo}(0.6)$.
 
 ## Sensitivity analysis for smartwatch data
 
 ```{r}
 #| eval: true
 #| echo: false
-#| label: fig-posterior-kappa
-#| fig-cap: "Posterior density of $\\zeta$ for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals."
+#| label: fig-posterior-tau
+#| fig-cap: "Posterior density of $\\tau$ for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals."
 knitr::include_graphics("fig/fig-sensitivity.png")
 ``` 
 
@@ -521,7 +566,7 @@ Y_i &\sim \mathsf{Gauss}(\mu + \eta_i, \sigma_i^2)\\
 \mu &\sim \mathsf{Gauss}(0, 100)\\
 \eta_i & \sim \mathsf{Gauss}(0, \tau^2)
 \end{align*}
-Given the large sample in each school, we treat $\sigma_i$ as fixed data.
+Given the large sample in each school, we treat $\sigma_i$ as fixed data by using the sample standard deviation.
 
 ## Sensibility analysis for eight schools example
 

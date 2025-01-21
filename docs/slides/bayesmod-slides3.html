@@ -28,6 +28,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -203,7 +268,11 @@ Léo Belzile
 <p>How to elicit reasonable values for them?</p>
 <ul>
 <li>use moment matching to get sensible values</li>
-<li>trial-and-error using the prior predictive</li>
+<li>trial-and-error using the prior predictive
+<ul>
+<li>draw a parameter value from the prior <span class="math inline">\(\boldsymbol{\theta}_0\)</span></li>
+<li>for each, generate a new observation from the model <span class="math inline">\(f(y_{\text{new}} \mid \boldsymbol{\theta}_0)\)</span></li>
+</ul></li>
 </ul>
 </section>
 <section id="example-of-simple-linear-regression" class="slide level2">
@@ -220,11 +289,11 @@ Léo Belzile
 <p>Consider the relationship between height (<span class="math inline">\(Y\)</span>, in cm) and weight (<span class="math inline">\(X\)</span>, in kg) among humans adults.<sup>1</sup></p>
 <p>Model using a simple linear regression</p>
 <p><span class="math display">\[\begin{align*}
-h_i &amp;\sim \mathsf{Gauss}(\mu_i, \sigma^2) \\
+Y_i &amp;\sim \mathsf{Gauss}(\mu_i, \sigma^2) \\
 \mu_i &amp;= \beta_0 + \beta_1(\mathrm{x}_i - \overline{x}) \\
 \beta_0 &amp;\sim \mathsf{Gauss}(178, 20^2) \\
-\sigma &amp;\sim \mathsf{U}(0, 50)
-\end{align*}\]</span></p>
+\sigma &amp;\sim \mathsf{unif}(0, 50)
+\end{align*}\]</span> What about the slope parameter prior <span class="math inline">\(p(\beta_1)\)</span>?</p>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>Section 4.4.1 of <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span></p></li></ol></aside></section>
 <section id="priors-for-the-slope" class="slide level2 smaller">
 <h2>Priors for the slope</h2>
@@ -235,10 +304,13 @@ Figure&nbsp;1: Prior draws of linear regressions with different priors: vague <s
 <section id="conjugate-priors" class="slide level2">
 <h2>Conjugate priors</h2>
 <p>A prior density <span class="math inline">\(p(\boldsymbol{\theta})\)</span> is conjugate for likelihood <span class="math inline">\(L(\boldsymbol{\theta}; \boldsymbol{y})\)</span> if the product <span class="math inline">\(L(\boldsymbol{\theta}; \boldsymbol{y})p(\boldsymbol{\theta})\)</span>, after renormalization, is of the same parametric family as the prior.</p>
-<p>Distributions that are exponential family admit conjugate priors.<sup>1</sup></p>
-<aside><ol class="aside-footnotes"><li id="fn2"><p>A distribution is an exponential family if it’s density can be written <span class="math display">\[\begin{align*}
+<p>Distributions that are exponential family admit conjugate priors.</p>
+<div style="font-size: 65%;">
+<p>A distribution is an exponential family if it’s density can be written <span class="math display">\[\begin{align*}
 f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_k(y) + D(\boldsymbol{\theta}) + h(y)\right\}.
-\end{align*}\]</span> The support of <span class="math inline">\(f\)</span> must not depend on <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p></li></ol></aside></section>
+\end{align*}\]</span> The support of <span class="math inline">\(f\)</span> must not depend on <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p>
+</div>
+</section>
 <section id="conjugate-priors-for-common-exponential-families" class="slide level2 smaller">
 <h2>Conjugate priors for common exponential families</h2>
 <table class="caption-top">
@@ -256,17 +328,17 @@ f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">\(Y \sim \mathsf{Exp}(\lambda)\)</span></td>
+<td><span class="math inline">\(Y \sim \mathsf{expo}(\lambda)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\lambda\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\lambda \sim \mathsf{Ga}(\alpha, \beta)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda \sim \mathsf{gamma}(\alpha, \beta)\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(Y \sim \mathsf{Po}(\mu)\)</span></td>
+<td><span class="math inline">\(Y \sim \mathsf{Poisson}(\mu)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\mu\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\mu \sim \mathsf{Ga}(\alpha, \beta)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mu \sim \mathsf{gamma}(\alpha, \beta)\)</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(Y \sim \mathsf{Bin}(n, \theta)\)</span></td>
+<td><span class="math inline">\(Y \sim \mathsf{binom}(n, \theta)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\theta\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\theta \sim \mathsf{Be}(\alpha, \beta)\)</span></td>
 </tr>
@@ -278,22 +350,22 @@ f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_
 <tr class="odd">
 <td><span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \sigma^2)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\sigma\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \sigma^2)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\mu, \sigma\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2)\)</span>, <span class="math inline">\(\sigma^{-2} \sim \mathsf{Ga}(\alpha, \beta)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2)\)</span>, <span class="math inline">\(\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)\)</span></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="conjugate-prior-for-the-poisson" class="slide level2">
 <h2>Conjugate prior for the Poisson</h2>
-<p>If <span class="math inline">\(Y \sim \mathsf{Po}(\mu)\)</span> with density <span class="math inline">\(f(y) = \mu^x\exp(-\mu x)/x!\)</span>, then for <span class="math inline">\(\mu \sim \mathsf{Ga}(\alpha, \beta)\)</span> with <span class="math inline">\(\alpha, \beta\)</span> fixed. Consider an i.i.d. sample with mean <span class="math inline">\(\overline{y}\)</span>. The posterior density is</p>
+<p>If <span class="math inline">\(Y \sim \mathsf{Poisson}(\mu)\)</span> with density <span class="math inline">\(f(y) = \mu^x\exp(-\mu x)/x!\)</span>, then for <span class="math inline">\(\mu \sim \mathsf{gamma}(\alpha, \beta)\)</span> with <span class="math inline">\(\alpha, \beta\)</span> fixed. Consider an i.i.d. sample with mean <span class="math inline">\(\overline{y}\)</span>. The posterior density is</p>
 <p><span class="math display">\[
 p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\overline{y}\right) \mu^{\alpha-1} \exp(-\beta \mu)
-\]</span> so must be gamma <span class="math inline">\(\mathsf{Ga}(n\overline{y} + \alpha, n\overline{y} + \beta)\)</span>.</p>
+\]</span> so must be gamma <span class="math inline">\(\mathsf{gamma}(n\overline{y} + \alpha, n\overline{y} + \beta)\)</span>.</p>
 <p><em>Parameter interpretation</em>: <span class="math inline">\(\alpha\)</span> events in <span class="math inline">\(\beta\)</span> time intervals.</p>
 </section>
 <section id="conjugate-prior-for-gaussian-known-variance" class="slide level2 smaller">
@@ -313,8 +385,19 @@ p(\mu, \sigma) &amp;\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}
 <ul>
 <li>The Upworthy Research Archive <span class="citation" data-cites="Matias:2021">(<a href="#/references" role="doc-biblioref" onclick="">Matias et al., 2021</a>)</span> contains results for 22743 experiments, with a click through rate of 1.58% on average and a standard deviation of 1.23%.</li>
 <li>We consider an A/B test that compared four different headlines for a story.</li>
-<li>We model the conversion <strong>rate</strong> for each using <span class="math inline">\(\texttt{click}_i \sim \mathsf{Po}(\lambda_i\texttt{impression}_i)\)</span></li>
+<li>We model the conversion <strong>rate</strong> for each using <span class="math inline">\(\texttt{click}_i \sim \mathsf{Poisson}(\lambda_i\texttt{impression}_i)\)</span>.</li>
 </ul>
+<p>We treat <span class="math inline">\(\texttt{impression}\)</span> as a known offset.</p>
+</section>
+<section id="headlines" class="slide level2">
+<h2>Headlines</h2>
+<p>Consider an A/B test from November 23st, 2014, that compared four different headlines for a story on Sesame Street workshop with interviews of children whose parents were in jail and visiting them in prisons. The headlines tested were:</p>
+<ol type="1">
+<li class="fragment">Some Don’t Like It When He Sees His Mom. But To Him? Pure Joy. Why Keep Her From Him?</li>
+<li class="fragment">They’re Not In Danger. They’re Right. See True Compassion From The Children Of The Incarcerated.</li>
+<li class="fragment">Kids Have No Place In Jail … But In This Case, They <em>Totally</em> Deserve It.</li>
+<li class="fragment">Going To Jail <em>Should</em> Be The Worst Part Of Their Life. It’s So Not. Not At All.</li>
+</ol>
 </section>
 <section id="ab-test-sesame-street-example" class="slide level2">
 <h2>A/B test: Sesame street example</h2>
@@ -353,7 +436,24 @@ p(\mu, \sigma) &amp;\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}
 </table>
 </div>
 </div>
-<p>Conjugate prior: moment matching for <span class="math inline">\(\lambda \sim \mathsf{Ga}(\alpha, \beta )\)</span> gives <span class="math inline">\(\alpha = 1.64\)</span> and <span class="math inline">\(\beta = 0.01\)</span>, as <span class="math inline">\(\beta = \mathsf{Va}_0(\lambda)/\mathsf{E}_0(\lambda)\)</span>.</p>
+</section>
+<section id="moment-matching-for-gamma-distribution" class="slide level2">
+<h2>Moment matching for gamma distribution</h2>
+<p>For <span class="math inline">\(Y \sim \mathsf{gamma}(\alpha, \beta)\)</span> with <span class="math inline">\(\beta\)</span> the rate parameter, we have <span class="math display">\[\begin{align*}
+\mathsf{E}(Y)=alpha/\beta, \qquad \mathsf{Va}(Y)=alpha/\beta^2.
+\end{align*}\]</span> We can solve for <span class="math inline">\(\beta =\mathsf{E}_0(\lambda)/\mathsf{Va}_0(\lambda)\)</span> and then use the mean relationship to retrieve $.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>mu <span class="ot">&lt;-</span> <span class="fl">0.0158</span>; sd <span class="ot">&lt;-</span> <span class="fl">0.0123</span></span>
+<span id="cb1-2"><a></a>(beta <span class="ot">&lt;-</span> mu<span class="sc">/</span>sd<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 104.4352</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>(alpha <span class="ot">&lt;-</span> mu <span class="sc">*</span> beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.650076</code></pre>
+</div>
+</div>
+<p>Moment matching gives <span class="math inline">\(\alpha = 1.65\)</span> and <span class="math inline">\(\beta = 104.44\)</span>.</p>
 </section>
 <section id="posterior-distributions-for-sesame-street" class="slide level2">
 <h2>Posterior distributions for Sesame Street</h2>
@@ -384,7 +484,7 @@ Y_{ij} &amp;\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
 <section id="conditions-for-a-proper-posterior" class="slide level2">
 <h2>Conditions for a proper posterior</h2>
 <ul>
-<li>for <span class="math inline">\(\tau \sim \mathsf{U}(0, \infty)\)</span>, we need at least <span class="math inline">\(J \geq 3\)</span> ‘groups’ for the posterior to be proper.</li>
+<li>for <span class="math inline">\(\tau \sim \mathsf{unif}(0, \infty)\)</span>, we need at least <span class="math inline">\(J \geq 3\)</span> ‘groups’ for the posterior to be proper.</li>
 <li>if we take <span class="math inline">\(p(\tau) \propto \tau^{-1}\)</span>, the posterior is never proper.</li>
 </ul>
 <p>As <span class="citation" data-cites="Gelman:2006">Gelman (<a href="#/references" role="doc-biblioref" onclick="">2006</a>)</span> states:</p>
@@ -394,9 +494,9 @@ Y_{ij} &amp;\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
 </section>
 <section id="improper-priors-as-limiting-cases" class="slide level2">
 <h2>Improper priors as limiting cases</h2>
-<p>We can view the improper prior as a limiting case <span class="math display">\[\sigma \sim \mathsf{U}(0, t), \qquad t \to \infty.\]</span></p>
+<p>We can view the improper prior as a limiting case <span class="math display">\[\sigma \sim \mathsf{unif}(0, t), \qquad t \to \infty.\]</span></p>
 <p>The Haldane prior for <span class="math inline">\(\theta\)</span> in a binomial model is <span class="math inline">\(\theta^{-1}(1-\theta)^{-1}\)</span>, a limiting <span class="math inline">\(\mathsf{Be}(0,0)\)</span> distribution.</p>
-<p>The improper prior <span class="math inline">\(p(\sigma) \propto \sigma^{-1}\)</span> is equivalent to an inverse gamma <span class="math inline">\(\mathsf{IGa}(\epsilon, \epsilon)\)</span> when <span class="math inline">\(\epsilon \to 0\)</span>.</p>
+<p>The improper prior <span class="math inline">\(p(\sigma) \propto \sigma^{-1}\)</span> is equivalent to an inverse gamma <span class="math inline">\(\mathsf{inv. gamma}(\epsilon, \epsilon)\)</span> when <span class="math inline">\(\epsilon \to 0\)</span>.</p>
 <p>The limiting posterior is thus improper for random effects scales, so the value of <span class="math inline">\(\epsilon\)</span> matters.</p>
 </section>
 <section id="mdi-prior-for-generalized-pareto" class="slide level2">
@@ -411,7 +511,7 @@ Y_{ij} &amp;\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
 
 <img data-src="bayesmod-slides3_files/figure-revealjs/fig-mdiprior-1.png" style="width:100.0%" class="r-stretch quarto-figure-center" id="fig-mdiprior"><p class="caption">
 Figure&nbsp;3: Unscaled maximum data information (MDI) prior density.
-</p><p>If we restrict the range of the MDI prior <span class="math inline">\(p(\xi)\)</span> to <span class="math inline">\(\xi \geq -1\)</span>, then <span class="math inline">\(p(\xi + 1) \sim \mathsf{Exp}(1)\)</span> and posterior is proper.</p>
+</p><p>If we restrict the range of the MDI prior <span class="math inline">\(p(\xi)\)</span> to <span class="math inline">\(\xi \geq -1\)</span>, then <span class="math inline">\(p(\xi + 1) \sim \mathsf{expo}(1)\)</span> and posterior is proper.</p>
 </section>
 <section id="flat-priors" class="slide level2">
 <h2>Flat priors</h2>
@@ -422,7 +522,7 @@ Figure&nbsp;3: Unscaled maximum data information (MDI) prior density.
 <h2>Flat priors for scale parameters</h2>
 <p>Consider a scale parameter <span class="math inline">\(\sigma &gt; 0\)</span>.</p>
 <ul>
-<li>We could truncate the range, e.g., <span class="math inline">\(\sigma \sim \mathsf{U}(0, 50)\)</span>, but this is not ‘uninformative’, as extreme values of <span class="math inline">\(\sigma\)</span> are as likely as small ones.</li>
+<li>We could truncate the range, e.g., <span class="math inline">\(\sigma \sim \mathsf{unif}(0, 50)\)</span>, but this is not ‘uninformative’, as extreme values of <span class="math inline">\(\sigma\)</span> are as likely as small ones.</li>
 <li>These priors are not invariant: if <span class="math inline">\(p\{\log(\sigma)\} \propto 1\)</span> implies <span class="math inline">\(p(\sigma) \propto \sigma^{-1}\)</span> so can be informative on another scale.</li>
 </ul>
 </section>
@@ -440,10 +540,10 @@ Figure&nbsp;3: Unscaled maximum data information (MDI) prior density.
 </section>
 <section id="jeffreys-prior-for-the-binomial-distribution" class="slide level2">
 <h2>Jeffrey’s prior for the binomial distribution</h2>
-<p>Consider <span class="math inline">\(Y \sim \mathsf{Bin}(1, \theta)\)</span>. The negative of the second derivative of the log likelihood with respect to <span class="math inline">\(p\)</span> is <span class="math display">\[
+<p>Consider <span class="math inline">\(Y \sim \mathsf{binom}(1, \theta)\)</span>. The negative of the second derivative of the log likelihood with respect to <span class="math inline">\(p\)</span> is <span class="math display">\[
 \jmath(\theta) = - \partial^2 \ell(\theta; y) / \partial \theta^2 = y/\theta^2 + (1-y)/(1-\theta)^2.
 \]</span></p>
-<p>Since <span class="math inline">\(\mathsf{E}(Y)=\theta\)</span>, the Fisher information is <span class="math display">\[\imath(\vartheta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = n/\{\theta(1-\theta)\}.\]</span> Jeffrey’s prior is therefore <span class="math inline">\(p(\theta) \propto \theta^{-1/2}(1-\theta)^{-1/2}\)</span>, a conjugate Beta prior <span class="math inline">\(\mathsf{Be}(0.5,0.5)\)</span>.</p>
+<p>Since <span class="math inline">\(\mathsf{E}(Y)=\theta\)</span>, the Fisher information is <span class="math display">\[\imath(\vartheta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = 1/\{\theta(1-\theta)\}.\]</span> Jeffrey’s prior is therefore <span class="math inline">\(p(\theta) \propto \theta^{-1/2}(1-\theta)^{-1/2}\)</span>, a conjugate Beta prior <span class="math inline">\(\mathsf{Be}(0.5,0.5)\)</span>.</p>
 </section>
 <section id="invariant-priors-for-location-scale-families" class="slide level2">
 <h2>Invariant priors for location-scale families</h2>
@@ -484,7 +584,7 @@ p(\sigma) &amp;\propto \sigma^{-1}
 </section>
 <section id="priors-for-scale-of-random-effects" class="slide level2">
 <h2>Priors for scale of random effects</h2>
-<p>The conjugate inverse gamma prior <span class="math inline">\(p(1/\zeta) \sim \mathsf{Ga}(\alpha, \beta)\)</span> is such that the mode for <span class="math inline">\(\zeta\)</span> is <span class="math inline">\(\beta/(1+\alpha)\)</span>.</p>
+<p>The conjugate inverse gamma prior <span class="math inline">\(p(\zeta) \sim \mathsf{inv. gamma}(\alpha, \beta)\)</span> is such that the mode for <span class="math inline">\(\zeta\)</span> is <span class="math inline">\(\beta/(1+\alpha)\)</span>.</p>
 <p>Often, we take <span class="math inline">\(\beta=\alpha = 0.01\)</span> or <span class="math inline">\(0.001\)</span>, but this leads to near-improper priors, so small values of the parameters are not optimal for ‘random effects’.</p>
 <p>The inverse gamma prior cannot provide shrinkage or allow for no variability between groups.</p>
 </section>
@@ -516,28 +616,33 @@ p(\sigma) &amp;\propto \sigma^{-1}
 </section>
 <section id="poisson-mixed-model" class="slide level2">
 <h2>Poisson mixed model</h2>
-<p>We model the number of violations, <code>nviolation</code> as a function of distraction type (<code>task</code>) and participant <code>id</code>.<sup>1</sup> <span class="math display">\[\begin{align*}
-\texttt{nviolation}_{ij} &amp;\sim \mathsf{Po}(\mu_{ij})\\
+<p>We model the number of violations, <code>nviolation</code> as a function of distraction type (<code>task</code>) and participant <code>id</code>. <span class="math display">\[\begin{align*}
+\texttt{nviolation}_{ij} &amp;\sim \mathsf{Poisson}(\mu_{ij})\\
 \mu_{ij} &amp;= \exp(\beta_{j} + \alpha_i),\\
 \beta_j &amp;\sim \mathsf{Gauss}(0, 100), \\
-\alpha_i &amp;\sim \mathsf{Gauss}(0, \kappa^2).
+\alpha_i &amp;\sim \mathsf{Gauss}(0, \tau^2).
 \end{align*}\]</span></p>
-<aside><ol class="aside-footnotes"><li id="fn3"><p>Specifically, <span class="math inline">\(\beta_j\)</span> is the coefficient for <code>task</code> <span class="math inline">\(j\)</span> (distraction type) and <span class="math inline">\(\alpha_i\)</span> is the random effect of participant <span class="math inline">\(i\)</span>.</p></li></ol></aside></section>
+<p>Specifically,</p>
+<ul>
+<li><span class="math inline">\(\beta_j\)</span> is the coefficient for <code>task</code> <span class="math inline">\(j\)</span> (distraction type),</li>
+<li><span class="math inline">\(\alpha_i\)</span> is the random effect of participant <span class="math inline">\(i\)</span>.</li>
+</ul>
+</section>
 <section id="priors-for-random-effect-scale" class="slide level2">
 <h2>Priors for random effect scale</h2>
-<p>Consider different priors for <span class="math inline">\(\kappa\)</span></p>
+<p>Consider different priors for <span class="math inline">\(\tau\)</span></p>
 <ul>
-<li>flat uniform prior <span class="math inline">\(\mathsf{U}(0,10)\)</span></li>
-<li>conjugate inverse gamma <span class="math inline">\(\mathsf{IG}(0.01, 0.01)\)</span> prior</li>
-<li>a Student-<span class="math inline">\(t\)</span> with <span class="math inline">\(\nu=3\)</span> degrees of freedom</li>
-<li>a penalized complexity prior such that the 0.95 percentile of the scale is 5, corresponding to <span class="math inline">\(\mathsf{Exp}(0.6)\)</span>.</li>
+<li>flat uniform prior <span class="math inline">\(\mathsf{unif}(0,10)\)</span></li>
+<li>conjugate inverse gamma <span class="math inline">\(\mathsf{inv. gamma}(0.01, 0.01)\)</span> prior</li>
+<li>a truncated Student-<span class="math inline">\(t\)</span> on <span class="math inline">\([0, \infty)\)</span> with <span class="math inline">\(\nu=3\)</span> degrees of freedom, <span class="math inline">\(\mathsf{Student}_{+}(0,1,3)\)</span></li>
+<li>a penalized complexity prior such that the 0.95 percentile of the scale is 5, corresponding to <span class="math inline">\(\mathsf{expo}(0.6)\)</span>.</li>
 </ul>
 </section>
 <section id="sensitivity-analysis-for-smartwatch-data" class="slide level2">
 <h2>Sensitivity analysis for smartwatch data</h2>
 
-<img data-src="fig/fig-sensitivity.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-kappa"><p class="caption">
-Figure&nbsp;4: Posterior density of <span class="math inline">\(\zeta\)</span> for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.
+<img data-src="fig/fig-sensitivity.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-tau"><p class="caption">
+Figure&nbsp;4: Posterior density of <span class="math inline">\(\tau\)</span> for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.
 </p><p>Basically indistinguishable results for the random scale..</p>
 </section>
 <section id="eight-schools-example" class="slide level2">
@@ -548,7 +653,7 @@ Figure&nbsp;4: Posterior density of <span class="math inline">\(\zeta\)</span> f
 Y_i &amp;\sim \mathsf{Gauss}(\mu + \eta_i, \sigma_i^2)\\
 \mu &amp;\sim \mathsf{Gauss}(0, 100)\\
 \eta_i &amp; \sim \mathsf{Gauss}(0, \tau^2)
-\end{align*}\]</span> Given the large sample in each school, we treat <span class="math inline">\(\sigma_i\)</span> as fixed data.</p>
+\end{align*}\]</span> Given the large sample in each school, we treat <span class="math inline">\(\sigma_i\)</span> as fixed data by using the sample standard deviation.</p>
 </section>
 <section id="sensibility-analysis-for-eight-schools-example" class="slide level2">
 <h2>Sensibility analysis for eight schools example</h2>
