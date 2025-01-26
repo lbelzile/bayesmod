@@ -1,12 +1,14 @@
 ---
-title: "Markov chain Monte Carlo"
+title: "Markov chains and Metropolis--Hastings"
 ---
 
 
 ## Content
 
+- Rejection sampling
+- Basics of Markov chains
 - Metropolis--Hastings algorithm
-- Efficient proposals for Metropolis--Hastings and tuning
+
 
 ## Learning objectives
 
@@ -15,19 +17,19 @@ At the end of the chapter, students should be able to
 - understand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ
 - implement a MHG algorithm to draw samples from the posterior
 - use output of MCMC to obtain estimates and standard errors
-
+- use efficient proposals and tuning for MCMC
 
 ## Readings
 
 
-- [@Geyer:2011](https://www.mcmchandbook.net/HandbookChapter1.pdf)
-- [Chapter 4 of the course notes](https://lbelzile.github.io/MATH80601A/mcmc.html)
-- @Neal:2003
+- [@Geyer:2011](https://www.mcmchandbook.net/HandbookChapter1.pdf) --- up to 1.17
+- [Chapters 4](https://lbelzile.github.io/MATH80601A/markovchains.html) [and 5](https://lbelzile.github.io/MATH80601A/mcmc.html) of the course notes
+
 
 ## Complementary readings
 
 - @Green:2015 (overview of MCMC methods)
-
+- @Neal:2003 (slice sampling)
 
 ## Slides
 

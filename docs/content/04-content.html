@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Markov chain Monte Carlo – Bayesian modelling</title>
+<title>Markov chains and Metropolis–Hastings – Bayesian modelling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -54,10 +54,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -245,7 +245,7 @@ div.csl-indent {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/04-content.html">4: Markov chain Monte Carlo</a></li></ol></nav><h1 class="title display-7">Markov chain Monte Carlo</h1></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/04-content.html">4: Markov chain Monte Carlo</a></li></ol></nav><h1 class="title display-7">Markov chains and Metropolis–Hastings</h1></header>
 
 <header id="title-block-header">
 
@@ -256,8 +256,9 @@ div.csl-indent {
 <section id="content" class="level2">
 <h2 class="anchored" data-anchor-id="content">Content</h2>
 <ul>
+<li>Rejection sampling</li>
+<li>Basics of Markov chains</li>
 <li>Metropolis–Hastings algorithm</li>
-<li>Efficient proposals for Metropolis–Hastings and tuning</li>
 </ul>
 </section>
 <section id="learning-objectives" class="level2">
@@ -267,20 +268,21 @@ div.csl-indent {
 <li>understand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ</li>
 <li>implement a MHG algorithm to draw samples from the posterior</li>
 <li>use output of MCMC to obtain estimates and standard errors</li>
+<li>use efficient proposals and tuning for MCMC</li>
 </ul>
 </section>
 <section id="readings" class="level2">
 <h2 class="anchored" data-anchor-id="readings">Readings</h2>
 <ul>
-<li><a href="https://www.mcmchandbook.net/HandbookChapter1.pdf"><span class="citation" data-cites="Geyer:2011">Geyer (<span>2011</span>)</span></a></li>
-<li><a href="https://lbelzile.github.io/MATH80601A/mcmc.html">Chapter 4 of the course notes</a></li>
-<li><span class="citation" data-cites="Neal:2003">Neal (<a href="#ref-Neal:2003" role="doc-biblioref">2003</a>)</span></li>
+<li><a href="https://www.mcmchandbook.net/HandbookChapter1.pdf"><span class="citation" data-cites="Geyer:2011">Geyer (<span>2011</span>)</span></a> — up to 1.17</li>
+<li><a href="https://lbelzile.github.io/MATH80601A/markovchains.html">Chapters 4</a> <a href="https://lbelzile.github.io/MATH80601A/mcmc.html">and 5</a> of the course notes</li>
 </ul>
 </section>
 <section id="complementary-readings" class="level2">
 <h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
 <ul>
 <li><span class="citation" data-cites="Green:2015">Green et al. (<a href="#ref-Green:2015" role="doc-biblioref">2015</a>)</span> (overview of MCMC methods)</li>
+<li><span class="citation" data-cites="Neal:2003">Neal (<a href="#ref-Neal:2003" role="doc-biblioref">2003</a>)</span> (slice sampling)</li>
 </ul>
 </section>
 <section id="slides" class="level2">

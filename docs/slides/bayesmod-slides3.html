@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.1">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.3">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -223,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Jan 20, 2025</p>
+  <p class="date">Last compiled Saturday Jan 25, 2025</p>
 </section>
 <section id="priors" class="slide level2">
 <h2>Priors</h2>
@@ -561,8 +561,8 @@ p(\sigma) &amp;\propto \sigma^{-1}
 <li>e.g., if we have a random effect <span class="math inline">\(\alpha \sim \mathsf{Gauss}(0, \zeta^2)\)</span>, the value <span class="math inline">\(\zeta=0\)</span> corresponds to no group variability.</li>
 </ul>
 </section>
-<section id="ingredients-of-penalized-complexity-priors" class="slide level2">
-<h2>Ingredients of penalized complexity priors</h2>
+<section id="rationale-penalized-complexity-priors" class="slide level2">
+<h2>Rationale penalized complexity priors</h2>
 <p>Consider a penalized complexity prior for parameter <span class="math inline">\(\zeta\)</span>.</p>
 <p><strong>Occam’s razor</strong> states that the simpler base model should be preferred if there is not enough evidence in favor of the full model.</p>
 <p>We measure the complexity of the full model with density <span class="math inline">\(f\)</span> using the Kullback–Leibler divergence between <span class="math inline">\(f\)</span> and base model <span class="math inline">\(f_0\)</span> densities. This is transformed into a distance <span class="math display">\[d=\sqrt{2\mathsf{KL}(f || f_0)}.\]</span></p>
@@ -570,17 +570,12 @@ p(\sigma) &amp;\propto \sigma^{-1}
 <section id="penalized-complexity-prior-construction" class="slide level2">
 <h2>Penalized complexity prior construction</h2>
 <p>Using a constant rate penalization from base model gives an exponential prior <span class="math inline">\(p(d) = \lambda \exp(-\lambda d)\)</span> on the distance scale, with a mode at <span class="math inline">\(d=0\)</span>, corresponding to the base model.</p>
-<p>Backtransform to parameter space to get <span class="math inline">\(p(\zeta)\)</span>, truncate above if <span class="math inline">\(d\)</span> is upper bounded, <span class="math display">\[p(\zeta) = \lambda \exp\{-\lambda \cdot d(\zeta)\} \left| \frac{\partial d(\zeta)}{\partial \zeta}\right|.\]</span></p>
-</section>
-<section id="fixing-penalized-complexity-hyperparameter" class="slide level2">
-<h2>Fixing penalized complexity hyperparameter</h2>
-<p>Pick rate <span class="math inline">\(\lambda\)</span> to control prior density in the tail, by specifying a value for (a transformation of) the parameter, say <span class="math inline">\(g(\zeta)\)</span>, which is interpretable.</p>
-<p>Elicit values of <span class="math inline">\(Q\)</span> and small probability <span class="math inline">\(\alpha\)</span> such that the tail probability <span class="math display">\[\Pr\{g(\zeta) &gt; Q\} = \alpha.\]</span></p>
+<p>Back-transform to parameter space to get <span class="math inline">\(p(\zeta)\)</span>, <span class="math display">\[p(\zeta) = \lambda \exp\{-\lambda \cdot d(\zeta)\} \left| \frac{\partial d(\zeta)}{\partial \zeta}\right|.\]</span></p>
 </section>
 <section id="penalized-complexity-prior-for-random-effect-scale" class="slide level2">
 <h2>Penalized complexity prior for random effect scale</h2>
 <p>If <span class="math inline">\(\alpha_j \sim \mathsf{Gauss}(0, \zeta^2)\)</span>, the penalized complexity prior is exponential with rate <span class="math inline">\(\lambda\)</span>.</p>
-<p>Given <span class="math inline">\(Q\)</span> a high quantile of the standard deviation <span class="math inline">\(\zeta\)</span>, set <span class="math inline">\(\lambda = -\ln(\alpha/Q)\)</span>.</p>
+<p>Elicit <span class="math inline">\(Q\)</span>, a high quantile of the standard deviation <span class="math inline">\(\zeta\)</span> with tail probability <span class="math inline">\(\alpha\)</span> and set <span class="math inline">\(\lambda = -\ln(\alpha/Q)\)</span>.</p>
 </section>
 <section id="priors-for-scale-of-random-effects" class="slide level2">
 <h2>Priors for scale of random effects</h2>

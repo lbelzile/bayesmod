@@ -953,7 +953,7 @@
     "href": "content/01-content.html#content",
     "title": "Introduction",
     "section": "Content",
-    "text": "Content\n\nMarginalization and conditioning\nBayes’ theorem\nReview of probability distributions\nLikelihood\nMonte Carlo integration\nRejection sampling",
+    "text": "Content\n\nMarginalization and conditioning\nBayes’ theorem\nReview of probability distributions\nLikelihood\nMonte Carlo integration",
     "crumbs": [
       "Content",
       "Course content",
@@ -1059,9 +1059,9 @@
   {
     "objectID": "content/04-content.html#content",
     "href": "content/04-content.html#content",
-    "title": "Markov chain Monte Carlo",
+    "title": "Markov chains and Metropolis–Hastings",
     "section": "Content",
-    "text": "Content\n\nMetropolis–Hastings algorithm\nEfficient proposals for Metropolis–Hastings and tuning",
+    "text": "Content\n\nRejection sampling\nBasics of Markov chains\nMetropolis–Hastings algorithm",
     "crumbs": [
       "Content",
       "Course content",
@@ -1071,9 +1071,9 @@
   {
     "objectID": "content/04-content.html#learning-objectives",
     "href": "content/04-content.html#learning-objectives",
-    "title": "Markov chain Monte Carlo",
+    "title": "Markov chains and Metropolis–Hastings",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a MHG algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a MHG algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors\nuse efficient proposals and tuning for MCMC",
     "crumbs": [
       "Content",
       "Course content",
@@ -1083,9 +1083,9 @@
   {
     "objectID": "content/04-content.html#readings",
     "href": "content/04-content.html#readings",
-    "title": "Markov chain Monte Carlo",
+    "title": "Markov chains and Metropolis–Hastings",
     "section": "Readings",
-    "text": "Readings\n\nGeyer (2011)\nChapter 4 of the course notes\nNeal (2003)",
+    "text": "Readings\n\nGeyer (2011) — up to 1.17\nChapters 4 and 5 of the course notes",
     "crumbs": [
       "Content",
       "Course content",
@@ -1095,9 +1095,9 @@
   {
     "objectID": "content/04-content.html#complementary-readings",
     "href": "content/04-content.html#complementary-readings",
-    "title": "Markov chain Monte Carlo",
+    "title": "Markov chains and Metropolis–Hastings",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\nGreen et al. (2015) (overview of MCMC methods)",
+    "text": "Complementary readings\n\nGreen et al. (2015) (overview of MCMC methods)\nNeal (2003) (slice sampling)",
     "crumbs": [
       "Content",
       "Course content",
@@ -1107,7 +1107,7 @@
   {
     "objectID": "content/04-content.html#slides",
     "href": "content/04-content.html#slides",
-    "title": "Markov chain Monte Carlo",
+    "title": "Markov chains and Metropolis–Hastings",
     "section": "Slides",
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
     "crumbs": [
@@ -1866,32 +1866,25 @@
     "text": "Penalized complexity priors\nSimpson et al. (2017) consider a principled way of constructing priors that penalized model complexity for stable inference and limit over-specification.\nSuppose that the restriction of the parameter creates a simpler base version.\n\ne.g., if we have a random effect \\(\\alpha \\sim \\mathsf{Gauss}(0, \\zeta^2)\\), the value \\(\\zeta=0\\) corresponds to no group variability."
   },
   {
-    "objectID": "slides/bayesmod-slides3.html#ingredients-of-penalized-complexity-priors",
-    "href": "slides/bayesmod-slides3.html#ingredients-of-penalized-complexity-priors",
+    "objectID": "slides/bayesmod-slides3.html#rationale-penalized-complexity-priors",
+    "href": "slides/bayesmod-slides3.html#rationale-penalized-complexity-priors",
     "title": "Bayesian modelling",
-    "section": "Ingredients of penalized complexity priors",
-    "text": "Ingredients of penalized complexity priors\nConsider a penalized complexity prior for parameter \\(\\zeta\\).\nOccam’s razor states that the simpler base model should be preferred if there is not enough evidence in favor of the full model.\nWe measure the complexity of the full model with density \\(f\\) using the Kullback–Leibler divergence between \\(f\\) and base model \\(f_0\\) densities. This is transformed into a distance \\[d=\\sqrt{2\\mathsf{KL}(f || f_0)}.\\]"
+    "section": "Rationale penalized complexity priors",
+    "text": "Rationale penalized complexity priors\nConsider a penalized complexity prior for parameter \\(\\zeta\\).\nOccam’s razor states that the simpler base model should be preferred if there is not enough evidence in favor of the full model.\nWe measure the complexity of the full model with density \\(f\\) using the Kullback–Leibler divergence between \\(f\\) and base model \\(f_0\\) densities. This is transformed into a distance \\[d=\\sqrt{2\\mathsf{KL}(f || f_0)}.\\]"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#penalized-complexity-prior-construction",
     "href": "slides/bayesmod-slides3.html#penalized-complexity-prior-construction",
     "title": "Bayesian modelling",
     "section": "Penalized complexity prior construction",
-    "text": "Penalized complexity prior construction\nUsing a constant rate penalization from base model gives an exponential prior \\(p(d) = \\lambda \\exp(-\\lambda d)\\) on the distance scale, with a mode at \\(d=0\\), corresponding to the base model.\nBacktransform to parameter space to get \\(p(\\zeta)\\), truncate above if \\(d\\) is upper bounded, \\[p(\\zeta) = \\lambda \\exp\\{-\\lambda \\cdot d(\\zeta)\\} \\left| \\frac{\\partial d(\\zeta)}{\\partial \\zeta}\\right|.\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides3.html#fixing-penalized-complexity-hyperparameter",
-    "href": "slides/bayesmod-slides3.html#fixing-penalized-complexity-hyperparameter",
-    "title": "Bayesian modelling",
-    "section": "Fixing penalized complexity hyperparameter",
-    "text": "Fixing penalized complexity hyperparameter\nPick rate \\(\\lambda\\) to control prior density in the tail, by specifying a value for (a transformation of) the parameter, say \\(g(\\zeta)\\), which is interpretable.\nElicit values of \\(Q\\) and small probability \\(\\alpha\\) such that the tail probability \\[\\Pr\\{g(\\zeta) &gt; Q\\} = \\alpha.\\]"
+    "text": "Penalized complexity prior construction\nUsing a constant rate penalization from base model gives an exponential prior \\(p(d) = \\lambda \\exp(-\\lambda d)\\) on the distance scale, with a mode at \\(d=0\\), corresponding to the base model.\nBack-transform to parameter space to get \\(p(\\zeta)\\), \\[p(\\zeta) = \\lambda \\exp\\{-\\lambda \\cdot d(\\zeta)\\} \\left| \\frac{\\partial d(\\zeta)}{\\partial \\zeta}\\right|.\\]"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#penalized-complexity-prior-for-random-effect-scale",
     "href": "slides/bayesmod-slides3.html#penalized-complexity-prior-for-random-effect-scale",
     "title": "Bayesian modelling",
     "section": "Penalized complexity prior for random effect scale",
-    "text": "Penalized complexity prior for random effect scale\nIf \\(\\alpha_j \\sim \\mathsf{Gauss}(0, \\zeta^2)\\), the penalized complexity prior is exponential with rate \\(\\lambda\\).\nGiven \\(Q\\) a high quantile of the standard deviation \\(\\zeta\\), set \\(\\lambda = -\\ln(\\alpha/Q)\\)."
+    "text": "Penalized complexity prior for random effect scale\nIf \\(\\alpha_j \\sim \\mathsf{Gauss}(0, \\zeta^2)\\), the penalized complexity prior is exponential with rate \\(\\lambda\\).\nElicit \\(Q\\), a high quantile of the standard deviation \\(\\zeta\\) with tail probability \\(\\alpha\\) and set \\(\\lambda = -\\ln(\\alpha/Q)\\)."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors-for-scale-of-random-effects",
