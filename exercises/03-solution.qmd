@@ -1,6 +1,6 @@
 ---
 title: "Solution 3"
-draft: true
+draft: false
 ---
 
 ## Exercise 3.1
@@ -12,7 +12,7 @@ f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ -
 for location $\nu >0$ and shape $\tau>0$. 
 
 a. Show that the joint prior
-$$ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
+$$ p(\lambda) \sim \mathsf{gamma}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{Gauss}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
 b. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
 c. Derive the marginal posterior $p(\lambda)$.
 
@@ -27,21 +27,21 @@ p(\lambda, \nu \mid \boldsymbol{y}) &\propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\
 \end{align*}
 where $c_1=\{\tau + t_1(\boldsymbol{y})\}$, $c_2 =(\tau\mu+n)/c_1$ and $c_3 =\tau\mu^2 + t_2(\boldsymbol{y})$.
 
-b. We see that the joint posterior as the product of two densities, say $q(\lambda \mid \boldsymbol{y})p(1/\nu \mid \lambda)$; $q(\lambda \mid \boldsymbol{y})$ is the density of a gamma distribution with shape $a = (n+1)/2+\alpha$ and rate $b=\beta + (c_3-c_1c_2^2)/2$, whereas the other is a reciprocal Gaussian with mean parameter $c_2$ and precision $\lambda c_1$. $\mathsf{Ga}\left\{(n+1)/2+\alpha\right\}$
+b. We see that the joint posterior as the product of two densities, say $q(\lambda \mid \boldsymbol{y})p(1/\nu \mid \lambda)$; $q(\lambda \mid \boldsymbol{y})$ is the density of a gamma distribution with shape $a = (n+1)/2+\alpha$ and rate $b=\beta + (c_3-c_1c_2^2)/2$, whereas the other is a reciprocal Gaussian with mean parameter $c_2$ and precision $\lambda c_1$. $\mathsf{gamma}\left\{(n+1)/2+\alpha\right\}$
 
 c. To get the marginal $p(\lambda \mid \boldsymbol{y})$, we need to integrate with respect to $\nu$. Making the change of variable $\mu = 1/\nu$, we recover a Gaussian kernel
 \begin{align*}
 p(\lambda \mid \boldsymbol{y}) &= \lambda^{a-1}\exp(-b\lambda)\int_{\mathbb{R}}\exp\left\{ -\frac{\lambda c_1}{2}\left(\mu - c_2\right)^2\right\}  \mathrm{d} \mu 
 \\&\propto \lambda^{a-1}\exp(-b\lambda) \lambda^{-1/2}
 \end{align*}
-so we conclude that, marginally, $\lambda \sim \mathsf{Ga}(n+ \alpha, b)$.
+so we conclude that, marginally, $\lambda \sim \mathsf{gamma}(n+ \alpha, b)$.
 
 :::
 
 ## Exercise 3.2
 
 Consider the Rayleigh distribution with scale $\sigma>0$. It's density is
-$$f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).$$
+$$f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(y \geq 0).$$
 
 Derive the Fisher information matrix and use it to obtain Jeffrey's prior for $\sigma$. Determine whether the prior is proper.
 
@@ -113,7 +113,7 @@ Let $a = -\mu/\sigma$ and $b = (1-\mu)/\sigma$ denote the standardized lower and
 \begin{align*}
 f(x; \mu, \sigma) = \frac{1}{\sigma}\frac{\phi\left(\frac{x - \mu}{\sigma}\right)}{\Phi(b) - \Phi(a)},
 \end{align*}
-where $\phi$ is the density of a standard Gaussian $\mathsf{No}(0,1)$ and $\Phi$ the corresponding distribution function.
+where $\phi$ is the density of a standard Gaussian $\mathsf{Gauss}(0,1)$ and $\Phi$ the corresponding distribution function.
 
 <!--
 and we can easily obtain the formulae for the first two moments (e.g., Wikipedia). Let $a = -\mu/\sigma$ and $b = (1-\mu)/\sigma$ denote the centered bounds; then

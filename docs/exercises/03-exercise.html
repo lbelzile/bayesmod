@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.3">
+<meta name="generator" content="quarto-1.7.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,10 +34,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -228,6 +228,12 @@ window.Quarto = {
  <span class="menu-text">2. Bayesics</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/03-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Priors</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -274,14 +280,14 @@ window.Quarto = {
 f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y &gt; 0)
 \end{align*}\]</span> for location <span class="math inline">\(\nu &gt;0\)</span> and shape <span class="math inline">\(\tau&gt;0\)</span>.</p>
 <ol type="a">
-<li>Show that the joint prior <span class="math display">\[ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \tau^{-1}\lambda^{-1}),\]</span> the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.</li>
+<li>Show that the joint prior <span class="math display">\[ p(\lambda) \sim \mathsf{gamma}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{Gauss}(\mu, \tau^{-1}\lambda^{-1}),\]</span> the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.</li>
 <li>Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. <em>Hint</em>: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.</li>
 <li>Derive the marginal posterior <span class="math inline">\(p(\lambda)\)</span>.</li>
 </ol>
 </section>
 <section id="exercise-3.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-3.2">Exercise 3.2</h2>
-<p>Consider the Rayleigh distribution with scale <span class="math inline">\(\sigma&gt;0\)</span>. It’s density is <span class="math display">\[f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).\]</span></p>
+<p>Consider the Rayleigh distribution with scale <span class="math inline">\(\sigma&gt;0\)</span>. It’s density is <span class="math display">\[f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(y \geq 0).\]</span></p>
 <p>Derive the Fisher information matrix and use it to obtain Jeffrey’s prior for <span class="math inline">\(\sigma\)</span>. Determine whether the prior is proper.</p>
 <!-- Derivation of prior for the correlation $\rho$ in a bivariate normal, in
 Jeffrey's theory of probability (1937)

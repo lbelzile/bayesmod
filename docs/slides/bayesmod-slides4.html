@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -213,7 +213,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Introduction to Monte Carlo methods and the Metropolis–Hastings algorithm</p>
+  <p class="subtitle">Monte Carlo methods, Markov chains and the Metropolis–Hastings algorithm</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -223,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Saturday Jan 25, 2025</p>
+  <p class="date">Last compiled Monday Jan 27, 2025</p>
 </section>
 <section id="bayesian-inference-beyond-conjugate-models" class="slide level2">
 <h2>Bayesian inference beyond conjugate models</h2>
@@ -244,6 +244,22 @@ Léo Belzile
 <p>If <span class="math inline">\(X\)</span> follows the same distribution as <span class="math inline">\(Y\)</span>, but restricted over the interval <span class="math inline">\([a,b]\)</span>, then <span class="math display">\[\Pr(X \leq x) = \frac{F(x) - F(a)}{F(b)-F(a)}, \qquad a \leq x \leq b,\]</span></p>
 <p>Therefore, <span class="math display">\[F^{-1}[F(a) + \{F(b)-F(a)\}U] \sim X\]</span></p>
 </section>
+<section id="fundamental-theorem-of-simulation" class="slide level2">
+<h2>Fundamental theorem of simulation</h2>
+<p>Consider a <span class="math inline">\(d\)</span>-variate random vector <span class="math inline">\(\boldsymbol{X},\)</span> independent of <span class="math inline">\(U \sim \mathsf{unif}(0,1)\)</span> and <span class="math inline">\(c&gt;0\)</span>. If <span class="math inline">\((\boldsymbol{X}, U)\)</span> is uniformly distributed on the set <span class="math display">\[\begin{align*}
+\mathcal{A}_{f}=\{(\boldsymbol{x}, u): 0 \leq u \leq  c f(\boldsymbol{x})\},
+\end{align*}\]</span> then <span class="math inline">\(\boldsymbol{X}\)</span> has density <span class="math inline">\(f(\boldsymbol{x}).\)</span> Conversely, if <span class="math inline">\(\boldsymbol{X}\)</span> has density <span class="math inline">\(f(\boldsymbol{x})\)</span> and <span class="math inline">\(U\sim\mathsf{unif}(0,1)\)</span> independently, then <span class="math inline">\([\boldsymbol{X}, cUf(\boldsymbol{X})]\)</span> is uniformly distributed on <span class="math inline">\(\mathcal{A}_f\)</span></p>
+<ul>
+<li><span class="math inline">\(f\)</span> is the marginal density of <span class="math inline">\(\boldsymbol{X}\)</span> since <span class="math inline">\(f(\boldsymbol{x}) = \int_0^{f(\boldsymbol{x})} \mathrm{d} u.\)</span></li>
+<li>If we can simulate uniformly from <span class="math inline">\(\mathcal{A}_{f},\)</span> then, we can discard the auxiliary variable <span class="math inline">\(u.\)</span> See <span class="citation" data-cites="Devroye:1986">Devroye (<a href="#/references" role="doc-biblioref" onclick="">1986</a>)</span>, Theorem 3.1.</li>
+</ul>
+</section>
+<section id="fundamental-theorem-of-simulation-in-picture" class="slide level2">
+<h2>Fundamental theorem of simulation in picture</h2>
+
+<img data-src="bayesmod-slides4_files/figure-revealjs/fig-fundamental-theorem-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-fundamental-theorem"><p class="caption">
+Figure&nbsp;1: Illustration of the fundamental theorem of simulation. All points in blue below the density curve belong to <span class="math inline">\(\mathcal{A}_f.\)</span>
+</p></section>
 <section id="simulation-algorithms-accept-reject" class="slide level2">
 <h2>Simulation algorithms: accept-reject</h2>
 <ul>
@@ -285,7 +301,7 @@ Léo Belzile
 <h2>Accept-reject illustration</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-acceptreject-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-acceptreject"><p class="caption">
-Figure&nbsp;1: Target density (full) and scaled proposal density (dashed): the vertical segment at <span class="math inline">\(x=1\)</span> shows the percentage of acceptance for a uniform slice under the scaled proposal, giving an acceptance ratio of 0.58.
+Figure&nbsp;2: Target density (full) and scaled proposal density (dashed): the vertical segment at <span class="math inline">\(x=1\)</span> shows the percentage of acceptance for a uniform slice under the scaled proposal, giving an acceptance ratio of 0.58.
 </p></section>
 <section id="truncated-gaussian-via-accept-reject" class="slide level2">
 <h2>Truncated Gaussian via accept-reject</h2>
@@ -382,14 +398,15 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 </section>
 <section id="stationarity-and-markov-property" class="slide level2">
 <h2>Stationarity and Markov property</h2>
-<p>A stochastic process is <strong>(weakly) stationary</strong> if</p>
+<p>A stochastic process is</p>
 <ul>
-<li>the distribution of <span class="math inline">\(\{X_1, \ldots, X_t\}\)</span> is the same as that of <span class="math inline">\(\{X_{n+1}, \ldots X_{t+n}\}\)</span> for any value of <span class="math inline">\(n\)</span> and given <span class="math inline">\(t\)</span>.</li>
+<li><strong>(strongly) stationary</strong> if the distribution of <span class="math inline">\(\{X_1, \ldots, X_t\}\)</span> is the same as that of <span class="math inline">\(\{X_{n+1}, \ldots X_{t+n}\}\)</span> for any value of <span class="math inline">\(n\)</span> and given <span class="math inline">\(t\)</span>.</li>
+<li><strong>weakly stationary</strong> if <span class="math inline">\(\mathsf{E}(X_t) = \mu\)</span> for all <span class="math inline">\(t\)</span>, and <span class="math inline">\(\mathsf{Cov}(X_t, X_{t+h}) = \gamma_h\)</span> does not depend on <span class="math inline">\(t\)</span>.</li>
+<li><strong>Markov</strong> if it satisfies the Markov property: given the current state of the chain, the future only depends on the current state and not on the past.</li>
 </ul>
-<p>A stochastic process is <strong>Markov</strong> if</p>
-<ul>
-<li>it satisfies the Markov property: given the current state of the chain, the future only depends on the current state and not on the past.</li>
-</ul>
+<div style="font-size: 65%;">
+<p>Strong stationarity implies weak stationarity.</p>
+</div>
 </section>
 <section id="autoregressive-process-of-order-1" class="slide level2">
 <h2>Autoregressive process of order 1</h2>
@@ -400,25 +417,44 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <li><span class="math inline">\(\mu\)</span> the global mean</li>
 <li><span class="math inline">\(\varepsilon_t\)</span> is an iid innovation with mean zero and variance <span class="math inline">\(\sigma^2\)</span></li>
 </ul>
-<p>If <span class="math inline">\(|\phi| &lt; 1\)</span>, the process is stationary, otherwise variance increases with <span class="math inline">\(t\)</span></p>
+<p>If <span class="math inline">\(|\phi| &lt; 1\)</span>, the process is stationary, otherwise the variance increases with <span class="math inline">\(t\)</span>.</p>
 </section>
-<section id="variance-of-a-stationary-distribution" class="slide level2">
-<h2>Variance of a stationary distribution</h2>
-<p>For a correlated sequence, the variance of the stationary distribution is <span class="math display">\[\begin{align*}
-\tau^2 = \mathsf{Va}(Y_t) + 2 \sum_{k=1}^\infty \mathsf{Co}(Y_t, Y_{t-k}).
+<section id="unconditional-moments-via-recursion" class="slide level2 smaller">
+<h2>Unconditional moments via recursion</h2>
+<p>The Gaussian <span class="math inline">\(\mathsf{AR}(1)\)</span> stationarity process follows <span class="math inline">\(Y_t \sim \mathsf{Gauss}(\mu, \sigma^2/(1-\phi^2)\)</span> marginally. <span class="math display">\[\begin{align*}
+Y_t &amp;= \mu (1-\phi) + \varepsilon_t + \phi \{\mu + \phi(Y_{t-2}-\mu) + \varepsilon_{t-1}\}
+\\&amp;= \mu + \sum_{j=0}^\infty \phi_j\varepsilon_{t-j}
+\end{align*}\]</span> whence <span class="math inline">\(\mathsf{E}(Y_t) = \mu\)</span> and <span class="math display">\[\begin{align*}
+\mathsf{Va}(Y_t) &amp;= \mathsf{Va}\left(\sum_{j=0}^\infty \phi_j\varepsilon_{t-j}\right)
+= \sum_{j=0}^\infty \phi_j^2 \mathsf{Va}(\varepsilon_{t-j})
+=\frac{\sigma^2}{(1-\phi^2)}
+\end{align*}\]</span> where the geometric series converges if <span class="math inline">\(\phi&lt;1\)</span> and diverges otherwise.</p>
+</section>
+<section id="unconditional-moments-via-tower-law" class="slide level2">
+<h2>Unconditional moments via tower law</h2>
+<p>If the process is weakly stationary, then <span class="math inline">\(\mathsf{E}_{Y_{t}}(Y_t)=\mathsf{E}_{Y_{t-1}}(Y_{t-1})\)</span> <span class="math display">\[\begin{align*}
+\mathsf{E}_{Y_{t}}(Y_t) &amp;= \mathsf{E}_{Y_{t-1}}\left\{\mathsf{E}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\}
+\\&amp;= \mu(1-\phi) + \phi\mathsf{E}_{Y_{t-1}}(Y_{t-1})
+\end{align*}\]</span> and so the unconditional mean is <span class="math inline">\(\mu\)</span>. For the variance, we have <span class="math display">\[\begin{align*}
+\mathsf{E}_{Y_{t}}(Y_t) &amp;= \mathsf{E}_{Y_{t-1}}\left\{\mathsf{Va}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\} + \mathsf{Va}_{Y_{t-1}}\left\{\mathsf{E}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\}\\
+&amp; = \sigma^2 + \mathsf{Va}_{Y_{t-1}}\left\{\mu + \phi(Y_{t-1} - \mu)\right\}
+\\&amp;= \sigma^2 + \phi^2 \mathsf{Va}_{Y_{t-1}}(Y_{t-1}).
 \end{align*}\]</span></p>
-<ul>
-<li>for i.i.d. data, <span class="math inline">\(\tau^2 = \mathsf{Va}(Y_t)\)</span></li>
-<li>for stationary <span class="math inline">\(\mathsf{AR}(1)\)</span> process, we get <span class="math inline">\(\sigma^2/(1-\phi^2)\)</span> (geometric series)</li>
-</ul>
 </section>
 <section id="variance-of-sample-average" class="slide level2">
 <h2>Variance of sample average</h2>
 <p>Intuitively, a sample of correlated observations carries less information than an independent sample of draws.</p>
 <p>We want the variance of the sample average, which is <span class="math display">\[\begin{align*}
-\mathsf{Va}\left(\overline{Y}_T\right) = \frac{1}{T}\sum_{t=1}^T \mathsf{Va}(Y_t) + \frac{2}{T} \sum_{t=1}^{T-1}\sum_{s = t+1}^T \mathsf{Co}(Y_t, Y_s).
+\mathsf{Va}\left(\overline{Y}_T\right) &amp;= \frac{1}{T^2}\sum_{t=1}^T \sum_{s=1}^T \mathsf{Co}(Y_t, Y_s)
+\\&amp;= \frac{1}{T^2}\sum_{t=1}^T \mathsf{Va}(Y_t) + \frac{2}{T^2} \sum_{t=1}^{T-1}\sum_{s = t+1}^T \mathsf{Co}(Y_t, Y_s).
 \end{align*}\]</span></p>
-<p>If the process is stationary, the covariances at lag <span class="math inline">\(k\)</span> are the same regardless of the time index and the unconditional variance is constant.</p>
+</section>
+<section id="autocovariance-and-markov-property" class="slide level2">
+<h2>Autocovariance and Markov property</h2>
+<p>The covariance at lag <span class="math inline">\(k\)</span>, in terms of innovations, gives <span class="math display">\[\begin{align*}
+\gamma_k = \mathsf{Co}(Y_t, Y_{t-k}) = \mathsf{Va}(\phi Y_{t-1}, Y_{t-k}) + \mathsf{Va}(\varepsilon_t, Y_{t-k}) = \phi \gamma_{k-1}
+\end{align*}\]</span> so by recursion <span class="math inline">\(\gamma_k = \gamma^k\mathsf{Va}(Y_t)\)</span>.</p>
+<p>The <span class="math inline">\(\mathsf{AR}(1)\)</span> process is first-order Markov since the conditional distribution <span class="math inline">\(p(Y_t \mid Y_{t-1}, \ldots, Y_{t-p})\)</span> equals <span class="math inline">\(p(Y_t \mid Y_{t-1}).\)</span></p>
 </section>
 <section id="variance-of-sample-average-redux" class="slide level2">
 <h2>Variance of sample average, redux</h2>
@@ -427,14 +463,14 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 \end{align*}\]</span> which is a function of</p>
 <ul>
 <li>the unconditional variance <span class="math inline">\(\tau^2\)</span></li>
-<li>the lag-<span class="math inline">\(k\)</span> autocorrelation <span class="math inline">\(\mathsf{Cor}(Y_{t}, Y_{t+k})=\gamma_k\)</span></li>
+<li>the lag-<span class="math inline">\(k\)</span> autocorrelation <span class="math inline">\(\mathsf{Cor}(Y_{t}, Y_{t+k})=\gamma_k.\)</span></li>
 </ul>
 </section>
 <section id="correlogram" class="slide level2">
 <h2>Correlogram</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-correlograms-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-correlograms"><p class="caption">
-Figure&nbsp;2: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number.
+Figure&nbsp;3: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number.
 </p></section>
 <section id="variance-of-sample-mean-of-ar1" class="slide level2">
 <h2>Variance of sample mean of AR(1)</h2>
@@ -445,7 +481,7 @@ Figure&nbsp;2: Correlogram of two Markov chains. These plots, often called acf o
 <h2>Inefficiency curve for AR(1)</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-ar1-variance-1.png" width="768" class="r-stretch quarto-figure-center" id="fig-ar1-variance"><p class="caption">
-Figure&nbsp;3: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with the same marginal variance (dashed). Right: variance ratio for positive correlations.
+Figure&nbsp;4: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with the same marginal variance (dashed). Right: variance ratio for positive correlations.
 </p><p>To get the same precision for the mean of <span class="math inline">\(\mathsf{AR}(1)\)</span> process with <span class="math inline">\(\phi \approx 0.75\)</span> than with i.i.d. data, we would need 9 times as many observations.</p>
 </section>
 <section id="morale-of-the-story" class="slide level2">
@@ -460,13 +496,13 @@ Figure&nbsp;3: Left: scaled asymptotic variance of the sample mean for AR(1) (fu
 <h2>When can we use Markov chains?</h2>
 <p>If a Markov chain is irreducible and acyclic, it has a unique stationary distribution.</p>
 <ul>
-<li>irreducibility: means that the chain can move from anywhere to anywhere, so it doesn’t get stuck in part of the space forever.</li>
-<li>acyclic: cyclical chains loop around and visit periodically a state</li>
+<li><strong>irreducibility</strong>: means that the chain can move from anywhere to anywhere, so it doesn’t get stuck in part of the space forever.</li>
+<li><strong>acyclic</strong>: cyclical chains loop around and visit periodically a state</li>
 </ul>
-<p>Ergodic theorem is our guarantee of convergence.</p>
+<p>Ergodic theorem is our guarantee of convergence (does not require acyclic).</p>
 </section>
-<section id="examples" class="slide level2">
-<h2>Examples</h2>
+<section id="examples-of-cyclical-or-reducible-chains" class="slide level2">
+<h2>Examples of cyclical or reducible chains</h2>
 <p>Consider discrete Markov chains over the integers <span class="math inline">\(1, 2, 3\)</span> with transition matrices</p>
 <p><span class="math display">\[
 P_1 = \begin{pmatrix}
@@ -482,11 +518,21 @@ P_2 = \begin{pmatrix}
 \end{pmatrix}.
 \]</span> Chain 1 is reducible to <span class="math inline">\(\{2, 3\}\)</span>, chain 2 is cyclical.</p>
 </section>
+<section id="law-of-large-number-ergodic-theorem" class="slide level2">
+<h2>Law of large number (ergodic theorem)</h2>
+<p>Ergodicity means that two segments of a time series far enough apart act as independent.</p>
+<p>Let <span class="math inline">\(\{Y_t\}\)</span> is a weakly stationary sequence with mean <span class="math inline">\(\mathsf{E}(Y_t)=\mu\)</span> and <span class="math inline">\(\gamma_h = \mathsf{Cov}(Y_t, Y_{t+h})\)</span>. Then, if the autocovariance series is convergent, meaning <span class="math display">\[\sum_{t=0}^\infty |\gamma_h| &lt; \infty,\]</span> then <span class="math inline">\(\{Y_t\}\)</span> is ergodic for the mean and <span class="math inline">\(\overline{Y} \stackrel{\mathrm{p}}{\to} \mu\)</span>.</p>
+</section>
+<section id="ergodicity-and-transformations" class="slide level2">
+<h2>Ergodicity and transformations</h2>
+<p>The ergodic theorem is a law of large numbers for stochastic processes that allows for serial dependence between observations, provided the latter is not too large.</p>
+<p>Any transformation <span class="math inline">\(g(\cdot)\)</span> of a stationary and ergodic process <span class="math inline">\(\{Y_t\}\)</span> retains the properties, so <span class="math inline">\(\overline{g} = T^{-1} \sum_{t=1}^T g(Y_t) \to \mathsf{E}\{g(Y_t)\}\)</span> as <span class="math inline">\(T \to \infty\)</span>.</p>
+</section>
 <section id="convergence-of-markov-chains" class="slide level2">
 <h2>Convergence of Markov chains</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-discrete-markov-chain-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-discrete-markov-chain"><p class="caption">
-Figure&nbsp;4: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).
+Figure&nbsp;5: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).
 </p></section>
 <section id="markov-chain-monte-carlo" class="slide level2">
 <h2>Markov chain Monte Carlo</h2>
@@ -494,7 +540,27 @@ Figure&nbsp;4: Discrete Markov chain on integers from 1 to 5, with traceplot of 
 <ul>
 <li>known up to a normalizing factor not depending on <span class="math inline">\(\boldsymbol{\theta}\)</span>.</li>
 </ul>
-<p>We use <span class="math inline">\(q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^*)\)</span> as transition kernel to generate proposals.</p>
+<p>We use a conditional density <span class="math inline">\(q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{cur}})\)</span> to generate proposals from the current value <span class="math inline">\(\boldsymbol{\theta}^{\text{cur}}\)</span>.</p>
+</section>
+<section id="transition-kernel-and-detailed-balanced" class="slide level2">
+<h2>Transition kernel and detailed balanced</h2>
+<div style="color: #ff585d; text-align: center">
+<p><strong>Theoretical details provided for completeness</strong></p>
+</div>
+<p>A transition kernel <span class="math inline">\(K(\boldsymbol{\theta}^{\text{cur}}, \boldsymbol{\theta}^{\text{prop}})\)</span> proposes a move from the current value <span class="math inline">\(\boldsymbol{\theta}^{\text{cur}}\)</span> to a proposal <span class="math inline">\(\boldsymbol{\theta}^{\text{prop}}\)</span>.</p>
+<p>If our target is <span class="math inline">\(p(\boldsymbol{\theta})\)</span>, then the Markov chain satisfies the <strong>detailed balance</strong> condition with respect to <span class="math inline">\(p(\cdot)\)</span> if <span class="math display">\[\begin{align*}
+K(\boldsymbol{\theta}^{\text{cur}}, \boldsymbol{\theta}^{\text{prop}})p(\boldsymbol{\theta}^{\text{cur}}) = K(\boldsymbol{\theta}^{\text{prop}}, \boldsymbol{\theta}^{\text{cur}})p(\boldsymbol{\theta}^{\text{prop}}).
+\end{align*}\]</span> If a Markov chain satisfies the detailed balance with respect to <span class="math inline">\(p(\cdot)\)</span>, then the latter is necessarily the invariant density of the Markov chain and the latter is reversible.</p>
+</section>
+<section id="transition-kernel-of-metropolishastings-algorithm" class="slide level2">
+<h2>Transition kernel of Metropolis–Hastings algorithm</h2>
+<div style="color: #ff585d; text-align: center">
+<p><strong>Theoretical details provided for completeness</strong></p>
+</div>
+<p>The Metropolis–Hastings algorithm has transition kernel for a move from <span class="math inline">\(\boldsymbol{x}\)</span> to a proposal <span class="math inline">\(\boldsymbol{y}\)</span> <span class="math display">\[\begin{align*}
+K(\boldsymbol{x}, \boldsymbol{y}) = \alpha(\boldsymbol{x}, \boldsymbol{y}) q(\boldsymbol{y} \mid \boldsymbol{x}) + \{1- r(\boldsymbol{x})\}\mathsf{I}(\boldsymbol{y}=\boldsymbol{x})
+\end{align*}\]</span> where <span class="math inline">\(r(\boldsymbol{x})=\int \alpha(\boldsymbol{x}, \boldsymbol{y}) q(\boldsymbol{y} \mid \boldsymbol{x})\mathrm{d} \boldsymbol{y}\)</span> is the average probability of acceptance of a move from <span class="math inline">\(\boldsymbol{x}\)</span>, <span class="math inline">\(\mathsf{I}(\cdot = \boldsymbol{x})\)</span> is a point mass at <span class="math inline">\(\boldsymbol{x},\)</span> and <span class="math inline">\(\alpha(\cdot)\)</span> is defined on the next slide.</p>
+<p>The Metropolis–Hastings algorithm satisfies detailed balanced.</p>
 </section>
 <section id="metropolishastings-algorithm" class="slide level2">
 <h2>Metropolis–Hastings algorithm</h2>
@@ -504,7 +570,7 @@ Figure&nbsp;4: Discrete Markov chain on integers from 1 to 5, with traceplot of 
 <li>Compute the acceptance ratio <span class="math display">\[
 R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
 \]</span></li>
-<li>With probability <span class="math inline">\(\min\{R, 1\}\)</span>, accept the proposal and set <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}\)</span>, otherwise set the value to the previous state, <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}\)</span>.</li>
+<li>With probability <span class="math inline">\(\alpha=\min\{R, 1\}\)</span>, accept the proposal and set <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}\)</span>, otherwise set the value to the previous state, <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}\)</span>.</li>
 </ol>
 </section>
 <section id="interpretation" class="slide level2">
@@ -615,7 +681,6 @@ Y_{i} &amp;\sim \mathsf{Po}(n_i\lambda_i), \qquad (i=1,2)\\
 </section>
 <section id="implementation-details-analysis-of-output" class="slide level2">
 <h2>Implementation details: analysis of output</h2>
-<p>Need specialized methods to compute standard errors of the posterior mean.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Posterior summaries</span></span>
 <span id="cb10-2"><a></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span>
@@ -635,6 +700,29 @@ kappa  0.07075 0.002033 2.033e-05      9.741e-05
 beta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929
 kappa  0.06673  0.06933  0.07077  0.07212  0.07463</code></pre>
 </section>
+<section id="standard-errors-for-posterior-means-batch-means" class="slide level2">
+<h2>Standard errors for posterior means – batch means</h2>
+<p><span class="citation" data-cites="Geyer:2011">Geyer (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> recommends to segment the time series into batches</p>
+<ol type="1">
+<li>Break the chain of length <span class="math inline">\(B\)</span> (after burn in) in <span class="math inline">\(K\)</span> blocks of size <span class="math inline">\(\approx K/B.\)</span></li>
+<li>Compute the sample mean of each segment.</li>
+<li>Compute the standard deviation of the segments mean.</li>
+<li>Rescale by <span class="math inline">\(K^{-1/2}\)</span> to get standard error of the global mean.</li>
+</ol>
+</section>
+<section id="illustration-of-batch-means" class="slide level2">
+<h2>Illustration of batch means</h2>
+
+<img data-src="bayesmod-slides4_files/figure-revealjs/fig-mcmc-batchmean-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-mcmc-batchmean"><p class="caption">
+Figure&nbsp;6: Calculation of the standard error of the posterior mean using the batch method.
+</p></section>
+<section id="standard-errors-for-posterior-means-autoregressive" class="slide level2">
+<h2>Standard errors for posterior means – autoregressive</h2>
+<p>We can also fit an high-order autoregressive process <span class="math inline">\(\mathsf{AR}(p)\)</span> and approximate the unconditional variance by that, and divide by <span class="math inline">\(\sqrt{T}\)</span>.</p>
+<ul>
+<li>Standard methods (Yule–Walker equations, maximum likelihood, spectral estimation) apply.</li>
+</ul>
+</section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
@@ -645,6 +733,9 @@ Botev, Z., &amp; L’Écuyer, P. (2017). Simulation from the normal distribution
 </div>
 <div id="ref-Devroye:1986" class="csl-entry" role="listitem">
 Devroye, L. (1986). <em><span>Non-Uniform Random Variate Generation</span></em>. Springer. <a href="http://www.nrbook.com/devroye/">http://www.nrbook.com/devroye/</a>
+</div>
+<div id="ref-Geyer:2011" class="csl-entry" role="listitem">
+Geyer, C. J. (2011). Introduction to <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 3–48). CRC Press. <a href="https://doi.org/10.1201/b10905">https://doi.org/10.1201/b10905</a>
 </div>
 </div>
 </section>

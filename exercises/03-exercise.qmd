@@ -11,7 +11,7 @@ f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ -
 for location $\nu >0$ and shape $\tau>0$. 
 
 a. Show that the joint prior
-$$ p(\lambda) \sim \mathsf{Ga}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{No}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
+$$ p(\lambda) \sim \mathsf{gamma}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{Gauss}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
 b. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
 c. Derive the marginal posterior $p(\lambda)$.
 
@@ -19,7 +19,7 @@ c. Derive the marginal posterior $p(\lambda)$.
 ## Exercise 3.2
 
 Consider the Rayleigh distribution with scale $\sigma>0$. It's density is
-$$f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(x \geq 0).$$
+$$f(y; \sigma) = \frac{y}{\sigma^2} \exp\left(-\frac{y^2}{2\sigma^2}\right)\mathrm{I}(y \geq 0).$$
 
 Derive the Fisher information matrix and use it to obtain Jeffrey's prior for $\sigma$. Determine whether the prior is proper.
 
