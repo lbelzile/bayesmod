@@ -43,7 +43,7 @@ Assume each of the 184 observations are independent from two Poisson populations
 The [`waiting` dataset](/files/data/waiting.csv) contains waiting times (in seconds) from 17:59 until the departure of the next metro at the Universite de Montreal station during week-days over three consecutive months.
 
 1. Assume first that the waiting time are independent and identically distributed as exponential. 
-   a. Use a conjugate gamma prior with mean 30 seconds and std. deviation 30 seconds. Give the values of the corresponding shape and rate parameters of the prior.
+   a. Use a conjugate gamma prior such that the average waiting time $1/\lambda$ has mean 30 seconds and std. deviation 30 seconds.^[Hint: if $\Lambda \sim \mathsf{gamma}(\alpha, \beta)$, then the reciprocal rate follows $1/\Lambda \sim \mathsf{inv. gamma}(\alpha, \beta)$ with $\mathsf{E}(\Lambda^{-1}) = \beta/(\alpha-1)$ for $\alpha>1$ and $\mathsf{Va}(\Lambda^{-1}) = \beta^2/\{(\alpha-1)^2(\alpha-2)\}$. Solve to find the values of the parameters and check numerically by generating data from the inverse gamma distribution.] Give the values of the corresponding shape and rate parameters of the prior.
    b. Plot an histogram of prior predictive draws.
    c. Derive the posterior distribution and report its parameter values.
    d. Calculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.

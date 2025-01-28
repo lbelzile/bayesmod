@@ -60,8 +60,8 @@ We focus on Monte Carlo methods.
 ## Simulation algorithms: inversion method
 
 If $F$ is an absolutely continuous distribution function, then 
-$$F(X) \sim \mathsf{U}(0,1).$$
-The inversion method consists in applying the quantile function $F^{-1}$ to $U \sim \mathsf{U}(0,1)$, viz. $$F^{-1}(U) \sim X.$$
+$$F(X) \sim \mathsf{unif}(0,1).$$
+The inversion method consists in applying the quantile function $F^{-1}$ to $U \sim \mathsf{unif}(0,1)$, viz. $$F^{-1}(U) \sim X.$$
 
 
 
@@ -72,7 +72,7 @@ Consider a random variable $Y$ with distribution function $F$.
 If $X$ follows the same distribution as $Y$, but restricted over the interval $[a,b]$, then
 $$\Pr(X \leq x) = \frac{F(x) - F(a)}{F(b)-F(a)}, \qquad a \leq x \leq b,$$
 
-Therefore, $$F^{-1}[F(a) + \{F(b)-F(a)\}U] \sim X$$
+Therefore, $$F^{-1}[F(a) + \{F(b)-F(a)\}U] \sim X.$$
 
 
 ## Fundamental theorem of simulation
@@ -82,7 +82,10 @@ If $(\boldsymbol{X}, U)$ is uniformly distributed on the set
 \begin{align*}
 \mathcal{A}_{f}=\{(\boldsymbol{x}, u): 0 \leq u \leq  c f(\boldsymbol{x})\},
 \end{align*}
-then $\boldsymbol{X}$ has density $f(\boldsymbol{x}).$ Conversely, if $\boldsymbol{X}$ has density $f(\boldsymbol{x})$ and $U\sim\mathsf{unif}(0,1)$ independently, then $[\boldsymbol{X}, cUf(\boldsymbol{X})]$ is uniformly distributed on $\mathcal{A}_f$
+then $\boldsymbol{X}$ has density $f(\boldsymbol{x}).$ 
+<!--
+Conversely, if $\boldsymbol{X}$ has density $f(\boldsymbol{x})$ and $U\sim\mathsf{unif}(0,1)$ independently, then $[\boldsymbol{X}, cUf(\boldsymbol{X})]$ is uniformly distributed on $\mathcal{A}_f$
+-->
 
 - $f$ is the marginal density of $\boldsymbol{X}$ since $f(\boldsymbol{x}) = \int_0^{f(\boldsymbol{x})} \mathrm{d} u.$
 - If we can simulate uniformly from $\mathcal{A}_{f},$ then, we can discard the auxiliary variable $u.$ See @Devroye:1986, Theorem 3.1.
@@ -118,31 +121,19 @@ ggplot() +
 
 ## Simulation algorithms: accept-reject
 
+
+
 - **Target**: sample from density $p(x)$ (hard to sample from)
-- **Proposal**: find a density $q(x)$ with nested support, $\mathrm{supp}(p) \subseteq \mathrm{supp}(q)$, such that 
+- **Proposal**: find a density $q(x)$ with nested support, $\mathrm{supp}(p) \subseteq \mathrm{supp}(q)$, such that for all $x \in \mathrm{supp}(p)$, 
 $$\frac{p(x)}{q(x)} \leq C, \quad C \geq 1.$$
+*Uses the fundamental theorem of simulation by finding an enveloppe $Cq(x)$ that is over the density $p(x).$*
 
 ## Rejection sampling algorithm
 
 1. Generate $X$ from proposal with density $q(x)$.
 2. Compute the ratio $R \gets p(X)/ q(X)$.
-3. If $CU \leq R$ for $U \sim \mathsf{U}(0,1)$, return $X$, else go back to step 1.
+3. If $CU \leq R$ for $U \sim \mathsf{unif}(0,1)$, return $X$, else go back to step 1.
 
-
-## Remarks on rejection sampling
-
-- Acceptance rate is $1/C$
-   - we need on average $C$ draws from $q$ to get one from $p$
-- $q$ must be more heavy-tailed than $p$
-   - e.g., $q(x)$ Student-$t$ for $p(x)$ Gaussian
-- $q$ should be cheap and easy to sample from!
-
-## Designing a good proposal density
-
-Good choices must satisfy the following constraints: 
-
-- pick a family $q(x)$ so that $$C = \mathrm{sup}_x \frac{p(x)}{q(x)}$$ is as close to 1 as possible.
-- you can use numerical optimization with $f(x) =\log p(x) - \log q(x)$ to find the mode $x^\star$ and the upper bound $C = \exp f(x^\star)$.
 
 ## Accept-reject illustration
 
@@ -182,9 +173,25 @@ ggplot() +
   theme_classic() 
 ```
 
+
+## Remarks on rejection sampling
+
+- Acceptance rate is $1/C$:
+   - we need on average $C$ draws from $q$ to get one from $p$.
+- $q$ must be more heavy-tailed than $p$
+   - e.g., $q(x)$ Student-$t$ for $p(x)$ Gaussian.
+- $q$ should be cheap and easy to sample from!
+
+## Designing a good proposal density
+
+Good choices must satisfy the following constraints: 
+
+- pick a family $q(x)$ so that $$C = \mathrm{argmax}_x \frac{p(x)}{q(x)}$$ is as close to 1 as possible.
+- you can use numerical optimization with target $$f(x) =\log p(x) - \log q(x)$$ to find the mode $x^\star$ and the upper bound $C = \exp f(x^\star).$
+
 ## Truncated Gaussian via accept-reject
 
-Consider sampling $Y \sim \mathsf{No}(\mu, \sigma^2)$, but truncated in the interval $(a, b)$. The target density is
+Consider sampling $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$, but truncated in the interval $(a, b)$. The target density is
 \begin{align*}
 p(x; \mu, \sigma, a, b) = \frac{1}{\sigma}\frac{\phi\left(\frac{x-\mu}{\sigma}\right)}{\Phi(\beta)-\Phi(\alpha)}.
 \end{align*}
@@ -193,7 +200,7 @@ where $\phi(\cdot), \Phi(\cdot)$ are respectively the density and distribution f
 
 ## Accept-reject (crude version)
 
-1. Simulate $X \sim \mathsf{No}(\mu, \sigma^2)$
+1. Simulate $X \sim \mathsf{Gauss}(\mu, \sigma^2)$
 2. reject any draw if $X < a$ or $X> b$. 
 
 The acceptance rate is $C^{-1} = \{\Phi(\beta) - \Phi(\alpha)\}$
@@ -253,11 +260,11 @@ The shifted Rayleigh has distribution function $$G(x) = 1-\exp\{(a^2-x^2)/2\}, x
 :::{.callout-important}
 
 ## Marsaglia algorithm
-1. Generate a shifted Rayleigh  above $a$, $X \gets  \{a^2 - 2\log(U)\}^{1/2}$ for $U \sim \mathsf{U}(0,1)$
-2. Accept $X$ if $XV \leq a$, where $V \sim \mathsf{U}(0,1)$.
+1. Generate a shifted Rayleigh  above $a$, $X \gets  \{a^2 - 2\log(U)\}^{1/2}$ for $U \sim \mathsf{unif}(0,1)$
+2. Accept $X$ if $XV \leq a$, where $V \sim \mathsf{unif}(0,1)$.
 :::
 
-For sampling on $[a,b]$, propose from a Rayleigh truncated above at $b$ [@LEcuyer.Botev:2017].
+For sampling on $[a,b]$ with $a$ very large, propose from a Rayleigh truncated above at $b$ [@LEcuyer.Botev:2017].
 
 ```{r}
 #| eval: true
@@ -315,23 +322,6 @@ $$Y_t = \mu + \phi(Y_{t-1} - \mu) + \varepsilon_t,$$ where
 
 If $|\phi| < 1$, the process is stationary, otherwise the variance increases with $t$.
 
-
-## Unconditional moments via recursion  {.smaller}
-
-
-The Gaussian $\mathsf{AR}(1)$ stationarity process follows $Y_t \sim \mathsf{Gauss}(\mu, \sigma^2/(1-\phi^2)$ marginally.
-\begin{align*}
-Y_t &= \mu (1-\phi) + \varepsilon_t + \phi \{\mu + \phi(Y_{t-2}-\mu) + \varepsilon_{t-1}\}
-\\&= \mu + \sum_{j=0}^\infty \phi_j\varepsilon_{t-j}
-\end{align*}
-whence $\mathsf{E}(Y_t) = \mu$ and
-\begin{align*}
-\mathsf{Va}(Y_t) &= \mathsf{Va}\left(\sum_{j=0}^\infty \phi_j\varepsilon_{t-j}\right)
-= \sum_{j=0}^\infty \phi_j^2 \mathsf{Va}(\varepsilon_{t-j})
-=\frac{\sigma^2}{(1-\phi^2)}
-\end{align*}
-where the geometric series converges if $\phi<1$ and diverges otherwise.
-
 ## Unconditional moments via tower law
 
 If the process is weakly stationary, then $\mathsf{E}_{Y_{t}}(Y_t)=\mathsf{E}_{Y_{t-1}}(Y_{t-1})$
@@ -342,47 +332,109 @@ If the process is weakly stationary, then $\mathsf{E}_{Y_{t}}(Y_t)=\mathsf{E}_{Y
 and so the unconditional mean is $\mu$.
 For the variance, we have
 \begin{align*}
-\mathsf{E}_{Y_{t}}(Y_t) &= \mathsf{E}_{Y_{t-1}}\left\{\mathsf{Va}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\} + \mathsf{Va}_{Y_{t-1}}\left\{\mathsf{E}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\}\\
+\mathsf{Va}_{Y_{t}}(Y_t) &= \mathsf{E}_{Y_{t-1}}\left\{\mathsf{Va}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\} + \mathsf{Va}_{Y_{t-1}}\left\{\mathsf{E}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\}\\
 & = \sigma^2 + \mathsf{Va}_{Y_{t-1}}\left\{\mu + \phi(Y_{t-1} - \mu)\right\}
 \\&= \sigma^2 + \phi^2 \mathsf{Va}_{Y_{t-1}}(Y_{t-1}).
 \end{align*}
-
-## Variance of sample average
-
-Intuitively, a sample of correlated observations carries less information than an independent sample of draws.
-
-We want the variance of the sample average, which is
-\begin{align*}
-\mathsf{Va}\left(\overline{Y}_T\right) &= \frac{1}{T^2}\sum_{t=1}^T \sum_{s=1}^T \mathsf{Co}(Y_t, Y_s)
-\\&= \frac{1}{T^2}\sum_{t=1}^T \mathsf{Va}(Y_t) + \frac{2}{T^2} \sum_{t=1}^{T-1}\sum_{s = t+1}^T \mathsf{Co}(Y_t, Y_s).
-\end{align*}
+and the unconditional variance is $\mathsf{Va}_{Y_t}(Y_t) = \sigma^2/(1-\phi^2).$
 
 
 ## Autocovariance and Markov property
-
 
 The covariance at lag $k$, in terms of innovations, gives
 \begin{align*}
 \gamma_k = \mathsf{Co}(Y_t, Y_{t-k}) = \mathsf{Va}(\phi Y_{t-1}, Y_{t-k}) + \mathsf{Va}(\varepsilon_t, Y_{t-k}) = \phi \gamma_{k-1}
 \end{align*}
-so by recursion $\gamma_k = \gamma^k\mathsf{Va}(Y_t)$.
+since $\varepsilon_t$ is independent of the past. We thus find $$\gamma_k = \phi^k\mathsf{Va}(Y_t).$$
 
 
 The $\mathsf{AR}(1)$ process is first-order Markov since the conditional distribution $p(Y_t \mid Y_{t-1}, \ldots, Y_{t-p})$ equals $p(Y_t \mid Y_{t-1}).$
 
+## Variance of sample average
+
+Intuitively, a sample of correlated observations carries less information than an independent sample of draws.
+
+The variance of the sample average is
+\begin{align*}
+\mathsf{Va}\left(\overline{Y}_T\right) &= \frac{1}{T^2}\sum_{t=1}^T \sum_{s=1}^T \mathsf{Co}(Y_t, Y_s)
+\\&= \frac{1}{T^2}\sum_{t=1}^T \mathsf{Va}(Y_t) + \frac{2}{T^2} \sum_{t=1}^{T-1}\sum_{s = t+1}^T \mathsf{Co}(Y_t, Y_s).
+\end{align*}
+Under independence and assuming stationarity, we get $\mathsf{Va}\left(\overline{Y}_T\right)=\sigma^2/T.$
+
+
 ## Variance of sample average, redux
 
-If a central limit theorem applies, the limiting variance of the sample mean simplifies to
+If the second moments are finite, the scaled limiting variance of the sample mean simplifies to
 \begin{align*}
-\lim_{T \to \infty} T\mathsf{Va}\left(\overline{Y}_T\right) = \tau^2 \left\{1+2\sum_{t=1}^\infty \gamma_t\right\}.
+\lim_{T \to \infty} T\mathsf{Va}\left(\overline{Y}_T\right) = \tau^2 \left\{1+2\sum_{t=1}^\infty \rho_t\right\}.
 \end{align*}
 which is a function of 
 
 - the unconditional variance $\tau^2$
-- the lag-$k$ autocorrelation $\mathsf{Cor}(Y_{t}, Y_{t+k})=\gamma_k.$
+- the lag-$k$ autocorrelation, $\mathsf{Cor}(Y_{t}, Y_{t+k})=\rho_k.$
+
+## Effective sample size
+
+The effective sample size is, loosely speaking, the equivalent number of observations if the $B$ marginal posterior draws where independent and more formally
+$$
+\mathsf{ESS} = \frac{B}{\left\{1+2\sum_{t=1}^\infty \rho_t\right\}}
+$$ 
+where $\rho_t$ is the lag $t$ correlation.
+
+## Effective sample size for AR(1)
+
+The lag-$k$ correlation of the stationary autoregressive process of order 1 is $\phi^k$, so
+$$1+2\sum_{t=1}^\infty \rho_t = 1 + 2 \left(\frac{1}{1-\phi}-1\right) = \frac{1+\phi}{1-\phi}.$$
+
+
+
+## Inefficiency curve for AR(1) {.smaller}
+
+```{r}
+#| label: fig-ar1-variance
+#| fig-width: 8
+#| fig-height: 4
+#| fig-cap: "Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with unit marginal variance (dashed). Right: variance ratio for positive correlations for selected range."
+#| message: false
+#| warning: false
+#| echo: false
+#| eval: true
+var2 <- function(rho){(1+rho)/(1-rho)}
+var1 <- function(rho){1}
+var_ratio <- function(rho){var2(rho)/var1(rho)}
+g1 <- ggplot() +
+  stat_function(fun = var1, xlim = c(-0.9,0.9), n = 1001L, linetype = "dashed") +
+  stat_function(fun = var2, xlim = c(-0.9,0.9), n = 1001L) +
+  labs(y = "", x = expression(phi)) +
+  theme_classic()
+g2 <- ggplot() +
+  stat_function(fun = var_ratio,
+                xlim = c(0.5,0.9), 
+                n = 1001L) +
+  labs(y = "") + 
+  theme_classic()  
+g1 + g2
+```
+
+
+To get the same precision for the mean of $\mathsf{AR}(1)$ process with $\phi \approx 0.75$ than with i.i.d. data, we would need 7 times as many observations.
+
+## Morale of the story 
+
+The price to pay for having correlated samples is 
+
+:::{style="font-size: 2em; color: #ff585d; text-align: center"}
+
+**inefficiency**
+
+:::
+
+The higher the autocorrelation, the larger the variability of our estimators.
+
 
 ## Correlogram
 
+We can look at the autocorrelation function to check the efficiency.
 
 ```{r}
 #| eval: true
@@ -397,67 +449,14 @@ chains <- cbind("chain 1" = arima.sim(model = list(ar = c(0.5,-0.1),
 bayesplot::mcmc_acf(x = coda::as.mcmc(chains)) + theme_classic()
 ```
 
-## Variance of sample mean of AR(1)
-
-The lag-$k$ correlation of the stationary autoregressive process of order 1 is $\phi^k$, so $$T\mathsf{Va}\left(\overline{Y}_T\right)=\sigma^2(1+\phi)/(1-\phi).$$
-
-For an independent sample, we have $$T\mathsf{Va}\left(\overline{Y}_T\right)=\sigma^2/(1-\phi^2).$$ 
 
 
-
-
-## Inefficiency curve for AR(1) {.smaller}
-
-```{r}
-#| label: fig-ar1-variance
-#| fig-width: 8
-#| fig-height: 4
-#| fig-cap: "Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with the same marginal variance (dashed). Right: variance ratio for positive correlations."
-#| message: false
-#| warning: false
-#| echo: false
-#| eval: true
-var2 <- function(rho){(1+rho)/(1-rho)}
-var1 <- function(rho){1/(1-rho^2)}
-var_ratio <- function(rho){var2(rho)/var1(rho)}
-g1 <- ggplot() +
-  stat_function(fun = var1, xlim = c(-0.9,0.9), n = 1001L, linetype = "dashed") +
-  stat_function(fun = var2, xlim = c(-0.9,0.9), n = 1001L) +
-  labs(y = "", x = expression(phi)) +
-  theme_classic()
-g2 <- ggplot() +
-  stat_function(fun = var_ratio,
-                xlim = c(0,1), 
-                n = 1001L) +
-  labs(y = "") + 
-  theme_classic()  
-g1 + g2
-```
-
-
-To get the same precision for the mean of $\mathsf{AR}(1)$ process with $\phi \approx 0.75$ than with i.i.d. data, we would need 9 times as many observations.
-
-## Morale of the story 
-
-The price to pay for having correlated samples is 
-
-:::{style="font-size: 2em; color: #ff585d; text-align: center"}
-
-**inefficiency**
-
-:::
-
-The higher the autocorrelation, the larger the variability of our estimators.
-
-## When can we use Markov chains?
+## Convergence of Markov chains
 
 If a Markov chain is irreducible and acyclic, it has a unique stationary distribution.
 
 - **irreducibility**: means that the chain can move from anywhere to anywhere, so it doesn't get stuck in part of the space forever.
 - **acyclic**: cyclical chains loop around and visit periodically a state
-
-Ergodic theorem is our guarantee of convergence (does not require acyclic).
-
 
 ## Examples of cyclical or reducible chains
 
@@ -479,6 +478,7 @@ $$
 Chain 1 is reducible to $\{2, 3\}$, chain 2 is cyclical.
 
 
+
 ## Law of large number (ergodic theorem)
 
 Ergodicity means that two segments of a time series far enough apart act as independent.
@@ -491,7 +491,23 @@ then $\{Y_t\}$ is ergodic for the mean and $\overline{Y} \stackrel{\mathrm{p}}{\
 
 The ergodic theorem is a law of large numbers for stochastic processes that allows for serial dependence between observations, provided the latter is not too large.
 
-Any transformation $g(\cdot)$ of a stationary and ergodic process $\{Y_t\}$ retains the properties, so $\overline{g} = T^{-1} \sum_{t=1}^T g(Y_t) \to \mathsf{E}\{g(Y_t)\}$ as $T \to \infty$.
+Any transformation $g(\cdot)$ of a stationary and ergodic process $\{Y_t\}$ retains the properties, so $\overline{g} = T^{-1} \sum_{t=1}^T g(Y_t) \to \mathsf{E}\{g(Y_t)\}$ as $T \to \infty.$
+
+The ergodic theorem holds even if the chain is cyclical.
+
+
+
+## Convergence and stationary distribution
+
+Consider a transition $P$ on $1, \ldots, 5$ defined as $$
+P = \begin{pmatrix}
+\frac{2}{3} & \frac{1}{3} &  0 & 0 & 0 \\
+\frac{1}{6} & \frac{2}{3} & \frac{1}{6} & 0 & 0 \\
+0 & \frac{1}{6} & \frac{2}{3} & \frac{1}{6} & 0 \\
+0 & 0 & \frac{1}{6} & \frac{2}{3} & \frac{1}{6} \\
+0 & 0 & 0 &  \frac{1}{3}  & \frac{2}{3} \\
+\end{pmatrix}
+$$ The stationary distribution is the value of the row vector $\boldsymbol{p},$ such that $\boldsymbol{p} = \boldsymbol{p}\mathbf{P}$ for transition matrix $\mathbf{P}$: we get $\boldsymbol{p}=(1,2,2,2,1)/8.$
 
 
 ## Convergence of Markov chains
@@ -547,55 +563,32 @@ g1 + g2
 
 ## Markov chain Monte Carlo
 
-We consider simulating from a distribution with associated density function $\propto p(\boldsymbol{\theta})$.
+We consider simulating from a distribution with associated density function proportional to $p(\cdot)$
 
-- known up to a normalizing factor not depending on $\boldsymbol{\theta}$.
-
-We use a conditional density $q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{cur}})$ to generate proposals from the current value $\boldsymbol{\theta}^{\text{cur}}$.
-
-
-## Transition kernel and detailed balanced
-
-:::{style="color: #ff585d; text-align: center"}
-
-**Theoretical details provided for completeness**
-
-:::
-
-A transition kernel  $K(\boldsymbol{\theta}^{\text{cur}}, \boldsymbol{\theta}^{\text{prop}})$ proposes a move from the current value $\boldsymbol{\theta}^{\text{cur}}$ to a proposal $\boldsymbol{\theta}^{\text{prop}}$.
-
-If our target is $p(\boldsymbol{\theta})$, then the Markov chain satisfies the **detailed balance** condition with respect to $p(\cdot)$ if
-\begin{align*}
-K(\boldsymbol{\theta}^{\text{cur}}, \boldsymbol{\theta}^{\text{prop}})p(\boldsymbol{\theta}^{\text{cur}}) = K(\boldsymbol{\theta}^{\text{prop}}, \boldsymbol{\theta}^{\text{cur}})p(\boldsymbol{\theta}^{\text{prop}}).
-\end{align*}
-If a Markov chain satisfies the detailed balance with respect to $p(\cdot)$, then the latter is necessarily the invariant density of the Markov chain and the latter is reversible.
+- using an algorithm that generates a Markov chain ,
+- without requiring knowledge of the normalizing factor.
 
 
-## Transition kernel of Metropolis--Hastings algorithm
+We use a conditional density $q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{cur}})$ to generate proposals from the current value $\boldsymbol{\theta}^{\text{cur}}.$
 
-:::{style="color: #ff585d; text-align: center"}
 
-**Theoretical details provided for completeness**
-
-:::
-
-The Metropolis--Hastings algorithm has transition kernel for a move from $\boldsymbol{x}$ to a proposal $\boldsymbol{y}$
-\begin{align*}
-K(\boldsymbol{x}, \boldsymbol{y}) = \alpha(\boldsymbol{x}, \boldsymbol{y}) q(\boldsymbol{y} \mid \boldsymbol{x}) + \{1- r(\boldsymbol{x})\}\mathsf{I}(\boldsymbol{y}=\boldsymbol{x})
-\end{align*}
-where $r(\boldsymbol{x})=\int \alpha(\boldsymbol{x}, \boldsymbol{y}) q(\boldsymbol{y} \mid \boldsymbol{x})\mathrm{d} \boldsymbol{y}$ is the average probability of acceptance of a move from $\boldsymbol{x}$, $\mathsf{I}(\cdot = \boldsymbol{x})$ is a point mass at $\boldsymbol{x},$ and $\alpha(\cdot)$ is defined on the next slide.
-
-The Metropolis--Hastings algorithm satisfies detailed balanced.
 
 ## Metropolis--Hastings algorithm 
 
-Starting from an initial value $\boldsymbol{\theta}_0$:
+Starting from an initial value $\boldsymbol{\theta}_0$: for $t=1, \ldots, T$
 
 1.  draw a proposal value $\boldsymbol{\theta}_t^{\star} \sim q(\boldsymbol{\theta} \mid \boldsymbol{\theta}_{t-1})$.
 2.  Compute the acceptance ratio $$
     R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
     $$
 3.  With probability $\alpha=\min\{R, 1\}$, accept the proposal and set $\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}$, otherwise set the value to the previous state, $\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}$.
+
+## Theory
+
+The Metropolis--Hastings algorithm satisfies a technical condition (detailed balance) that ensures that the Markov chain generated is reversible. 
+
+- Thus, any draw from the posterior will generate a new realization from the posterior. 
+- Provided the starting value has non-zero probability under the posterior, the chain will converge to the stationarity distribution (albeit perhaps slowly).
 
 
 ## Interpretation
@@ -612,23 +605,26 @@ Starting from an initial value $\boldsymbol{\theta}_0$:
 If the proposal is symmetric, the ratio of proposal densities is $$q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} ) / q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1}) = 1.$$
 
 Common examples include random walk proposals
-$$\boldsymbol{\theta}_t^{\star} \gets \boldsymbol{\theta}_{t-1} + \tau Z, \qquad Z$$ where $Z$ is a mean zero, variance one random variable.
+$$\boldsymbol{\theta}_t^{\star} \gets \boldsymbol{\theta}_{t-1} + \tau Z,$$ where $Z \sim \mathsf{Gauss}(0,1).$
 
 ## Independent proposals
 
 - If we pick instead a global proposal, we must ensure that $q$ samples in far regions (recall rejection sampling), otherwise ...
-- Good proposals include heavy tailed distribution such as Student-$t$ with small degrees of freedom, centered at the maximum a posteriori $\widehat{\boldsymbol{\theta}}$ and with scale matrix $-\mathbf{H}^{-1}(\boldsymbol{\theta}_t^{\star})$, where $\mathbf{H}(\cdot)$ is the Hessian of the log posterior.
+- Good proposals include heavy tailed distribution such as Student-$t$ with small degrees of freedom, 
+
+- centered at the maximum a posteriori $\widehat{\boldsymbol{\theta}}$ and 
+- with scale matrix proportional to $-\mathbf{H}^{-1}(\boldsymbol{\theta}_t^{\star})$, where $\mathbf{H}(\cdot)$ is the Hessian of the (unnormalized) log posterior.
 
 
 ## Upworthy data example
 
 We model the Poisson rates for headlines with questions or not. Our model is
 \begin{align*}
-Y_{i} &\sim \mathsf{Po}(n_i\lambda_i), \qquad (i=1,2)\\
+Y_{i} &\sim \mathsf{Poisson}(n_i\lambda_i), \qquad (i=1,2)\\
 \lambda_1 &= \exp(\beta + \kappa) \\
 \lambda_2 &= \exp(\beta) \\
-\beta & \sim \mathsf{No}(\log 0.01, 1.5) \\
-\kappa &\sim \mathsf{No}(0, 1)
+\beta & \sim \mathsf{Gauss}(\log 0.01, 1.5) \\
+\kappa &\sim \mathsf{Gauss}(0, 1)
 \end{align*}
 
 ## Implementation details: data and containers

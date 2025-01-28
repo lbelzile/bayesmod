@@ -285,7 +285,7 @@ f(y; p) = p(1-p)^{y}, \qquad y = 0, 1, 2, \ldots;
 <ol type="1">
 <li>Assume first that the waiting time are independent and identically distributed as exponential.
 <ol type="a">
-<li>Use a conjugate gamma prior with mean 30 seconds and std. deviation 30 seconds. Give the values of the corresponding shape and rate parameters of the prior.</li>
+<li>Use a conjugate gamma prior such that the average waiting time <span class="math inline">\(1/\lambda\)</span> has mean 30 seconds and std. deviation 30 seconds.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Give the values of the corresponding shape and rate parameters of the prior.</li>
 <li>Plot an histogram of prior predictive draws.</li>
 <li>Derive the posterior distribution and report its parameter values.</li>
 <li>Calculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.</li>
@@ -310,6 +310,7 @@ Niekerk, J. van, Bakka, H., &amp; Rue, H. (2021). A principled distance-based pr
 
 <ol>
 <li id="fn1"><p>Take <span class="math inline">\(\alpha_1 &gt; 3\)</span> for part e.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Hint: if <span class="math inline">\(\Lambda \sim \mathsf{gamma}(\alpha, \beta)\)</span>, then the reciprocal rate follows <span class="math inline">\(1/\Lambda \sim \mathsf{inv. gamma}(\alpha, \beta)\)</span> with <span class="math inline">\(\mathsf{E}(\Lambda^{-1}) = \beta/(\alpha-1)\)</span> for <span class="math inline">\(\alpha&gt;1\)</span> and <span class="math inline">\(\mathsf{Va}(\Lambda^{-1}) = \beta^2/\{(\alpha-1)^2(\alpha-2)\}\)</span>. Solve to find the values of the parameters and check numerically by generating data from the inverse gamma distribution.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
