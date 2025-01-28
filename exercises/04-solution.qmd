@@ -6,13 +6,13 @@ draft: true
 
 ## Exercise 4.1
 
-Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
+Consider the Laplace family of distribution, $\mathsf{Laplace}(\nu, \tau)$, with density
 \begin{align*}
 g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau > 0
 \end{align*}
-as a candidate distribution for rejection sampling from $\mathsf{No}(0,1)$.
+as a candidate distribution for rejection sampling from $\mathsf{Gauss}(0,1)$.
 
-1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau)$.
+1. Provide an inversion sampling algorithm to generate from $\mathsf{Laplace}(\nu, \tau)$.
 2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
 3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
  degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
@@ -29,7 +29,7 @@ F(x) = \begin{cases}
 1 - \frac{1}{2} \exp\left(-\frac{x-\nu}{\tau}\right) & x >\nu\\
 \end{cases}
 \end{align*}
-and using the quantile transform, set $X=\nu + \tau \log(2U)$ if $U \leq 0.5$ and $X=\nu - \tau\log(2-2U)$ if $U > 0.5$ for $U \sim \mathsf{U}(0,1)$.
+and using the quantile transform, set $X=\nu + \tau \log(2U)$ if $U \leq 0.5$ and $X=\nu - \tau\log(2-2U)$ if $U > 0.5$ for $U \sim \mathsf{unif}(0,1)$.
 2. The Gaussian has lighter tail than the Laplace, so this won't work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.
 3. The optimal value for the location of the Student-$t$ would be $\nu$ (here zero for the standard Laplace). We compute the optimal scale via in the code below:
 $$
@@ -102,7 +102,7 @@ The following code produces
 #| echo: true
 nobs <- 10L # number of observations
 ybar <- 8   # average waiting time
-B <- 1000L  # number of draws
+B <- 1e4L  # number of draws
 # Un-normalized log posterior: scaled log likelihood + log prior
 upost <- function(x){ 
   dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +
@@ -113,32 +113,34 @@ post_samp <- rust::ru(logf = upost,
                       init = nobs/ybar)$sim_vals # initial value of mode
 ```
 
-Estimate using the Monte Carlo sample:
+Estimate using the independent Monte Carlo samples:
 
-1. the probability that the waiting time is between 3 and 15 minutes
+1. the probability that the average waiting time $1/\lambda$ is between 3 and 15 minutes
 2. the average waiting time
-3. the standard deviation of the waiting time
+3. the standard deviation of the average waiting time.
 
+
+Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.
 
 ::: {.solution}
 
 ```{r}
+# Monte Carlo for waiting time
 # Lambda is the reciprocal mean (1/minute)
-times <- 1/post_samp
-mean(times > 3 & times < 15)
-mean(times)
-sd(times)
-```
+times_mc <- 1/post_samp
+mean(times_mc > 3 & times_mc < 15)
+sd(times_mc)
+# posterior mean
+mean(times_mc)
+# Standard error of posterior mean
+sd(times_mc)/sqrt(length(post_samp))
 
-:::
 
-Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.
-
-```{r}
+# Metropolis-Hastings algorithm
 B <- 1e4L
 curr <- 8/10 # prior mean
 chains <- numeric(B) # container
-sd_prop <- 0.1
+sd_prop <- 0.1 # proposal standard deviation
 for(b in seq_len(B)){
   prop <- rnorm(n = 1, mean = curr, sd = sd_prop)
   if(upost(prop) - upost(curr) > -rexp(1)){
@@ -148,15 +150,118 @@ for(b in seq_len(B)){
 }
 # Discard burn-in
 times <- 1/chains[-(1:100)]
+# Estimate quantities using Monte Carlo
 mean(times > 3 & times < 15)
 mean(times)
 sd(times)
 # Summary of MCMC
-mcmc <- coda::mcmc(chains)
+mcmc <- coda::mcmc(times)
 summary(mcmc)
+```
+We can see that the standard error for the mean is roughly twice as big. We would thus need to inflate the sample size by a factor four to get the same precision.
+
+## Solution 4.3
+
+
+Consider the following code which implements a Metropolis--Hastings algorithm to simulate observations from a $\mathsf{beta}(0.5, 0.5)$ density.
+
+```{r}
+#| echo: true
+#| eval: true
+log_f <- function(par){
+  dbeta(x = par, shape1 = 0.5, shape2 = 0.5, log = TRUE)
+}
+metropo <- function(B, sd_prop = 0.2){
+  chain <- rep(0, B)
+  # Draw initial value
+  cur <- runif(1)
+  for(b in seq_len(B)){
+    repeat {
+        # Simulate proposal from Gaussian random walk proposal
+        prop <- cur + rnorm(1, sd = sd_prop)
+        # check admissibility for probability of success
+        if (prop >= 0 & prop <= 1)
+          break
+    }
+    # Compute (log) acceptance ratio
+    logR <- log_f(prop) - log_f(cur) 
+    # Accept the move if R > u
+    if(isTRUE(logR > log(runif(1)))){
+     cur <- prop 
+    }
+    chain[b] <- cur
+  }
+  return(chain)
+}
+# Run MCMC for 10K iterations
+mc <- metropo(1e4L)
+```
+
+To see if the algorithm works:
+
+a. Plot the density of the Markov chain draws along with the beta density curve. 
+b. Check that empirical moments match the theoretical ones
+
+If the algorithm is incorrect, provide a fix and explain the reason for the problem.
+
+:::{.solution}
+
+The sampler is incorrect because it tacitly draws from Gaussian variables that are restricted to $[0,1]$ via the accept-reject step. This means in particular that the acceptance ratio involves constants for the probability given a Gaussian centered at the current value or proposal truncated on the unit interval
+$$\frac{q(x^{\text{cur}\hphantom{c}} \mid x^{\text{prop}})}{q(x^{\text{prop}} \mid x^{\text{cur}\hphantom{c}})} = \frac{\Phi\{(1-x^{\text{cur}})/\sigma^{\text{prop}}\} - \Phi(-x^{\text{cur}}/\sigma^{\text{prop}})}{\Phi\{(1-x^{\text{prop}})/\sigma^{\text{prop}}\} - \Phi(-x^{\text{prop}}/\sigma^{\text{prop}})}.$$
+
+This exercise was inspired by [this blog post](https://darrenjw.wordpress.com/2012/06/04/metropolis-hastings-mcmc-when-the-proposal-and-target-have-differing-support/) by Darren Wilkinson.
+
+```{r}
+#| echo: true
+#| eval: true
+log_f <- function(par){
+  dbeta(x = par, shape1 = 0.5, shape2 = 0.5, log = TRUE)
+}
+metropo_fixed <- function(B, sd_prop = 0.2){
+  chain <- rep(0, B)
+  # Draw initial value
+  cur <- runif(1)
+  for(b in seq_len(B)){
+    repeat {
+        # Simulate proposal from Gaussian random walk proposal
+        prop <- cur + rnorm(1, sd = sd_prop)
+        # check admissibility for probability of success
+        if (prop >= 0 & prop <= 1)
+          break
+    }
+    # Compute (log) acceptance ratio
+    logR <- log_f(prop) - log_f(cur) + 
+      log(pnorm(1, mean = cur, sd = sd_prop) - pnorm(0, mean = cur, sd = sd_prop)) -
+      log(pnorm(1, mean = prop, sd = sd_prop) - pnorm(0, mean = prop, sd = sd_prop))
+    # Accept the move if R > u
+    if(isTRUE(logR > log(runif(1)))){
+     cur <- prop 
+    }
+    chain[b] <- cur
+  }
+  return(chain)
+}
+# Run MCMC for 10K iterations
+mc2 <- metropo_fixed(1e4L)
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '90%'
+#| label: fig-comparison
+#| fig-cap: "Comparison of histogram for 10K draws from the incorrect sampler (left) and the correct sampler (right)."
+par(mfrow = c(1,2))
+hist(mc, breaks = seq(0, 1, by = 0.05), prob = TRUE, main = "", ylab = "density", xlab = "x")
+curve(dbeta(x, shape1 = 0.5, shape2 = 0.5), from = 0, to = 1, add = TRUE, lty = 2)
+hist(mc2, breaks = seq(0, 1, by = 0.05), prob = TRUE, main = "", ylab = "density", xlab = "x")
+curve(dbeta(x, shape1 = 0.5, shape2 = 0.5), from = 0, to = 1, add = TRUE, lty = 2)
 ```
 
 
+:::
+
+<!--
 ## Exercise 4.3
 
 Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates $\lambda_i$ $(i=1,2)$, with the same priors. Use a Metropolis--Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.
@@ -247,3 +352,6 @@ summary(mcmc_list)
 ```
 
 :::
+
+
+-->

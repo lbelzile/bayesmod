@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -248,6 +282,7 @@ window.Quarto = {
   <ul>
   <li><a href="#exercise-4.1" id="toc-exercise-4.1" class="nav-link active" data-scroll-target="#exercise-4.1">Exercise 4.1</a></li>
   <li><a href="#exercise-4.2" id="toc-exercise-4.2" class="nav-link" data-scroll-target="#exercise-4.2">Exercise 4.2</a></li>
+  <li><a href="#exercise-4.3" id="toc-exercise-4.3" class="nav-link" data-scroll-target="#exercise-4.3">Exercise 4.3</a></li>
   </ul>
 </nav>
     </div>
@@ -275,11 +310,11 @@ window.Quarto = {
 
 <section id="exercise-4.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-4.1">Exercise 4.1</h2>
-<p>Consider the Laplace family of distribution, <span class="math inline">\(\mathsf{La}(\nu, \tau)\)</span>, with density <span class="math display">\[\begin{align*}
+<p>Consider the Laplace family of distribution, <span class="math inline">\(\mathsf{Laplace}(\nu, \tau)\)</span>, with density <span class="math display">\[\begin{align*}
 g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau &gt; 0
-\end{align*}\]</span> as a candidate distribution for rejection sampling from <span class="math inline">\(\mathsf{No}(0,1).\)</span></p>
+\end{align*}\]</span> as a candidate distribution for rejection sampling from <span class="math inline">\(\mathsf{Gauss}(0,1).\)</span></p>
 <ol type="1">
-<li>Provide an inversion sampling algorithm to generate from <span class="math inline">\(\mathsf{La}(\nu, \tau).\)</span></li>
+<li>Provide an inversion sampling algorithm to generate from <span class="math inline">\(\mathsf{Laplace}(\nu, \tau).\)</span></li>
 <li>Can you use the proposal to generate from a standard Gaussian? for Student-<span class="math inline">\(t\)</span> with 1 degree of freedom? Justify your answer.</li>
 <li>Consider as proposal a location-scale version of the Student-t with <span class="math inline">\(\nu=3\)</span> degrees of freedom. Find the optimal location and scale parameters and the upper bound <span class="math inline">\(C\)</span> for your choice.</li>
 <li>Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.</li>
@@ -287,12 +322,77 @@ g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qqua
 </section>
 <section id="exercise-4.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-4.2">Exercise 4.2</h2>
-<p>Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates <span class="math inline">\(\lambda_i\)</span> <span class="math inline">\((i=1,2)\)</span>, with the same priors. Use a Metropolis–Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.</p>
+<p>We revisit <a href="../exercises/02-exercise.html#exercice-2.3">Exercise 2.3</a>, which used a half-Cauchy prior for the exponential waiting time of buses.</p>
+<p>The ratio-of-uniform method, implemented in the <a href="https://paulnorthrop.github.io/rust/index.html"><code>rust</code> <strong>R</strong> package</a>, can be used to simulate independent draws from the posterior of the rate <span class="math inline">\(\lambda\)</span>. The following code produces</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="dv">10</span>L <span class="co"># number of observations</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ybar <span class="ot">&lt;-</span> <span class="dv">8</span>   <span class="co"># average waiting time</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">1000</span>L  <span class="co"># number of draws</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Un-normalized log posterior: scaled log likelihood + log prior</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>log_post <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dgamma</span>(<span class="at">x =</span> x, <span class="at">shape =</span> nobs <span class="sc">+</span> <span class="dv">1</span>L, <span class="at">rate =</span> nobs<span class="sc">*</span>ybar, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(<span class="dv">2</span>) <span class="sc">+</span> <span class="fu">dt</span>(<span class="at">x =</span> x, <span class="at">df =</span> <span class="dv">1</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>post_samp <span class="ot">&lt;-</span> rust<span class="sc">::</span><span class="fu">ru</span>(<span class="at">logf =</span> log_post, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n =</span> B, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">d =</span> <span class="dv">1</span>,  <span class="co"># dimension of parameter (scalar)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">init =</span> nobs<span class="sc">/</span>ybar)<span class="sc">$</span>sim_vals <span class="co"># initial value of mode</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Estimate using the independent Monte Carlo samples:</p>
 <ol type="1">
-<li>Tune the variance to reach an approximate acceptance rate of 0.44.</li>
-<li>Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See <a href="http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html"><code>bayesplot</code></a> or <code>coda</code>. Comment on the convergence and mixing of your Markov chain Monte Carlo.</li>
-<li>Report summary statistics of the chains.</li>
+<li>the probability that the waiting time is between 3 and 15 minutes</li>
+<li>the average waiting time</li>
+<li>the standard deviation of the waiting time.</li>
 </ol>
+<p>Next, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values and the standard errors of the posterior mean for <span class="math inline">\(\lambda.\)</span></p>
+<!--
+
+Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates $\lambda_i$ $(i=1,2)$, with the same priors. Use a Metropolis--Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.
+
+
+1. Tune the variance to reach an approximate acceptance rate of 0.44.
+2. Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See [`bayesplot`](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html) or `coda`. Comment on  the convergence and mixing of your Markov chain Monte Carlo.
+3. Report summary statistics of the chains.
+
+-->
+</section>
+<section id="exercise-4.3" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-4.3">Exercise 4.3</h2>
+<p>Consider the following code which implements a Metropolis–Hastings algorithm to simulate observations from a <span class="math inline">\(\mathsf{beta}(0.5, 0.5)\)</span> density.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>metropo <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="fu">metropo</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To see if the algorithm works:</p>
+<ol type="a">
+<li>Plot the density of the Markov chain draws along with the beta density curve.</li>
+<li>Check that empirical moments match the theoretical ones</li>
+</ol>
+<p>If the algorithm is incorrect, provide a fix and explain the reason for the problem.</p>
 
 
 </section>

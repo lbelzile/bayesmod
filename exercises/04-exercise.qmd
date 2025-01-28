@@ -6,20 +6,51 @@ title: "Exercises 4"
 
 ## Exercise 4.1
 
-Consider the Laplace family of distribution, $\mathsf{La}(\nu, \tau)$, with density
+Consider the Laplace family of distribution, $\mathsf{Laplace}(\nu, \tau)$, with density
 \begin{align*}
 g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qquad \nu \in \mathbb{R}, \tau > 0
 \end{align*}
-as a candidate distribution for rejection sampling from $\mathsf{No}(0,1).$
+as a candidate distribution for rejection sampling from $\mathsf{Gauss}(0,1).$
 
-1. Provide an inversion sampling algorithm to generate from $\mathsf{La}(\nu, \tau).$
+1. Provide an inversion sampling algorithm to generate from $\mathsf{Laplace}(\nu, \tau).$
 2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
 3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
  degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
 4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
 
-
 ## Exercise 4.2
+
+
+We revisit [Exercise 2.3](/exercises/02-exercise.html#exercice-2.3), which used a half-Cauchy prior for the exponential waiting time of buses.
+
+The ratio-of-uniform method, implemented in the [`rust` **R** package](https://paulnorthrop.github.io/rust/index.html), can be used to simulate independent draws from the posterior of the rate $\lambda$.
+The following code produces 
+```{r}
+#| eval: true
+#| echo: true
+nobs <- 10L # number of observations
+ybar <- 8   # average waiting time
+B <- 1000L  # number of draws
+# Un-normalized log posterior: scaled log likelihood + log prior
+log_post <- function(x){ 
+  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +
+    log(2) + dt(x = x, df = 1, log = TRUE)}
+post_samp <- rust::ru(logf = log_post, 
+                      n = B, 
+                      d = 1,  # dimension of parameter (scalar)
+                      init = nobs/ybar)$sim_vals # initial value of mode
+```
+
+Estimate using the independent Monte Carlo samples:
+
+1. the probability that the waiting time is between 3 and 15 minutes
+2. the average waiting time
+3. the standard deviation of the waiting time.
+
+
+Next, implement a random walk Metropolis--Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values and the standard errors of the posterior mean for $\lambda.$
+
+<!--
 
 Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates $\lambda_i$ $(i=1,2)$, with the same priors. Use a Metropolis--Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.
 
@@ -28,4 +59,47 @@ Repeat the simulations in Example 3.6, this time with a parametrization in terms
 2. Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See [`bayesplot`](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html) or `coda`. Comment on  the convergence and mixing of your Markov chain Monte Carlo.
 3. Report summary statistics of the chains.
 
+-->
 
+## Exercise 4.3
+
+Consider the following code which implements a Metropolis--Hastings algorithm to simulate observations from a $\mathsf{beta}(0.5, 0.5)$ density.
+
+```{r}
+#| echo: true
+#| eval: false
+log_f <- function(par){
+  dbeta(x = par, shape1 = 0.5, shape2 = 0.5, log = TRUE)
+}
+metropo <- function(B, sd_prop = 0.2){
+  chain <- rep(0, B)
+  # Draw initial value
+  cur <- runif(1)
+  for(b in seq_len(B)){
+    repeat {
+        # Simulate proposal from Gaussian random walk proposal
+        prop <- cur + rnorm(1, sd = sd_prop)
+        # check admissibility for probability of success
+        if (prop >= 0 & prop <= 1)
+          break
+    }
+    # Compute (log) acceptance ratio
+    logR <- log_f(prop) - log_f(cur) 
+    # Accept the move if R > u
+    if(isTRUE(logR > log(runif(1)))){
+     cur <- prop 
+    }
+    chain[b] <- cur
+  }
+  return(chain)
+}
+# Run MCMC for 10K iterations
+mc <- metropo(1e4L)
+```
+
+To see if the algorithm works:
+
+a. Plot the density of the Markov chain draws along with the beta density curve. 
+b. Check that empirical moments match the theoretical ones
+
+If the algorithm is incorrect, provide a fix and explain the reason for the problem.

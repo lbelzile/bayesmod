@@ -1775,7 +1775,7 @@
     "href": "exercises/04-exercise.html",
     "title": "Exercises 4",
     "section": "",
-    "text": "Consider the Laplace family of distribution, \\(\\mathsf{La}(\\nu, \\tau)\\), with density \\[\\begin{align*}\ng(x; \\nu, \\tau) = \\frac{1}{2\\tau} \\exp\\left(- \\frac{|x-\\nu|}{\\tau}\\right), \\qquad \\nu \\in \\mathbb{R}, \\tau &gt; 0\n\\end{align*}\\] as a candidate distribution for rejection sampling from \\(\\mathsf{No}(0,1).\\)\n\nProvide an inversion sampling algorithm to generate from \\(\\mathsf{La}(\\nu, \\tau).\\)\nCan you use the proposal to generate from a standard Gaussian? for Student-\\(t\\) with 1 degree of freedom? Justify your answer.\nConsider as proposal a location-scale version of the Student-t with \\(\\nu=3\\) degrees of freedom. Find the optimal location and scale parameters and the upper bound \\(C\\) for your choice.\nUse the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.",
+    "text": "Consider the Laplace family of distribution, \\(\\mathsf{Laplace}(\\nu, \\tau)\\), with density \\[\\begin{align*}\ng(x; \\nu, \\tau) = \\frac{1}{2\\tau} \\exp\\left(- \\frac{|x-\\nu|}{\\tau}\\right), \\qquad \\nu \\in \\mathbb{R}, \\tau &gt; 0\n\\end{align*}\\] as a candidate distribution for rejection sampling from \\(\\mathsf{Gauss}(0,1).\\)\n\nProvide an inversion sampling algorithm to generate from \\(\\mathsf{Laplace}(\\nu, \\tau).\\)\nCan you use the proposal to generate from a standard Gaussian? for Student-\\(t\\) with 1 degree of freedom? Justify your answer.\nConsider as proposal a location-scale version of the Student-t with \\(\\nu=3\\) degrees of freedom. Find the optimal location and scale parameters and the upper bound \\(C\\) for your choice.\nUse the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.",
     "crumbs": [
       "Exercises",
       "4. Metropolis-Hastings"
@@ -1786,7 +1786,7 @@
     "href": "exercises/04-exercise.html#exercise-4.1",
     "title": "Exercises 4",
     "section": "",
-    "text": "Consider the Laplace family of distribution, \\(\\mathsf{La}(\\nu, \\tau)\\), with density \\[\\begin{align*}\ng(x; \\nu, \\tau) = \\frac{1}{2\\tau} \\exp\\left(- \\frac{|x-\\nu|}{\\tau}\\right), \\qquad \\nu \\in \\mathbb{R}, \\tau &gt; 0\n\\end{align*}\\] as a candidate distribution for rejection sampling from \\(\\mathsf{No}(0,1).\\)\n\nProvide an inversion sampling algorithm to generate from \\(\\mathsf{La}(\\nu, \\tau).\\)\nCan you use the proposal to generate from a standard Gaussian? for Student-\\(t\\) with 1 degree of freedom? Justify your answer.\nConsider as proposal a location-scale version of the Student-t with \\(\\nu=3\\) degrees of freedom. Find the optimal location and scale parameters and the upper bound \\(C\\) for your choice.\nUse the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.",
+    "text": "Consider the Laplace family of distribution, \\(\\mathsf{Laplace}(\\nu, \\tau)\\), with density \\[\\begin{align*}\ng(x; \\nu, \\tau) = \\frac{1}{2\\tau} \\exp\\left(- \\frac{|x-\\nu|}{\\tau}\\right), \\qquad \\nu \\in \\mathbb{R}, \\tau &gt; 0\n\\end{align*}\\] as a candidate distribution for rejection sampling from \\(\\mathsf{Gauss}(0,1).\\)\n\nProvide an inversion sampling algorithm to generate from \\(\\mathsf{Laplace}(\\nu, \\tau).\\)\nCan you use the proposal to generate from a standard Gaussian? for Student-\\(t\\) with 1 degree of freedom? Justify your answer.\nConsider as proposal a location-scale version of the Student-t with \\(\\nu=3\\) degrees of freedom. Find the optimal location and scale parameters and the upper bound \\(C\\) for your choice.\nUse the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.",
     "crumbs": [
       "Exercises",
       "4. Metropolis-Hastings"
@@ -1797,7 +1797,7 @@
     "href": "exercises/04-exercise.html#exercise-4.2",
     "title": "Exercises 4",
     "section": "Exercise 4.2",
-    "text": "Exercise 4.2\nRepeat the simulations in Example 3.6, this time with a parametrization in terms of log rates \\(\\lambda_i\\) \\((i=1,2)\\), with the same priors. Use a Metropolis–Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.\n\nTune the variance to reach an approximate acceptance rate of 0.44.\nProduce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See bayesplot or coda. Comment on the convergence and mixing of your Markov chain Monte Carlo.\nReport summary statistics of the chains.",
+    "text": "Exercise 4.2\nWe revisit Exercise 2.3, which used a half-Cauchy prior for the exponential waiting time of buses.\nThe ratio-of-uniform method, implemented in the rust R package, can be used to simulate independent draws from the posterior of the rate \\(\\lambda\\). The following code produces\n\nnobs &lt;- 10L # number of observations\nybar &lt;- 8   # average waiting time\nB &lt;- 1000L  # number of draws\n# Un-normalized log posterior: scaled log likelihood + log prior\nlog_post &lt;- function(x){ \n  dgamma(x = x, shape = nobs + 1L, rate = nobs*ybar, log = TRUE) +\n    log(2) + dt(x = x, df = 1, log = TRUE)}\npost_samp &lt;- rust::ru(logf = log_post, \n                      n = B, \n                      d = 1,  # dimension of parameter (scalar)\n                      init = nobs/ybar)$sim_vals # initial value of mode\n\nEstimate using the independent Monte Carlo samples:\n\nthe probability that the waiting time is between 3 and 15 minutes\nthe average waiting time\nthe standard deviation of the waiting time.\n\nNext, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values and the standard errors of the posterior mean for \\(\\lambda.\\)",
     "crumbs": [
       "Exercises",
       "4. Metropolis-Hastings"
@@ -2614,5 +2614,16 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References"
+  },
+  {
+    "objectID": "exercises/04-exercise.html#exercise-4.3",
+    "href": "exercises/04-exercise.html#exercise-4.3",
+    "title": "Exercises 4",
+    "section": "Exercise 4.3",
+    "text": "Exercise 4.3\nConsider the following code which implements a Metropolis–Hastings algorithm to simulate observations from a \\(\\mathsf{beta}(0.5, 0.5)\\) density.\n\nlog_f &lt;- function(par){\n  dbeta(x = par, shape1 = 0.5, shape2 = 0.5, log = TRUE)\n}\nmetropo &lt;- function(B, sd_prop = 0.2){\n  chain &lt;- rep(0, B)\n  # Draw initial value\n  cur &lt;- runif(1)\n  for(b in seq_len(B)){\n    repeat {\n        # Simulate proposal from Gaussian random walk proposal\n        prop &lt;- cur + rnorm(1, sd = sd_prop)\n        # check admissibility for probability of success\n        if (prop &gt;= 0 & prop &lt;= 1)\n          break\n    }\n    # Compute (log) acceptance ratio\n    logR &lt;- log_f(prop) - log_f(cur) \n    # Accept the move if R &gt; u\n    if(isTRUE(logR &gt; log(runif(1)))){\n     cur &lt;- prop \n    }\n    chain[b] &lt;- cur\n  }\n  return(chain)\n}\n# Run MCMC for 10K iterations\nmc &lt;- metropo(1e4L)\n\nTo see if the algorithm works:\n\nPlot the density of the Markov chain draws along with the beta density curve.\nCheck that empirical moments match the theoretical ones\n\nIf the algorithm is incorrect, provide a fix and explain the reason for the problem.",
+    "crumbs": [
+      "Exercises",
+      "4. Metropolis-Hastings"
+    ]
   }
 ]
