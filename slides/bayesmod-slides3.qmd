@@ -104,7 +104,7 @@ Working with standardized response and inputs $$x_i \mapsto (x_i - \overline{x})
 
 ##  Example - simple linear regression
 
-Consider the relationship between height ($Y$, in cm) and weight ($X$, in kg) among humans adults.^[Section 4.4.1 of @McElreath:2020]
+Consider the relationship between height ($Y,$ in cm) and weight ($X,$ in kg) among humans adults.^[Section 4.4.1 of @McElreath:2020]
 
 Model using a simple linear regression
 
@@ -167,7 +167,7 @@ g1 + g2
 
 ## Conjugate priors
 
-A prior density $p(\boldsymbol{\theta})$ is conjugate for likelihood $L(\boldsymbol{\theta}; \boldsymbol{y})$ if the product $L(\boldsymbol{\theta}; \boldsymbol{y})p(\boldsymbol{\theta})$, after renormalization, is of the same parametric family as the prior.
+A prior density $p(\boldsymbol{\theta})$ is conjugate for likelihood $L(\boldsymbol{\theta}; \boldsymbol{y})$ if the product $L(\boldsymbol{\theta}; \boldsymbol{y})p(\boldsymbol{\theta}),$ after renormalization, is of the same parametric family as the prior.
 
 
 Distributions that are exponential family admit conjugate priors.
@@ -177,7 +177,7 @@ A distribution is an exponential family if it's density can be written
 \begin{align*}
 f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_k(y) + D(\boldsymbol{\theta}) + h(y)\right\}.
 \end{align*}
-The support of $f$ must not depend on $\boldsymbol{\theta}$.
+The support of $f$ must not depend on $\boldsymbol{\theta}.$
 
 :::
 
@@ -191,22 +191,22 @@ The support of $f$ must not depend on $\boldsymbol{\theta}$.
 | $Y \sim \mathsf{binom}(n, \theta)$ | $\theta$ | $\theta \sim \mathsf{Be}(\alpha, \beta)$ |
 | $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu$ | $\mu \sim \mathsf{Gauss}(\nu, \omega^2)$ |
 | $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\sigma$ | $\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)$ |
-| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu, \sigma$ | $\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2)$, $\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)$ |
+| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu, \sigma$ | $\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2),$ $\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)$ |
 
 ## Conjugate prior for the Poisson 
 
-If $Y \sim \mathsf{Poisson}(\mu)$ with density $f(y) = \mu^x\exp(-\mu x)/x!$, then for $\mu \sim \mathsf{gamma}(\alpha, \beta)$ with $\alpha, \beta$ fixed. Consider an i.i.d. sample with mean $\overline{y}$. The posterior density is
+If $Y \sim \mathsf{Poisson}(\mu)$ with density $f(y) = \mu^x\exp(-\mu x)/x!,$ then for $\mu \sim \mathsf{gamma}(\alpha, \beta)$ with $\alpha, \beta$ fixed. Consider an i.i.d. sample with mean $\overline{y}.$ The posterior density is
 
 $$
 p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\overline{y}\right) \mu^{\alpha-1} \exp(-\beta \mu)
 $$
-so must be gamma $\mathsf{gamma}(n\overline{y} + \alpha, n\overline{y} + \beta)$.
+so must be gamma $\mathsf{gamma}(n\overline{y} + \alpha, n\overline{y} + \beta).$
 
 *Parameter interpretation*: $\alpha$ events in $\beta$ time intervals.
 
 ## Conjugate prior for Gaussian (known variance) {.smaller}
 
-Consider an iid sample, $Y_i \sim \mathsf{Gauss}(\mu, \sigma^2)$ and let $\mu \mid \sigma \sim \mathsf{Gauss}(\nu, \sigma^2\tau^2)$. Then,
+Consider an iid sample, $Y_i \sim \mathsf{Gauss}(\mu, \sigma^2)$ and let $\mu \mid \sigma \sim \mathsf{Gauss}(\nu, \sigma^2\tau^2).$ Then,
 \begin{align*}
 p(\mu, \sigma) &\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}{2\sigma^2}\sum_{i=1}^n (y_{i}-\mu)^2\right\} \exp\left\{-\frac{1}{2\sigma^2\tau^2}(\mu - \nu)^2\right\}
 \\&\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{\left(\sum_{i=1}^n y_{i} + \frac{\nu}{\tau^2}\right)\frac{\mu}{\sigma^2} - \left( \frac{n}{2} +\frac{1}{2\tau^2}\right)\frac{\mu^2}{\sigma^2}\right\}.
@@ -215,13 +215,13 @@ p(\mu, \sigma) &\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}{2\s
 The conditional posterior $p(\mu \mid \sigma)$ is Gaussian with
 
 - mean $(n\overline{y}\tau^2 + \nu)/(n\tau^2 + 1)$ and 
-- precision (reciprocal variance) $(n + 1/\tau^2)/\sigma^2$.
+- precision (reciprocal variance) $(n + 1/\tau^2)/\sigma^2.$
 
 ## Upworthy examples
 
 - The Upworthy Research Archive [@Matias:2021] contains results for 22743 experiments, with a click through rate of 1.58% on average and a standard deviation of 1.23%.
 - We consider an A/B test that compared four different headlines for a story.
-- We model the conversion **rate** for each using $\texttt{click}_i \sim \mathsf{Poisson}(\lambda_i\texttt{impression}_i)$.
+- We model the conversion **rate** for each using $\texttt{click}_i \sim \mathsf{Poisson}(\lambda_i\texttt{impression}_i).$
 
 
 We treat $\texttt{impression}$ as a known offset.
@@ -257,7 +257,7 @@ knitr::kable(abtest)
 
 For $Y \sim \mathsf{gamma}(\alpha, \beta)$ with $\beta$ the rate parameter, we have
 \begin{align*}
-\mathsf{E}(Y)=alpha/\beta, \qquad \mathsf{Va}(Y)=alpha/\beta^2.
+\mathsf{E}(Y)=\alpha/\beta, \qquad \mathsf{Va}(Y)=\alpha/\beta^2.
 \end{align*}
 We can solve for $\beta =\mathsf{E}_0(\lambda)/\mathsf{Va}_0(\lambda)$ and then use the mean relationship to retrieve $\alpha.
 
@@ -269,7 +269,7 @@ mu <- 0.0158; sd <- 0.0123
 (alpha <- mu * beta)
 ```
 
-Moment matching gives $\alpha = 1.65$ and $\beta = 104.44$.
+Moment matching gives $\alpha = 1.65$ and $\beta = 104.44.$
 
 ## Posterior distributions for Sesame Street
 
@@ -281,7 +281,7 @@ Moment matching gives $\alpha = 1.65$ and $\beta = 104.44$.
 #| cache: true
 #| fig-width: 8
 #| fig-height: 5
-#| fig-cap: "Gamma posterior of the conversion rate for the Upworthy Sesame street headline."
+#| fig-cap: "Gamma posteriors of the conversion rate for the Upworthy Sesame street headline."
 cols <- MetBrewer::met.brewer("Hiroshige", 4)
 names(cols) <- paste0("H", 1:4)
 library(ggplot2)
@@ -346,8 +346,8 @@ Y_{ij} &\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
 
 ## Conditions for a proper posterior
 
-- for $\tau \sim \mathsf{unif}(0, \infty)$, we need at least $J \geq 3$ 'groups' for the posterior to be proper.
-- if we take $p(\tau) \propto \tau^{-1}$, the posterior is never proper. 
+- for $\tau \sim \mathsf{unif}(0, \infty),$ we need at least $J \geq 3$ 'groups' for the posterior to be proper.
+- if we take $p(\tau) \propto \tau^{-1},$ the posterior is never proper. 
 
 As @Gelman:2006 states: 
 
@@ -358,21 +358,21 @@ As @Gelman:2006 states:
 
 We can view the improper prior as a limiting case $$\sigma \sim \mathsf{unif}(0, t), \qquad t \to \infty.$$
 
-The Haldane prior for $\theta$ in a binomial model is $\theta^{-1}(1-\theta)^{-1}$, a limiting $\mathsf{Be}(0,0)$ distribution. 
+The Haldane prior for $\theta$ in a binomial model is $\theta^{-1}(1-\theta)^{-1},$ a limiting $\mathsf{Be}(0,0)$ distribution. 
 
-The improper prior $p(\sigma) \propto \sigma^{-1}$ is equivalent to an inverse gamma $\mathsf{inv. gamma}(\epsilon, \epsilon)$ when $\epsilon \to 0$.
+The improper prior $p(\sigma) \propto \sigma^{-1}$ is equivalent to an inverse gamma $\mathsf{inv. gamma}(\epsilon, \epsilon)$ when $\epsilon \to 0.$
 
 The limiting posterior is thus improper for random effects scales, so the value of $\epsilon$ matters.
 
 
 ## MDI prior for generalized Pareto
 
-Let $Y_i \sim \mathsf{GP}(\sigma, \xi)$ be generalized Pareto with density $$f(x) = \sigma^{-1}(1+\xi x/\sigma)_{+}^{-1/\xi-1}$$ for $\sigma>0$ and $\xi \in \mathbb{R}$, and $x_{+} =\max\{0, x\}$.
+Let $Y_i \sim \mathsf{GP}(\sigma, \xi)$ be generalized Pareto with density $$f(x) = \sigma^{-1}(1+\xi x/\sigma)_{+}^{-1/\xi-1}$$ for $\sigma>0$ and $\xi \in \mathbb{R},$ and $x_{+} =\max\{0, x\}.$
 
 
 Consider the maximum data information (MDI) $$p(\xi) \propto \exp(-\xi).$$
 
-Since $\lim_{\xi \to -\infty} \exp(-\xi) = \infty$, the prior density increases without bound as $\xi$ becomes smaller.
+Since $\lim_{\xi \to -\infty} \exp(-\xi) = \infty,$ the prior density increases without bound as $\xi$ becomes smaller.
 
 ## Truncated MDI for generalized Pareto distribution
 
@@ -395,19 +395,19 @@ ggplot() +
        subtitle = "unscaled prior density")
 ```
 
-If we restrict the range of the MDI prior $p(\xi)$ to $\xi \geq -1$, then $p(\xi + 1) \sim \mathsf{expo}(1)$ and posterior is proper.
+If we restrict the range of the MDI prior $p(\xi)$ to $\xi \geq -1,$ then $p(\xi + 1) \sim \mathsf{expo}(1)$ and posterior is proper.
 
 ## Flat priors
 
-Uniform prior over the support of $\theta$, $$p(\theta) \propto 1.$$ 
+Uniform prior over the support of $\theta,$ $$p(\theta) \propto 1.$$ 
 
-Improper prior unless $\theta \in [a,b]$ for finite $a, b$.
+Improper prior unless $\theta \in [a,b]$ for finite $a, b.$
 
 ## Flat priors for scale parameters
 
-Consider a scale parameter $\sigma > 0$.
+Consider a scale parameter $\sigma > 0.$
 
-- We could truncate the range, e.g., $\sigma \sim \mathsf{unif}(0, 50)$, but this is not 'uninformative', as extreme values of $\sigma$ are as likely as small ones.
+- We could truncate the range, e.g., $\sigma \sim \mathsf{unif}(0, 50),$ but this is not 'uninformative', as extreme values of $\sigma$ are as likely as small ones.
 - These priors are not invariant: if $p\{\log(\sigma)\} \propto 1$ implies $p(\sigma) \propto \sigma^{-1}$ so can be informative on another scale.
 
 ## Vague priors
@@ -416,7 +416,7 @@ Vague priors are very diffuse proper prior.
 
 For example, a vague Gaussian prior for regression coefficients on standardized data, $$\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\mathbf{0}_p, 100\mathbf{I}_p).$$
 
-- if we consider a logistic regression with a binary variable $\mathrm{X}_j \in \{0,1\}$, then $\beta_j =5$ gives odds ratios of 150, and $\beta_j=10$ of around 22K... 
+- if we consider a logistic regression with a binary variable $\mathrm{X}_j \in \{0,1\},$ then $\beta_j =5$ gives odds ratios of 150, and $\beta_j=10$ of around 22K... 
 
 ## Invariance and Jeffrey's prior
 
@@ -425,25 +425,25 @@ In single-parameter models, the **Jeffrey's prior** $$p(\theta) \propto |\imath(
 
 ## Jeffrey's prior for the binomial distribution
 
-Consider $Y \sim \mathsf{binom}(1, \theta)$. The negative of the second derivative of the log likelihood with respect to $p$ is
+Consider $Y \sim \mathsf{binom}(1, \theta).$ The negative of the second derivative of the log likelihood with respect to $p$ is
 $$
 \jmath(\theta) = - \partial^2 \ell(\theta; y) / \partial \theta^2 = y/\theta^2 + (1-y)/(1-\theta)^2.
 $$
 
-Since $\mathsf{E}(Y)=\theta$, the Fisher information is $$\imath(\vartheta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = 1/\{\theta(1-\theta)\}.$$
-Jeffrey's prior is therefore $p(\theta) \propto \theta^{-1/2}(1-\theta)^{-1/2}$, a conjugate Beta prior $\mathsf{Be}(0.5,0.5)$.
+Since $\mathsf{E}(Y)=\theta,$ the Fisher information is $$\imath(\vartheta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = 1/\{\theta(1-\theta)\}.$$
+Jeffrey's prior is therefore $p(\theta) \propto \theta^{-1/2}(1-\theta)^{-1/2},$ a conjugate Beta prior $\mathsf{Be}(0.5,0.5).$
 
 
 ## Invariant priors for location-scale families
 
-For a location-scale family with location $\mu$ and scale $\sigma$, the independent priors
+For a location-scale family with location $\mu$ and scale $\sigma,$ the independent priors
 \begin{align*}
 p(\mu) &\propto 1\\
 p(\sigma) &\propto \sigma^{-1}
 \end{align*}
 are location-scale invariant.
 
-The results are invariant to affine transformations of the units, $\vartheta = a + b \theta$.
+The results are invariant to affine transformations of the units, $\vartheta = a + b \theta.$
 
 
 
@@ -451,49 +451,32 @@ The results are invariant to affine transformations of the units, $\vartheta = a
 
 @Simpson:2017 consider a principled way of constructing priors that penalized model complexity for stable inference and limit over-specification.
 
-Suppose that the restriction of the parameter creates a simpler base version.
+Computes Kullback--Leibler divergence between $f$ and base model $f_0$ densities, builds an exponential prior on the distance scale and backtransform.
 
-- e.g., if we have a random effect $\alpha \sim \mathsf{Gauss}(0, \zeta^2)$, the value $\zeta=0$ corresponds to no group variability.
- 
-## Rationale penalized complexity priors
-
-Consider a penalized complexity prior for parameter $\zeta$.
-
-**Occam's razor** states that the simpler base model should be preferred if there is not enough evidence in favor of the full model.
-
-We measure the complexity of the full model with density $f$ using the Kullback--Leibler divergence between $f$ and base model $f_0$ densities. 
-This is transformed into a distance $$d=\sqrt{2\mathsf{KL}(f || f_0)}.$$
-
-## Penalized complexity prior construction
-
-Using a constant rate penalization from base model gives an exponential prior $p(d) = \lambda \exp(-\lambda d)$ on the distance scale, with a mode at $d=0$, corresponding to the base model. 
-
-Back-transform to parameter space to get $p(\zeta)$, 
-$$p(\zeta) = \lambda \exp\{-\lambda \cdot d(\zeta)\} \left| \frac{\partial d(\zeta)}{\partial \zeta}\right|.$$
-
+The resulting prior is scale-invariant, but it's derivation is nontrivial.
  
 ## Penalized complexity prior for random effect scale
 
-If $\alpha_j \sim \mathsf{Gauss}(0, \zeta^2)$, the penalized complexity prior is exponential with rate $\lambda$.
+If $\alpha_j \sim \mathsf{Gauss}(0, \zeta^2),$ the penalized complexity prior for the scale $\zeta \sim \mathsf{expo}(\lambda).$
 
-Elicit $Q$, a high quantile of the standard deviation $\zeta$ with tail probability $\alpha$ and set $\lambda = -\ln(\alpha/Q)$.
+Elicit $Q,$ a high quantile of the standard deviation $\zeta$ with tail probability $\alpha$ and set $\lambda = -\log(\alpha/Q).$
 
 
  
 ## Priors for scale of random effects
 
-The conjugate inverse gamma prior $p(\zeta) \sim \mathsf{inv. gamma}(\alpha, \beta)$ is such that the mode for $\zeta$ is $\beta/(1+\alpha)$.
+The conjugate inverse gamma prior $p(\zeta^2) \sim \mathsf{inv. gamma}(\alpha, \beta)$ is such that the mode for $\zeta^2$ is $\beta/(1+\alpha).$
 
-Often, we take $\beta=\alpha = 0.01$ or $0.001$, but this leads to near-improper priors, so small values of the parameters are not optimal for 'random effects'.
+Often, we take $\beta=\alpha = 0.01$ or $0.001,$ but this leads to near-improper priors, so small values of the parameters are not optimal for 'random effects'.
 
 The inverse gamma prior cannot provide shrinkage or allow for no variability between groups.
  
 ## Priors for scale of random effects
 
-A popular suggestion, due to @Gelman:2006, is to take a centered Student-$t$ distribution with $\nu$ degrees of freedoms, truncated over $[0, \infty)$ with scale $s$.
+A popular suggestion, due to @Gelman:2006, is to take a centered Student-$t$ distribution with $\nu$ degrees of freedoms, truncated over $[0, \infty)$ with scale $s.$
 
 - since the mode is at zero, provides support for the base model
-- we want small degrees of freedom $\nu$, preferable to take $\nu=3$? Cauchy model ($\nu=1$) still popular.
+- we want small degrees of freedom $\nu,$ preferable to take $\nu=3$? Cauchy model ($\nu=1$) still popular.
  
 ## Prior sensitivity
 
@@ -525,7 +508,7 @@ We model the number of violations, `nviolation` as a function of distraction typ
 Specifically,
 
 - $\beta_j$ is the coefficient for `task` $j$ (distraction type),
-- $\alpha_i$ is the random effect of participant $i$.
+- $\alpha_i$ is the random effect of participant $i.$
 
 
 ## Priors for random effect scale
@@ -535,7 +518,7 @@ Consider different priors for $\tau$
 - flat uniform prior $\mathsf{unif}(0,10)$
 - conjugate inverse gamma $\mathsf{inv. gamma}(0.01, 0.01)$ prior
 - a truncated Student-$t$ on $[0, \infty)$ with $\nu=3$ degrees of freedom, $\mathsf{Student}_{+}(0,1,3)$
-- a penalized complexity prior such that the 0.95 percentile of the scale is 5, corresponding to $\mathsf{expo}(0.6)$.
+- a penalized complexity prior such that the 0.95 percentile of the scale is 5, corresponding to $\mathsf{expo}(0.6).$
 
 ## Sensitivity analysis for smartwatch data
 
