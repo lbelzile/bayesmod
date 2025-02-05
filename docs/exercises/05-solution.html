@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -88,10 +88,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -237,20 +237,20 @@ window.Quarto = {
 <section id="exercise-5.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-5.1">Exercise 5.1</h2>
 <p>The Pareto distribution with shape <span class="math inline">\(\alpha&gt;0\)</span> and scale <span class="math inline">\(\tau&gt;0\)</span> has density <span class="math display">\[
-f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathsf{I}(x &gt; \tau).
+f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathrm{I}(x &gt; \tau).
 \]</span> It can be used to model power laws in insurance and finance, or in demography. The <code>uscitypopn</code> data set in the <code>hecbayes</code> package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.</p>
 <ol type="1">
 <li>Using improper priors, write the joint posterior for a simple random sample of size <span class="math inline">\(n\)</span> and derive the conditional distributions <span class="math inline">\(p(\alpha \mid \boldsymbol{y}, \tau)\)</span> and <span class="math inline">\(p(\tau \mid \alpha, \boldsymbol{y})\)</span>.</li>
-<li>The mononomial distribution <span class="math inline">\(\mathsf{Mono}(a,b)\)</span> has density <span class="math inline">\(p(x) \propto x^{a-1}\mathsf{I}(0 \leq x \leq b)\)</span>. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.</li>
+<li>The mononomial distribution <span class="math inline">\(\mathsf{Mono}(a,b)\)</span> has density <span class="math inline">\(p(x) \propto x^{a-1}\mathrm{I}(0 \leq x \leq b)\)</span>. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.</li>
 <li>Implement Gibbs sampling for this problem for the <code>uscitypopn</code> data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates?</li>
 </ol>
 <div class="proof solution">
 <p><span class="proof-title"><em>Solution</em>. </span>With improper prior, the joint posterior is the product of the likelihood contributions so <span class="math display">\[
-p(\alpha, \tau \mid \boldsymbol{y}) \propto \alpha^n \left(\prod_{i=1}^n y_i\right)^{-\alpha-1} \tau^{-n\alpha} \mathsf{I}(\min_i y_i &gt; \tau).
+p(\alpha, \tau \mid \boldsymbol{y}) \propto \alpha^n \left(\prod_{i=1}^n y_i\right)^{-\alpha-1} \tau^{-n\alpha} \mathrm{I}(\min_i y_i &gt; \tau).
 \]</span> Using the hint, write the conditional density for <span class="math inline">\(\alpha\)</span> given the rest as <span class="math display">\[\begin{align*}
 p(\alpha \mid \boldsymbol{y}, \tau) \propto \alpha^n \left( \frac{\prod_{i=1}^n y_i}{\tau^n}\right)^{-\alpha} = \alpha^{(n+1)-1} \exp\left\{-\alpha \left(\sum_{i=1}^n\log y_i - n\log \tau\right) \right\}
 \end{align*}\]</span> which is <span class="math inline">\(\mathsf{Gamma}\big(n+1, \sum_{i=1}^n \log y_i - n \log \tau \big)\)</span>. For the second, we have <span class="math display">\[\begin{align*}
-p(\tau \mid \alpha, \boldsymbol{y}) \propto \tau^{n\alpha} \mathsf{I}(\min_{i} y_i &gt; \tau),
+p(\tau \mid \alpha, \boldsymbol{y}) \propto \tau^{n\alpha} \mathrm{I}(\min_{i} y_i &gt; \tau),
 \end{align*}\]</span> a mononomial distribution with parameters <span class="math inline">\(a=n\alpha+1\)</span> and <span class="math inline">\(b = \min_{i} y_i\)</span>.</p>
 <p>To find the normalizing constant of the mononomial distribution, we simply integrate the unnormalized density to obtain the reciprocal constant: if <span class="math inline">\(c = \int g(x) \mathrm{d} x\)</span> for <span class="math inline">\(c &lt; \infty\)</span> and <span class="math inline">\(g(x) \geq 0\)</span> for all <span class="math inline">\(x\)</span>, then <span class="math inline">\(g(x)/c\)</span> integrates to one and is a valid density. Thus, we find <span class="math display">\[c= \int_0^b x^{a-1}\mathrm{d} x = \left[\frac{x^{a}}{a}\right]_{0}^b= \frac{b^{a}}{a}.\]</span> The distribution function is <span class="math inline">\(G(x) = (x/b)^{a}\)</span> for <span class="math inline">\(x \in [0,b]\)</span> and the quantile function <span class="math inline">\(G^{-1}(u) = u^{1/a}b\)</span>.</p>
 <div class="cell">

@@ -7,12 +7,12 @@ title: "Solution 5"
 
 The Pareto distribution with shape $\alpha>0$ and scale $\tau>0$ has density
 $$
-f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathsf{I}(x > \tau).
+f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathrm{I}(x > \tau).
 $$
 It can be used to model power laws in insurance and finance, or in demography. The `uscitypopn` data set in the `hecbayes` package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.
 
 1. Using improper priors, write the joint posterior for a simple random sample of size $n$ and derive the conditional distributions $p(\alpha \mid \boldsymbol{y}, \tau)$ and $p(\tau \mid \alpha, \boldsymbol{y})$.
-2. The mononomial distribution $\mathsf{Mono}(a,b)$ has density $p(x) \propto x^{a-1}\mathsf{I}(0 \leq x \leq b)$. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.
+2. The mononomial distribution $\mathsf{Mono}(a,b)$ has density $p(x) \propto x^{a-1}\mathrm{I}(0 \leq x \leq b)$. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.
 3. Implement Gibbs sampling for this problem for the `uscitypopn` data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates?
 
 
@@ -21,7 +21,7 @@ It can be used to model power laws in insurance and finance, or in demography. T
 
 With improper prior, the joint posterior is the product of the likelihood contributions so
 $$
-p(\alpha, \tau \mid \boldsymbol{y}) \propto \alpha^n \left(\prod_{i=1}^n y_i\right)^{-\alpha-1} \tau^{-n\alpha} \mathsf{I}(\min_i y_i > \tau).
+p(\alpha, \tau \mid \boldsymbol{y}) \propto \alpha^n \left(\prod_{i=1}^n y_i\right)^{-\alpha-1} \tau^{-n\alpha} \mathrm{I}(\min_i y_i > \tau).
 $$
 Using the hint, write the conditional density for $\alpha$ given the rest as
 \begin{align*}
@@ -29,7 +29,7 @@ p(\alpha \mid \boldsymbol{y}, \tau) \propto \alpha^n \left( \frac{\prod_{i=1}^n 
 \end{align*}
 which is $\mathsf{Gamma}\big(n+1, \sum_{i=1}^n \log y_i - n \log \tau \big)$. For the second, we have
 \begin{align*}
-p(\tau \mid \alpha, \boldsymbol{y}) \propto \tau^{n\alpha} \mathsf{I}(\min_{i} y_i > \tau),
+p(\tau \mid \alpha, \boldsymbol{y}) \propto \tau^{n\alpha} \mathrm{I}(\min_{i} y_i > \tau),
 \end{align*}
 a mononomial distribution with parameters $a=n\alpha+1$ and $b = \min_{i} y_i$.
 

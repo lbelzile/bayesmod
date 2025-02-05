@@ -1,6 +1,5 @@
 ---
 title: "Solution 4"
-draft: true
 ---
 
 
@@ -159,6 +158,8 @@ mcmc <- coda::mcmc(times)
 summary(mcmc)
 ```
 We can see that the standard error for the mean is roughly twice as big. We would thus need to inflate the sample size by a factor four to get the same precision.
+
+:::
 
 ## Solution 4.3
 

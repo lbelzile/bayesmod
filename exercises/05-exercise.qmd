@@ -7,7 +7,7 @@ title: "Exercises 5"
 
 The Pareto distribution with shape $\alpha>0$ and scale $\tau>0$ has density
 $$
-f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathsf{I}(x > \tau).
+f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathrm{I}(x > \tau).
 $$
 It can be used to model power laws in insurance and finance, or in demography. The `uscitypopn` data set in the `hecbayes` package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.
 
@@ -24,4 +24,4 @@ Implement the Bayesian LASSO for the `diabetes` cancer surgery from package `lar
 1. Fit the model for a range of values of $\lambda$ and produce parameter estimate paths to replicate Figure 2 of the paper.
 2. Check the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?
 3. Implement the method of section 3.1 from @Park.Casella:2008 by adding $\lambda$ as a parameter.
-4. For three models with different values of $\lambda$, compute the widely applicable information criterion (WAIC) and use it to assess predictive performance.
+<!--4. For three models with different values of $\lambda$, compute the widely applicable information criterion (WAIC) and use it to assess predictive performance. -->
