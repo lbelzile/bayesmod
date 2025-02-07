@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.3">
+<meta name="generator" content="quarto-1.7.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -68,10 +68,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -182,7 +182,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-solution.html">Solutions</a></li><li class="breadcrumb-item"><a href="../exercises/04-solution.html">4. Metropolis-Hastings</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-solution.html">Solutions</a></li><li class="breadcrumb-item"><a href="../exercises/04-solution.html">4. Monte Carlo methods</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -230,7 +230,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/04-exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4. Metropolis-Hastings</span></a>
+ <span class="menu-text">4. Monte Carlo methods</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -271,7 +271,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/04-solution.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">4. Metropolis-Hastings</span></a>
+ <span class="menu-text">4. Monte Carlo methods</span></a>
   </div>
 </li>
       </ul>
@@ -295,7 +295,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-solution.html">Solutions</a></li><li class="breadcrumb-item"><a href="../exercises/04-solution.html">4. Metropolis-Hastings</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-solution.html">Solutions</a></li><li class="breadcrumb-item"><a href="../exercises/04-solution.html">4. Monte Carlo methods</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Solution 4</h1>
 </div>
@@ -336,7 +336,7 @@ F(x) = \begin{cases}
 \end{align*}\]</span> and using the quantile transform, set <span class="math inline">\(X=\nu + \tau \log(2U)\)</span> if <span class="math inline">\(U \leq 0.5\)</span> and <span class="math inline">\(X=\nu - \tau\log(2-2U)\)</span> if <span class="math inline">\(U &gt; 0.5\)</span> for <span class="math inline">\(U \sim \mathsf{unif}(0,1)\)</span>.</li>
 <li>The Gaussian has lighter tail than the Laplace, so this won’t work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.</li>
 <li>The optimal value for the location of the Student-<span class="math inline">\(t\)</span> would be <span class="math inline">\(\nu\)</span> (here zero for the standard Laplace). We compute the optimal scale via in the code below: <span class="math display">\[
-\mathrm{argmax}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmin}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
+\mathrm{argmin}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmax}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
 \]</span></li>
 </ol>
 <div class="cell">
@@ -386,7 +386,7 @@ F(x) = \begin{cases}
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo estimator of the acceptance rate</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ntrials<span class="sc">/</span><span class="fu">length</span>(samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.274109</code></pre>
+<pre><code>[1] 1.265971</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot density</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -439,21 +439,21 @@ F(x) = \begin{cases}
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>times_mc <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>post_samp</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times_mc <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times_mc <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.98</code></pre>
+<pre><code>[1] 0.9779</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times_mc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.642588</code></pre>
+<pre><code>[1] 2.69878</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># posterior mean</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times_mc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 7.978362</code></pre>
+<pre><code>[1] 8.016499</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error of posterior mean</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times_mc)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(post_samp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.02642588</code></pre>
+<pre><code>[1] 0.0269878</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Metropolis-Hastings algorithm</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
@@ -472,15 +472,15 @@ F(x) = \begin{cases}
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate quantities using Monte Carlo</span></span>
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9773737</code></pre>
+<pre><code>[1] 0.9790909</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 8.010612</code></pre>
+<pre><code>[1] 8.045255</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.676302</code></pre>
+<pre><code>[1] 2.655438</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of MCMC</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>mcmc <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">mcmc</span>(times)</span>
@@ -496,12 +496,12 @@ Sample size per chain = 9900
    plus standard error of the mean:
 
           Mean             SD       Naive SE Time-series SE 
-       8.01061        2.67630        0.02690        0.05787 
+       8.04526        2.65544        0.02669        0.05450 
 
 2. Quantiles for each variable:
 
   2.5%    25%    50%    75%  97.5% 
- 4.283  6.170  7.538  9.203 14.691 </code></pre>
+ 4.241  6.203  7.552  9.384 14.562 </code></pre>
 </div>
 </div>
 <p>We can see that the standard error for the mean is roughly twice as big. We would thus need to inflate the sample size by a factor four to get the same precision.</p>
@@ -606,6 +606,7 @@ Repeat the simulations in Example 3.6, this time with a parametrization in terms
 :::{ .solution}
 
 The only thing we need to do is change the parametrization, and add tuning of the variance.
+
 
 
 ::: {.cell}
@@ -751,6 +752,7 @@ lambda[2] -4.444 -4.443 -4.442 -4.441 -4.440
 
 :::
 :::
+
 
 
 

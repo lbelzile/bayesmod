@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.3">
+<meta name="generator" content="quarto-1.7.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>News – Bayesian modelling</title>
+<title>Assignment 2 – Bayesian modelling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -29,17 +49,15 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -69,35 +87,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-news-table .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
-      
-      searchColumns: ["listing-title","listing-date","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-news-table'] = new List('listing-news-table', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -129,9 +118,9 @@ window.Quarto = {
 };
 </script>
 
-<link rel="alternate" type="application/rss+xml" title="Bayesian Modelling News" href="index.xml" data-external="1"></head>
+</head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -161,7 +150,7 @@ window.Quarto = {
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../evaluations/index.html"> 
+    <a class="nav-link active" href="../evaluations/index.html" aria-current="page"> 
 <span class="menu-text">Evaluations</span></a>
   </li>  
   <li class="nav-item">
@@ -174,23 +163,75 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../evaluations/01-assignment.html">Assignments</a></li><li class="breadcrumb-item"><a href="../evaluations/02-assignment.html">Assignment 2</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Evaluations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/weekly-check-in.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Weekly check-in</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/01-assignment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/02-assignment.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 2</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../evaluations/01-assignment.html">Assignments</a></li><li class="breadcrumb-item"><a href="../evaluations/02-assignment.html">Assignment 2</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">News</h1>
+<h1 class="title">Assignment 2</h1>
 </div>
 
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta">
 
     
   
@@ -202,91 +243,84 @@ window.Quarto = {
 </header>
 
 
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="grid">
-<div class="g-col-12 g-col-md-2">
-<p class="download-btn">
-<a class="btn btn-danger btn-sm" href="https://lbelzile.github.io/bayesmod/news/index.xml" role="button"><i class="fa-solid fa-square-rss" aria-hidden="true"></i> RSS</a>
-</p>
-</div>
-<div class="g-col-12 g-col-md-10">
-<p>
-<input class="form-control" type="text" value="https://lbelzile.github.io/bayesmod/news/index.xml" onclick="this.select()" readonly="">
-</p>
-</div>
-</div>
-</div>
-</div>
-<div id="listing-news-table" class="quarto-listing quarto-listing-container-table">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-     <select id="listing-news-table-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-news-table'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-       <option value="" disabled="" selected="" hidden="">Order By</option>
-       <option value="index" data-direction="asc">Default</option>
-         <option value="listing-date-sort" data-direction="asc">
-          Date - Oldest
-        </option>
-         <option value="listing-date-sort" data-direction="desc">
-          Date - Newest
-        </option>
-         <option value="listing-title-sort" data-direction="asc">
-          Title
-        </option>
-     </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<table class="quarto-listing-table table table-hover">
-<thead>
-<tr>
-<th>
-<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
-</th>
-<th>
-<a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
-</th>
-<th>
-Categories
-</th>
-</tr>
-</thead>
-<tbody class="list">
-<tr data-index="0" data-categories="YW5ub3VuY2VtZW50cw==" data-listing-date-sort="1735946100000" data-listing-file-modified-sort="1737152155198" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="403" data-listing-title-sort="Welcome to class" data-listing-filename-sort="01a-welcome.qmd" onclick="href = this.querySelector('a').getAttribute('href');
- if (href) { window.location=href ; return false; }">
-<td>
-<span class="listing-date">Friday January 3, 2025 at 6:15 PM</span>
-</td>
-<td>
-<a href="../news/01a-welcome.html" class="title listing-title">Welcome to class</a>
-</td>
-<td>
-<span class="listing-categories">announcements</span>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div>
+<p>These problems are for credit and to be handed in on March 3rd at the latest.</p>
+<section id="problem-2.1" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2.1">Problem 2.1</h2>
+<p>The <code>rats</code> data, extracted from Table 5 of <span class="citation" data-cites="Tarone:1982">Tarone (<a href="#ref-Tarone:1982" role="doc-biblioref">1982</a>)</span>, contains observations from 70 experiments on animal carcinogenesis bioassay conducted with female F344 rats, recording the number of lung cancer tumors developed. Treating the observations as independent, write <span class="math display">\[\begin{align*}
+y_i \mid \theta_i &amp;\sim \mathsf{binom}(n_i, \theta_i), \quad i =1, \ldots, 70 \\
+\theta_i \mid \alpha, \beta &amp; \sim \mathsf{beta}(\alpha, \beta)
+\end{align*}\]</span> with an improper prior <span class="math inline">\(p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\alpha&gt;0, \beta&gt;0).\)</span></p>
+<ol type="1">
+<li>Derive the conditional distributions of <span class="math inline">\(p(\theta_i \mid \alpha, \beta, \boldsymbol{y})\)</span>, <span class="math inline">\(p(\alpha \mid \beta, \boldsymbol{\theta})\)</span> and <span class="math inline">\(p(\beta \mid \alpha, \boldsymbol{\theta}).\)</span></li>
+<li>Implement a Gibbs sampling algorithm simulating from the conditionals <span class="math inline">\(\boldsymbol{\theta} \mid \cdot,\)</span> <span class="math inline">\(\alpha \mid \cdot\)</span> and <span class="math inline">\(\beta \mid \cdot\)</span> using one of the following methods: rejection sampling (try an exponential distribution), ratio-of-uniform <span class="citation" data-cites="Wakefield:1991">(<a href="#ref-Wakefield:1991" role="doc-biblioref">Wakefield et al., 1991</a>)</span> via the <strong>R</strong> package <a href="https://doi.org/10.32614/CRAN.package.rust"><code>rust</code></a>, adaptive rejection sampling <span class="citation" data-cites="Martino:2018 Gilks.Wild:1992">(<a href="#ref-Gilks.Wild:1992" role="doc-biblioref">Gilks &amp; Wild, 1992</a>; <a href="#ref-Martino:2018" role="doc-biblioref">Martino et al., 2018</a>)</span> via the <a href="https://doi.org/10.32614/CRAN.package.ars"><code>ars</code></a> <strong>R</strong> package<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> or slice sampling <span class="citation" data-cites="Neal:2003">(<a href="#ref-Neal:2003" role="doc-biblioref">Neal, 2003</a>)</span>.</li>
+<li>Use instead a Metropolis-within-Gibbs sampling algorithm with a Gibbs step for <span class="math inline">\(\boldsymbol{\theta}\)</span> and a random walk Metropolis–Hastings step for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.</li>
+<li>Reparametrize the model in terms of <span class="math inline">\(\log(\beta)\)</span> and <span class="math inline">\(\log(\alpha)/\log(\beta)\)</span> instead and run a Metropolis–Hasting step for the two parameters.</li>
+<li>For each sampler and parametrization, plot the bivariate histogram/density/scatter plot for <span class="math inline">\((\alpha, \beta)\)</span>, plus correlograms for both parameters. Comment on the mixing of the algorithms.</li>
+</ol>
+</section>
+<section id="problem-2.2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2.2">Problem 2.2</h2>
+<p>The purpose of this exercise is to (a) compare models of different complexity and (b) explore different parametrizations and their impact on sampling. The data <code>climatechange</code> contains mean global temperature increases <span class="math inline">\(T\)</span> from the twenty year period 1970–1999 to projections 2020-2049 for different climate general circulation models (GCM, indexed by <span class="math inline">\(G\)</span>), and sometimes multiple simulation runs. The purpose of the analysis is to obtain a suitable mean temperature change globally for each representative concentration pathway (RCP, one of 2.6, 4.5, 6.0 and 8.5), with <span class="math inline">\(P \in \{1, \ldots, 4\}\)</span> denoting the ordered RCPs. The data were obtained from the <code>bang</code> <strong>R</strong> package and preprocessed to simplify the exposition, but see <span class="citation" data-cites="Northrop.Chandler:2014">Northrop &amp; Chandler (<a href="#ref-Northrop.Chandler:2014" role="doc-biblioref">2014</a>)</span> for pointers about the methodology.</p>
+<p>The hierarchical structure we consider is: <span class="math display">\[\begin{align*}
+T \mid P=k, G=l, \boldsymbol{\alpha}, \boldsymbol{\beta}, \tau &amp;\sim \mathsf{Gauss}(\alpha_k + \beta_l, \tau^2)\\
+\boldsymbol{\alpha} \mid \boldsymbol{\mu}, \omega &amp;\sim \mathsf{Gauss}_4(\boldsymbol{\mu}, \omega^2\mathbf{I}_4) \mathrm{I}(\alpha_1 \leq \alpha_2 \leq \cdots \leq \alpha_4) \\
+\beta_k \mid \sigma &amp;\sim \mathsf{Gauss}(0, \sigma^2), \qquad k = 1, \ldots, K.
+\end{align*}\]</span></p>
+<ol type="1">
+<li>Prior elicitation:
+<ol type="a">
+<li>what are your prior belief about climate change the range of plausible temperature increases? Write down suitable values for the means <span class="math inline">\(\boldsymbol{\mu}\)</span> and the standard deviation <span class="math inline">\(\omega\)</span> (which could be the same for all RCP) under different emission scenarios, if <span class="math inline">\(\mu_1\)</span> corresponds to RCP 2.6, <span class="math inline">\(\mu_2\)</span> to RCP 4.5, etc. and your guesses are nondecreasing.</li>
+<li>choose suitable priors for the scale parameters <span class="math inline">\(\omega,\)</span> <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\sigma\)</span> and perform a sensitivity analysis to check the impact of these on your conclusions, knowing that there are few replicates for some GCM.</li>
+</ol></li>
+<li>Reparametrizations: Consider the following parametrizations and indicate which works better for the problem based on considerations such as identifiability, mixing and effective sample size.
+<ol type="a">
+<li>a sum-to-zero hard constraint for <span class="math inline">\(\beta_k.\)</span></li>
+<li>a strong prior for <span class="math inline">\(\beta_l\)</span> that shrinks the values towards zero (via the prior for the scale <span class="math inline">\(\sigma.)\)</span>.</li>
+</ol></li>
+<li>Model adequacy: using WAIC, simulation-based calibration or posterior predictive checks for a suitable test function, or alternative graphical diagnostics, compare the above model in whichever parametrization works best with
+<ol type="a">
+<li>the same model, but with different variances for each RCP, i.e., <span class="math inline">\(\mathsf{Va}(T \mid \cdot)=\tau^2_k?\)</span></li>
+<li>the same model, but with a linear trend as a function of the value of RCP.</li>
+</ol></li>
+<li>Report the summary statistics of your procedure (posterior means, std. errors, range and effective sample size) and calculate the correlation between estimates from the same GCM for different RCPs, and for the same GCM for different RCPs. Comments on the findings (especially values of <span class="math inline">\(\boldsymbol{\alpha}\)</span>, which are the target of interest).</li>
+<li>Produce a caterpillar plot of the parameters <span class="math inline">\(\beta_k\)</span> (<span class="math inline">\(k=1,\ldots, 38\)</span>) as follows:
+<ol type="a">
+<li>obtain posterior mean for each random effect <span class="math inline">\(\beta_k\)</span> and sort them in increasing order</li>
+<li>for each parameter, obtain 80% equitailed credible intervals.</li>
+<li>plot the point estimates and intervals against order.</li>
+</ol></li>
+</ol>
 
 
 
+</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Gilks.Wild:1992" class="csl-entry" role="listitem">
+Gilks, W. R., &amp; Wild, P. (1992). Adaptive rejection sampling for <span>G</span>ibbs sampling. <em>Journal of the Royal Statistical Society. Series C (Applied Statistics)</em>, <em>41</em>(2), 337–348. <a href="https://doi.org/10.2307/2347565">https://doi.org/10.2307/2347565</a>
+</div>
+<div id="ref-Martino:2018" class="csl-entry" role="listitem">
+Martino, L., Luengo, D., &amp; Míguez, J. (2018). Adaptive rejection sampling methods. In <em>Independent random sampling methods</em> (pp. 115–157). Springer. <a href="https://doi.org/10.1007/978-3-319-72634-2_4">https://doi.org/10.1007/978-3-319-72634-2_4</a>
+</div>
+<div id="ref-Neal:2003" class="csl-entry" role="listitem">
+Neal, R. M. (2003). Slice sampling. <em>The Annals of Statistics</em>, <em>31</em>(3), 705–767. <a href="https://doi.org/10.1214/aos/1056562461">https://doi.org/10.1214/aos/1056562461</a>
+</div>
+<div id="ref-Northrop.Chandler:2014" class="csl-entry" role="listitem">
+Northrop, P. J., &amp; Chandler, R. E. (2014). Quantifying sources of uncertainty in projections of future climate. <em>Journal of Climate</em>, <em>27</em>(23), 8793–8808. <a href="https://doi.org/10.1175/JCLI-D-14-00265.1">https://doi.org/10.1175/JCLI-D-14-00265.1</a>
+</div>
+<div id="ref-Tarone:1982" class="csl-entry" role="listitem">
+Tarone, R. E. (1982). The use of historical control information in testing for a trend in proportions. <em>Biometrics</em>, <em>38</em>(1), 215–220. <a href="https://doi.org/10.2307/2530304">https://doi.org/10.2307/2530304</a>
+</div>
+<div id="ref-Wakefield:1991" class="csl-entry" role="listitem">
+Wakefield, J. C., Gelfand, A. E., &amp; Smith, A. F. M. (1991). Efficient generation of random variates via the ratio-of-uniforms method. <em>Statistics and Computing</em>, <em>1</em>(2), 129–133. <a href="https://doi.org/10.1007/bf01889987">https://doi.org/10.1007/bf01889987</a>
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Adaptive rejection sampling method works for log-concave distributions, which is the case for both the conditional of the hyperparameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

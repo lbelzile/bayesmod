@@ -32,7 +32,7 @@ and using the quantile transform, set $X=\nu + \tau \log(2U)$ if $U \leq 0.5$ an
 2. The Gaussian has lighter tail than the Laplace, so this won't work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.
 3. The optimal value for the location of the Student-$t$ would be $\nu$ (here zero for the standard Laplace). We compute the optimal scale via in the code below:
 $$
-\mathrm{argmax}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmin}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
+\mathrm{argmin}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmax}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
 $$
 
 

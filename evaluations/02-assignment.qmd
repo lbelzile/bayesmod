@@ -1,8 +1,52 @@
 ---
 title: "Assignment 2"
+toc: false
 ---
 
 These problems are for credit and to be handed in on March 3rd at the latest.
 
 ## Problem 2.1
+
+The `rats` data, extracted from Table 5 of @Tarone:1982, contains observations from 70 experiments on  animal carcinogenesis bioassay
+conducted with female F344 rats, recording the number of lung cancer tumors developed. Treating the observations as independent, write
+\begin{align*}
+y_i \mid \theta_i &\sim \mathsf{binom}(n_i, \theta_i), \quad i =1, \ldots, 70 \\
+\theta_i \mid \alpha, \beta & \sim \mathsf{beta}(\alpha, \beta)
+\end{align*}
+with an improper prior $p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\alpha>0, \beta>0).$
+
+
+
+1. Derive the conditional distributions of $p(\theta_i \mid \alpha, \beta, \boldsymbol{y})$, $p(\alpha \mid \beta, \boldsymbol{\theta})$ and $p(\beta \mid \alpha, \boldsymbol{\theta}).$
+2. Implement a Gibbs sampling algorithm simulating from the conditionals $\boldsymbol{\theta} \mid \cdot,$ $\alpha \mid \cdot$ and $\beta \mid \cdot$ using one of the following methods:  rejection sampling (try an exponential distribution), ratio-of-uniform [@Wakefield:1991] via the **R** package [`rust`](https://doi.org/10.32614/CRAN.package.rust), adaptive rejection sampling [@Martino:2018;@Gilks.Wild:1992] via the [`ars`](https://doi.org/10.32614/CRAN.package.ars) **R** package^[Adaptive rejection sampling method works for log-concave distributions, which is the case for both the conditional of the hyperparameters $\alpha$ and $\beta$.] or slice sampling [@Neal:2003].
+3. Use instead a Metropolis-within-Gibbs sampling algorithm with a Gibbs step for $\boldsymbol{\theta}$ and a random walk Metropolis--Hastings step for $\alpha$ and $\beta$. 
+4. Reparametrize the model in terms of $\log(\beta)$ and $\log(\alpha)/\log(\beta)$ instead and run a Metropolis--Hasting step for the two parameters.
+5. For each sampler and parametrization, plot the bivariate histogram/density/scatter plot for $(\alpha, \beta)$, plus correlograms for both parameters. Comment on the mixing of the algorithms.
+ 
+
+## Problem 2.2
+
+The purpose of this exercise is to (a) compare models of different complexity and (b) explore different parametrizations and their impact on sampling. The data `climatechange` contains mean global temperature increases $T$ from the twenty year period 1970--1999 to projections 2020-2049 for different climate general circulation models (GCM, indexed by $G$), and sometimes multiple simulation runs. The purpose of the analysis is to obtain a suitable mean temperature change globally for each representative concentration pathway (RCP, one of 2.6, 4.5, 6.0 and 8.5), with $P \in \{1, \ldots, 4\}$ denoting the ordered RCPs. The data were obtained from the `bang` **R** package and preprocessed to simplify the exposition, but see @Northrop.Chandler:2014 for pointers about the methodology.
+
+The hierarchical structure we consider is:
+\begin{align*}
+T \mid P=k, G=l, \boldsymbol{\alpha}, \boldsymbol{\beta}, \tau &\sim \mathsf{Gauss}(\alpha_k + \beta_l, \tau^2)\\
+\boldsymbol{\alpha} \mid \boldsymbol{\mu}, \omega &\sim \mathsf{Gauss}_4(\boldsymbol{\mu}, \omega^2\mathbf{I}_4) \mathrm{I}(\alpha_1 \leq \alpha_2 \leq \cdots \leq \alpha_4) \\
+\beta_k \mid \sigma &\sim \mathsf{Gauss}(0, \sigma^2), \qquad k = 1, \ldots, K.
+\end{align*}
+
+1. Prior elicitation: 
+    a. what are your prior belief about climate change the range of plausible temperature increases? Write down suitable values for the means $\boldsymbol{\mu}$ and the standard deviation $\omega$ (which could be the same for all RCP) under different emission scenarios, if $\mu_1$ corresponds to RCP 2.6, $\mu_2$ to RCP 4.5, etc. and your guesses are nondecreasing.
+    b. choose suitable priors for the scale parameters $\omega,$ $\tau$ and $\sigma$ and perform a sensitivity analysis to check the impact of these on your conclusions, knowing that there are few replicates for some GCM.
+2. Reparametrizations: Consider the following parametrizations and indicate which works better for the problem based on considerations such as identifiability, mixing and effective sample size.
+    a. a sum-to-zero hard constraint for $\beta_k.$
+    b. a strong prior for $\beta_l$ that shrinks the values towards zero (via the prior for the scale $\sigma.)$.
+3. Model adequacy: using WAIC, simulation-based calibration or posterior predictive checks for a suitable test function, or alternative graphical diagnostics, compare the above model in whichever parametrization works best with 
+   a.  the same model, but with different variances for each RCP, i.e., $\mathsf{Va}(T \mid \cdot)=\tau^2_k?$ 
+   b.  the same model, but with a linear trend as a function of the value of RCP.
+4. Report the summary statistics of your procedure (posterior means, std. errors, range and effective sample size) and calculate the correlation between estimates from the same GCM for different RCPs, and for the same GCM for different RCPs. Comments on the findings (especially values of $\boldsymbol{\alpha}$, which are the target of interest).
+5. Produce a caterpillar plot of the parameters $\beta_k$ ($k=1,\ldots, 38$) as follows: 
+   a. obtain posterior mean for each random effect $\beta_k$ and sort them in increasing order
+   b. for each parameter, obtain 80% equitailed credible intervals.
+   c. plot the point estimates and intervals against order.
 
