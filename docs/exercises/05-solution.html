@@ -154,7 +154,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -180,7 +180,7 @@ window.Quarto = {
 <span class="menu-text">Content</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../exercises/index.html"> 
+    <a class="nav-link active" href="../exercises/index.html" aria-current="page"> 
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
@@ -197,10 +197,115 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-solution.html">Solutions</a></li><li class="breadcrumb-item"><a href="../exercises/05-solution.html">5. Gibbs sampling</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercises</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/02-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Bayesics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/03-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Priors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/04-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Monte Carlo methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/05-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Gibbs sampling</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Solutions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/02-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Bayesics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/03-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Priors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/04-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Monte Carlo methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/05-solution.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">5. Gibbs sampling</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -215,7 +320,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-solution.html">Solutions</a></li><li class="breadcrumb-item"><a href="../exercises/05-solution.html">5. Gibbs sampling</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Solution 5</h1>
 </div>
@@ -240,13 +345,13 @@ window.Quarto = {
 f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathrm{I}(x &gt; \tau).
 \]</span> It can be used to model power laws in insurance and finance, or in demography. The <code>uscitypopn</code> data set in the <code>hecbayes</code> package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.</p>
 <ol type="1">
-<li>Using improper priors, write the joint posterior for a simple random sample of size <span class="math inline">\(n\)</span> and derive the conditional distributions <span class="math inline">\(p(\alpha \mid \boldsymbol{y}, \tau)\)</span> and <span class="math inline">\(p(\tau \mid \alpha, \boldsymbol{y})\)</span>.</li>
+<li>Using improper priors <span class="math inline">\(p(\alpha, \tau) \propto 1,\)</span> write the joint posterior for a simple random sample of size <span class="math inline">\(n\)</span> and derive the conditional distributions <span class="math inline">\(p(\alpha \mid \boldsymbol{y}, \tau)\)</span> and <span class="math inline">\(p(\tau \mid \alpha, \boldsymbol{y})\)</span>.</li>
 <li>The mononomial distribution <span class="math inline">\(\mathsf{Mono}(a,b)\)</span> has density <span class="math inline">\(p(x) \propto x^{a-1}\mathrm{I}(0 \leq x \leq b)\)</span>. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.</li>
 <li>Implement Gibbs sampling for this problem for the <code>uscitypopn</code> data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates?</li>
 </ol>
 <div class="proof solution">
 <p><span class="proof-title"><em>Solution</em>. </span>With improper prior, the joint posterior is the product of the likelihood contributions so <span class="math display">\[
-p(\alpha, \tau \mid \boldsymbol{y}) \propto \alpha^n \left(\prod_{i=1}^n y_i\right)^{-\alpha-1} \tau^{-n\alpha} \mathrm{I}(\min_i y_i &gt; \tau).
+p(\alpha, \tau \mid \boldsymbol{y}) \propto \alpha^n \left(\prod_{i=1}^n y_i\right)^{-\alpha-1} \tau^{n\alpha} \mathrm{I}(\min_i y_i &gt; \tau).
 \]</span> Using the hint, write the conditional density for <span class="math inline">\(\alpha\)</span> given the rest as <span class="math display">\[\begin{align*}
 p(\alpha \mid \boldsymbol{y}, \tau) \propto \alpha^n \left( \frac{\prod_{i=1}^n y_i}{\tau^n}\right)^{-\alpha} = \alpha^{(n+1)-1} \exp\left\{-\alpha \left(\sum_{i=1}^n\log y_i - n\log \tau\right) \right\}
 \end{align*}\]</span> which is <span class="math inline">\(\mathsf{Gamma}\big(n+1, \sum_{i=1}^n \log y_i - n \log \tau \big)\)</span>. For the second, we have <span class="math display">\[\begin{align*}
@@ -281,8 +386,8 @@ p(\tau \mid \alpha, \boldsymbol{y}) \propto \tau^{n\alpha} \mathrm{I}(\min_{i} y
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute effective sample size</span></span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(chains)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   alpha      tau 
-9663.054 9349.813 </code></pre>
+<pre><code>    alpha       tau 
+ 9718.142 10000.000 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(chains)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -296,13 +401,13 @@ Sample size per chain = 10000
    plus standard error of the mean:
 
            Mean        SD  Naive SE Time-series SE
-alpha 1.387e+00    0.1309  0.001309       0.001331
-tau   1.991e+05 1259.7326 12.597326      13.027974
+alpha 1.391e+00    0.1306  0.001306       0.001324
+tau   1.991e+05 1247.1410 12.471410      12.471410
 
 2. Quantiles for each variable:
 
            2.5%       25%       50%       75%     97.5%
-alpha 1.142e+00 1.297e+00 1.382e+00 1.471e+00 1.655e+00
+alpha 1.143e+00 1.303e+00 1.385e+00 1.476e+00 1.657e+00
 tau   1.958e+05 1.987e+05 1.995e+05 2.000e+05 2.004e+05</code></pre>
 </div>
 </div>
@@ -311,7 +416,7 @@ tau   1.958e+05 1.987e+05 1.995e+05 2.000e+05 2.004e+05</code></pre>
 </section>
 <section id="exercise-5.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-5.2">Exercise 5.2</h2>
-<p>Implement the Bayesian LASSO for the <code>diabetes</code> cancer surgery from package <code>lars</code>. Check <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> for the details of the Gibbs sampling.</p>
+<p>Implement the Bayesian LASSO for the <code>diabetes</code> cancer surgery from package <code>lars</code>. Check <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> for the details of the Gibbs sampling (p.&nbsp;682, right column).</p>
 <ol type="1">
 <li>Fit the model for a range of values of <span class="math inline">\(\lambda\)</span> and produce parameter estimate paths to replicate Figure 2 of the paper.</li>
 <li>Check the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?</li>

@@ -274,6 +274,12 @@ window.Quarto = {
  <span class="menu-text">4. Monte Carlo methods</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/05-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Gibbs sampling</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -322,7 +328,7 @@ g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qqua
 <ol type="1">
 <li>Provide an inversion sampling algorithm to generate from <span class="math inline">\(\mathsf{Laplace}(\nu, \tau)\)</span>.</li>
 <li>Can you use the proposal to generate from a standard Gaussian? for Student-<span class="math inline">\(t\)</span> with 1 degree of freedom? Justify your answer.</li>
-<li>Consider as proposal a location-scale version of the Student-t with <span class="math inline">\(\nu=3\)</span> degrees of freedom. Find the optimal location and scale parameters and the upper bound <span class="math inline">\(C\)</span> for your choice.</li>
+<li>Consider as proposal a location-scale version of the Student-t with <span class="math inline">\(3\)</span> degrees of freedom. degrees of freedom. Find the optimal location and scale parameters and the upper bound <span class="math inline">\(C\)</span> for your choice.</li>
 <li>Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.</li>
 </ol>
 <div class="proof solution">
@@ -335,7 +341,7 @@ F(x) = \begin{cases}
 \end{cases}
 \end{align*}\]</span> and using the quantile transform, set <span class="math inline">\(X=\nu + \tau \log(2U)\)</span> if <span class="math inline">\(U \leq 0.5\)</span> and <span class="math inline">\(X=\nu - \tau\log(2-2U)\)</span> if <span class="math inline">\(U &gt; 0.5\)</span> for <span class="math inline">\(U \sim \mathsf{unif}(0,1)\)</span>.</li>
 <li>The Gaussian has lighter tail than the Laplace, so this won’t work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.</li>
-<li>The optimal value for the location of the Student-<span class="math inline">\(t\)</span> would be <span class="math inline">\(\nu\)</span> (here zero for the standard Laplace). We compute the optimal scale via in the code below: <span class="math display">\[
+<li>The optimal value for the location of the Student-<span class="math inline">\(t\)</span> would be <span class="math inline">\(\nu\)</span> (e.g., zero for the standard Laplace). We compute the optimal scale via in the code below: <span class="math display">\[
 \mathrm{argmin}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmax}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
 \]</span></li>
 </ol>
@@ -386,7 +392,7 @@ F(x) = \begin{cases}
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo estimator of the acceptance rate</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ntrials<span class="sc">/</span><span class="fu">length</span>(samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.265971</code></pre>
+<pre><code>[1] 1.271773</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot density</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -437,54 +443,49 @@ F(x) = \begin{cases}
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo for waiting time</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Lambda is the reciprocal mean (1/minute)</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>times_mc <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>post_samp</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times_mc <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times_mc <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean of binary variables + std. error</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">mean</span>(times_mc <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times_mc <span class="sc">&lt;</span> <span class="dv">15</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">est =</span> p, <span class="at">se =</span> <span class="fu">sqrt</span>(p<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">/</span>B))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9779</code></pre>
+<pre><code>       est         se 
+0.97850000 0.00145044 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times_mc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior mean with standard error</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">est =</span> <span class="fu">mean</span>(times_mc), <span class="at">se =</span> <span class="fu">sd</span>(times_mc)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(post_samp)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.69878</code></pre>
+<pre><code>       est         se 
+8.03913171 0.02722838 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># posterior mean</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times_mc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Metropolis-Hastings algorithm</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>curr <span class="ot">&lt;-</span> <span class="dv">8</span><span class="sc">/</span><span class="dv">10</span> <span class="co"># prior mean</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>chains <span class="ot">&lt;-</span> <span class="fu">numeric</span>(B) <span class="co"># container</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>sd_prop <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co"># proposal standard deviation</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  prop <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">mean =</span> curr, <span class="at">sd =</span> sd_prop)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">upost</span>(prop) <span class="sc">-</span> <span class="fu">upost</span>(curr) <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    curr <span class="ot">&lt;-</span> prop</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  chains[b] <span class="ot">&lt;-</span> curr</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Discard burn-in</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>chains[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)]</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate quantities using Monte Carlo</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 8.016499</code></pre>
+<pre><code>[1] 0.9780808</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error of posterior mean</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times_mc)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(post_samp))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0269878</code></pre>
+<pre><code>[1] 8.012436</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Metropolis-Hastings algorithm</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>curr <span class="ot">&lt;-</span> <span class="dv">8</span><span class="sc">/</span><span class="dv">10</span> <span class="co"># prior mean</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>chains <span class="ot">&lt;-</span> <span class="fu">numeric</span>(B) <span class="co"># container</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>sd_prop <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co"># proposal standard deviation</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  prop <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">mean =</span> curr, <span class="at">sd =</span> sd_prop)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">upost</span>(prop) <span class="sc">-</span> <span class="fu">upost</span>(curr) <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    curr <span class="ot">&lt;-</span> prop</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  chains[b] <span class="ot">&lt;-</span> curr</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Discard burn-in</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>chains[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)]</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate quantities using Monte Carlo</span></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9790909</code></pre>
+<pre><code>[1] 2.57092</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 8.045255</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.655438</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of MCMC</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>mcmc <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">mcmc</span>(times)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mcmc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of MCMC</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mcmc <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">mcmc</span>(times)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mcmc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Iterations = 1:9900
@@ -496,12 +497,12 @@ Sample size per chain = 9900
    plus standard error of the mean:
 
           Mean             SD       Naive SE Time-series SE 
-       8.04526        2.65544        0.02669        0.05450 
+       8.01244        2.57092        0.02584        0.05354 
 
 2. Quantiles for each variable:
 
   2.5%    25%    50%    75%  97.5% 
- 4.241  6.203  7.552  9.384 14.562 </code></pre>
+ 4.486  6.200  7.535  9.292 14.599 </code></pre>
 </div>
 </div>
 <p>We can see that the standard error for the mean is roughly twice as big. We would thus need to inflate the sample size by a factor four to get the same precision.</p>
@@ -511,33 +512,33 @@ Sample size per chain = 9900
 <h2 class="anchored" data-anchor-id="solution-4.3">Solution 4.3</h2>
 <p>Consider the following code which implements a Metropolis–Hastings algorithm to simulate observations from a <span class="math inline">\(\mathsf{beta}(0.5, 0.5)\)</span> density.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>metropo <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) </span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="fu">metropo</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>metropo <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) </span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="fu">metropo</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To see if the algorithm works:</p>
 <ol type="a">
@@ -549,35 +550,35 @@ Sample size per chain = 9900
 <p><span class="proof-title"><em>Solution</em>. </span>The sampler is incorrect because it tacitly draws from Gaussian variables that are restricted to <span class="math inline">\([0,1]\)</span> via the accept-reject step. This means in particular that the acceptance ratio involves constants for the probability given a Gaussian centered at the current value or proposal truncated on the unit interval <span class="math display">\[\frac{q(x^{\text{cur}\hphantom{c}} \mid x^{\text{prop}})}{q(x^{\text{prop}} \mid x^{\text{cur}\hphantom{c}})} = \frac{\Phi\{(1-x^{\text{cur}})/\sigma^{\text{prop}}\} - \Phi(-x^{\text{cur}}/\sigma^{\text{prop}})}{\Phi\{(1-x^{\text{prop}})/\sigma^{\text{prop}}\} - \Phi(-x^{\text{prop}}/\sigma^{\text{prop}})}.\]</span></p>
 <p>This exercise was inspired by <a href="https://darrenjw.wordpress.com/2012/06/04/metropolis-hastings-mcmc-when-the-proposal-and-target-have-differing-support/">this blog post</a> by Darren Wilkinson.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>metropo_fixed <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
-<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) <span class="sc">+</span> </span>
-<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(<span class="fu">pnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> cur, <span class="at">sd =</span> sd_prop) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean =</span> cur, <span class="at">sd =</span> sd_prop)) <span class="sc">-</span></span>
-<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(<span class="fu">pnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> prop, <span class="at">sd =</span> sd_prop) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean =</span> prop, <span class="at">sd =</span> sd_prop))</span>
-<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
-<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
-<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
-<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
-<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
-<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
-<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>mc2 <span class="ot">&lt;-</span> <span class="fu">metropo_fixed</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>metropo_fixed <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) <span class="sc">+</span> </span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(<span class="fu">pnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> cur, <span class="at">sd =</span> sd_prop) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean =</span> cur, <span class="at">sd =</span> sd_prop)) <span class="sc">-</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(<span class="fu">pnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> prop, <span class="at">sd =</span> sd_prop) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean =</span> prop, <span class="at">sd =</span> sd_prop))</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>mc2 <span class="ot">&lt;-</span> <span class="fu">metropo_fixed</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">

@@ -13,7 +13,7 @@ as a candidate distribution for rejection sampling from $\mathsf{Gauss}(0,1)$.
 
 1. Provide an inversion sampling algorithm to generate from $\mathsf{Laplace}(\nu, \tau)$.
 2. Can you use the proposal to generate from a standard Gaussian? for Student-$t$ with 1 degree of freedom? Justify your answer.
-3. Consider as proposal a location-scale version of the Student-t with $\nu=3$
+3. Consider as proposal a location-scale version of the Student-t with $3$ degrees of freedom.
  degrees of freedom. Find the optimal location and scale parameters and the upper bound $C$ for your choice.
 4. Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.
 
@@ -30,7 +30,7 @@ F(x) = \begin{cases}
 \end{align*}
 and using the quantile transform, set $X=\nu + \tau \log(2U)$ if $U \leq 0.5$ and $X=\nu - \tau\log(2-2U)$ if $U > 0.5$ for $U \sim \mathsf{unif}(0,1)$.
 2. The Gaussian has lighter tail than the Laplace, so this won't work. The Cauchy distribution would be a suitable candidate, albeit too heavy tailed.
-3. The optimal value for the location of the Student-$t$ would be $\nu$ (here zero for the standard Laplace). We compute the optimal scale via in the code below:
+3. The optimal value for the location of the Student-$t$ would be $\nu$ (e.g., zero for the standard Laplace). We compute the optimal scale via in the code below:
 $$
 \mathrm{argmin}_{\sigma \in \mathbb{R}_{+}}\mathrm{argmax}_{x \in \mathbb{R}} \{\log f(x) - \log g(x; \sigma)\}
 $$
@@ -127,12 +127,12 @@ Next, implement a random walk Metropolis--Hastings algorithm to sample draws fro
 # Monte Carlo for waiting time
 # Lambda is the reciprocal mean (1/minute)
 times_mc <- 1/post_samp
-mean(times_mc > 3 & times_mc < 15)
-sd(times_mc)
-# posterior mean
-mean(times_mc)
-# Standard error of posterior mean
-sd(times_mc)/sqrt(length(post_samp))
+# Mean of binary variables + std. error
+p <- mean(times_mc > 3 & times_mc < 15)
+c(est = p, se = sqrt(p*(1-p)/B))
+# Posterior mean with standard error
+c(est = mean(times_mc), se = sd(times_mc)/sqrt(length(post_samp)))
+
 
 
 # Metropolis-Hastings algorithm

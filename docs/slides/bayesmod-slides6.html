@@ -28,7 +28,92 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-  </style>
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-da069d641d4916e8549bf8dc2b95f825.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -128,7 +213,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Bayesian workflow and computational strategies</p>
+  <p class="subtitle">Computational strategies and diagnostics</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -138,24 +223,73 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Friday Feb 7, 2025</p>
+  <p class="date">Last compiled Monday Feb 10, 2025</p>
+</section>
+<section id="outline" class="slide level2">
+<h2>Outline</h2>
+<p>How do we assess convergence of a MCMC algorithm?</p>
+<ul>
+<li>the algorithm implementation must be correct,</li>
+<li>the chain must have converged to the target posterior.</li>
+<li>the effective sample size must be sufficiently large for inference.</li>
+</ul>
+</section>
+<section id="strategies" class="slide level2">
+<h2>Strategies</h2>
+<p>Many diagnostics require running multiple chains</p>
+<ul>
+<li>check within vs between variance,</li>
+<li>determine whether they converge to the same target.</li>
+</ul>
+</section>
+<section id="correct-implementation" class="slide level2">
+<h2>Correct implementation</h2>
+<p>We can generate artificial data to check the procedure.</p>
+<p>Simulation-based calibration <span class="citation" data-cites="Talts:2020">(<a href="#/references" role="doc-biblioref" onclick="">Talts et al., 2020</a>)</span> proceeds with, in order</p>
+<ol type="1">
+<li><span class="math inline">\(\boldsymbol{\theta}_0 \sim p(\boldsymbol{\theta}),\)</span></li>
+<li><span class="math inline">\(\boldsymbol{y}_0 \sim p(\boldsymbol{y} \mid \boldsymbol{\theta}_0),\)</span></li>
+<li><span class="math inline">\(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_B \sim p(\boldsymbol{\theta} \mid \boldsymbol{y}_0 ).\)</span></li>
+</ol>
+</section>
+<section id="simulation-based-calibration" class="slide level2">
+<h2>Simulation-based calibration</h2>
+<ul>
+<li>Conditional on the simulated <span class="math inline">\(\boldsymbol{y}\)</span>, the distribution of <span class="math inline">\(\boldsymbol{\theta}_0\)</span> is the same as that of <span class="math inline">\(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_B.\)</span></li>
+<li>We do a dimension reduction step taking the test function <span class="math inline">\(t(\cdot)\)</span> to get the rank of the prior draw among the posterior ones, breaking ties at random if any.</li>
+<li>These steps are repeated <span class="math inline">\(K\)</span> times, yielding <span class="math inline">\(K\)</span> test functions <span class="math inline">\(T_1, \ldots, T_K.\)</span> We then test for uniformity using results from <span class="citation" data-cites="Sailynoja:2022">Säilynoja et al. (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>.</li>
+</ul>
+</section>
+<section id="breaking-down-the-markov-chain" class="slide level2">
+<h2>Breaking down the Markov chain</h2>
+<p>We distinguish between three phases</p>
+<ul>
+<li><strong>burn in</strong> period: initial draws allowing the algorithm to converge to it’s stationary distribution (discarded)</li>
+<li><strong>warmup</strong> adaptation period: tuning period for the proposal std. deviation, etc. (discarded)</li>
+<li>sampling period: draws post burn in and warmup that are kept for inference</li>
+</ul>
+<p>We can optionally <strong>thin</strong> by keeping one every <span class="math inline">\(k\)</span> iterations from the sampling period to reduce the storage.</p>
 </section>
 <section id="visual-diagnostic-trace-plots" class="slide level2">
 <h2>Visual diagnostic: trace plots</h2>
 <p>Display the Markov chain sample path as a function of the number of iterations.</p>
 <ul>
-<li>Run multiple chains to see if they converge to the same target.
-<ul>
-<li>if not, check starting values (compare log posterior) or parameter identifiability!</li>
-</ul></li>
+<li>Ideally, run multiple chains to see if they converge to the same mode (for multimodal behaviour).</li>
 <li>Markov chains should look like a fat hairy caterpillar!</li>
-<li><code>bayesplot</code> and <code>coda</code> have functionalities for plots (trace plot, trace rank, correlograms, marginal densities, etc.)</li>
+<li>Check the <code>bayesplot</code> and <code>coda</code> <strong>R</strong> packages (trace plot, trace rank, correlograms, marginal densities, etc.)</li>
 </ul>
 </section>
 <section id="checking-convergence-with-multiple-chains" class="slide level2">
 <h2>Checking convergence with multiple chains</h2>
 
 <img data-src="fig/catterpillar_traceplots.png" class="r-stretch quarto-figure-center"><p class="caption">Four healthy parallel chains for parameters.</p></section>
+<section id="trace-rank-plot" class="slide level2">
+<h2>Trace rank plot</h2>
+<p>A <strong>trace rank</strong> plot compares the rank of the values of the different chain at a given iteration.</p>
+<ul>
+<li>With good mixing, the ranks should switch frequently and be distributed uniformly across integers.</li>
+</ul>
+</section>
 <section id="effective-sample-size" class="slide level2">
 <h2>Effective sample size</h2>
 <p>Are my chains long enough to compute reliable summaries?</p>
@@ -172,7 +306,6 @@ Léo Belzile
 <li><p>We can estimate the variance of the target to know the precision</p></li>
 <li><p>(related question: how many significant digits to report?)</p></li>
 </ul>
-<p>In <strong>R</strong>, via <code>coda::effectiveSize()</code></p>
 </section>
 <section id="estimating-the-variance-block-method" class="slide level2">
 <h2>Estimating the variance (block method)</h2>
@@ -200,6 +333,18 @@ Figure&nbsp;1: Calculation of the standard error of the posterior mean using the
 <img data-src="bayesmod-slides6_files/figure-revealjs/fig-badstart-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-badstart"><p class="caption">
 Figure&nbsp;2: Traceplots of three Markov chains for the same target with different initial values for the first 500 iterations (left) and trace rank plot after discarding these (right). The latter is indicative of the speed of mixing.
 </p></section>
+<section id="gelmanrubin-diagnostic" class="slide level2">
+<h2>Gelman–Rubin diagnostic</h2>
+<p>Suppose we run <span class="math inline">\(M\)</span> chains for <span class="math inline">\(B\)</span> iterations, post burn in.</p>
+<p>Denote by <span class="math inline">\(\theta_{bm}\)</span> the <span class="math inline">\(b\)</span>th draw of the <span class="math inline">\(m\)</span>th chain, we compute the global average <span class="math display">\[\overline{\theta} = \frac{1}{BM}\sum_{b=1}^B \sum_{m=1}^m \theta_{bm}\]</span> and similarly the chain-specific sample average and variances, respectively <span class="math inline">\(\overline{\theta}_m\)</span> and <span class="math inline">\(\widehat{\sigma}^2_m\)</span> (<span class="math inline">\(m=1, \ldots, M\)</span>).</p>
+</section>
+<section id="sum-of-square-decomposition" class="slide level2">
+<h2>Sum of square decomposition</h2>
+<p>The between-chain variance and within-chain variance estimator are <span class="math display">\[\begin{align*}
+\mathsf{Va}_{\text{between}} &amp;= \frac{B}{M-1}\sum_{m=1}^M (\overline{\theta}_m - \overline{\theta})^2\\
+\mathsf{Va}_{\text{within}} &amp;= \frac{1}{M}\sum_{m=1}^m \widehat{\sigma}^2_m
+\end{align*}\]</span></p>
+</section>
 <section id="potential-scale-reduction-statistic" class="slide level2">
 <h2>Potential scale reduction statistic</h2>
 <p>The Gelman–Rubin diagnostic, denoted <span class="math inline">\(\widehat{R}\)</span>, is obtained by running multiple chains and considering the difference between within-chain and between-chains variances,</p>
@@ -214,6 +359,15 @@ Figure&nbsp;2: Traceplots of three Markov chains for the same target with differ
 <img data-src="bayesmod-slides6_files/figure-revealjs/fig-rhat-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-rhat"><p class="caption">
 Figure&nbsp;3: Two pairs of Markov chains: the top ones seem stationary, but with different modes and <span class="math inline">\(\widehat{R} \approx 3.4\)</span>. The chains on the right hover around zero, but do not appear stable, with <span class="math inline">\(\widehat{R} \approx 1.6\)</span>.
 </p></section>
+<section id="one-chain-or-multiple-chains" class="slide level2">
+<h2>One chain or multiple chains?</h2>
+<p>Generally, it is preferable to run a single chain for a longer period than run multiple chains sequentially</p>
+<ul>
+<li>there is a cost to initializing multiple times with different starting values since we must discard initial draws.</li>
+<li>but with parallel computations, multiple chains are more frequent nowadays.</li>
+<li>multiple diagnostics require running several chains.</li>
+</ul>
+</section>
 <section id="posterior-predictive-checks" class="slide level2">
 <h2>Posterior predictive checks</h2>
 <ol type="1">
@@ -225,7 +379,7 @@ Figure&nbsp;3: Two pairs of Markov chains: the top ones seem stationary, but wit
 <section id="posterior-predictive-checks-1" class="slide level2">
 <h2>Posterior predictive checks</h2>
 
-<img data-src="fig/fig-posterior-pred-check.png" width="448" class="r-stretch quarto-figure-center" id="fig-posterior-pred-check"><p class="caption">
+<img data-src="fig/fig-posterior-pred-check.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-pred-check"><p class="caption">
 Figure&nbsp;4: Posterior predictive checks for the standard deviation (top) and density of posterior draws (bottom) for hierarchical Poisson model with individual effects (left) and simpler model with only conditions (right).
 </p></section>
 <section id="log-pointwise-predictive-density" class="slide level2">
@@ -242,6 +396,17 @@ n\mathsf{WAIC} = -\sum_{i=1}^n \mathsf{LPPD}_i + \sum_{i=1}^n \mathsf{Va}_{\bold
 \end{align*}\]</span> where we use again the empirical variance to compute the rightmost term.</p>
 <p>Smaller values of <span class="math inline">\(\mathsf{WAIC}\)</span> are better.</p>
 </section>
+<section id="pseudo-code-for-waic" class="slide level2">
+<h2>Pseudo-code for WAIC</h2>
+<p>Evaluate the log likelihood for each posterior draw and each observation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co">#' WAIC</span></span>
+<span id="cb1-2"><a></a><span class="co">#' @param loglik_pt B by n matrix of pointwise log likelihood</span></span>
+<span id="cb1-3"><a></a>WAIC <span class="ot">&lt;-</span> <span class="cf">function</span>(loglik_pt){</span>
+<span id="cb1-4"><a></a>  <span class="sc">-</span><span class="fu">mean</span>(<span class="fu">apply</span>(loglik_pt, <span class="dv">2</span>, mean)) <span class="sc">+</span>  <span class="fu">mean</span>(<span class="fu">apply</span>(loglik_pt, <span class="dv">2</span>, var))</span>
+<span id="cb1-5"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 <section id="bayesian-leave-one-out-cross-validation" class="slide level2">
 <h2>Bayesian leave-one-out cross validation</h2>
 <p>In Bayesian setting, we can use the leave-one-out predictive density <span class="math display">\[p(y_i \mid \boldsymbol{y}_{-i})\]</span> as a measure of predictive accuracy. the</p>
@@ -256,14 +421,254 @@ n\mathsf{WAIC} = -\sum_{i=1}^n \mathsf{LPPD}_i + \sum_{i=1}^n \mathsf{Va}_{\bold
 <section id="leave-one-out-with-quantile-quantile-plots" class="slide level2">
 <h2>Leave-one-out with quantile-quantile plots</h2>
 
-<img data-src="fig/fig-loocv-qqplots.png" width="448" class="r-stretch quarto-figure-center" id="fig-posterior-loocv"><p class="caption">
+<img data-src="fig/fig-loocv-qqplots.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-loocv"><p class="caption">
 Figure&nbsp;5: Quantile-quantile plots based on leave-one-out cross validation for model for the hierarchical Poisson model fitted to the Upworthy data with the individual random effects (left) and without (right).
 </p></section>
-<section id="references" class="slide level2">
+<section id="deviance-information-criterion" class="slide level2">
+<h2>Deviance information criterion</h2>
+<p>The <strong>deviance</strong> information criterion of <span class="citation" data-cites="Spiegelhalter:2002">Spiegelhalter et al. (<a href="#/references" role="doc-biblioref" onclick="">2002</a>)</span> is <span class="math display">\[\begin{align*}
+\mathsf{DIC} = -2 \ell(\widetilde{\boldsymbol{\theta}}) + 2 p_D
+\end{align*}\]</span> where <span class="math inline">\(p_D\)</span> is the posterior expectation of the deviance relative to the point estimator of the parameter <span class="math inline">\(\widetilde{\boldsymbol{\theta}}\)</span> (e.g., the maximum a posteriori or the posterior mean) <span class="math display">\[\begin{align*}
+p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \boldsymbol{y}\}= \int 2 \{ \ell(\widetilde{\boldsymbol{\theta}}) - \ell(\boldsymbol{\theta})\} f(\boldsymbol{\theta} \mid \boldsymbol{y} \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span></p>
+</section>
+<section id="criticism-of-dic" class="slide level2">
+<h2>Criticism of DIC</h2>
+<ul>
+<li>The DIC can be easily evaluated by keeping track of the log likelihood evaluated at each posterior draw from a Markov chain Monte Carlo algorithm.</li>
+<li>The penalty term <span class="math inline">\(p_D\)</span> is however not invariant to reparametrizations.</li>
+<li>A Gaussian approximation to the MLE under suitable regularity conditions shows that the <span class="math inline">\(\mathsf{DIC}\)</span> is equivalent in large samples to <span class="math inline">\(\mathsf{AIC}.\)</span></li>
+</ul>
+</section>
+<section>
+<section id="computational-strategies" class="title-slide slide level1 center">
+<h1>Computational strategies</h1>
+
+</section>
+<section id="sources-of-poor-mixing" class="slide level2">
+<h2>Sources of poor mixing</h2>
+<p>Slow mixing can be due to the following:</p>
+<ul>
+<li>poor proposals</li>
+<li>strong correlation between posterior parameters</li>
+<li>overparametrization and lack of identifiability</li>
+</ul>
+</section>
+<section id="computational-strategies-1" class="slide level2">
+<h2>Computational strategies</h2>
+<p>These problems can be addressed using one of the following:</p>
+<ul>
+<li>removing redundant parameters or pinning some using sharp priors</li>
+<li>reparametrization</li>
+<li>clever proposals (adaptive MCMC), see <span class="citation" data-cites="Andrieu.Thoms:2008">Andrieu &amp; Thoms (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span> and <span class="citation" data-cites="Rosenthal:2011">Rosenthal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span>.</li>
+<li>marginalization</li>
+<li>blocking</li>
+</ul>
+</section>
+<section id="removing-redundant-parameters" class="slide level2">
+<h2>Removing redundant parameters</h2>
+<p>Consider a one-way ANOVA with <span class="math inline">\(K\)</span> categories, with observation <span class="math inline">\(i\)</span> from group <span class="math inline">\(k\)</span> having <span class="math display">\[\begin{align*}
+Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \alpha_k, \sigma^2_y) \\
+\alpha_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\alpha)
+\end{align*}\]</span> and an improper prior for the mean <span class="math inline">\(p(\mu) \propto 1.\)</span></p>
+<p>There are <span class="math inline">\(K+1\)</span> mean parameters for the groups, so we can enforce a sum-to-zero constraint for <span class="math inline">\(\sum_{k=1}^K \alpha_k=0\)</span> and sample <span class="math inline">\(K-1\)</span> parameters for the difference to the global mean.</p>
+</section>
+<section id="parameter-expansion" class="slide level2">
+<h2>Parameter expansion</h2>
+<p>Add redundant parameter to improve mixing by decorrelating <span class="citation" data-cites="Liu.Rubin.Wu:1998">(<a href="#/references" role="doc-biblioref" onclick="">Liu et al., 1998</a>)</span></p>
+<p><span class="math display">\[\begin{align*}
+Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \xi\eta_k, \sigma^2_y) \\
+\eta_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\eta)
+\end{align*}\]</span> so that <span class="math inline">\(\sigma_\alpha = |\xi|\sigma_\eta.\)</span></p>
+</section>
+<section id="marginalization" class="slide level2">
+<h2>Marginalization</h2>
+<p>Given a model <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{Z})\)</span>, reduce the dependance by sampling from the marginal</p>
+<p><span class="math display">\[
+p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \boldsymbol{z}.
+\]</span></p>
+<p>This happens for data augmentation, etc., and reduces dependency between parameters, but typically the likelihood becomes more expensive to compute</p>
+</section>
+<section id="gaussian-model-with-random-effects" class="slide level2">
+<h2>Gaussian model with random effects</h2>
+<p>Consider a hierarchical Gaussian model of the form <span class="math display">\[\begin{align*}
+\boldsymbol{Y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B} + \boldsymbol{\varepsilon}
+\end{align*}\]</span> where</p>
+<ul>
+<li><span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times p\)</span> design matrix with centered inputs,</li>
+<li><span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}(\boldsymbol{0}_p, \sigma^2\mathbf{I}_p),\)</span></li>
+<li><span class="math inline">\(\boldsymbol{B}\sim \mathsf{Gauss}_q(\boldsymbol{0}_q, \boldsymbol{\Omega})\)</span> are random effects and</li>
+<li><span class="math inline">\(\boldsymbol{\varepsilon} \sim \mathsf{Gauss}_n(\boldsymbol{0}_n, \kappa^2\mathbf{I}_n)\)</span> are independent white noise.</li>
+</ul>
+</section>
+<section id="marginalization-of-gaussian-models" class="slide level2">
+<h2>Marginalization of Gaussian models</h2>
+<p>We can write <span class="math display">\[\begin{align*}
+\boldsymbol{Y} \mid \mathbf{\beta}, \boldsymbol{B} &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B},  \sigma^2\mathbf{I}_p)\\
+\boldsymbol{Y} \mid \mathbf{\beta} &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
+\end{align*}\]</span> where the second line corresponds to marginalizing out the random effects <span class="math inline">\(\boldsymbol{B}.\)</span></p>
+</section>
+<section id="efficient-calculations-for-gaussian-models" class="slide level2">
+<h2>Efficient calculations for Gaussian models</h2>
+<p>If, as is often the case, <span class="math inline">\(\boldsymbol{\Omega}^{-1}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are sparse matrices, the full precision matrix can be efficiently computed using Shermann–Morisson–Woodbury identity as <span class="math display">\[\begin{align*}
+\mathbf{Q}^{-1} &amp;=   \mathbf{Z}\boldsymbol{\Omega}^{-1}\mathbf{Z}^\top + \kappa^2 \mathbf{I}_n,\\
+\kappa^2\mathbf{Q} &amp; = \mathbf{I}_n - \mathbf{Z} \boldsymbol{G}^{-1} \mathbf{Z}^\top,\\
+\boldsymbol{G} &amp;= \mathbf{Z}^\top\mathbf{Z} + \kappa^2 \boldsymbol{\Omega}^{-1}
+\end{align*}\]</span> Section 3.1 of <span class="citation" data-cites="Nychka:2015">Nychka et al. (<a href="#/references" role="doc-biblioref" onclick="">2015</a>)</span> details efficient ways of calculating the quadratic form involving <span class="math inline">\(\mathbf{Q}\)</span> and it’s determinant.</p>
+</section>
+<section id="blocking" class="slide level2">
+<h2>Blocking</h2>
+<p>Identify groups of strongly correlated parameters and propose a joint update for these.</p>
+<ul>
+<li>The more parameters we propose at the same time, the lower the chance of acceptance</li>
+<li>Often ways to sample these efficiently</li>
+</ul>
+</section>
+<section id="tokyo-rainfall" class="slide level2">
+<h2>Tokyo rainfall</h2>
+<p>We consider data from <span class="citation" data-cites="Kitagawa:1987">Kitagawa (<a href="#/references" role="doc-biblioref" onclick="">1987</a>)</span> that provide a binomial time series giving the number of days in years 1983 and 1984 (a leap year) in which there was more than 1mm of rain in Tokyo; see section 4.3.4 of <span class="citation" data-cites="Rue.Held:2005">Rue &amp; Held (<a href="#/references" role="doc-biblioref" onclick="">2005</a>)</span>.</p>
+<p>We have <span class="math inline">\(T=366\)</span> days and <span class="math inline">\(n_t \in \{1,2\}\)</span> <span class="math inline">\((t=1, \ldots, T)\)</span> the number of observations in day <span class="math inline">\(t\)</span> and <span class="math inline">\(y_t=\{0,\ldots, n_t\}\)</span> the number of days with rain.</p>
+</section>
+<section id="smoothing-probabilities" class="slide level2">
+<h2>Smoothing probabilities</h2>
+<p>The objective is to obtain a smoothed probability of rain. The underlying probit model considered takes <span class="math inline">\(Y_t \mid n_t, p_t \sim \mathsf{binom}(n_t, p_t)\)</span> and <span class="math inline">\(p_t = \Phi(\beta_t).\)</span></p>
+<p>We specify the random effects <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_{T}(\boldsymbol{0}, \tau^{-1}\mathbf{Q}),\)</span> where <span class="math inline">\(\mathbf{Q}\)</span> is a <span class="math inline">\(T \times T\)</span> precision matrix that encodes the local dependence.</p>
+<p>A circular random walk structure of order 2 is used to model the smooth curves by smoothing over neighbors, and enforces small second derivative. This is a suitable prior because it enforces no constraint on the mean structure.</p>
+</section>
+<section id="random-walk-prior" class="slide level2">
+<h2>Random walk prior</h2>
+<p>This amounts to specifying the process with for <span class="math inline">\(t \in \mathbb{N} \mod 366 + 1\)</span> <span class="math display">\[\begin{align*}
+\Delta^2\beta_t &amp;= (\beta_{t+1} - \beta_t) - (\beta_t - \beta_{t-1})
+\\&amp;=-\beta_{t-1} +2 \beta_t - \beta_{t+1} \sim \mathsf{Gauss}(0, \tau^{-1}).
+\end{align*}\]</span></p>
+</section>
+<section id="circulant-precision-matrix" class="slide level2">
+<h2>Circulant precision matrix</h2>
+<p>This yields an intrinsic Gaussian Markov random field with a circulant precision matrix <span class="math inline">\(\tau\mathbf{Q}\)</span> of rank <span class="math inline">\(T-1,\)</span> where <span class="math display">\[\begin{align*}
+\mathbf{Q} &amp;=
+\begin{pmatrix}
+6 &amp; -4 &amp; 1 &amp; 0 &amp; \cdots &amp; 1 &amp; -4\\
+-4 &amp; 6 &amp; -4 &amp; 1 &amp; \ddots &amp; 0 &amp; 1 \\
+1 &amp; -4 &amp; 6 &amp; -4 &amp; \ddots &amp; 0 &amp; 0 \\
+\vdots &amp; \ddots &amp; \ddots  &amp; \ddots  &amp; \ddots  &amp; \ddots &amp; \vdots \\
+-4 &amp; 1 &amp; 0 &amp; 0 &amp; \cdots &amp; -4 &amp; 6
+\end{pmatrix}.
+\end{align*}\]</span> Because of the linear dependency, the determinant of <span class="math inline">\(\mathbf{Q}\)</span> is zero.</p>
+</section>
+<section id="prior-draws" class="slide level2">
+<h2>Prior draws</h2>
+
+<img data-src="bayesmod-slides6_files/figure-revealjs/fig-CRW2-prior-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-CRW2-prior"><p class="caption">
+Figure&nbsp;6: Five realizations from the cyclical random walk Gaussian prior of order 2.
+</p></section>
+<section id="gibbs-sampling-for-tokyo-data" class="slide level2">
+<h2>Gibbs sampling for Tokyo data</h2>
+<p>We can perform data augmentation by imputing Gaussian variables, say <span class="math inline">\(\{z_{t,i}\}\)</span> from truncated Gaussian, where <span class="math inline">\(z_{t,i} = \beta_t + \varepsilon_{t,i}\)</span> and <span class="math inline">\(\varepsilon_{t,i} \sim \mathsf{Gauss}(0,1)\)</span> are independent standard Gaussian and <span class="math display">\[\begin{align*}
+z_{t,i} \mid  y_{t,i}, \beta_t \sim
+\begin{cases}
+\mathsf{trunc. Gauss}(\beta_t, 1, -\infty, 0) &amp; y_{t,i} = 0 \\
+\mathsf{trunc. Gauss}(\beta_t, 1,  0, \infty) &amp; y_{t,i} =1
+\end{cases}
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-for-tokyo-data" class="slide level2">
+<h2>Posterior for Tokyo data</h2>
+<p>The posterior is proportional to <span class="math display">\[\begin{align*}
+p(\boldsymbol{\beta} \mid \tau)p(\tau)\prod_{t=1}^{T}\prod_{i=1}^{n_t}p(y_{t,i} \mid z_{t,i}) p(z_{t,i} \mid \beta_t)
+\end{align*}\]</span></p>
+</section>
+<section id="data-augmentation-for-tokyo-data" class="slide level2">
+<h2>Data augmentation for Tokyo data</h2>
+<p>Once we have imputed the Gaussian latent vectors, we can work directly with the values of <span class="math inline">\(z_t = \sum_{i=1}^{n_t} z_{i,t}.\)</span> The posterior is <span class="math display">\[\begin{align*}
+p(\boldsymbol{\beta}, \tau) &amp;\propto \tau^{(n-1)/2}\exp \left( - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta}\right)
+\\&amp; \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z} - \boldsymbol{\beta})\right\} \tau^{a-1}\exp(-\tau b)
+\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{z} = (z_1, \ldots, z_T).\)</span></p>
+</section>
+<section id="gibbs-for-tokyo-data---conditionals" class="slide level2">
+<h2>Gibbs for Tokyo data - conditionals</h2>
+<p>Completing the quadratic form shows that <span class="math display">\[\begin{align*}
+\boldsymbol{\beta} \mid \boldsymbol{z}, \tau &amp;\sim \mathsf{Gauss}_T\left[\left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}^{-1} \boldsymbol{z}, \left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}^{-1}\right]\\
+\tau \mid \boldsymbol{\beta} &amp; \sim \mathsf{gamma}\left( \frac{n-1}{2} + a, \frac{\boldsymbol{\beta}^\top \mathbf{Q}\boldsymbol{\beta}}{2} + b \right)
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-prediction-for-probability-of-rainfall" class="slide level2">
+<h2>Posterior prediction for probability of rainfall</h2>
+
+<img data-src="fig/fig-rainfall-1.png" class="r-stretch quarto-figure-center"><p class="caption">Posterior prediction for probability of rainfall</p></section>
+<section id="blocking-vs-joint-update" class="slide level2">
+<h2>Blocking vs joint update</h2>
+<p>Compare the following two stategies</p>
+<ul>
+<li>joint update: given <span class="math inline">\(\boldsymbol{z}\)</span> and <span class="math inline">\(\tau\)</span>, simulate <span class="math inline">\(\boldsymbol{\beta}\)</span> jointly</li>
+<li>one-parameter at a time: starting from <span class="math inline">\(i \sim \mathsf{unif}(\{1, \ldots, 366\}),\)</span> get index <span class="math inline">\(t= i \mod 366 + 1\)</span> and simulate <span class="math inline">\(\beta_i \mid \boldsymbol{\beta}_{-i}, \boldsymbol{z}, \tau\)</span> one at a time.</li>
+</ul>
+</section>
+<section id="blocking-strategy" class="slide level2">
+<h2>Blocking strategy</h2>
+
+<img data-src="fig/fig-tokyo-post1-1.png" class="r-stretch quarto-figure-center"><p class="caption">Trace plots for Tokyo with blocking of random effects</p></section>
+<section id="individual-update-strategy" class="slide level2">
+<h2>Individual update strategy</h2>
+
+<img data-src="fig/fig-tokyo-post2-1.png" class="r-stretch quarto-figure-center"><p class="caption">Trace plots for Tokyo with random scan Gibbs for random effects</p></section>
+<section id="lessons-from-the-tokyo-example" class="slide level2">
+<h2>Lessons from the Tokyo example</h2>
+<p>What happened?</p>
+<ul>
+<li>there is lower autocorrelation with the joint update (also faster here!) for the <span class="math inline">\(\boldsymbol{\beta}\)</span></li>
+<li>in both cases, <span class="math inline">\(\tau \mid \cdot\)</span> mixes poorly because the values of <span class="math inline">\(\boldsymbol{\beta}\)</span> were sampled conditional on the previous value.</li>
+</ul>
+<p>A better avenue would be to use a Metropolis random walk for <span class="math inline">\(\tau^{\star}\)</span>, simulate <span class="math inline">\(\boldsymbol{\beta} \mid \tau^{\star}\)</span> and propose the joint vector <span class="math inline">\((\tau^{\star}, \boldsymbol{\beta}^{\star})\)</span> simultaneously.</p>
+</section>
+<section id="one-step-further" class="slide level2">
+<h2>One step further</h2>
+<p>We could also remove the data augmentation step and propose from a Gaussian approximation of the log likelihood, using a Taylor series expansion of the log likelihood about <span class="math inline">\(\boldsymbol{\beta}_{t-1}\)</span> <span class="math display">\[\begin{align*}
+\log p(\boldsymbol{\beta} \mid \boldsymbol{y}) \stackrel{\boldsymbol{\beta}}{\propto} - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta} + \sum_{t=1}^T \log f(y_t \mid \beta_t)
+\end{align*}\]</span> and the <span class="math inline">\(y_t\)</span> are conditionally independent in the likelihood. Refer to Section 4.4.1 of <span class="citation" data-cites="Rue.Held:2005">Rue &amp; Held (<a href="#/references" role="doc-biblioref" onclick="">2005</a>)</span> for more details.</p>
+</section>
+<section id="technical-aside-in-sparsity-we-trust" class="slide level2">
+<h2>Technical aside: in sparsity we trust!</h2>
+<p>It is crucial to exploit the sparsity structure of <span class="math inline">\(\mathbf{Q}\)</span> for efficient calculations of the likelihood</p>
+<ul>
+<li>typically requires re-ordering elements to get a banded precision matrix</li>
+<li>precompute the sparse Cholesky</li>
+<li>compute inverse by solving systems of linear equations; there are dedicated algorithms</li>
+</ul>
+</section>
+<section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 
-</section>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Andrieu.Thoms:2008" class="csl-entry" role="listitem">
+Andrieu, C., &amp; Thoms, J. (2008). A tutorial on adaptive <span>MCMC</span>. <em>Statistics and Computing</em>, <em>18</em>(4), 343–373. <a href="https://doi.org/10.1007/s11222-008-9110-y">https://doi.org/10.1007/s11222-008-9110-y</a>
+</div>
+<div id="ref-Kitagawa:1987" class="csl-entry" role="listitem">
+Kitagawa, G. (1987). Non-<span>G</span>aussian state–space modeling of nonstationary time series. <em>Journal of the American Statistical Association</em>, <em>82</em>(400), 1032–1041. <a href="https://doi.org/10.1080/01621459.1987.10478534">https://doi.org/10.1080/01621459.1987.10478534</a>
+</div>
+<div id="ref-Liu.Rubin.Wu:1998" class="csl-entry" role="listitem">
+Liu, C., Rubin, D. B., &amp; Wu, Y. N. (1998). Parameter expansion to accelerate <span>EM</span>: The <span>PX-EM</span> algorithm. <em>Biometrika</em>, <em>85</em>(4), 755–770. <a href="https://doi.org/10.1093/biomet/85.4.755">https://doi.org/10.1093/biomet/85.4.755</a>
+</div>
+<div id="ref-Nychka:2015" class="csl-entry" role="listitem">
+Nychka, D., Bandyopadhyay, S., Hammerling, D., Lindgren, F., &amp; Sain, S. (2015). A multiresolution <span>G</span>aussian process model for the analysis of large spatial datasets. <em>Journal of Computational and Graphical Statistics</em>, <em>24</em>(2), 579–599.
+</div>
+<div id="ref-Rosenthal:2011" class="csl-entry" role="listitem">
+Rosenthal, J. (2011). Optimal proposal distributions and adaptive <span>MCMC</span>. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 93–112). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
+</div>
+<div id="ref-Rue.Held:2005" class="csl-entry" role="listitem">
+Rue, H., &amp; Held, L. (2005). <em><span>G</span>aussian <span>M</span>arkov random fields: Theory and applications</em> (p. 280). CRC Press.
+</div>
+<div id="ref-Sailynoja:2022" class="csl-entry" role="listitem">
+Säilynoja, T., Bürkner, P.-C., &amp; Vehtari, A. (2022). Graphical test for discrete uniformity and its applications in goodness-of-fit evaluation and multiple sample comparison. <em>Statistics and Computing</em>, <em>32</em>(2), 32. <a href="https://doi.org/10.1007/s11222-022-10090-6">https://doi.org/10.1007/s11222-022-10090-6</a>
+</div>
+<div id="ref-Spiegelhalter:2002" class="csl-entry" role="listitem">
+Spiegelhalter, D. J., Best, N. G., Carlin, B. P., &amp; Van Der Linde, A. (2002). Bayesian measures of model complexity and fit. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>64</em>(4), 583–639. <a href="https://doi.org/10.1111/1467-9868.00353">https://doi.org/10.1111/1467-9868.00353</a>
+</div>
+<div id="ref-Talts:2020" class="csl-entry" role="listitem">
+Talts, S., Betancourt, M., Simpson, D., Vehtari, A., &amp; Gelman, A. (2020). <em>Validating <span>B</span>ayesian inference algorithms with simulation-based calibration</em>. <a href="https://doi.org/10.48550/arXiv.1804.06788">https://doi.org/10.48550/arXiv.1804.06788</a>
+</div>
+</div>
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo"></p>
