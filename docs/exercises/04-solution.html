@@ -328,7 +328,7 @@ g(x; \nu, \tau) = \frac{1}{2\tau} \exp\left(- \frac{|x-\nu|}{\tau}\right), \qqua
 <ol type="1">
 <li>Provide an inversion sampling algorithm to generate from <span class="math inline">\(\mathsf{Laplace}(\nu, \tau)\)</span>.</li>
 <li>Can you use the proposal to generate from a standard Gaussian? for Student-<span class="math inline">\(t\)</span> with 1 degree of freedom? Justify your answer.</li>
-<li>Consider as proposal a location-scale version of the Student-t with <span class="math inline">\(3\)</span> degrees of freedom. degrees of freedom. Find the optimal location and scale parameters and the upper bound <span class="math inline">\(C\)</span> for your choice.</li>
+<li>Consider as proposal a location-scale version of the Student-t with <span class="math inline">\(3\)</span> degrees of freedom. Find the optimal location and scale parameters and the upper bound <span class="math inline">\(C\)</span> for your choice.</li>
 <li>Use the accept-reject to simulate 1000 independent observations and compute the empirical acceptance rate.</li>
 </ol>
 <div class="proof solution">
@@ -392,7 +392,7 @@ F(x) = \begin{cases}
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo estimator of the acceptance rate</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ntrials<span class="sc">/</span><span class="fu">length</span>(samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.271773</code></pre>
+<pre><code>[1] 1.261368</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot density</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -409,7 +409,7 @@ F(x) = \begin{cases}
 </div>
 </div>
 <ol start="4" type="1">
-<li>The Monte Carlo acceptance rate is 1.27, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits.</li>
+<li>The Monte Carlo acceptance rate is 1.26, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits.</li>
 </ol>
 </div>
 </section>
@@ -447,14 +447,14 @@ F(x) = \begin{cases}
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">mean</span>(times_mc <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times_mc <span class="sc">&lt;</span> <span class="dv">15</span>)</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">est =</span> p, <span class="at">se =</span> <span class="fu">sqrt</span>(p<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">/</span>B))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       est         se 
-0.97850000 0.00145044 </code></pre>
+<pre><code>        est          se 
+0.977900000 0.001470088 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior mean with standard error</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">est =</span> <span class="fu">mean</span>(times_mc), <span class="at">se =</span> <span class="fu">sd</span>(times_mc)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(post_samp)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       est         se 
-8.03913171 0.02722838 </code></pre>
+8.02353960 0.02676175 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Metropolis-Hastings algorithm</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
@@ -473,15 +473,15 @@ F(x) = \begin{cases}
 <span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate quantities using Monte Carlo</span></span>
 <span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9780808</code></pre>
+<pre><code>[1] 0.9770707</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 8.012436</code></pre>
+<pre><code>[1] 8.074385</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.57092</code></pre>
+<pre><code>[1] 2.743424</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of MCMC</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mcmc <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">mcmc</span>(times)</span>
@@ -497,12 +497,12 @@ Sample size per chain = 9900
    plus standard error of the mean:
 
           Mean             SD       Naive SE Time-series SE 
-       8.01244        2.57092        0.02584        0.05354 
+       8.07439        2.74342        0.02757        0.05848 
 
 2. Quantiles for each variable:
 
   2.5%    25%    50%    75%  97.5% 
- 4.486  6.200  7.535  9.292 14.599 </code></pre>
+ 4.406  6.167  7.580  9.382 14.785 </code></pre>
 </div>
 </div>
 <p>We can see that the standard error for the mean is roughly twice as big. We would thus need to inflate the sample size by a factor four to get the same precision.</p>

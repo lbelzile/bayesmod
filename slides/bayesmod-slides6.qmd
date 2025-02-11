@@ -11,6 +11,7 @@ bibliography: MATH80601A.bib
 format:
   revealjs:
     slide-number: true
+    html-math-method: mathjax
     preview-links: auto
     theme: [simple, hecmontreal.scss]
     title-slide-attributes:
@@ -342,7 +343,7 @@ knitr::include_graphics("fig/fig-posterior-pred-check.png")
 
 ## Log pointwise predictive density
 
-Consider the expected value of the log observation-wise log density with respect to the posterior distribution $p(\boldsymbol{\theta} \mid \boldsymbol{y})$, 
+Consider the expected value of the observation-wise log density with respect to the posterior distribution $p(\boldsymbol{\theta} \mid \boldsymbol{y})$,
 \begin{align*}
 \mathsf{LPPD}_i = \mathsf{E}_{\boldsymbol{\theta} \mid \boldsymbol{y}} \left\{ \log p(y_i \mid \boldsymbol{\theta})\right\},
 \end{align*}
@@ -376,7 +377,7 @@ WAIC <- function(loglik_pt){
 ## Bayesian leave-one-out cross validation
 
 In Bayesian setting, we can use the leave-one-out predictive density
-$$p(y_i \mid \boldsymbol{y}_{-i})$$ as a measure of predictive accuracy. the 
+$$p(y_i \mid \boldsymbol{y}_{-i})$$ as a measure of predictive accuracy.
 
 We can use importance sampling to approximate the latter.
 
@@ -408,7 +409,7 @@ The **deviance** information criterion of @Spiegelhalter:2002 is
 \end{align*}
 where $p_D$ is the posterior expectation of the deviance relative to the point estimator of the parameter $\widetilde{\boldsymbol{\theta}}$ (e.g., the maximum a posteriori or the posterior mean)
 \begin{align*}
-p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \boldsymbol{y}\}= \int 2 \{ \ell(\widetilde{\boldsymbol{\theta}}) - \ell(\boldsymbol{\theta})\} f(\boldsymbol{\theta} \mid \boldsymbol{y} \mathrm{d} \boldsymbol{\theta}
+p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \boldsymbol{y}\}= \int 2 \{ \ell(\widetilde{\boldsymbol{\theta}}) - \ell(\boldsymbol{\theta})\} p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}
 \end{align*}
 
 
@@ -488,8 +489,8 @@ where
 
 We can write
 \begin{align*}
-\boldsymbol{Y} \mid \mathbf{\beta}, \boldsymbol{B} &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B},  \sigma^2\mathbf{I}_p)\\
-\boldsymbol{Y} \mid \mathbf{\beta} &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
+\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \sigma^2 &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B},  \sigma^2\mathbf{I}_p)\\
+\boldsymbol{Y} \mid \boldsymbol{\beta} &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
 \end{align*}
 where the second line corresponds to marginalizing out the random effects $\boldsymbol{B}.$
 
@@ -525,7 +526,7 @@ The objective is to obtain a smoothed probability of rain. The underlying probit
 
 
 
-We specify the random effects $\boldsymbol{\beta} \sim \mathsf{Gauss}_{T}(\boldsymbol{0}, \tau^{-1}\mathbf{Q}),$ where $\mathbf{Q}$ is a $T \times T$ precision matrix that encodes the local dependence. 
+We specify the random effects $\boldsymbol{\beta} \sim \mathsf{Gauss}_{T}(\boldsymbol{0}, \tau^{-1}\mathbf{Q}^{-1}),$ where $\mathbf{Q}$ is a $T \times T$ precision matrix that encodes the local dependence.
 
 A circular random walk structure of order 2 is used to model the smooth curves by smoothing over neighbors, and enforces small second derivative. This is a suitable prior because it enforces no constraint on the mean structure. 
 
@@ -537,7 +538,7 @@ This amounts to specifying the process with for $t \in \mathbb{N} \mod 366 + 1$
 \\&=-\beta_{t-1} +2 \beta_t - \beta_{t+1} \sim \mathsf{Gauss}(0, \tau^{-1}).
 \end{align*}
 
-## Circulant precision matrix
+## Circulant precision matrix {.smaller}
 
 This yields an intrinsic Gaussian Markov random field with a circulant precision matrix $\tau\mathbf{Q}$ of rank $T-1,$ where
 \begin{align*}
@@ -595,10 +596,11 @@ p(\boldsymbol{\beta} \mid \tau)p(\tau)\prod_{t=1}^{T}\prod_{i=1}^{n_t}p(y_{t,i} 
 
 ## Data augmentation for Tokyo data
 
-Once we have imputed the Gaussian latent vectors, we can work directly with the values of $z_t = \sum_{i=1}^{n_t} z_{i,t}.$ The posterior is
+Once we have imputed the Gaussian latent vectors, we can work directly with the values of $z_t = \sum_{i=1}^{n_t} z_{i,t}$ 
 \begin{align*}
-p(\boldsymbol{\beta}, \tau) &\propto \tau^{(n-1)/2}\exp \left( - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta}\right)
-\\& \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z} - \boldsymbol{\beta})\right\} \tau^{a-1}\exp(-\tau b)
+p(\boldsymbol{\beta}, \tau) &\propto \tau^{(T-1)/2}\exp \left( - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta}\right)
+\\& \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z} - \boldsymbol{\beta})\right\} 
+\\& \times \tau^{a-1}\exp(-\tau b)
 \end{align*}
 where $\boldsymbol{z} = (z_1, \ldots, z_T).$
 
@@ -606,8 +608,9 @@ where $\boldsymbol{z} = (z_1, \ldots, z_T).$
 
 Completing the quadratic form shows that
 \begin{align*}
-\boldsymbol{\beta} \mid \boldsymbol{z}, \tau &\sim \mathsf{Gauss}_T\left[\left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}^{-1} \boldsymbol{z}, \left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}^{-1}\right]\\
-\tau \mid \boldsymbol{\beta} & \sim \mathsf{gamma}\left( \frac{n-1}{2} + a, \frac{\boldsymbol{\beta}^\top \mathbf{Q}\boldsymbol{\beta}}{2} + b \right)
+\boldsymbol{\beta} \mid \boldsymbol{z}, \tau &\sim \mathsf{Gauss}_T\left(\mathbf{Q}^{\star -1} \boldsymbol{z}, \mathbf{Q}^{\star -1}\right)\\
+\tau \mid \boldsymbol{\beta} & \sim \mathsf{gamma}\left( \frac{T-1}{2} + a, \frac{\boldsymbol{\beta}^\top \mathbf{Q}\boldsymbol{\beta}}{2} + b \right),\\
+\mathbf{Q}^{\star} &= \left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}
 \end{align*}
 
 ## Posterior prediction for probability of rainfall

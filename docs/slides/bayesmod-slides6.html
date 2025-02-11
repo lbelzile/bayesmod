@@ -384,7 +384,7 @@ Figure&nbsp;4: Posterior predictive checks for the standard deviation (top) and 
 </p></section>
 <section id="log-pointwise-predictive-density" class="slide level2">
 <h2>Log pointwise predictive density</h2>
-<p>Consider the expected value of the log observation-wise log density with respect to the posterior distribution <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, <span class="math display">\[\begin{align*}
+<p>Consider the expected value of the observation-wise log density with respect to the posterior distribution <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, <span class="math display">\[\begin{align*}
 \mathsf{LPPD}_i = \mathsf{E}_{\boldsymbol{\theta} \mid \boldsymbol{y}} \left\{ \log p(y_i \mid \boldsymbol{\theta})\right\},
 \end{align*}\]</span></p>
 <p>The higher the value of <span class="math inline">\(\mathsf{LPPD}_i\)</span>, the better the fit for that observation.</p>
@@ -409,7 +409,7 @@ n\mathsf{WAIC} = -\sum_{i=1}^n \mathsf{LPPD}_i + \sum_{i=1}^n \mathsf{Va}_{\bold
 </section>
 <section id="bayesian-leave-one-out-cross-validation" class="slide level2">
 <h2>Bayesian leave-one-out cross validation</h2>
-<p>In Bayesian setting, we can use the leave-one-out predictive density <span class="math display">\[p(y_i \mid \boldsymbol{y}_{-i})\]</span> as a measure of predictive accuracy. the</p>
+<p>In Bayesian setting, we can use the leave-one-out predictive density <span class="math display">\[p(y_i \mid \boldsymbol{y}_{-i})\]</span> as a measure of predictive accuracy.</p>
 <p>We can use importance sampling to approximate the latter.</p>
 <p>Requirement: need to keep track of the log likelihood of each observation for each posterior draw (<span class="math inline">\(B \times n\)</span> values).</p>
 </section>
@@ -429,7 +429,7 @@ Figure&nbsp;5: Quantile-quantile plots based on leave-one-out cross validation f
 <p>The <strong>deviance</strong> information criterion of <span class="citation" data-cites="Spiegelhalter:2002">Spiegelhalter et al. (<a href="#/references" role="doc-biblioref" onclick="">2002</a>)</span> is <span class="math display">\[\begin{align*}
 \mathsf{DIC} = -2 \ell(\widetilde{\boldsymbol{\theta}}) + 2 p_D
 \end{align*}\]</span> where <span class="math inline">\(p_D\)</span> is the posterior expectation of the deviance relative to the point estimator of the parameter <span class="math inline">\(\widetilde{\boldsymbol{\theta}}\)</span> (e.g., the maximum a posteriori or the posterior mean) <span class="math display">\[\begin{align*}
-p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \boldsymbol{y}\}= \int 2 \{ \ell(\widetilde{\boldsymbol{\theta}}) - \ell(\boldsymbol{\theta})\} f(\boldsymbol{\theta} \mid \boldsymbol{y} \mathrm{d} \boldsymbol{\theta}
+p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \boldsymbol{y}\}= \int 2 \{ \ell(\widetilde{\boldsymbol{\theta}}) - \ell(\boldsymbol{\theta})\} p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}
 \end{align*}\]</span></p>
 </section>
 <section id="criticism-of-dic" class="slide level2">
@@ -504,8 +504,8 @@ p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \
 <section id="marginalization-of-gaussian-models" class="slide level2">
 <h2>Marginalization of Gaussian models</h2>
 <p>We can write <span class="math display">\[\begin{align*}
-\boldsymbol{Y} \mid \mathbf{\beta}, \boldsymbol{B} &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B},  \sigma^2\mathbf{I}_p)\\
-\boldsymbol{Y} \mid \mathbf{\beta} &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
+\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \sigma^2 &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B},  \sigma^2\mathbf{I}_p)\\
+\boldsymbol{Y} \mid \boldsymbol{\beta} &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
 \end{align*}\]</span> where the second line corresponds to marginalizing out the random effects <span class="math inline">\(\boldsymbol{B}.\)</span></p>
 </section>
 <section id="efficient-calculations-for-gaussian-models" class="slide level2">
@@ -532,7 +532,7 @@ p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \
 <section id="smoothing-probabilities" class="slide level2">
 <h2>Smoothing probabilities</h2>
 <p>The objective is to obtain a smoothed probability of rain. The underlying probit model considered takes <span class="math inline">\(Y_t \mid n_t, p_t \sim \mathsf{binom}(n_t, p_t)\)</span> and <span class="math inline">\(p_t = \Phi(\beta_t).\)</span></p>
-<p>We specify the random effects <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_{T}(\boldsymbol{0}, \tau^{-1}\mathbf{Q}),\)</span> where <span class="math inline">\(\mathbf{Q}\)</span> is a <span class="math inline">\(T \times T\)</span> precision matrix that encodes the local dependence.</p>
+<p>We specify the random effects <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_{T}(\boldsymbol{0}, \tau^{-1}\mathbf{Q}^{-1}),\)</span> where <span class="math inline">\(\mathbf{Q}\)</span> is a <span class="math inline">\(T \times T\)</span> precision matrix that encodes the local dependence.</p>
 <p>A circular random walk structure of order 2 is used to model the smooth curves by smoothing over neighbors, and enforces small second derivative. This is a suitable prior because it enforces no constraint on the mean structure.</p>
 </section>
 <section id="random-walk-prior" class="slide level2">
@@ -542,7 +542,7 @@ p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \
 \\&amp;=-\beta_{t-1} +2 \beta_t - \beta_{t+1} \sim \mathsf{Gauss}(0, \tau^{-1}).
 \end{align*}\]</span></p>
 </section>
-<section id="circulant-precision-matrix" class="slide level2">
+<section id="circulant-precision-matrix" class="slide level2 smaller">
 <h2>Circulant precision matrix</h2>
 <p>This yields an intrinsic Gaussian Markov random field with a circulant precision matrix <span class="math inline">\(\tau\mathbf{Q}\)</span> of rank <span class="math inline">\(T-1,\)</span> where <span class="math display">\[\begin{align*}
 \mathbf{Q} &amp;=
@@ -579,16 +579,18 @@ p(\boldsymbol{\beta} \mid \tau)p(\tau)\prod_{t=1}^{T}\prod_{i=1}^{n_t}p(y_{t,i} 
 </section>
 <section id="data-augmentation-for-tokyo-data" class="slide level2">
 <h2>Data augmentation for Tokyo data</h2>
-<p>Once we have imputed the Gaussian latent vectors, we can work directly with the values of <span class="math inline">\(z_t = \sum_{i=1}^{n_t} z_{i,t}.\)</span> The posterior is <span class="math display">\[\begin{align*}
-p(\boldsymbol{\beta}, \tau) &amp;\propto \tau^{(n-1)/2}\exp \left( - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta}\right)
-\\&amp; \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z} - \boldsymbol{\beta})\right\} \tau^{a-1}\exp(-\tau b)
+<p>Once we have imputed the Gaussian latent vectors, we can work directly with the values of <span class="math inline">\(z_t = \sum_{i=1}^{n_t} z_{i,t}\)</span> <span class="math display">\[\begin{align*}
+p(\boldsymbol{\beta}, \tau) &amp;\propto \tau^{(T-1)/2}\exp \left( - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta}\right)
+\\&amp; \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z} - \boldsymbol{\beta})\right\}
+\\&amp; \times \tau^{a-1}\exp(-\tau b)
 \end{align*}\]</span> where <span class="math inline">\(\boldsymbol{z} = (z_1, \ldots, z_T).\)</span></p>
 </section>
 <section id="gibbs-for-tokyo-data---conditionals" class="slide level2">
 <h2>Gibbs for Tokyo data - conditionals</h2>
 <p>Completing the quadratic form shows that <span class="math display">\[\begin{align*}
-\boldsymbol{\beta} \mid \boldsymbol{z}, \tau &amp;\sim \mathsf{Gauss}_T\left[\left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}^{-1} \boldsymbol{z}, \left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}^{-1}\right]\\
-\tau \mid \boldsymbol{\beta} &amp; \sim \mathsf{gamma}\left( \frac{n-1}{2} + a, \frac{\boldsymbol{\beta}^\top \mathbf{Q}\boldsymbol{\beta}}{2} + b \right)
+\boldsymbol{\beta} \mid \boldsymbol{z}, \tau &amp;\sim \mathsf{Gauss}_T\left(\mathbf{Q}^{\star -1} \boldsymbol{z}, \mathbf{Q}^{\star -1}\right)\\
+\tau \mid \boldsymbol{\beta} &amp; \sim \mathsf{gamma}\left( \frac{T-1}{2} + a, \frac{\boldsymbol{\beta}^\top \mathbf{Q}\boldsymbol{\beta}}{2} + b \right),\\
+\mathbf{Q}^{\star} &amp;= \left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}
 \end{align*}\]</span></p>
 </section>
 <section id="posterior-prediction-for-probability-of-rainfall" class="slide level2">
@@ -859,7 +861,7 @@ Talts, S., Betancourt, M., Simpson, D., Vehtari, A., &amp; Gelman, A. (2020). <e
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
