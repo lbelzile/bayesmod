@@ -1,0 +1,19 @@
+---
+title: "Exercises 6"
+draft: true
+---
+
+
+## Exercise 6.1
+
+Run four Markov chains to estimate the parameters with different starting values. Store the posterior parameters
+For each posterior draw, sample a corresponding dataset from the posterior predictive with the same size as the original and Draw samples from
+
+1. Plot the chain including burn in and warmup period. How many iterations does it take for the chains
+2. Estimate the quartiles and report adjusted Monte Carlo standard errors based on the effective sample size.
+3. Calculate the $\widehat{R}$ factor for each parameter.
+4. **posterior predictive check: for each simulated dataset from the posterior predictive,
+     a. plot their density and compare with that of the original data.
+     b. Compare the posterior std. deviation and the range.
+     c. Compute the leave-one-out cross validated probability integral transform
+5. Compute WAIC
