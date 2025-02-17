@@ -272,53 +272,9 @@ h_t = \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
 \end{align*}
 where $U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)$ and $Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).$
 
-It is possible to introduce leverage by adding $\mathsf{Cor}(Z_t, U_t = \rho.$
+It is possible to introduce leverage by adding $\mathsf{Cor}(Z_t, U_t) = \rho.$
 
 
-## Nimble code
-See the package [vignette](https://r-nimble.org/nimbleExamples/stochastic_volatility.html)
-
-```{r}
-#| eval: false
-#| echo: true
-stochVolCode <- nimbleCode({
-  x[1] ~ dnorm(mu, sd = sigma / sqrt(1-phi*phi))
-  y[1] ~ dnorm(0, sd = beta * exp(0.5 * x[1]))
-  for (t in 2:T){
-    x[t] ~ dnorm(mu + phi * (x[t-1] - mu), sd = sigma)
-    y[t] ~ dnorm(0, sd = beta * exp(0.5 * x[t]))
-  }
-  phi ~ dunif(-1, 1)
-  sigma ~ dt(mu = 0, sd = 5, df = 1)
-  mu ~ dt(mu = 0, sd = 10, df = 1)
-  beta <- exp(0.5*mu)
-})
-```
-
-## Stan code for stochastic volatility
-
-data {
-  int<lower=0> T;   // # sample size
-  vector[T] y;      // mean zero return at time t
-}
-parameters {
-  real mu;                     // mean log volatility
-  real<lower=-1, upper=1> phi; // persistence of volatility, force stationarity
-  real<lower=0> sigma;         // white noise shock scale
-  vector[T] h;                 // log volatility at time t
-}
-model {
-  phi ~ uniform(-1, 1);
-  sigma ~ cauchy(0, 5);
-  mu ~ cauchy(0, 10);
-  h[1] ~ normal(mu, sigma / sqrt(1 - phi * phi)); // unconditional distribution
-  for (t in 2:T) {
-    h[t] ~ normal(mu + phi * (h[t - 1] -  mu), sigma);
-  }
-  for (t in 1:T) {
-    y[t] ~ normal(0, exp(h[t] / 2));
-  }
-}
 
 ## References
 

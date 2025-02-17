@@ -1832,6 +1832,30 @@
     ]
   },
   {
+    "objectID": "content/07-content.html#slides",
+    "href": "content/07-content.html#slides",
+    "title": "Probabilistic programming",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "7: Probabilistic programming"
+    ]
+  },
+  {
+    "objectID": "content/07-content.html#code",
+    "href": "content/07-content.html#code",
+    "title": "Probabilistic programming",
+    "section": "Code",
+    "text": "Code\n\nStochastic volatility model: Stan code 1 and 2 and cmdstanr R script\nSmartwatch example and cmdstanr R script",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "7: Probabilistic programming"
+    ]
+  },
+  {
     "objectID": "content/installation.html",
     "href": "content/installation.html",
     "title": "Installing R and RStudio",
@@ -3247,21 +3271,7 @@
     "href": "slides/bayesmod-slides7.html#stochastic-volatility-model",
     "title": "Bayesian modelling",
     "section": "Stochastic volatility model",
-    "text": "Stochastic volatility model\nFinancial returns \\(Y_t\\) typically exhibit time-varying variability. The stochastic volatility model is a parameter-driven model that specifies \\[\\begin{align*}\nY_t = \\exp(h_t/2) Z_t \\\\\nh_t = \\gamma + \\phi (h_{t-1} - \\gamma) + \\sigma U_t\n\\end{align*}\\] where \\(U_t \\stackrel{\\mathrm{iid}}{\\sim} \\mathsf{Gauss}(0,1)\\) and \\(Z_t \\sim  \\stackrel{\\mathrm{iid}}{\\sim} \\mathsf{Gauss}(0,1).\\)\nIt is possible to introduce leverage by adding \\(\\mathsf{Cor}(Z_t, U_t = \\rho.\\)"
-  },
-  {
-    "objectID": "slides/bayesmod-slides7.html#nimble-code",
-    "href": "slides/bayesmod-slides7.html#nimble-code",
-    "title": "Bayesian modelling",
-    "section": "Nimble code",
-    "text": "Nimble code\nSee the package vignette\n\nstochVolCode &lt;- nimbleCode({\n  x[1] ~ dnorm(mu, sd = sigma / sqrt(1-phi*phi))\n  y[1] ~ dnorm(0, sd = beta * exp(0.5 * x[1]))\n  for (t in 2:T){\n    x[t] ~ dnorm(mu + phi * (x[t-1] - mu), sd = sigma)\n    y[t] ~ dnorm(0, sd = beta * exp(0.5 * x[t]))\n  }\n  phi ~ dunif(-1, 1)\n  sigma ~ dt(mu = 0, sd = 5, df = 1)\n  mu ~ dt(mu = 0, sd = 10, df = 1)\n  beta &lt;- exp(0.5*mu)\n})"
-  },
-  {
-    "objectID": "slides/bayesmod-slides7.html#stan-code-for-stochastic-volatility",
-    "href": "slides/bayesmod-slides7.html#stan-code-for-stochastic-volatility",
-    "title": "Bayesian modelling",
-    "section": "Stan code for stochastic volatility",
-    "text": "Stan code for stochastic volatility\ndata { int&lt;lower=0&gt; T; // # sample size vector[T] y; // mean zero return at time t } parameters { real mu; // mean log volatility real&lt;lower=-1, upper=1&gt; phi; // persistence of volatility, force stationarity real&lt;lower=0&gt; sigma; // white noise shock scale vector[T] h; // log volatility at time t } model { phi ~ uniform(-1, 1); sigma ~ cauchy(0, 5); mu ~ cauchy(0, 10); h[1] ~ normal(mu, sigma / sqrt(1 - phi * phi)); // unconditional distribution for (t in 2:T) { h[t] ~ normal(mu + phi * (h[t - 1] - mu), sigma); } for (t in 1:T) { y[t] ~ normal(0, exp(h[t] / 2)); } }"
+    "text": "Stochastic volatility model\nFinancial returns \\(Y_t\\) typically exhibit time-varying variability. The stochastic volatility model is a parameter-driven model that specifies \\[\\begin{align*}\nY_t = \\exp(h_t/2) Z_t \\\\\nh_t = \\gamma + \\phi (h_{t-1} - \\gamma) + \\sigma U_t\n\\end{align*}\\] where \\(U_t \\stackrel{\\mathrm{iid}}{\\sim} \\mathsf{Gauss}(0,1)\\) and \\(Z_t \\sim  \\stackrel{\\mathrm{iid}}{\\sim} \\mathsf{Gauss}(0,1).\\)\nIt is possible to introduce leverage by adding \\(\\mathsf{Cor}(Z_t, U_t) = \\rho.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides7.html#references",
