@@ -5,7 +5,7 @@ filters:
    - include-code-files
 ---
 
-These problems are for credit and to be handed in on ZoneCours on March 10th at the latest at 15:30.
+These problems are for credit and to be handed in on ZoneCours on March 16th at the latest at 23:30.
 
 ## Problem 2.1
 
@@ -40,15 +40,15 @@ T_{k,l}\mid  \boldsymbol{\alpha}, \boldsymbol{\beta}, \tau &\sim \mathsf{Gauss}(
 1. Prior elicitation: 
     a. what are your prior belief about climate change the range of plausible temperature increases? Write down suitable values for the means $\boldsymbol{\mu}$ and the standard deviation $\omega$ (which could be the same for all RCP) under different emission scenarios, if $\mu_1$ corresponds to RCP 2.6, $\mu_2$ to RCP 4.5, etc. and your guesses are non-decreasing.
     b. choose suitable priors for the scale parameters $\omega,$ $\tau$ and $\sigma$.
-2. Reparametrizations: enforce a sum-to-zero hard constraint for $\beta_l$ versus soft-constraint (by reducing the variance and setting the prior to mean-zero). Indicate which works better for the problem based on considerations such as mixing and effective sample size.
+2. Reparametrization: enforce a sum-to-zero hard constraint for $\beta_l$ (as is done in the Stan code provided below) versus soft-constraint (by reducing the variance and setting the prior to mean zero). Indicate which works better for the problem based on considerations such as mixing and effective sample size.
 3. For Model A, produce a caterpillar plot of the parameters $\beta_l$ ($l=1,\ldots, 38$) as follows: 
    a. obtain posterior mean for each random effect $\beta_l$ and sort them in increasing order
    b. for each parameter $\beta_l,$ obtain 80% equitailed credible intervals.
    c. plot the ordered point estimates and intervals against rank.
 4. **Model B**: Consider forcing an ordering constraint for $\boldsymbol{\alpha}$, so that $\alpha_1 \leq \cdots \leq \alpha_4.$ What happens to the posterior?
     - Plot the marginal posterior density of $\alpha_1, \ldots, \alpha_4$ for the models with and without the ordering constraint and comment.
-5. **Model C**:  keep RCP categorical, but let each emission scenario have it's own response variance $\sigma^2_k.$
-6. **Model D**: Replace the categorical variables $\boldsymbol{\alpha}$ with a linear trend as a function of the value of RCP (i.e., treating the value of RCP as continuous rather than categorical).
+5. **Model C**:  keep RCP categorical, but let each emission scenario have it's own response variance $\omega^2_k,$ so that $\alpha_k \sim \mathsf{Gauss}(\mu_k, \omega^2_k)$ independent.
+6. **Model D**: Replace the categorical variables $\boldsymbol{\alpha}$ with a linear trend as a function of the value of RCP (i.e., treating the value of RCP as continuous rather than categorical, with $\alpha \cdot \mathsf{RCP}$).
 7. Compare Models A to D: 
     - for each, compute the log likelihood for each posterior draw and use it to obtain the WAIC criterion. 
     - in addition perform posterior predictive checks for a suitable test function.

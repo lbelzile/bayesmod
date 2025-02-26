@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -88,10 +88,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -277,7 +277,7 @@ window.Quarto = {
 </header>
 
 
-<p>These problems are for credit and to be handed in on ZoneCours on March 10th at the latest at 15:30.</p>
+<p>These problems are for credit and to be handed in on ZoneCours on March 16th at the latest at 23:30.</p>
 <section id="problem-2.1" class="level2">
 <h2 class="anchored" data-anchor-id="problem-2.1">Problem 2.1</h2>
 <p>The <a href="../files/data/rats.csv"><code>rats</code> data</a>, extracted from Table 5 of <span class="citation" data-cites="Tarone:1982">Tarone (<a href="#ref-Tarone:1982" role="doc-biblioref">1982</a>)</span>, contains observations from 70 experiments on animal carcinogenesis bioassay conducted with female F344 rats, recording the number of lung cancer tumors developed. Treating the observations as independent, write <span class="math display">\[\begin{align*}
@@ -306,7 +306,7 @@ T_{k,l}\mid  \boldsymbol{\alpha}, \boldsymbol{\beta}, \tau &amp;\sim \mathsf{Gau
 <li>what are your prior belief about climate change the range of plausible temperature increases? Write down suitable values for the means <span class="math inline">\(\boldsymbol{\mu}\)</span> and the standard deviation <span class="math inline">\(\omega\)</span> (which could be the same for all RCP) under different emission scenarios, if <span class="math inline">\(\mu_1\)</span> corresponds to RCP 2.6, <span class="math inline">\(\mu_2\)</span> to RCP 4.5, etc. and your guesses are non-decreasing.</li>
 <li>choose suitable priors for the scale parameters <span class="math inline">\(\omega,\)</span> <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\sigma\)</span>.</li>
 </ol></li>
-<li>Reparametrizations: enforce a sum-to-zero hard constraint for <span class="math inline">\(\beta_l\)</span> versus soft-constraint (by reducing the variance and setting the prior to mean-zero). Indicate which works better for the problem based on considerations such as mixing and effective sample size.</li>
+<li>Reparametrization: enforce a sum-to-zero hard constraint for <span class="math inline">\(\beta_l\)</span> (as is done in the Stan code provided below) versus soft-constraint (by reducing the variance and setting the prior to mean zero). Indicate which works better for the problem based on considerations such as mixing and effective sample size.</li>
 <li>For Model A, produce a caterpillar plot of the parameters <span class="math inline">\(\beta_l\)</span> (<span class="math inline">\(l=1,\ldots, 38\)</span>) as follows:
 <ol type="a">
 <li>obtain posterior mean for each random effect <span class="math inline">\(\beta_l\)</span> and sort them in increasing order</li>
@@ -317,8 +317,8 @@ T_{k,l}\mid  \boldsymbol{\alpha}, \boldsymbol{\beta}, \tau &amp;\sim \mathsf{Gau
 <ul>
 <li>Plot the marginal posterior density of <span class="math inline">\(\alpha_1, \ldots, \alpha_4\)</span> for the models with and without the ordering constraint and comment.</li>
 </ul></li>
-<li><strong>Model C</strong>: keep RCP categorical, but let each emission scenario have it’s own response variance <span class="math inline">\(\sigma^2_k.\)</span></li>
-<li><strong>Model D</strong>: Replace the categorical variables <span class="math inline">\(\boldsymbol{\alpha}\)</span> with a linear trend as a function of the value of RCP (i.e., treating the value of RCP as continuous rather than categorical).</li>
+<li><strong>Model C</strong>: keep RCP categorical, but let each emission scenario have it’s own response variance <span class="math inline">\(\omega^2_k,\)</span> so that <span class="math inline">\(\alpha_k \sim \mathsf{Gauss}(\mu_k, \omega^2_k)\)</span> independent.</li>
+<li><strong>Model D</strong>: Replace the categorical variables <span class="math inline">\(\boldsymbol{\alpha}\)</span> with a linear trend as a function of the value of RCP (i.e., treating the value of RCP as continuous rather than categorical, with <span class="math inline">\(\alpha \cdot \mathsf{RCP}\)</span>).</li>
 <li>Compare Models A to D:
 <ul>
 <li>for each, compute the log likelihood for each posterior draw and use it to obtain the WAIC criterion.</li>
