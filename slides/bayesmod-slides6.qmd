@@ -599,10 +599,10 @@ p(\boldsymbol{\beta} \mid \tau)p(\tau)\prod_{t=1}^{T}\prod_{i=1}^{n_t}p(y_{t,i} 
 Once we have imputed the Gaussian latent vectors, we can work directly with the values of $z_t = \sum_{i=1}^{n_t} z_{i,t}$ 
 \begin{align*}
 p(\boldsymbol{\beta}, \tau) &\propto \tau^{(T-1)/2}\exp \left( - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta}\right)
-\\& \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z} - \boldsymbol{\beta})\right\} 
+\\& \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z}/\boldsymbol{n} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z}/\boldsymbol{n} - \boldsymbol{\beta})\right\}
 \\& \times \tau^{a-1}\exp(-\tau b)
 \end{align*}
-where $\boldsymbol{z} = (z_1, \ldots, z_T).$
+where $\boldsymbol{z} = (z_1, \ldots, z_T),$ as $n_t^{-1} z_t \sim \mathsf{Gauss}(\beta_t, n_t^{-1}).$
 
 ## Gibbs for Tokyo data - conditionals
 

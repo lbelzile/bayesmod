@@ -267,8 +267,8 @@ knitr::include_graphics("fig/Stan.png")
 
 Financial returns $Y_t$ typically exhibit time-varying variability. The **stochastic volatility** model is a parameter-driven model that specifies
 \begin{align*}
-Y_t = \exp(h_t/2) Z_t \\
-h_t = \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
+Y_t &= \exp(h_t/2) Z_t \\
+h_t &= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
 \end{align*}
 where $U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)$ and $Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).$
 
