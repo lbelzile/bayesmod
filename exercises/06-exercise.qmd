@@ -1,28 +1,94 @@
 ---
 title: "Exercises 6"
+draft: true
 ---
 
 
 ## Exercise 6.1
 
-Consider the eight school data.
+Consider the eight school data from Educational Testing Service (ETS), featured prominently in @Gelman:2013. The data shows results of randomized experiments in eight different schools to estimate the effect of coaching on SAT-V scores.
+The data consist of estimated treatment mean difference and their standard errors. The data size are large, so the average treatment effect (ATE) can be considered Gaussian and the standard errors are treated as a known quantity.
 
-Consider a one-way ANOVA with $K$ categories, with observation $i$ from group $k$ having
+```{r}
+#| eval: true
+#| echo: false
+es <- data.frame(school = LETTERS[1:8], 
+                 y = c(28, 8, -3, 7, -1, 1, 18, 12), 
+                 se = c(15, 10, 16, 11, 9, 11, 10, 18))
+ggplot(es, aes(x = school, y = y)) +
+  geom_point(col = "purple") +
+  geom_errorbar(aes(ymin = y - 1.96*se, ymax = y + 1.96*se), width = 0.3) +
+  labs(x = "school", y = "",
+       subtitle = "Average treatment effect with asymptotic 95% confidence intervals") +
+  theme_classic()
+```
+
+
+Consider a one-way ANOVA with a single observation per group, where for $i=1, \ldots, n,$ we have
 \begin{align*}
-Y_{i,k} &\sim \mathsf{Gauss}(\mu + \alpha_k, \sigma^2_y) \\
-\alpha_k &\sim \mathsf{Gauss}(0, \sigma^2_\alpha)
+Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha_i, \sigma^2_i) \\
+\alpha_i &\sim \mathsf{Gauss}(0, \sigma^2_\alpha)
 \end{align*}
 and an improper prior for the mean $p(\mu) \propto 1.$
-If there are $K$ groups, then the group-specific mean is $\mu+\alpha_k$, and there is a redundant parameter. In the Bayesian setting, the parameters are weakly identifiable because of the prior on $\boldsymbol{\alpha}$.
+If there are $K$ groups, then the group-specific mean is $\mu+\alpha_k$, and there is a redundant parameter. In the Bayesian setting, the parameters are weakly identifiable because of the prior on $\boldsymbol{\alpha}$, but the geometry is such that $\alpha_k \to 0$ as $\sigma^2_{\alpha} \to 0.$ See [Section 5.5](https://users.aalto.fi/~ave/BDA3.pdf) on p. 119 of @Gelman:2013 for more details.
 
-Add redundant parameter to improve mixing by decorrelating [@Liu.Rubin.Wu:1998]
-
+We fit the model by adding redundant parameter to improve mixing [@Liu.Rubin.Wu:1998,@Gelman.vanDyk:2008]
 \begin{align*}
-Y_{i,k} &\sim \mathsf{Gauss}(\mu + \xi\eta_k, \sigma^2_y) \\
-\eta_k &\sim \mathsf{Gauss}(0, \sigma^2_\eta)
+Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
+\xi_i &\sim \mathsf{Gauss}(0, \sigma^2_\xi)
 \end{align*}
-so that $\sigma_\alpha = |\xi|\sigma_\eta.$
+so that $\sigma_\alpha = |\alpha|\sigma_\xi.$
 
+```{r}
+# Eight school data
+es <- data.frame(school = LETTERS[1:8], 
+                 y = c(28, 8, -3, 7, -1, 1, 18, 12), 
+                 se = c(15, 10, 16, 11, 9, 11, 10, 18))
+n <- nrow(es)
+B <- 1e3L
+set.seed(80601)
+# Starting values
+alpha <- rnorm(0, sd = 0.01)
+mu <- mean(es$y)
+sigma_al <- sqrt(var(es$y) - mean(es$se))
+pars <- matrix(NA, nrow = B, ncol = n + 2)
+var_mu <- 1/sum(1/es$se^2)
+for(b in seq_len(B)){
+  var_al <- 1/(1/es$se^2 + 1/sigma_al^2)
+  pars[b, 1:n] <- alpha <- rnorm(n = n, mean = var_al * (es$y - mu)/es$se^2, sd = sqrt(var_al))
+  pars[b, n + 1] <- mu <- rnorm(n = 1, mean = var_mu * sum((es$y - alpha)/es$se^2), sd = sqrt(var_mu)) 
+  pars[b, n + 2] <- sigma_al <- sum(alpha^2) / rchisq(1, df = n - 1) 
+}
+
+
+# Compare trace plots for mu + alpha
+plot(pars[, 2] + pars[, n+1])
+plot(pars[, 2])
+# Funnel behaviour
+plot(pars[, 2] + pars[, n+1])
+
+
+## Sampler 2
+# y_i | alpha ~ Gauss(alpha_i, sigma_i)
+# alpha_i ~ Gauss(mu, sigma_al)
+Sigma_y <- diag(es$se^2)
+Sigma_b <- diag(rep(sigma_b))^2
+# Generalized least squares joint update via data augmentation
+gls_update <- function(
+
+# Same model, with parameter expansion
+pars2 <- matrix(NA, nrow = B, ncol = n + 2)
+
+ 
+```
+
+
+```{r}
+
+```
+
+
+Derive the Gibbs sampler for the two models with improper priors.
 
 Run four Markov chains to estimate the parameters with different starting values and store the posterior parameters. For each posterior draw, sample a corresponding data set from the posterior predictive with the same size as the original.
 
@@ -35,7 +101,7 @@ Run four Markov chains to estimate the parameters with different starting values
      c. Compute the leave-one-out cross validated probability integral transform
 5. Compute WAIC
 
-
+See this [post](https://xuwd11.github.io/am207/wiki/gelmanschools.html) for display of the pathological behaviour that can be captured by divergence in Hamiltonian Monte Carlo.
 
 ## Exercise 6.2
 
