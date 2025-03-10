@@ -1,6 +1,5 @@
 ---
-title: "Exercises 6"
-draft: true
+title: "Solution 6"
 ---
 
 
@@ -8,6 +7,19 @@ draft: true
 
 Consider the eight school data from Educational Testing Service (ETS), featured prominently in @Gelman:2013. The data shows results of randomized experiments in eight different schools to estimate the effect of coaching on SAT-V scores.
 The data consist of estimated treatment mean difference and their standard errors. The data size are large, so the average treatment effect (ATE) can be considered Gaussian and the standard errors are treated as a known quantity.
+
+
+
+1. Derive the Gibbs sampler for the two models with improper priors. Note that, to sample jointly from $p(\mu, \boldsymbol{\alpha} \mid \boldsymbol{y}, \sigma^2_{\alpha}, \boldsymbol{\sigma}^2_{\boldsymbol{y}})$, you can draw from the marginal of $\boldsymbol{\alpha}$, then the conditional $\mu \mid \boldsymbol{\alpha}, \cdots$.
+2. Fit the three algorithms described in @Gelman.vanDyk:2008 and compare their efficiency via effective sample size (ESS). In particular, draw traceplots and calculate effective sample sizes for 
+    
+    - $\mu$
+    - $\alpha_1$, 
+    - the sum $\mu + \alpha_1$.
+
+as well as pairs plot of $\alpha_i, \log \sigma_{\alpha}$. The latter should display a very strong funnel.
+
+
 
 ```{r}
 #| eval: true
@@ -64,11 +76,8 @@ for(b in seq_len(B)){
   pars1[b, n + 2] <- sigma_al <- sum(alpha^2) / rchisq(1, df = n - 1) 
 }
 
-
-
-
 ## Sampler 2
-# Same model, with joint updates parameter expansion
+# Same model, with joint updates
 set.seed(80601)
 # Starting values
 alpha <- rnorm(0, sd = 0.01)
@@ -99,7 +108,13 @@ for(b in seq_len(B)){
   pars3[b, 1:n] <- alpha_st*a
   pars3[b, n + 2] <- sigma_al <- abs(a)*sigma_al_st
 }
- 
+```
+
+We can write the joint density of $\mu$ and $\boldsymbol{\alpha}$ and integrate out $\mu$. The precision for $\alpha_j$ is $Q_{\alpha_j} = 1/\sigma^2_j + 1/\sigma_{\alpha}^2$, and the unconditional mean of $p(\alpha_j \mid \sigma_{\alpha})$ is $Q^{-1}_{\alpha_j}y_j/\sigma^2_j$. The conditional distribution $p(\mu, \mid \boldsymbol{\alpha}, \sigma_{\alpha})$ is Gaussian with precision $Q_{\mu} = \sum_{j=1}^{8} \sigma^{-2}_j$ and mean $Q_{\mu}^{-1}\sum_{j=1}^8 \sigma^{-2}_j(y_j-\alpha_j).$ The other steps are detailed in @Gelman.vanDyk:2008.
+
+```{r}
+#| eval: true
+#| echo: true
 # Compare trace plots for mu + alpha
 plot(pars1[, 2] + pars1[, n+1])
 plot(pars1[, 2])
@@ -115,17 +130,6 @@ ggplot(
   labs(x = expression(alpha[2]), y = expression("log"~sigma[alpha])) +
   theme_classic()
 ```
-
-
-1. Derive the Gibbs sampler for the two models with improper priors. Note that, to sample jointly from $p(\mu, \boldsymbol{\alpha} \mid \boldsymbol{y}, \sigma^2_{\alpha}, \boldsymbol{\sigma}^2_{\boldsymbol{y}})$, you can draw from the marginal of $\boldsymbol{\alpha}$, then the conditional $\mu \mid \boldsymbol{\alpha}, \cdots$.
-2. Fit the three algorithms described in @Gelman.vanDyk:2008 and compare their efficiency via effective sample size (ESS). In particular, draw traceplots and calculate effective sample sizes for 
-    
-    - $\mu$
-    - $\alpha_1$, 
-    - the sum $\mu + \alpha_1$.
-
-as well as pairs plot of $\alpha_i, \log \sigma_{\alpha}$. The latter should display a very strong funnel.
-
 <!--
 Run four Markov chains to estimate the parameters with different starting values and store the posterior parameters. For each posterior draw, sample a corresponding data set from the posterior predictive with the same size as the original.
 
