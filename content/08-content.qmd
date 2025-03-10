@@ -1,46 +1,49 @@
 ---
-title: "Probabilistic programming"
+title: "Regression models"
 ---
 
 
 ## Content
 
-- Hamiltonian Monte Carlo
-- Probabilistic programming
-- Stan
+- Bayesian linear model
+- Priors for covariance matrices
+- Shrinkage prior
+- Bayesian model averaging
 
 ## Learning objectives
 
 At the end of the chapter, students should be able to
 
-- code models using Stan
+- code a Gaussian linear model using Gibbs sampling
+- determine suitable priors for correlated random effects
+- understand the methodology behind shrinkage priors
 
 
 
 ## Readings
 
-- @Betancourt:2017
-- @Neal:2011
-- [Chi Feng's MCMC gallery](http://chi-feng.github.io/mcmc-demo/)
-
+- [Chapter 8](https://lbelzile.github.io/MATH80601A/regression.html) of the course notes
 
 ## Complementary readings
 
-
-- [Stan user guide](https://mc-stan.org/docs/stan-users-guide/)
+- @Mitchell.Beauchamp:1988, @George.McCulloch:1993 (spike and slab priors)
+- @Geweke:1993 (Bayesian linear model)
+- @Carvalho.Polson:2010, @Piironen.Vehtari:2017 (horseshoe priors)
+- @Bove.Held:2011 (Zellner $g$-prior for GLM)
+- @vanErp:2018 (comparison of shrinkage priors)
+- @Hoeting:1998, Holmes:2002 (Bayesian model averaging)
 
 
 ## Slides
 
 
-<p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides7.html">{{< fa arrow-up-right-from-square >}} &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides7.pdf" role="button">{{< fa file-pdf >}} &ensp;Download PDF of all slides</a></p>
+<p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides8.html">{{< fa arrow-up-right-from-square >}} &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides8.pdf" role="button">{{< fa file-pdf >}} &ensp;Download PDF of all slides</a></p>
 
 
 <div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides7.html"></iframe>
+<iframe class="slide-deck" src="../slides/bayesmod-slides8.html"></iframe>
 </div>
 
 ## Code
 
-- Stochastic volatility model: Stan code [1](/files/code/stochvol1.stan) and [2](/files/code/stochvol2.stan) and [`cmdstanr` **R** script](/files/code/stochvol_stan.R)
-- [Smartwatch example](/files/code/poisson_smartwatch.stan)  and [`cmdstanr` **R** script](/files/code/poisson_smartwatch.R)
+- Horseshoe prior

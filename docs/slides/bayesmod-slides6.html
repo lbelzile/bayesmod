@@ -223,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Wednesday Feb 26, 2025</p>
+  <p class="date">Last compiled Monday Mar 10, 2025</p>
 </section>
 <section id="outline" class="slide level2">
 <h2>Outline</h2>
@@ -379,7 +379,7 @@ Figure&nbsp;3: Two pairs of Markov chains: the top ones seem stationary, but wit
 <section id="posterior-predictive-checks-1" class="slide level2">
 <h2>Posterior predictive checks</h2>
 
-<img data-src="fig/fig-posterior-pred-check.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-pred-check"><p class="caption">
+<img data-src="fig/fig-posterior-pred-check.png" width="448" class="r-stretch quarto-figure-center" id="fig-posterior-pred-check"><p class="caption">
 Figure&nbsp;4: Posterior predictive checks for the standard deviation (top) and density of posterior draws (bottom) for hierarchical Poisson model with individual effects (left) and simpler model with only conditions (right).
 </p></section>
 <section id="log-pointwise-predictive-density" class="slide level2">
@@ -421,7 +421,7 @@ n\mathsf{WAIC} = -\sum_{i=1}^n \mathsf{LPPD}_i + \sum_{i=1}^n \mathsf{Va}_{\bold
 <section id="leave-one-out-with-quantile-quantile-plots" class="slide level2">
 <h2>Leave-one-out with quantile-quantile plots</h2>
 
-<img data-src="fig/fig-loocv-qqplots.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-loocv"><p class="caption">
+<img data-src="fig/fig-loocv-qqplots.png" width="448" class="r-stretch quarto-figure-center" id="fig-posterior-loocv"><p class="caption">
 Figure&nbsp;5: Quantile-quantile plots based on leave-one-out cross validation for model for the hierarchical Poisson model fitted to the Upworthy data with the individual random effects (left) and without (right).
 </p></section>
 <section id="deviance-information-criterion" class="slide level2">
@@ -581,9 +581,9 @@ p(\boldsymbol{\beta} \mid \tau)p(\tau)\prod_{t=1}^{T}\prod_{i=1}^{n_t}p(y_{t,i} 
 <h2>Data augmentation for Tokyo data</h2>
 <p>Once we have imputed the Gaussian latent vectors, we can work directly with the values of <span class="math inline">\(z_t = \sum_{i=1}^{n_t} z_{i,t}\)</span> <span class="math display">\[\begin{align*}
 p(\boldsymbol{\beta}, \tau) &amp;\propto \tau^{(T-1)/2}\exp \left( - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta}\right)
-\\&amp; \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z} - \boldsymbol{\beta})\right\}
+\\&amp; \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z}/\boldsymbol{n} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z}/\boldsymbol{n} - \boldsymbol{\beta})\right\}
 \\&amp; \times \tau^{a-1}\exp(-\tau b)
-\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{z} = (z_1, \ldots, z_T).\)</span></p>
+\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{z} = (z_1, \ldots, z_T),\)</span> as <span class="math inline">\(n_t^{-1} z_t \sim \mathsf{Gauss}(\beta_t, n_t^{-1}).\)</span></p>
 </section>
 <section id="gibbs-for-tokyo-data---conditionals" class="slide level2">
 <h2>Gibbs for Tokyo data - conditionals</h2>

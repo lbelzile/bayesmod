@@ -1,6 +1,5 @@
 ---
 title: "Exercises 6"
-draft: true
 ---
 
 
@@ -12,6 +11,7 @@ The data consist of estimated treatment mean difference and their standard error
 ```{r}
 #| eval: true
 #| echo: false
+library(ggplot2)
 es <- data.frame(school = LETTERS[1:8], 
                  y = c(28, 8, -3, 7, -1, 1, 18, 12), 
                  se = c(15, 10, 16, 11, 9, 11, 10, 18))
@@ -32,7 +32,7 @@ Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha_i, \sigma^2_i) \\
 and an improper prior for the mean $p(\mu) \propto 1.$
 If there are $K$ groups, then the group-specific mean is $\mu+\alpha_k$, and there is a redundant parameter. In the Bayesian setting, the parameters are weakly identifiable because of the prior on $\boldsymbol{\alpha}$, but the geometry is such that $\alpha_k \to 0$ as $\sigma^2_{\alpha} \to 0.$ See [Section 5.5](https://users.aalto.fi/~ave/BDA3.pdf) on p. 119 of @Gelman:2013 for more details.
 
-We fit the model by adding redundant parameter to improve mixing [@Liu.Rubin.Wu:1998,@Gelman.vanDyk:2008]
+We fit the model by adding redundant parameter to improve mixing [@Gelman.vanDyk:2008]
 \begin{align*}
 Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 \xi_i &\sim \mathsf{Gauss}(0, \sigma^2_\xi)
@@ -40,66 +40,23 @@ Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 so that $\sigma_\alpha = |\alpha|\sigma_\xi.$
 
 ```{r}
+#| echo: true
+#| eval: false
 # Eight school data
 es <- data.frame(school = LETTERS[1:8], 
                  y = c(28, 8, -3, 7, -1, 1, 18, 12), 
                  se = c(15, 10, 16, 11, 9, 11, 10, 18))
-n <- nrow(es)
-B <- 1e3L
-set.seed(80601)
-# Starting values
-alpha <- rnorm(0, sd = 0.01)
-mu <- mean(es$y)
-sigma_al <- sqrt(var(es$y) - mean(es$se))
-pars <- matrix(NA, nrow = B, ncol = n + 2)
-var_mu <- 1/sum(1/es$se^2)
-for(b in seq_len(B)){
-  var_al <- 1/(1/es$se^2 + 1/sigma_al^2)
-  pars[b, 1:n] <- alpha <- rnorm(n = n, mean = var_al * (es$y - mu)/es$se^2, sd = sqrt(var_al))
-  pars[b, n + 1] <- mu <- rnorm(n = 1, mean = var_mu * sum((es$y - alpha)/es$se^2), sd = sqrt(var_mu)) 
-  pars[b, n + 2] <- sigma_al <- sum(alpha^2) / rchisq(1, df = n - 1) 
-}
-
-
-# Compare trace plots for mu + alpha
-plot(pars[, 2] + pars[, n+1])
-plot(pars[, 2])
-# Funnel behaviour
-plot(pars[, 2] + pars[, n+1])
-
-
-## Sampler 2
-# y_i | alpha ~ Gauss(alpha_i, sigma_i)
-# alpha_i ~ Gauss(mu, sigma_al)
-Sigma_y <- diag(es$se^2)
-Sigma_b <- diag(rep(sigma_b))^2
-# Generalized least squares joint update via data augmentation
-gls_update <- function(
-
-# Same model, with parameter expansion
-pars2 <- matrix(NA, nrow = B, ncol = n + 2)
-
- 
 ```
 
 
-```{r}
+1. Derive the Gibbs sampler for the two models with improper priors. Note that, to sample jointly from $p(\mu, \boldsymbol{\alpha} \mid \boldsymbol{y}, \sigma^2_{\alpha}, \boldsymbol{\sigma}^2_{\boldsymbol{y}})$, you can draw from the marginal of $\boldsymbol{\alpha}$, then the conditional $\mu \mid \boldsymbol{\alpha}, \cdots$.
+2. Fit the three algorithms described in @Gelman.vanDyk:2008 and compare their efficiency via effective sample size (ESS). In particular, draw traceplots and calculate effective sample sizes for 
+    
+    - $\mu$
+    - $\alpha_1$, 
+    - the sum $\mu + \alpha_1$.
 
-```
-
-
-Derive the Gibbs sampler for the two models with improper priors.
-
-Run four Markov chains to estimate the parameters with different starting values and store the posterior parameters. For each posterior draw, sample a corresponding data set from the posterior predictive with the same size as the original.
-
-1. Plot the chain including burn in and warmup period. How many iterations does it take for the chains to stabilize?
-2. Estimate the quartiles and report adjusted Monte Carlo standard errors based on the effective sample size.
-3. Calculate the $\widehat{R}$ factor for each parameter.
-4. **Posterior predictive check**: for each simulated dataset from the posterior predictive,
-     a. plot their density and compare with that of the original data.
-     b. Compare the posterior std. deviation and the range.
-     c. Compute the leave-one-out cross validated probability integral transform
-5. Compute WAIC
+as well as pairs plot of $\alpha_i, \log \sigma_{\alpha}$. The latter should display a very strong funnel.
 
 See this [post](https://xuwd11.github.io/am207/wiki/gelmanschools.html) for display of the pathological behaviour that can be captured by divergence in Hamiltonian Monte Carlo.
 

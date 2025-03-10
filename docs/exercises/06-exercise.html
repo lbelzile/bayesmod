@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 /* CSS for citations */
 div.csl-bib-body { }
 div.csl-entry {
@@ -120,7 +154,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -146,7 +180,7 @@ window.Quarto = {
 <span class="menu-text">Content</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../exercises/index.html"> 
+    <a class="nav-link active" href="../exercises/index.html" aria-current="page"> 
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
@@ -163,10 +197,121 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-exercise.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/06-exercise.html">6. Bayesian workflow</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercises</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/02-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Bayesics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/03-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Priors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/04-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Monte Carlo methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/05-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Gibbs sampling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/06-exercise.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">6. Bayesian workflow</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Solutions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/02-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Bayesics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/03-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Priors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/04-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Monte Carlo methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/05-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Gibbs sampling</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -182,7 +327,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-exercise.html">Exercises</a></li><li class="breadcrumb-item"><a href="../exercises/06-exercise.html">6. Bayesian workflow</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Exercises 6</h1>
 </div>
@@ -203,29 +348,41 @@ window.Quarto = {
 
 <section id="exercise-6.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-6.1">Exercise 6.1</h2>
-<p>Consider the eight school data.</p>
-<p>Consider a one-way ANOVA with <span class="math inline">\(K\)</span> categories, with observation <span class="math inline">\(i\)</span> from group <span class="math inline">\(k\)</span> having <span class="math display">\[\begin{align*}
-Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \alpha_k, \sigma^2_y) \\
-\alpha_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\alpha)
-\end{align*}\]</span> and an improper prior for the mean <span class="math inline">\(p(\mu) \propto 1.\)</span> If there are <span class="math inline">\(K\)</span> groups, then the</p>
-<p>Add redundant parameter to improve mixing by decorrelating <span class="citation" data-cites="Liu.Rubin.Wu:1998">(<a href="#ref-Liu.Rubin.Wu:1998" role="doc-biblioref"><strong>Liu.Rubin.Wu:1998?</strong></a>)</span></p>
-<p><span class="math display">\[\begin{align*}
-Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \xi\eta_k, \sigma^2_y) \\
-\eta_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\eta)
-\end{align*}\]</span> so that <span class="math inline">\(\sigma_\alpha = |\xi|\sigma_\eta.\)</span></p>
-<p>Run four Markov chains to estimate the parameters with different starting values and store the posterior parameters. For each posterior draw, sample a corresponding data set from the posterior predictive with the same size as the original.</p>
+<p>Consider the eight school data from Educational Testing Service (ETS), featured prominently in <span class="citation" data-cites="Gelman:2013">Gelman et al. (<a href="#ref-Gelman:2013" role="doc-biblioref">2013</a>)</span>. The data shows results of randomized experiments in eight different schools to estimate the effect of coaching on SAT-V scores. The data consist of estimated treatment mean difference and their standard errors. The data size are large, so the average treatment effect (ATE) can be considered Gaussian and the standard errors are treated as a known quantity.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06-exercise_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Consider a one-way ANOVA with a single observation per group, where for <span class="math inline">\(i=1, \ldots, n,\)</span> we have <span class="math display">\[\begin{align*}
+Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha_i, \sigma^2_i) \\
+\alpha_i &amp;\sim \mathsf{Gauss}(0, \sigma^2_\alpha)
+\end{align*}\]</span> and an improper prior for the mean <span class="math inline">\(p(\mu) \propto 1.\)</span> If there are <span class="math inline">\(K\)</span> groups, then the group-specific mean is <span class="math inline">\(\mu+\alpha_k\)</span>, and there is a redundant parameter. In the Bayesian setting, the parameters are weakly identifiable because of the prior on <span class="math inline">\(\boldsymbol{\alpha}\)</span>, but the geometry is such that <span class="math inline">\(\alpha_k \to 0\)</span> as <span class="math inline">\(\sigma^2_{\alpha} \to 0.\)</span> See <a href="https://users.aalto.fi/~ave/BDA3.pdf">Section 5.5</a> on p.&nbsp;119 of <span class="citation" data-cites="Gelman:2013">Gelman et al. (<a href="#ref-Gelman:2013" role="doc-biblioref">2013</a>)</span> for more details.</p>
+<p>We fit the model by adding redundant parameter to improve mixing <span class="citation" data-cites="Gelman.vanDyk:2008">(<a href="#ref-Gelman.vanDyk:2008" role="doc-biblioref">Andrew Gelman &amp; Boscardin, 2008</a>)</span> <span class="math display">\[\begin{align*}
+Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
+\xi_i &amp;\sim \mathsf{Gauss}(0, \sigma^2_\xi)
+\end{align*}\]</span> so that <span class="math inline">\(\sigma_\alpha = |\alpha|\sigma_\xi.\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eight school data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>es <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">school =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>], </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">28</span>, <span class="dv">8</span>, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">7</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">18</span>, <span class="dv">12</span>), </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">se =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">16</span>, <span class="dv">11</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">10</span>, <span class="dv">18</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ol type="1">
-<li>Plot the chain including burn in and warmup period. How many iterations does it take for the chains to stabilize?</li>
-<li>Estimate the quartiles and report adjusted Monte Carlo standard errors based on the effective sample size.</li>
-<li>Calculate the <span class="math inline">\(\widehat{R}\)</span> factor for each parameter.</li>
-<li><strong>Posterior predictive check</strong>: for each simulated dataset from the posterior predictive,
-<ol type="a">
-<li>plot their density and compare with that of the original data.</li>
-<li>Compare the posterior std. deviation and the range.</li>
-<li>Compute the leave-one-out cross validated probability integral transform</li>
-</ol></li>
-<li>Compute WAIC</li>
+<li><p>Derive the Gibbs sampler for the two models with improper priors. Note that, to sample jointly from <span class="math inline">\(p(\mu, \boldsymbol{\alpha} \mid \boldsymbol{y}, \sigma^2_{\alpha}, \boldsymbol{\sigma}^2_{\boldsymbol{y}})\)</span>, you can draw from the marginal of <span class="math inline">\(\boldsymbol{\alpha}\)</span>, then the conditional <span class="math inline">\(\mu \mid \boldsymbol{\alpha}, \cdots\)</span>.</p></li>
+<li><p>Fit the three algorithms described in <span class="citation" data-cites="Gelman.vanDyk:2008">Andrew Gelman &amp; Boscardin (<a href="#ref-Gelman.vanDyk:2008" role="doc-biblioref">2008</a>)</span> and compare their efficiency via effective sample size (ESS). In particular, draw traceplots and calculate effective sample sizes for</p>
+<ul>
+<li><span class="math inline">\(\mu\)</span></li>
+<li><span class="math inline">\(\alpha_1\)</span>,</li>
+<li>the sum <span class="math inline">\(\mu + \alpha_1\)</span>.</li>
+</ul></li>
 </ol>
+<p>as well as pairs plot of <span class="math inline">\(\alpha_i, \log \sigma_{\alpha}\)</span>. The latter should display a very strong funnel.</p>
+<p>See this <a href="https://xuwd11.github.io/am207/wiki/gelmanschools.html">post</a> for display of the pathological behaviour that can be captured by divergence in Hamiltonian Monte Carlo.</p>
 </section>
 <section id="exercise-6.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-6.2">Exercise 6.2</h2>
@@ -280,6 +437,12 @@ Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Gelman.vanDyk:2008" class="csl-entry" role="listitem">
+Andrew Gelman, Z. H., David A van Dyk, &amp; Boscardin, J. W. (2008). Using redundant parameterizations to fit hierarchical models. <em>Journal of Computational and Graphical Statistics</em>, <em>17</em>(1), 95–122. <a href="https://doi.org/10.1198/106186008X287337">https://doi.org/10.1198/106186008X287337</a>
+</div>
+<div id="ref-Gelman:2013" class="csl-entry" role="listitem">
+Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2013). <em>Bayesian data analysis</em> (3rd ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/b16018">https://doi.org/10.1201/b16018</a>
+</div>
 <div id="ref-Smith:2002" class="csl-entry" role="listitem">
 Smith, R. L. (2002). A statistical assessment of <span>B</span>uchanan’s vote in <span>P</span>alm <span>B</span>each <span>C</span>ounty. <em>Statistical Science</em>, <em>17</em>(4), 441–457. <a href="https://doi.org/10.1214/ss/1049993203">https://doi.org/10.1214/ss/1049993203</a>
 </div>

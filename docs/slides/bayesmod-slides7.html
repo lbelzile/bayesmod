@@ -158,7 +158,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Wednesday Feb 26, 2025</p>
+  <p class="date">Last compiled Monday Mar 10, 2025</p>
 </section>
 <section id="curse-of-dimensionality" class="slide level2">
 <h2>Curse of dimensionality</h2>
@@ -354,8 +354,8 @@ s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\f
 <section id="stochastic-volatility-model" class="slide level2">
 <h2>Stochastic volatility model</h2>
 <p>Financial returns <span class="math inline">\(Y_t\)</span> typically exhibit time-varying variability. The <strong>stochastic volatility</strong> model is a parameter-driven model that specifies <span class="math display">\[\begin{align*}
-Y_t = \exp(h_t/2) Z_t \\
-h_t = \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
+Y_t &amp;= \exp(h_t/2) Z_t \\
+h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
 \end{align*}\]</span> where <span class="math inline">\(U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).\)</span></p>
 <p>It is possible to introduce leverage by adding <span class="math inline">\(\mathsf{Cor}(Z_t, U_t) = \rho.\)</span></p>
 </section>
