@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.3">
+<meta name="generator" content="quarto-1.7.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,10 +54,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -88,35 +88,6 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -335,11 +306,10 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
 <ul>
 <li><span class="citation" data-cites="Mitchell.Beauchamp:1988">Mitchell &amp; Beauchamp (<a href="#ref-Mitchell.Beauchamp:1988" role="doc-biblioref">1988</a>)</span>, <span class="citation" data-cites="George.McCulloch:1993">George &amp; McCulloch (<a href="#ref-George.McCulloch:1993" role="doc-biblioref">1993</a>)</span> (spike and slab priors)</li>
-<li><span class="citation" data-cites="Geweke:1993">(<a href="#ref-Geweke:1993" role="doc-biblioref"><strong>Geweke:1993?</strong></a>)</span> (Bayesian linear model)</li>
-<li><span class="citation" data-cites="Carvalho.Polson:2010">(<a href="#ref-Carvalho.Polson:2010" role="doc-biblioref"><strong>Carvalho.Polson:2010?</strong></a>)</span>, <span class="citation" data-cites="Piironen.Vehtari:2017">Piironen &amp; Vehtari (<a href="#ref-Piironen.Vehtari:2017" role="doc-biblioref">2017</a>)</span> (horseshoe priors)</li>
-<li><span class="citation" data-cites="Bove.Held:2011">Bové &amp; Held (<a href="#ref-Bove.Held:2011" role="doc-biblioref">2011</a>)</span> (Zellner <span class="math inline">\(g\)</span>-prior for GLM)</li>
-<li><span class="citation" data-cites="vanErp:2018">(<a href="#ref-vanErp:2018" role="doc-biblioref"><strong>vanErp:2018?</strong></a>)</span> (comparison of shrinkage priors)</li>
-<li><span class="citation" data-cites="Hoeting:1998">(<a href="#ref-Hoeting:1998" role="doc-biblioref"><strong>Hoeting:1998?</strong></a>)</span>, Holmes:2002 (Bayesian model averaging)</li>
+<li><span class="citation" data-cites="Geweke:1992">Geweke (<a href="#ref-Geweke:1992" role="doc-biblioref">1992</a>)</span> (Bayesian linear model)</li>
+<li><span class="citation" data-cites="Carvalho.Polson.Scott:2010">Carvalho et al. (<a href="#ref-Carvalho.Polson.Scott:2010" role="doc-biblioref">2010</a>)</span>, <span class="citation" data-cites="Piironen.Vehtari:2017">Piironen &amp; Vehtari (<a href="#ref-Piironen.Vehtari:2017" role="doc-biblioref">2017</a>)</span> (horseshoe priors) <!-- - @Bove.Held:2011 (Zellner $g$-prior for GLM) --></li>
+<li><span class="citation" data-cites="vanErp:2019">Erp et al. (<a href="#ref-vanErp:2019" role="doc-biblioref">2019</a>)</span> (comparison of shrinkage priors)</li>
+<li><span class="citation" data-cites="Hoeting:1999">Hoeting et al. (<a href="#ref-Hoeting:1999" role="doc-biblioref">1999</a>)</span>, Holmes:2002 (Bayesian model averaging)</li>
 </ul>
 </section>
 <section id="slides" class="level2">
@@ -355,8 +325,8 @@ window.Quarto = {
 <section id="code" class="level2">
 <h2 class="anchored" data-anchor-id="code">Code</h2>
 <ul>
-<li>Gaussian regression <a href="../files/code/gaussianregression_dax.R"><strong>R</strong> script</a></li>
-<li>Horseshoe prior</li>
+<li>Gaussian regression <a href="../files/code/08-gaussianregression.R"><strong>R</strong> script</a></li>
+<li>Horseshoe prior <a href="../files/code/08-horseshoe.R"><strong>R</strong> script</a> and <a href="../files/code/08-horseshoe.stan">Stan script</a></li>
 </ul>
 
 
@@ -364,11 +334,20 @@ window.Quarto = {
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Bove.Held:2011" class="csl-entry" role="listitem">
-Bové, D. S., &amp; Held, L. (2011). Hyper-<span class="math inline">\(g\)</span> priors for generalized linear models. <em>Bayesian Analysis</em>, <em>6</em>(3), 387–410. <a href="https://doi.org/10.1214/11-ba615">https://doi.org/10.1214/11-ba615</a>
+<div id="ref-Carvalho.Polson.Scott:2010" class="csl-entry" role="listitem">
+Carvalho, C. M., Polson, N. G., &amp; Scott, J. G. (2010). The horseshoe estimator for sparse signals. <em>Biometrika</em>, <em>97</em>(2), 465–480. <a href="https://doi.org/10.1093/biomet/asq017">https://doi.org/10.1093/biomet/asq017</a>
+</div>
+<div id="ref-vanErp:2019" class="csl-entry" role="listitem">
+Erp, S. van, Oberski, D. L., &amp; Mulder, J. (2019). Shrinkage priors for <span>B</span>ayesian penalized regression. <em>Journal of Mathematical Psychology</em>, <em>89</em>, 31–50. <a href="https://doi.org/10.1016/j.jmp.2018.12.004">https://doi.org/10.1016/j.jmp.2018.12.004</a>
 </div>
 <div id="ref-George.McCulloch:1993" class="csl-entry" role="listitem">
 George, E. I., &amp; McCulloch, R. E. (1993). Variable selection via <span>G</span>ibbs sampling. <em>Journal of the American Statistical Association</em>, <em>88</em>(423), 881–889. <a href="https://doi.org/10.1080/01621459.1993.10476353">https://doi.org/10.1080/01621459.1993.10476353</a>
+</div>
+<div id="ref-Geweke:1992" class="csl-entry" role="listitem">
+Geweke, J. (1992). Evaluating the accuracy of sampling-based approaches to the calculation of posterior moments. In <em>Bayesian statistics 4: Proceedings of the fourth valencia international meeting, dedicated to the memory of morris h. DeGroot, 1931–1989</em>. Oxford University Press. <a href="https://doi.org/10.1093/oso/9780198522669.003.0010">https://doi.org/10.1093/oso/9780198522669.003.0010</a>
+</div>
+<div id="ref-Hoeting:1999" class="csl-entry" role="listitem">
+Hoeting, J. A., Madigan, D., Raftery, A. E., &amp; Volinsky, C. T. (1999). Bayesian model averaging: A tutorial. <em>Statistical Science</em>, <em>14</em>(4), 382–401. <a href="http://www.jstor.org/stable/2676803">http://www.jstor.org/stable/2676803</a>
 </div>
 <div id="ref-Mitchell.Beauchamp:1988" class="csl-entry" role="listitem">
 Mitchell, T. J., &amp; Beauchamp, J. J. (1988). Bayesian variable selection in linear regression. <em>Journal of the American Statistical Association</em>, <em>83</em>(404), 1023–1032. <a href="https://doi.org/10.1080/01621459.1988.10478694">https://doi.org/10.1080/01621459.1988.10478694</a>

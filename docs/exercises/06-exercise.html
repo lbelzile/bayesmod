@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.3">
+<meta name="generator" content="quarto-1.7.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -88,10 +88,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -306,6 +306,12 @@ window.Quarto = {
  <span class="menu-text">5. Gibbs sampling</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/06-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Bayesian workflow</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -362,7 +368,7 @@ window.Quarto = {
 Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha_i, \sigma^2_i) \\
 \alpha_i &amp;\sim \mathsf{Gauss}(0, \sigma^2_\alpha)
 \end{align*}\]</span> and an improper prior for the mean <span class="math inline">\(p(\mu) \propto 1.\)</span> If there are <span class="math inline">\(K\)</span> groups, then the group-specific mean is <span class="math inline">\(\mu+\alpha_k\)</span>, and there is a redundant parameter. In the Bayesian setting, the parameters are weakly identifiable because of the prior on <span class="math inline">\(\boldsymbol{\alpha}\)</span>, but the geometry is such that <span class="math inline">\(\alpha_k \to 0\)</span> as <span class="math inline">\(\sigma^2_{\alpha} \to 0.\)</span> See <a href="https://users.aalto.fi/~ave/BDA3.pdf">Section 5.5</a> on p.&nbsp;119 of <span class="citation" data-cites="Gelman:2013">Gelman et al. (<a href="#ref-Gelman:2013" role="doc-biblioref">2013</a>)</span> for more details.</p>
-<p>We fit the model by adding redundant parameter to improve mixing <span class="citation" data-cites="Gelman.vanDyk:2008">(<a href="#ref-Gelman.vanDyk:2008" role="doc-biblioref">Andrew Gelman &amp; Boscardin, 2008</a>)</span> <span class="math display">\[\begin{align*}
+<p>We fit the model by adding redundant parameter to improve mixing <span class="citation" data-cites="Gelman.vanDyk:2008">(<a href="#ref-Gelman.vanDyk:2008" role="doc-biblioref">Gelman et al., 2008</a>)</span> <span class="math display">\[\begin{align*}
 Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 \xi_i &amp;\sim \mathsf{Gauss}(0, \sigma^2_\xi)
 \end{align*}\]</span> so that <span class="math inline">\(\sigma_\alpha = |\alpha|\sigma_\xi.\)</span></p>
@@ -374,7 +380,7 @@ Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 </div>
 <ol type="1">
 <li><p>Derive the Gibbs sampler for the two models with improper priors. Note that, to sample jointly from <span class="math inline">\(p(\mu, \boldsymbol{\alpha} \mid \boldsymbol{y}, \sigma^2_{\alpha}, \boldsymbol{\sigma}^2_{\boldsymbol{y}})\)</span>, you can draw from the marginal of <span class="math inline">\(\boldsymbol{\alpha}\)</span>, then the conditional <span class="math inline">\(\mu \mid \boldsymbol{\alpha}, \cdots\)</span>.</p></li>
-<li><p>Fit the three algorithms described in <span class="citation" data-cites="Gelman.vanDyk:2008">Andrew Gelman &amp; Boscardin (<a href="#ref-Gelman.vanDyk:2008" role="doc-biblioref">2008</a>)</span> and compare their efficiency via effective sample size (ESS). In particular, draw traceplots and calculate effective sample sizes for</p>
+<li><p>Fit the three algorithms described in <span class="citation" data-cites="Gelman.vanDyk:2008">Gelman et al. (<a href="#ref-Gelman.vanDyk:2008" role="doc-biblioref">2008</a>)</span> and compare their efficiency via effective sample size (ESS). In particular, draw traceplots and calculate effective sample sizes for</p>
 <ul>
 <li><span class="math inline">\(\mu\)</span></li>
 <li><span class="math inline">\(\alpha_1\)</span>,</li>
@@ -437,11 +443,11 @@ Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Gelman.vanDyk:2008" class="csl-entry" role="listitem">
-Andrew Gelman, Z. H., David A van Dyk, &amp; Boscardin, J. W. (2008). Using redundant parameterizations to fit hierarchical models. <em>Journal of Computational and Graphical Statistics</em>, <em>17</em>(1), 95–122. <a href="https://doi.org/10.1198/106186008X287337">https://doi.org/10.1198/106186008X287337</a>
-</div>
 <div id="ref-Gelman:2013" class="csl-entry" role="listitem">
 Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2013). <em>Bayesian data analysis</em> (3rd ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/b16018">https://doi.org/10.1201/b16018</a>
+</div>
+<div id="ref-Gelman.vanDyk:2008" class="csl-entry" role="listitem">
+Gelman, A., Dyk, D. A. van, Huang, Z., &amp; Boscardin, J. W. (2008). Using redundant parameterizations to fit hierarchical models. <em>Journal of Computational and Graphical Statistics</em>, <em>17</em>(1), 95–122. <a href="https://doi.org/10.1198/106186008X287337">https://doi.org/10.1198/106186008X287337</a>
 </div>
 <div id="ref-Smith:2002" class="csl-entry" role="listitem">
 Smith, R. L. (2002). A statistical assessment of <span>B</span>uchanan’s vote in <span>P</span>alm <span>B</span>each <span>C</span>ounty. <em>Statistical Science</em>, <em>17</em>(4), 441–457. <a href="https://doi.org/10.1214/ss/1049993203">https://doi.org/10.1214/ss/1049993203</a>
