@@ -286,19 +286,22 @@ y_i \mid \theta_i &amp;\sim \mathsf{binom}(n_i, \theta_i), \quad i =1, \ldots, 7
 \end{align*}\]</span> with an improper prior <span class="math inline">\(p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\alpha&gt;0, \beta&gt;0).\)</span></p>
 <ol type="1">
 <li>Derive the conditional distributions of <span class="math inline">\(p(\theta_i \mid \alpha, \beta, \boldsymbol{y})\)</span>, <span class="math inline">\(p(\alpha \mid \beta, \boldsymbol{\theta})\)</span> and <span class="math inline">\(p(\beta \mid \alpha, \boldsymbol{\theta}).\)</span></li>
-<li>Implement a Gibbs sampling algorithm simulating from the conditionals <span class="math inline">\(\boldsymbol{\theta} \mid \cdot,\)</span> <span class="math inline">\(\alpha \mid \cdot\)</span> and <span class="math inline">\(\beta \mid \cdot\)</span> using one of the following methods: rejection sampling (try an exponential distribution), ratio-of-uniform <span class="citation" data-cites="Wakefield:1991">(<a href="#ref-Wakefield:1991" role="doc-biblioref">Wakefield et al., 1991</a>)</span> via the <strong>R</strong> package <a href="https://doi.org/10.32614/CRAN.package.rust"><code>rust</code></a>, adaptive rejection sampling <span class="citation" data-cites="Martino:2018 Gilks.Wild:1992">(<a href="#ref-Gilks.Wild:1992" role="doc-biblioref">Gilks &amp; Wild, 1992</a>; <a href="#ref-Martino:2018" role="doc-biblioref">Martino et al., 2018</a>)</span> via the <a href="https://doi.org/10.32614/CRAN.package.ars"><code>ars</code></a> <strong>R</strong> package<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> or slice sampling <span class="citation" data-cites="Neal:2003">(<a href="#ref-Neal:2003" role="doc-biblioref">Neal, 2003</a>)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
-<li>Use instead a sampling algorithm with a Gibbs step for <span class="math inline">\(\boldsymbol{\theta}\)</span> and a random walk Metropolis–Hastings step for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.</li>
-<li>Reparametrize the model in terms of <span class="math inline">\(\log(\beta)\)</span> and <span class="math inline">\(\log(\alpha)/\log(\beta)\)</span> instead and run a Metropolis–Hasting step for the two parameters.</li>
-<li>For each sampler and parametrization, plot the bivariate histogram/density/scatter plot for <span class="math inline">\((\alpha, \beta)\)</span>, plus correlograms for both parameters. Comment on the mixing of the algorithms.</li>
+<li>Implement a Gibbs sampling algorithm simulating in turn from the conditionals</li>
 </ol>
+<ul>
+<li><span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y}, \alpha, \beta) \equiv \prod_{i=1}^n p(\theta_i \mid y_i, \alpha, beta)\)</span>,</li>
+<li><span class="math inline">\(p(\alpha \mid \boldsymbol{\theta}, \beta)\)</span>,</li>
+<li><span class="math inline">\(p(\beta \mid \boldsymbol{\theta}, \alpha)\)</span>,</li>
+</ul>
+<p>You can sample the <span class="math inline">\(\theta_i\)</span> easily since the prior is conditionally conjugate. For the other two parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, try using one of the following methods: rejection sampling (try an exponential distribution), ratio-of-uniform <span class="citation" data-cites="Wakefield:1991">(<a href="#ref-Wakefield:1991" role="doc-biblioref">Wakefield et al., 1991</a>)</span> via the <strong>R</strong> package <a href="https://doi.org/10.32614/CRAN.package.rust"><code>rust</code></a>, adaptive rejection sampling <span class="citation" data-cites="Martino:2018 Gilks.Wild:1992">(<a href="#ref-Gilks.Wild:1992" role="doc-biblioref">Gilks &amp; Wild, 1992</a>; <a href="#ref-Martino:2018" role="doc-biblioref">Martino et al., 2018</a>)</span> via the <a href="https://doi.org/10.32614/CRAN.package.ars"><code>ars</code></a> <strong>R</strong> package<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> or slice sampling <span class="citation" data-cites="Neal:2003">(<a href="#ref-Neal:2003" role="doc-biblioref">Neal, 2003</a>)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> 3. Use instead a sampling algorithm with a Gibbs step for <span class="math inline">\(\boldsymbol{\theta}\)</span> and a random walk Metropolis–Hastings step for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. 4. Reparametrize the model in terms of <span class="math inline">\(\log(\beta)\)</span> and <span class="math inline">\(\log(\alpha)/\log(\beta)\)</span> instead and run a Metropolis–Hasting step for the two parameters. 5. For each sampler and parametrization, plot the bivariate histogram/density/scatter plot for <span class="math inline">\((\alpha, \beta)\)</span>, plus correlograms for both parameters. Comment on the mixing of the algorithms.</p>
 </section>
 <section id="problem-2.2" class="level2">
 <h2 class="anchored" data-anchor-id="problem-2.2">Problem 2.2</h2>
 <p>The purpose of this exercise is to explore different parametrizations and their impact on sampling. The <a href="../files/data/climatechange.csv"><code>climatechange</code> data</a> contains mean global temperature increases <span class="math inline">\(T\)</span> from the twenty year period 1970–1999 to projections 2069–2098 for different climate general circulation models (GCM), and sometimes multiple simulation runs for each GCM. The purpose of the analysis is to obtain a suitable mean temperature change globally for each representative concentration pathway (RCP, one of 2.6, 4.5, 6.0 and 8.5). The data were obtained from the <code>bang</code> <strong>R</strong> package and preprocessed to simplify the exposition, but see <span class="citation" data-cites="Northrop.Chandler:2014">Northrop &amp; Chandler (<a href="#ref-Northrop.Chandler:2014" role="doc-biblioref">2014</a>)</span> for pointers about the methodology.</p>
 <p>The hierarchical structure for <strong>Model A</strong> and temperature <span class="math inline">\(T\)</span> for RCP <span class="math inline">\(k\)</span> and GCM <span class="math inline">\(l\)</span> is: <span class="math display">\[\begin{align*}
-T_{k,l}\mid  \boldsymbol{\alpha}, \boldsymbol{\beta}, \tau &amp;\sim \mathsf{Gauss}(\alpha_k + \beta_l, \tau^2)\\
+T_{k,l}\mid  \boldsymbol{\alpha}, \boldsymbol{\beta}, \tau &amp;\sim \mathsf{Gauss}(\alpha_k + \beta_l, \sigma^2)\\
 \boldsymbol{\alpha} \mid \boldsymbol{\mu}, \omega &amp;\sim \mathsf{Gauss}_4(\boldsymbol{\mu}, \omega^2\mathbf{I}_4)\\
-\beta_l \mid \sigma &amp;\sim \mathsf{Gauss}(0, \sigma^2), \qquad l = 1, \ldots, L.
+\beta_l \mid \sigma &amp;\sim \mathsf{Gauss}(0, \tau^2), \qquad l = 1, \ldots, L.
 \end{align*}\]</span></p>
 <ol type="1">
 <li>Prior elicitation:
@@ -319,11 +322,7 @@ T_{k,l}\mid  \boldsymbol{\alpha}, \boldsymbol{\beta}, \tau &amp;\sim \mathsf{Gau
 </ul></li>
 <li><strong>Model C</strong>: keep RCP categorical, but let each emission scenario have it’s own response variance <span class="math inline">\(\omega^2_k,\)</span> so that <span class="math inline">\(\alpha_k \sim \mathsf{Gauss}(\mu_k, \omega^2_k)\)</span> independent.</li>
 <li><strong>Model D</strong>: Replace the categorical variables <span class="math inline">\(\boldsymbol{\alpha}\)</span> with a linear trend as a function of the value of RCP (i.e., treating the value of RCP as continuous rather than categorical, with <span class="math inline">\(\alpha \cdot \mathsf{RCP}\)</span>).</li>
-<li>Compare Models A to D:
-<ul>
-<li>for each, compute the log likelihood for each posterior draw and use it to obtain the WAIC criterion.</li>
-<li>in addition perform posterior predictive checks for a suitable test function.</li>
-</ul></li>
+<li>Compare Models A to D: for each, compute the log likelihood for each posterior draw and use it to obtain the WAIC criterion.</li>
 <li>For a chosen adequate model, report the summary statistics of your procedure (posterior means, std. errors, range and effective sample size) for the variance parameters and the mean increase per RCP (or slope).</li>
 </ol>
 <section id="helper-code-for-problem-2.2" class="level3">
@@ -400,7 +399,7 @@ Wakefield, J. C., Gelfand, A. E., &amp; Smith, A. F. M. (1991). Efficient genera
 
 <ol>
 <li id="fn1"><p>Adaptive rejection sampling method works for log-concave distributions, which is the case for both the conditional of the hyperparameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>If everything fails for you, you can use Metropolis<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>If everything fails for you, you can use Metropolis.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
