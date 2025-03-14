@@ -22,7 +22,7 @@ with an improper prior $p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\al
 1. Derive the conditional distributions of $p(\theta_i \mid \alpha, \beta, \boldsymbol{y})$, $p(\alpha \mid \beta, \boldsymbol{\theta})$ and $p(\beta \mid \alpha, \boldsymbol{\theta}).$
 2. Implement a Gibbs sampling algorithm simulating in turn from the conditionals 
 
-- $p(\boldsymbol{\theta} \mid \boldsymbol{y}, \alpha, \beta) \equiv \prod_{i=1}^n p(\theta_i \mid y_i, \alpha, beta)$, 
+- $p(\boldsymbol{\theta} \mid \boldsymbol{y}, \alpha, \beta) \equiv \prod_{i=1}^n p(\theta_i \mid y_i, \alpha, \beta)$, 
 - $p(\alpha \mid \boldsymbol{\theta}, \beta)$,
 - $p(\beta \mid \boldsymbol{\theta}, \alpha)$, 
 
