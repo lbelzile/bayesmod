@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,10 +54,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -139,7 +139,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/09-content.html">9: Laplace approximation</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/09-content.html">9: Deterministic approximations</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -251,7 +251,7 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/09-content.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">9: Laplace approximation</span></a>
+ <span class="menu-text">9: Deterministic approximations</span></a>
   </div>
 </li>
       </ul>
@@ -270,12 +270,13 @@ div.csl-indent {
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
   <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
   <li><a href="#complementary-readings" id="toc-complementary-readings" class="nav-link" data-scroll-target="#complementary-readings">Complementary readings</a></li>
+  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides">Slides</a></li>
   <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/09-content.html">9: Laplace approximation</a></li></ol></nav><h1 class="title display-7">Laplace approximation</h1></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/09-content.html">9: Deterministic approximations</a></li></ol></nav><h1 class="title display-7">Laplace approximation</h1></header>
 
 <header id="title-block-header">
 
@@ -286,8 +287,8 @@ div.csl-indent {
 <section id="content" class="level2">
 <h2 class="anchored" data-anchor-id="content">Content</h2>
 <ul>
-<li>Bernstein–von Mises approximation</li>
-<li>Laplace approximation</li>
+<li>Bernstein–von Mises theorem</li>
+<li>Laplace approximations</li>
 <li>integrated nested Laplace approximation (INLA)</li>
 </ul>
 </section>
@@ -295,8 +296,8 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>At the end of the chapter, students should be able to</p>
 <ul>
-<li>derive the Laplace approximation for simple models</li>
-<li>describe the difference between deterministic and stochastic aproximations</li>
+<li>derive the Laplace approximation for simple models to compute marginal likelihood, posterior expectation or approximation to density.</li>
+<li>describe the difference between deterministic and stochastic approximations.</li>
 </ul>
 </section>
 <section id="readings" class="level2">
@@ -313,27 +314,29 @@ div.csl-indent {
 <li>Laplace approximation for Bayes factor: <span class="citation" data-cites="Raftery:1995">Raftery (<a href="#ref-Raftery:1995" role="doc-biblioref">1995</a>)</span></li>
 <li>integrated nested Laplace approximation: <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#ref-Rue.Martino.Chopin:2009" role="doc-biblioref">2009</a>)</span>, <span class="citation" data-cites="Wood:2019">Wood (<a href="#ref-Wood:2019" role="doc-biblioref">2019</a>)</span></li>
 </ul>
-<!--
-## Slides
-
-
-<p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides9.html"> &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides9.pdf" role="button"> &ensp;Download PDF of all slides</a></p>
-
-
+</section>
+<section id="slides" class="level2">
+<h2 class="anchored" data-anchor-id="slides">Slides</h2>
+<p class="text-center">
+<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides9.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides9.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
+</p>
 <div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides9.html"></iframe>
+<iframe class="slide-deck" src="../slides/bayesmod-slides9.html">
+</iframe>
 </div>
-
--->
 </section>
 <section id="code" class="level2">
-
+<h2 class="anchored" data-anchor-id="code">Code</h2>
+<ul>
+<li>Laplace approximations for exponential-gamma model <a href="../files/code/09-laplace.R"><strong>R</strong> script</a></li>
+<li>INLA code (/files/code/09-INLA.R)</li>
+</ul>
 
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Code</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-Durante:2024" class="csl-entry" role="listitem">
 Durante, D., Pozza, F., &amp; Szabo, B. (2024). Skewed <span>B</span>ernstein–von <span>M</span>ises theorem and skew-modal approximations. <em>The Annals of Statistics</em>, <em>52</em>(6), 2714–2737. <a href="https://doi.org/10.1214/24-AOS2429">https://doi.org/10.1214/24-AOS2429</a>
 </div>

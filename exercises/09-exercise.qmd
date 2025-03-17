@@ -1,0 +1,20 @@
+---
+title: Exercises 9
+---
+
+
+## Exercise 9.1
+
+We consider the accuracy of the Gaussian approximation to the posterior of a Bernoulli likelihood $Y_i \sim \mathsf{binom}(1, \theta)$ with $y =\sum_{i=1}^n y_i = \lfloor 0.1n\rfloor$ successes out of $n$ trials, i.e., if 10% of the realizations are successes. To do so,
+
+
+a. Obtain a closed-form expression maximum a posteriori and the hessian of the log posterior for a conjugate $\mathsf{beta}(a,b)$ prior.
+b. Plug in the approximation with a $\theta \sim \mathsf{beta}(1/2, 1/2)$ prior for $n\in\{10, 100, 1000\}$ and plot the Gaussian approximation along with the true posterior.
+c. Repeat this with $\vartheta = \log(\theta) - \log(1-\theta)$, using a change of variable. Is the approximation better for small $n$? Discuss.
+d. Compute the marginal likelihood and compare the approximation with the true value.
+      
+## Exercise 9.2
+
+Consider the Bernoulli sample of size $n$ with $y$ successes and a $\mathsf{beta}(1/2, 1/2)$ conjugate prior. Compute the Laplace approximation to the posterior mean for samples of size $n=10, 20, 50, 100$ and $y/n \in \{0, 0.1, 0.25, 0.5\}$.
+
+

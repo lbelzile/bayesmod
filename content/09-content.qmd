@@ -5,16 +5,16 @@ title: "Laplace approximation"
 
 ## Content
 
-- Bernstein--von Mises approximation
-- Laplace approximation
+- Bernstein--von Mises theorem
+- Laplace approximations
 - integrated nested Laplace approximation (INLA)
 
 ## Learning objectives
 
 At the end of the chapter, students should be able to
 
-- derive the Laplace approximation for simple models
-- describe the difference between deterministic and stochastic aproximations
+- derive the Laplace approximation for simple models to compute marginal likelihood, posterior expectation or approximation to density.
+- describe the difference between deterministic and stochastic approximations.
 
 
 
@@ -30,7 +30,7 @@ At the end of the chapter, students should be able to
 - Laplace approximation for Bayes factor: @Raftery:1995
 - integrated nested Laplace approximation: @Rue.Martino.Chopin:2009, @Wood:2019
 
-<!--
+
 ## Slides
 
 
@@ -41,6 +41,9 @@ At the end of the chapter, students should be able to
 <iframe class="slide-deck" src="../slides/bayesmod-slides9.html"></iframe>
 </div>
 
--->
+
 
 ## Code
+
+- Laplace approximations for exponential-gamma model [**R** script](/files/code/09-laplace.R)
+- INLA code (/files/code/09-INLA.R)

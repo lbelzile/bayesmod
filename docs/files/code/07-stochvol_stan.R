@@ -5,7 +5,7 @@ library(bayesplot)
 
 data(exchangerate, package = "hecbayes")
 # Compute response from raw spot exchange rates at noon
-y <- 100*diff(log(exchangerate$dexrate))
+y <- 100*diff(log(exchangerate$rate))
 # 'y' is now a series of percentage of log daily differences
 y <- y - mean(y) # mean center
 
