@@ -2,6 +2,17 @@
 title: "Solution 6"
 ---
 
+```{r}
+#| eval: true
+#| echo: false
+#| message: false
+#| warning: false
+library(brms)
+library(INLA)
+library(patchwork)
+library(ggplot2)
+theme_set(theme_classic())
+```
 
 ## Exercise 6.1
 
@@ -32,8 +43,7 @@ ggplot(es, aes(x = school, y = y)) +
   geom_point(col = "purple") +
   geom_errorbar(aes(ymin = y - 1.96*se, ymax = y + 1.96*se), width = 0.3) +
   labs(x = "school", y = "",
-       subtitle = "Average treatment effect with asymptotic 95% confidence intervals") +
-  theme_classic()
+       subtitle = "Average treatment effect with asymptotic 95% confidence intervals")
 ```
 
 
@@ -51,6 +61,10 @@ Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 \xi_i &\sim \mathsf{Gauss}(0, \sigma^2_\xi)
 \end{align*}
 so that $\sigma_\alpha = |\alpha|\sigma_\xi.$
+
+
+
+::: {.solution}
 
 ```{r}
 #| eval: true
@@ -127,9 +141,11 @@ ggplot(
   mapping = aes(x = beta2, y = log(sigma), color = parametrization)) +
   geom_point() +
   scale_color_grey() +
-  labs(x = expression(alpha[2]), y = expression("log"~sigma[alpha])) +
-  theme_classic()
+  labs(x = expression(alpha[2]), y = expression("log"~sigma[alpha])) 
 ```
+
+:::
+
 <!--
 Run four Markov chains to estimate the parameters with different starting values and store the posterior parameters. For each posterior draw, sample a corresponding data set from the posterior predictive with the same size as the original.
 
@@ -158,7 +174,7 @@ where
 - $\beta_j$ the defensive strength of team $j$ and 
 - $\delta$ is the common home advantage. 
 
-The scores in a match and between matches are assumed to be conditionally independent of one another given $\boldsymbol{\alpha}, \boldsymbol{\beta}, \delta$. The data set `soccer` contains the results of football (soccer) matches for the 2015 season of the English Premier Ligue (EPL) and contains the following variables
+The scores in a match and between matches are assumed to be conditionally independent of one another given $\boldsymbol{\alpha}, \boldsymbol{\beta}, \delta$. The data set `efl` contains the results of football (soccer) matches for the 20232-2024 season of the English Football Ligue (EFL) and contains the following variables
 
 - `score`: number of goals of `team` during a match
 - `team`: categorical variable giving the name of the team which scored the goals
@@ -167,7 +183,7 @@ The scores in a match and between matches are assumed to be conditionally indepe
 
 
 1. Specify suitable priors for the regression parameters that shrink $\alpha_i$ and $\beta_j$ to zero.
-2. Fit the model characterized using the frequentist estimates as starting values and answer the following questions: 
+2. Fit the model: 
    - Using the posterior distribution, give the expected number of goals for a match between Manchester United (at home) against Liverpool.
    - Report and interpret the estimated posterior mean home advantage $\widehat{\delta}$. 
    - Calculate the probability that the home advantage $\delta$ is positive?
@@ -178,6 +194,87 @@ Y_{ij1} \sim \mathsf{Poisson}\{\exp(\alpha_i +\beta_j + \delta)\},
 Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
 \end{align}
 Does the second model fit significantly better than  than the first? Compare the models using WAIC and Bayes factors.
+
+:::{.solution}
+
+We use the `brms` package to generate Stan code following **R** syntax. Model 1 can be fit by adding random effects for `team` and `opponent`. These are assigned penalized complexity priors for the scale such that their 0.99 quantile is 1, giving $1-\exp(-\lambda_0) = 0.99$ and thus $\lambda_0=-\log (0.01).$
+
+```{r}
+# Model 1
+fit_brms1 <- brms::brm(formula = score ~ home + (1 | team) + (1 | opponent),
+                 data = efl, 
+                 prior = c(
+                   set_prior("normal(0, 10)", class = "b", coef = "home"),
+                   set_prior("exponential(4.605)", class = "sd", group = "team"),
+                   set_prior("exponential(4.605)", class = "sd", group = "opponent")
+                 ),
+                 family = poisson, 
+                 silent = 0, 
+                 save_model = "Maher1.stan")
+summary(fit_brms1)
+# Use S3 generic for prediction, with new data frame
+predict(fit_brms1, newdata = data.frame(home = 1, team = "Man Utd", opponent = "Liverpool"))
+# Manual prediction from posterior predictive
+# 1) extract simulations
+sims <- fit_brms1$fit@sim$samples[[1]]
+nsim <- length(sims[[1]])
+# 2) calculate the posterior mean for the match for each team (Poisson with log link)
+post_mean1 <- exp(sims$b_Intercept + sims$b_home + sims$`r_opponent[Liverpool,Intercept]` + sims$`r_team[Man.Utd,Intercept]`)
+post_mean2 <- exp(sims$b_Intercept + sims$`r_team[Liverpool,Intercept]` + sims$`r_opponent[Man.Utd,Intercept]`)
+# 3) generate the number of goals from the posterior predictive
+post_pred1 <- rpois(n = nsim, lambda = post_mean1)
+post_pred2 <- rpois(n = nsim, lambda = post_mean2)
+# Plot the posterior predictive (bar plot)
+g1 <- ggplot(data = data.frame(x = c(post_pred1, post_pred2),
+                         team = rep(c("Manchester United", "Liverpool"), each = nsim)),
+       aes(x = x, fill = team)) + 
+  geom_bar(position = position_dodge()) + 
+  labs(x = "number of goals") 
+g2 <- ggplot(data = data.frame(delta = exp(sims$b_home)),
+             mapping = aes(x = delta)) +
+  geom_density() + 
+  labs(x = expression("home advantage"~exp(delta))) 
+g1 + g2
+```
+
+# Model 2
+fit_brms2 <- brms::brm(formula = score ~ home + (1 | team) + (1 | opponent),
+                 data = efl, 
+                 prior = c(
+                   set_prior("normal(0, 10)", class = "b", coef = "home"),
+                   set_prior("exponential(4.605)", class = "sd", group = "team"),
+                   set_prior("exponential(4.605)", class = "sd", group = "opponent")
+                 ),
+                 family = poisson, save_model = "Maher2.stan")
+summary(fit_brms2)
+
+waic(fit_brms1); waic(fit_brms2)
+```
+
+
+We can also fit the model using integrated nested Laplace approximations.
+
+```{r}
+library(INLA)
+# Default prior for random effects
+# inla.models()$latent$iid$hyper$theta
+prec_prior <- list(theta = list(prior = "pc.prec", param = c(1, 0.01)))
+fit_inla <- INLA::inla(
+  score ~ home + f(team, model = "iid", hyper = prec_prior) +
+    f(opponent, model = "iid", hyper = prec_prior),
+  family = "poisson",
+    data = efl)
+marg_delta <- fit_inla$marginals.fixed[[2]]
+inla.pmarginal(q = 0, marginal = inla.smarginal(marg_delta))
+
+ggplot(data = data.frame(inla.smarginal(marg_delta)), mapping = aes(x = x, y = y)) + 
+  geom_line() + 
+  labs(x = expression(delta), y  = "", subtitle = "Marginal density of home advantage") + 
+  theme_classic()
+```
+
+:::
+
 
 ## Exercise 6.3
 

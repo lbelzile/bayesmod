@@ -1,0 +1,80 @@
+---
+title: "Solution 9"
+---
+
+
+
+## Exercise 9.1
+
+We consider the accuracy of the Gaussian approximation to the posterior of a Bernoulli likelihood $Y_i \sim \mathsf{binom}(1, \theta)$ with $y =\sum_{i=1}^n y_i = \lfloor 0.1n\rfloor$ successes out of $n$ trials, i.e., if 10% of the realizations are successes. To do so,
+
+
+a. Obtain a closed-form expression maximum a posteriori and the hessian of the log posterior for a conjugate $\mathsf{beta}(a,b)$ prior.
+b. Plug in the approximation with a $\theta \sim \mathsf{beta}(1/2, 1/2)$ prior for $n\in\{10, 100, 1000\}$ and plot the Gaussian approximation along with the true posterior.
+c. Repeat this with $\vartheta = \log(\theta) - \log(1-\theta)$, using a change of variable. Is the approximation better for small $n$? Discuss.
+d. Compute the marginal likelihood and compare the approximation with the true value.
+
+:::{.solution}
+
+a. Consider the beta kernel $k(\theta) = \theta^{\alpha-1}(1-\theta)^{\beta-1}$ for $\alpha, \beta>0.$ 
+The unnormalized log posterior to optimize and the negative of it's Hessian matrix are
+\begin{align*}
+\log k(\theta) &\propto (\alpha-1)\log \theta + (\beta-1) \log (1-\theta),\\
+\frac{\partial \log k(\theta)}{\partial \theta} &\propto \frac{\alpha-1}{\theta} - \frac{\beta-1}{1-\theta},\\
+-\frac{\partial^2 \log k(\theta)}{\partial \theta^2} &= \frac{\alpha-1}{\theta^2} + \frac{\beta-1}{(1-\theta)^2}.
+\end{align*}
+By equating the gradient to zero, we find that the posterior mode is $\widehat{\theta} = (\alpha-1)/(\alpha+\beta-2)$ if $\alpha>1, \beta>1.$ 
+
+:::
+## Exercise 9.2
+
+Consider a simple random sample from a Bernoulli of size $n$ with $y$ successes and a $\mathsf{beta}(a, b)$ conjugate prior. Compute the Laplace approximation to the posterior mean for samples of size $n=10, 20, 50, 100$ and $y/n \in \{0.1, 0.25, 0.5,1\}$ and $a=b=1.$
+
+
+:::{.solution}
+
+<!--Example 8.3 of Bove and Held (2020) -->
+We can apply Laplace's approximation and write
+\begin{align*}
+ \mathsf{E}_{{\Theta} \mid {Y}}(\theta) &=  \frac{\int g({\theta}) p({y} \mid {\theta}) p( {\theta}) \mathrm{d} {\theta}}{\int p({y} \mid {\theta})p({\theta}) \mathrm{d} {\theta}}
+\end{align*}
+
+The Hessian evaluated at the mode gives $\mathbf{H}=(\alpha+\beta-2)^3/\{(\alpha-1)(\beta-1)\}.$ To simplify notation, take $\alpha = y+a$ and $\beta = n-y+b$: the Laplace approximation is therefore
+\begin{align*}
+ \widehat{\mathsf{E}}_{{\Theta} \mid {Y}}(\theta)&= \left( \frac{(\alpha + \beta-2)^{3}}{(\alpha-1)(\beta-1)}\frac{\alpha(\beta-1)}{(\alpha + \beta-1)^{3}}\right)^{1/2} \widehat{\theta}_g \left( \frac{\widehat{\theta}_g}{\widehat{\theta}_{\mathrm{MAP}}}\right)^{\alpha-1} \left( \frac{1-\widehat{\theta}_g}{1-\widehat{\theta}_{\mathrm{MAP}}}\right)^{\beta-1} 
+ \\& =
+\frac{\alpha^{\alpha+1/2}}{(\alpha-1)^{\alpha-1/2}}\frac{(\alpha + \beta-2)^{\alpha + \beta-1/2}}{(\alpha + \beta-1)^{\alpha + \beta+1/2}}
+ \end{align*}
+and taking $a=b=1$, we retrieve
+\begin{align*}
+\widehat{\mathsf{E}}_{{\Theta} \mid {Y}}(\theta)  = \frac{(y+1)^{y+3/2}n^{n+3/2}}{(y+1/2)^{y+1/2}(n+1)^{n+5/2}}.
+\end{align*}
+
+
+```{r}
+#| eval: true
+#| echo: true
+# Posterior mean of beta-binomial
+lap_post_mean <- function(alpha, beta){
+  exp((alpha+0.5)*log(alpha) - (alpha-0.5)*log(alpha-1) + 
+        (alpha + beta - 0.5)*log(alpha + beta -2) - 
+        (alpha + beta + 0.5)*log(alpha +  beta - 1))
+}
+ns <- c(10L, 20L, 50L, 100L)
+yfrac <- c(0.1, 0.25, 0.5,1)
+approx <- array(dim = c(4,4,2), dimnames = list(n = ns, "y/n" = yfrac, approx = c("laplace","exact")))
+for(i in seq_along(ns)){
+  for(j in seq_along(yfrac)){
+    alpha <- ns[i]*yfrac[j] + 1
+    beta <- ns[i]*(1-yfrac[j]) + 1
+ approx[i,j,] <-  c(lap_post_mean(alpha, beta), alpha/(alpha+beta)) 
+  }
+}
+approx
+# Percentage relative error
+round(100*(approx[,,1]-approx[,,2])/approx[,,2], 3)
+```
+
+:::
+
+

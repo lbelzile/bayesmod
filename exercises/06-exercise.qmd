@@ -81,8 +81,8 @@ The scores in a match and between matches are assumed to be conditionally indepe
 - `home`: binary variable, 1 if `team` is playing at home, 0 otherwise.
 
 
-1. Specify suitable priors for the regression parameters that shrink $\alpha_i$ and $\beta_j$ to zero.
-2. Fit the model characterized using the frequentist estimates as starting values and answer the following questions: 
+1. Specify penalized complexity priors for the regression parameters scale $\sigma$ that shrink $\alpha_i \sim \mathsf{Gauss}(0, \sigma^2)$ and $\beta_j \sim \mathsf{Gauss}(0, \sigma^2)$ to zero, with a probability of 1% of exceeding 1.
+2. Fit the model and answer the following questions: 
    - Using the posterior distribution, give the expected number of goals for a match between Manchester United (at home) against Liverpool.
    - Report and interpret the estimated posterior mean home advantage $\widehat{\delta}$. 
    - Calculate the probability that the home advantage $\delta$ is positive?
