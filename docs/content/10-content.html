@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Probabilistic programming – Bayesian modelling</title>
+<title>Variational inference – Bayesian modelling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -139,7 +139,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/07-content.html">7: Probabilistic programming</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/10-content.html">10: Variational inference</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -238,7 +238,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/07-content.html" class="sidebar-item-text sidebar-link active">
+  <a href="../content/07-content.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">7: Probabilistic programming</span></a>
   </div>
 </li>
@@ -256,7 +256,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/10-content.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/10-content.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">10: Variational inference</span></a>
   </div>
 </li>
@@ -276,13 +276,11 @@ div.csl-indent {
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
   <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
   <li><a href="#complementary-readings" id="toc-complementary-readings" class="nav-link" data-scroll-target="#complementary-readings">Complementary readings</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides">Slides</a></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/07-content.html">7: Probabilistic programming</a></li></ol></nav><h1 class="title display-7">Probabilistic programming</h1></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/10-content.html">10: Variational inference</a></li></ol></nav><h1 class="title display-7">Variational inference</h1></header>
 
 <header id="title-block-header">
 
@@ -293,59 +291,61 @@ div.csl-indent {
 <section id="content" class="level2">
 <h2 class="anchored" data-anchor-id="content">Content</h2>
 <ul>
-<li>Hamiltonian Monte Carlo</li>
-<li>Probabilistic programming</li>
-<li>Stan</li>
+<li>Kullback–Leibler divergence and evidence lower bound (ELBO)</li>
+<li>Estimation methods: CAVI, black-box variational inference</li>
 </ul>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>At the end of the chapter, students should be able to</p>
-<ul>
-<li>code models using Stan</li>
-</ul>
 </section>
 <section id="readings" class="level2">
 <h2 class="anchored" data-anchor-id="readings">Readings</h2>
 <ul>
-<li><span class="citation" data-cites="Betancourt:2017">Betancourt (<a href="#ref-Betancourt:2017" role="doc-biblioref">2017</a>)</span></li>
-<li><span class="citation" data-cites="Neal:2011">Neal (<a href="#ref-Neal:2011" role="doc-biblioref">2011</a>)</span></li>
-<li><a href="http://chi-feng.github.io/mcmc-demo/">Chi Feng’s MCMC gallery</a></li>
+<li><span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#ref-Ranganath.Gerrish.Blei:2014" role="doc-biblioref">2014</a>)</span></li>
+<li><a href="https://lbelzile.github.io/MATH80601A/variational.html">Chapter 10</a> of the course notes</li>
 </ul>
 </section>
 <section id="complementary-readings" class="level2">
 <h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
 <ul>
-<li><a href="https://mc-stan.org/docs/stan-users-guide/">Stan user guide</a></li>
+<li><span class="citation" data-cites="Blei:2017">Blei et al. (<a href="#ref-Blei:2017" role="doc-biblioref">2017</a>)</span></li>
+<li><span class="citation" data-cites="Kucukelbir:2017">Kucukelbir et al. (<a href="#ref-Kucukelbir:2017" role="doc-biblioref">2017</a>)</span></li>
 </ul>
-</section>
-<section id="slides" class="level2">
-<h2 class="anchored" data-anchor-id="slides">Slides</h2>
-<p class="text-center">
-<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides7.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides7.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
-</p>
+<!--
+
+
+## Slides
+
+
+<p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides10.html"> &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides10.pdf" role="button"> &ensp;Download PDF of all slides</a></p>
+
+
 <div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides7.html">
-</iframe>
+<iframe class="slide-deck" src="../slides/bayesmod-slides10.html"></iframe>
 </div>
-</section>
-<section id="code" class="level2">
-<h2 class="anchored" data-anchor-id="code">Code</h2>
-<ul>
-<li>Stochastic volatility model: Stan code <a href="../files/code/07-stochvol1.stan">1</a> and <a href="../files/code/07-stochvol2.stan">2</a> and <a href="../files/code/07-stochvol_stan.R"><code>cmdstanr</code> <strong>R</strong> script</a></li>
-<li><a href="../files/code/07-poisson_smartwatch.stan">Smartwatch example</a> and <a href="../files/code/07-poisson_smartwatch.R"><code>cmdstanr</code> <strong>R</strong> script</a></li>
-</ul>
+
+
+
+## Code
+
+- Variational example [**R** script](/files/code/10-variational.R)
+
+-->
 
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Betancourt:2017" class="csl-entry" role="listitem">
-Betancourt, M. (2017). A conceptual introduction to <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>arXiv Preprint</em>. <a href="https://doi.org/10.48550/arXiv.1701.02434">https://doi.org/10.48550/arXiv.1701.02434</a>
+<div id="ref-Blei:2017" class="csl-entry" role="listitem">
+Blei, D. M., Kucukelbir, A., &amp; and, J. D. M. (2017). Variational inference: A review for statisticians. <em>Journal of the American Statistical Association</em>, <em>112</em>(518), 859–877. <a href="https://doi.org/10.1080/01621459.2017.1285773">https://doi.org/10.1080/01621459.2017.1285773</a>
 </div>
-<div id="ref-Neal:2011" class="csl-entry" role="listitem">
-Neal, R. M. (2011). <span>MCMC</span> using <span>H</span>amiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 113–162). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
+<div id="ref-Kucukelbir:2017" class="csl-entry" role="listitem">
+Kucukelbir, A., Tran, D., Ranganath, R., Gelman, A., &amp; Blei, D. M. (2017). Automatic differentiation variational inference. <em>Journal of Machine Learning Research</em>, <em>18</em>(14), 1–45. <a href="http://jmlr.org/papers/v18/16-107.html">http://jmlr.org/papers/v18/16-107.html</a>
+</div>
+<div id="ref-Ranganath.Gerrish.Blei:2014" class="csl-entry" role="listitem">
+Ranganath, R., Gerrish, S., &amp; Blei, D. (2014). Black box variational inference. In S. Kaski &amp; J. Corander (Eds.), <em>Proceedings of the seventeenth international conference on artificial intelligence and statistics</em> (Vol. 33, pp. 814–822). PMLR. <a href="https://proceedings.mlr.press/v33/ranganath14.html">https://proceedings.mlr.press/v33/ranganath14.html</a>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

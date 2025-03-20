@@ -63,8 +63,10 @@ Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 so that $\sigma_\alpha = |\alpha|\sigma_\xi.$
 
 
+See this [post](https://xuwd11.github.io/am207/wiki/gelmanschools.html) for display of the pathological behaviour that can be captured by divergence in Hamiltonian Monte Carlo.
 
-::: {.solution}
+
+:::{.solution}
 
 ```{r}
 #| eval: true
@@ -158,8 +160,6 @@ Run four Markov chains to estimate the parameters with different starting values
      c. Compute the leave-one-out cross validated probability integral transform
 5. Compute WAIC
 -->
-
-See this [post](https://xuwd11.github.io/am207/wiki/gelmanschools.html) for display of the pathological behaviour that can be captured by divergence in Hamiltonian Monte Carlo.
 
 ## Exercise 6.2
 
