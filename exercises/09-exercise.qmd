@@ -9,8 +9,8 @@ We consider the accuracy of the Gaussian approximation to the posterior of a Ber
 
 
 a. Obtain a closed-form expression maximum a posteriori and the hessian of the log posterior for a conjugate $\mathsf{beta}(a,b)$ prior.
-b. Plug in the approximation with a $\theta \sim \mathsf{beta}(1/2, 1/2)$ prior for $n\in\{10, 100, 1000\}$ and plot the Gaussian approximation along with the true posterior.
-c. Repeat this with $\vartheta = \log(\theta) - \log(1-\theta)$, using a change of variable. Is the approximation better for small $n$? Discuss.
+b. Repeat this with $\vartheta = \log(\theta) - \log(1-\theta)$, using a change of variable. 
+c. Plug in the approximations with a $\theta \sim \mathsf{beta}(1/2, 1/2)$ prior for $n\in\{25, 50, 100\}$ and plot the Gaussian approximation along with the true posterior. Is the approximation for $\vartheta$ better for small $n$? Discuss.
 d. Compute the marginal likelihood and compare the approximation with the true value.
       
 ## Exercise 9.2

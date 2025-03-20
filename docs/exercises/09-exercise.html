@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.3">
+<meta name="generator" content="quarto-1.7.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,10 +34,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -264,6 +264,12 @@ window.Quarto = {
  <span class="menu-text">6. Bayesian workflow</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/09-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. Deterministic approximations</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -308,14 +314,14 @@ window.Quarto = {
 <p>We consider the accuracy of the Gaussian approximation to the posterior of a Bernoulli likelihood <span class="math inline">\(Y_i \sim \mathsf{binom}(1, \theta)\)</span> with <span class="math inline">\(y =\sum_{i=1}^n y_i = \lfloor 0.1n\rfloor\)</span> successes out of <span class="math inline">\(n\)</span> trials, i.e., if 10% of the realizations are successes. To do so,</p>
 <ol type="a">
 <li>Obtain a closed-form expression maximum a posteriori and the hessian of the log posterior for a conjugate <span class="math inline">\(\mathsf{beta}(a,b)\)</span> prior.</li>
-<li>Plug in the approximation with a <span class="math inline">\(\theta \sim \mathsf{beta}(1/2, 1/2)\)</span> prior for <span class="math inline">\(n\in\{10, 100, 1000\}\)</span> and plot the Gaussian approximation along with the true posterior.</li>
-<li>Repeat this with <span class="math inline">\(\vartheta = \log(\theta) - \log(1-\theta)\)</span>, using a change of variable. Is the approximation better for small <span class="math inline">\(n\)</span>? Discuss.</li>
+<li>Repeat this with <span class="math inline">\(\vartheta = \log(\theta) - \log(1-\theta)\)</span>, using a change of variable.</li>
+<li>Plug in the approximations with a <span class="math inline">\(\theta \sim \mathsf{beta}(1/2, 1/2)\)</span> prior for <span class="math inline">\(n\in\{25, 50, 100\}\)</span> and plot the Gaussian approximation along with the true posterior. Is the approximation for <span class="math inline">\(\vartheta\)</span> better for small <span class="math inline">\(n\)</span>? Discuss.</li>
 <li>Compute the marginal likelihood and compare the approximation with the true value.</li>
 </ol>
 </section>
 <section id="exercise-9.2" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-9.2">Exercise 9.2</h2>
-<p>Consider the Bernoulli sample of size <span class="math inline">\(n\)</span> with <span class="math inline">\(y\)</span> successes and a <span class="math inline">\(\mathsf{beta}(1/2, 1/2)\)</span> conjugate prior. Compute the Laplace approximation to the posterior mean for samples of size <span class="math inline">\(n=10, 20, 50, 100\)</span> and <span class="math inline">\(y/n \in \{0, 0.1, 0.25, 0.5\}\)</span>.</p>
+<p>Consider the Bernoulli sample of size <span class="math inline">\(n\)</span> with <span class="math inline">\(y\)</span> successes and a <span class="math inline">\(\mathsf{beta}(1,1)\)</span> conjugate prior. Compute the Laplace approximation to the posterior mean for samples of size <span class="math inline">\(n=10, 20, 50, 100\)</span> and <span class="math inline">\(y/n \in \{0, 0.1, 0.25, 0.5\}\)</span>.</p>
 
 
 </section>

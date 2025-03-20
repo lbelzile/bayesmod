@@ -1,5 +1,6 @@
 ---
 title: "Solution 9"
+draft: false
 ---
 
 
@@ -9,9 +10,10 @@ title: "Solution 9"
 We consider the accuracy of the Gaussian approximation to the posterior of a Bernoulli likelihood $Y_i \sim \mathsf{binom}(1, \theta)$ with $y =\sum_{i=1}^n y_i = \lfloor 0.1n\rfloor$ successes out of $n$ trials, i.e., if 10% of the realizations are successes. To do so,
 
 
+
 a. Obtain a closed-form expression maximum a posteriori and the hessian of the log posterior for a conjugate $\mathsf{beta}(a,b)$ prior.
-b. Plug in the approximation with a $\theta \sim \mathsf{beta}(1/2, 1/2)$ prior for $n\in\{10, 100, 1000\}$ and plot the Gaussian approximation along with the true posterior.
-c. Repeat this with $\vartheta = \log(\theta) - \log(1-\theta)$, using a change of variable. Is the approximation better for small $n$? Discuss.
+b. Repeat this with $\vartheta = \log(\theta) - \log(1-\theta)$, using a change of variable. 
+c. Plug in the approximations with a $\theta \sim \mathsf{beta}(1/2, 1/2)$ prior for $n\in\{25, 50, 100\}$ and plot the Gaussian approximation along with the true posterior. Is the approximation for $\vartheta$ better for small $n$? Discuss.
 d. Compute the marginal likelihood and compare the approximation with the true value.
 
 :::{.solution}
@@ -24,8 +26,129 @@ The unnormalized log posterior to optimize and the negative of it's Hessian matr
 -\frac{\partial^2 \log k(\theta)}{\partial \theta^2} &= \frac{\alpha-1}{\theta^2} + \frac{\beta-1}{(1-\theta)^2}.
 \end{align*}
 By equating the gradient to zero, we find that the posterior mode is $\widehat{\theta} = (\alpha-1)/(\alpha+\beta-2)$ if $\alpha>1, \beta>1.$ 
+b. If we write now instead $\theta = \mathrm{expit}(\vartheta) \equiv \exp(\vartheta)/\{1+\exp(\vartheta)\}$ for $\vartheta \in \mathbb{R},$ gradient and Hessian matrix become
+\begin{align*}
+\frac{\partial k(\vartheta)}{\partial \vartheta} &= 
+\frac{\partial}{\partial \vartheta} (\alpha-1)\vartheta - (\beta-1)\log\{1+\exp(\vartheta)\}
+\\&=(\alpha-1) - \mathrm{expit}(\vartheta)(\beta-1)
+\end{align*}
+so that $\widehat{\vartheta}_{\mathrm{MAP}}=\mathrm{logit}\{(\alpha-1)/(\beta-1),$ and 
+\begin{align*}
+\jmath_{\vartheta}(\vartheta) = -\frac{\partial^2 k(\vartheta)}{\partial \vartheta^2} &= (\beta-1)\frac{\mathrm{expit}(\vartheta)}{1+\exp(\vartheta)}
+\end{align*}
+and the Jacobian of the change of variables gives 
+\begin{align*}
+f_{\theta}(\theta) = \phi\{\log(\theta)-\log(1-\theta); \widehat{\vartheta}_{\mathrm{MAP}}, -1/\jmath_{\vartheta}(\widehat{\vartheta}_{\mathrm{MAP}})\} \theta^{-1}(1-\theta)^{-1}
+\end{align*}
+c. See @fig-approx: the (truncated) Gaussian approximation is not particularly good, but the one for $\vartheta$ has too much mass close to zero and markedly worst for small $n$. The arcsin variance stabilization transformation would probably be a better choice here.
+d. The marginal likelihood is $\mathrm{Beta}(\alpha, \beta)/\mathrm{Beta}(0.5, 0.5).$ We can simply plug-in the approximation in the formula to get the results of @tbl-laplace-approx.
+```{r}
+#| eval: true
+#| echo: true
+gauss_approx_beta <- function(n){
+  y <- floor(0.1*n)
+  alpha <- 0.5 + y
+  beta <- n - y + 0.5
+  # Gaussian approximation for theta
+  map <- (alpha - 1)/(alpha + beta - 2)
+  neghessian <- function(x, alpha, beta){
+    (alpha-1)/x^2 + (beta-1)/(1-x)^2
+  }
+  jm <- neghessian(x = map, alpha = alpha, beta = beta)
+  # Gaussian approximation for logit(theta) = vartheta
+  map_v <- qlogis(map)# qlogis((alpha-1)/(beta-1))
+  neghessian_v <- function(x, alpha, beta){
+    (beta - 1) * plogis(x) / (1 + exp(x))
+  }
+  jm_v <- neghessian_v(map_v, alpha = alpha, beta = beta)
+  dens_logit_gauss <- function(x){
+    exp(-log(x) - log(1-x) +
+        dnorm(x = qlogis(x), mean = map_v, sd = sqrt(1/jm_v), log = TRUE))
+  }
+  # Check that Jacobian is okay
+  # integrate(dens_logit_gauss, 0, 1)
+  xs <- seq(0, 1, length.out = 1001)
+  data.frame(x = xs, 
+             posterior = dbeta(x = xs, shape1 = alpha, shape2 = beta), 
+             gaussian = dnorm(x = xs, mean = map, sd = sqrt(1/jm)) / diff(pnorm(c(0,1), mean = map, sd = sqrt(1/jm))),
+             gaussian_logit = dens_logit_gauss(xs)) |>
+    tidyr::pivot_longer(cols = -1, 
+                        names_to = "model", 
+                        values_to = "density") |>
+    dplyr::mutate(model = factor(model))
+}
+# Marginal approximation to Bernoulli sample + beta(0.5, 0.5) prior
+laplace_marginal <- function(n){
+  y <- floor(0.1*n)
+  alpha <- 0.5 + y
+  beta <- n - y + 0.5
+  # Gaussian approximation for theta
+  map <- (alpha - 1)/(alpha + beta - 2)
+  neghessian <- function(x, alpha, beta){
+    (alpha-1)/x^2 + (beta-1)/(1-x)^2
+  }
+ lapl_marglik <- dbinom(x = y, size = n, prob = map, log = TRUE) - lchoose(n,y) + 
+   dbeta(map, 0.5, 0.5, log = TRUE) + 
+   0.5*log(2*pi) - 0.5*log(neghessian(map, alpha, beta))
+ true_marglik <- lbeta(alpha, beta)-lbeta(0.5,0.5)
+ c(laplace = lapl_marglik, true = true_marglik)
+}
+```
+
+
+```{r}
+#| eval: true
+#| code-fold: true
+#| warning: false
+#| message: false
+#| label: fig-approx
+#| fig-cap: "Density of Gaussian approximations for $\\theta$ and $\\vartheta$ (log odds scale) versus true posterior as a function of the sample size for $n=25$ (left), $n=50$ (middle) and $n=100$ (right)."
+#| fig-width: 8
+#| fig-height: 3
+library(ggplot2)
+library(patchwork)
+theme_set(theme_classic())
+g1 <- ggplot(mapping = aes(x = x, y = density, 
+                           linetype = model, 
+                           color = model)) +
+  geom_line(data = gauss_approx_beta(10)) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  MetBrewer::scale_color_met_d("Hiroshige") +
+  labs(caption = "n=25")
+g2 <- ggplot(mapping = aes(x = x, y = density, 
+                           linetype = model, 
+                           color = model)) +
+  geom_line(data = gauss_approx_beta(25)) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  scale_x_continuous(limits = c(0,0.3), expand = expansion()) +
+  MetBrewer::scale_color_met_d("Hiroshige") +
+  labs(caption = "n=50")
+g3 <- ggplot(mapping = aes(x = x, y = density, 
+                           linetype = model, 
+                           color = model)) +
+  geom_line(data = gauss_approx_beta(50)) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  scale_x_continuous(limits = c(0.05,0.2), expand = expansion()) +
+  MetBrewer::scale_color_met_d("Hiroshige") +
+  labs(caption = "n=100")
+
+g1 + g2 + g3 + plot_layout(guides = 'collect') & theme(legend.position = "top") 
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| code-fold: true
+#| label: tbl-laplace-approx
+#| tbl-cap: "Log of marginal likelihood based on the Laplace approximation and the exact value"
+res <- sapply(c(10,25,100), laplace_marginal)
+colnames(res) <- c(10,25,100)
+knitr::kable(res, digits = 3)
+```
+
 
 :::
+
 ## Exercise 9.2
 
 Consider a simple random sample from a Bernoulli of size $n$ with $y$ successes and a $\mathsf{beta}(a, b)$ conjugate prior. Compute the Laplace approximation to the posterior mean for samples of size $n=10, 20, 50, 100$ and $y/n \in \{0.1, 0.25, 0.5,1\}$ and $a=b=1.$

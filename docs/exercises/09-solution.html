@@ -134,7 +134,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -160,7 +160,7 @@ window.Quarto = {
 <span class="menu-text">Content</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../exercises/index.html"> 
+    <a class="nav-link active" href="../exercises/index.html" aria-current="page"> 
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
@@ -177,10 +177,139 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-solution.html">Solutions</a></li><li class="breadcrumb-item"><a href="../exercises/09-solution.html">9. Deterministic approximations</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Exercises</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/02-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Bayesics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/03-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Priors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/04-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Monte Carlo methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/05-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Gibbs sampling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/06-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Bayesian workflow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/09-exercise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. Deterministic approximations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Solutions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/01-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/02-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Bayesics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/03-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Priors</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/04-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Monte Carlo methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/05-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">5. Gibbs sampling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/06-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Bayesian workflow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/09-solution.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">9. Deterministic approximations</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -195,7 +324,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../exercises/01-solution.html">Solutions</a></li><li class="breadcrumb-item"><a href="../exercises/09-solution.html">9. Deterministic approximations</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Solution 9</h1>
 </div>
@@ -219,8 +348,8 @@ window.Quarto = {
 <p>We consider the accuracy of the Gaussian approximation to the posterior of a Bernoulli likelihood <span class="math inline">\(Y_i \sim \mathsf{binom}(1, \theta)\)</span> with <span class="math inline">\(y =\sum_{i=1}^n y_i = \lfloor 0.1n\rfloor\)</span> successes out of <span class="math inline">\(n\)</span> trials, i.e., if 10% of the realizations are successes. To do so,</p>
 <ol type="a">
 <li>Obtain a closed-form expression maximum a posteriori and the hessian of the log posterior for a conjugate <span class="math inline">\(\mathsf{beta}(a,b)\)</span> prior.</li>
-<li>Plug in the approximation with a <span class="math inline">\(\theta \sim \mathsf{beta}(1/2, 1/2)\)</span> prior for <span class="math inline">\(n\in\{10, 100, 1000\}\)</span> and plot the Gaussian approximation along with the true posterior.</li>
-<li>Repeat this with <span class="math inline">\(\vartheta = \log(\theta) - \log(1-\theta)\)</span>, using a change of variable. Is the approximation better for small <span class="math inline">\(n\)</span>? Discuss.</li>
+<li>Repeat this with <span class="math inline">\(\vartheta = \log(\theta) - \log(1-\theta)\)</span>, using a change of variable.</li>
+<li>Plug in the approximations with a <span class="math inline">\(\theta \sim \mathsf{beta}(1/2, 1/2)\)</span> prior for <span class="math inline">\(n\in\{25, 50, 100\}\)</span> and plot the Gaussian approximation along with the true posterior. Is the approximation for <span class="math inline">\(\vartheta\)</span> better for small <span class="math inline">\(n\)</span>? Discuss.</li>
 <li>Compute the marginal likelihood and compare the approximation with the true value.</li>
 </ol>
 <div class="proof solution">
@@ -231,7 +360,150 @@ window.Quarto = {
 \frac{\partial \log k(\theta)}{\partial \theta} &amp;\propto \frac{\alpha-1}{\theta} - \frac{\beta-1}{1-\theta},\\
 -\frac{\partial^2 \log k(\theta)}{\partial \theta^2} &amp;= \frac{\alpha-1}{\theta^2} + \frac{\beta-1}{(1-\theta)^2}.
 \end{align*}\]</span> By equating the gradient to zero, we find that the posterior mode is <span class="math inline">\(\widehat{\theta} = (\alpha-1)/(\alpha+\beta-2)\)</span> if <span class="math inline">\(\alpha&gt;1, \beta&gt;1.\)</span></li>
+<li>If we write now instead <span class="math inline">\(\theta = \mathrm{expit}(\vartheta) \equiv \exp(\vartheta)/\{1+\exp(\vartheta)\}\)</span> for <span class="math inline">\(\vartheta \in \mathbb{R},\)</span> gradient and Hessian matrix become <span class="math display">\[\begin{align*}
+\frac{\partial k(\vartheta)}{\partial \vartheta} &amp;=
+\frac{\partial}{\partial \vartheta} (\alpha-1)\vartheta - (\beta-1)\log\{1+\exp(\vartheta)\}
+\\&amp;=(\alpha-1) - \mathrm{expit}(\vartheta)(\beta-1)
+\end{align*}\]</span> so that <span class="math inline">\(\widehat{\vartheta}_{\mathrm{MAP}}=\mathrm{logit}\{(\alpha-1)/(\beta-1),\)</span> and <span class="math display">\[\begin{align*}
+\jmath_{\vartheta}(\vartheta) = -\frac{\partial^2 k(\vartheta)}{\partial \vartheta^2} &amp;= (\beta-1)\frac{\mathrm{expit}(\vartheta)}{1+\exp(\vartheta)}
+\end{align*}\]</span> and the Jacobian of the change of variables gives <span class="math display">\[\begin{align*}
+f_{\theta}(\theta) = \phi\{\log(\theta)-\log(1-\theta); \widehat{\vartheta}_{\mathrm{MAP}}, -1/\jmath_{\vartheta}(\widehat{\vartheta}_{\mathrm{MAP}})\} \theta^{-1}(1-\theta)^{-1}
+\end{align*}\]</span></li>
+<li>See <a href="#fig-approx" class="quarto-xref">Figure&nbsp;1</a>: the (truncated) Gaussian approximation is not particularly good, but the one for <span class="math inline">\(\vartheta\)</span> has too much mass close to zero and markedly worst for small <span class="math inline">\(n\)</span>. The arcsin variance stabilization transformation would probably be a better choice here.</li>
+<li>The marginal likelihood is <span class="math inline">\(\mathrm{Beta}(\alpha, \beta)/\mathrm{Beta}(0.5, 0.5).\)</span> We can simply plug-in the approximation in the formula to get the results of <a href="#tbl-laplace-approx" class="quarto-xref">Table&nbsp;1</a>.</li>
 </ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gauss_approx_beta <span class="ot">&lt;-</span> <span class="cf">function</span>(n){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">floor</span>(<span class="fl">0.1</span><span class="sc">*</span>n)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  alpha <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> y</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> n <span class="sc">-</span> y <span class="sc">+</span> <span class="fl">0.5</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Gaussian approximation for theta</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  map <span class="ot">&lt;-</span> (alpha <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>(alpha <span class="sc">+</span> beta <span class="sc">-</span> <span class="dv">2</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  neghessian <span class="ot">&lt;-</span> <span class="cf">function</span>(x, alpha, beta){</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    (alpha<span class="dv">-1</span>)<span class="sc">/</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> (beta<span class="dv">-1</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>x)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  jm <span class="ot">&lt;-</span> <span class="fu">neghessian</span>(<span class="at">x =</span> map, <span class="at">alpha =</span> alpha, <span class="at">beta =</span> beta)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Gaussian approximation for logit(theta) = vartheta</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  map_v <span class="ot">&lt;-</span> <span class="fu">qlogis</span>(map)<span class="co"># qlogis((alpha-1)/(beta-1))</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  neghessian_v <span class="ot">&lt;-</span> <span class="cf">function</span>(x, alpha, beta){</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    (beta <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">plogis</span>(x) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(x))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  jm_v <span class="ot">&lt;-</span> <span class="fu">neghessian_v</span>(map_v, <span class="at">alpha =</span> alpha, <span class="at">beta =</span> beta)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  dens_logit_gauss <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exp</span>(<span class="sc">-</span><span class="fu">log</span>(x) <span class="sc">-</span> <span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>x) <span class="sc">+</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">dnorm</span>(<span class="at">x =</span> <span class="fu">qlogis</span>(x), <span class="at">mean =</span> map_v, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>jm_v), <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check that Jacobian is okay</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># integrate(dens_logit_gauss, 0, 1)</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  xs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">1001</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">x =</span> xs, </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">posterior =</span> <span class="fu">dbeta</span>(<span class="at">x =</span> xs, <span class="at">shape1 =</span> alpha, <span class="at">shape2 =</span> beta), </span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">gaussian =</span> <span class="fu">dnorm</span>(<span class="at">x =</span> xs, <span class="at">mean =</span> map, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>jm)) <span class="sc">/</span> <span class="fu">diff</span>(<span class="fu">pnorm</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">mean =</span> map, <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>jm))),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">gaussian_logit =</span> <span class="fu">dens_logit_gauss</span>(xs)) <span class="sc">|&gt;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span><span class="dv">1</span>, </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                        <span class="at">names_to =</span> <span class="st">"model"</span>, </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>                        <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">model =</span> <span class="fu">factor</span>(model))</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Marginal approximation to Bernoulli sample + beta(0.5, 0.5) prior</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>laplace_marginal <span class="ot">&lt;-</span> <span class="cf">function</span>(n){</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">floor</span>(<span class="fl">0.1</span><span class="sc">*</span>n)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  alpha <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> y</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  beta <span class="ot">&lt;-</span> n <span class="sc">-</span> y <span class="sc">+</span> <span class="fl">0.5</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Gaussian approximation for theta</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  map <span class="ot">&lt;-</span> (alpha <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>(alpha <span class="sc">+</span> beta <span class="sc">-</span> <span class="dv">2</span>)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  neghessian <span class="ot">&lt;-</span> <span class="cf">function</span>(x, alpha, beta){</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    (alpha<span class="dv">-1</span>)<span class="sc">/</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> (beta<span class="dv">-1</span>)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">-</span>x)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a> lapl_marglik <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(<span class="at">x =</span> y, <span class="at">size =</span> n, <span class="at">prob =</span> map, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">lchoose</span>(n,y) <span class="sc">+</span> </span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>   <span class="fu">dbeta</span>(map, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>   <span class="fl">0.5</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">log</span>(<span class="fu">neghessian</span>(map, alpha, beta))</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a> true_marglik <span class="ot">&lt;-</span> <span class="fu">lbeta</span>(alpha, beta)<span class="sc">-</span><span class="fu">lbeta</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a> <span class="fu">c</span>(<span class="at">laplace =</span> lapl_marglik, <span class="at">true =</span> true_marglik)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> density, </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">linetype =</span> model, </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">color =</span> model)) <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">gauss_approx_beta</span>(<span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>), <span class="at">expand =</span> <span class="fu">expansion</span>()) <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  MetBrewer<span class="sc">::</span><span class="fu">scale_color_met_d</span>(<span class="st">"Hiroshige"</span>) <span class="sc">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"n=25"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> density, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                           <span class="at">linetype =</span> model, </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                           <span class="at">color =</span> model)) <span class="sc">+</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">gauss_approx_beta</span>(<span class="dv">25</span>)) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>), <span class="at">expand =</span> <span class="fu">expansion</span>()) <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.3</span>), <span class="at">expand =</span> <span class="fu">expansion</span>()) <span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  MetBrewer<span class="sc">::</span><span class="fu">scale_color_met_d</span>(<span class="st">"Hiroshige"</span>) <span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"n=50"</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> density, </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                           <span class="at">linetype =</span> model, </span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                           <span class="at">color =</span> model)) <span class="sc">+</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> <span class="fu">gauss_approx_beta</span>(<span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>), <span class="at">expand =</span> <span class="fu">expansion</span>()) <span class="sc">+</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">0.05</span>,<span class="fl">0.2</span>), <span class="at">expand =</span> <span class="fu">expansion</span>()) <span class="sc">+</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  MetBrewer<span class="sc">::</span><span class="fu">scale_color_met_d</span>(<span class="st">"Hiroshige"</span>) <span class="sc">+</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"n=100"</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2 <span class="sc">+</span> g3 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">'collect'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-approx" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="09-solution_files/figure-html/fig-approx-1.png" class="img-fluid figure-img" width="768">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Density of Gaussian approximations for <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\vartheta\)</span> (log odds scale) versus true posterior as a function of the sample size for <span class="math inline">\(n=25\)</span> (left), <span class="math inline">\(n=50\)</span> (middle) and <span class="math inline">\(n=100\)</span> (right).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div id="tbl-laplace-approx" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-laplace-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Log of marginal likelihood based on the Laplace approximation and the exact value
+</figcaption>
+<div aria-describedby="tbl-laplace-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">10</th>
+<th style="text-align: right;">25</th>
+<th style="text-align: right;">100</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">laplace</td>
+<td style="text-align: right;">-4.729</td>
+<td style="text-align: right;">-8.844</td>
+<td style="text-align: right;">-35.041</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">true</td>
+<td style="text-align: right;">-4.681</td>
+<td style="text-align: right;">-8.830</td>
+<td style="text-align: right;">-35.042</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
 </div>
 </section>
 <section id="exercise-9.2" class="level2">
@@ -251,23 +523,23 @@ window.Quarto = {
 \widehat{\mathsf{E}}_{{\Theta} \mid {Y}}(\theta)  = \frac{(y+1)^{y+3/2}n^{n+3/2}}{(y+1/2)^{y+1/2}(n+1)^{n+5/2}}.
 \end{align*}\]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior mean of beta-binomial</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>lap_post_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta){</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>((alpha<span class="fl">+0.5</span>)<span class="sc">*</span><span class="fu">log</span>(alpha) <span class="sc">-</span> (alpha<span class="fl">-0.5</span>)<span class="sc">*</span><span class="fu">log</span>(alpha<span class="dv">-1</span>) <span class="sc">+</span> </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        (alpha <span class="sc">+</span> beta <span class="sc">-</span> <span class="fl">0.5</span>)<span class="sc">*</span><span class="fu">log</span>(alpha <span class="sc">+</span> beta <span class="sc">-</span><span class="dv">2</span>) <span class="sc">-</span> </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        (alpha <span class="sc">+</span> beta <span class="sc">+</span> <span class="fl">0.5</span>)<span class="sc">*</span><span class="fu">log</span>(alpha <span class="sc">+</span>  beta <span class="sc">-</span> <span class="dv">1</span>))</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>L, <span class="dv">20</span>L, <span class="dv">50</span>L, <span class="dv">100</span>L)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>yfrac <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>,<span class="dv">1</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>approx <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>), <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">n =</span> ns, <span class="st">"y/n"</span> <span class="ot">=</span> yfrac, <span class="at">approx =</span> <span class="fu">c</span>(<span class="st">"laplace"</span>,<span class="st">"exact"</span>)))</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(ns)){</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="fu">seq_along</span>(yfrac)){</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    alpha <span class="ot">&lt;-</span> ns[i]<span class="sc">*</span>yfrac[j] <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> ns[i]<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>yfrac[j]) <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a> approx[i,j,] <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="fu">lap_post_mean</span>(alpha, beta), alpha<span class="sc">/</span>(alpha<span class="sc">+</span>beta)) </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>approx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior mean of beta-binomial</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>lap_post_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(alpha, beta){</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>((alpha<span class="fl">+0.5</span>)<span class="sc">*</span><span class="fu">log</span>(alpha) <span class="sc">-</span> (alpha<span class="fl">-0.5</span>)<span class="sc">*</span><span class="fu">log</span>(alpha<span class="dv">-1</span>) <span class="sc">+</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        (alpha <span class="sc">+</span> beta <span class="sc">-</span> <span class="fl">0.5</span>)<span class="sc">*</span><span class="fu">log</span>(alpha <span class="sc">+</span> beta <span class="sc">-</span><span class="dv">2</span>) <span class="sc">-</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        (alpha <span class="sc">+</span> beta <span class="sc">+</span> <span class="fl">0.5</span>)<span class="sc">*</span><span class="fu">log</span>(alpha <span class="sc">+</span>  beta <span class="sc">-</span> <span class="dv">1</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>L, <span class="dv">20</span>L, <span class="dv">50</span>L, <span class="dv">100</span>L)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>yfrac <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>,<span class="dv">1</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>approx <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">2</span>), <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">n =</span> ns, <span class="st">"y/n"</span> <span class="ot">=</span> yfrac, <span class="at">approx =</span> <span class="fu">c</span>(<span class="st">"laplace"</span>,<span class="st">"exact"</span>)))</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(ns)){</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="fu">seq_along</span>(yfrac)){</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    alpha <span class="ot">&lt;-</span> ns[i]<span class="sc">*</span>yfrac[j] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> ns[i]<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>yfrac[j]) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a> approx[i,j,] <span class="ot">&lt;-</span>  <span class="fu">c</span>(<span class="fu">lap_post_mean</span>(alpha, beta), alpha<span class="sc">/</span>(alpha<span class="sc">+</span>beta)) </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>approx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>, , approx = laplace
 
@@ -287,8 +559,8 @@ n           0.1      0.25 0.5         1
   50  0.1153846 0.2596154 0.5 0.9807692
   100 0.1078431 0.2549020 0.5 0.9901961</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Percentage relative error</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>(approx[,,<span class="dv">1</span>]<span class="sc">-</span>approx[,,<span class="dv">2</span>])<span class="sc">/</span>approx[,,<span class="dv">2</span>], <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Percentage relative error</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>(approx[,,<span class="dv">1</span>]<span class="sc">-</span>approx[,,<span class="dv">2</span>])<span class="sc">/</span>approx[,,<span class="dv">2</span>], <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     y/n
 n       0.1  0.25    0.5      1

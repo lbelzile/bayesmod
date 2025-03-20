@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -223,18 +223,13 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Mar 17, 2025</p>
+  <p class="date">Last compiled Wednesday Mar 19, 2025</p>
 </section>
 <section id="rationale-for-deterministic-approximations" class="slide level2">
 <h2>Rationale for deterministic approximations</h2>
 <p>Markov chain Monte Carlo methods require tuning and can be markedly slow when the dimension of the parameter space grows.</p>
 <p>The curse of dimensionality affects the performance of MCMC.</p>
-</section>
-<section id="structured-models" class="slide level2">
-<h2>Structured models</h2>
-<p>Models in genomics data or spatio-temporal applications including random effects (e.g., spline smoothers) are predominant.</p>
-<p>They often contain several thousands or millions of latent parameters.</p>
-<p>Inference becomes <strong>unfeasible</strong> in reasonable time using methods we covered so far.</p>
+<p>We consider simple approximations to the marginal likelihood, posterior moments, or posterior density that only require <strong>numerical optimization</strong>.</p>
 </section>
 <section id="landau-notation" class="slide level2">
 <h2>Landau notation</h2>
@@ -258,15 +253,15 @@ h(\boldsymbol{x}) &amp;= h(\boldsymbol{x}_0) + (\boldsymbol{x}- \boldsymbol{x}_0
 </section>
 <section id="laplace-approximation" class="slide level2">
 <h2>Laplace approximation</h2>
-<p>The <strong>Laplace approximation</strong> is used to approximate integrals of functions that are <span class="math inline">\(\mathrm{O}(n)\)</span> of the form <span class="math display">\[\begin{align*}
+<p>The <strong>Laplace approximation</strong> is used to approximate integrals of non-negative functions <span class="math inline">\(g(\boldsymbol{x})\)</span> that are <span class="math inline">\(\mathrm{O}(n)\)</span> of the form <span class="math display">\[\begin{align*}
 I_n = \int_{\mathbb{R}_p} g(\boldsymbol{x}) \mathrm{d} \boldsymbol{x} = \int \exp\{h(\boldsymbol{x})\}\mathrm{d} \boldsymbol{x}.
 \end{align*}\]</span></p>
-<p>The idea is that we can, ignoring terms above third order and assuming <span class="math inline">\(\boldsymbol{x}_0\)</span> satisfies <span class="math inline">\(h'(\boldsymbol{x}_0)=\boldsymbol{0}_p,\)</span> a multivariate Gaussian density.</p>
+<p>The idea is that we can, ignoring terms above third order and assuming <span class="math inline">\(\boldsymbol{x}_0\)</span> satisfies <span class="math inline">\(h'(\boldsymbol{x}_0)=\boldsymbol{0}_p,\)</span> approximate <span class="math inline">\(g(\cdot)\)</span> by a multivariate Gaussian density.</p>
 </section>
 <section id="laplace-approximation-to-integrals" class="slide level2">
 <h2>Laplace approximation to integrals</h2>
 <p>If we perform a Taylor series expansion of the log of the integrand, then <span class="math display">\[\begin{align*}
-I_n \approx \left(\frac{2\pi}{n}\right)^{p/2} | \mathbf{H}(\boldsymbol{x}_0)|^{-1/2}\exp\{h(\boldsymbol{x}_0)\} + \mathrm{O}(n^{-1})
+I_n \approx (2\pi)^{p/2} | \mathbf{H}(\boldsymbol{x}_0)|^{-1/2}\exp\{h(\boldsymbol{x}_0)\} + \mathrm{O}(n^{-1})
 \end{align*}\]</span> where <span class="math inline">\(|\mathbf{H}(\boldsymbol{x}_0)|\)</span> is the determinant of the Hessian matrix of <span class="math inline">\(-h(\boldsymbol{x})\)</span> evaluated at the mode <span class="math inline">\(\boldsymbol{x}_0.\)</span></p>
 </section>
 <section id="laplace-approximation-1" class="slide level2">
@@ -291,8 +286,69 @@ p(\boldsymbol{y}) = \int_{\mathbb{R}^p} p(\boldsymbol{y} \mid \boldsymbol{\theta
 \log p(\boldsymbol{y}) &amp;= \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) + \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) \\&amp;\quad + \frac{p}{2} \log (2\pi) - \frac{1}{2}\log |\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})| + \mathrm{O}(n^{-1})
 \end{align*}\]</span></p>
 </section>
-<section id="prior-and-likelihood-contribution" class="slide level2">
-<h2>Prior and likelihood contribution</h2>
+<section id="example-with-exponential-likelihood" class="slide level2">
+<h2>Example with exponential likelihood</h2>
+<p>Consider an exponential likelihood <span class="math inline">\(Y_i \mid \lambda \sim \mathsf{expo}(\lambda)\)</span> with conjugate gamma prior <span class="math inline">\(\lambda \sim \mathsf{gamma}(a,b)\)</span>. The exponential model has information <span class="math inline">\(i(\lambda)=n/\lambda^2\)</span> and the mode of the posterior is <span class="math display">\[\widehat{\lambda}_{\mathrm{MAP}}=\frac{n+a-1}{\sum_{i=1}^n y_i + b}.\]</span></p>
+</section>
+<section id="marginal-likelihood-approximation-for-exponential-likelihood" class="slide level2">
+<h2>Marginal likelihood approximation for exponential likelihood</h2>
+<p>We can also obtain an estimate of the marginal likelihood, which is equal for the conjugate model <span class="math display">\[\begin{align*}
+p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}^n y_i \right)^{n+a}}.
+\end{align*}\]</span></p>
+<p>For the sample of size <span class="math inline">\(62,\)</span> the exponential model marginal likelihood is <span class="math inline">\(-276.5.\)</span></p>
+</section>
+<section id="numerical-approximation-to-marginal-likelihood" class="slide level2">
+<h2>Numerical approximation to marginal likelihood</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">data</span>(waiting, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb1-2"><a></a>a <span class="ot">&lt;-</span> <span class="fl">0.01</span>; b <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
+<span id="cb1-3"><a></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(waiting); s <span class="ot">&lt;-</span> <span class="fu">sum</span>(waiting)</span>
+<span id="cb1-4"><a></a>map <span class="ot">&lt;-</span> (n <span class="sc">+</span> a <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>(s <span class="sc">+</span> b) <span class="co">#posterior mode</span></span>
+<span id="cb1-5"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1-6"><a></a>  <span class="fu">sum</span>(<span class="fu">dexp</span>(waiting, <span class="at">rate =</span> x, <span class="at">log =</span> <span class="cn">TRUE</span>)) <span class="sc">+</span></span>
+<span id="cb1-7"><a></a>    <span class="fu">dgamma</span>(x, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-8"><a></a>}</span>
+<span id="cb1-9"><a></a><span class="co"># Hessian evaluated at MAP</span></span>
+<span id="cb1-10"><a></a>H <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">c</span>(numDeriv<span class="sc">::</span><span class="fu">hessian</span>(logpost, <span class="at">x =</span> map))</span>
+<span id="cb1-11"><a></a><span class="co"># Laplace approximation</span></span>
+<span id="cb1-12"><a></a>marg_lik_laplace <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">-</span> <span class="fu">log</span>(H) <span class="sc">+</span> <span class="fu">logpost</span>(map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The Laplace approximation gives <span class="math inline">\(-281.9.\)</span></p>
+</section>
+<section id="posterior-expectation-using-laplace-method" class="slide level2">
+<h2>Posterior expectation using Laplace method</h2>
+<p>If we are interested in computing the posterior expectation of a positive real-valued functional <span class="math inline">\(g(\boldsymbol{\theta}): \mathbb{R}^p \to \mathbb{R}_{+},\)</span> we may write <span class="math display">\[\begin{align*}
+\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} &amp;=  \frac{\int g(\boldsymbol{\theta}) p(\boldsymbol{y} \mid \boldsymbol{\theta}) p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}{\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-expectation-via-laplace" class="slide level2">
+<h2>Posterior expectation via Laplace</h2>
+<p>We can apply Laplace’s method to both numerator and denominator. Let <span class="math inline">\(\widehat{\boldsymbol{\theta}}_g\)</span> and <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}\)</span> of the integrand of the numerator and denominator, respectively, and the negative of the Hessian matrix of the log integrands <span class="math display">\[\begin{align*}
+\jmath_g&amp;=  -\frac{\partial^2}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} \left\{ \log g(\boldsymbol{\theta}) + \log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta})\right\}, \\
+\jmath &amp;=  -\frac{\partial^2}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} \left\{\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta})\right\}.
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-expectation-approximation" class="slide level2">
+<h2>Posterior expectation approximation</h2>
+<p>Putting these together <span class="math display">\[\begin{align*}
+\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} \approx \frac{|\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})|^{1/2}}{|\jmath_g(\widehat{\boldsymbol{\theta}}_g)|^{1/2}} \frac{g(\widehat{\boldsymbol{\theta}}_g) p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_g) p( \widehat{\boldsymbol{\theta}}_g)}{p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})}.
+\end{align*}\]</span> While the Laplace method has an error <span class="math inline">\(\mathrm{O}(n^{-1}),\)</span> the leading order term of the expansion cancels out from the ratio and the above has error of <span class="math inline">\(\mathrm{O}(n^{-2}).\)</span></p>
+</section>
+<section id="example-of-posterior-mean-for-exponential-likelihood" class="slide level2">
+<h2>Example of posterior mean for exponential likelihood</h2>
+<p>Consider the posterior mean <span class="math inline">\(\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\lambda)\)</span> and let <span class="math inline">\(s=\sum_{i=1}^n y_i\)</span>. Then, <span class="math display">\[\begin{align*}
+\widehat{\lambda}_g &amp;= \frac{(n+a)}{s + b} \\
+|\jmath_g(\widehat{\lambda}_g)|^{1/2} &amp;= \left(\frac{n+a}{\widehat{\lambda}_g^2}\right)^{1/2} =  \frac{s + b}{(n+a)^{1/2}}
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-mean" class="slide level2">
+<h2>Posterior mean</h2>
+<p>Simplification gives the approximation <span class="math display">\[\begin{align*}
+\frac{\exp(-1)}{s + b} \frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}
+\end{align*}\]</span> which gives <span class="math inline">\(0.03457,\)</span> whereas the true posterior mean is <span class="math inline">\((n+a)/(s+b) = 0.03457.\)</span></p>
+</section>
+<section id="aside-on-prior-and-likelihood-relative-contribution" class="slide level2">
+<h2>Aside on prior and likelihood relative contribution</h2>
 <p>Usually,</p>
 <ul>
 <li><span class="math inline">\(p(\boldsymbol{\theta}) = \mathrm{O}(1)\)</span> and</li>
@@ -304,42 +360,40 @@ p(\boldsymbol{y}) = \int_{\mathbb{R}^p} p(\boldsymbol{y} \mid \boldsymbol{\theta
 <li>the Hessian <span class="math inline">\(-\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\)</span> by the Fisher information <span class="math inline">\(n\boldsymbol{\imath}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}).\)</span></li>
 </ul>
 </section>
-<section id="frequentist-approximation" class="slide level2">
-<h2>Frequentist approximation</h2>
-<p>If we use this approximation instead, we get <span class="math display">\[\begin{align*}
-\log p(\boldsymbol{y}) &amp;= \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}) -\frac{p}{2} \log n + \\&amp; \quad  \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}) - \frac{1}{2} \log |\boldsymbol{\imath}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})| + \frac{p}{2} \log(2\pi)  + \mathrm{O}(n^{-1/2})
+<section id="frequentist-approximations" class="slide level2">
+<h2>Frequentist approximations</h2>
+<p>If we use these approximations instead, we get <span class="math display">\[\begin{align*}
+\log p(\boldsymbol{y}) &amp;= \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}) -\frac{p}{2} \log n + \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\\&amp; \quad   - \frac{1}{2} \log |\boldsymbol{\imath}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})| + \frac{p}{2} \log(2\pi)  + \mathrm{O}(n^{-1/2})
 \end{align*}\]</span> where the error is now <span class="math inline">\(\mathrm{O}(n^{-1/2})\)</span> due to replacing the true information by it’s sample counterpart.</p>
 </section>
-<section id="approximation-error" class="slide level2">
-<h2>Approximation error</h2>
-<p>The likelihood is <span class="math inline">\(\mathrm{O}(n),\)</span> the second term of the first line is <span class="math inline">\(\mathrm{O}(\log n)\)</span> and the others are <span class="math inline">\(\mathrm{O}(1).\)</span> This approximation is thus overall <span class="math inline">\(\mathrm{O}(1).\)</span></p>
-<p>If we take as prior <span class="math display">\[\boldsymbol{\theta} \sim \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}, \boldsymbol{\imath}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\},\]</span> then the approximation error to the marginal likelihood reduces to <span class="math inline">\(\mathrm{O}(n^{-1/2}).\)</span></p>
+<section id="reducing-the-approximation-rate" class="slide level2">
+<h2>Reducing the approximation rate</h2>
+<p>Ignoring all but the two first terms leads to <span class="math inline">\(\mathrm{O}(1)\)</span> approximation error, unless we consider the setting where we take a prior centered at the MLE with unit Fisher information precision (equivalent to <span class="math inline">\(n=1\)</span> phantom observation). Then, due to cancellation of terms in the expansion, <span class="math display">\[\boldsymbol{\theta} \sim \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}, \boldsymbol{\imath}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\},\]</span> with approximation error of <span class="math inline">\(\mathrm{O}(n^{-1/2}).\)</span></p>
 </section>
-<section id="frequentist-approximation-to-marginal-likelihood" class="slide level2">
-<h2>Frequentist approximation to marginal likelihood</h2>
-<p>This gives the approximation <span class="math display">\[\begin{align*}
+<section id="frequentist-approximation-to-the-marginal-likelihood" class="slide level2">
+<h2>Frequentist approximation to the marginal likelihood</h2>
+<p>This gives the approximation, whose quality improves with increasing sample size <span class="math inline">\(n\)</span>: <span class="math display">\[\begin{align*}
 -2\log p(\boldsymbol{y}) \approx \mathsf{BIC} = -2\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + p\log n
 \end{align*}\]</span></p>
-<p>The <span class="math inline">\(\mathsf{BIC}\)</span> approximation will improve with increasing sample size.</p>
 <p>The unnormalized weight <span class="math inline">\(\exp(-\mathsf{BIC}/2)\)</span> is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor.</p>
 </section>
-<section id="bayesian-model-averaging" class="slide level2">
-<h2>Bayesian model averaging</h2>
+<section id="bayesian-model-averaging-via-bic" class="slide level2">
+<h2>Bayesian model averaging via BIC</h2>
 <p>We consider the <code>diabetes</code> model from <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span> and models with 10 predictors plus intercept.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(leaps)</span>
-<span id="cb1-2"><a></a><span class="fu">data</span>(diabetes, <span class="at">package =</span> <span class="st">"lars"</span>)</span>
-<span id="cb1-3"><a></a>search <span class="ot">&lt;-</span> leaps<span class="sc">::</span><span class="fu">regsubsets</span>(</span>
-<span id="cb1-4"><a></a>  <span class="at">x =</span> diabetes<span class="sc">$</span>x,</span>
-<span id="cb1-5"><a></a>  <span class="at">y =</span> diabetes<span class="sc">$</span>y,</span>
-<span id="cb1-6"><a></a>  <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1-7"><a></a>  <span class="at">method =</span> <span class="st">"exhaustive"</span>, </span>
-<span id="cb1-8"><a></a>  <span class="at">nvmax =</span> <span class="dv">10</span>, <span class="at">nbest =</span> <span class="dv">99</span>, <span class="at">really.big =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-9"><a></a>models_bic <span class="ot">&lt;-</span> <span class="fu">summary</span>(search)<span class="sc">$</span>bic</span>
-<span id="cb1-10"><a></a><span class="co"># Renormalize BIC and keep only models with some weight</span></span>
-<span id="cb1-11"><a></a>bic <span class="ot">&lt;-</span> models_bic <span class="sc">-</span> <span class="fu">min</span>(models_bic)</span>
-<span id="cb1-12"><a></a>models <span class="ot">&lt;-</span> <span class="fu">which</span>(bic <span class="sc">&lt;</span> <span class="dv">7</span>)</span>
-<span id="cb1-13"><a></a>bma_weights <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">library</span>(leaps)</span>
+<span id="cb2-2"><a></a><span class="fu">data</span>(diabetes, <span class="at">package =</span> <span class="st">"lars"</span>)</span>
+<span id="cb2-3"><a></a>search <span class="ot">&lt;-</span> leaps<span class="sc">::</span><span class="fu">regsubsets</span>(</span>
+<span id="cb2-4"><a></a>  <span class="at">x =</span> diabetes<span class="sc">$</span>x,</span>
+<span id="cb2-5"><a></a>  <span class="at">y =</span> diabetes<span class="sc">$</span>y,</span>
+<span id="cb2-6"><a></a>  <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-7"><a></a>  <span class="at">method =</span> <span class="st">"exhaustive"</span>, </span>
+<span id="cb2-8"><a></a>  <span class="at">nvmax =</span> <span class="dv">10</span>, <span class="at">nbest =</span> <span class="dv">99</span>, <span class="at">really.big =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-9"><a></a>models_bic <span class="ot">&lt;-</span> <span class="fu">summary</span>(search)<span class="sc">$</span>bic</span>
+<span id="cb2-10"><a></a><span class="co"># Renormalize BIC and keep only models with some weight</span></span>
+<span id="cb2-11"><a></a>bic <span class="ot">&lt;-</span> models_bic <span class="sc">-</span> <span class="fu">min</span>(models_bic)</span>
+<span id="cb2-12"><a></a>models <span class="ot">&lt;-</span> <span class="fu">which</span>(bic <span class="sc">&lt;</span> <span class="dv">7</span>)</span>
+<span id="cb2-13"><a></a>bma_weights <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="weights-and-model-components" class="slide level2">
@@ -371,7 +425,7 @@ Figure&nbsp;1: BIC as a function of the linear model covariates (left) and Bayes
 <h2>Gaussian large-sample approximation to MLE</h2>
 <p>Suppose that the prior is continuous and positive in a neighborhood of the maximum.</p>
 <p>Assume further that the regularity conditions for maximum likelihood estimator holds. Then, in the limit as <span class="math inline">\(n \to \infty\)</span> <span class="math display">\[\begin{align*}
-\boldsymbol{\theta} \mid \boldsymbol{y} \stackrel{\cdot}{\sim} \mathsf{Gauss}\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},  \jmath^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\}
+\boldsymbol{\theta} \mid \boldsymbol{y} \stackrel{\cdot}{\sim} \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},  \jmath^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\}
 \end{align*}\]</span></p>
 </section>
 <section id="corollary" class="slide level2">
@@ -390,77 +444,30 @@ Figure&nbsp;1: BIC as a function of the linear model covariates (left) and Bayes
 <li>The third-order derivative of the likelihood is bounded: we can get away with weaker, but this is easiest to check (and ensures that the higher order terms of the Taylor series expansion vanishes asymptotically).</li>
 </ul>
 </section>
-<section id="example-with-exponential-likelihood" class="slide level2">
-<h2>Example with exponential likelihood</h2>
-<p>Consider an exponential likelihood <span class="math inline">\(Y_i \mid \lambda \sim \mathsf{expo}(\lambda)\)</span> with conjugate gamma prior <span class="math inline">\(\lambda \sim \mathsf{gamma}(a,b)\)</span>. The exponential model has information <span class="math inline">\(i(\lambda)=n/\lambda^2\)</span> and the mode of the posterior is <span class="math display">\[\widehat{\lambda}_{\mathrm{MAP}}=\frac{n+a-1}{\sum_{i=1}^n y_i + b}.\]</span></p>
-</section>
 <section id="gaussian-approximation-to-gamma-posterior" class="slide level2">
 <h2>Gaussian approximation to gamma posterior</h2>
 
 <img data-src="bayesmod-slides9_files/figure-revealjs/fig-post-gamma-laplace-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-post-gamma-laplace"><p class="caption">
 Figure&nbsp;2: Gaussian approximation (dashed) to the posterior density (full line) of the exponential rate <span class="math inline">\(\lambda\)</span> for the <code>waiting</code> dataset with an exponential likelihood and a gamma prior with <span class="math inline">\(a=0.01\)</span> and <span class="math inline">\(b=0.01.\)</span> The plots are based on the first <span class="math inline">\(10\)</span> observations (left) and the whole sample of size <span class="math inline">\(n=62\)</span> (right).
 </p></section>
-<section id="marginal-likelihood-approximation-for-exponential-likelihood" class="slide level2">
-<h2>Marginal likelihood approximation for exponential likelihood</h2>
-<p>We can also obtain an estimate of the marginal likelihood, which is equal for the conjugate model <span class="math display">\[\begin{align*}
-p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}^n y_i \right)^{n+a}}.
-\end{align*}\]</span></p>
-<p>For the sample of size <span class="math inline">\(62,\)</span> the exponential model marginal likelihood is <span class="math inline">\(-276.5.\)</span></p>
-</section>
-<section id="numerical-approximation-to-marginal-likelihood" class="slide level2">
-<h2>Numerical approximation to marginal likelihood</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">data</span>(waiting, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb2-2"><a></a>a <span class="ot">&lt;-</span> <span class="fl">0.01</span>; b <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
-<span id="cb2-3"><a></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(waiting); s <span class="ot">&lt;-</span> <span class="fu">sum</span>(waiting)</span>
-<span id="cb2-4"><a></a>map <span class="ot">&lt;-</span> (n <span class="sc">+</span> a <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>(s <span class="sc">+</span> b) <span class="co">#posterior mode</span></span>
-<span id="cb2-5"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb2-6"><a></a>  <span class="fu">sum</span>(<span class="fu">dexp</span>(waiting, <span class="at">rate =</span> x, <span class="at">log =</span> <span class="cn">TRUE</span>)) <span class="sc">+</span></span>
-<span id="cb2-7"><a></a>    <span class="fu">dgamma</span>(x, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-8"><a></a>}</span>
-<span id="cb2-9"><a></a><span class="co"># Hessian evaluated at MAP</span></span>
-<span id="cb2-10"><a></a>H <span class="ot">&lt;-</span> <span class="sc">-</span>numDeriv<span class="sc">::</span><span class="fu">hessian</span>(logpost, <span class="at">x =</span> map)</span>
-<span id="cb2-11"><a></a><span class="co"># Laplace approximation</span></span>
-<span id="cb2-12"><a></a>marg_lik_laplace <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">-</span> <span class="fu">c</span>(<span class="fu">determinant</span>(H)<span class="sc">$</span>modulus) <span class="sc">+</span> <span class="fu">logpost</span>(map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The Laplace approximation gives <span class="math inline">\(-281.9.\)</span></p>
-</section>
-<section id="posterior-expectation-using-laplace-method" class="slide level2">
-<h2>Posterior expectation using Laplace method</h2>
-<p>If we are interested in computing the posterior expectation of a positive real-valued functional <span class="math inline">\(g(\boldsymbol{\theta}): \mathbb{R}^p \to \mathbb{R}_{+},\)</span> we may write <span class="math display">\[\begin{align*}
-\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}(g(\boldsymbol{\theta}) \mid \boldsymbol{y}) &amp;=  \frac{\int g(\boldsymbol{\theta}) p(\boldsymbol{y} \mid \boldsymbol{\theta}) p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}{\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}
-\end{align*}\]</span></p>
-</section>
-<section id="posterior-expectation-via-laplace" class="slide level2">
-<h2>Posterior expectation via Laplace</h2>
-<p>We can apply Laplace’s method to both numerator and denominator. Let <span class="math inline">\(\widehat{\boldsymbol{\theta}}_g\)</span> and <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}\)</span> of the integrand of the numerator and denominator, respectively, and the negative of the Hessian matrix of the log integrands <span class="math display">\[\begin{align*}
-\jmath_g&amp;=  -\frac{\partial^2}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} \left\{ \log g(\boldsymbol{\theta}) + \log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta})\right\}, \\
-\jmath &amp;=  -\frac{\partial^2}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} \left\{\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta})\right\}.
-\end{align*}\]</span></p>
-</section>
-<section id="posterior-expectation-approximation" class="slide level2">
-<h2>Posterior expectation approximation</h2>
-<p>Putting these together <span class="math display">\[\begin{align*}
-\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}(g(\boldsymbol{\theta}) \mid \boldsymbol{y}) = \frac{|\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})|^{1/2}}{|\jmath_g(\widehat{\boldsymbol{\theta}}_g)|^{1/2}} \frac{g(\widehat{\boldsymbol{\theta}}_g) p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_g) p( \widehat{\boldsymbol{\theta}}_g)}{p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})} + \mathrm{O}(n^{-2})
-\end{align*}\]</span> While the Laplace method has an error <span class="math inline">\(\mathrm{O}(n^{-1}),\)</span> the leading order term of the expansion cancels out from the ratio.</p>
-</section>
-<section id="example-of-posterior-mean-for-exponential-likelihood" class="slide level2">
-<h2>Example of posterior mean for exponential likelihood</h2>
-<p>Consider the posterior mean <span class="math inline">\(\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\lambda)\)</span> and let <span class="math inline">\(s=\sum_{i=1}^n y_i\)</span>. Then, <span class="math display">\[\begin{align*}
-\widehat{\lambda}_g &amp;= \frac{(n+a)}{s + b} \\
-|\jmath_g(\widehat{\lambda}_g)|^{1/2} &amp;= \left(\frac{n+a}{\widehat{\lambda}_g^2}\right)^{1/2} =  \frac{s + b}{(n+a)^{1/2}}
-\end{align*}\]</span></p>
-</section>
-<section id="posterior-mean" class="slide level2">
-<h2>Posterior mean</h2>
-<p>Simplification gives the approximation <span class="math display">\[\begin{align*}
-\frac{\exp(-1)}{s + b} \frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}
-\end{align*}\]</span> which gives <span class="math inline">\(0.03457,\)</span> whereas the true posterior mean is <span class="math inline">\((n+a)/(s+b) = 0.03457.\)</span></p>
+<section id="structured-models" class="slide level2">
+<h2>Structured models</h2>
+<p>Models in genomics data or spatio-temporal applications including random effects (e.g., spline smoothers) are predominant.</p>
+<p>They often contain several thousands or millions of latent parameters.</p>
+<p>Inference becomes <strong>unfeasible</strong> in reasonable time using methods we covered so far.</p>
 </section>
 <section id="integrated-nested-laplace-approximation" class="slide level2">
 <h2>Integrated nested Laplace approximation</h2>
-<p>Consider a model with response <span class="math inline">\(\boldsymbol{y}\)</span> which depends on covariates <span class="math inline">\(\mathbf{x}\)</span> through a latent Gaussian process, typically the prior of coefficients <span class="math inline">\(\boldsymbol{\beta} \in \mathbb{R}^p.\)</span> Often, <span class="math inline">\(\boldsymbol{\beta}\)</span> is Gaussian Markov random field with a sparse precision.</p>
-<p>The dimension <span class="math inline">\(p\)</span> can be substantial (several thousands) with a comparably low-dimensional hyperparameter vector <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^m.\)</span></p>
+<p>Consider a model with response <span class="math inline">\(\boldsymbol{y}\)</span> which depends on covariates <span class="math inline">\(\mathbf{x}\)</span> through a latent Gaussian process <span class="math inline">\(\boldsymbol{\beta}.\)</span></p>
+<p>Typically, the prior of coefficients <span class="math inline">\(\boldsymbol{\beta} \in \mathbb{R}^p.\)</span> The dimension <span class="math inline">\(p\)</span> can be substantial (several thousands) with a comparably low-dimensional hyperparameter vector <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^m.\)</span></p>
+<p>Consider data that are conditionally independent given <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{Q}^{-1})\)</span> for simplicity.</p>
+</section>
+<section id="gaussian-approximations-considered" class="slide level2">
+<h2>Gaussian approximations considered</h2>
+<p>Then, <span class="math display">\[\begin{align*}
+p(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto \exp\left\{-\frac{1}{2} \boldsymbol{\beta}^\top\mathbf{Q}\boldsymbol{\beta} + \sum_{i=1}^n \log p(y_i \mid \beta_i, \boldsymbol{\theta})\right\}
+\end{align*}\]</span> If <span class="math inline">\(\boldsymbol{\beta}\)</span> is a Gaussian Markov random field, it’s precision matrix <span class="math inline">\(\mathbf{Q}\)</span> will be sparse. A Gaussian approximation to this model would have precision matrix <span class="math inline">\(\mathbf{Q} + \mathrm{diag}(\boldsymbol{c})\)</span> for some vector <span class="math inline">\(\boldsymbol{c}\)</span> obtained from the second-order expansion of the likelihood.</p>
+<p>This allows one to use dedicated algorithms for sparse matrices.</p>
 </section>
 <section id="inla-targets-of-inference" class="slide level2">
 <h2>INLA: targets of inference</h2>
@@ -516,16 +523,17 @@ p(\theta_i \mid \boldsymbol{y}) &amp;= \int p(\boldsymbol{\theta} \mid \boldsymb
 </section>
 <section id="further-approximations" class="slide level2">
 <h2>Further approximations</h2>
-<p>To reduce the computational costs, <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> propose to use the approximate mean to avoid optimizing and consider the conditional based on the conditional of the Gaussian approximation with mean <span class="math inline">\(\widehat{\boldsymbol{\beta}}\)</span> and covariance <span class="math inline">\(\boldsymbol{\Sigma} = \mathbf{H}^{-1}(\widehat{\boldsymbol{\beta}}),\)</span> <span class="math display">\[\begin{align*}
+<p>To reduce the computational costs, <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> propose to use the approximate mean to avoid optimizing and use the conditional of the Gaussian approximation with mean <span class="math inline">\(\widehat{\boldsymbol{\beta}}\)</span> and covariance <span class="math inline">\(\boldsymbol{\Sigma} = \mathbf{H}^{-1}(\widehat{\boldsymbol{\beta}}),\)</span> <span class="math display">\[\begin{align*}
 \boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y} &amp;\approx \mathsf{Gauss}_{p-1}\left(\widetilde{\boldsymbol{\beta}}_{(i)}, \mathbf{M}^{-1}_{-i,-i}\right);
 \\
-\widetilde{\boldsymbol{\beta}}_{(i)} &amp;= \widehat{\boldsymbol{\beta}}_{-i} + \boldsymbol{\Sigma}_{i,i}^{-1}\boldsymbol{\Sigma}_{i,-i}(\beta_i - \widehat{\beta}_i,
+\widetilde{\boldsymbol{\beta}}_{(i)} &amp;= \widehat{\boldsymbol{\beta}}_{-i} + \boldsymbol{\Sigma}_{i,i}^{-1}\boldsymbol{\Sigma}_{i,-i}(\beta_i - \widehat{\beta}_i),
 \end{align*}\]</span> This only requires a rank-one update.</p>
 </section>
 <section id="further-approximations-1" class="slide level2">
 <h2>Further approximations</h2>
 <p><span class="citation" data-cites="Wood:2019">Wood (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span> suggest to use a Newton step to correct <span class="math inline">\(\widetilde{\boldsymbol{\beta}}_{(i)},\)</span> starting from the conditional mean.</p>
-<p>The second step is to exploit the local dependence on <span class="math inline">\(\boldsymbol{\beta}\)</span> using the Markov structure to build an improvement to the Hessian. Various strategies are proposed in <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> and <span class="citation" data-cites="Wood:2019">Wood (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span>. Nowadays, the INLA software uses a low-rank variational correction to Laplace method, proposed in <span class="citation" data-cites="vanNiekerk.Rue:2024">van Niekerk &amp; Rue (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>.</p>
+<p>The second step is to exploit the local dependence on <span class="math inline">\(\boldsymbol{\beta}\)</span> using the Markov structure to build an improvement to the Hessian. Various strategies are proposed in <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> and <span class="citation" data-cites="Wood:2019">Wood (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span>.</p>
+<p>Nowadays, the INLA software uses a low-rank variational correction to Laplace method, proposed in <span class="citation" data-cites="vanNiekerk.Rue:2024">van Niekerk &amp; Rue (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>.</p>
 </section>
 <section id="the-inla-software" class="slide level2">
 <h2>The INLA software</h2>
@@ -544,7 +552,7 @@ h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(INLA)</span>
 <span id="cb3-2"><a></a><span class="fu">data</span>(exchangerate, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
 <span id="cb3-3"><a></a><span class="co"># Compute response from raw spot exchange rates at noon</span></span>
-<span id="cb3-4"><a></a>y <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">diff</span>(<span class="fu">log</span>(exchangerate<span class="sc">$</span>rate))</span>
+<span id="cb3-4"><a></a>y <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">diff</span>(<span class="fu">log</span>(exchangerate<span class="sc">$</span>dexrate))</span>
 <span id="cb3-5"><a></a>time <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(y)</span>
 <span id="cb3-6"><a></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">time =</span> time)</span>
 <span id="cb3-7"><a></a>f_stochvol <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"ar1"</span>,</span>
@@ -583,7 +591,7 @@ Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters fr
 <span id="cb4-5"><a></a>  <span class="at">marginal =</span> marg_prec)</span>
 <span id="cb4-6"><a></a>INLA<span class="sc">::</span><span class="fu">inla.qmarginal</span>(marg_var, <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>,  <span class="fl">0.975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1727293 0.2622303 0.4049277</code></pre>
+<pre><code>[1] 0.2864905 0.4543037 0.7396820</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Posterior marginal mean and variance of phi</span></span>
 <span id="cb6-2"><a></a>mom1 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
@@ -595,7 +603,7 @@ Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters fr
 <span id="cb6-8"><a></a><span class="fu">c</span>(<span class="at">mean =</span> mom1, <span class="at">sd =</span> <span class="fu">sqrt</span>(mom2 <span class="sc">-</span> mom1<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       mean          sd 
-0.992721400 0.002303189 </code></pre>
+0.984052723 0.005762531 </code></pre>
 </div>
 </div>
 </section>
@@ -636,7 +644,7 @@ Park, T., &amp; Casella, G. (2008). The <span>B</span>ayesian <span>L</span>asso
 Raftery, A. E. (1995). Bayesian model selection in social research. <em>Sociological Methodology</em>, <em>25</em>, 111–163. <a href="https://doi.org/10.2307/271063">https://doi.org/10.2307/271063</a>
 </div>
 <div id="ref-Rue.Martino.Chopin:2009" class="csl-entry" role="listitem">
-Rue, H., Martino, S., &amp; Chopin, N. (2009). Approximate bayesian inference for latent <span>G</span>aussian models by using integrated nested <span>L</span>aplace approximations. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>71</em>(2), 319–392. <a href="https://doi.org/10.1111/j.1467-9868.2008.00700.x">https://doi.org/10.1111/j.1467-9868.2008.00700.x</a>
+Rue, H., Martino, S., &amp; Chopin, N. (2009). Approximate <span>B</span>ayesian inference for latent <span>G</span>aussian models by using integrated nested <span>L</span>aplace approximations. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>71</em>(2), 319–392. <a href="https://doi.org/10.1111/j.1467-9868.2008.00700.x">https://doi.org/10.1111/j.1467-9868.2008.00700.x</a>
 </div>
 <div id="ref-Tierney.Kadane:1986" class="csl-entry" role="listitem">
 Tierney, L., &amp; Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. <em>Journal of the American Statistical Association</em>, <em>81</em>(393), 82–86. <a href="https://doi.org/10.1080/01621459.1986.10478240">https://doi.org/10.1080/01621459.1986.10478240</a>

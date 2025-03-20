@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.3">
+<meta name="generator" content="quarto-1.7.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -88,10 +88,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -318,6 +318,12 @@ window.Quarto = {
  <span class="menu-text">6. Bayesian workflow</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exercises/09-solution.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">9. Deterministic approximations</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -375,7 +381,7 @@ window.Quarto = {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="06-solution_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="06-solution_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -388,6 +394,8 @@ Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha_i, \sigma^2_i) \\
 Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 \xi_i &amp;\sim \mathsf{Gauss}(0, \sigma^2_\xi)
 \end{align*}\]</span> so that <span class="math inline">\(\sigma_\alpha = |\alpha|\sigma_\xi.\)</span></p>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eight school data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>es <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">school =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>], </span>
@@ -449,7 +457,7 @@ Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="06-solution_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="06-solution_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -457,7 +465,7 @@ Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="06-solution_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="06-solution_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -470,13 +478,13 @@ Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> beta2, <span class="at">y =</span> <span class="fu">log</span>(sigma), <span class="at">color =</span> parametrization)) <span class="sc">+</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_grey</span>() <span class="sc">+</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(alpha[<span class="dv">2</span>]), <span class="at">y =</span> <span class="fu">expression</span>(<span class="st">"log"</span><span class="sc">~</span>sigma[alpha])) <span class="sc">+</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(alpha[<span class="dv">2</span>]), <span class="at">y =</span> <span class="fu">expression</span>(<span class="st">"log"</span><span class="sc">~</span>sigma[alpha])) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="06-solution_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="06-solution_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid figure-img" width="672"></p>
 </figure>
+</div>
 </div>
 </div>
 </div>
@@ -505,7 +513,7 @@ Y_{ij1} \mid \delta, \alpha_i, \beta_j &amp;\sim \mathsf{Poisson}\{\exp(\delta +
 <li><span class="math inline">\(\beta_j\)</span> the defensive strength of team <span class="math inline">\(j\)</span> and</li>
 <li><span class="math inline">\(\delta\)</span> is the common home advantage.</li>
 </ul>
-<p>The scores in a match and between matches are assumed to be conditionally independent of one another given <span class="math inline">\(\boldsymbol{\alpha}, \boldsymbol{\beta}, \delta\)</span>. The data set <code>soccer</code> contains the results of football (soccer) matches for the 2015 season of the English Premier Ligue (EPL) and contains the following variables</p>
+<p>The scores in a match and between matches are assumed to be conditionally independent of one another given <span class="math inline">\(\boldsymbol{\alpha}, \boldsymbol{\beta}, \delta\)</span>. The data set <code>efl</code> contains the results of football (soccer) matches for the 20232-2024 season of the English Football Ligue (EFL) and contains the following variables</p>
 <ul>
 <li><code>score</code>: number of goals of <code>team</code> during a match</li>
 <li><code>team</code>: categorical variable giving the name of the team which scored the goals</li>
@@ -514,7 +522,7 @@ Y_{ij1} \mid \delta, \alpha_i, \beta_j &amp;\sim \mathsf{Poisson}\{\exp(\delta +
 </ul>
 <ol type="1">
 <li>Specify suitable priors for the regression parameters that shrink <span class="math inline">\(\alpha_i\)</span> and <span class="math inline">\(\beta_j\)</span> to zero.</li>
-<li>Fit the model characterized using the frequentist estimates as starting values and answer the following questions:
+<li>Fit the model:
 <ul>
 <li>Using the posterior distribution, give the expected number of goals for a match between Manchester United (at home) against Liverpool.</li>
 <li>Report and interpret the estimated posterior mean home advantage <span class="math inline">\(\widehat{\delta}\)</span>.</li>
@@ -526,6 +534,230 @@ Y_{ij1} \sim \mathsf{Poisson}\{\exp(\alpha_i +\beta_j + \delta)\},
 Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
 \end{align}\]</span> Does the second model fit significantly better than than the first? Compare the models using WAIC and Bayes factors.</li>
 </ol>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span>We use the <code>brms</code> package to generate Stan code following <strong>R</strong> syntax. Model 1 can be fit by adding random effects for <code>team</code> and <code>opponent</code>. These are assigned penalized complexity priors for the scale such that their 0.99 quantile is 1, giving <span class="math inline">\(1-\exp(-\lambda_0) = 0.99\)</span> and thus <span class="math inline">\(\lambda_0=-\log (0.01).\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(efl, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Model 1</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>fit_brms1 <span class="ot">&lt;-</span> brms<span class="sc">::</span><span class="fu">brm</span>(<span class="at">formula =</span> score <span class="sc">~</span> home <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> team) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> opponent),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> efl, </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">prior =</span> <span class="fu">c</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">set_prior</span>(<span class="st">"normal(0, 10)"</span>, <span class="at">class =</span> <span class="st">"b"</span>, <span class="at">coef =</span> <span class="st">"home"</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">set_prior</span>(<span class="st">"exponential(4.605)"</span>, <span class="at">class =</span> <span class="st">"sd"</span>, <span class="at">group =</span> <span class="st">"team"</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">set_prior</span>(<span class="st">"exponential(4.605)"</span>, <span class="at">class =</span> <span class="st">"sd"</span>, <span class="at">group =</span> <span class="st">"opponent"</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                 ),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">family =</span> poisson, </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">silent =</span> <span class="dv">0</span>, </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                 <span class="at">save_model =</span> <span class="st">"Maher1.stan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Compiling Stan program...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Start sampling</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 0.000116 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 1.16 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 1.827 seconds (Warm-up)
+Chain 1:                1.266 seconds (Sampling)
+Chain 1:                3.093 seconds (Total)
+Chain 1: 
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 2).
+Chain 2: 
+Chain 2: Gradient evaluation took 8.1e-05 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.81 seconds.
+Chain 2: Adjust your expectations accordingly!
+Chain 2: 
+Chain 2: 
+Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 2: 
+Chain 2:  Elapsed Time: 1.856 seconds (Warm-up)
+Chain 2:                1.285 seconds (Sampling)
+Chain 2:                3.141 seconds (Total)
+Chain 2: 
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 3).
+Chain 3: 
+Chain 3: Gradient evaluation took 8.1e-05 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.81 seconds.
+Chain 3: Adjust your expectations accordingly!
+Chain 3: 
+Chain 3: 
+Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 3: 
+Chain 3:  Elapsed Time: 1.752 seconds (Warm-up)
+Chain 3:                1.282 seconds (Sampling)
+Chain 3:                3.034 seconds (Total)
+Chain 3: 
+
+SAMPLING FOR MODEL 'anon_model' NOW (CHAIN 4).
+Chain 4: 
+Chain 4: Gradient evaluation took 8e-05 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.8 seconds.
+Chain 4: Adjust your expectations accordingly!
+Chain 4: 
+Chain 4: 
+Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 4: 
+Chain 4:  Elapsed Time: 1.871 seconds (Warm-up)
+Chain 4:                1.297 seconds (Sampling)
+Chain 4:                3.168 seconds (Total)
+Chain 4: </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_brms1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: poisson 
+  Links: mu = log 
+Formula: score ~ home + (1 | team) + (1 | opponent) 
+   Data: efl (Number of observations: 760) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Multilevel Hyperparameters:
+~opponent (Number of levels: 20) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.24      0.05     0.15     0.36 1.00     1521     2414
+
+~team (Number of levels: 20) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)     0.25      0.05     0.16     0.36 1.00     1627     2333
+
+Regression Coefficients:
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept     0.34      0.09     0.15     0.51 1.00     1610     1759
+home          0.20      0.06     0.09     0.31 1.00     6890     2708
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use S3 generic for prediction, with new data frame</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(fit_brms1, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">home =</span> <span class="dv">1</span>, <span class="at">team =</span> <span class="st">"Man Utd"</span>, <span class="at">opponent =</span> <span class="st">"Liverpool"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Estimate Est.Error Q2.5 Q97.5
+[1,]  1.27025  1.142603    0     4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual prediction from posterior predictive</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) extract simulations</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>sims <span class="ot">&lt;-</span> fit_brms1<span class="sc">$</span>fit<span class="sc">@</span>sim<span class="sc">$</span>samples[[<span class="dv">1</span>]]</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>nsim <span class="ot">&lt;-</span> <span class="fu">length</span>(sims[[<span class="dv">1</span>]])</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) calculate the posterior mean for the match for each team (Poisson with log link)</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>post_mean1 <span class="ot">&lt;-</span> <span class="fu">exp</span>(sims<span class="sc">$</span>b_Intercept <span class="sc">+</span> sims<span class="sc">$</span>b_home <span class="sc">+</span> sims<span class="sc">$</span><span class="st">`</span><span class="at">r_opponent[Liverpool,Intercept]</span><span class="st">`</span> <span class="sc">+</span> sims<span class="sc">$</span><span class="st">`</span><span class="at">r_team[Man.Utd,Intercept]</span><span class="st">`</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>post_mean2 <span class="ot">&lt;-</span> <span class="fu">exp</span>(sims<span class="sc">$</span>b_Intercept <span class="sc">+</span> sims<span class="sc">$</span><span class="st">`</span><span class="at">r_team[Liverpool,Intercept]</span><span class="st">`</span> <span class="sc">+</span> sims<span class="sc">$</span><span class="st">`</span><span class="at">r_opponent[Man.Utd,Intercept]</span><span class="st">`</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) generate the number of goals from the posterior predictive</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>post_pred1 <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> nsim, <span class="at">lambda =</span> post_mean1)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>post_pred2 <span class="ot">&lt;-</span> <span class="fu">rpois</span>(<span class="at">n =</span> nsim, <span class="at">lambda =</span> post_mean2)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the posterior predictive (bar plot)</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(post_pred1, post_pred2),</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">team =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Manchester United"</span>, <span class="st">"Liverpool"</span>), <span class="at">each =</span> nsim)),</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">fill =</span> team)) <span class="sc">+</span> </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>()) <span class="sc">+</span> </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"number of goals"</span>) </span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">delta =</span> <span class="fu">exp</span>(sims<span class="sc">$</span>b_home)),</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> delta)) <span class="sc">+</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span> </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(<span class="st">"home advantage"</span><span class="sc">~</span><span class="fu">exp</span>(delta))) </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="model-2" class="level1">
+<h1>Model 2</h1>
+<p>fit_brms2 &lt;- brms::brm(formula = score ~ home + (1 | team) + (1 | opponent), data = efl, prior = c( set_prior(“normal(0, 10)”, class = “b”, coef = “home”), set_prior(“exponential(4.605)”, class = “sd”, group = “team”), set_prior(“exponential(4.605)”, class = “sd”, group = “opponent”) ), family = poisson, save_model = “Maher2.stan”) summary(fit_brms2)</p>
+<p>waic(fit_brms1); waic(fit_brms2)</p>
+<pre><code>
+
+We can also fit the model using integrated nested Laplace approximations.
+
+::: {.cell}
+
+```{.r .cell-code}
+library(INLA)
+# Default prior for random effects
+# inla.models()$latent$iid$hyper$theta
+prec_prior &lt;- list(theta = list(prior = "pc.prec", param = c(1, 0.01)))
+fit_inla &lt;- INLA::inla(
+  score ~ home + f(team, model = "iid", hyper = prec_prior) +
+    f(opponent, model = "iid", hyper = prec_prior),
+  family = "poisson",
+    data = efl)
+marg_delta &lt;- fit_inla$marginals.fixed[[2]]
+inla.pmarginal(q = 0, marginal = inla.smarginal(marg_delta))</code></pre>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0002693049</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="fu">inla.smarginal</span>(marg_delta)), <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(delta), <span class="at">y  =</span> <span class="st">""</span>, <span class="at">subtitle =</span> <span class="st">"Marginal density of home advantage"</span>) <span class="sc">+</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="06-solution_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</section>
+</div>
+<p>:::</p>
 </section>
 <section id="exercise-6.3" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-6.3">Exercise 6.3</h2>

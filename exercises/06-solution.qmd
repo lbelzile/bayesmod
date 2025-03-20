@@ -200,6 +200,7 @@ Does the second model fit significantly better than  than the first? Compare the
 We use the `brms` package to generate Stan code following **R** syntax. Model 1 can be fit by adding random effects for `team` and `opponent`. These are assigned penalized complexity priors for the scale such that their 0.99 quantile is 1, giving $1-\exp(-\lambda_0) = 0.99$ and thus $\lambda_0=-\log (0.01).$
 
 ```{r}
+data(efl, package = "hecbayes")
 # Model 1
 fit_brms1 <- brms::brm(formula = score ~ home + (1 | team) + (1 | opponent),
                  data = efl, 
