@@ -1,0 +1,394 @@
+---
+title: "Bayesian modelling"
+author: "Léo Belzile"
+subtitle: "Variational inference"
+date: today
+date-format: "[Last compiled] dddd MMM D, YYYY"
+eval: true
+echo: true
+cache: true
+bibliography: MATH80601A.bib
+format:
+  revealjs:
+    slide-number: true
+    html-math-method: mathjax
+    preview-links: auto
+    theme: [simple, hecmontreal.scss]
+    title-slide-attributes:
+      data-background-color: "#ff585d"
+    logo: "fig/logo_hec_montreal_bleu_web.png"
+---
+
+
+```{r}
+#| include: false
+#| eval: true
+#| echo: false
+hecbleu <- c("#002855")
+fcols <- c(gris = "#888b8d",
+           bleu = "#0072ce",
+           aqua = "#00aec7",
+           vert = "#26d07c",
+           rouge = "#ff585d",
+           rose = "#eb6fbd",
+           jaune = "#f3d03e")
+pcols <- c(gris = "#d9d9d6",
+           bleu = "#92c1e9",
+           agua = "#88dbdf",
+           vert = "#8fe2b0",
+           rouge = "#ffb1bb",
+           rose = "#eab8e4",
+           jaune = "#f2f0a1")
+library(ggplot2)
+theme_set(theme_classic())
+library(patchwork)
+knitr::opts_chunk$set(fig.retina = 3, collapse = TRUE)
+options(digits = 3, width = 75)
+```
+
+## Variational inference
+
+Laplace approximation provides a heuristic for large-sample approximations, but it fails to characterize well $p(\boldsymbol{\theta} \mid \boldsymbol{y})$.
+
+We consider rather a setting where we approximate $p$ by another distribution $g$ which we wish to be close.
+The terminology **variational** is synonym for optimization.
+
+## Kullback--Leibler divergence
+
+The Kullback--Leibler divergence between densities $f_t(\cdot)$ and $g(\cdot; \boldsymbol{\psi}),$ is
+\begin{align*}
+\mathsf{KL}(f_t \parallel g) &=\int \log \left(\frac{f_t(\boldsymbol{x})}{g(\boldsymbol{x}; \boldsymbol{\psi})}\right) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x}\\
+&= \int \log f_t(\boldsymbol{x}) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x} - \int \log g(\boldsymbol{x}; \boldsymbol{\psi}) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x}
+\\ &= {\color{#c38f16}{\mathsf{E}_{f_t}\{\log f_t(\boldsymbol{X})\}}} - \mathsf{E}_{f_t}\{\log g(\boldsymbol{X}; \boldsymbol{\psi})\}
+\end{align*}
+The ${\color{#c38f16}{\text{negative entropy}}}$ does not depend on $g(\cdot).$
+
+
+## Model misspecification
+
+
+- The divergence is strictly positive unless $g(\cdot; \boldsymbol{\psi}) \equiv f_t(\cdot).$
+- The divergence is not symmetric.
+
+
+The Kullback--Leibler divergence notion is central to study of model misspecification.
+
+- if we fit $g(\cdot)$ when data arise from $f_t,$ the maximum likelihood estimator of the parameters $\widehat{\boldsymbol{\psi}}$ will be the value of the parameter that minimizes the  Kullback--Leibler divergence $\mathsf{KL}(f_t \parallel g)$.
+
+
+## Marginal likelihood
+
+Consider now the problem of approximating the marginal likelihood, sometimes called the evidence,
+\begin{align*}
+p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(\boldsymbol{y}, \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}.
+\end{align*}
+where we only have the joint $p(\boldsymbol{y}, \boldsymbol{\theta})$ is the product of the likelihood times the prior.
+
+
+## Reformulation of the marginal density
+
+Consider $g(\boldsymbol{\theta};\boldsymbol{\psi})$ with $\boldsymbol{\psi} \in \mathbb{R}^J$ an approximating density function whose integral is one over $\boldsymbol{\Theta} \subseteq \mathbb{R}^p$ and whose support is part of that of $\mathrm{supp} (g) \subseteq \mathrm{supp}(p) = \boldsymbol{\Theta}$:
+\begin{align*}
+p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}}  \frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})} g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
+\end{align*}
+
+## Bounding the marginal likelihood
+
+
+For $h(x)$ a convex function, **Jensen's inequality** implies that $$h\{\mathsf{E}(X)\} \leq \mathsf{E}\{h(X)\},$$ and applying this with $h(x)=-\log(x),$ we get
+\begin{align*}
+-\log p(\boldsymbol{y}) \leq - \log  \left(\frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})}\right) g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
+\end{align*}
+
+
+## Evidence lower bound
+
+We can thus consider the model that minimizes the **reverse Kullback--Leibler divergence**
+\begin{align*}
+g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}) = \mathrm{argmin}_{\boldsymbol{\psi}} \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\}.
+\end{align*}
+
+Consider the reformulation
+\begin{align*}
+\mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\} &= \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\} - \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} \\&\quad+ \log p(\boldsymbol{y}).
+\end{align*}
+
+
+## Evidence lower bound
+
+Instead of minimizing the Kullback--Leibler divergence, we can equivalently maximize the so-called **evidence lower bound** (ELBO)
+\begin{align*}f
+\mathsf{ELBO}(g) = \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} - \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\}
+\end{align*}
+
+The ELBO is a lower bound for the marginal likelihood because a Kullback--Leibler divergence is non-negative and
+\begin{align*}
+\log p(\boldsymbol{y}) = \mathsf{ELBO}(g) +  \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\}.
+\end{align*}
+
+## Use of ELBO
+
+The idea is that we will approximate the density $p(\boldsymbol{\theta} \mid \boldsymbol{y}) \approx g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}})$.
+
+- the ELBO can be used for model comparison (but we compare bounds...)
+- we can sample from $q$ as before.
+
+## Heuristics of ELBO
+
+Maximize the evidence, subject to a regularization term:
+\begin{align*}
+\mathsf{ELBO}(g) = \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} - \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\}
+\end{align*}
+
+The ELBO is an objective function comprising:
+
+- the first term will be maximized by taking a distribution placing mass near the MAP of $p(\boldsymbol{y}, \boldsymbol{\theta}),$
+- the second term can be viewed as a penalty that favours high entropy of the approximating family (higher for distributions which are diffuse).
+
+## Laplace vs variational approximation
+
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-cap: "Skewed density with the Laplace approximation (dashed orange) and variational Gaussian approximation (dotted blue)."
+#| label: fig-skewed
+
+# Laplace approximation
+# Find mode by numerical optimization
+mode_laplace <- optim(
+   par = 0.2,
+   fn = function(x){
+     -sn::dsn(x, xi = 0, alpha = 10, log = TRUE)},
+   method = "Brent",
+   lower = -1,
+   upper = 2, hessian = TRUE)
+curve(sn::dsn(x, xi = 0, alpha = 10),
+     from = -2,
+     to = 4,
+     n = 1001,
+     bty = "n", ylab = "density",
+     ylim = c(0,1), lwd = 1.5)
+curve(dnorm(x,
+  mean = mode_laplace$value,
+  sd = sqrt(1/mode_laplace$hessian[1])),
+from = -2, to = 4, add = TRUE, lty = 2,  lwd = 1.5, col = MetBrewer::met.brewer("Hiroshige", 2)[1])
+
+dsn <- function(x, loc = 0, scale = 1, alpha){
+  2*dnorm(x, loc, scale)*pnorm(alpha*x, loc, scale)
+}
+  X <- rnorm(10000)
+elbo <- function(pars, mu = 0, sigma = 1, alpha = 10){
+  ms <- pars[1]
+  s2 <- exp(pars[2])
+  obj <- log(s2) - 0.5*(s2+ms^2-2*mu*ms)/(sigma^2) +
+    # mean(dnorm(X, mean = mu, sd = sigma, log = TRUE)) +
+    mean(pnorm(alpha*(sqrt(s2)*X+ms), log = TRUE))
+  -obj
+}
+varia_sn <- optim(par =rep(0,2), fn = elbo,  alpha = 10)
+# curve(dsn(x, alpha = 10), from = -2, to = 4)
+curve(dnorm(x, varia_sn$par[1],
+     sqrt(exp(varia_sn$par[2]))),
+  add = TRUE, lty = 3, col = MetBrewer::met.brewer("Hiroshige", 2)[2],
+ from = -2, to = 4, lwd = 1.5)
+```
+
+
+## Choice of approximating density
+
+In practice, the quality of the approximation depends on the choice of $g(\cdot; \boldsymbol{\psi}).$
+
+- We typically want matching support.
+- The approximation will be affected by the correlation between posterior components $\boldsymbol{\theta} \mid \boldsymbol{y}$
+- Derivations can also be done for $(\boldsymbol{U}, \boldsymbol{\theta})$, where $\boldsymbol{U}$ are latent variables from a data augmentation scheme.
+
+
+## Factorization
+
+We can consider densities  $g(;\boldsymbol{\psi})$ that factorize into blocks with parameters $\boldsymbol{\psi}_1, \ldots, \boldsymbol{\psi}_M,$ where
+\begin{align*}
+g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \prod_{j=1}^M g_j(\boldsymbol{\theta}_j; \boldsymbol{\psi}_j)
+\end{align*}
+If we assume that each of the $J$ parameters $\theta_1, \ldots, \theta_J$ are independent, then
+we obtain a **mean-field** approximation.
+
+## Optimal form of approximating density
+
+\begin{align*}
+\mathsf{ELBO}(g) & \stackrel{\boldsymbol{\theta}_i}{\propto} \int \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\} g_i(\boldsymbol{\theta}_i) \mathrm{d} \boldsymbol{\theta}_i \\&\quad - \int \log \{ g_i(\boldsymbol{\theta}_i) \} g_i(\boldsymbol{\theta}_i) \mathrm{d} \boldsymbol{\theta}_i
+\end{align*}
+The choice of $g_i$ that maximizes the ELBO is
+\begin{align*}
+ g^{\star}_i(\boldsymbol{\theta}_i) \propto \exp \left[ \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\}\right].
+\end{align*}
+Often, we look at the kernel of $g^{\star}_j$ to deduce the normalizing constant.
+
+## Coordinate-ascent variational inference (CAVI)
+
+- We can maximize $g^{\star}_j$ in turn for each $j=1, \ldots, M$ treating the other parameters as fixed.
+- This scheme is guaranteed to monotonically increase the ELBO until convergence to a local maximum.
+- Convergence: monitor ELBO and stop when the change is lower then some present numerical tolerance.
+- The approximation may have multiple local optima: perform random initializations and keep the best one.
+
+## Example of CAVI mean-field for Gaussian target
+
+
+We consider the example from Section 2.2.2 of @Ormerod.Wand:2010 for approximation of a Gaussian distribution, with
+\begin{align*}
+Y_i &\sim \mathsf{Gauss}(\mu, \tau^{-1}), \qquad i =1, \ldots, n;\\
+\mu &\sim \mathsf{Gauss}(\mu_0, \tau_0^{-1}) \\
+\tau &\sim \mathsf{gamma}(a_0, b_0).
+\end{align*}
+This is an example where the full posterior is available in closed-form, so we can compare our approximation with the truth.
+
+## Variational approximation to Gaussian --- mean
+
+We assume a factorization of the variational approximation $g_\mu(\mu)g_\tau(\tau);$ the factor for $g_\mu$ is proportional to
+\begin{align*}
+ \log g^{\star}_\mu(\mu) \propto -\frac{\mathsf{E}_{\tau}(\tau)}{2} \sum_{i=1}^n (y_i-\mu)^2-\frac{\tau_0}{2}(\mu-\mu_0)^2
+\end{align*}
+which is quadratic in $\mu$ and thus must be Gaussian with precision $\tau_n = \tau_0 + n\tau$ and mean $\tau_n^{-1}\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n\overline{y})$
+
+## Variational approximation to Gaussian --- precision
+
+The optimal precision factor satisfies
+\begin{align*}
+ \ln g^{\star}_{\tau}(\tau) &\propto (a_0-1 +n/2) \log \tau \\& \quad - \tau {\color{#c38f16}{\left[b_0  + \frac{1}{2} \mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\}\right]}}.
+\end{align*}
+This is of the same form as  $p(\tau \mid \mu, \boldsymbol{y}),$ namely a gamma with shape $a_n =a_0 +n/2$ and rate ${\color{#c38f16}{b_n}}$.
+
+## Rate of the gamma for $g_\tau$
+
+It is helpful to rewrite the expected value as
+\begin{align*}
+ \mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\} = \sum_{i=1}^n \{y_i - \mathsf{E}_{\mu}(\mu)\}^2 + n \mathsf{Var}_{\mu}(\mu),
+\end{align*}
+so that it depends on the parameters of the distribution of $\mu$ directly.
+
+## CAVI for Gaussian
+
+The algorithm cycles through the following updates until convergence:
+
+- $\mathsf{Va}_{\mu}(\mu) = \{\tau_0 + n \mathsf{E}_{\tau}(\tau)\}^{-1},$
+- $\mathsf{E}_{\mu}(\mu) = \mathsf{Va}_{\mu}(\mu)(\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n \overline{y}),$
+- $\mathsf{E}_{\tau}(\tau) = a_n/b_n$ where $b_n$ is a function of $\mathsf{E}_{\mu}(\mu)$ and $\mathsf{Var}_{\mu}(\mu)\}.$
+
+We only compute the ELBO at the end of each cycle.
+
+## Monitoring convergence
+
+The derivation of the ELBO is straightforward but tedious; we only need to monitor
+\begin{align*}
+- \frac{\tau_0}{2} \mathsf{E}_{\mu}\{(\mu - \mu_0)^2\} - \frac{\log\tau_n}{2}-a_n\log b_n
+\end{align*}
+for convergence, although other normalizing constants would be necessary if we wanted to approximate the marginal likelihood.
+
+## Stochastic optimization
+
+
+We consider alternative numeric schemes which rely on stochastic optimization [@Hoffman:2013].
+
+The key idea behind these methods is that
+
+- we can use gradient-based algorithms,
+- and approximate the expectations with respect to $g$ by drawing samples from it
+
+Also allows for minibatch (random subset) selection to reduce computational costs in large samples
+
+## Black-box variational inference
+
+@Ranganath.Gerrish.Blei:2014 shows that the gradient of the ELBO reduces to
+\begin{align*}
+ \frac{\partial}{\partial \boldsymbol{\psi}} \mathsf{ELBO}(g) &=\mathsf{E}_{g}\left\{\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} \times \log \left( \frac{p(\boldsymbol{\theta}, \boldsymbol{y})}{g(\boldsymbol{\theta}; \boldsymbol{\psi})}\right)\right\}
+\end{align*}
+using the change rule, differentiation under the integral sign (dominated convergence theorem) and the identity
+\begin{align*}
+\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \frac{\partial g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}}
+\end{align*}
+
+## Black-box variational inference in practice
+
+- Note that the gradient simplifies for $g_i$ in exponential families (covariance of sufficient statistic with $\log(p/g)$).
+- The gradient estimator is particularly noisy, so @Ranganath.Gerrish.Blei:2014 provide two methods to reduce the variance of this expression using control variates and Rao--Blackwellization.
+
+## Automatic differentiation variational inference
+@Kucukelbir:2017 proposes a stochastic gradient algorithm, but with two main innovations.
+
+- The first is the general use of Gaussian approximating densities for factorized density, with parameter transformations to map from the support of $T: \boldsymbol{\Theta} \mapsto \mathbb{R}^p$ via $T(\boldsymbol{\theta})=\boldsymbol{\zeta}.$
+- The second is to use the resulting **location-scale** family to obtain an alternative form of the gradient.
+
+## Gaussian full-rank approximation
+
+Consider an approximation $g(\boldsymbol{\zeta}; \boldsymbol{\psi})$ where $\boldsymbol{\psi}$ consists of
+
+- mean parameters $\boldsymbol{\mu}$ and
+- covariance $\boldsymbol{\Sigma}$, parametrized through a Cholesky decomposition
+
+The full approximation is of course more flexible when the transformed parameters $\boldsymbol{\zeta}$ are correlated, but is more expensive to compute than the mean-field approximation.
+
+## Change of variable
+
+The change of variable introduces a Jacobian term $\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})$ for the approximation to the density $p(\boldsymbol{\theta}, \boldsymbol{y})$, where
+
+\begin{align*}
+p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|
+\end{align*}
+
+## Gaussian entropy
+
+The entropy of the multivariate Gaussian with mean $\boldsymbol{\mu}$ and covariance $\boldsymbol{\Sigma} = \mathbf{LL}^\top$, where $\mathbf{L}$ is a lower triangular matrix, is
+\begin{align*}
+ \mathbb{H}(\boldsymbol{L}) = - \mathsf{E}_g(\log g) &= \frac{D+D\log(2\pi) + \log |\mathbf{LL}^\top|}{2},
+\end{align*}
+and only depends on $\boldsymbol{\Sigma}$.
+
+## ELBO with Gaussian approximation
+
+Since the Gaussian is a location-scale family, we can rewrite the model in terms of a standardized Gaussian variable $\boldsymbol{Z}\sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{I}_p)$ where $\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{Z}$ (this transformation has unit Jacobian).
+
+The ELBO with the transformation becomes
+\begin{align*}
+ \mathsf{E}_{\boldsymbol{Z}}\left[ \log p\{\boldsymbol{y}, T^{-1}(\boldsymbol{\zeta})\} + \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|\right] + \mathbb{H}(\boldsymbol{L}).
+\end{align*}
+
+## Chain rule
+
+If $\boldsymbol{\theta} = T^{-1}(\boldsymbol{\zeta})$ and $\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{z},$ we have for $\boldsymbol{\psi}$ equal to either $\boldsymbol{\mu}$ or $\mathbf{L}$ that
+\begin{align*}
+ & \frac{\partial}{\partial \boldsymbol{\psi}}\log p(\boldsymbol{y}, \boldsymbol{\theta})
+ \\&\quad  = \frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}}
+   \times \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}
+\times \frac{\partial (\boldsymbol{\mu} + \mathbf{L}\boldsymbol{z})}{\partial \boldsymbol{\psi}}
+\end{align*}
+
+## Gradients for ADVI {.smaller}
+
+The gradients of the ELBO with respect to the mean and variance are
+\begin{align*}
+ \nabla_{\boldsymbol{\mu}} &= \mathsf{E}_{\boldsymbol{Z}}\left\{\frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}\right\} \\
+ \nabla_{\mathbf{L}} &= \mathsf{E}_{\boldsymbol{Z}}\left[\left\{\frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}\right\}\boldsymbol{Z}^\top\right] + \mathbf{L}^{-\top}.
+\end{align*}
+and we can approximate the expectation by drawing standard Gaussian samples $\boldsymbol{Z}_1, \ldots, \boldsymbol{Z}_B.$
+
+## Quality of approximation
+
+Consider the stochastic volatility model.
+
+```{r}
+#| eval: true
+#| echo: false
+#| fig-align: 'center'
+#| out-width: '90%'
+knitr::include_graphics("fig/stochvol-volatility.png")
+```
+
+Fitting HMC-NUTS to the exchange rate data takes 156 seconds for 10K iterations, vs 2 seconds for the mean-field approximation.
+
+
+
+
+
+
+## References
+

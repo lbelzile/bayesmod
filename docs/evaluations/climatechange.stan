@@ -22,3 +22,4 @@ model {
   beta ~ normal(0, sqrt(L * inv(L - 1)) * tau);
   // TODO: Add priors for sigma, tau, omega here
 }
+
