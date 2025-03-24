@@ -6,7 +6,7 @@ title: "Variational inference"
 ## Content
 
 - Kullback--Leibler divergence and evidence lower bound (ELBO)
-- Estimation methods: CAVI, black-box variational inference
+- Estimation methods: coordinate ascent, black-box, automatic differentiation variational inference schemes
 
 ## Learning objectives
 
@@ -18,13 +18,17 @@ At the end of the chapter, students should be able to
 ## Readings
 
 
-- @Ranganath.Gerrish.Blei:2014
+- Chapter 10 of @Bishop:2006
+- @Kucukelbir:2017
 - [Chapter 10](https://lbelzile.github.io/MATH80601A/variational.html) of the course notes
 
 ## Complementary readings
 
+- @Ranganath.Gerrish.Blei:2014
 - @Blei:2017
-- @Kucukelbir:2017
+- @Ormerod.Wand:2010
+- @Hoffman:2013
+
 
 <!--
 
@@ -39,10 +43,9 @@ At the end of the chapter, students should be able to
 <iframe class="slide-deck" src="../slides/bayesmod-slides10.html"></iframe>
 </div>
 
-
+-->
 
 ## Code
 
-- Variational example [**R** script](/files/code/10-variational.R)
+- ADVI for stochastic volatility model [**R** script](/files/code/10-stochvol_ADVI.R)
 
--->

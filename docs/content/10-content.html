@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -54,10 +54,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -276,6 +276,7 @@ div.csl-indent {
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
   <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
   <li><a href="#complementary-readings" id="toc-complementary-readings" class="nav-link" data-scroll-target="#complementary-readings">Complementary readings</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
   </ul>
 </nav>
     </div>
@@ -292,7 +293,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="content">Content</h2>
 <ul>
 <li>Kullback–Leibler divergence and evidence lower bound (ELBO)</li>
-<li>Estimation methods: CAVI, black-box variational inference</li>
+<li>Estimation methods: coordinate ascent, black-box, automatic differentiation variational inference schemes</li>
 </ul>
 </section>
 <section id="learning-objectives" class="level2">
@@ -302,15 +303,18 @@ div.csl-indent {
 <section id="readings" class="level2">
 <h2 class="anchored" data-anchor-id="readings">Readings</h2>
 <ul>
-<li><span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#ref-Ranganath.Gerrish.Blei:2014" role="doc-biblioref">2014</a>)</span></li>
+<li>Chapter 10 of <span class="citation" data-cites="Bishop:2006">Bishop (<a href="#ref-Bishop:2006" role="doc-biblioref">2006</a>)</span></li>
+<li><span class="citation" data-cites="Kucukelbir:2017">Kucukelbir et al. (<a href="#ref-Kucukelbir:2017" role="doc-biblioref">2017</a>)</span></li>
 <li><a href="https://lbelzile.github.io/MATH80601A/variational.html">Chapter 10</a> of the course notes</li>
 </ul>
 </section>
 <section id="complementary-readings" class="level2">
 <h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
 <ul>
+<li><span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#ref-Ranganath.Gerrish.Blei:2014" role="doc-biblioref">2014</a>)</span></li>
 <li><span class="citation" data-cites="Blei:2017">Blei et al. (<a href="#ref-Blei:2017" role="doc-biblioref">2017</a>)</span></li>
-<li><span class="citation" data-cites="Kucukelbir:2017">Kucukelbir et al. (<a href="#ref-Kucukelbir:2017" role="doc-biblioref">2017</a>)</span></li>
+<li><span class="citation" data-cites="Ormerod.Wand:2010">Ormerod &amp; Wand (<a href="#ref-Ormerod.Wand:2010" role="doc-biblioref">2010</a>)</span></li>
+<li><span class="citation" data-cites="Hoffman:2013">Hoffman et al. (<a href="#ref-Hoffman:2013" role="doc-biblioref">2013</a>)</span></li>
 </ul>
 <!--
 
@@ -325,24 +329,33 @@ div.csl-indent {
 <iframe class="slide-deck" src="../slides/bayesmod-slides10.html"></iframe>
 </div>
 
-
-
-## Code
-
-- Variational example [**R** script](/files/code/10-variational.R)
-
 -->
+</section>
+<section id="code" class="level2">
+<h2 class="anchored" data-anchor-id="code">Code</h2>
+<ul>
+<li>ADVI for stochastic volatility model <a href="../files/code/10-stochvol_ADVI.R"><strong>R</strong> script</a></li>
+</ul>
 
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Bishop:2006" class="csl-entry" role="listitem">
+Bishop, C. M. (2006). <em>Pattern recognition and machine learning (information science and statistics)</em>. Springer-Verlag.
+</div>
 <div id="ref-Blei:2017" class="csl-entry" role="listitem">
 Blei, D. M., Kucukelbir, A., &amp; and, J. D. M. (2017). Variational inference: A review for statisticians. <em>Journal of the American Statistical Association</em>, <em>112</em>(518), 859–877. <a href="https://doi.org/10.1080/01621459.2017.1285773">https://doi.org/10.1080/01621459.2017.1285773</a>
 </div>
+<div id="ref-Hoffman:2013" class="csl-entry" role="listitem">
+Hoffman, M. D., Blei, D. M., Wang, C., &amp; Paisley, J. (2013). Stochastic variational inference. <em>Journal of Machine Learning Research</em>, <em>14</em>(40), 1303–1347. <a href="http://jmlr.org/papers/v14/hoffman13a.html">http://jmlr.org/papers/v14/hoffman13a.html</a>
+</div>
 <div id="ref-Kucukelbir:2017" class="csl-entry" role="listitem">
 Kucukelbir, A., Tran, D., Ranganath, R., Gelman, A., &amp; Blei, D. M. (2017). Automatic differentiation variational inference. <em>Journal of Machine Learning Research</em>, <em>18</em>(14), 1–45. <a href="http://jmlr.org/papers/v18/16-107.html">http://jmlr.org/papers/v18/16-107.html</a>
+</div>
+<div id="ref-Ormerod.Wand:2010" class="csl-entry" role="listitem">
+Ormerod, J. T., &amp; Wand, M. P. (2010). Explaining variational approximations. <em>The American Statistician</em>, <em>64</em>(2), 140–153. <a href="https://doi.org/10.1198/tast.2010.09058">https://doi.org/10.1198/tast.2010.09058</a>
 </div>
 <div id="ref-Ranganath.Gerrish.Blei:2014" class="csl-entry" role="listitem">
 Ranganath, R., Gerrish, S., &amp; Blei, D. (2014). Black box variational inference. In S. Kaski &amp; J. Corander (Eds.), <em>Proceedings of the seventeenth international conference on artificial intelligence and statistics</em> (Vol. 33, pp. 814–822). Pmlr. <a href="https://proceedings.mlr.press/v33/ranganath14.html">https://proceedings.mlr.press/v33/ranganath14.html</a>
