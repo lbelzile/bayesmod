@@ -5,6 +5,23 @@ title: Exercises 10
 
 ## Exercise 10.1
 
+Suppose that $p(\boldsymbol{\theta})$ is a density with $\boldsymbol{\theta} \in \mathbb{R}^p$ and that we consider a Gaussian approximation $q(\boldsymbol{\theta})$ with mean $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$. Show that the parameters that minimize the Kullback--Leibler $\mathsf{KL}\{p(\boldsymbol{\theta} \parallel q(\boldsymbol{\theta})\}$ are the expectation and variance under $p(\boldsymbol{\theta})$.^[Note that this is not a variational approximation!]
       
 ## Exercise 10.2
+
+Consider a finite mixture model of $K$ univariate Gaussian $\mathsf{Gauss}(\mu_k, \tau_k^{-1})$ with $K$ fixed, whose density is
+\begin{align*}
+\sum_{k=1}^{K} w_k \left(\frac{\tau_k}{2\pi}\right)^{1/2}\exp \left\{-\frac{\tau_k}{2}(y_i-\mu_k)^2\right\}
+\end{align*}
+where $\boldsymbol{w} \in \mathbb{S}_{K-1}$ are positive weights that sum to one, meaning $w_1 + \cdots + w_K=1.$ We use conjugate priors 
+$\mu_k \sim \mathsf{Gauss}(0, 100)$, $\tau_k \sim \mathsf{Gamma}(a, b)$ for $k=1, \ldots, K$ and $\boldsymbol{w} \sim \mathsf{Dirichlet}(\alpha)$ for $a, b, \alpha>0$ fixed hyperparameter values.
+
+To help with inference, we introduce auxiliary variables $\boldsymbol{U}_1, \ldots, \boldsymbol{U}_n$ where $\boldsymbol{U}_i \sim \mathsf{multinom}(1, \boldsymbol{w})$ that indicates which cluster component the model belongs to, and $\omega_k = \Pr(U_{ik}=1).$
+
+The parameters and latent variables for the posterior of interest are $\boldsymbol{\mu}, \boldsymbol{\tau}, \boldsymbol{w}$ and $\mathbf{U}.$ Consider a factorized decomposition in which each component is independent of the others, $q_{\boldsymbol{w}}(\boldsymbol{w})q_{\boldsymbol{\mu}}(\boldsymbol{\mu})q_{\boldsymbol{\tau}}(\boldsymbol{\tau}) q(\boldsymbol{U}).$
+
+1. Apply the coordinate ascent algorithm to obtain the distribution for the optimal components.
+2. Write down an expression for the ELBO.
+3. Run the algorithm for the `geyser` data from `MASS` **R** package for $K=2$ until convergence with $\alpha=0.1, a=b=0.01.$ Repeat multiple times with different initializations and save the ELBO for each run.
+4. Repeat these steps for $K=2, \ldots, 6$ and plot the ELBO as a function of $K$. Comment on the optimal number of cluster components suggested by the approximation to the marginal likelihood.
 

@@ -12,8 +12,9 @@ title: "Variational inference"
 
 At the end of the chapter, students should be able to
 
-
-
+- explain the link between ELBO and reverse Kullback--Leibler divergence and it use for approximations
+- derive the CAVI recursions for a given factorization
+- use variational inference for Bayesian inference
 
 ## Readings
 
@@ -47,5 +48,6 @@ At the end of the chapter, students should be able to
 
 ## Code
 
-- ADVI for stochastic volatility model [**R** script](/files/code/10-stochvol_ADVI.R)
+- [**R** script](/files/code/10-CAVI.R) of CAVI with Gaussian model
+- [**R** script](/files/code/10-stochvol_ADVI.R) of ADVI for stochastic volatility model 
 

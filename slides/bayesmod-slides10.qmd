@@ -175,17 +175,17 @@ The ELBO is an objective function comprising:
 #| echo: false
 #| fig-cap: "Skewed density with the Laplace approximation (dashed orange) and variational Gaussian approximation (dotted blue)."
 #| label: fig-skewed
-
+loc <- 0; scale <- 1; asym <- 10
 # Laplace approximation
 # Find mode by numerical optimization
 mode_laplace <- optim(
    par = 0.2,
    fn = function(x){
-     -sn::dsn(x, xi = 0, alpha = 10, log = TRUE)},
+     -sn::dsn(x, xi = loc,omega = scale, alpha = asym, log = TRUE)},
    method = "Brent",
    lower = -1,
    upper = 2, hessian = TRUE)
-curve(sn::dsn(x, xi = 0, alpha = 10),
+curve(sn::dsn(x, xi = loc,omega = scale, alpha = asym),
      from = -2,
      to = 4,
      n = 1001,
@@ -196,24 +196,13 @@ curve(dnorm(x,
   sd = sqrt(1/mode_laplace$hessian[1])),
 from = -2, to = 4, add = TRUE, lty = 2,  lwd = 1.5, col = MetBrewer::met.brewer("Hiroshige", 2)[1])
 
-dsn <- function(x, loc = 0, scale = 1, alpha){
-  2*dnorm(x, loc, scale)*pnorm(alpha*x, loc, scale)
-}
-  X <- rnorm(10000)
-elbo <- function(pars, mu = 0, sigma = 1, alpha = 10){
-  ms <- pars[1]
-  s2 <- exp(pars[2])
-  obj <- log(s2) - 0.5*(s2+ms^2-2*mu*ms)/(sigma^2) +
-    # mean(dnorm(X, mean = mu, sd = sigma, log = TRUE)) +
-    mean(pnorm(alpha*(sqrt(s2)*X+ms), log = TRUE))
-  -obj
-}
-varia_sn <- optim(par =rep(0,2), fn = elbo,  alpha = 10)
+
+sn_mean <- loc + scale*asym/sqrt(1+asym^2)*sqrt(2/pi)
+sn_var <- scale^2*(1-2*asym^2/(1+asym^2)/pi)
 # curve(dsn(x, alpha = 10), from = -2, to = 4)
-curve(dnorm(x, varia_sn$par[1],
-     sqrt(exp(varia_sn$par[2]))),
+curve(dnorm(x, sn_mean, sd = sqrt(sn_var)),
   add = TRUE, lty = 3, col = MetBrewer::met.brewer("Hiroshige", 2)[2],
- from = -2, to = 4, lwd = 1.5)
+ from = -2, to = 4, lwd = 2)
 ```
 
 

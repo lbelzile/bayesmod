@@ -2825,7 +2825,7 @@
     "href": "content/10-content.html#learning-objectives",
     "title": "Variational inference",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nexplain the link between ELBO and reverse Kullback–Leibler divergence and it use for approximations\nderive the CAVI recursions for a given factorization\nuse variational inference for Bayesian inference",
     "crumbs": [
       "Content",
       "Course content",
@@ -2873,7 +2873,7 @@
     "href": "content/10-content.html#code",
     "title": "Variational inference",
     "section": "Code",
-    "text": "Code\n\nADVI for stochastic volatility model R script",
+    "text": "Code\n\nR script of CAVI with Gaussian model\nR script of ADVI for stochastic volatility model",
     "crumbs": [
       "Content",
       "Course content",
@@ -3260,11 +3260,48 @@
     ]
   },
   {
+    "objectID": "exercises/10-exercise.html",
+    "href": "exercises/10-exercise.html",
+    "title": "Exercises 10",
+    "section": "",
+    "text": "Suppose that \\(p(\\boldsymbol{\\theta})\\) is a density with \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^p\\) and that we consider a Gaussian approximation \\(q(\\boldsymbol{\\theta})\\) with mean \\(\\boldsymbol{\\mu}\\) and covariance matrix \\(\\boldsymbol{\\Sigma}\\). Show that the parameters that minimize the Kullback–Leibler \\(\\mathsf{KL}\\{p(\\boldsymbol{\\theta} \\parallel q(\\boldsymbol{\\theta})\\}\\) are the expectation and variance under \\(p(\\boldsymbol{\\theta})\\).1",
+    "crumbs": [
+      "Exercises",
+      "10: Variational inference"
+    ]
+  },
+  {
+    "objectID": "exercises/10-exercise.html#exercise-10.1",
+    "href": "exercises/10-exercise.html#exercise-10.1",
+    "title": "Exercises 10",
+    "section": "",
+    "text": "Suppose that \\(p(\\boldsymbol{\\theta})\\) is a density with \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^p\\) and that we consider a Gaussian approximation \\(q(\\boldsymbol{\\theta})\\) with mean \\(\\boldsymbol{\\mu}\\) and covariance matrix \\(\\boldsymbol{\\Sigma}\\). Show that the parameters that minimize the Kullback–Leibler \\(\\mathsf{KL}\\{p(\\boldsymbol{\\theta} \\parallel q(\\boldsymbol{\\theta})\\}\\) are the expectation and variance under \\(p(\\boldsymbol{\\theta})\\).1",
+    "crumbs": [
+      "Exercises",
+      "10: Variational inference"
+    ]
+  },
+  {
     "objectID": "exercises/10-exercise.html#exercise-10.2",
     "href": "exercises/10-exercise.html#exercise-10.2",
     "title": "Exercises 10",
     "section": "Exercise 10.2",
-    "text": "Exercise 10.2"
+    "text": "Exercise 10.2\nConsider a finite mixture model of \\(K\\) univariate Gaussian \\(\\mathsf{Gauss}(\\mu_k, \\tau_k^{-1})\\) with \\(K\\) fixed, whose density is \\[\\begin{align*}\n\\sum_{k=1}^{K} w_k \\left(\\frac{\\tau_k}{2\\pi}\\right)^{1/2}\\exp \\left\\{-\\frac{\\tau_k}{2}(y_i-\\mu_k)^2\\right\\}\n\\end{align*}\\] where \\(\\boldsymbol{w} \\in \\mathbb{S}_{K-1}\\) are positive weights that sum to one, meaning \\(w_1 + \\cdots + w_K=1.\\) We use conjugate priors \\(\\mu_k \\sim \\mathsf{Gauss}(0, 100)\\), \\(\\tau_k \\sim \\mathsf{Gamma}(a, b)\\) for \\(k=1, \\ldots, K\\) and \\(\\boldsymbol{w} \\sim \\mathsf{Dirichlet}(\\alpha)\\) for \\(a, b, \\alpha&gt;0\\) fixed hyperparameter values.\nTo help with inference, we introduce auxiliary variables \\(\\boldsymbol{U}_1, \\ldots, \\boldsymbol{U}_n\\) where \\(\\boldsymbol{U}_i \\sim \\mathsf{multinom}(1, \\boldsymbol{w})\\) that indicates which cluster component the model belongs to, and \\(\\omega_k = \\Pr(U_{ik}=1).\\)\nThe parameters and latent variables for the posterior of interest are \\(\\boldsymbol{\\mu}, \\boldsymbol{\\tau}, \\boldsymbol{w}\\) and \\(\\mathbf{U}.\\) Consider a factorized decomposition in which each component is independent of the others, \\(q_{\\boldsymbol{w}}(\\boldsymbol{w})q_{\\boldsymbol{\\mu}}(\\boldsymbol{\\mu})q_{\\boldsymbol{\\tau}}(\\boldsymbol{\\tau}) q(\\boldsymbol{U}).\\)\n\nApply the coordinate ascent algorithm to obtain the distribution for the optimal components.\nWrite down an expression for the ELBO.\nRun the algorithm for the geyser data from MASS R package for \\(K=2\\) until convergence with \\(\\alpha=0.1, a=b=0.01.\\) Repeat multiple times with different initializations and save the ELBO for each run.\nRepeat these steps for \\(K=2, \\ldots, 6\\) and plot the ELBO as a function of \\(K\\). Comment on the optimal number of cluster components suggested by the approximation to the marginal likelihood.",
+    "crumbs": [
+      "Exercises",
+      "10: Variational inference"
+    ]
+  },
+  {
+    "objectID": "exercises/10-exercise.html#footnotes",
+    "href": "exercises/10-exercise.html#footnotes",
+    "title": "Exercises 10",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nNote that this is not a variational approximation!↩︎",
+    "crumbs": [
+      "Exercises",
+      "10: Variational inference"
+    ]
   },
   {
     "objectID": "index.html",
