@@ -51,7 +51,9 @@ options(digits = 3, width = 75)
 Laplace approximation provides a heuristic for large-sample approximations, but it fails to characterize well $p(\boldsymbol{\theta} \mid \boldsymbol{y})$.
 
 We consider rather a setting where we approximate $p$ by another distribution $g$ which we wish to be close.
-The terminology **variational** is synonym for optimization.
+
+
+The terminology **variational** is synonym for optimization in this context.
 
 ## Kullback--Leibler divergence
 
@@ -76,6 +78,7 @@ The Kullback--Leibler divergence notion is central to study of model misspecific
 - if we fit $g(\cdot)$ when data arise from $f_t,$ the maximum likelihood estimator of the parameters $\widehat{\boldsymbol{\psi}}$ will be the value of the parameter that minimizes the  Kullback--Leibler divergence $\mathsf{KL}(f_t \parallel g)$.
 
 
+
 ## Marginal likelihood
 
 Consider now the problem of approximating the marginal likelihood, sometimes called the evidence,
@@ -84,10 +87,29 @@ p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(\boldsymbol{y}, \boldsymbol{\th
 \end{align*}
 where we only have the joint $p(\boldsymbol{y}, \boldsymbol{\theta})$ is the product of the likelihood times the prior.
 
+## Approximating the marginal likelihood
 
-## Reformulation of the marginal density
+Consider $g(\boldsymbol{\theta};\boldsymbol{\psi})$ with $\boldsymbol{\psi} \in \mathbb{R}^J$ an approximating density function 
 
-Consider $g(\boldsymbol{\theta};\boldsymbol{\psi})$ with $\boldsymbol{\psi} \in \mathbb{R}^J$ an approximating density function whose integral is one over $\boldsymbol{\Theta} \subseteq \mathbb{R}^p$ and whose support is part of that of $\mathrm{supp} (g) \subseteq \mathrm{supp}(p) = \boldsymbol{\Theta}$:
+- whose integral is one over $\boldsymbol{\Theta} \subseteq \mathbb{R}^p$ (normalized density)
+- whose support is part of that of $\mathrm{supp} (g) \subseteq \mathrm{supp}(p) = \boldsymbol{\Theta}$ (so KL divergence is not infinite)
+
+Objective: minimize the Kullback--Leibler divergence $$\mathsf{KL}\left\{p(\boldsymbol{\theta} \mid \boldsymbol{y}) \parallel g(\boldsymbol{\theta};\boldsymbol{\psi})\right\}.$$
+
+## Problems ahead
+
+Minimizing the Kullback--Leibler divergence is not feasible to evaluate the posterior.
+
+Taking $f_t = p(\boldsymbol{\theta} \mid \boldsymbol{y})$ is not feasible: we need the marginal likelihood
+to compute the expectation!
+
+
+## Alternative expression for the marginal likelihood
+
+
+We consider a different objective to bound the marginal likelihood. Write
+
+
 \begin{align*}
 p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}}  \frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})} g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}
@@ -97,7 +119,7 @@ p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}}  \frac{p(\boldsymbol{y}, \boldsym
 
 For $h(x)$ a convex function, **Jensen's inequality** implies that $$h\{\mathsf{E}(X)\} \leq \mathsf{E}\{h(X)\},$$ and applying this with $h(x)=-\log(x),$ we get
 \begin{align*}
--\log p(\boldsymbol{y}) \leq - \log  \left(\frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})}\right) g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
+-\log p(\boldsymbol{y}) \leq -\int_{\boldsymbol{\Theta}} \log  \left(\frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})}\right) g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}
 
 
@@ -105,30 +127,30 @@ For $h(x)$ a convex function, **Jensen's inequality** implies that $$h\{\mathsf{
 
 We can thus consider the model that minimizes the **reverse Kullback--Leibler divergence**
 \begin{align*}
-g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}) = \mathrm{argmin}_{\boldsymbol{\psi}} \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\}.
+g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}) = \mathrm{argmin}_{\boldsymbol{\psi}} \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\}.
 \end{align*}
 
-Consider the reformulation
+Since $p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\theta} \mid \boldsymbol{y}) p(\boldsymbol{y})$, 
 \begin{align*}
-\mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\} &= \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\} - \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} \\&\quad+ \log p(\boldsymbol{y}).
+\mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\} &= \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\} - \mathsf{E}_g\{\log p( \boldsymbol{\theta}, \boldsymbol{y})\} \\&\quad+ \log p(\boldsymbol{y}).
 \end{align*}
 
 
 ## Evidence lower bound
 
 Instead of minimizing the Kullback--Leibler divergence, we can equivalently maximize the so-called **evidence lower bound** (ELBO)
-\begin{align*}f
+\begin{align*}
 \mathsf{ELBO}(g) = \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} - \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\}
 \end{align*}
 
 The ELBO is a lower bound for the marginal likelihood because a Kullback--Leibler divergence is non-negative and
 \begin{align*}
-\log p(\boldsymbol{y}) = \mathsf{ELBO}(g) +  \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\}.
+\log p(\boldsymbol{y}) = \mathsf{ELBO}(g) +  \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\}.
 \end{align*}
 
 ## Use of ELBO
 
-The idea is that we will approximate the density $p(\boldsymbol{\theta} \mid \boldsymbol{y}) \approx g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}})$.
+The idea is that we will approximate the density $$p(\boldsymbol{\theta} \mid \boldsymbol{y}) \approx g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}).$$
 
 - the ELBO can be used for model comparison (but we compare bounds...)
 - we can sample from $q$ as before.
@@ -200,7 +222,7 @@ curve(dnorm(x, varia_sn$par[1],
 In practice, the quality of the approximation depends on the choice of $g(\cdot; \boldsymbol{\psi}).$
 
 - We typically want matching support.
-- The approximation will be affected by the correlation between posterior components $\boldsymbol{\theta} \mid \boldsymbol{y}$
+- The approximation will be affected by the correlation between posterior components $\boldsymbol{\theta} \mid \boldsymbol{y}.$
 - Derivations can also be done for $(\boldsymbol{U}, \boldsymbol{\theta})$, where $\boldsymbol{U}$ are latent variables from a data augmentation scheme.
 
 
@@ -213,16 +235,23 @@ g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \prod_{j=1}^M g_j(\boldsymbol{\theta
 If we assume that each of the $J$ parameters $\theta_1, \ldots, \theta_J$ are independent, then
 we obtain a **mean-field** approximation.
 
-## Optimal form of approximating density
+## Maximizing the ELBO one step at a time
 
 \begin{align*}
-\mathsf{ELBO}(g) & \stackrel{\boldsymbol{\theta}_i}{\propto} \int \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\} g_i(\boldsymbol{\theta}_i) \mathrm{d} \boldsymbol{\theta}_i \\&\quad - \int \log \{ g_i(\boldsymbol{\theta}_i) \} g_i(\boldsymbol{\theta}_i) \mathrm{d} \boldsymbol{\theta}_i
+\mathsf{ELBO}(g) &= \int \log p(\boldsymbol{y}, \boldsymbol{\theta}) \prod_{j=1}^M g_j(\boldsymbol{\theta}_j)\mathrm{d} \boldsymbol{\theta} \\&\quad- \sum_{j=1}^M \int \log \{ g_j(\boldsymbol{\theta}_j) \} g_j(\boldsymbol{\theta}_j) \mathrm{d}  \boldsymbol{\theta}_j
+ \\& \stackrel{\boldsymbol{\theta}_i}{\propto} \mathsf{E}_{i}\left[\mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\} \right] - \mathsf{E}_i\left[\log \{ g_i(\boldsymbol{\theta}_i) \}\right]
 \end{align*}
-The choice of $g_i$ that maximizes the ELBO is
+which is the negative of a Kullback--Leibler divergence.
+
+## Optimal choice of approximating density
+
+The maximum possible value of zero for the KL is attained when $$\log \{ g_i(\boldsymbol{\theta}_i) \} = \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\}.$$
+The choice of marginal $g_i$ that maximizes the ELBO is
 \begin{align*}
  g^{\star}_i(\boldsymbol{\theta}_i) \propto \exp \left[ \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\}\right].
 \end{align*}
 Often, we look at the kernel of $g^{\star}_j$ to deduce the normalizing constant.
+
 
 ## Coordinate-ascent variational inference (CAVI)
 
@@ -248,7 +277,7 @@ We assume a factorization of the variational approximation $g_\mu(\mu)g_\tau(\ta
 \begin{align*}
  \log g^{\star}_\mu(\mu) \propto -\frac{\mathsf{E}_{\tau}(\tau)}{2} \sum_{i=1}^n (y_i-\mu)^2-\frac{\tau_0}{2}(\mu-\mu_0)^2
 \end{align*}
-which is quadratic in $\mu$ and thus must be Gaussian with precision $\tau_n = \tau_0 + n\tau$ and mean $\tau_n^{-1}\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n\overline{y})$
+which is quadratic in $\mu$ and thus must be Gaussian with precision $\tau_n = \tau_0 + n\tau$ and mean $\tau_n^{-1}\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n\overline{y}\}$
 
 ## Variational approximation to Gaussian --- precision
 
@@ -271,8 +300,8 @@ so that it depends on the parameters of the distribution of $\mu$ directly.
 The algorithm cycles through the following updates until convergence:
 
 - $\mathsf{Va}_{\mu}(\mu) = \{\tau_0 + n \mathsf{E}_{\tau}(\tau)\}^{-1},$
-- $\mathsf{E}_{\mu}(\mu) = \mathsf{Va}_{\mu}(\mu)(\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n \overline{y}),$
-- $\mathsf{E}_{\tau}(\tau) = a_n/b_n$ where $b_n$ is a function of $\mathsf{E}_{\mu}(\mu)$ and $\mathsf{Var}_{\mu}(\mu)\}.$
+- $\mathsf{E}_{\mu}(\mu) = \mathsf{Va}_{\mu}(\mu)\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n \overline{y}\},$
+- $\mathsf{E}_{\tau}(\tau) = a_n/b_n$ where $b_n$ is a function of both $\mathsf{E}_{\mu}(\mu)$ and $\mathsf{Var}_{\mu}(\mu).$
 
 We only compute the ELBO at the end of each cycle.
 
@@ -283,6 +312,8 @@ The derivation of the ELBO is straightforward but tedious; we only need to monit
 - \frac{\tau_0}{2} \mathsf{E}_{\mu}\{(\mu - \mu_0)^2\} - \frac{\log\tau_n}{2}-a_n\log b_n
 \end{align*}
 for convergence, although other normalizing constants would be necessary if we wanted to approximate the marginal likelihood.
+
+We can also consider relative changes in parameter values as tolerance criterion.
 
 ## Stochastic optimization
 
@@ -339,7 +370,7 @@ p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \
 
 The entropy of the multivariate Gaussian with mean $\boldsymbol{\mu}$ and covariance $\boldsymbol{\Sigma} = \mathbf{LL}^\top$, where $\mathbf{L}$ is a lower triangular matrix, is
 \begin{align*}
- \mathbb{H}(\boldsymbol{L}) = - \mathsf{E}_g(\log g) &= \frac{D+D\log(2\pi) + \log |\mathbf{LL}^\top|}{2},
+ \mathcal{E}(\mathbf{L}) = - \mathsf{E}_g(\log g) &= \frac{D+D\log(2\pi) + \log |\mathbf{LL}^\top|}{2},
 \end{align*}
 and only depends on $\boldsymbol{\Sigma}$.
 
@@ -349,12 +380,12 @@ Since the Gaussian is a location-scale family, we can rewrite the model in terms
 
 The ELBO with the transformation becomes
 \begin{align*}
- \mathsf{E}_{\boldsymbol{Z}}\left[ \log p\{\boldsymbol{y}, T^{-1}(\boldsymbol{\zeta})\} + \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|\right] + \mathbb{H}(\boldsymbol{L}).
+ \mathsf{E}_{\boldsymbol{Z}}\left[ \log p\{\boldsymbol{y}, T^{-1}(\boldsymbol{\zeta})\} + \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|\right] + \mathcal{E}(\mathbf{L}).
 \end{align*}
 
 ## Chain rule
 
-If $\boldsymbol{\theta} = T^{-1}(\boldsymbol{\zeta})$ and $\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{z},$ we have for $\boldsymbol{\psi}$ equal to either $\boldsymbol{\mu}$ or $\mathbf{L}$ that
+If $\boldsymbol{\theta} = T^{-1}(\boldsymbol{\zeta})$ and $\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{z},$ we have for $\boldsymbol{\psi}$ equal to either $\boldsymbol{\mu}$ or $\mathbf{L}$, using the chain rule,
 \begin{align*}
  & \frac{\partial}{\partial \boldsymbol{\psi}}\log p(\boldsymbol{y}, \boldsymbol{\theta})
  \\&\quad  = \frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}}

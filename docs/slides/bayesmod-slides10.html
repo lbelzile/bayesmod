@@ -158,12 +158,13 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Mar 24, 2025</p>
+  <p class="date">Last compiled Wednesday Mar 26, 2025</p>
 </section>
 <section id="variational-inference" class="slide level2">
 <h2>Variational inference</h2>
 <p>Laplace approximation provides a heuristic for large-sample approximations, but it fails to characterize well <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>.</p>
-<p>We consider rather a setting where we approximate <span class="math inline">\(p\)</span> by another distribution <span class="math inline">\(g\)</span> which we wish to be close. The terminology <strong>variational</strong> is synonym for optimization.</p>
+<p>We consider rather a setting where we approximate <span class="math inline">\(p\)</span> by another distribution <span class="math inline">\(g\)</span> which we wish to be close.</p>
+<p>The terminology <strong>variational</strong> is synonym for optimization in this context.</p>
 </section>
 <section id="kullbackleibler-divergence" class="slide level2">
 <h2>Kullback–Leibler divergence</h2>
@@ -190,39 +191,54 @@ Léo Belzile
 p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(\boldsymbol{y}, \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}\]</span> where we only have the joint <span class="math inline">\(p(\boldsymbol{y}, \boldsymbol{\theta})\)</span> is the product of the likelihood times the prior.</p>
 </section>
-<section id="reformulation-of-the-marginal-density" class="slide level2">
-<h2>Reformulation of the marginal density</h2>
-<p>Consider <span class="math inline">\(g(\boldsymbol{\theta};\boldsymbol{\psi})\)</span> with <span class="math inline">\(\boldsymbol{\psi} \in \mathbb{R}^J\)</span> an approximating density function whose integral is one over <span class="math inline">\(\boldsymbol{\Theta} \subseteq \mathbb{R}^p\)</span> and whose support is part of that of <span class="math inline">\(\mathrm{supp} (g) \subseteq \mathrm{supp}(p) = \boldsymbol{\Theta}\)</span>: <span class="math display">\[\begin{align*}
+<section id="approximating-the-marginal-likelihood" class="slide level2">
+<h2>Approximating the marginal likelihood</h2>
+<p>Consider <span class="math inline">\(g(\boldsymbol{\theta};\boldsymbol{\psi})\)</span> with <span class="math inline">\(\boldsymbol{\psi} \in \mathbb{R}^J\)</span> an approximating density function</p>
+<ul>
+<li>whose integral is one over <span class="math inline">\(\boldsymbol{\Theta} \subseteq \mathbb{R}^p\)</span> (normalized density)</li>
+<li>whose support is part of that of <span class="math inline">\(\mathrm{supp} (g) \subseteq \mathrm{supp}(p) = \boldsymbol{\Theta}\)</span> (so KL divergence is not infinite)</li>
+</ul>
+<p>Objective: minimize the Kullback–Leibler divergence <span class="math display">\[\mathsf{KL}\left\{p(\boldsymbol{\theta} \mid \boldsymbol{y}) \parallel g(\boldsymbol{\theta};\boldsymbol{\psi})\right\}.\]</span></p>
+</section>
+<section id="problems-ahead" class="slide level2">
+<h2>Problems ahead</h2>
+<p>Minimizing the Kullback–Leibler divergence is not feasible to evaluate the posterior.</p>
+<p>Taking <span class="math inline">\(f_t = p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is not feasible: we need the marginal likelihood to compute the expectation!</p>
+</section>
+<section id="alternative-expression-for-the-marginal-likelihood" class="slide level2">
+<h2>Alternative expression for the marginal likelihood</h2>
+<p>We consider a different objective to bound the marginal likelihood. Write</p>
+<p><span class="math display">\[\begin{align*}
 p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}}  \frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})} g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}\]</span></p>
 </section>
 <section id="bounding-the-marginal-likelihood" class="slide level2">
 <h2>Bounding the marginal likelihood</h2>
 <p>For <span class="math inline">\(h(x)\)</span> a convex function, <strong>Jensen’s inequality</strong> implies that <span class="math display">\[h\{\mathsf{E}(X)\} \leq \mathsf{E}\{h(X)\},\]</span> and applying this with <span class="math inline">\(h(x)=-\log(x),\)</span> we get <span class="math display">\[\begin{align*}
--\log p(\boldsymbol{y}) \leq - \log  \left(\frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})}\right) g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
+-\log p(\boldsymbol{y}) \leq -\int_{\boldsymbol{\Theta}} \log  \left(\frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})}\right) g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}\]</span></p>
 </section>
 <section id="evidence-lower-bound" class="slide level2">
 <h2>Evidence lower bound</h2>
 <p>We can thus consider the model that minimizes the <strong>reverse Kullback–Leibler divergence</strong> <span class="math display">\[\begin{align*}
-g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}) = \mathrm{argmin}_{\boldsymbol{\psi}} \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\}.
+g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}) = \mathrm{argmin}_{\boldsymbol{\psi}} \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\}.
 \end{align*}\]</span></p>
-<p>Consider the reformulation <span class="math display">\[\begin{align*}
-\mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\} &amp;= \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\} - \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} \\&amp;\quad+ \log p(\boldsymbol{y}).
+<p>Since <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\theta} \mid \boldsymbol{y}) p(\boldsymbol{y})\)</span>, <span class="math display">\[\begin{align*}
+\mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\} &amp;= \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\} - \mathsf{E}_g\{\log p( \boldsymbol{\theta}, \boldsymbol{y})\} \\&amp;\quad+ \log p(\boldsymbol{y}).
 \end{align*}\]</span></p>
 </section>
 <section id="evidence-lower-bound-1" class="slide level2">
 <h2>Evidence lower bound</h2>
-<p>Instead of minimizing the Kullback–Leibler divergence, we can equivalently maximize the so-called <strong>evidence lower bound</strong> (ELBO) <span class="math display">\[\begin{align*}f
+<p>Instead of minimizing the Kullback–Leibler divergence, we can equivalently maximize the so-called <strong>evidence lower bound</strong> (ELBO) <span class="math display">\[\begin{align*}
 \mathsf{ELBO}(g) = \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} - \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\}
 \end{align*}\]</span></p>
 <p>The ELBO is a lower bound for the marginal likelihood because a Kullback–Leibler divergence is non-negative and <span class="math display">\[\begin{align*}
-\log p(\boldsymbol{y}) = \mathsf{ELBO}(g) +  \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta}, \boldsymbol{y})\}.
+\log p(\boldsymbol{y}) = \mathsf{ELBO}(g) +  \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\}.
 \end{align*}\]</span></p>
 </section>
 <section id="use-of-elbo" class="slide level2">
 <h2>Use of ELBO</h2>
-<p>The idea is that we will approximate the density <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y}) \approx g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}})\)</span>.</p>
+<p>The idea is that we will approximate the density <span class="math display">\[p(\boldsymbol{\theta} \mid \boldsymbol{y}) \approx g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}).\]</span></p>
 <ul>
 <li>the ELBO can be used for model comparison (but we compare bounds…)</li>
 <li>we can sample from <span class="math inline">\(q\)</span> as before.</li>
@@ -250,7 +266,7 @@ Figure&nbsp;1: Skewed density with the Laplace approximation (dashed orange) and
 <p>In practice, the quality of the approximation depends on the choice of <span class="math inline">\(g(\cdot; \boldsymbol{\psi}).\)</span></p>
 <ul>
 <li>We typically want matching support.</li>
-<li>The approximation will be affected by the correlation between posterior components <span class="math inline">\(\boldsymbol{\theta} \mid \boldsymbol{y}\)</span></li>
+<li>The approximation will be affected by the correlation between posterior components <span class="math inline">\(\boldsymbol{\theta} \mid \boldsymbol{y}.\)</span></li>
 <li>Derivations can also be done for <span class="math inline">\((\boldsymbol{U}, \boldsymbol{\theta})\)</span>, where <span class="math inline">\(\boldsymbol{U}\)</span> are latent variables from a data augmentation scheme.</li>
 </ul>
 </section>
@@ -260,11 +276,16 @@ Figure&nbsp;1: Skewed density with the Laplace approximation (dashed orange) and
 g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \prod_{j=1}^M g_j(\boldsymbol{\theta}_j; \boldsymbol{\psi}_j)
 \end{align*}\]</span> If we assume that each of the <span class="math inline">\(J\)</span> parameters <span class="math inline">\(\theta_1, \ldots, \theta_J\)</span> are independent, then we obtain a <strong>mean-field</strong> approximation.</p>
 </section>
-<section id="optimal-form-of-approximating-density" class="slide level2">
-<h2>Optimal form of approximating density</h2>
+<section id="maximizing-the-elbo-one-step-at-a-time" class="slide level2">
+<h2>Maximizing the ELBO one step at a time</h2>
 <p><span class="math display">\[\begin{align*}
-\mathsf{ELBO}(g) &amp; \stackrel{\boldsymbol{\theta}_i}{\propto} \int \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\} g_i(\boldsymbol{\theta}_i) \mathrm{d} \boldsymbol{\theta}_i \\&amp;\quad - \int \log \{ g_i(\boldsymbol{\theta}_i) \} g_i(\boldsymbol{\theta}_i) \mathrm{d} \boldsymbol{\theta}_i
-\end{align*}\]</span> The choice of <span class="math inline">\(g_i\)</span> that maximizes the ELBO is <span class="math display">\[\begin{align*}
+\mathsf{ELBO}(g) &amp;= \int \log p(\boldsymbol{y}, \boldsymbol{\theta}) \prod_{j=1}^M g_j(\boldsymbol{\theta}_j)\mathrm{d} \boldsymbol{\theta} \\&amp;\quad- \sum_{j=1}^M \int \log \{ g_j(\boldsymbol{\theta}_j) \} g_j(\boldsymbol{\theta}_j) \mathrm{d}  \boldsymbol{\theta}_j
+\\&amp; \stackrel{\boldsymbol{\theta}_i}{\propto} \mathsf{E}_{i}\left[\mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\} \right] - \mathsf{E}_i\left[\log \{ g_i(\boldsymbol{\theta}_i) \}\right]
+\end{align*}\]</span> which is the negative of a Kullback–Leibler divergence.</p>
+</section>
+<section id="optimal-choice-of-approximating-density" class="slide level2">
+<h2>Optimal choice of approximating density</h2>
+<p>The maximum possible value of zero for the KL is attained when <span class="math display">\[\log \{ g_i(\boldsymbol{\theta}_i) \} = \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\}.\]</span> The choice of marginal <span class="math inline">\(g_i\)</span> that maximizes the ELBO is <span class="math display">\[\begin{align*}
 g^{\star}_i(\boldsymbol{\theta}_i) \propto \exp \left[ \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\}\right].
 \end{align*}\]</span> Often, we look at the kernel of <span class="math inline">\(g^{\star}_j\)</span> to deduce the normalizing constant.</p>
 </section>
@@ -289,7 +310,7 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \tau^{-1}), \qquad i =1, \ldots, n;\\
 <h2>Variational approximation to Gaussian — mean</h2>
 <p>We assume a factorization of the variational approximation <span class="math inline">\(g_\mu(\mu)g_\tau(\tau);\)</span> the factor for <span class="math inline">\(g_\mu\)</span> is proportional to <span class="math display">\[\begin{align*}
 \log g^{\star}_\mu(\mu) \propto -\frac{\mathsf{E}_{\tau}(\tau)}{2} \sum_{i=1}^n (y_i-\mu)^2-\frac{\tau_0}{2}(\mu-\mu_0)^2
-\end{align*}\]</span> which is quadratic in <span class="math inline">\(\mu\)</span> and thus must be Gaussian with precision <span class="math inline">\(\tau_n = \tau_0 + n\tau\)</span> and mean <span class="math inline">\(\tau_n^{-1}\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n\overline{y})\)</span></p>
+\end{align*}\]</span> which is quadratic in <span class="math inline">\(\mu\)</span> and thus must be Gaussian with precision <span class="math inline">\(\tau_n = \tau_0 + n\tau\)</span> and mean <span class="math inline">\(\tau_n^{-1}\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n\overline{y}\}\)</span></p>
 </section>
 <section id="variational-approximation-to-gaussian-precision" class="slide level2">
 <h2>Variational approximation to Gaussian — precision</h2>
@@ -308,8 +329,8 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \tau^{-1}), \qquad i =1, \ldots, n;\\
 <p>The algorithm cycles through the following updates until convergence:</p>
 <ul>
 <li><span class="math inline">\(\mathsf{Va}_{\mu}(\mu) = \{\tau_0 + n \mathsf{E}_{\tau}(\tau)\}^{-1},\)</span></li>
-<li><span class="math inline">\(\mathsf{E}_{\mu}(\mu) = \mathsf{Va}_{\mu}(\mu)(\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n \overline{y}),\)</span></li>
-<li><span class="math inline">\(\mathsf{E}_{\tau}(\tau) = a_n/b_n\)</span> where <span class="math inline">\(b_n\)</span> is a function of <span class="math inline">\(\mathsf{E}_{\mu}(\mu)\)</span> and <span class="math inline">\(\mathsf{Var}_{\mu}(\mu)\}.\)</span></li>
+<li><span class="math inline">\(\mathsf{E}_{\mu}(\mu) = \mathsf{Va}_{\mu}(\mu)\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n \overline{y}\},\)</span></li>
+<li><span class="math inline">\(\mathsf{E}_{\tau}(\tau) = a_n/b_n\)</span> where <span class="math inline">\(b_n\)</span> is a function of both <span class="math inline">\(\mathsf{E}_{\mu}(\mu)\)</span> and <span class="math inline">\(\mathsf{Var}_{\mu}(\mu).\)</span></li>
 </ul>
 <p>We only compute the ELBO at the end of each cycle.</p>
 </section>
@@ -318,6 +339,7 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \tau^{-1}), \qquad i =1, \ldots, n;\\
 <p>The derivation of the ELBO is straightforward but tedious; we only need to monitor <span class="math display">\[\begin{align*}
 - \frac{\tau_0}{2} \mathsf{E}_{\mu}\{(\mu - \mu_0)^2\} - \frac{\log\tau_n}{2}-a_n\log b_n
 \end{align*}\]</span> for convergence, although other normalizing constants would be necessary if we wanted to approximate the marginal likelihood.</p>
+<p>We can also consider relative changes in parameter values as tolerance criterion.</p>
 </section>
 <section id="stochastic-optimization" class="slide level2">
 <h2>Stochastic optimization</h2>
@@ -371,19 +393,19 @@ p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \
 <section id="gaussian-entropy" class="slide level2">
 <h2>Gaussian entropy</h2>
 <p>The entropy of the multivariate Gaussian with mean <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance <span class="math inline">\(\boldsymbol{\Sigma} = \mathbf{LL}^\top\)</span>, where <span class="math inline">\(\mathbf{L}\)</span> is a lower triangular matrix, is <span class="math display">\[\begin{align*}
-\mathbb{H}(\boldsymbol{L}) = - \mathsf{E}_g(\log g) &amp;= \frac{D+D\log(2\pi) + \log |\mathbf{LL}^\top|}{2},
+\mathcal{E}(\mathbf{L}) = - \mathsf{E}_g(\log g) &amp;= \frac{D+D\log(2\pi) + \log |\mathbf{LL}^\top|}{2},
 \end{align*}\]</span> and only depends on <span class="math inline">\(\boldsymbol{\Sigma}\)</span>.</p>
 </section>
 <section id="elbo-with-gaussian-approximation" class="slide level2">
 <h2>ELBO with Gaussian approximation</h2>
 <p>Since the Gaussian is a location-scale family, we can rewrite the model in terms of a standardized Gaussian variable <span class="math inline">\(\boldsymbol{Z}\sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{I}_p)\)</span> where <span class="math inline">\(\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{Z}\)</span> (this transformation has unit Jacobian).</p>
 <p>The ELBO with the transformation becomes <span class="math display">\[\begin{align*}
-\mathsf{E}_{\boldsymbol{Z}}\left[ \log p\{\boldsymbol{y}, T^{-1}(\boldsymbol{\zeta})\} + \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|\right] + \mathbb{H}(\boldsymbol{L}).
+\mathsf{E}_{\boldsymbol{Z}}\left[ \log p\{\boldsymbol{y}, T^{-1}(\boldsymbol{\zeta})\} + \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|\right] + \mathcal{E}(\mathbf{L}).
 \end{align*}\]</span></p>
 </section>
 <section id="chain-rule" class="slide level2">
 <h2>Chain rule</h2>
-<p>If <span class="math inline">\(\boldsymbol{\theta} = T^{-1}(\boldsymbol{\zeta})\)</span> and <span class="math inline">\(\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{z},\)</span> we have for <span class="math inline">\(\boldsymbol{\psi}\)</span> equal to either <span class="math inline">\(\boldsymbol{\mu}\)</span> or <span class="math inline">\(\mathbf{L}\)</span> that <span class="math display">\[\begin{align*}
+<p>If <span class="math inline">\(\boldsymbol{\theta} = T^{-1}(\boldsymbol{\zeta})\)</span> and <span class="math inline">\(\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{z},\)</span> we have for <span class="math inline">\(\boldsymbol{\psi}\)</span> equal to either <span class="math inline">\(\boldsymbol{\mu}\)</span> or <span class="math inline">\(\mathbf{L}\)</span>, using the chain rule, <span class="math display">\[\begin{align*}
 &amp; \frac{\partial}{\partial \boldsymbol{\psi}}\log p(\boldsymbol{y}, \boldsymbol{\theta})
 \\&amp;\quad  = \frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}}
    \times \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}
