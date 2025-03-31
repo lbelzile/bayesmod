@@ -1,0 +1,40 @@
+---
+title: "Assignment 3"
+toc: false
+filters:
+   - include-code-files
+---
+
+These problems are for credit and to be handed in on ZoneCours on April 28th at the latest at 23:55.
+
+## Problem 3.1
+
+The [`rats` data](/files/data/rats.csv), extracted from Table 5 of @Tarone:1982, contains observations from 70 experiments on  animal carcinogenesis bioassay
+conducted with female F344 rats, recording the number of lung cancer tumors developed. Treating the observations as independent, write
+\begin{align*}
+y_i \mid \theta_i &\sim \mathsf{binom}(n_i, \theta_i), \quad i =1, \ldots, 70 \\
+\theta_i \mid \alpha, \beta & \sim \mathsf{beta}(\alpha, \beta)
+\end{align*}
+with an improper prior $p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\alpha>0, \beta>0).$
+
+Fit the model using variational inference
+
+1. Derive the optimal choice of distribution for $\theta_i$ and use coordinate ascent updates for these parameters
+2. Assume a full-rank Gaussian approximation for the pair $(\alpha, \beta)$ and run stochastic gradient descent using ADVI.
+3. Plot the ELBO and the posterior distribution; compare with the results of your Gibbs sampler from Assignement 2.
+ 
+
+## Problem 3.2
+
+Consider the following hierarchical model:
+\begin{align*}
+Y \mid X \sim \mathsf{Gauss}(2x + x^{1/2}, \tau^2), \qquad X \sim 3 + \mathsf{expo}(1)
+\end{align*}
+
+1. Using forward sampling, obtain 10 000 draws from $Y$ and plot the marginal density.
+2. Write code to calculate the marginal density for fixed value of $y$
+\begin{align*}
+p(y) = \frac{p(x,y)}{p(x \mid y)}
+\end{align*}
+by approximating the denominator $p(x \mid y)$ using Laplace approximation, using a truncated Gaussian to account for the support constraint since $x \in [3, \infty).$
+3. Evaluate your algorithm pointwise over 100 observations from the support of $Y$ (deduced from part 1) and compare with the Monte Carlo approximation to the density.
