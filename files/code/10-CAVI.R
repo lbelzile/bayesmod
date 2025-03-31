@@ -1,4 +1,9 @@
-# Simulate fake data
+
+
+#############################################################
+## CAVI algorithm for Gaussian data with conjugate priors
+#############################################################
+## Simulate fake data
 set.seed(80601)
 y <- rnorm(n = 20, mean = 20, sd = 3)
 hist(y)
@@ -9,7 +14,7 @@ b0 <- 0.01
 mu0 <- 0
 tau0 <- 1e-4
 # Precompute summary statistics
-n <- length(y); 
+n <- length(y);
 sum_y <- sum(y)
 # Initialize algorithm
 E_mu <- init[1]
@@ -34,8 +39,8 @@ for(i in 1:B){
 plot(1:B, elbo, type = "b")
 # Plot the marginal approximations
 par(mfrow = c(1,2))
-curve(dnorm(x, mean = E_mu, sd = sqrt(var_mu)), 
-            from = E_mu - 3*sqrt(var_mu), 
+curve(dnorm(x, mean = E_mu, sd = sqrt(var_mu)),
+            from = E_mu - 3*sqrt(var_mu),
             to = E_mu + 3*sqrt(var_mu),
       ylab = "density", xlab = expression(mu), bty = "n")
 
@@ -44,3 +49,215 @@ curve(dgamma(x, shape = an, rate = bn), from = 0, to = 0.5,
       ylab = "density", xlab = expression(tau), bty = "n")
 
 
+#############################################################
+## CAVI algorithm for K-components Gaussian mixture models
+#############################################################
+# Parameters are
+# 1) weights w (probability of components)
+# 2) cluster means mu
+# 3) cluster variance sigma_sq
+# 4) binary indicators of clusters "a" (data augmentation)
+CAVI_gauss_mixt <- function(K = 2L, y,
+                            prior_mean_mu = rep(0, K),
+                            prior_var_mu = rep(1e8, K),
+                            prior_shape_var = rep(0.01, K),
+                            prior_rate_var = rep(0.01, K),
+                            prior_shape_weights = 0.01,
+                            niter = 1000L
+){
+  stopifnot(K >= 1)
+  K <- as.integer(K)
+  n <- length(y)
+  # ELBO normalizing constant (only depends on hyperparameters)
+  lcst <- 0.5*K*(1-n*log(2*pi)) +
+    lgamma(K*prior_shape_weights) -
+    K*lgamma(prior_shape_weights) -
+    lgamma(n + K*prior_shape_weights)  +
+    sum(prior_shape_var*log(prior_rate_var)) -
+    sum(lgamma(prior_shape_var))
+  # Initialization
+  mu <- runif(K)*diff(range(y))
+  sigma_sq <- alpha <- rep(1, K)
+  A <- B <- rep(1, K) # K vector
+  ELBO <- numeric(niter)
+  nu <- matrix(NA, nrow = n, ncol = K)
+  # CAVI runs
+  for(b in seq_len(niter)){
+    for(k in seq_len(K)){
+      nu[, k] <- exp(digamma(alpha[k]) + 0.5*digamma(A[k]) - 0.5*log(B[k]) -
+                       0.5*A[k]/B[k]*((y-mu[k])^2+ sigma_sq[k]))
+    }
+    omega <- nu/rowSums(nu) # Probability of components for each obs
+    om <- colSums(omega) # sample size in each cluster
+    sigma_sq <- 1/(1/prior_var_mu + A*om/B) # posterior variance of cluster
+    mu <- sigma_sq*(prior_mean_mu/prior_var_mu + A/B*colSums(omega * y)) # posterior mean of cluster
+    alpha <- prior_shape_weights + om
+    A <- prior_shape_var + 0.5*om
+    B <- prior_rate_var + 0.5*(colSums(omega*(outer(y, mu, FUN = "-")^2)) + om*sigma_sq)
+    # Compute ELBO
+    ELBO[b] <- lcst + sum(lgamma(A) - A*log(B) +
+                            lgamma(alpha) + 0.5*(log(sigma_sq) - log(prior_var_mu)) -
+                            0.5*((mu-prior_mean_mu)^2 + sigma_sq)/prior_var_mu) -
+      sum(omega*log(omega+1e-80))
+  }
+  list(elbo = ELBO,
+       mu_mean = mu,
+       mu_var = sigma_sq,
+       sigmasq_shape = A,
+       sigmasq_rate = B,
+       weights_alpha = alpha,
+       probs = omega,
+       mean_probs = alpha/sum(alpha),
+       cluster_probs = colSums(omega)/sum(omega)
+  )
+}
+## Data application
+data(geyser, package = "MASS")
+mixt <- CAVI_gauss_mixt(K = 2, y = geyser$duration)
+plot(mixt$elbo, xlab = "number of iterations", ylab = "evidence lower bound", type = "b")
+# Compute posterior mean of mean, variance and probability of each cluster
+post_prob <- mixt$mean_probs
+post_mean <- mixt$mu_mean
+post_sd <- sqrt(mixt$sigmasq_rate/(mixt$sigmasq_shape-1))
+# Plot the mixture density at posterior mean
+curve(post_prob[1]*dnorm(x, mean = post_mean[1], sd = post_sd[1]) +
+        post_prob[2]*dnorm(x, mean = post_mean[2], sd = post_sd[2]),
+      from = 1,
+      to = 6,
+      n = 1001,
+      xlab = "duration of geyser eruption (in minutes)",
+      ylab = "density")
+rug(geyser$duration)
+
+
+#############################################################
+## CAVI algorithm for linear mixed effect model
+#############################################################
+## Considers a data augmentation with random effects u's
+## and a factorizations with variance vs (mean + random effects)
+## Assuming a diagonal structure (independent) on random effects
+## - multivariate Gaussian for (beta, u)
+## - independent inverse. gamma for each variance component
+# Y ~ Gauss(X beta + Z u, sigma_sq_eps I)
+# u ~ Gauss(0, blockdiag(sigma_sq_u))
+
+cavi_varcomp_linmixmod <- function(
+    y,
+    Xform,
+    Zform,
+    data,
+    maxiter = 1e3L,
+    tol = 1e-8,
+    prior_beta_mean,
+    prior_beta_prec,
+    prior_var_shape,
+    prior_var_rate
+){
+  stopifnot(is.matrix(X))
+  y <- as.numeric(y)
+  n <- length(y)
+  X <- model.matrix(as.formula(Xform), data = data)
+  mm <- model.frame(as.formula(Zform), data = data)
+  ym <- model.response(mm)
+  r <- ncol(mm) - ifelse(is.null(ym), 0, 1)
+  Z <- Matrix::sparse.model.matrix(
+    as.formula(paste(c(Zform, "-1"), collapse = "")),
+    data = data)
+  K <- apply(mm, 2, function(x){length(unique(x))})
+  stopifnot(ncol(Z) == sum(K))
+  C <- cbind(X, Z)
+  stopifnot(nrow(X) == n, nrow(Z) == n)
+  p <- ncol(X)
+  if(missing(prior_beta_mean)){
+    prior_beta_mean <- rep(0, p)
+  } else{
+    stopifnot(length(prior_beta_mean) == p)
+  }
+  if(missing(prior_beta_prec)){
+    prior_beta_prec <- Matrix::Diagonal(n = p, x = 0.01)
+  } else{
+    stopifnot(is.matrix(prior_beta_prec),
+              ncol(prior_beta_prec) == p,
+              nrow(prior_beta_prec) == p,
+              isSymmetric(prior_beta_prec))
+  }
+  if(missing(prior_var_shape)){
+    prior_var_shape <- rep(0.01, r + 1)
+  } else{
+    stopifnot(is.numeric(prior_var_shape),
+              isTRUE(all(prior_var_shape > 0)),
+              length(prior_var_shape) == (r + 1))
+  }
+  if(missing(prior_var_rate)){
+    prior_var_rate <- rep(0.01, r + 1)
+  } else{
+    stopifnot(is.numeric(prior_var_rate),
+              isTRUE(all(prior_var_rate > 0)),
+              length(prior_var_rate) == (r + 1))
+  }
+  # Check for variance components
+  stopifnot(Matrix::rowSums(Z) == rep(1, n))
+  lcst <- 0.5*(p+sum(K)) - 0.5*n*log(2*pi) +
+    0.5*c(Matrix::determinant(prior_beta_prec)$modulus) +
+    sum(prior_var_shape*log(prior_var_rate)) -
+    sum(log(prior_var_shape)) +
+    sum(lgamma(prior_var_shape + 0.5*c(n, K)))
+  maxiter <- as.integer(maxiter)
+  # Initial values
+  B_u <- rexp(r)
+  B_e <- rexp(1)
+  # Fixed values (do not change)
+  A_e <- prior_var_shape[1] + 0.5*n
+  A_u <- prior_var_shape[-1] + 0.5*K
+  elbo <- numeric(maxiter) # container for ELBO
+  for(b in seq_len(maxiter)){
+    # Update coefficients (means)
+    prec <- A_e/B_e * Matrix::crossprod(C) +
+      Matrix::bdiag(c(prior_beta_prec,
+                      sapply(1:r, function(i){
+                        Matrix::Diagonal(K[i],x = A_u[i]/B_u[i])})))
+    V <- solve(prec)
+    mu <- A_e/B_e * as.numeric(V %*% crossprod(C, y))
+    B_e <- prior_var_rate[1] +
+      0.5 * as.numeric(crossprod(y - as.numeric(C %*% mu))) +
+      sum(Matrix::diag(crossprod(C) %*% V))
+    B_u <- prior_var_rate[2] +
+      0.5 * as.numeric(crossprod(mu[-(1:p)])) +
+      sum(diag(V)[-(1:p)])
+    elbo[b] <- lcst -
+      0.5 * as.numeric(Matrix::determinant(prec)$modulus) -
+      0.5  * as.numeric(t(mu[1:p]) %*% prior_beta_prec %*% mu[1:p] +
+                          Matrix::determinant(
+                            prior_beta_prec %*% V[1:p,1:p])$modulus) -
+      A_e*log(B_e) - sum(A_u*log(B_u))
+    if(b > 2 && (elbo[b]-elbo[b-1]) < tol){
+      break
+    }
+  }
+  list(elbo = elbo[seq_len(b)],
+       X = X,
+       Z = Z,
+       sigmasq_shape = c(A_e, A_u),
+       sigmasq_rate = c(B_e, B_u),
+       coef_mean = mu,
+       coef_var = V)
+}
+
+data(Orthodont, package = "nlme")
+# Fix factors (unordered)
+Orthodont$Subject <- factor(Orthodont$Subject, ordered = FALSE)
+sd_y <- sd(Orthodont$distance)
+y <- Orthodont$distance/sd_y # standardize response
+fit_lmm <- cavi_varcomp_linmixmod(
+  y = y,
+  Xform = ~ age + Sex,
+  Zform = ~ Subject,
+  data = Orthodont)
+lme <- lme4::lmer(y ~ age + Sex + (1 | Subject),
+                  data = Orthodont)
+# Compare coefficients for mean + random effects
+coefs <- c(lme4::fixef(lme), unlist(lme4::ranef(lme)))
+max(abs(coefs - fit_lmm$coef_mean))
+# Posterior mean of variance
+lme4::VarCorr(lme)
+sqrt(fit_lmm$sigmasq_rate/(fit_lmm$sigmasq_shape-1))
