@@ -1470,335 +1470,310 @@
     "text": "References\n\n\n\n\nCasella, G., & Berger, R. L. (2002). Statistical inference (2nd ed.). Duxbury.\n\n\nFinetti, B. de. (1974). Theory of probability: A critical introductory treatment (Vol. 1). Wiley.\n\n\nHyndman, R. J. (1996). Computing and graphing highest density regions. The American Statistician, 50(2), 120–126. https://doi.org/10.1080/00031305.1996.10474359\n\n\nMcElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and STAN (2nd ed.). Chapman; Hall/CRC."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#distribution-and-density-function",
-    "href": "slides/bayesmod-slides1.html#distribution-and-density-function",
+    "objectID": "slides/bayesmod-slides10.html#variational-inference",
+    "href": "slides/bayesmod-slides10.html#variational-inference",
     "title": "Bayesian modelling",
-    "section": "Distribution and density function",
-    "text": "Distribution and density function\nLet \\(\\boldsymbol{X} \\in \\mathbb{R}^d\\) be a random vector with distribution function \\[\\begin{align*}\nF_{\\boldsymbol{X}}(\\boldsymbol{x}) = \\Pr(\\boldsymbol{X} \\leq \\boldsymbol{x}) = \\Pr(X_1 \\leq x_1, \\ldots, X_d \\leq x_d).\n\\end{align*}\\]\nIf the distribution of \\(\\boldsymbol{X}\\) is absolutely continuous, \\[\\begin{align*}\nF_{\\boldsymbol{X}}(\\boldsymbol{x}) = \\int_{-\\infty}^{x_d} \\cdots \\int_{-\\infty}^{x_1} f_{\\boldsymbol{X}}(z_1, \\ldots, z_d) \\mathrm{d} z_1 \\cdots \\mathrm{d} z_d,\n\\end{align*}\\] where \\(f_{\\boldsymbol{X}}(\\boldsymbol{x})\\) is the joint density function."
+    "section": "Variational inference",
+    "text": "Variational inference\nLaplace approximation provides a heuristic for large-sample approximations, but it fails to characterize well \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\).\nWe consider rather a setting where we approximate \\(p\\) by another distribution \\(g\\) which we wish to be close.\nThe terminology variational is synonym for optimization in this context."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#mass-function",
-    "href": "slides/bayesmod-slides1.html#mass-function",
+    "objectID": "slides/bayesmod-slides10.html#kullbackleibler-divergence",
+    "href": "slides/bayesmod-slides10.html#kullbackleibler-divergence",
     "title": "Bayesian modelling",
-    "section": "Mass function",
-    "text": "Mass function\nBy abuse of notation, we denote the mass function in the discrete case \\[0 \\leq f_{\\boldsymbol{X}}(\\boldsymbol{x}) = \\Pr(X_1 = x_1, \\ldots, X_d = x_d) \\leq 1.\\]\nThe support is the set of non-zero density/probability total probability over all points in the support, \\[\\sum_{\\boldsymbol{x} \\in \\mathsf{supp}(\\boldsymbol{X})} f_{\\boldsymbol{X}}(\\boldsymbol{x}) = 1.\\]"
+    "section": "Kullback–Leibler divergence",
+    "text": "Kullback–Leibler divergence\nThe Kullback–Leibler divergence between densities \\(f_t(\\cdot)\\) and \\(g(\\cdot; \\boldsymbol{\\psi}),\\) is \\[\\begin{align*}\n\\mathsf{KL}(f_t \\parallel g) &=\\int \\log \\left(\\frac{f_t(\\boldsymbol{x})}{g(\\boldsymbol{x}; \\boldsymbol{\\psi})}\\right) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\\\\\n&= \\int \\log f_t(\\boldsymbol{x}) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x} - \\int \\log g(\\boldsymbol{x}; \\boldsymbol{\\psi}) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\n\\\\ &= {\\color{#c38f16}{\\mathsf{E}_{f_t}\\{\\log f_t(\\boldsymbol{X})\\}}} - \\mathsf{E}_{f_t}\\{\\log g(\\boldsymbol{X}; \\boldsymbol{\\psi})\\}\n\\end{align*}\\] The \\({\\color{#c38f16}{\\text{negative entropy}}}\\) does not depend on \\(g(\\cdot).\\)"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#marginal-distribution",
-    "href": "slides/bayesmod-slides1.html#marginal-distribution",
+    "objectID": "slides/bayesmod-slides10.html#model-misspecification",
+    "href": "slides/bayesmod-slides10.html#model-misspecification",
     "title": "Bayesian modelling",
-    "section": "Marginal distribution",
-    "text": "Marginal distribution\nThe marginal distribution of a subvector \\(\\boldsymbol{X}_{1:k}=(X_1, \\ldots, X_k)^\\top\\) is \\[\\begin{align*}\nF_{\\boldsymbol{X}_{1:k}}(\\boldsymbol{x}_{1:k}) &= \\Pr(\\boldsymbol{X}_{1:k} \\leq \\boldsymbol{x}_{1:k}) \\\\&= F_{\\boldsymbol{X}}(x_1, \\ldots, x_k, \\infty, \\ldots, \\infty).\n\\end{align*}\\]"
+    "section": "Model misspecification",
+    "text": "Model misspecification\n\nThe divergence is strictly positive unless \\(g(\\cdot; \\boldsymbol{\\psi}) \\equiv f_t(\\cdot).\\)\nThe divergence is not symmetric.\n\nThe Kullback–Leibler divergence notion is central to study of model misspecification.\n\nif we fit \\(g(\\cdot)\\) when data arise from \\(f_t,\\) the maximum likelihood estimator of the parameters \\(\\widehat{\\boldsymbol{\\psi}}\\) will be the value of the parameter that minimizes the Kullback–Leibler divergence \\(\\mathsf{KL}(f_t \\parallel g)\\)."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#marginal-density",
-    "href": "slides/bayesmod-slides1.html#marginal-density",
+    "objectID": "slides/bayesmod-slides10.html#marginal-likelihood",
+    "href": "slides/bayesmod-slides10.html#marginal-likelihood",
     "title": "Bayesian modelling",
-    "section": "Marginal density",
-    "text": "Marginal density\nThe marginal density \\(f_{\\boldsymbol{X}_{1:k}}(\\boldsymbol{x}_{1:k})\\) of an absolutely continuous subvector \\(\\boldsymbol{X}_{1:k}=(X_1, \\ldots, X_k)^\\top\\) is \\[\\begin{align*}\n\\int_{-\\infty}^\\infty \\cdots  \\int_{-\\infty}^\\infty  f_{\\boldsymbol{X}}(x_1, \\ldots, x_k, z_{k+1}, \\ldots, z_{d}) \\mathrm{d} z_{k+1} \\cdots \\mathrm{d}z_d.\n\\end{align*}\\] through integration from the joint density."
+    "section": "Marginal likelihood",
+    "text": "Marginal likelihood\nConsider now the problem of approximating the marginal likelihood, sometimes called the evidence, \\[\\begin{align*}\np(\\boldsymbol{y}) = \\int_{\\boldsymbol{\\Theta}} p(\\boldsymbol{y}, \\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\] where we only have the joint \\(p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\) is the product of the likelihood times the prior."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#conditional-distribution",
-    "href": "slides/bayesmod-slides1.html#conditional-distribution",
+    "objectID": "slides/bayesmod-slides10.html#approximating-the-marginal-likelihood",
+    "href": "slides/bayesmod-slides10.html#approximating-the-marginal-likelihood",
     "title": "Bayesian modelling",
-    "section": "Conditional distribution",
-    "text": "Conditional distribution\nThe conditional distribution function of \\(\\boldsymbol{Y}\\) given \\(\\boldsymbol{X}=\\boldsymbol{x}\\), is \\[\\begin{align*}\nf_{\\boldsymbol{Y} \\mid \\boldsymbol{X}}(\\boldsymbol{y}; \\boldsymbol{x}) = \\frac{f_{\\boldsymbol{X}, \\boldsymbol{Y}}(\\boldsymbol{x}, \\boldsymbol{y})}{f_{\\boldsymbol{X}}(\\boldsymbol{x})}\n\\end{align*}\\] for any value of \\(\\boldsymbol{x}\\) in the support of \\(\\boldsymbol{X}\\)."
+    "section": "Approximating the marginal likelihood",
+    "text": "Approximating the marginal likelihood\nConsider \\(g(\\boldsymbol{\\theta};\\boldsymbol{\\psi})\\) with \\(\\boldsymbol{\\psi} \\in \\mathbb{R}^J\\) an approximating density function\n\nwhose integral is one over \\(\\boldsymbol{\\Theta} \\subseteq \\mathbb{R}^p\\) (normalized density)\nwhose support is part of that of \\(\\mathrm{supp} (g) \\subseteq \\mathrm{supp}(p) = \\boldsymbol{\\Theta}\\) (so KL divergence is not infinite)\n\nObjective: minimize the Kullback–Leibler divergence \\[\\mathsf{KL}\\left\\{p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\parallel g(\\boldsymbol{\\theta};\\boldsymbol{\\psi})\\right\\}.\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#conditional-and-marginal-for-contingency-table",
-    "href": "slides/bayesmod-slides1.html#conditional-and-marginal-for-contingency-table",
+    "objectID": "slides/bayesmod-slides10.html#problems-ahead",
+    "href": "slides/bayesmod-slides10.html#problems-ahead",
     "title": "Bayesian modelling",
-    "section": "Conditional and marginal for contingency table",
-    "text": "Conditional and marginal for contingency table\nConsider a bivariate distribution for \\((Y_1, Y_2)\\) supported on \\(\\{1,2,3\\} \\times \\{1, 2\\}\\) whose joint probability mass function is given in Table 1\n\n\n\n\nTable 1: Bivariate mass function with probability of each outcome for \\((Y_1, Y_2)\\).\n\n\n\n\n\n\n\n\\(Y_1=1\\)\n\\(Y_1=2\\)\n\\(Y_1=3\\)\nrow total\n\n\n\n\n\\(Y_2=1\\)\n0.20\n0.3\n0.10\n0.6\n\n\n\\(Y_2=2\\)\n0.15\n0.2\n0.05\n0.4\n\n\ncol. total\n0.35\n0.5\n0.15\n1.0"
+    "section": "Problems ahead",
+    "text": "Problems ahead\nMinimizing the Kullback–Leibler divergence is not feasible to evaluate the posterior.\nTaking \\(f_t = p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) is not feasible: we need the marginal likelihood to compute the expectation!"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#calculations-for-the-marginal-distribution",
-    "href": "slides/bayesmod-slides1.html#calculations-for-the-marginal-distribution",
+    "objectID": "slides/bayesmod-slides10.html#alternative-expression-for-the-marginal-likelihood",
+    "href": "slides/bayesmod-slides10.html#alternative-expression-for-the-marginal-likelihood",
     "title": "Bayesian modelling",
-    "section": "Calculations for the marginal distribution",
-    "text": "Calculations for the marginal distribution\nThe marginal distribution of \\(Y_1\\) is obtain by looking at the total probability for each row/column, e.g., \\[\\Pr(Y_1=i) = \\Pr(Y_1=i, Y_2=1)+ \\Pr(Y_1=i, Y_2=2).\\]\n\n\\(\\Pr(Y_1=1)=0.35\\), \\(\\Pr(Y_1=2)=0.5\\), \\(\\Pr(Y_1=3) = 0.15\\).\n\\(\\Pr(Y_2=1)=0.6\\) and \\(\\Pr(Y_2=2)=0.4\\)"
+    "section": "Alternative expression for the marginal likelihood",
+    "text": "Alternative expression for the marginal likelihood\nWe consider a different objective to bound the marginal likelihood. Write\n\\[\\begin{align*}\np(\\boldsymbol{y}) = \\int_{\\boldsymbol{\\Theta}}  \\frac{p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi})} g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#conditional-distribution-1",
-    "href": "slides/bayesmod-slides1.html#conditional-distribution-1",
+    "objectID": "slides/bayesmod-slides10.html#bounding-the-marginal-likelihood",
+    "href": "slides/bayesmod-slides10.html#bounding-the-marginal-likelihood",
     "title": "Bayesian modelling",
-    "section": "Conditional distribution",
-    "text": "Conditional distribution\nThe conditional distribution \\[\\Pr(Y_2 = i \\mid Y_1=2) = \\frac{\\Pr(Y_1=2, Y_2=i)}{\\Pr(Y_1=2)},\\] so \\[\\begin{align*}\n\\Pr(Y_2 = 1 \\mid Y_1=2) &= 0.3/0.5 = 0.6\n\\\\ \\Pr(Y_2=2 \\mid Y_1=2) &= 0.4.\n\\end{align*}\\]"
+    "section": "Bounding the marginal likelihood",
+    "text": "Bounding the marginal likelihood\nFor \\(h(x)\\) a convex function, Jensen’s inequality implies that \\[h\\{\\mathsf{E}(X)\\} \\leq \\mathsf{E}\\{h(X)\\},\\] and applying this with \\(h(x)=-\\log(x),\\) we get \\[\\begin{align*}\n-\\log p(\\boldsymbol{y}) \\leq -\\int_{\\boldsymbol{\\Theta}} \\log  \\left(\\frac{p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi})}\\right) g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#independence",
-    "href": "slides/bayesmod-slides1.html#independence",
+    "objectID": "slides/bayesmod-slides10.html#evidence-lower-bound",
+    "href": "slides/bayesmod-slides10.html#evidence-lower-bound",
     "title": "Bayesian modelling",
-    "section": "Independence",
-    "text": "Independence\nVectors \\(\\boldsymbol{Y}\\) and \\(\\boldsymbol{X}\\) are independent if \\[\\begin{align*}\nF_{\\boldsymbol{X}, \\boldsymbol{Y}}(\\boldsymbol{x}, \\boldsymbol{y}) = F_{\\boldsymbol{X}}(\\boldsymbol{x})F_{\\boldsymbol{Y}}(\\boldsymbol{y})\n\\end{align*}\\] for any value of \\(\\boldsymbol{x}\\), \\(\\boldsymbol{y}\\).\nThe joint density, if it exists, also factorizes \\[\\begin{align*}\nf_{\\boldsymbol{X}, \\boldsymbol{Y}}(\\boldsymbol{x}, \\boldsymbol{y}) = f_{\\boldsymbol{X}}(\\boldsymbol{x})f_{\\boldsymbol{Y}}(\\boldsymbol{y}).\n\\end{align*}\\]\nIf two subvectors \\(\\boldsymbol{X}\\) and \\(\\boldsymbol{Y}\\) are independent, then the conditional density \\(f_{\\boldsymbol{Y} \\mid \\boldsymbol{X}}(\\boldsymbol{y}; \\boldsymbol{x})\\) equals the marginal \\(f_{\\boldsymbol{Y}}(\\boldsymbol{y})\\)."
+    "section": "Evidence lower bound",
+    "text": "Evidence lower bound\nWe can thus consider the model that minimizes the reverse Kullback–Leibler divergence \\[\\begin{align*}\ng(\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\psi}}) = \\mathrm{argmin}_{\\boldsymbol{\\psi}} \\mathsf{KL}\\{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\parallel p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\}.\n\\end{align*}\\]\nSince \\(p(\\boldsymbol{\\theta}, \\boldsymbol{y}) = p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) p(\\boldsymbol{y})\\), \\[\\begin{align*}\n\\mathsf{KL}\\{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\parallel p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\} &= \\mathsf{E}_{g}\\{\\log g(\\boldsymbol{\\theta})\\} - \\mathsf{E}_g\\{\\log p( \\boldsymbol{\\theta}, \\boldsymbol{y})\\} \\\\&\\quad+ \\log p(\\boldsymbol{y}).\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#expected-value",
-    "href": "slides/bayesmod-slides1.html#expected-value",
+    "objectID": "slides/bayesmod-slides10.html#evidence-lower-bound-1",
+    "href": "slides/bayesmod-slides10.html#evidence-lower-bound-1",
     "title": "Bayesian modelling",
-    "section": "Expected value",
-    "text": "Expected value\nIf \\(\\boldsymbol{Y}\\) has density \\(f_{\\boldsymbol{Y}},\\) then \\[\\begin{align*}\n\\mathsf{E}\\{g(\\boldsymbol{Y})\\} = \\int g(\\boldsymbol{y}) f_{\\boldsymbol{Y}}(\\boldsymbol{y}) \\mathrm{d} \\boldsymbol{y}\n\\end{align*}\\] a weighted integral of \\(g\\) with weight \\(f_{\\boldsymbol{Y}}.\\)\nThe identity function gives the expected value \\(\\mathsf{E}(\\boldsymbol{Y}).\\)"
+    "section": "Evidence lower bound",
+    "text": "Evidence lower bound\nInstead of minimizing the Kullback–Leibler divergence, we can equivalently maximize the so-called evidence lower bound (ELBO) \\[\\begin{align*}\n\\mathsf{ELBO}(g) = \\mathsf{E}_g\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\} - \\mathsf{E}_{g}\\{\\log g(\\boldsymbol{\\theta})\\}\n\\end{align*}\\]\nThe ELBO is a lower bound for the marginal likelihood because a Kullback–Leibler divergence is non-negative and \\[\\begin{align*}\n\\log p(\\boldsymbol{y}) = \\mathsf{ELBO}(g) +  \\mathsf{KL}\\{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\parallel p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\}.\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#covariance-matrix",
-    "href": "slides/bayesmod-slides1.html#covariance-matrix",
+    "objectID": "slides/bayesmod-slides10.html#use-of-elbo",
+    "href": "slides/bayesmod-slides10.html#use-of-elbo",
     "title": "Bayesian modelling",
-    "section": "Covariance matrix",
-    "text": "Covariance matrix\nWe define the covariance matrix of \\(\\boldsymbol{Y}\\) as \\[\\begin{align*}\n\\mathsf{Va}(\\boldsymbol{Y}) = \\mathsf{E}\\left[\\left\\{\\boldsymbol{Y} - \\mathsf{E}(\\boldsymbol{Y})\\right\\}\\left\\{\\boldsymbol{Y} - \\mathsf{E}(\\boldsymbol{Y})\\right\\}^\\top\\right],\n\\end{align*}\\] which reduces in the unidimensional setting to \\(\\mathsf{Va}(Y) = \\mathsf{E}\\{Y - \\mathsf{E}(Y)\\}^2 = \\mathsf{E}(Y^2) - \\mathsf{E}(Y)^2.\\)"
+    "section": "Use of ELBO",
+    "text": "Use of ELBO\nThe idea is that we will approximate the density \\[p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\approx g(\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\psi}}).\\]\n\nthe ELBO can be used for model comparison (but we compare bounds…)\nwe can sample from \\(q\\) as before."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#affine-transformations",
-    "href": "slides/bayesmod-slides1.html#affine-transformations",
+    "objectID": "slides/bayesmod-slides10.html#heuristics-of-elbo",
+    "href": "slides/bayesmod-slides10.html#heuristics-of-elbo",
     "title": "Bayesian modelling",
-    "section": "Affine transformations",
-    "text": "Affine transformations\nIf \\(\\boldsymbol{Y}\\) is \\(d\\)-dimensional and \\(\\mathbf{A}\\) is \\(p \\times d\\) and \\(\\boldsymbol{b}\\) is a \\(p\\) vector, then\n\\[\\begin{align*}\n\\mathsf{E}(\\boldsymbol{AY} + \\boldsymbol{b}) &= \\boldsymbol{A}\\mathsf{E}(\\boldsymbol{Y}) + \\boldsymbol{b},\\\\\n\\mathsf{Va}(\\boldsymbol{AY} + \\boldsymbol{b}) &= \\boldsymbol{A}\\mathsf{Va}(\\boldsymbol{Y})\\boldsymbol{A}^\\top.\n\\end{align*}\\]"
+    "section": "Heuristics of ELBO",
+    "text": "Heuristics of ELBO\nMaximize the evidence, subject to a regularization term: \\[\\begin{align*}\n\\mathsf{ELBO}(g) = \\mathsf{E}_g\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\} - \\mathsf{E}_{g}\\{\\log g(\\boldsymbol{\\theta})\\}\n\\end{align*}\\]\nThe ELBO is an objective function comprising:\n\nthe first term will be maximized by taking a distribution placing mass near the MAP of \\(p(\\boldsymbol{y}, \\boldsymbol{\\theta}),\\)\nthe second term can be viewed as a penalty that favours high entropy of the approximating family (higher for distributions which are diffuse)."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#law-of-iterated-expectation-and-variance",
-    "href": "slides/bayesmod-slides1.html#law-of-iterated-expectation-and-variance",
+    "objectID": "slides/bayesmod-slides10.html#laplace-vs-variational-approximation",
+    "href": "slides/bayesmod-slides10.html#laplace-vs-variational-approximation",
     "title": "Bayesian modelling",
-    "section": "Law of iterated expectation and variance",
-    "text": "Law of iterated expectation and variance\nLet \\(\\boldsymbol{Z}\\) and \\(\\boldsymbol{Y}\\) be random vectors. The expected value of \\(\\boldsymbol{Y}\\) is \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{Y}}(\\boldsymbol{Y}) = \\mathsf{E}_{\\boldsymbol{Z}}\\left\\{\\mathsf{E}_{\\boldsymbol{Y} \\mid \\boldsymbol{Z}}(\\boldsymbol{Y})\\right\\}.\n\\end{align*}\\]\nThe tower property gives a law of iterated variance \\[\\begin{align*}\n\\mathsf{Va}_{\\boldsymbol{Y}}(\\boldsymbol{Y}) = \\mathsf{E}_{\\boldsymbol{Z}}\\left\\{\\mathsf{Va}_{\\boldsymbol{Y} \\mid \\boldsymbol{Z}}(\\boldsymbol{Y})\\right\\} + \\mathsf{Va}_{\\boldsymbol{Z}}\\left\\{\\mathsf{E}_{\\boldsymbol{Y} \\mid \\boldsymbol{Z}}(\\boldsymbol{Y})\\right\\}.\n\\end{align*}\\]"
+    "section": "Laplace vs variational approximation",
+    "text": "Laplace vs variational approximation\n\n\nFigure 1: Skewed density with the Laplace approximation (dashed orange) and variational Gaussian approximation (dotted blue)."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#poisson-distribution",
-    "href": "slides/bayesmod-slides1.html#poisson-distribution",
+    "objectID": "slides/bayesmod-slides10.html#choice-of-approximating-density",
+    "href": "slides/bayesmod-slides10.html#choice-of-approximating-density",
     "title": "Bayesian modelling",
-    "section": "Poisson distribution",
-    "text": "Poisson distribution\nThe Poisson distribution has mass \\[\\begin{align*}\nf(x)=\\mathsf{Pr}(Y=x) = \\frac{\\exp(-\\lambda)\\lambda^y}{\\Gamma(y+1)}, \\quad x=0, 1, 2, \\ldots\n\\end{align*}\\] where \\(\\Gamma(\\cdot)\\) denotes the gamma function.\nThe parameter \\(\\lambda\\) of the Poisson distribution is both the expectation and the variance of the distribution, meaning \\[\\mathsf{E}(Y)=\\mathsf{Va}(Y)=\\lambda.\\]"
+    "section": "Choice of approximating density",
+    "text": "Choice of approximating density\nIn practice, the quality of the approximation depends on the choice of \\(g(\\cdot; \\boldsymbol{\\psi}).\\)\n\nWe typically want matching support.\nThe approximation will be affected by the correlation between posterior components \\(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}.\\)\nDerivations can also be done for \\((\\boldsymbol{U}, \\boldsymbol{\\theta})\\), where \\(\\boldsymbol{U}\\) are latent variables from a data augmentation scheme."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#gamma-distribution",
-    "href": "slides/bayesmod-slides1.html#gamma-distribution",
+    "objectID": "slides/bayesmod-slides10.html#factorization",
+    "href": "slides/bayesmod-slides10.html#factorization",
     "title": "Bayesian modelling",
-    "section": "Gamma distribution",
-    "text": "Gamma distribution\nA gamma distribution with shape \\(\\alpha&gt;0\\) and rate \\(\\beta&gt;0\\), denoted \\(Y \\sim \\mathsf{gamma}(\\alpha, \\beta)\\), has density \\[\\begin{align*}\nf(x) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}\\exp(-\\beta x), \\qquad x \\in (0, \\infty),\n\\end{align*}\\] where \\(\\Gamma(\\alpha)=\\int_0^\\infty t^{\\alpha-1}\\exp(-t)\\mathrm{d} t\\) is the gamma function."
+    "section": "Factorization",
+    "text": "Factorization\nWe can consider densities \\(g(;\\boldsymbol{\\psi})\\) that factorize into blocks with parameters \\(\\boldsymbol{\\psi}_1, \\ldots, \\boldsymbol{\\psi}_M,\\) where \\[\\begin{align*}\ng(\\boldsymbol{\\theta}; \\boldsymbol{\\psi}) = \\prod_{j=1}^M g_j(\\boldsymbol{\\theta}_j; \\boldsymbol{\\psi}_j)\n\\end{align*}\\] If we assume that each of the \\(J\\) parameters \\(\\theta_1, \\ldots, \\theta_J\\) are independent, then we obtain a mean-field approximation."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#poisson-with-random-scale",
-    "href": "slides/bayesmod-slides1.html#poisson-with-random-scale",
+    "objectID": "slides/bayesmod-slides10.html#maximizing-the-elbo-one-step-at-a-time",
+    "href": "slides/bayesmod-slides10.html#maximizing-the-elbo-one-step-at-a-time",
     "title": "Bayesian modelling",
-    "section": "Poisson with random scale",
-    "text": "Poisson with random scale\nTo handle overdispersion in count data, take\n\\[\\begin{align*}\nY \\mid \\Lambda &= \\lambda \\sim \\mathsf{Poisson}(\\lambda)\\\\\n\\Lambda &\\sim \\mathsf{Gamma}(k\\mu, k).\n\\end{align*}\\]\nThe joint density of \\(Y\\) and \\(\\Lambda\\) on \\(\\mathbb{N}=\\{0,1,\\ldots\\} \\times \\mathbb{R}_{+}\\) is \\[\\begin{align*}\nf(y, \\lambda) &= f(y \\mid \\lambda)f(\\lambda) \\\\\n&= \\frac{\\lambda^y\\exp(-\\lambda)}{\\Gamma(y+1)}  \\frac{k^{k\\mu}\\lambda^{k\\mu-1}\\exp(-k\\lambda)}{\\Gamma(k\\mu)}\n\\end{align*}\\]"
+    "section": "Maximizing the ELBO one step at a time",
+    "text": "Maximizing the ELBO one step at a time\n\\[\\begin{align*}\n\\mathsf{ELBO}(g) &= \\int \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta}) \\prod_{j=1}^M g_j(\\boldsymbol{\\theta}_j)\\mathrm{d} \\boldsymbol{\\theta} \\\\&\\quad- \\sum_{j=1}^M \\int \\log \\{ g_j(\\boldsymbol{\\theta}_j) \\} g_j(\\boldsymbol{\\theta}_j) \\mathrm{d}  \\boldsymbol{\\theta}_j\n\\\\& \\stackrel{\\boldsymbol{\\theta}_i}{\\propto} \\mathsf{E}_{i}\\left[\\mathsf{E}_{-i}\\left\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\right\\} \\right] - \\mathsf{E}_i\\left[\\log \\{ g_i(\\boldsymbol{\\theta}_i) \\}\\right]\n\\end{align*}\\] which is the negative of a Kullback–Leibler divergence."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#conditional-distribution-2",
-    "href": "slides/bayesmod-slides1.html#conditional-distribution-2",
+    "objectID": "slides/bayesmod-slides10.html#optimal-choice-of-approximating-density",
+    "href": "slides/bayesmod-slides10.html#optimal-choice-of-approximating-density",
     "title": "Bayesian modelling",
-    "section": "Conditional distribution",
-    "text": "Conditional distribution\nThe conditional distribution of \\(\\Lambda \\mid Y=y\\) can be found by considering only terms that are function of \\(\\lambda\\), whence \\[\\begin{align*}\nf(\\lambda \\mid Y=y) \\stackrel{\\lambda}{\\propto}\\lambda^{y+k\\mu-1}\\exp\\{-(k+1)\\lambda\\}\n\\end{align*}\\] so \\(\\Lambda \\mid Y=y \\sim \\mathsf{gamma}(k\\mu + y, k+1)\\)."
+    "section": "Optimal choice of approximating density",
+    "text": "Optimal choice of approximating density\nThe maximum possible value of zero for the KL is attained when \\[\\log \\{ g_i(\\boldsymbol{\\theta}_i) \\} = \\mathsf{E}_{-i}\\left\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\right\\}.\\] The choice of marginal \\(g_i\\) that maximizes the ELBO is \\[\\begin{align*}\ng^{\\star}_i(\\boldsymbol{\\theta}_i) \\propto \\exp \\left[ \\mathsf{E}_{-i}\\left\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\right\\}\\right].\n\\end{align*}\\] Often, we look at the kernel of \\(g^{\\star}_j\\) to deduce the normalizing constant."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#marginal-density-of-poisson-mean-mixture",
-    "href": "slides/bayesmod-slides1.html#marginal-density-of-poisson-mean-mixture",
+    "objectID": "slides/bayesmod-slides10.html#coordinate-ascent-variational-inference-cavi",
+    "href": "slides/bayesmod-slides10.html#coordinate-ascent-variational-inference-cavi",
     "title": "Bayesian modelling",
-    "section": "Marginal density of Poisson mean mixture",
-    "text": "Marginal density of Poisson mean mixture\n\\[\\begin{align*}\nf(y) &= \\frac{f(y,  \\lambda)}{f(\\lambda \\mid y)} = \\frac{\\frac{\\lambda^y\\exp(-\\lambda)}{\\Gamma(y+1)}  \\frac{k^{k\\mu}\\lambda^{k\\mu-1}\\exp(-k\\lambda)}{\\Gamma(k\\mu)}}{ \\frac{(k+1)^{k\\mu+y}\\lambda^{k\\mu+y-1}\\exp\\{-(k+1)\\lambda\\}}{\\Gamma(k\\mu+y)}}\\\\\n&= \\frac{\\Gamma(k\\mu+y)}{\\Gamma(k\\mu)\\Gamma(y+1)}k^{k\\mu} (k+1)^{-k\\mu-y}\\\\&= \\frac{\\Gamma(k\\mu+y)}{\\Gamma(k\\mu)\\Gamma(y+1)}\\left(1-\\frac{1}{k+1}\\right)^{k\\mu} \\left(\\frac{1}{k+1}\\right)^y\n\\end{align*}\\] Marginally, \\(Y \\sim \\mathsf{neg. binom}(p)\\) where \\(p=(k+1)^{-1}.\\)"
+    "section": "Coordinate-ascent variational inference (CAVI)",
+    "text": "Coordinate-ascent variational inference (CAVI)\n\nWe can maximize \\(g^{\\star}_j\\) in turn for each \\(j=1, \\ldots, M\\) treating the other parameters as fixed.\nThis scheme is guaranteed to monotonically increase the ELBO until convergence to a local maximum.\nConvergence: monitor ELBO and stop when the change is lower then some present numerical tolerance.\nThe approximation may have multiple local optima: perform random initializations and keep the best one."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#moments-of-negative-binomial",
-    "href": "slides/bayesmod-slides1.html#moments-of-negative-binomial",
+    "objectID": "slides/bayesmod-slides10.html#example-of-cavi-mean-field-for-gaussian-target",
+    "href": "slides/bayesmod-slides10.html#example-of-cavi-mean-field-for-gaussian-target",
     "title": "Bayesian modelling",
-    "section": "Moments of negative binomial",
-    "text": "Moments of negative binomial\nBy the laws of iterated expectation and iterative variance, \\[\\begin{align*}\n\\mathsf{E}(Y) &= \\mathsf{E}_{\\Lambda}\\{\\mathsf{E}(Y \\mid \\Lambda\\} \\\\& = \\mathsf{E}(\\Lambda) = \\mu\\\\\n\\mathsf{Va}(Y) &= \\mathsf{E}_{\\Lambda}\\{\\mathsf{Va}(Y \\mid \\Lambda)\\} + \\mathsf{Va}_{\\Lambda}\\{\\mathsf{E}(Y \\mid \\Lambda)\\} \\\\&= \\mathsf{E}(\\Lambda) + \\mathsf{Va}(\\Lambda) \\\\&= \\mu + \\mu/k.\n\\end{align*}\\] The marginal distribution of \\(Y\\), unconditionally, has a variance which exceeds its mean."
+    "section": "Example of CAVI mean-field for Gaussian target",
+    "text": "Example of CAVI mean-field for Gaussian target\nWe consider the example from Section 2.2.2 of Ormerod & Wand (2010) for approximation of a Gaussian distribution, with \\[\\begin{align*}\nY_i &\\sim \\mathsf{Gauss}(\\mu, \\tau^{-1}), \\qquad i =1, \\ldots, n;\\\\\n\\mu &\\sim \\mathsf{Gauss}(\\mu_0, \\tau_0^{-1}) \\\\\n\\tau &\\sim \\mathsf{gamma}(a_0, b_0).\n\\end{align*}\\] This is an example where the full posterior is available in closed-form, so we can compare our approximation with the truth."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#change-of-variable-formula",
-    "href": "slides/bayesmod-slides1.html#change-of-variable-formula",
+    "objectID": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-mean",
+    "href": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-mean",
     "title": "Bayesian modelling",
-    "section": "Change of variable formula",
-    "text": "Change of variable formula\nConsider an injective (one-to-one) differentiable function \\(\\boldsymbol{g}: \\mathbb{R}^d \\to \\mathbb{R}^d,\\) with inverse \\(\\boldsymbol{g}^{-1}.\\) Then, if \\(\\boldsymbol{Y}=\\boldsymbol{g}(\\boldsymbol{X}),\\) \\[\\begin{align*}\n\\Pr(\\boldsymbol{Y} \\leq \\boldsymbol{y}) = \\Pr\\{\\boldsymbol{g}(\\boldsymbol{X}) \\leq \\boldsymbol{y}\\} = \\Pr\\{\\boldsymbol{X} \\leq \\boldsymbol{x} = \\boldsymbol{g}^{-1}(\\boldsymbol{y})\\}.\n\\end{align*}\\]\nUsing the chain rule, the density of \\(\\boldsymbol{Y}\\) is \\[\\begin{align*}\nf_{\\boldsymbol{Y}}(\\boldsymbol{y}) = f_{\\boldsymbol{X}}\\left\\{\\boldsymbol{g}^{-1}(\\boldsymbol{y})\\right\\} \\left| \\mathbf{J}_{\\boldsymbol{g}^{-1}}(\\boldsymbol{y})\\right| = f_{\\boldsymbol{X}}(\\boldsymbol{x}) \\left| \\mathbf{J}_{\\boldsymbol{g}}(\\boldsymbol{x})\\right|^{-1}\n\\end{align*}\\] where \\(\\mathbf{J}_{\\boldsymbol{g}}(\\boldsymbol{x})\\) is the Jacobian matrix with \\(i,j\\)th element \\(\\partial [\\boldsymbol{g}(\\boldsymbol{x})]_i / \\partial x_j.\\)"
+    "section": "Variational approximation to Gaussian — mean",
+    "text": "Variational approximation to Gaussian — mean\nWe assume a factorization of the variational approximation \\(g_\\mu(\\mu)g_\\tau(\\tau);\\) the factor for \\(g_\\mu\\) is proportional to \\[\\begin{align*}\n\\log g^{\\star}_\\mu(\\mu) \\propto -\\frac{\\mathsf{E}_{\\tau}(\\tau)}{2} \\sum_{i=1}^n (y_i-\\mu)^2-\\frac{\\tau_0}{2}(\\mu-\\mu_0)^2\n\\end{align*}\\] which is quadratic in \\(\\mu\\) and thus must be Gaussian with precision \\(\\tau_n = \\tau_0 + n\\tau\\) and mean \\(\\tau_n^{-1}\\{\\tau_0\\mu_0 + \\mathsf{E}_{\\tau}(\\tau)n\\overline{y}\\}\\)"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#gaussian-location-scale",
-    "href": "slides/bayesmod-slides1.html#gaussian-location-scale",
+    "objectID": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-precision",
+    "href": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-precision",
     "title": "Bayesian modelling",
-    "section": "Gaussian location-scale",
-    "text": "Gaussian location-scale\nConsider \\(d\\) independent standard Gaussian variates \\(X_j \\sim \\mathsf{Gauss}(0, 1)\\) for \\(j=1, \\ldots, d,\\) with joint density function \\[\\begin{align*}\nf_{\\boldsymbol{X}}(\\boldsymbol{x})= (2\\pi)^{-d/2} \\exp \\left( - \\frac{\\boldsymbol{x}^\\top\\boldsymbol{x}}{2}\\right).\n\\end{align*}\\] Consider the transformation \\(\\boldsymbol{Y} = \\mathbf{A}\\boldsymbol{X}+\\boldsymbol{b},\\) with \\(\\mathbf{A}\\) an invertible matrix."
+    "section": "Variational approximation to Gaussian — precision",
+    "text": "Variational approximation to Gaussian — precision\nThe optimal precision factor satisfies \\[\\begin{align*}\n\\ln g^{\\star}_{\\tau}(\\tau) &\\propto (a_0-1 +n/2) \\log \\tau \\\\& \\quad - \\tau {\\color{#c38f16}{\\left[b_0  + \\frac{1}{2} \\mathsf{E}_{\\mu}\\left\\{\\sum_{i=1}^n (y_i-\\mu)^2\\right\\}\\right]}}.\n\\end{align*}\\] This is of the same form as \\(p(\\tau \\mid \\mu, \\boldsymbol{y}),\\) namely a gamma with shape \\(a_n =a_0 +n/2\\) and rate \\({\\color{#c38f16}{b_n}}\\)."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#change-of-variable-for-gaussian",
-    "href": "slides/bayesmod-slides1.html#change-of-variable-for-gaussian",
+    "objectID": "slides/bayesmod-slides10.html#rate-of-the-gamma-for-g_tau",
+    "href": "slides/bayesmod-slides10.html#rate-of-the-gamma-for-g_tau",
     "title": "Bayesian modelling",
-    "section": "Change of variable for Gaussian",
-    "text": "Change of variable for Gaussian\n\nThe inverse transformation is \\(\\boldsymbol{g}^{-1}(\\boldsymbol{y}) = \\mathbf{A}^{-1}(\\boldsymbol{y}-\\boldsymbol{b}).\\)\nThe Jacobian \\(\\mathbf{J}_{\\boldsymbol{g}}(\\boldsymbol{x})\\) is simply \\(\\mathbf{A},\\) so the joint density of \\(\\boldsymbol{Y}\\) is \\[\\begin{align*}\n(2\\pi)^{-d/2} |\\mathbf{A}|^{-1}\\exp \\left\\{ - \\frac{(\\boldsymbol{y}-\\boldsymbol{b})^\\top\\mathbf{A}^{-\\top}\\mathbf{A}^{-1}(\\boldsymbol{y}-\\boldsymbol{b})}{2}\\right\\}.\n\\end{align*}\\] Since \\(|\\mathbf{A}^{-1}| = |\\mathbf{A}|^{-1}\\) and \\(\\mathbf{A}^{-\\top}\\mathbf{A}^{-1} = (\\mathbf{AA}^\\top)^{-1},\\) we recover \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{b}, \\mathbf{AA}^\\top).\\)"
+    "section": "Rate of the gamma for \\(g_\\tau\\)",
+    "text": "Rate of the gamma for \\(g_\\tau\\)\nIt is helpful to rewrite the expected value as \\[\\begin{align*}\n\\mathsf{E}_{\\mu}\\left\\{\\sum_{i=1}^n (y_i-\\mu)^2\\right\\} = \\sum_{i=1}^n \\{y_i - \\mathsf{E}_{\\mu}(\\mu)\\}^2 + n \\mathsf{Var}_{\\mu}(\\mu),\n\\end{align*}\\] so that it depends on the parameters of the distribution of \\(\\mu\\) directly."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-subvectors",
-    "href": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-subvectors",
+    "objectID": "slides/bayesmod-slides10.html#cavi-for-gaussian",
+    "href": "slides/bayesmod-slides10.html#cavi-for-gaussian",
     "title": "Bayesian modelling",
-    "section": "Conditional distribution of Gaussian subvectors",
-    "text": "Conditional distribution of Gaussian subvectors\nLet \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{\\mu}, \\boldsymbol{Q}^{-1})\\) and consider the partition \\[\\begin{align*}\n\\boldsymbol{Y} = \\begin{pmatrix} \\boldsymbol{Y}_1 \\\\ \\boldsymbol{Y}_2\\end{pmatrix}, \\quad\n\\boldsymbol{\\mu} = \\begin{pmatrix} \\boldsymbol{\\mu}_1 \\\\ \\boldsymbol{\\mu}_2\\end{pmatrix}, \\quad\n\\boldsymbol{Q} = \\begin{pmatrix} \\boldsymbol{Q}_{11} & \\boldsymbol{Q}_{12}\\\\ \\boldsymbol{Q}_{21} & \\boldsymbol{\\Sigma}_{22}\\end{pmatrix},\n\\end{align*}\\] where \\(\\boldsymbol{Y}_1\\) is a \\(k \\times 1\\) and \\(\\boldsymbol{Y}_2\\) is a \\((d-k) \\times 1\\) vector for some \\(1\\leq k &lt; d.\\)\nThen, we have the conditional distribution \\[\\begin{align*}\n\\boldsymbol{Y}_1 \\mid \\boldsymbol{Y}_2 =\\boldsymbol{y}_2 &\\sim \\mathsf{Gauss}_k(\\boldsymbol{\\mu}_1-\\boldsymbol{Q}_{11}^{-1}\\boldsymbol{Q}_{12}(\\boldsymbol{y}_2-\\boldsymbol{\\mu}_2), \\boldsymbol{Q}^{-1}_{11})\n\\end{align*}\\]"
+    "section": "CAVI for Gaussian",
+    "text": "CAVI for Gaussian\nThe algorithm cycles through the following updates until convergence:\n\n\\(\\mathsf{Va}_{\\mu}(\\mu) = \\{\\tau_0 + n \\mathsf{E}_{\\tau}(\\tau)\\}^{-1},\\)\n\\(\\mathsf{E}_{\\mu}(\\mu) = \\mathsf{Va}_{\\mu}(\\mu)\\{\\tau_0\\mu_0 + \\mathsf{E}_{\\tau}(\\tau)n \\overline{y}\\},\\)\n\\(\\mathsf{E}_{\\tau}(\\tau) = a_n/b_n\\) where \\(b_n\\) is a function of both \\(\\mathsf{E}_{\\mu}(\\mu)\\) and \\(\\mathsf{Var}_{\\mu}(\\mu).\\)\n\nWe only compute the ELBO at the end of each cycle."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#likelihood",
-    "href": "slides/bayesmod-slides1.html#likelihood",
+    "objectID": "slides/bayesmod-slides10.html#monitoring-convergence",
+    "href": "slides/bayesmod-slides10.html#monitoring-convergence",
     "title": "Bayesian modelling",
-    "section": "Likelihood",
-    "text": "Likelihood\nThe likelihood \\(L(\\boldsymbol{\\theta})\\) is a function of the parameter vector \\(\\boldsymbol{\\theta}\\) that gives the ‘density’ of a sample under a postulated distribution, treating the observations as fixed, \\[\\begin{align*}\nL(\\boldsymbol{\\theta}; \\boldsymbol{y}) = f(\\boldsymbol{y}; \\boldsymbol{\\theta}).\n\\end{align*}\\]"
+    "section": "Monitoring convergence",
+    "text": "Monitoring convergence\nThe derivation of the ELBO is straightforward but tedious; we only need to monitor \\[\\begin{align*}\n- \\frac{\\tau_0}{2} \\mathsf{E}_{\\mu}\\{(\\mu - \\mu_0)^2\\} - \\frac{\\log\\tau_n}{2}-a_n\\log b_n\n\\end{align*}\\] for convergence, although other normalizing constants would be necessary if we wanted to approximate the marginal likelihood.\nWe can also consider relative changes in parameter values as tolerance criterion."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#likelihood-for-independent-observations",
-    "href": "slides/bayesmod-slides1.html#likelihood-for-independent-observations",
+    "objectID": "slides/bayesmod-slides10.html#stochastic-optimization",
+    "href": "slides/bayesmod-slides10.html#stochastic-optimization",
     "title": "Bayesian modelling",
-    "section": "Likelihood for independent observations",
-    "text": "Likelihood for independent observations\nIf the joint density factorizes, \\[\\begin{align*}\nL(\\boldsymbol{\\theta}; \\boldsymbol{y})=\\prod_{i=1}^n f_i(y_i; \\boldsymbol{\\theta}) = f_1(y_1; \\boldsymbol{\\theta}) \\times \\cdots \\times f_n(y_n; \\boldsymbol{\\theta}).\n\\end{align*}\\] The corresponding log likelihood function for independent and identically distributions observations is \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}; \\boldsymbol{y}) = \\sum_{i=1}^n \\ln f(y_i; \\boldsymbol{\\theta})\n\\end{align*}\\]"
+    "section": "Stochastic optimization",
+    "text": "Stochastic optimization\nWe consider alternative numeric schemes which rely on stochastic optimization (Hoffman et al., 2013).\nThe key idea behind these methods is that\n\nwe can use gradient-based algorithms,\nand approximate the expectations with respect to \\(g\\) by drawing samples from it\n\nAlso allows for minibatch (random subset) selection to reduce computational costs in large samples"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#score",
-    "href": "slides/bayesmod-slides1.html#score",
+    "objectID": "slides/bayesmod-slides10.html#black-box-variational-inference",
+    "href": "slides/bayesmod-slides10.html#black-box-variational-inference",
     "title": "Bayesian modelling",
-    "section": "Score",
-    "text": "Score\nLet \\(\\ell(\\boldsymbol{\\theta}),\\) \\(\\boldsymbol{\\theta} \\in \\boldsymbol{\\Theta} \\subseteq \\mathbb{R}^p,\\) be the log likelihood function. The gradient of the log likelihood, termed score is the \\(p\\)-vector \\[U(\\boldsymbol{\\theta}) = \\frac{\\partial \\ell(\\boldsymbol{\\theta})}{ \\partial \\boldsymbol{\\theta}}.\\]"
+    "section": "Black-box variational inference",
+    "text": "Black-box variational inference\nRanganath et al. (2014) shows that the gradient of the ELBO reduces to \\[\\begin{align*}\n\\frac{\\partial}{\\partial \\boldsymbol{\\psi}} \\mathsf{ELBO}(g) &=\\mathsf{E}_{g}\\left\\{\\frac{\\partial \\log g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}} \\times \\log \\left( \\frac{p(\\boldsymbol{\\theta}, \\boldsymbol{y})}{g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}\\right)\\right\\}\n\\end{align*}\\] using the change rule, differentiation under the integral sign (dominated convergence theorem) and the identity \\[\\begin{align*}\n\\frac{\\partial \\log g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}} g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi}) = \\frac{\\partial g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}}\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#information-matrix",
-    "href": "slides/bayesmod-slides1.html#information-matrix",
+    "objectID": "slides/bayesmod-slides10.html#black-box-variational-inference-in-practice",
+    "href": "slides/bayesmod-slides10.html#black-box-variational-inference-in-practice",
     "title": "Bayesian modelling",
-    "section": "Information matrix",
-    "text": "Information matrix\nThe observed information matrix is the hessian of the negative log likelihood, \\[\\begin{align*}\nj(\\boldsymbol{\\theta}; \\boldsymbol{y})=-\\frac{\\partial^2 \\ell(\\boldsymbol{\\theta}; \\boldsymbol{y})}{\\partial \\boldsymbol{\\theta} \\partial \\boldsymbol{\\theta}^\\top},\n\\end{align*}\\] evaluated at the maximum likelihood estimate \\(\\widehat{\\boldsymbol{\\theta}},\\) so \\(j(\\widehat{\\boldsymbol{\\theta}}).\\)"
+    "section": "Black-box variational inference in practice",
+    "text": "Black-box variational inference in practice\n\nNote that the gradient simplifies for \\(g_i\\) in exponential families (covariance of sufficient statistic with \\(\\log(p/g)\\)).\nThe gradient estimator is particularly noisy, so Ranganath et al. (2014) provide two methods to reduce the variance of this expression using control variates and Rao–Blackwellization."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#expected-information",
-    "href": "slides/bayesmod-slides1.html#expected-information",
+    "objectID": "slides/bayesmod-slides10.html#automatic-differentiation-variational-inference",
+    "href": "slides/bayesmod-slides10.html#automatic-differentiation-variational-inference",
     "title": "Bayesian modelling",
-    "section": "Expected information",
-    "text": "Expected information\nUnder regularity conditions, the expected information, also called Fisher information matrix, is \\[\\begin{align*}\ni(\\boldsymbol{\\theta}) = \\mathsf{E}\\left\\{U(\\boldsymbol{\\theta}; \\boldsymbol{Y}) U(\\boldsymbol{\\theta}; \\boldsymbol{Y})^\\top\\right\\} = \\mathsf{E}\\left\\{j(\\boldsymbol{\\theta}; \\boldsymbol{Y})\\right\\}\n\\end{align*}\\]"
+    "section": "Automatic differentiation variational inference",
+    "text": "Automatic differentiation variational inference\nKucukelbir et al. (2017) proposes a stochastic gradient algorithm, but with two main innovations.\n\nThe first is the general use of Gaussian approximating densities for factorized density, with parameter transformations to map from the support of \\(T: \\boldsymbol{\\Theta} \\mapsto \\mathbb{R}^p\\) via \\(T(\\boldsymbol{\\theta})=\\boldsymbol{\\zeta}.\\)\nThe second is to use the resulting location-scale family to obtain an alternative form of the gradient."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#note-on-information-matrices",
-    "href": "slides/bayesmod-slides1.html#note-on-information-matrices",
+    "objectID": "slides/bayesmod-slides10.html#gaussian-full-rank-approximation",
+    "href": "slides/bayesmod-slides10.html#gaussian-full-rank-approximation",
     "title": "Bayesian modelling",
-    "section": "Note on information matrices",
-    "text": "Note on information matrices\nInformation matrices are symmetric and provide information about the variability of \\(\\widehat{\\boldsymbol{\\theta}}.\\)\nThe information of an iid sample of size \\(n\\)is \\(n\\) times that of a single observation\n\ninformation accumulates at a linear rate."
+    "section": "Gaussian full-rank approximation",
+    "text": "Gaussian full-rank approximation\nConsider an approximation \\(g(\\boldsymbol{\\zeta}; \\boldsymbol{\\psi})\\) where \\(\\boldsymbol{\\psi}\\) consists of\n\nmean parameters \\(\\boldsymbol{\\mu}\\) and\ncovariance \\(\\boldsymbol{\\Sigma}\\), parametrized through a Cholesky decomposition\n\nThe full approximation is of course more flexible when the transformed parameters \\(\\boldsymbol{\\zeta}\\) are correlated, but is more expensive to compute than the mean-field approximation."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#information-for-the-gaussian-distribution",
-    "href": "slides/bayesmod-slides1.html#information-for-the-gaussian-distribution",
+    "objectID": "slides/bayesmod-slides10.html#change-of-variable",
+    "href": "slides/bayesmod-slides10.html#change-of-variable",
     "title": "Bayesian modelling",
-    "section": "Information for the Gaussian distribution",
-    "text": "Information for the Gaussian distribution\nConsider \\(Y \\sim \\mathsf{Gauss}(\\mu, \\tau^{-1})\\), parametrized in terms of precision \\(\\tau\\). The likelihood contribution for an \\(n\\) sample is, up to proportionality, \\[\\begin{align*}\n\\ell(\\mu, \\tau) \\propto \\frac{n}{2}\\log(\\tau) - \\frac{\\tau}{2}\\sum_{i=1}^n(Y_i^2-2\\mu Y_i+\\mu^2)\n\\end{align*}\\]"
+    "section": "Change of variable",
+    "text": "Change of variable\nThe change of variable introduces a Jacobian term \\(\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\) for the approximation to the density \\(p(\\boldsymbol{\\theta}, \\boldsymbol{y})\\), where\n\\[\\begin{align*}\np(\\boldsymbol{\\theta}, \\boldsymbol{y}) = p(\\boldsymbol{\\zeta}, \\boldsymbol{y}) \\left|\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\right|\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#gaussian-information-matrices",
-    "href": "slides/bayesmod-slides1.html#gaussian-information-matrices",
+    "objectID": "slides/bayesmod-slides10.html#gaussian-entropy",
+    "href": "slides/bayesmod-slides10.html#gaussian-entropy",
     "title": "Bayesian modelling",
-    "section": "Gaussian information matrices",
-    "text": "Gaussian information matrices\nThe observed and Fisher information matrices are \\[\\begin{align*}\nj(\\mu, \\tau) &= \\begin{pmatrix}\nn\\tau & -\\sum_{i=1}^n (Y_i-\\mu)\\\\\n-\\sum_{i=1}^n (Y_i-\\mu) & \\frac{n}{2\\tau^2}\n\\end{pmatrix}, \\\\\ni(\\mu, \\tau) &= n\\begin{pmatrix}\n\\tau & 0\\\\\n0 & \\frac{1}{2\\tau^2}\n\\end{pmatrix}\n\\end{align*}\\] Since \\(\\mathsf{E}(Y_i) = \\mu\\), the expected value of the off-diagonal entries of the Fisher information matrix are zero."
+    "section": "Gaussian entropy",
+    "text": "Gaussian entropy\nThe entropy of the multivariate Gaussian with mean \\(\\boldsymbol{\\mu}\\) and covariance \\(\\boldsymbol{\\Sigma} = \\mathbf{LL}^\\top\\), where \\(\\mathbf{L}\\) is a lower triangular matrix, is \\[\\begin{align*}\n\\mathcal{E}(\\mathbf{L}) = - \\mathsf{E}_g(\\log g) &= \\frac{D+D\\log(2\\pi) + \\log |\\mathbf{LL}^\\top|}{2},\n\\end{align*}\\] and only depends on \\(\\boldsymbol{\\Sigma}\\)."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#example-random-right-censoring",
-    "href": "slides/bayesmod-slides1.html#example-random-right-censoring",
+    "objectID": "slides/bayesmod-slides10.html#elbo-with-gaussian-approximation",
+    "href": "slides/bayesmod-slides10.html#elbo-with-gaussian-approximation",
     "title": "Bayesian modelling",
-    "section": "Example: random right-censoring",
-    "text": "Example: random right-censoring\nConsider a survival analysis problem for independent time-to-event data subject to (noninformative) random right-censoring. We observe\n\nfailure times \\(Y_i (i=1, \\ldots, n)\\) drawn from \\(F(\\cdot; \\boldsymbol{\\theta})\\) supported on \\((0, \\infty)\\)\nindependent binary censoring indicators \\(C_i \\in \\{0,1\\}\\), with \\(0\\) indicating right-censoring and \\(C_i=1\\) observed failure time."
+    "section": "ELBO with Gaussian approximation",
+    "text": "ELBO with Gaussian approximation\nSince the Gaussian is a location-scale family, we can rewrite the model in terms of a standardized Gaussian variable \\(\\boldsymbol{Z}\\sim \\mathsf{Gauss}_p(\\boldsymbol{0}_p, \\mathbf{I}_p)\\) where \\(\\boldsymbol{\\zeta} = \\boldsymbol{\\mu} + \\mathbf{L}\\boldsymbol{Z}\\) (this transformation has unit Jacobian).\nThe ELBO with the transformation becomes \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{Z}}\\left[ \\log p\\{\\boldsymbol{y}, T^{-1}(\\boldsymbol{\\zeta})\\} + \\log \\left|\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\right|\\right] + \\mathcal{E}(\\mathbf{L}).\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#likelihood-contribution-with-censoring",
-    "href": "slides/bayesmod-slides1.html#likelihood-contribution-with-censoring",
+    "objectID": "slides/bayesmod-slides10.html#chain-rule",
+    "href": "slides/bayesmod-slides10.html#chain-rule",
     "title": "Bayesian modelling",
-    "section": "Likelihood contribution with censoring",
-    "text": "Likelihood contribution with censoring\nIf individual observation \\(i\\) has not experienced the event at the end of the collection period, then the likelihood contribution is \\(\\Pr(Y &gt; y) = 1-F(y; \\boldsymbol{\\theta})\\), where \\(y_i\\) is the maximum time observed for \\(Y_i\\). We write the log likelihood \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}) = \\sum_{i: c_i=0} \\log \\{1- F(y_i; \\boldsymbol{\\theta})\\} + \\sum_{i: c_i=1} \\log f(y_i; \\boldsymbol{\\theta})\n\\end{align*}\\]"
+    "section": "Chain rule",
+    "text": "Chain rule\nIf \\(\\boldsymbol{\\theta} = T^{-1}(\\boldsymbol{\\zeta})\\) and \\(\\boldsymbol{\\zeta} = \\boldsymbol{\\mu} + \\mathbf{L}\\boldsymbol{z},\\) we have for \\(\\boldsymbol{\\psi}\\) equal to either \\(\\boldsymbol{\\mu}\\) or \\(\\mathbf{L}\\), using the chain rule, \\[\\begin{align*}\n& \\frac{\\partial}{\\partial \\boldsymbol{\\psi}}\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\n\\\\&\\quad  = \\frac{\\partial \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{\\partial \\boldsymbol{\\theta}}\n   \\times \\frac{\\partial T^{-1}(\\boldsymbol{\\zeta})}{\\partial \\boldsymbol{\\zeta}}\n\\times \\frac{\\partial (\\boldsymbol{\\mu} + \\mathbf{L}\\boldsymbol{z})}{\\partial \\boldsymbol{\\psi}}\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#censoring-and-exponential-data",
-    "href": "slides/bayesmod-slides1.html#censoring-and-exponential-data",
+    "objectID": "slides/bayesmod-slides10.html#gradients-for-advi",
+    "href": "slides/bayesmod-slides10.html#gradients-for-advi",
     "title": "Bayesian modelling",
-    "section": "Censoring and exponential data",
-    "text": "Censoring and exponential data\nSuppose for simplicity that \\(Y_i \\sim \\mathsf{expo}(\\lambda)\\) and let \\(m=c_1 + \\cdots + c_n\\) denote the number of observed failure times. Then, the log likelihood and the Fisher information are \\[\\begin{align*}\n\\ell(\\lambda) &= \\lambda \\sum_{i=1}^n y_i + \\log \\lambda m\\\\\ni(\\lambda) &= m/\\lambda^2\n\\end{align*}\\] and the right-censored observations for the exponential model do not contribute to the information."
+    "section": "Gradients for ADVI",
+    "text": "Gradients for ADVI\nThe gradients of the ELBO with respect to the mean and variance are \\[\\begin{align*}\n\\nabla_{\\boldsymbol{\\mu}} &= \\mathsf{E}_{\\boldsymbol{Z}}\\left\\{\\frac{\\partial \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{\\partial \\boldsymbol{\\theta}} \\frac{\\partial T^{-1}(\\boldsymbol{\\zeta})}{\\partial \\boldsymbol{\\zeta}}  + \\frac{\\partial \\log \\left|\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\right|}{\\partial \\boldsymbol{\\zeta}}\\right\\} \\\\\n\\nabla_{\\mathbf{L}} &= \\mathsf{E}_{\\boldsymbol{Z}}\\left[\\left\\{\\frac{\\partial \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{\\partial \\boldsymbol{\\theta}} \\frac{\\partial T^{-1}(\\boldsymbol{\\zeta})}{\\partial \\boldsymbol{\\zeta}}  + \\frac{\\partial \\log \\left|\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\right|}{\\partial \\boldsymbol{\\zeta}}\\right\\}\\boldsymbol{Z}^\\top\\right] + \\mathbf{L}^{-\\top}.\n\\end{align*}\\] and we can approximate the expectation by drawing standard Gaussian samples \\(\\boldsymbol{Z}_1, \\ldots, \\boldsymbol{Z}_B.\\)"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#example-first-order-autoregressive-process",
-    "href": "slides/bayesmod-slides1.html#example-first-order-autoregressive-process",
+    "objectID": "slides/bayesmod-slides10.html#quality-of-approximation",
+    "href": "slides/bayesmod-slides10.html#quality-of-approximation",
     "title": "Bayesian modelling",
-    "section": "Example: first-order autoregressive process",
-    "text": "Example: first-order autoregressive process\nConsider an \\(\\mathsf{AR}(1)\\) model of the form \\[Y_t = \\mu + \\phi(Y_{t-1} - \\mu) + \\varepsilon_t,\\] where\n\n\\(\\phi\\) is the lag-one correlation,\n\\(\\mu\\) the global mean and\n\\(\\varepsilon_t\\) is an iid innovation with mean zero and variance \\(\\sigma^2\\).\n\nIf \\(|\\phi| &lt; 1\\), the process is stationary, and the variance does not increase with \\(t\\)."
+    "section": "Quality of approximation",
+    "text": "Quality of approximation\nConsider the stochastic volatility model.\n\nFitting HMC-NUTS to the exchange rate data takes 156 seconds for 10K iterations, vs 2 seconds for the mean-field approximation."
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#markov-property-and-likelihood-decomposition",
-    "href": "slides/bayesmod-slides1.html#markov-property-and-likelihood-decomposition",
+    "objectID": "slides/bayesmod-slides10.html#references",
+    "href": "slides/bayesmod-slides10.html#references",
     "title": "Bayesian modelling",
-    "section": "Markov property and likelihood decomposition",
-    "text": "Markov property and likelihood decomposition\nThe Markov property states that the current realization depends on the past, \\(Y_t \\mid Y_1, \\ldots, Y_{t-1},\\) only through the most recent value \\(Y_{t-1}.\\) The log likelihood thus becomes \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}) = \\ln f(y_1) + \\sum_{i=2}^n f(y_i \\mid y_{i-1}).\n\\end{align*}\\]"
+    "section": "References",
+    "text": "References\n\n\n\n\nHoffman, M. D., Blei, D. M., Wang, C., & Paisley, J. (2013). Stochastic variational inference. Journal of Machine Learning Research, 14(40), 1303–1347. http://jmlr.org/papers/v14/hoffman13a.html\n\n\nKucukelbir, A., Tran, D., Ranganath, R., Gelman, A., & Blei, D. M. (2017). Automatic differentiation variational inference. Journal of Machine Learning Research, 18(14), 1–45. http://jmlr.org/papers/v18/16-107.html\n\n\nOrmerod, J. T., & Wand, M. P. (2010). Explaining variational approximations. The American Statistician, 64(2), 140–153. https://doi.org/10.1198/tast.2010.09058\n\n\nRanganath, R., Gerrish, S., & Blei, D. (2014). Black box variational inference. In S. Kaski & J. Corander (Eds.), Proceedings of the seventeenth international conference on artificial intelligence and statistics (Vol. 33, pp. 814–822). Pmlr. https://proceedings.mlr.press/v33/ranganath14.html"
   },
   {
-    "objectID": "slides/bayesmod-slides1.html#marginal-of-ar1",
-    "href": "slides/bayesmod-slides1.html#marginal-of-ar1",
-    "title": "Bayesian modelling",
-    "section": "Marginal of AR(1)",
-    "text": "Marginal of AR(1)\nThe \\(\\mathsf{AR}(1)\\) stationarity process has unconditional moments \\[\\mathsf{E}(Y_t) = \\mu, \\qquad \\mathsf{Var}(Y_t)=\\sigma^2/(1-\\phi^2).\\]\nThe \\(\\mathsf{AR}(1)\\) process is first-order Markov since the conditional distribution \\(f(Y_t \\mid Y_{t-1}, \\ldots, Y_{t-p})\\) equals \\(f(Y_t \\mid Y_{t-1})\\)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#log-likelihood-of-ar1",
-    "href": "slides/bayesmod-slides1.html#log-likelihood-of-ar1",
-    "title": "Bayesian modelling",
-    "section": "Log likelihood of AR(1)",
-    "text": "Log likelihood of AR(1)\nIf innovations are Gaussian, we have \\[Y_t \\mid Y_{t-1}=y_{t-1} \\sim \\mathsf{Gauss}\\{\\mu(1-\\phi)+ \\phi y_{t-1}, \\sigma^2\\}, \\qquad t&gt;1.\\] so the log-likelihood is \\[\\begin{align*}\n&\\ell(\\mu, \\phi,\\sigma^2)= -\\frac{n}{2}\\log(2\\pi) - n\\log \\sigma + \\frac{1}{2}\\log(1-\\phi^2) \\\\&\\quad -\\frac{(1-\\phi^2)(y_1- \\mu)^2}{2\\sigma^2} - \\sum_{i=2}^n \\frac{(y_t - \\mu(1-\\phi)- \\phi y_{t-1})^2}{2\\sigma^2}\n\\end{align*}\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#estimation-of-integrals",
-    "href": "slides/bayesmod-slides1.html#estimation-of-integrals",
-    "title": "Bayesian modelling",
-    "section": "Estimation of integrals",
-    "text": "Estimation of integrals\nSuppose we can simulate \\(B\\) i.i.d. variables with the same distribution, \\(x_1, \\ldots, x_B\\) with distribution \\(F\\).\nWe want to compute \\(\\mathsf{E}\\{g(X)\\}=\\int g(x) f(x) \\mathrm{d} x=\\mu_g\\) for some functional \\(g(\\cdot)\\)\n\n\\(g(x)=x\\) (mean)\n\\(g(x) = \\mathsf{I}(x \\in A)\\) (probability of event)\netc."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#vanilla-monte-carlo-integration",
-    "href": "slides/bayesmod-slides1.html#vanilla-monte-carlo-integration",
-    "title": "Bayesian modelling",
-    "section": "Vanilla Monte Carlo integration",
-    "text": "Vanilla Monte Carlo integration\nWe substitute expected value by sample average of \\[\\begin{align*}\n\\widehat{\\mu}_g = \\frac{1}{B} \\sum_{b=1}^B g(x_b).\n\\end{align*}\\]\n\nlaw of large number guarantees convergence of \\(\\widehat{\\mu}_g \\to \\mu_g\\) if the latter is finite.\nUnder finite second moments, central limit theorem gives \\[\\sqrt{B}(\\widehat{\\mu}_g - \\mu_g) \\sim \\mathsf{No}(0, \\sigma^2_g).\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#importance-sampling",
-    "href": "slides/bayesmod-slides1.html#importance-sampling",
-    "title": "Bayesian modelling",
-    "section": "Importance sampling",
-    "text": "Importance sampling\nConsider density \\(q\\) instead with \\(\\mathrm{supp}(p) \\subseteq \\mathrm{supp}(q).\\) Then, \\[\\begin{align*}\n\\mathsf{E}\\{g(X)\\} = \\int_{\\mathcal{X}} g(x) \\frac{p(x)}{q(x)} q(x) \\mathrm{d} x\n\\end{align*}\\] and we can proceed similarly by drawing samples from \\(q\\)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#importance-sampling-estimator",
-    "href": "slides/bayesmod-slides1.html#importance-sampling-estimator",
-    "title": "Bayesian modelling",
-    "section": "Importance sampling estimator",
-    "text": "Importance sampling estimator\nAn alternative Monte Carlo estimator uses the weighted average \\[\\begin{align*}\n\\widetilde{\\mathsf{E}}\\{g(X)\\} =\\frac{B^{-1} \\sum_{b=1}^B w_b g(x_b) }{B^{-1}\\sum_{b=1}^B w_b}.\n\\end{align*}\\] with weights \\(w_b = p(x_b)/q(x_b)\\). The latter equal 1 on average, so one could omit the denominator without harm."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#standard-errors",
-    "href": "slides/bayesmod-slides1.html#standard-errors",
-    "title": "Bayesian modelling",
-    "section": "Standard errors",
-    "text": "Standard errors\nIf the variance of \\(g(X)\\) is finite, we can approximate the latter by the sample variance of the simple random sample and obtain the Monte Carlo standard error of the estimator \\[\\begin{align*}\n\\mathsf{se}^2[\\widehat{\\mathsf{E}}\\{g(X)\\}] = \\frac{1}{B(B-1)} \\sum_{b=1}^B \\left[ g(x_b) -  \\widehat{\\mathsf{E}}\\{g(X)\\} \\right]^2.\n\\end{align*}\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#precision-of-monte-carlo-integration",
-    "href": "slides/bayesmod-slides1.html#precision-of-monte-carlo-integration",
-    "title": "Bayesian modelling",
-    "section": "Precision of Monte Carlo integration",
-    "text": "Precision of Monte Carlo integration\nWe want to have an estimator as precise as possible.\n\nbut we can’t control the variance of \\(g(X)\\), say \\(\\sigma_g^2\\)\nthe more simulations \\(B\\), the lower the variance of the mean.\nsample average for i.i.d. data has variance \\(\\sigma^2_g/B\\)\nto reduce the standard deviation by a factor 10, we need \\(100\\) times more draws!\n\nRemember: the answer is random."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#example-functionals-of-gamma-distribution",
-    "href": "slides/bayesmod-slides1.html#example-functionals-of-gamma-distribution",
-    "title": "Bayesian modelling",
-    "section": "Example: functionals of gamma distribution",
-    "text": "Example: functionals of gamma distribution\n\n\nFigure 1: Running mean trace plots for \\(g(x)=\\mathrm{I}(x&lt;1)\\) (left), \\(g(x)=x\\) (middle) and \\(g(x)=1/x\\) (right) for a Gamma distribution with shape 0.5 and rate 2, as a function of the Monte Carlo sample size."
-  },
-  {
-    "objectID": "slides/bayesmod-slides1.html#recap",
-    "href": "slides/bayesmod-slides1.html#recap",
-    "title": "Bayesian modelling",
-    "section": "Recap",
-    "text": "Recap\n\nWe can specify distribution using hierarchies, with marginal \\(\\times\\) conditional.\nMost density and mass functions for \\(\\boldsymbol{Y}\\) can be identified from their support and their kernel, i.e., terms that depend on \\(\\boldsymbol{y}\\), ignoring normalizing constants. We then match expressions.\nExpectations can be calculated analytically, or approximated via Monte Carlo simulations."
-  },
-  {
-    "objectID": "exercises/index.html",
-    "href": "exercises/index.html",
-    "title": "Exercises",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "\n            Bayesian modelling\n        ",
     "section": "",
-    "text": "This section will contain exercises that are directly connected to the course notes, in addition to other exercises from reference manuals.",
+    "text": "Hands on introduction to Bayesian data analysis. The course will cover the formulation, evaluation and comparison of Bayesian models through examples.\n        \n        \n            MATH 80601A, Winter 2025HEC Montréal\n        \n    \n    \n      \n        \n        \n        \n      \n    \n\n\n\n\n\n\n\nInstructor\n\n   Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\nCourse details\n\n   Winter 2025\n   Monday\n   15:30-18:30\n   CSC, Labid Aljundi\n\n\n\nContacting me\nPlease post course-related questions on Piazza. I am best reached by email."
+  },
+  {
+    "objectID": "exercises/10-solution.html",
+    "href": "exercises/10-solution.html",
+    "title": "Solution 10",
+    "section": "",
+    "text": "Suppose that \\(p(\\boldsymbol{\\theta})\\) is a density with \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^d\\) and that we consider a Gaussian approximation \\(q(\\boldsymbol{\\theta})\\) with mean \\(\\boldsymbol{\\mu}\\) and covariance matrix \\(\\boldsymbol{\\Sigma}\\). Show that the parameters that minimize the Kullback–Leibler \\(\\mathsf{KL}\\{p(\\boldsymbol{\\theta} \\parallel q(\\boldsymbol{\\theta})\\}\\) are the expectation and variance under \\(p(\\boldsymbol{\\theta})\\).1\n\nSolution. Refer to the Matrix cookbook\nConsider \\(g \\equiv \\phi_d(\\cdot; \\boldsymbol{\\mu},\\boldsymbol{\\Sigma})\\) a Gaussian density and \\(p(\\boldsymbol{\\theta})\\) the target. Optimization of the parameters of \\(g\\) can be performed by differentiation of the target. The Kullback–Leibler divergence involves two terms: the negative entropy, which is constant, and the expected value of log density, so \\[\\begin{align*}\n\\mathsf{KL}(p \\parallel g) \\stackrel{\\boldsymbol{\\mu}, \\boldsymbol{\\Sigma}}{\\propto} -\\frac{1}{2} \\mathsf{E}_{p}\\left\\{ (\\boldsymbol{\\theta}-\\boldsymbol{\\mu})^\\top\\boldsymbol{\\Sigma}^{-1}(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})\\right\\} - \\frac{1}{2} \\log |\\boldsymbol{\\Sigma}|\n\\end{align*}\\] Taking gradients (formulas 57 and 61 of the Matrix Cookbook) and interchanging the order of integration and differentiation, assuming that the first two moments of \\(p(\\boldsymbol{\\theta})\\) exists, gives \\[\\begin{align*}\n\\frac{\\partial}{\\partial \\boldsymbol{\\mu}} \\mathsf{KL}(p \\parallel g) &= \\mathsf{E}_{p}\\left\\{(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})^\\top\\right\\}\\boldsymbol{\\Sigma}^{-1} \\\\\n\\frac{\\partial}{\\partial \\boldsymbol{\\Sigma}} \\mathsf{KL}(p \\parallel g) &= \\frac{1}{2} \\boldsymbol{\\Sigma}^{-1}\n\\mathsf{E}_{p}\\left\\{(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})^\\top\\right\\}\\boldsymbol{\\Sigma}^{-1}  - \\frac{1}{2}\\boldsymbol{\\Sigma}^{-1}\n\\end{align*}\\] Equating these to zero yields \\(\\mathsf{E}_p(\\boldsymbol{\\theta}) = \\boldsymbol{\\mu}\\) and \\(\\mathsf{E}_p\\left\\{(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})^\\top\\right\\} = \\boldsymbol{\\Sigma}\\) provided \\(\\boldsymbol{\\Sigma}\\) is invertible.",
     "crumbs": [
-      "Exercises"
+      "Exercises",
+      "Solutions",
+      "10. Variational inference"
+    ]
+  },
+  {
+    "objectID": "exercises/10-solution.html#exercise-10.1",
+    "href": "exercises/10-solution.html#exercise-10.1",
+    "title": "Solution 10",
+    "section": "",
+    "text": "Suppose that \\(p(\\boldsymbol{\\theta})\\) is a density with \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^d\\) and that we consider a Gaussian approximation \\(q(\\boldsymbol{\\theta})\\) with mean \\(\\boldsymbol{\\mu}\\) and covariance matrix \\(\\boldsymbol{\\Sigma}\\). Show that the parameters that minimize the Kullback–Leibler \\(\\mathsf{KL}\\{p(\\boldsymbol{\\theta} \\parallel q(\\boldsymbol{\\theta})\\}\\) are the expectation and variance under \\(p(\\boldsymbol{\\theta})\\).1\n\nSolution. Refer to the Matrix cookbook\nConsider \\(g \\equiv \\phi_d(\\cdot; \\boldsymbol{\\mu},\\boldsymbol{\\Sigma})\\) a Gaussian density and \\(p(\\boldsymbol{\\theta})\\) the target. Optimization of the parameters of \\(g\\) can be performed by differentiation of the target. The Kullback–Leibler divergence involves two terms: the negative entropy, which is constant, and the expected value of log density, so \\[\\begin{align*}\n\\mathsf{KL}(p \\parallel g) \\stackrel{\\boldsymbol{\\mu}, \\boldsymbol{\\Sigma}}{\\propto} -\\frac{1}{2} \\mathsf{E}_{p}\\left\\{ (\\boldsymbol{\\theta}-\\boldsymbol{\\mu})^\\top\\boldsymbol{\\Sigma}^{-1}(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})\\right\\} - \\frac{1}{2} \\log |\\boldsymbol{\\Sigma}|\n\\end{align*}\\] Taking gradients (formulas 57 and 61 of the Matrix Cookbook) and interchanging the order of integration and differentiation, assuming that the first two moments of \\(p(\\boldsymbol{\\theta})\\) exists, gives \\[\\begin{align*}\n\\frac{\\partial}{\\partial \\boldsymbol{\\mu}} \\mathsf{KL}(p \\parallel g) &= \\mathsf{E}_{p}\\left\\{(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})^\\top\\right\\}\\boldsymbol{\\Sigma}^{-1} \\\\\n\\frac{\\partial}{\\partial \\boldsymbol{\\Sigma}} \\mathsf{KL}(p \\parallel g) &= \\frac{1}{2} \\boldsymbol{\\Sigma}^{-1}\n\\mathsf{E}_{p}\\left\\{(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})^\\top\\right\\}\\boldsymbol{\\Sigma}^{-1}  - \\frac{1}{2}\\boldsymbol{\\Sigma}^{-1}\n\\end{align*}\\] Equating these to zero yields \\(\\mathsf{E}_p(\\boldsymbol{\\theta}) = \\boldsymbol{\\mu}\\) and \\(\\mathsf{E}_p\\left\\{(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})(\\boldsymbol{\\theta}-\\boldsymbol{\\mu})^\\top\\right\\} = \\boldsymbol{\\Sigma}\\) provided \\(\\boldsymbol{\\Sigma}\\) is invertible.",
+    "crumbs": [
+      "Exercises",
+      "Solutions",
+      "10. Variational inference"
+    ]
+  },
+  {
+    "objectID": "exercises/10-solution.html#exercise-10.2",
+    "href": "exercises/10-solution.html#exercise-10.2",
+    "title": "Solution 10",
+    "section": "Exercise 10.2",
+    "text": "Exercise 10.2\nConsider a finite mixture model of \\(K\\) univariate Gaussian \\(\\mathsf{Gauss}(\\mu_k, \\tau_k^{-1})\\) with \\(K\\) fixed, whose density is \\[\\begin{align*}\n\\sum_{k=1}^{K} w_k \\left(\\frac{\\tau_k}{2\\pi}\\right)^{1/2}\\exp \\left\\{-\\frac{\\tau_k}{2}(y_i-\\mu_k)^2\\right\\}\n\\end{align*}\\] where \\(\\boldsymbol{w} \\in \\mathbb{S}_{K-1}\\) are positive weights that sum to one, meaning \\(w_1 + \\cdots + w_K=1.\\) We use conjugate priors \\(\\mu_k \\sim \\mathsf{Gauss}(0, 100)\\), \\(\\tau_k \\sim \\mathsf{Gamma}(a, b)\\) for \\(k=1, \\ldots, K\\) and \\(\\boldsymbol{w} \\sim \\mathsf{Dirichlet}(\\alpha)\\) for \\(a, b, \\alpha&gt;0\\) fixed hyperparameter values.\nTo help with inference, we introduce auxiliary variables \\(\\boldsymbol{U}_1, \\ldots, \\boldsymbol{U}_n\\) where \\(\\boldsymbol{U}_i \\sim \\mathsf{multinom}(1, \\boldsymbol{w})\\) that indicates which cluster component the model belongs to, and \\(\\omega_k = \\Pr(U_{ik}=1).\\)\nThe parameters and latent variables for the posterior of interest are \\(\\boldsymbol{\\mu}, \\boldsymbol{\\tau}, \\boldsymbol{w}\\) and \\(\\mathbf{U}.\\) Consider a factorized decomposition in which each component is independent of the others, \\(q_{\\boldsymbol{w}}(\\boldsymbol{w})q_{\\boldsymbol{\\mu}}(\\boldsymbol{\\mu})q_{\\boldsymbol{\\tau}}(\\boldsymbol{\\tau}) q(\\boldsymbol{U}).\\)\n\nApply the coordinate ascent algorithm to obtain the distribution for the optimal components.\nWrite down an expression for the ELBO.\nRun the algorithm for the geyser data from MASS R package for \\(K=2\\) until convergence with \\(\\alpha=0.1, a=b=0.01.\\) Repeat multiple times with different initializations and save the ELBO for each run.\nRepeat these steps for \\(K=2, \\ldots, 6\\) and plot the ELBO as a function of \\(K\\). Comment on the optimal number of cluster components suggested by the approximation to the marginal likelihood.\n\n\nSolution. \n\n#############################################################\n## CAVI algorithm for K-components Gaussian mixture models\n#############################################################\n# Parameters are\n# 1) weights w (probability of components)\n# 2) cluster means mu\n# 3) cluster variance sigma_sq\n# 4) binary indicators of clusters \"a\" (data augmentation)\nCAVI_gauss_mixt &lt;- function(K = 2L, y,\n                prior_mean_mu = rep(0, K),\n                prior_var_mu = rep(1e8, K),\n                prior_shape_var = rep(0.01, K),\n                prior_rate_var = rep(0.01, K),\n                prior_shape_weights = 0.01,\n                maxiter = 1000L,\n                tol = 1e-8\n                ){\n  stopifnot(K &gt;= 1)\n  K &lt;- as.integer(K)\n  n &lt;- length(y)\n  # ELBO normalizing constant (only depends on hyperparameters)\nlcst &lt;- 0.5*K*(1-n*log(2*pi)) +\n  lgamma(K*prior_shape_weights) -\n  K*lgamma(prior_shape_weights) -\n  lgamma(n + K*prior_shape_weights)  +\n  sum(prior_shape_var*log(prior_rate_var)) -\n  sum(lgamma(prior_shape_var))\n# Initialization\nmu &lt;- runif(K)*diff(range(y))\nsigma_sq &lt;- alpha &lt;- rep(1, K)\nA &lt;- B &lt;- rep(1, K) # K vector\nELBO &lt;- numeric(maxiter)\nnu &lt;- matrix(NA, nrow = n, ncol = K)\n# CAVI runs\nfor(b in seq_len(maxiter)){\n  for(k in seq_len(K)){\n    nu[, k] &lt;- exp(digamma(alpha[k]) + 0.5*digamma(A[k]) - 0.5*log(B[k]) -\n                   0.5*A[k]/B[k]*((y-mu[k])^2+ sigma_sq[k]))\n  }\n  omega &lt;- nu/rowSums(nu) # Probability of components for each obs\n  om &lt;- colSums(omega) # sample size in each cluster\n  sigma_sq &lt;- 1/(1/prior_var_mu + A*om/B) # posterior variance of cluster\n  mu &lt;- sigma_sq*(prior_mean_mu/prior_var_mu + A/B*colSums(omega * y)) # posterior mean of cluster\n  alpha &lt;- prior_shape_weights + om\n  A &lt;- prior_shape_var + 0.5*om\n  B &lt;- prior_rate_var + 0.5*(colSums(omega*(outer(y, mu, FUN = \"-\")^2)) + om*sigma_sq)\n  # Compute ELBO\n  ELBO[b] &lt;- lcst + sum(lgamma(A) - A*log(B) +\n    lgamma(alpha) + 0.5*(log(sigma_sq) - log(prior_var_mu)) -\n    0.5*((mu-prior_mean_mu)^2 + sigma_sq)/prior_var_mu) -\n    sum(omega*log(omega+1e-80))\n  if(b &gt;=2){\n    if((ELBO[b]-ELBO[b-1]) &lt; tol){\n      break\n    }\n  }\n}\nlist(elbo = ELBO[1:b],\n     mu_mean = mu,\n     mu_var = sigma_sq,\n     sigmasq_shape = A,\n     sigmasq_rate = B,\n     weights_alpha = alpha,\n     probs = omega,\n     mean_probs = alpha/sum(alpha),\n     cluster_probs = colSums(omega)/sum(omega)\n)\n}\n\n\n# Fit the model\ndata(geyser, package = \"MASS\")\nmixt &lt;- CAVI_gauss_mixt(K = 2, y = geyser$duration)\nplot(mixt$elbo, \n     xlab = \"number of iterations\", \n     ylab = \"evidence lower bound\", \n     type = \"b\")\n\n\n\n\n\n\n\n# Compute posterior mean of mean, variance and probability of each cluster\npost_prob &lt;- mixt$mean_probs\npost_mean &lt;- mixt$mu_mean\npost_sd &lt;- sqrt(mixt$sigmasq_rate/(mixt$sigmasq_shape-1))\n# Plot the mixture density at posterior mean\ncurve(post_prob[1]*dnorm(x, mean = post_mean[1], sd = post_sd[1]) +\n        post_prob[2]*dnorm(x, mean = post_mean[2], sd = post_sd[2]),\n      from = 1,\n      to = 6,\n      n = 1001,\n      xlab = \"duration of geyser eruption (in minutes)\",\n      ylab = \"density\")\nrug(geyser$duration)",
+    "crumbs": [
+      "Exercises",
+      "Solutions",
+      "10. Variational inference"
+    ]
+  },
+  {
+    "objectID": "exercises/10-solution.html#footnotes",
+    "href": "exercises/10-solution.html#footnotes",
+    "title": "Solution 10",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nNote that this is not a variational approximation!↩︎",
+    "crumbs": [
+      "Exercises",
+      "Solutions",
+      "10. Variational inference"
     ]
   },
   {
@@ -2209,531 +2184,75 @@
     ]
   },
   {
-    "objectID": "content/09-content.html#content",
-    "href": "content/09-content.html#content",
-    "title": "Deterministic approximations",
+    "objectID": "content/10-content.html#content",
+    "href": "content/10-content.html#content",
+    "title": "Variational inference",
     "section": "Content",
-    "text": "Content\n\nBernstein–von Mises theorem\nLaplace approximations\nintegrated nested Laplace approximation (INLA)",
+    "text": "Content\n\nKullback–Leibler divergence and evidence lower bound (ELBO)\nEstimation methods: coordinate ascent, black-box, automatic differentiation variational inference schemes",
     "crumbs": [
       "Content",
       "Course content",
-      "9: Deterministic approximations"
+      "10: Variational inference"
     ]
   },
   {
-    "objectID": "content/09-content.html#learning-objectives",
-    "href": "content/09-content.html#learning-objectives",
-    "title": "Deterministic approximations",
+    "objectID": "content/10-content.html#learning-objectives",
+    "href": "content/10-content.html#learning-objectives",
+    "title": "Variational inference",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nderive the Laplace approximation for simple models to compute marginal likelihood, posterior expectation or approximation to density.\ndescribe the difference between deterministic and stochastic approximations.",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nexplain the link between ELBO and reverse Kullback–Leibler divergence and it use for approximations\nderive the CAVI recursions for a given factorization\nuse variational inference for Bayesian inference",
     "crumbs": [
       "Content",
       "Course content",
-      "9: Deterministic approximations"
+      "10: Variational inference"
     ]
   },
   {
-    "objectID": "content/09-content.html#readings",
-    "href": "content/09-content.html#readings",
-    "title": "Deterministic approximations",
+    "objectID": "content/10-content.html#readings",
+    "href": "content/10-content.html#readings",
+    "title": "Variational inference",
     "section": "Readings",
-    "text": "Readings\n\nChapter 9 of the course notes",
+    "text": "Readings\n\nChapter 10 of Bishop (2006)\nKucukelbir et al. (2017)\nChapter 10 of the course notes",
     "crumbs": [
       "Content",
       "Course content",
-      "9: Deterministic approximations"
+      "10: Variational inference"
     ]
   },
   {
-    "objectID": "content/09-content.html#complementary-readings",
-    "href": "content/09-content.html#complementary-readings",
-    "title": "Deterministic approximations",
+    "objectID": "content/10-content.html#complementary-readings",
+    "href": "content/10-content.html#complementary-readings",
+    "title": "Variational inference",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\nLaplace approximation use in statistics: Tierney & Kadane (1986)\nskewed Bernstein–von Mises: Durante et al. (2024)\nLaplace approximation for Bayes factor: Raftery (1995)\nintegrated nested Laplace approximation: Rue et al. (2009), Wood (2019)",
+    "text": "Complementary readings\n\nRanganath et al. (2014)\nBlei et al. (2017)\nOrmerod & Wand (2010)\nHoffman et al. (2013)",
     "crumbs": [
       "Content",
       "Course content",
-      "9: Deterministic approximations"
+      "10: Variational inference"
     ]
   },
   {
-    "objectID": "content/09-content.html#slides",
-    "href": "content/09-content.html#slides",
-    "title": "Deterministic approximations",
+    "objectID": "content/10-content.html#slides",
+    "href": "content/10-content.html#slides",
+    "title": "Variational inference",
     "section": "Slides",
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
     "crumbs": [
       "Content",
       "Course content",
-      "9: Deterministic approximations"
+      "10: Variational inference"
     ]
   },
   {
-    "objectID": "content/09-content.html#code",
-    "href": "content/09-content.html#code",
-    "title": "Deterministic approximations",
+    "objectID": "content/10-content.html#code",
+    "href": "content/10-content.html#code",
+    "title": "Variational inference",
     "section": "Code",
-    "text": "Code\n\nLaplace approximations for exponential-gamma model R script\nINLA package R script",
+    "text": "Code\n\nR script of CAVI with Gaussian model\nR script of ADVI for stochastic volatility model",
     "crumbs": [
       "Content",
       "Course content",
-      "9: Deterministic approximations"
-    ]
-  },
-  {
-    "objectID": "content/07-content.html#content",
-    "href": "content/07-content.html#content",
-    "title": "Probabilistic programming",
-    "section": "Content",
-    "text": "Content\n\nHamiltonian Monte Carlo\nProbabilistic programming\nStan",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "7: Probabilistic programming"
-    ]
-  },
-  {
-    "objectID": "content/07-content.html#learning-objectives",
-    "href": "content/07-content.html#learning-objectives",
-    "title": "Probabilistic programming",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ncode models using Stan",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "7: Probabilistic programming"
-    ]
-  },
-  {
-    "objectID": "content/07-content.html#readings",
-    "href": "content/07-content.html#readings",
-    "title": "Probabilistic programming",
-    "section": "Readings",
-    "text": "Readings\n\nBetancourt (2017)\nNeal (2011)\nChi Feng’s MCMC gallery",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "7: Probabilistic programming"
-    ]
-  },
-  {
-    "objectID": "content/07-content.html#complementary-readings",
-    "href": "content/07-content.html#complementary-readings",
-    "title": "Probabilistic programming",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\nStan user guide",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "7: Probabilistic programming"
-    ]
-  },
-  {
-    "objectID": "content/07-content.html#slides",
-    "href": "content/07-content.html#slides",
-    "title": "Probabilistic programming",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "7: Probabilistic programming"
-    ]
-  },
-  {
-    "objectID": "content/07-content.html#code",
-    "href": "content/07-content.html#code",
-    "title": "Probabilistic programming",
-    "section": "Code",
-    "text": "Code\n\nStochastic volatility model: Stan code 1 and 2 and cmdstanr R script\nSmartwatch example and cmdstanr R script",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "7: Probabilistic programming"
-    ]
-  },
-  {
-    "objectID": "content/05-content.html#content",
-    "href": "content/05-content.html#content",
-    "title": "Markov chain Monte Carlo",
-    "section": "Content",
-    "text": "Content\n\nMetropolis-adjusted Langevin algorithm (MALA)\nGibbs sampling\nData augmentation",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "5: Gibbs sampling"
-    ]
-  },
-  {
-    "objectID": "content/05-content.html#learning-objectives",
-    "href": "content/05-content.html#learning-objectives",
-    "title": "Markov chain Monte Carlo",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nimplement Gibbs sampling\nderive the conditional distributions of a model for Gibbs sampling",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "5: Gibbs sampling"
-    ]
-  },
-  {
-    "objectID": "content/05-content.html#readings",
-    "href": "content/05-content.html#readings",
-    "title": "Markov chain Monte Carlo",
-    "section": "Readings",
-    "text": "Readings\n\nChapters 5 and 6 of the course notes",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "5: Gibbs sampling"
-    ]
-  },
-  {
-    "objectID": "content/05-content.html#complementary-readings",
-    "href": "content/05-content.html#complementary-readings",
-    "title": "Markov chain Monte Carlo",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\nAlbert (2009), chapters 6 and 10 (several examples)\nMcElreath (2020), chapter 9 (non technical)\nNeal (2003) (slice sampling)",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "5: Gibbs sampling"
-    ]
-  },
-  {
-    "objectID": "content/05-content.html#slides",
-    "href": "content/05-content.html#slides",
-    "title": "Markov chain Monte Carlo",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "5: Gibbs sampling"
-    ]
-  },
-  {
-    "objectID": "content/03-content.html#content",
-    "href": "content/03-content.html#content",
-    "title": "Priors",
-    "section": "Content",
-    "text": "Content\n\nConjugate, flat, vague, Jeffrey’s, informative and penalized complexity priors\nPriors for regression models\nParameter elicitation\nPrior sensitivity analysis",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "3: Priors"
-    ]
-  },
-  {
-    "objectID": "content/03-content.html#learning-objectives",
-    "href": "content/03-content.html#learning-objectives",
-    "title": "Priors",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nchoose a suitable prior for a Bayesian analysis\nderive parameters of posterior distributions in conjugate models\nperform parameter elicitation\nassess the impact of priors through sensitivity analysis",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "3: Priors"
-    ]
-  },
-  {
-    "objectID": "content/03-content.html#readings",
-    "href": "content/03-content.html#readings",
-    "title": "Priors",
-    "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 3 of the course notes",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "3: Priors"
-    ]
-  },
-  {
-    "objectID": "content/03-content.html#complementary-readings",
-    "href": "content/03-content.html#complementary-readings",
-    "title": "Priors",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nVillani (2023), chapter 4\nGelman et al. (2013), chapters 2, 3 and 5\nJohnson et al. (2022), chapter 5\ntruncated Student-t priors for hierarchical models (Gelman, 2006)\npenalized complexity priors (Simpson et al., 2017)",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "3: Priors"
-    ]
-  },
-  {
-    "objectID": "content/03-content.html#slides",
-    "href": "content/03-content.html#slides",
-    "title": "Priors",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "3: Priors"
-    ]
-  },
-  {
-    "objectID": "content/01-content.html#content",
-    "href": "content/01-content.html#content",
-    "title": "Introduction",
-    "section": "Content",
-    "text": "Content\n\nMarginalization and conditioning\nBayes’ theorem\nReview of probability distributions\nLikelihood\nMonte Carlo integration",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/01-content.html#readings",
-    "href": "content/01-content.html#readings",
-    "title": "Introduction",
-    "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 1 of the course notes",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/01-content.html#complementary-readings",
-    "href": "content/01-content.html#complementary-readings",
-    "title": "Introduction",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nChapter 1 of Wood (2015)\nChapter 4 and 6.1 of Davison (2003)\nChapters 2 and 3 of Robert & Casella (2004)\nChapters 1–6 of Casella & Berger (2002)",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/01-content.html#slides",
-    "href": "content/01-content.html#slides",
-    "title": "Introduction",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/01-content.html#code",
-    "href": "content/01-content.html#code",
-    "title": "Introduction",
-    "section": "Code",
-    "text": "Code\n\nR script for geometric-beta example",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/02-content.html#content",
-    "href": "content/02-content.html#content",
-    "title": "Bayesics",
-    "section": "Content",
-    "text": "Content\n\nProbability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "2: Bayesics"
-    ]
-  },
-  {
-    "objectID": "content/02-content.html#learning-objectives",
-    "href": "content/02-content.html#learning-objectives",
-    "title": "Bayesics",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ndefine key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference\nperform inference in conjugate models with a single parameter\ncalculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)\nexplain some of the conceptual differences between frequentist and Bayesian inference",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "2: Bayesics"
-    ]
-  },
-  {
-    "objectID": "content/02-content.html#readings",
-    "href": "content/02-content.html#readings",
-    "title": "Bayesics",
-    "section": "Readings",
-    "text": "Readings\n\nChapter 2 of the course notes",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "2: Bayesics"
-    ]
-  },
-  {
-    "objectID": "content/02-content.html#complementary-readings",
-    "href": "content/02-content.html#complementary-readings",
-    "title": "Bayesics",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nEdwards et al. (1992)\nJohnson et al. (2022), chapters 2–4 and sections 8.1, 8.3\nVillani (2023), chapters 1 and 2\nAlbert (2009), chapters 2 and 3",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "2: Bayesics"
-    ]
-  },
-  {
-    "objectID": "content/02-content.html#slides",
-    "href": "content/02-content.html#slides",
-    "title": "Bayesics",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "2: Bayesics"
-    ]
-  },
-  {
-    "objectID": "content/02-content.html#code",
-    "href": "content/02-content.html#code",
-    "title": "Bayesics",
-    "section": "Code",
-    "text": "Code\n\nR script for Example 2.4 of the course notes",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "2: Bayesics"
-    ]
-  },
-  {
-    "objectID": "content/04-content.html#content",
-    "href": "content/04-content.html#content",
-    "title": "Markov chains and Metropolis–Hastings",
-    "section": "Content",
-    "text": "Content\n\nRejection sampling\nBasics of Markov chains\nMetropolis–Hastings algorithm",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
-    ]
-  },
-  {
-    "objectID": "content/04-content.html#learning-objectives",
-    "href": "content/04-content.html#learning-objectives",
-    "title": "Markov chains and Metropolis–Hastings",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a Metropolis–Hastings algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors\nuse efficient proposals and tuning for MCMC",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
-    ]
-  },
-  {
-    "objectID": "content/04-content.html#readings",
-    "href": "content/04-content.html#readings",
-    "title": "Markov chains and Metropolis–Hastings",
-    "section": "Readings",
-    "text": "Readings\n\nGeyer (2011) — up to 1.17\nChapters 4 and 5 of the course notes",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
-    ]
-  },
-  {
-    "objectID": "content/04-content.html#complementary-readings",
-    "href": "content/04-content.html#complementary-readings",
-    "title": "Markov chains and Metropolis–Hastings",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\nGreen et al. (2015) (overview of MCMC methods)",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
-    ]
-  },
-  {
-    "objectID": "content/04-content.html#slides",
-    "href": "content/04-content.html#slides",
-    "title": "Markov chains and Metropolis–Hastings",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
-    ]
-  },
-  {
-    "objectID": "content/06-content.html#content",
-    "href": "content/06-content.html#content",
-    "title": "Bayesian workflow and model diagnostics",
-    "section": "Content",
-    "text": "Content\n\nComputational tricks (blocking, reparametrization, marginalization, etc.)\nBayesian workflow\nGraphical diagnostics of convergence\nGoodness-of-fit measures (WAIC, LOO-CV, etc.)",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "6: Bayesian workflow"
-    ]
-  },
-  {
-    "objectID": "content/06-content.html#learning-objectives",
-    "href": "content/06-content.html#learning-objectives",
-    "title": "Bayesian workflow and model diagnostics",
-    "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nchoose suitable test statistics to evaluate model adequacy\nassess convergence using graphical tools and effective sample size\nperform model comparisons using Bayes factor or predictive measures\ndiagnose performance of MCMC algorithms and implement potential remedies",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "6: Bayesian workflow"
-    ]
-  },
-  {
-    "objectID": "content/06-content.html#readings",
-    "href": "content/06-content.html#readings",
-    "title": "Bayesian workflow and model diagnostics",
-    "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 7 of the course notes\nGelman et al. (2020)",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "6: Bayesian workflow"
-    ]
-  },
-  {
-    "objectID": "content/06-content.html#complementary-readings",
-    "href": "content/06-content.html#complementary-readings",
-    "title": "Bayesian workflow and model diagnostics",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nGelman et al. (2013), chapters 6 and 7\nMcElreath (2020), chapter 9.5",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "6: Bayesian workflow"
-    ]
-  },
-  {
-    "objectID": "content/06-content.html#slides",
-    "href": "content/06-content.html#slides",
-    "title": "Bayesian workflow and model diagnostics",
-    "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "6: Bayesian workflow"
-    ]
-  },
-  {
-    "objectID": "content/06-content.html#code",
-    "href": "content/06-content.html#code",
-    "title": "Bayesian workflow and model diagnostics",
-    "section": "Code",
-    "text": "Code\n\nR script for two-component mixture model\nR script for the Tokyo rainfall",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "6: Bayesian workflow"
+      "10: Variational inference"
     ]
   },
   {
@@ -2809,76 +2328,567 @@
     ]
   },
   {
-    "objectID": "content/10-content.html#content",
-    "href": "content/10-content.html#content",
-    "title": "Variational inference",
+    "objectID": "content/06-content.html#content",
+    "href": "content/06-content.html#content",
+    "title": "Bayesian workflow and model diagnostics",
     "section": "Content",
-    "text": "Content\n\nKullback–Leibler divergence and evidence lower bound (ELBO)\nEstimation methods: coordinate ascent, black-box, automatic differentiation variational inference schemes",
+    "text": "Content\n\nComputational tricks (blocking, reparametrization, marginalization, etc.)\nBayesian workflow\nGraphical diagnostics of convergence\nGoodness-of-fit measures (WAIC, LOO-CV, etc.)",
     "crumbs": [
       "Content",
       "Course content",
-      "10: Variational inference"
+      "6: Bayesian workflow"
     ]
   },
   {
-    "objectID": "content/10-content.html#learning-objectives",
-    "href": "content/10-content.html#learning-objectives",
-    "title": "Variational inference",
+    "objectID": "content/06-content.html#learning-objectives",
+    "href": "content/06-content.html#learning-objectives",
+    "title": "Bayesian workflow and model diagnostics",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nexplain the link between ELBO and reverse Kullback–Leibler divergence and it use for approximations\nderive the CAVI recursions for a given factorization\nuse variational inference for Bayesian inference",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nchoose suitable test statistics to evaluate model adequacy\nassess convergence using graphical tools and effective sample size\nperform model comparisons using Bayes factor or predictive measures\ndiagnose performance of MCMC algorithms and implement potential remedies",
     "crumbs": [
       "Content",
       "Course content",
-      "10: Variational inference"
+      "6: Bayesian workflow"
     ]
   },
   {
-    "objectID": "content/10-content.html#readings",
-    "href": "content/10-content.html#readings",
-    "title": "Variational inference",
+    "objectID": "content/06-content.html#readings",
+    "href": "content/06-content.html#readings",
+    "title": "Bayesian workflow and model diagnostics",
     "section": "Readings",
-    "text": "Readings\n\nChapter 10 of Bishop (2006)\nKucukelbir et al. (2017)\nChapter 10 of the course notes",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 7 of the course notes\nGelman et al. (2020)",
     "crumbs": [
       "Content",
       "Course content",
-      "10: Variational inference"
+      "6: Bayesian workflow"
     ]
   },
   {
-    "objectID": "content/10-content.html#complementary-readings",
-    "href": "content/10-content.html#complementary-readings",
-    "title": "Variational inference",
+    "objectID": "content/06-content.html#complementary-readings",
+    "href": "content/06-content.html#complementary-readings",
+    "title": "Bayesian workflow and model diagnostics",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\nRanganath et al. (2014)\nBlei et al. (2017)\nOrmerod & Wand (2010)\nHoffman et al. (2013)",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nGelman et al. (2013), chapters 6 and 7\nMcElreath (2020), chapter 9.5",
     "crumbs": [
       "Content",
       "Course content",
-      "10: Variational inference"
+      "6: Bayesian workflow"
     ]
   },
   {
-    "objectID": "content/10-content.html#slides",
-    "href": "content/10-content.html#slides",
-    "title": "Variational inference",
+    "objectID": "content/06-content.html#slides",
+    "href": "content/06-content.html#slides",
+    "title": "Bayesian workflow and model diagnostics",
     "section": "Slides",
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
     "crumbs": [
       "Content",
       "Course content",
-      "10: Variational inference"
+      "6: Bayesian workflow"
     ]
   },
   {
-    "objectID": "content/10-content.html#code",
-    "href": "content/10-content.html#code",
-    "title": "Variational inference",
+    "objectID": "content/06-content.html#code",
+    "href": "content/06-content.html#code",
+    "title": "Bayesian workflow and model diagnostics",
     "section": "Code",
-    "text": "Code\n\nR script of CAVI with Gaussian model\nR script of ADVI for stochastic volatility model",
+    "text": "Code\n\nR script for two-component mixture model\nR script for the Tokyo rainfall",
     "crumbs": [
       "Content",
       "Course content",
-      "10: Variational inference"
+      "6: Bayesian workflow"
     ]
+  },
+  {
+    "objectID": "content/04-content.html#content",
+    "href": "content/04-content.html#content",
+    "title": "Markov chains and Metropolis–Hastings",
+    "section": "Content",
+    "text": "Content\n\nRejection sampling\nBasics of Markov chains\nMetropolis–Hastings algorithm",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+    ]
+  },
+  {
+    "objectID": "content/04-content.html#learning-objectives",
+    "href": "content/04-content.html#learning-objectives",
+    "title": "Markov chains and Metropolis–Hastings",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a Metropolis–Hastings algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors\nuse efficient proposals and tuning for MCMC",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+    ]
+  },
+  {
+    "objectID": "content/04-content.html#readings",
+    "href": "content/04-content.html#readings",
+    "title": "Markov chains and Metropolis–Hastings",
+    "section": "Readings",
+    "text": "Readings\n\nGeyer (2011) — up to 1.17\nChapters 4 and 5 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+    ]
+  },
+  {
+    "objectID": "content/04-content.html#complementary-readings",
+    "href": "content/04-content.html#complementary-readings",
+    "title": "Markov chains and Metropolis–Hastings",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\nGreen et al. (2015) (overview of MCMC methods)",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+    ]
+  },
+  {
+    "objectID": "content/04-content.html#slides",
+    "href": "content/04-content.html#slides",
+    "title": "Markov chains and Metropolis–Hastings",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+    ]
+  },
+  {
+    "objectID": "content/02-content.html#content",
+    "href": "content/02-content.html#content",
+    "title": "Bayesics",
+    "section": "Content",
+    "text": "Content\n\nProbability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "2: Bayesics"
+    ]
+  },
+  {
+    "objectID": "content/02-content.html#learning-objectives",
+    "href": "content/02-content.html#learning-objectives",
+    "title": "Bayesics",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ndefine key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference\nperform inference in conjugate models with a single parameter\ncalculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)\nexplain some of the conceptual differences between frequentist and Bayesian inference",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "2: Bayesics"
+    ]
+  },
+  {
+    "objectID": "content/02-content.html#readings",
+    "href": "content/02-content.html#readings",
+    "title": "Bayesics",
+    "section": "Readings",
+    "text": "Readings\n\nChapter 2 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "2: Bayesics"
+    ]
+  },
+  {
+    "objectID": "content/02-content.html#complementary-readings",
+    "href": "content/02-content.html#complementary-readings",
+    "title": "Bayesics",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nEdwards et al. (1992)\nJohnson et al. (2022), chapters 2–4 and sections 8.1, 8.3\nVillani (2023), chapters 1 and 2\nAlbert (2009), chapters 2 and 3",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "2: Bayesics"
+    ]
+  },
+  {
+    "objectID": "content/02-content.html#slides",
+    "href": "content/02-content.html#slides",
+    "title": "Bayesics",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "2: Bayesics"
+    ]
+  },
+  {
+    "objectID": "content/02-content.html#code",
+    "href": "content/02-content.html#code",
+    "title": "Bayesics",
+    "section": "Code",
+    "text": "Code\n\nR script for Example 2.4 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "2: Bayesics"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#content",
+    "href": "content/01-content.html#content",
+    "title": "Introduction",
+    "section": "Content",
+    "text": "Content\n\nMarginalization and conditioning\nBayes’ theorem\nReview of probability distributions\nLikelihood\nMonte Carlo integration",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#readings",
+    "href": "content/01-content.html#readings",
+    "title": "Introduction",
+    "section": "Readings",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 1 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#complementary-readings",
+    "href": "content/01-content.html#complementary-readings",
+    "title": "Introduction",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nChapter 1 of Wood (2015)\nChapter 4 and 6.1 of Davison (2003)\nChapters 2 and 3 of Robert & Casella (2004)\nChapters 1–6 of Casella & Berger (2002)",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#slides",
+    "href": "content/01-content.html#slides",
+    "title": "Introduction",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#code",
+    "href": "content/01-content.html#code",
+    "title": "Introduction",
+    "section": "Code",
+    "text": "Code\n\nR script for geometric-beta example",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/03-content.html#content",
+    "href": "content/03-content.html#content",
+    "title": "Priors",
+    "section": "Content",
+    "text": "Content\n\nConjugate, flat, vague, Jeffrey’s, informative and penalized complexity priors\nPriors for regression models\nParameter elicitation\nPrior sensitivity analysis",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "3: Priors"
+    ]
+  },
+  {
+    "objectID": "content/03-content.html#learning-objectives",
+    "href": "content/03-content.html#learning-objectives",
+    "title": "Priors",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nchoose a suitable prior for a Bayesian analysis\nderive parameters of posterior distributions in conjugate models\nperform parameter elicitation\nassess the impact of priors through sensitivity analysis",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "3: Priors"
+    ]
+  },
+  {
+    "objectID": "content/03-content.html#readings",
+    "href": "content/03-content.html#readings",
+    "title": "Priors",
+    "section": "Readings",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 3 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "3: Priors"
+    ]
+  },
+  {
+    "objectID": "content/03-content.html#complementary-readings",
+    "href": "content/03-content.html#complementary-readings",
+    "title": "Priors",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nVillani (2023), chapter 4\nGelman et al. (2013), chapters 2, 3 and 5\nJohnson et al. (2022), chapter 5\ntruncated Student-t priors for hierarchical models (Gelman, 2006)\npenalized complexity priors (Simpson et al., 2017)",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "3: Priors"
+    ]
+  },
+  {
+    "objectID": "content/03-content.html#slides",
+    "href": "content/03-content.html#slides",
+    "title": "Priors",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "3: Priors"
+    ]
+  },
+  {
+    "objectID": "content/05-content.html#content",
+    "href": "content/05-content.html#content",
+    "title": "Markov chain Monte Carlo",
+    "section": "Content",
+    "text": "Content\n\nMetropolis-adjusted Langevin algorithm (MALA)\nGibbs sampling\nData augmentation",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Gibbs sampling"
+    ]
+  },
+  {
+    "objectID": "content/05-content.html#learning-objectives",
+    "href": "content/05-content.html#learning-objectives",
+    "title": "Markov chain Monte Carlo",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nimplement Gibbs sampling\nderive the conditional distributions of a model for Gibbs sampling",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Gibbs sampling"
+    ]
+  },
+  {
+    "objectID": "content/05-content.html#readings",
+    "href": "content/05-content.html#readings",
+    "title": "Markov chain Monte Carlo",
+    "section": "Readings",
+    "text": "Readings\n\nChapters 5 and 6 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Gibbs sampling"
+    ]
+  },
+  {
+    "objectID": "content/05-content.html#complementary-readings",
+    "href": "content/05-content.html#complementary-readings",
+    "title": "Markov chain Monte Carlo",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\nAlbert (2009), chapters 6 and 10 (several examples)\nMcElreath (2020), chapter 9 (non technical)\nNeal (2003) (slice sampling)",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Gibbs sampling"
+    ]
+  },
+  {
+    "objectID": "content/05-content.html#slides",
+    "href": "content/05-content.html#slides",
+    "title": "Markov chain Monte Carlo",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Gibbs sampling"
+    ]
+  },
+  {
+    "objectID": "content/07-content.html#content",
+    "href": "content/07-content.html#content",
+    "title": "Probabilistic programming",
+    "section": "Content",
+    "text": "Content\n\nHamiltonian Monte Carlo\nProbabilistic programming\nStan",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "7: Probabilistic programming"
+    ]
+  },
+  {
+    "objectID": "content/07-content.html#learning-objectives",
+    "href": "content/07-content.html#learning-objectives",
+    "title": "Probabilistic programming",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ncode models using Stan",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "7: Probabilistic programming"
+    ]
+  },
+  {
+    "objectID": "content/07-content.html#readings",
+    "href": "content/07-content.html#readings",
+    "title": "Probabilistic programming",
+    "section": "Readings",
+    "text": "Readings\n\nBetancourt (2017)\nNeal (2011)\nChi Feng’s MCMC gallery",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "7: Probabilistic programming"
+    ]
+  },
+  {
+    "objectID": "content/07-content.html#complementary-readings",
+    "href": "content/07-content.html#complementary-readings",
+    "title": "Probabilistic programming",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\nStan user guide",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "7: Probabilistic programming"
+    ]
+  },
+  {
+    "objectID": "content/07-content.html#slides",
+    "href": "content/07-content.html#slides",
+    "title": "Probabilistic programming",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "7: Probabilistic programming"
+    ]
+  },
+  {
+    "objectID": "content/07-content.html#code",
+    "href": "content/07-content.html#code",
+    "title": "Probabilistic programming",
+    "section": "Code",
+    "text": "Code\n\nStochastic volatility model: Stan code 1 and 2 and cmdstanr R script\nSmartwatch example and cmdstanr R script",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "7: Probabilistic programming"
+    ]
+  },
+  {
+    "objectID": "content/09-content.html#content",
+    "href": "content/09-content.html#content",
+    "title": "Deterministic approximations",
+    "section": "Content",
+    "text": "Content\n\nBernstein–von Mises theorem\nLaplace approximations\nintegrated nested Laplace approximation (INLA)",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "9: Deterministic approximations"
+    ]
+  },
+  {
+    "objectID": "content/09-content.html#learning-objectives",
+    "href": "content/09-content.html#learning-objectives",
+    "title": "Deterministic approximations",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nderive the Laplace approximation for simple models to compute marginal likelihood, posterior expectation or approximation to density.\ndescribe the difference between deterministic and stochastic approximations.",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "9: Deterministic approximations"
+    ]
+  },
+  {
+    "objectID": "content/09-content.html#readings",
+    "href": "content/09-content.html#readings",
+    "title": "Deterministic approximations",
+    "section": "Readings",
+    "text": "Readings\n\nChapter 9 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "9: Deterministic approximations"
+    ]
+  },
+  {
+    "objectID": "content/09-content.html#complementary-readings",
+    "href": "content/09-content.html#complementary-readings",
+    "title": "Deterministic approximations",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\nLaplace approximation use in statistics: Tierney & Kadane (1986)\nskewed Bernstein–von Mises: Durante et al. (2024)\nLaplace approximation for Bayes factor: Raftery (1995)\nintegrated nested Laplace approximation: Rue et al. (2009), Wood (2019)",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "9: Deterministic approximations"
+    ]
+  },
+  {
+    "objectID": "content/09-content.html#slides",
+    "href": "content/09-content.html#slides",
+    "title": "Deterministic approximations",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "9: Deterministic approximations"
+    ]
+  },
+  {
+    "objectID": "content/09-content.html#code",
+    "href": "content/09-content.html#code",
+    "title": "Deterministic approximations",
+    "section": "Code",
+    "text": "Code\n\nLaplace approximations for exponential-gamma model R script\nINLA package R script",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "9: Deterministic approximations"
+    ]
+  },
+  {
+    "objectID": "content/11-content.html#content",
+    "href": "content/11-content.html#content",
+    "title": "Expectation propagation",
+    "section": "Content",
+    "text": "Content\n\nNewton method and sequences of Gaussian approximations\nExpectation propagation (EP)"
+  },
+  {
+    "objectID": "content/11-content.html#learning-objectives",
+    "href": "content/11-content.html#learning-objectives",
+    "title": "Expectation propagation",
+    "section": "Learning objectives",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nimplement expectation propagation in simple problems\nexplain the differences between EP, Laplace and variational inference\nunderstand under which circumstances EP is unstable"
+  },
+  {
+    "objectID": "content/11-content.html#readings",
+    "href": "content/11-content.html#readings",
+    "title": "Expectation propagation",
+    "section": "Readings",
+    "text": "Readings\n\nDehaene & Barthelmé (2018), section 1–2\nSection 10.7 of Bishop (2006)\nCseke & Heskes (2011)"
+  },
+  {
+    "objectID": "content/11-content.html#complementary-readings",
+    "href": "content/11-content.html#complementary-readings",
+    "title": "Expectation propagation",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\nMinka (2001)"
+  },
+  {
+    "objectID": "content/11-content.html#slides",
+    "href": "content/11-content.html#slides",
+    "title": "Expectation propagation",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
   },
   {
     "objectID": "content/installation.html",
@@ -3264,7 +3274,7 @@
     "href": "exercises/10-exercise.html",
     "title": "Exercises 10",
     "section": "",
-    "text": "Suppose that \\(p(\\boldsymbol{\\theta})\\) is a density with \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^p\\) and that we consider a Gaussian approximation \\(q(\\boldsymbol{\\theta})\\) with mean \\(\\boldsymbol{\\mu}\\) and covariance matrix \\(\\boldsymbol{\\Sigma}\\). Show that the parameters that minimize the Kullback–Leibler \\(\\mathsf{KL}\\{p(\\boldsymbol{\\theta} \\parallel q(\\boldsymbol{\\theta})\\}\\) are the expectation and variance under \\(p(\\boldsymbol{\\theta})\\).1",
+    "text": "Suppose that \\(p(\\boldsymbol{\\theta})\\) is a density with \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^d\\) and that we consider a Gaussian approximation \\(g(\\boldsymbol{\\theta})\\) with mean \\(\\boldsymbol{\\mu}\\) and covariance matrix \\(\\boldsymbol{\\Sigma}\\). Show that the parameters that minimize the Kullback–Leibler \\(\\mathsf{KL}\\{p(\\boldsymbol{\\theta} \\parallel g(\\boldsymbol{\\theta})\\}\\) are the expectation and variance under \\(p(\\boldsymbol{\\theta})\\).1",
     "crumbs": [
       "Exercises",
       "10: Variational inference"
@@ -3275,7 +3285,7 @@
     "href": "exercises/10-exercise.html#exercise-10.1",
     "title": "Exercises 10",
     "section": "",
-    "text": "Suppose that \\(p(\\boldsymbol{\\theta})\\) is a density with \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^p\\) and that we consider a Gaussian approximation \\(q(\\boldsymbol{\\theta})\\) with mean \\(\\boldsymbol{\\mu}\\) and covariance matrix \\(\\boldsymbol{\\Sigma}\\). Show that the parameters that minimize the Kullback–Leibler \\(\\mathsf{KL}\\{p(\\boldsymbol{\\theta} \\parallel q(\\boldsymbol{\\theta})\\}\\) are the expectation and variance under \\(p(\\boldsymbol{\\theta})\\).1",
+    "text": "Suppose that \\(p(\\boldsymbol{\\theta})\\) is a density with \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^d\\) and that we consider a Gaussian approximation \\(g(\\boldsymbol{\\theta})\\) with mean \\(\\boldsymbol{\\mu}\\) and covariance matrix \\(\\boldsymbol{\\Sigma}\\). Show that the parameters that minimize the Kullback–Leibler \\(\\mathsf{KL}\\{p(\\boldsymbol{\\theta} \\parallel g(\\boldsymbol{\\theta})\\}\\) are the expectation and variance under \\(p(\\boldsymbol{\\theta})\\).1",
     "crumbs": [
       "Exercises",
       "10: Variational inference"
@@ -3286,7 +3296,7 @@
     "href": "exercises/10-exercise.html#exercise-10.2",
     "title": "Exercises 10",
     "section": "Exercise 10.2",
-    "text": "Exercise 10.2\nConsider a finite mixture model of \\(K\\) univariate Gaussian \\(\\mathsf{Gauss}(\\mu_k, \\tau_k^{-1})\\) with \\(K\\) fixed, whose density is \\[\\begin{align*}\n\\sum_{k=1}^{K} w_k \\left(\\frac{\\tau_k}{2\\pi}\\right)^{1/2}\\exp \\left\\{-\\frac{\\tau_k}{2}(y_i-\\mu_k)^2\\right\\}\n\\end{align*}\\] where \\(\\boldsymbol{w} \\in \\mathbb{S}_{K-1}\\) are positive weights that sum to one, meaning \\(w_1 + \\cdots + w_K=1.\\) We use conjugate priors \\(\\mu_k \\sim \\mathsf{Gauss}(0, 100)\\), \\(\\tau_k \\sim \\mathsf{Gamma}(a, b)\\) for \\(k=1, \\ldots, K\\) and \\(\\boldsymbol{w} \\sim \\mathsf{Dirichlet}(\\alpha)\\) for \\(a, b, \\alpha&gt;0\\) fixed hyperparameter values.\nTo help with inference, we introduce auxiliary variables \\(\\boldsymbol{U}_1, \\ldots, \\boldsymbol{U}_n\\) where \\(\\boldsymbol{U}_i \\sim \\mathsf{multinom}(1, \\boldsymbol{w})\\) that indicates which cluster component the model belongs to, and \\(\\omega_k = \\Pr(U_{ik}=1).\\)\nThe parameters and latent variables for the posterior of interest are \\(\\boldsymbol{\\mu}, \\boldsymbol{\\tau}, \\boldsymbol{w}\\) and \\(\\mathbf{U}.\\) Consider a factorized decomposition in which each component is independent of the others, \\(q_{\\boldsymbol{w}}(\\boldsymbol{w})q_{\\boldsymbol{\\mu}}(\\boldsymbol{\\mu})q_{\\boldsymbol{\\tau}}(\\boldsymbol{\\tau}) q(\\boldsymbol{U}).\\)\n\nApply the coordinate ascent algorithm to obtain the distribution for the optimal components.\nWrite down an expression for the ELBO.\nRun the algorithm for the geyser data from MASS R package for \\(K=2\\) until convergence with \\(\\alpha=0.1, a=b=0.01.\\) Repeat multiple times with different initializations and save the ELBO for each run.\nRepeat these steps for \\(K=2, \\ldots, 6\\) and plot the ELBO as a function of \\(K\\). Comment on the optimal number of cluster components suggested by the approximation to the marginal likelihood.",
+    "text": "Exercise 10.2\nConsider a finite mixture model of \\(K\\) univariate Gaussian \\(\\mathsf{Gauss}(\\mu_k, \\tau_k^{-1})\\) with \\(K\\) fixed, whose density is \\[\\begin{align*}\n\\sum_{k=1}^{K} w_k \\left(\\frac{\\tau_k}{2\\pi}\\right)^{1/2}\\exp \\left\\{-\\frac{\\tau_k}{2}(y_i-\\mu_k)^2\\right\\}\n\\end{align*}\\] where \\(\\boldsymbol{w} \\in \\mathbb{S}_{K-1}\\) are positive weights that sum to one, meaning \\(w_1 + \\cdots + w_K=1.\\) We use conjugate priors \\(\\mu_k \\sim \\mathsf{Gauss}(0, 100)\\), \\(\\tau_k \\sim \\mathsf{Gamma}(a, b)\\) for \\(k=1, \\ldots, K\\) and \\(\\boldsymbol{w} \\sim \\mathsf{Dirichlet}(\\alpha)\\) for \\(a, b, \\alpha&gt;0\\) fixed hyperparameter values.\nTo help with inference, we introduce auxiliary variables \\(\\boldsymbol{U}_1, \\ldots, \\boldsymbol{U}_n\\) where \\(\\boldsymbol{U}_i \\sim \\mathsf{multinom}(1, \\boldsymbol{w})\\) that indicates which cluster component the model belongs to, and \\(\\omega_k = \\Pr(U_{ik}=1).\\)\nThe parameters and latent variables for the posterior of interest are \\(\\boldsymbol{\\mu}, \\boldsymbol{\\tau}, \\boldsymbol{w}\\) and \\(\\mathbf{U}.\\) Consider a factorized decomposition in which each component is independent of the others, \\(q_{\\boldsymbol{w}}(\\boldsymbol{w})q_{\\boldsymbol{\\mu}}(\\boldsymbol{\\mu})q_{\\boldsymbol{\\tau}}(\\boldsymbol{\\tau}) g(\\boldsymbol{U}).\\)\n\nApply the coordinate ascent algorithm to obtain the distribution for the optimal components.\nWrite down an expression for the ELBO.\nRun the algorithm for the geyser data from MASS R package for \\(K=2\\) until convergence with \\(\\alpha=0.1, a=b=0.01.\\) Repeat multiple times with different initializations and save the ELBO for each run.\nRepeat these steps for \\(K=2, \\ldots, 6\\) and plot the ELBO as a function of \\(K\\). Comment on the optimal number of cluster components suggested by the approximation to the marginal likelihood.",
     "crumbs": [
       "Exercises",
       "10: Variational inference"
@@ -3304,263 +3314,441 @@
     ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "\n            Bayesian modelling\n        ",
+    "objectID": "exercises/index.html",
+    "href": "exercises/index.html",
+    "title": "Exercises",
     "section": "",
-    "text": "Hands on introduction to Bayesian data analysis. The course will cover the formulation, evaluation and comparison of Bayesian models through examples.\n        \n        \n            MATH 80601A, Winter 2025HEC Montréal\n        \n    \n    \n      \n        \n        \n        \n      \n    \n\n\n\n\n\n\n\nInstructor\n\n   Dr. Léo Belzile\n   4.850, Côte-Sainte-Catherine\n   leo.belzile@hec.ca\n\n\n\nCourse details\n\n   Winter 2025\n   Monday\n   15:30-18:30\n   CSC, Labid Aljundi\n\n\n\nContacting me\nPlease post course-related questions on Piazza. I am best reached by email."
+    "text": "This section will contain exercises that are directly connected to the course notes, in addition to other exercises from reference manuals.",
+    "crumbs": [
+      "Exercises"
+    ]
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#variational-inference",
-    "href": "slides/bayesmod-slides10.html#variational-inference",
+    "objectID": "slides/bayesmod-slides1.html#distribution-and-density-function",
+    "href": "slides/bayesmod-slides1.html#distribution-and-density-function",
+    "title": "Bayesian modelling",
+    "section": "Distribution and density function",
+    "text": "Distribution and density function\nLet \\(\\boldsymbol{X} \\in \\mathbb{R}^d\\) be a random vector with distribution function \\[\\begin{align*}\nF_{\\boldsymbol{X}}(\\boldsymbol{x}) = \\Pr(\\boldsymbol{X} \\leq \\boldsymbol{x}) = \\Pr(X_1 \\leq x_1, \\ldots, X_d \\leq x_d).\n\\end{align*}\\]\nIf the distribution of \\(\\boldsymbol{X}\\) is absolutely continuous, \\[\\begin{align*}\nF_{\\boldsymbol{X}}(\\boldsymbol{x}) = \\int_{-\\infty}^{x_d} \\cdots \\int_{-\\infty}^{x_1} f_{\\boldsymbol{X}}(z_1, \\ldots, z_d) \\mathrm{d} z_1 \\cdots \\mathrm{d} z_d,\n\\end{align*}\\] where \\(f_{\\boldsymbol{X}}(\\boldsymbol{x})\\) is the joint density function."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#mass-function",
+    "href": "slides/bayesmod-slides1.html#mass-function",
+    "title": "Bayesian modelling",
+    "section": "Mass function",
+    "text": "Mass function\nBy abuse of notation, we denote the mass function in the discrete case \\[0 \\leq f_{\\boldsymbol{X}}(\\boldsymbol{x}) = \\Pr(X_1 = x_1, \\ldots, X_d = x_d) \\leq 1.\\]\nThe support is the set of non-zero density/probability total probability over all points in the support, \\[\\sum_{\\boldsymbol{x} \\in \\mathsf{supp}(\\boldsymbol{X})} f_{\\boldsymbol{X}}(\\boldsymbol{x}) = 1.\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#marginal-distribution",
+    "href": "slides/bayesmod-slides1.html#marginal-distribution",
+    "title": "Bayesian modelling",
+    "section": "Marginal distribution",
+    "text": "Marginal distribution\nThe marginal distribution of a subvector \\(\\boldsymbol{X}_{1:k}=(X_1, \\ldots, X_k)^\\top\\) is \\[\\begin{align*}\nF_{\\boldsymbol{X}_{1:k}}(\\boldsymbol{x}_{1:k}) &= \\Pr(\\boldsymbol{X}_{1:k} \\leq \\boldsymbol{x}_{1:k}) \\\\&= F_{\\boldsymbol{X}}(x_1, \\ldots, x_k, \\infty, \\ldots, \\infty).\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#marginal-density",
+    "href": "slides/bayesmod-slides1.html#marginal-density",
+    "title": "Bayesian modelling",
+    "section": "Marginal density",
+    "text": "Marginal density\nThe marginal density \\(f_{\\boldsymbol{X}_{1:k}}(\\boldsymbol{x}_{1:k})\\) of an absolutely continuous subvector \\(\\boldsymbol{X}_{1:k}=(X_1, \\ldots, X_k)^\\top\\) is \\[\\begin{align*}\n\\int_{-\\infty}^\\infty \\cdots  \\int_{-\\infty}^\\infty  f_{\\boldsymbol{X}}(x_1, \\ldots, x_k, z_{k+1}, \\ldots, z_{d}) \\mathrm{d} z_{k+1} \\cdots \\mathrm{d}z_d.\n\\end{align*}\\] through integration from the joint density."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#conditional-distribution",
+    "href": "slides/bayesmod-slides1.html#conditional-distribution",
+    "title": "Bayesian modelling",
+    "section": "Conditional distribution",
+    "text": "Conditional distribution\nThe conditional distribution function of \\(\\boldsymbol{Y}\\) given \\(\\boldsymbol{X}=\\boldsymbol{x}\\), is \\[\\begin{align*}\nf_{\\boldsymbol{Y} \\mid \\boldsymbol{X}}(\\boldsymbol{y}; \\boldsymbol{x}) = \\frac{f_{\\boldsymbol{X}, \\boldsymbol{Y}}(\\boldsymbol{x}, \\boldsymbol{y})}{f_{\\boldsymbol{X}}(\\boldsymbol{x})}\n\\end{align*}\\] for any value of \\(\\boldsymbol{x}\\) in the support of \\(\\boldsymbol{X}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#conditional-and-marginal-for-contingency-table",
+    "href": "slides/bayesmod-slides1.html#conditional-and-marginal-for-contingency-table",
+    "title": "Bayesian modelling",
+    "section": "Conditional and marginal for contingency table",
+    "text": "Conditional and marginal for contingency table\nConsider a bivariate distribution for \\((Y_1, Y_2)\\) supported on \\(\\{1,2,3\\} \\times \\{1, 2\\}\\) whose joint probability mass function is given in Table 1\n\n\n\n\nTable 1: Bivariate mass function with probability of each outcome for \\((Y_1, Y_2)\\).\n\n\n\n\n\n\n\n\\(Y_1=1\\)\n\\(Y_1=2\\)\n\\(Y_1=3\\)\nrow total\n\n\n\n\n\\(Y_2=1\\)\n0.20\n0.3\n0.10\n0.6\n\n\n\\(Y_2=2\\)\n0.15\n0.2\n0.05\n0.4\n\n\ncol. total\n0.35\n0.5\n0.15\n1.0"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#calculations-for-the-marginal-distribution",
+    "href": "slides/bayesmod-slides1.html#calculations-for-the-marginal-distribution",
+    "title": "Bayesian modelling",
+    "section": "Calculations for the marginal distribution",
+    "text": "Calculations for the marginal distribution\nThe marginal distribution of \\(Y_1\\) is obtain by looking at the total probability for each row/column, e.g., \\[\\Pr(Y_1=i) = \\Pr(Y_1=i, Y_2=1)+ \\Pr(Y_1=i, Y_2=2).\\]\n\n\\(\\Pr(Y_1=1)=0.35\\), \\(\\Pr(Y_1=2)=0.5\\), \\(\\Pr(Y_1=3) = 0.15\\).\n\\(\\Pr(Y_2=1)=0.6\\) and \\(\\Pr(Y_2=2)=0.4\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#conditional-distribution-1",
+    "href": "slides/bayesmod-slides1.html#conditional-distribution-1",
+    "title": "Bayesian modelling",
+    "section": "Conditional distribution",
+    "text": "Conditional distribution\nThe conditional distribution \\[\\Pr(Y_2 = i \\mid Y_1=2) = \\frac{\\Pr(Y_1=2, Y_2=i)}{\\Pr(Y_1=2)},\\] so \\[\\begin{align*}\n\\Pr(Y_2 = 1 \\mid Y_1=2) &= 0.3/0.5 = 0.6\n\\\\ \\Pr(Y_2=2 \\mid Y_1=2) &= 0.4.\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#independence",
+    "href": "slides/bayesmod-slides1.html#independence",
+    "title": "Bayesian modelling",
+    "section": "Independence",
+    "text": "Independence\nVectors \\(\\boldsymbol{Y}\\) and \\(\\boldsymbol{X}\\) are independent if \\[\\begin{align*}\nF_{\\boldsymbol{X}, \\boldsymbol{Y}}(\\boldsymbol{x}, \\boldsymbol{y}) = F_{\\boldsymbol{X}}(\\boldsymbol{x})F_{\\boldsymbol{Y}}(\\boldsymbol{y})\n\\end{align*}\\] for any value of \\(\\boldsymbol{x}\\), \\(\\boldsymbol{y}\\).\nThe joint density, if it exists, also factorizes \\[\\begin{align*}\nf_{\\boldsymbol{X}, \\boldsymbol{Y}}(\\boldsymbol{x}, \\boldsymbol{y}) = f_{\\boldsymbol{X}}(\\boldsymbol{x})f_{\\boldsymbol{Y}}(\\boldsymbol{y}).\n\\end{align*}\\]\nIf two subvectors \\(\\boldsymbol{X}\\) and \\(\\boldsymbol{Y}\\) are independent, then the conditional density \\(f_{\\boldsymbol{Y} \\mid \\boldsymbol{X}}(\\boldsymbol{y}; \\boldsymbol{x})\\) equals the marginal \\(f_{\\boldsymbol{Y}}(\\boldsymbol{y})\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#expected-value",
+    "href": "slides/bayesmod-slides1.html#expected-value",
+    "title": "Bayesian modelling",
+    "section": "Expected value",
+    "text": "Expected value\nIf \\(\\boldsymbol{Y}\\) has density \\(f_{\\boldsymbol{Y}},\\) then \\[\\begin{align*}\n\\mathsf{E}\\{g(\\boldsymbol{Y})\\} = \\int g(\\boldsymbol{y}) f_{\\boldsymbol{Y}}(\\boldsymbol{y}) \\mathrm{d} \\boldsymbol{y}\n\\end{align*}\\] a weighted integral of \\(g\\) with weight \\(f_{\\boldsymbol{Y}}.\\)\nThe identity function gives the expected value \\(\\mathsf{E}(\\boldsymbol{Y}).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#covariance-matrix",
+    "href": "slides/bayesmod-slides1.html#covariance-matrix",
+    "title": "Bayesian modelling",
+    "section": "Covariance matrix",
+    "text": "Covariance matrix\nWe define the covariance matrix of \\(\\boldsymbol{Y}\\) as \\[\\begin{align*}\n\\mathsf{Va}(\\boldsymbol{Y}) = \\mathsf{E}\\left[\\left\\{\\boldsymbol{Y} - \\mathsf{E}(\\boldsymbol{Y})\\right\\}\\left\\{\\boldsymbol{Y} - \\mathsf{E}(\\boldsymbol{Y})\\right\\}^\\top\\right],\n\\end{align*}\\] which reduces in the unidimensional setting to \\(\\mathsf{Va}(Y) = \\mathsf{E}\\{Y - \\mathsf{E}(Y)\\}^2 = \\mathsf{E}(Y^2) - \\mathsf{E}(Y)^2.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#affine-transformations",
+    "href": "slides/bayesmod-slides1.html#affine-transformations",
+    "title": "Bayesian modelling",
+    "section": "Affine transformations",
+    "text": "Affine transformations\nIf \\(\\boldsymbol{Y}\\) is \\(d\\)-dimensional and \\(\\mathbf{A}\\) is \\(p \\times d\\) and \\(\\boldsymbol{b}\\) is a \\(p\\) vector, then\n\\[\\begin{align*}\n\\mathsf{E}(\\boldsymbol{AY} + \\boldsymbol{b}) &= \\boldsymbol{A}\\mathsf{E}(\\boldsymbol{Y}) + \\boldsymbol{b},\\\\\n\\mathsf{Va}(\\boldsymbol{AY} + \\boldsymbol{b}) &= \\boldsymbol{A}\\mathsf{Va}(\\boldsymbol{Y})\\boldsymbol{A}^\\top.\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#law-of-iterated-expectation-and-variance",
+    "href": "slides/bayesmod-slides1.html#law-of-iterated-expectation-and-variance",
+    "title": "Bayesian modelling",
+    "section": "Law of iterated expectation and variance",
+    "text": "Law of iterated expectation and variance\nLet \\(\\boldsymbol{Z}\\) and \\(\\boldsymbol{Y}\\) be random vectors. The expected value of \\(\\boldsymbol{Y}\\) is \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{Y}}(\\boldsymbol{Y}) = \\mathsf{E}_{\\boldsymbol{Z}}\\left\\{\\mathsf{E}_{\\boldsymbol{Y} \\mid \\boldsymbol{Z}}(\\boldsymbol{Y})\\right\\}.\n\\end{align*}\\]\nThe tower property gives a law of iterated variance \\[\\begin{align*}\n\\mathsf{Va}_{\\boldsymbol{Y}}(\\boldsymbol{Y}) = \\mathsf{E}_{\\boldsymbol{Z}}\\left\\{\\mathsf{Va}_{\\boldsymbol{Y} \\mid \\boldsymbol{Z}}(\\boldsymbol{Y})\\right\\} + \\mathsf{Va}_{\\boldsymbol{Z}}\\left\\{\\mathsf{E}_{\\boldsymbol{Y} \\mid \\boldsymbol{Z}}(\\boldsymbol{Y})\\right\\}.\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#poisson-distribution",
+    "href": "slides/bayesmod-slides1.html#poisson-distribution",
+    "title": "Bayesian modelling",
+    "section": "Poisson distribution",
+    "text": "Poisson distribution\nThe Poisson distribution has mass \\[\\begin{align*}\nf(x)=\\mathsf{Pr}(Y=x) = \\frac{\\exp(-\\lambda)\\lambda^y}{\\Gamma(y+1)}, \\quad x=0, 1, 2, \\ldots\n\\end{align*}\\] where \\(\\Gamma(\\cdot)\\) denotes the gamma function.\nThe parameter \\(\\lambda\\) of the Poisson distribution is both the expectation and the variance of the distribution, meaning \\[\\mathsf{E}(Y)=\\mathsf{Va}(Y)=\\lambda.\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#gamma-distribution",
+    "href": "slides/bayesmod-slides1.html#gamma-distribution",
+    "title": "Bayesian modelling",
+    "section": "Gamma distribution",
+    "text": "Gamma distribution\nA gamma distribution with shape \\(\\alpha&gt;0\\) and rate \\(\\beta&gt;0\\), denoted \\(Y \\sim \\mathsf{gamma}(\\alpha, \\beta)\\), has density \\[\\begin{align*}\nf(x) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha-1}\\exp(-\\beta x), \\qquad x \\in (0, \\infty),\n\\end{align*}\\] where \\(\\Gamma(\\alpha)=\\int_0^\\infty t^{\\alpha-1}\\exp(-t)\\mathrm{d} t\\) is the gamma function."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#poisson-with-random-scale",
+    "href": "slides/bayesmod-slides1.html#poisson-with-random-scale",
+    "title": "Bayesian modelling",
+    "section": "Poisson with random scale",
+    "text": "Poisson with random scale\nTo handle overdispersion in count data, take\n\\[\\begin{align*}\nY \\mid \\Lambda &= \\lambda \\sim \\mathsf{Poisson}(\\lambda)\\\\\n\\Lambda &\\sim \\mathsf{Gamma}(k\\mu, k).\n\\end{align*}\\]\nThe joint density of \\(Y\\) and \\(\\Lambda\\) on \\(\\mathbb{N}=\\{0,1,\\ldots\\} \\times \\mathbb{R}_{+}\\) is \\[\\begin{align*}\nf(y, \\lambda) &= f(y \\mid \\lambda)f(\\lambda) \\\\\n&= \\frac{\\lambda^y\\exp(-\\lambda)}{\\Gamma(y+1)}  \\frac{k^{k\\mu}\\lambda^{k\\mu-1}\\exp(-k\\lambda)}{\\Gamma(k\\mu)}\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#conditional-distribution-2",
+    "href": "slides/bayesmod-slides1.html#conditional-distribution-2",
+    "title": "Bayesian modelling",
+    "section": "Conditional distribution",
+    "text": "Conditional distribution\nThe conditional distribution of \\(\\Lambda \\mid Y=y\\) can be found by considering only terms that are function of \\(\\lambda\\), whence \\[\\begin{align*}\nf(\\lambda \\mid Y=y) \\stackrel{\\lambda}{\\propto}\\lambda^{y+k\\mu-1}\\exp\\{-(k+1)\\lambda\\}\n\\end{align*}\\] so \\(\\Lambda \\mid Y=y \\sim \\mathsf{gamma}(k\\mu + y, k+1)\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#marginal-density-of-poisson-mean-mixture",
+    "href": "slides/bayesmod-slides1.html#marginal-density-of-poisson-mean-mixture",
+    "title": "Bayesian modelling",
+    "section": "Marginal density of Poisson mean mixture",
+    "text": "Marginal density of Poisson mean mixture\n\\[\\begin{align*}\nf(y) &= \\frac{f(y,  \\lambda)}{f(\\lambda \\mid y)} = \\frac{\\frac{\\lambda^y\\exp(-\\lambda)}{\\Gamma(y+1)}  \\frac{k^{k\\mu}\\lambda^{k\\mu-1}\\exp(-k\\lambda)}{\\Gamma(k\\mu)}}{ \\frac{(k+1)^{k\\mu+y}\\lambda^{k\\mu+y-1}\\exp\\{-(k+1)\\lambda\\}}{\\Gamma(k\\mu+y)}}\\\\\n&= \\frac{\\Gamma(k\\mu+y)}{\\Gamma(k\\mu)\\Gamma(y+1)}k^{k\\mu} (k+1)^{-k\\mu-y}\\\\&= \\frac{\\Gamma(k\\mu+y)}{\\Gamma(k\\mu)\\Gamma(y+1)}\\left(1-\\frac{1}{k+1}\\right)^{k\\mu} \\left(\\frac{1}{k+1}\\right)^y\n\\end{align*}\\] Marginally, \\(Y \\sim \\mathsf{neg. binom}(p)\\) where \\(p=(k+1)^{-1}.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#moments-of-negative-binomial",
+    "href": "slides/bayesmod-slides1.html#moments-of-negative-binomial",
+    "title": "Bayesian modelling",
+    "section": "Moments of negative binomial",
+    "text": "Moments of negative binomial\nBy the laws of iterated expectation and iterative variance, \\[\\begin{align*}\n\\mathsf{E}(Y) &= \\mathsf{E}_{\\Lambda}\\{\\mathsf{E}(Y \\mid \\Lambda\\} \\\\& = \\mathsf{E}(\\Lambda) = \\mu\\\\\n\\mathsf{Va}(Y) &= \\mathsf{E}_{\\Lambda}\\{\\mathsf{Va}(Y \\mid \\Lambda)\\} + \\mathsf{Va}_{\\Lambda}\\{\\mathsf{E}(Y \\mid \\Lambda)\\} \\\\&= \\mathsf{E}(\\Lambda) + \\mathsf{Va}(\\Lambda) \\\\&= \\mu + \\mu/k.\n\\end{align*}\\] The marginal distribution of \\(Y\\), unconditionally, has a variance which exceeds its mean."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#change-of-variable-formula",
+    "href": "slides/bayesmod-slides1.html#change-of-variable-formula",
+    "title": "Bayesian modelling",
+    "section": "Change of variable formula",
+    "text": "Change of variable formula\nConsider an injective (one-to-one) differentiable function \\(\\boldsymbol{g}: \\mathbb{R}^d \\to \\mathbb{R}^d,\\) with inverse \\(\\boldsymbol{g}^{-1}.\\) Then, if \\(\\boldsymbol{Y}=\\boldsymbol{g}(\\boldsymbol{X}),\\) \\[\\begin{align*}\n\\Pr(\\boldsymbol{Y} \\leq \\boldsymbol{y}) = \\Pr\\{\\boldsymbol{g}(\\boldsymbol{X}) \\leq \\boldsymbol{y}\\} = \\Pr\\{\\boldsymbol{X} \\leq \\boldsymbol{x} = \\boldsymbol{g}^{-1}(\\boldsymbol{y})\\}.\n\\end{align*}\\]\nUsing the chain rule, the density of \\(\\boldsymbol{Y}\\) is \\[\\begin{align*}\nf_{\\boldsymbol{Y}}(\\boldsymbol{y}) = f_{\\boldsymbol{X}}\\left\\{\\boldsymbol{g}^{-1}(\\boldsymbol{y})\\right\\} \\left| \\mathbf{J}_{\\boldsymbol{g}^{-1}}(\\boldsymbol{y})\\right| = f_{\\boldsymbol{X}}(\\boldsymbol{x}) \\left| \\mathbf{J}_{\\boldsymbol{g}}(\\boldsymbol{x})\\right|^{-1}\n\\end{align*}\\] where \\(\\mathbf{J}_{\\boldsymbol{g}}(\\boldsymbol{x})\\) is the Jacobian matrix with \\(i,j\\)th element \\(\\partial [\\boldsymbol{g}(\\boldsymbol{x})]_i / \\partial x_j.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#gaussian-location-scale",
+    "href": "slides/bayesmod-slides1.html#gaussian-location-scale",
+    "title": "Bayesian modelling",
+    "section": "Gaussian location-scale",
+    "text": "Gaussian location-scale\nConsider \\(d\\) independent standard Gaussian variates \\(X_j \\sim \\mathsf{Gauss}(0, 1)\\) for \\(j=1, \\ldots, d,\\) with joint density function \\[\\begin{align*}\nf_{\\boldsymbol{X}}(\\boldsymbol{x})= (2\\pi)^{-d/2} \\exp \\left( - \\frac{\\boldsymbol{x}^\\top\\boldsymbol{x}}{2}\\right).\n\\end{align*}\\] Consider the transformation \\(\\boldsymbol{Y} = \\mathbf{A}\\boldsymbol{X}+\\boldsymbol{b},\\) with \\(\\mathbf{A}\\) an invertible matrix."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#change-of-variable-for-gaussian",
+    "href": "slides/bayesmod-slides1.html#change-of-variable-for-gaussian",
+    "title": "Bayesian modelling",
+    "section": "Change of variable for Gaussian",
+    "text": "Change of variable for Gaussian\n\nThe inverse transformation is \\(\\boldsymbol{g}^{-1}(\\boldsymbol{y}) = \\mathbf{A}^{-1}(\\boldsymbol{y}-\\boldsymbol{b}).\\)\nThe Jacobian \\(\\mathbf{J}_{\\boldsymbol{g}}(\\boldsymbol{x})\\) is simply \\(\\mathbf{A},\\) so the joint density of \\(\\boldsymbol{Y}\\) is \\[\\begin{align*}\n(2\\pi)^{-d/2} |\\mathbf{A}|^{-1}\\exp \\left\\{ - \\frac{(\\boldsymbol{y}-\\boldsymbol{b})^\\top\\mathbf{A}^{-\\top}\\mathbf{A}^{-1}(\\boldsymbol{y}-\\boldsymbol{b})}{2}\\right\\}.\n\\end{align*}\\] Since \\(|\\mathbf{A}^{-1}| = |\\mathbf{A}|^{-1}\\) and \\(\\mathbf{A}^{-\\top}\\mathbf{A}^{-1} = (\\mathbf{AA}^\\top)^{-1},\\) we recover \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{b}, \\mathbf{AA}^\\top).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-subvectors",
+    "href": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-subvectors",
+    "title": "Bayesian modelling",
+    "section": "Conditional distribution of Gaussian subvectors",
+    "text": "Conditional distribution of Gaussian subvectors\nLet \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{\\mu}, \\boldsymbol{Q}^{-1})\\) and consider the partition \\[\\begin{align*}\n\\boldsymbol{Y} = \\begin{pmatrix} \\boldsymbol{Y}_1 \\\\ \\boldsymbol{Y}_2\\end{pmatrix}, \\quad\n\\boldsymbol{\\mu} = \\begin{pmatrix} \\boldsymbol{\\mu}_1 \\\\ \\boldsymbol{\\mu}_2\\end{pmatrix}, \\quad\n\\boldsymbol{Q} = \\begin{pmatrix} \\boldsymbol{Q}_{11} & \\boldsymbol{Q}_{12}\\\\ \\boldsymbol{Q}_{21} & \\boldsymbol{\\Sigma}_{22}\\end{pmatrix},\n\\end{align*}\\] where \\(\\boldsymbol{Y}_1\\) is a \\(k \\times 1\\) and \\(\\boldsymbol{Y}_2\\) is a \\((d-k) \\times 1\\) vector for some \\(1\\leq k &lt; d.\\)\nThen, we have the conditional distribution \\[\\begin{align*}\n\\boldsymbol{Y}_1 \\mid \\boldsymbol{Y}_2 =\\boldsymbol{y}_2 &\\sim \\mathsf{Gauss}_k(\\boldsymbol{\\mu}_1-\\boldsymbol{Q}_{11}^{-1}\\boldsymbol{Q}_{12}(\\boldsymbol{y}_2-\\boldsymbol{\\mu}_2), \\boldsymbol{Q}^{-1}_{11})\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#likelihood",
+    "href": "slides/bayesmod-slides1.html#likelihood",
+    "title": "Bayesian modelling",
+    "section": "Likelihood",
+    "text": "Likelihood\nThe likelihood \\(L(\\boldsymbol{\\theta})\\) is a function of the parameter vector \\(\\boldsymbol{\\theta}\\) that gives the ‘density’ of a sample under a postulated distribution, treating the observations as fixed, \\[\\begin{align*}\nL(\\boldsymbol{\\theta}; \\boldsymbol{y}) = f(\\boldsymbol{y}; \\boldsymbol{\\theta}).\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#likelihood-for-independent-observations",
+    "href": "slides/bayesmod-slides1.html#likelihood-for-independent-observations",
+    "title": "Bayesian modelling",
+    "section": "Likelihood for independent observations",
+    "text": "Likelihood for independent observations\nIf the joint density factorizes, \\[\\begin{align*}\nL(\\boldsymbol{\\theta}; \\boldsymbol{y})=\\prod_{i=1}^n f_i(y_i; \\boldsymbol{\\theta}) = f_1(y_1; \\boldsymbol{\\theta}) \\times \\cdots \\times f_n(y_n; \\boldsymbol{\\theta}).\n\\end{align*}\\] The corresponding log likelihood function for independent and identically distributions observations is \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}; \\boldsymbol{y}) = \\sum_{i=1}^n \\ln f(y_i; \\boldsymbol{\\theta})\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#score",
+    "href": "slides/bayesmod-slides1.html#score",
+    "title": "Bayesian modelling",
+    "section": "Score",
+    "text": "Score\nLet \\(\\ell(\\boldsymbol{\\theta}),\\) \\(\\boldsymbol{\\theta} \\in \\boldsymbol{\\Theta} \\subseteq \\mathbb{R}^p,\\) be the log likelihood function. The gradient of the log likelihood, termed score is the \\(p\\)-vector \\[U(\\boldsymbol{\\theta}) = \\frac{\\partial \\ell(\\boldsymbol{\\theta})}{ \\partial \\boldsymbol{\\theta}}.\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#information-matrix",
+    "href": "slides/bayesmod-slides1.html#information-matrix",
+    "title": "Bayesian modelling",
+    "section": "Information matrix",
+    "text": "Information matrix\nThe observed information matrix is the hessian of the negative log likelihood, \\[\\begin{align*}\nj(\\boldsymbol{\\theta}; \\boldsymbol{y})=-\\frac{\\partial^2 \\ell(\\boldsymbol{\\theta}; \\boldsymbol{y})}{\\partial \\boldsymbol{\\theta} \\partial \\boldsymbol{\\theta}^\\top},\n\\end{align*}\\] evaluated at the maximum likelihood estimate \\(\\widehat{\\boldsymbol{\\theta}},\\) so \\(j(\\widehat{\\boldsymbol{\\theta}}).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#expected-information",
+    "href": "slides/bayesmod-slides1.html#expected-information",
+    "title": "Bayesian modelling",
+    "section": "Expected information",
+    "text": "Expected information\nUnder regularity conditions, the expected information, also called Fisher information matrix, is \\[\\begin{align*}\ni(\\boldsymbol{\\theta}) = \\mathsf{E}\\left\\{U(\\boldsymbol{\\theta}; \\boldsymbol{Y}) U(\\boldsymbol{\\theta}; \\boldsymbol{Y})^\\top\\right\\} = \\mathsf{E}\\left\\{j(\\boldsymbol{\\theta}; \\boldsymbol{Y})\\right\\}\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#note-on-information-matrices",
+    "href": "slides/bayesmod-slides1.html#note-on-information-matrices",
+    "title": "Bayesian modelling",
+    "section": "Note on information matrices",
+    "text": "Note on information matrices\nInformation matrices are symmetric and provide information about the variability of \\(\\widehat{\\boldsymbol{\\theta}}.\\)\nThe information of an iid sample of size \\(n\\)is \\(n\\) times that of a single observation\n\ninformation accumulates at a linear rate."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#information-for-the-gaussian-distribution",
+    "href": "slides/bayesmod-slides1.html#information-for-the-gaussian-distribution",
+    "title": "Bayesian modelling",
+    "section": "Information for the Gaussian distribution",
+    "text": "Information for the Gaussian distribution\nConsider \\(Y \\sim \\mathsf{Gauss}(\\mu, \\tau^{-1})\\), parametrized in terms of precision \\(\\tau\\). The likelihood contribution for an \\(n\\) sample is, up to proportionality, \\[\\begin{align*}\n\\ell(\\mu, \\tau) \\propto \\frac{n}{2}\\log(\\tau) - \\frac{\\tau}{2}\\sum_{i=1}^n(Y_i^2-2\\mu Y_i+\\mu^2)\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#gaussian-information-matrices",
+    "href": "slides/bayesmod-slides1.html#gaussian-information-matrices",
+    "title": "Bayesian modelling",
+    "section": "Gaussian information matrices",
+    "text": "Gaussian information matrices\nThe observed and Fisher information matrices are \\[\\begin{align*}\nj(\\mu, \\tau) &= \\begin{pmatrix}\nn\\tau & -\\sum_{i=1}^n (Y_i-\\mu)\\\\\n-\\sum_{i=1}^n (Y_i-\\mu) & \\frac{n}{2\\tau^2}\n\\end{pmatrix}, \\\\\ni(\\mu, \\tau) &= n\\begin{pmatrix}\n\\tau & 0\\\\\n0 & \\frac{1}{2\\tau^2}\n\\end{pmatrix}\n\\end{align*}\\] Since \\(\\mathsf{E}(Y_i) = \\mu\\), the expected value of the off-diagonal entries of the Fisher information matrix are zero."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#example-random-right-censoring",
+    "href": "slides/bayesmod-slides1.html#example-random-right-censoring",
+    "title": "Bayesian modelling",
+    "section": "Example: random right-censoring",
+    "text": "Example: random right-censoring\nConsider a survival analysis problem for independent time-to-event data subject to (noninformative) random right-censoring. We observe\n\nfailure times \\(Y_i (i=1, \\ldots, n)\\) drawn from \\(F(\\cdot; \\boldsymbol{\\theta})\\) supported on \\((0, \\infty)\\)\nindependent binary censoring indicators \\(C_i \\in \\{0,1\\}\\), with \\(0\\) indicating right-censoring and \\(C_i=1\\) observed failure time."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#likelihood-contribution-with-censoring",
+    "href": "slides/bayesmod-slides1.html#likelihood-contribution-with-censoring",
+    "title": "Bayesian modelling",
+    "section": "Likelihood contribution with censoring",
+    "text": "Likelihood contribution with censoring\nIf individual observation \\(i\\) has not experienced the event at the end of the collection period, then the likelihood contribution is \\(\\Pr(Y &gt; y) = 1-F(y; \\boldsymbol{\\theta})\\), where \\(y_i\\) is the maximum time observed for \\(Y_i\\). We write the log likelihood \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}) = \\sum_{i: c_i=0} \\log \\{1- F(y_i; \\boldsymbol{\\theta})\\} + \\sum_{i: c_i=1} \\log f(y_i; \\boldsymbol{\\theta})\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#censoring-and-exponential-data",
+    "href": "slides/bayesmod-slides1.html#censoring-and-exponential-data",
+    "title": "Bayesian modelling",
+    "section": "Censoring and exponential data",
+    "text": "Censoring and exponential data\nSuppose for simplicity that \\(Y_i \\sim \\mathsf{expo}(\\lambda)\\) and let \\(m=c_1 + \\cdots + c_n\\) denote the number of observed failure times. Then, the log likelihood and the Fisher information are \\[\\begin{align*}\n\\ell(\\lambda) &= \\lambda \\sum_{i=1}^n y_i + \\log \\lambda m\\\\\ni(\\lambda) &= m/\\lambda^2\n\\end{align*}\\] and the right-censored observations for the exponential model do not contribute to the information."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#example-first-order-autoregressive-process",
+    "href": "slides/bayesmod-slides1.html#example-first-order-autoregressive-process",
+    "title": "Bayesian modelling",
+    "section": "Example: first-order autoregressive process",
+    "text": "Example: first-order autoregressive process\nConsider an \\(\\mathsf{AR}(1)\\) model of the form \\[Y_t = \\mu + \\phi(Y_{t-1} - \\mu) + \\varepsilon_t,\\] where\n\n\\(\\phi\\) is the lag-one correlation,\n\\(\\mu\\) the global mean and\n\\(\\varepsilon_t\\) is an iid innovation with mean zero and variance \\(\\sigma^2\\).\n\nIf \\(|\\phi| &lt; 1\\), the process is stationary, and the variance does not increase with \\(t\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#markov-property-and-likelihood-decomposition",
+    "href": "slides/bayesmod-slides1.html#markov-property-and-likelihood-decomposition",
+    "title": "Bayesian modelling",
+    "section": "Markov property and likelihood decomposition",
+    "text": "Markov property and likelihood decomposition\nThe Markov property states that the current realization depends on the past, \\(Y_t \\mid Y_1, \\ldots, Y_{t-1},\\) only through the most recent value \\(Y_{t-1}.\\) The log likelihood thus becomes \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}) = \\ln f(y_1) + \\sum_{i=2}^n f(y_i \\mid y_{i-1}).\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#marginal-of-ar1",
+    "href": "slides/bayesmod-slides1.html#marginal-of-ar1",
+    "title": "Bayesian modelling",
+    "section": "Marginal of AR(1)",
+    "text": "Marginal of AR(1)\nThe \\(\\mathsf{AR}(1)\\) stationarity process has unconditional moments \\[\\mathsf{E}(Y_t) = \\mu, \\qquad \\mathsf{Var}(Y_t)=\\sigma^2/(1-\\phi^2).\\]\nThe \\(\\mathsf{AR}(1)\\) process is first-order Markov since the conditional distribution \\(f(Y_t \\mid Y_{t-1}, \\ldots, Y_{t-p})\\) equals \\(f(Y_t \\mid Y_{t-1})\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#log-likelihood-of-ar1",
+    "href": "slides/bayesmod-slides1.html#log-likelihood-of-ar1",
+    "title": "Bayesian modelling",
+    "section": "Log likelihood of AR(1)",
+    "text": "Log likelihood of AR(1)\nIf innovations are Gaussian, we have \\[Y_t \\mid Y_{t-1}=y_{t-1} \\sim \\mathsf{Gauss}\\{\\mu(1-\\phi)+ \\phi y_{t-1}, \\sigma^2\\}, \\qquad t&gt;1.\\] so the log-likelihood is \\[\\begin{align*}\n&\\ell(\\mu, \\phi,\\sigma^2)= -\\frac{n}{2}\\log(2\\pi) - n\\log \\sigma + \\frac{1}{2}\\log(1-\\phi^2) \\\\&\\quad -\\frac{(1-\\phi^2)(y_1- \\mu)^2}{2\\sigma^2} - \\sum_{i=2}^n \\frac{(y_t - \\mu(1-\\phi)- \\phi y_{t-1})^2}{2\\sigma^2}\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#estimation-of-integrals",
+    "href": "slides/bayesmod-slides1.html#estimation-of-integrals",
+    "title": "Bayesian modelling",
+    "section": "Estimation of integrals",
+    "text": "Estimation of integrals\nSuppose we can simulate \\(B\\) i.i.d. variables with the same distribution, \\(x_1, \\ldots, x_B\\) with distribution \\(F\\).\nWe want to compute \\(\\mathsf{E}\\{g(X)\\}=\\int g(x) f(x) \\mathrm{d} x=\\mu_g\\) for some functional \\(g(\\cdot)\\)\n\n\\(g(x)=x\\) (mean)\n\\(g(x) = \\mathsf{I}(x \\in A)\\) (probability of event)\netc."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#vanilla-monte-carlo-integration",
+    "href": "slides/bayesmod-slides1.html#vanilla-monte-carlo-integration",
+    "title": "Bayesian modelling",
+    "section": "Vanilla Monte Carlo integration",
+    "text": "Vanilla Monte Carlo integration\nWe substitute expected value by sample average of \\[\\begin{align*}\n\\widehat{\\mu}_g = \\frac{1}{B} \\sum_{b=1}^B g(x_b).\n\\end{align*}\\]\n\nlaw of large number guarantees convergence of \\(\\widehat{\\mu}_g \\to \\mu_g\\) if the latter is finite.\nUnder finite second moments, central limit theorem gives \\[\\sqrt{B}(\\widehat{\\mu}_g - \\mu_g) \\sim \\mathsf{No}(0, \\sigma^2_g).\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#importance-sampling",
+    "href": "slides/bayesmod-slides1.html#importance-sampling",
+    "title": "Bayesian modelling",
+    "section": "Importance sampling",
+    "text": "Importance sampling\nConsider density \\(q\\) instead with \\(\\mathrm{supp}(p) \\subseteq \\mathrm{supp}(q).\\) Then, \\[\\begin{align*}\n\\mathsf{E}\\{g(X)\\} = \\int_{\\mathcal{X}} g(x) \\frac{p(x)}{q(x)} q(x) \\mathrm{d} x\n\\end{align*}\\] and we can proceed similarly by drawing samples from \\(q\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#importance-sampling-estimator",
+    "href": "slides/bayesmod-slides1.html#importance-sampling-estimator",
+    "title": "Bayesian modelling",
+    "section": "Importance sampling estimator",
+    "text": "Importance sampling estimator\nAn alternative Monte Carlo estimator uses the weighted average \\[\\begin{align*}\n\\widetilde{\\mathsf{E}}\\{g(X)\\} =\\frac{B^{-1} \\sum_{b=1}^B w_b g(x_b) }{B^{-1}\\sum_{b=1}^B w_b}.\n\\end{align*}\\] with weights \\(w_b = p(x_b)/q(x_b)\\). The latter equal 1 on average, so one could omit the denominator without harm."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#standard-errors",
+    "href": "slides/bayesmod-slides1.html#standard-errors",
+    "title": "Bayesian modelling",
+    "section": "Standard errors",
+    "text": "Standard errors\nIf the variance of \\(g(X)\\) is finite, we can approximate the latter by the sample variance of the simple random sample and obtain the Monte Carlo standard error of the estimator \\[\\begin{align*}\n\\mathsf{se}^2[\\widehat{\\mathsf{E}}\\{g(X)\\}] = \\frac{1}{B(B-1)} \\sum_{b=1}^B \\left[ g(x_b) -  \\widehat{\\mathsf{E}}\\{g(X)\\} \\right]^2.\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#precision-of-monte-carlo-integration",
+    "href": "slides/bayesmod-slides1.html#precision-of-monte-carlo-integration",
+    "title": "Bayesian modelling",
+    "section": "Precision of Monte Carlo integration",
+    "text": "Precision of Monte Carlo integration\nWe want to have an estimator as precise as possible.\n\nbut we can’t control the variance of \\(g(X)\\), say \\(\\sigma_g^2\\)\nthe more simulations \\(B\\), the lower the variance of the mean.\nsample average for i.i.d. data has variance \\(\\sigma^2_g/B\\)\nto reduce the standard deviation by a factor 10, we need \\(100\\) times more draws!\n\nRemember: the answer is random."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#example-functionals-of-gamma-distribution",
+    "href": "slides/bayesmod-slides1.html#example-functionals-of-gamma-distribution",
+    "title": "Bayesian modelling",
+    "section": "Example: functionals of gamma distribution",
+    "text": "Example: functionals of gamma distribution\n\n\nFigure 1: Running mean trace plots for \\(g(x)=\\mathrm{I}(x&lt;1)\\) (left), \\(g(x)=x\\) (middle) and \\(g(x)=1/x\\) (right) for a Gamma distribution with shape 0.5 and rate 2, as a function of the Monte Carlo sample size."
+  },
+  {
+    "objectID": "slides/bayesmod-slides1.html#recap",
+    "href": "slides/bayesmod-slides1.html#recap",
+    "title": "Bayesian modelling",
+    "section": "Recap",
+    "text": "Recap\n\nWe can specify distribution using hierarchies, with marginal \\(\\times\\) conditional.\nMost density and mass functions for \\(\\boldsymbol{Y}\\) can be identified from their support and their kernel, i.e., terms that depend on \\(\\boldsymbol{y}\\), ignoring normalizing constants. We then match expressions.\nExpectations can be calculated analytically, or approximated via Monte Carlo simulations."
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#revisiting-kullbackleibler-divergence",
+    "href": "slides/bayesmod-slides11.html#revisiting-kullbackleibler-divergence",
+    "title": "Bayesian modelling",
+    "section": "Revisiting Kullback–Leibler divergence",
+    "text": "Revisiting Kullback–Leibler divergence\nThe Kullback–Leibler divergence between densities \\(f_t(\\cdot)\\) and \\(g(\\cdot; \\boldsymbol{\\psi}),\\) is \\[\\begin{align*}\n\\mathsf{KL}(f_t \\parallel g) &=\\int \\log \\left(\\frac{f_t(\\boldsymbol{x})}{g(\\boldsymbol{x}; \\boldsymbol{\\psi})}\\right) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\\\\\n\\\\ &= \\mathsf{E}_{f_t}\\{\\log f_t(\\boldsymbol{X})\\} - \\mathsf{E}_{f_t}\\{\\log g(\\boldsymbol{X}; \\boldsymbol{\\psi})\\}\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#forward-kullbackleibler-divergence",
+    "href": "slides/bayesmod-slides11.html#forward-kullbackleibler-divergence",
+    "title": "Bayesian modelling",
+    "section": "Forward Kullback–Leibler divergence",
+    "text": "Forward Kullback–Leibler divergence\nIf \\(g(\\cdot; \\boldsymbol{\\mu}, \\boldsymbol{\\Sigma})\\) is Gaussian approximating density, then we minimize the KL divergence by matching moments: \\[\\begin{align*}\n\\boldsymbol{\\mu}^* &= \\mathsf{E}_{f_t}(\\boldsymbol{X})\\\\\n\\boldsymbol{\\Sigma}^* &= \\mathsf{E}_{f_t}\\left\\{(\\boldsymbol{X}-\\boldsymbol{\\mu})(\\boldsymbol{X}-\\boldsymbol{\\mu})^\\top\\right\\}\n\\end{align*}\\] See Exercise 10.1 for a derivation."
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#variational-inference",
+    "href": "slides/bayesmod-slides11.html#variational-inference",
     "title": "Bayesian modelling",
     "section": "Variational inference",
-    "text": "Variational inference\nLaplace approximation provides a heuristic for large-sample approximations, but it fails to characterize well \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\).\nWe consider rather a setting where we approximate \\(p\\) by another distribution \\(g\\) which we wish to be close.\nThe terminology variational is synonym for optimization in this context."
+    "text": "Variational inference\nWe don’t know the posterior mean and variance! (they depend on unknown normalizing constant).\nVariational inference finds rather the approximation that minimizes the reverse Kullback–Leibler divergence \\(\\mathsf{KL}(g \\parallel f_t).\\)\nQualitatively, this yields a very different approximation."
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#kullbackleibler-divergence",
-    "href": "slides/bayesmod-slides10.html#kullbackleibler-divergence",
+    "objectID": "slides/bayesmod-slides11.html#comparing-approximations",
+    "href": "slides/bayesmod-slides11.html#comparing-approximations",
     "title": "Bayesian modelling",
-    "section": "Kullback–Leibler divergence",
-    "text": "Kullback–Leibler divergence\nThe Kullback–Leibler divergence between densities \\(f_t(\\cdot)\\) and \\(g(\\cdot; \\boldsymbol{\\psi}),\\) is \\[\\begin{align*}\n\\mathsf{KL}(f_t \\parallel g) &=\\int \\log \\left(\\frac{f_t(\\boldsymbol{x})}{g(\\boldsymbol{x}; \\boldsymbol{\\psi})}\\right) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\\\\\n&= \\int \\log f_t(\\boldsymbol{x}) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x} - \\int \\log g(\\boldsymbol{x}; \\boldsymbol{\\psi}) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\n\\\\ &= {\\color{#c38f16}{\\mathsf{E}_{f_t}\\{\\log f_t(\\boldsymbol{X})\\}}} - \\mathsf{E}_{f_t}\\{\\log g(\\boldsymbol{X}; \\boldsymbol{\\psi})\\}\n\\end{align*}\\] The \\({\\color{#c38f16}{\\text{negative entropy}}}\\) does not depend on \\(g(\\cdot).\\)"
+    "section": "Comparing approximations",
+    "text": "Comparing approximations\n\n\nFigure 1: Approximation of a correlated bivariate Gaussian density by independent Gaussians."
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#model-misspecification",
-    "href": "slides/bayesmod-slides10.html#model-misspecification",
+    "objectID": "slides/bayesmod-slides11.html#gaussian-as-exponential-family",
+    "href": "slides/bayesmod-slides11.html#gaussian-as-exponential-family",
     "title": "Bayesian modelling",
-    "section": "Model misspecification",
-    "text": "Model misspecification\n\nThe divergence is strictly positive unless \\(g(\\cdot; \\boldsymbol{\\psi}) \\equiv f_t(\\cdot).\\)\nThe divergence is not symmetric.\n\nThe Kullback–Leibler divergence notion is central to study of model misspecification.\n\nif we fit \\(g(\\cdot)\\) when data arise from \\(f_t,\\) the maximum likelihood estimator of the parameters \\(\\widehat{\\boldsymbol{\\psi}}\\) will be the value of the parameter that minimizes the Kullback–Leibler divergence \\(\\mathsf{KL}(f_t \\parallel g)\\)."
+    "section": "Gaussian as exponential family",
+    "text": "Gaussian as exponential family\nWrite the Gaussian distribution in terms of canonical parameters \\[\\begin{align*}\nq(\\boldsymbol{\\theta}) \\propto \\exp \\left( - \\frac{1}{2} \\boldsymbol{\\theta}^\\top \\mathbf{Q}\\boldsymbol{\\theta} + \\boldsymbol{\\theta}^\\top \\boldsymbol{r}\\right)\n\\end{align*}\\] where \\(\\mathbf{Q}\\) is the precision matrix and \\(\\boldsymbol{r}=\\mathbf{Q}\\boldsymbol{\\mu},\\) the linear shift."
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#marginal-likelihood",
-    "href": "slides/bayesmod-slides10.html#marginal-likelihood",
+    "objectID": "slides/bayesmod-slides11.html#notation",
+    "href": "slides/bayesmod-slides11.html#notation",
     "title": "Bayesian modelling",
-    "section": "Marginal likelihood",
-    "text": "Marginal likelihood\nConsider now the problem of approximating the marginal likelihood, sometimes called the evidence, \\[\\begin{align*}\np(\\boldsymbol{y}) = \\int_{\\boldsymbol{\\Theta}} p(\\boldsymbol{y}, \\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\] where we only have the joint \\(p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\) is the product of the likelihood times the prior."
+    "section": "Notation",
+    "text": "Notation\nLet \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})=\\exp\\{-\\psi(\\boldsymbol{\\theta})\\}\\) denote the posterior density.\nSince logarithm is a monotonic transform, we can equivalent minimize \\(\\psi(\\boldsymbol{\\theta})\\) to find the posterior mode.\nDenote - the gradient \\(\\nabla_{\\boldsymbol{\\theta}} \\psi(\\boldsymbol{\\theta}) = \\partial \\psi/\\partial \\boldsymbol{\\theta}\\) - the Hessian matrix \\(\\mathbf{H}(\\boldsymbol{\\theta}) = \\partial^2 \\psi/(\\partial \\boldsymbol{\\theta}\\partial \\boldsymbol{\\theta}^\\top).\\)"
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#approximating-the-marginal-likelihood",
-    "href": "slides/bayesmod-slides10.html#approximating-the-marginal-likelihood",
+    "objectID": "slides/bayesmod-slides11.html#newton-algorithm",
+    "href": "slides/bayesmod-slides11.html#newton-algorithm",
     "title": "Bayesian modelling",
-    "section": "Approximating the marginal likelihood",
-    "text": "Approximating the marginal likelihood\nConsider \\(g(\\boldsymbol{\\theta};\\boldsymbol{\\psi})\\) with \\(\\boldsymbol{\\psi} \\in \\mathbb{R}^J\\) an approximating density function\n\nwhose integral is one over \\(\\boldsymbol{\\Theta} \\subseteq \\mathbb{R}^p\\) (normalized density)\nwhose support is part of that of \\(\\mathrm{supp} (g) \\subseteq \\mathrm{supp}(p) = \\boldsymbol{\\Theta}\\) (so KL divergence is not infinite)\n\nObjective: minimize the Kullback–Leibler divergence \\[\\mathsf{KL}\\left\\{p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\parallel g(\\boldsymbol{\\theta};\\boldsymbol{\\psi})\\right\\}.\\]"
+    "section": "Newton algorithm",
+    "text": "Newton algorithm\nStarting from an initial value \\(\\boldsymbol{\\theta}_{(0)},\\) we consider at step \\(i\\), a second order Taylor series expansion of \\(\\psi(\\boldsymbol{\\theta})\\) around \\(\\boldsymbol{\\theta}_{(i)},\\) which gives \\[\\begin{align*}\n\\psi(\\boldsymbol{\\theta}) &\\approx \\psi(\\boldsymbol{\\theta}_{(i)}) + \\nabla_{\\boldsymbol{\\theta}} \\psi(\\boldsymbol{\\theta}_{(i)})(\\boldsymbol{\\theta} - \\boldsymbol{\\theta}_{(i)}) \\\\& \\quad + (\\boldsymbol{\\theta} - \\boldsymbol{\\theta}_{(i)})^\\top\\mathbf{H}(\\boldsymbol{\\theta}_{(i)})(\\boldsymbol{\\theta} - \\boldsymbol{\\theta}_{(i)})\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#problems-ahead",
-    "href": "slides/bayesmod-slides10.html#problems-ahead",
+    "objectID": "slides/bayesmod-slides11.html#gaussian-smoothing",
+    "href": "slides/bayesmod-slides11.html#gaussian-smoothing",
     "title": "Bayesian modelling",
-    "section": "Problems ahead",
-    "text": "Problems ahead\nMinimizing the Kullback–Leibler divergence is not feasible to evaluate the posterior.\nTaking \\(f_t = p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) is not feasible: we need the marginal likelihood to compute the expectation!"
+    "section": "Gaussian smoothing",
+    "text": "Gaussian smoothing\nThe term \\(\\psi(\\boldsymbol{\\theta}_{(i)})\\) is constant, so if we plug-in this inside the exponential, we obtain \\[\\begin{align*}\nq_{(i+1)}(\\boldsymbol{\\theta}) &\\propto \\exp \\left\\{ - \\frac{1}{2} \\boldsymbol{\\theta}^\\top\\mathbf{H}(\\boldsymbol{\\theta}_{(i)}) \\boldsymbol{\\theta} + \\boldsymbol{\\theta}^\\top\\mathbf{H}(\\boldsymbol{\\theta}_{(i)})\\boldsymbol{\\theta}_{(i+1)}\\right\\}\n\\end{align*}\\] where the mean of the approximation is \\[\\begin{align*}\n\\boldsymbol{\\theta}_{(i+1)} = \\boldsymbol{\\theta}_{(i)} - \\mathbf{H}^{-1}(\\boldsymbol{\\theta}_{(i)}) \\nabla_{\\boldsymbol{\\theta}} \\psi(\\boldsymbol{\\theta}_{(i)}).\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#alternative-expression-for-the-marginal-likelihood",
-    "href": "slides/bayesmod-slides10.html#alternative-expression-for-the-marginal-likelihood",
+    "objectID": "slides/bayesmod-slides11.html#side-remarks",
+    "href": "slides/bayesmod-slides11.html#side-remarks",
     "title": "Bayesian modelling",
-    "section": "Alternative expression for the marginal likelihood",
-    "text": "Alternative expression for the marginal likelihood\nWe consider a different objective to bound the marginal likelihood. Write\n\\[\\begin{align*}\np(\\boldsymbol{y}) = \\int_{\\boldsymbol{\\Theta}}  \\frac{p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi})} g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]"
+    "section": "Side remarks",
+    "text": "Side remarks\nThe new mean vector \\(\\boldsymbol{\\theta}_{(i+1)}\\) corresponds to a Newton update, and at the same time we have defined a sequence of Gaussian updating approximations.\nThis scheme works provided that \\(\\mathbf{H}(\\boldsymbol{\\theta}_{(i)})\\) is positive definite and invertible. Without convexity, we get a divergent sequence.\nThe fixed point to which the algorithm converges is the Laplace approximation."
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#bounding-the-marginal-likelihood",
-    "href": "slides/bayesmod-slides10.html#bounding-the-marginal-likelihood",
+    "objectID": "slides/bayesmod-slides11.html#location-scale-transformation-gradients",
+    "href": "slides/bayesmod-slides11.html#location-scale-transformation-gradients",
     "title": "Bayesian modelling",
-    "section": "Bounding the marginal likelihood",
-    "text": "Bounding the marginal likelihood\nFor \\(h(x)\\) a convex function, Jensen’s inequality implies that \\[h\\{\\mathsf{E}(X)\\} \\leq \\mathsf{E}\\{h(X)\\},\\] and applying this with \\(h(x)=-\\log(x),\\) we get \\[\\begin{align*}\n-\\log p(\\boldsymbol{y}) \\leq -\\int_{\\boldsymbol{\\Theta}} \\log  \\left(\\frac{p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi})}\\right) g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]"
+    "section": "Location-scale transformation gradients",
+    "text": "Location-scale transformation gradients\nFor location-scale family, with a Gaussian approximation on the target \\(\\boldsymbol{\\theta} = \\boldsymbol{\\mu} + \\mathbf{L}\\boldsymbol{Z}\\) with \\(\\mathbf{LL}^\\top=\\boldsymbol{\\Sigma}\\) and \\(\\boldsymbol{Z} \\sim \\mathsf{Gauss}_p(\\boldsymbol{0}_p, \\mathbf{I}_p)\\) that the gradient satisfies \\[\\begin{align*}\n\\nabla_{\\boldsymbol{\\mu}}\\mathsf{ELBO}(q)&= -\\mathsf{E}_{\\boldsymbol{Z}}\\{\\nabla_{\\boldsymbol{\\theta}}\\psi(\\boldsymbol{\\theta})\\} \\\\\n\\nabla_{\\mathbf{L}}\\mathsf{ELBO}(q)&= -\\mathsf{E}_{\\boldsymbol{Z}}\\{\\nabla_{\\boldsymbol{\\theta}}\\psi(\\boldsymbol{\\theta})\\boldsymbol{Z}^\\top\\} + \\mathbf{L}^{-\\top}\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#evidence-lower-bound",
-    "href": "slides/bayesmod-slides10.html#evidence-lower-bound",
+    "objectID": "slides/bayesmod-slides11.html#steins-lemma",
+    "href": "slides/bayesmod-slides11.html#steins-lemma",
     "title": "Bayesian modelling",
-    "section": "Evidence lower bound",
-    "text": "Evidence lower bound\nWe can thus consider the model that minimizes the reverse Kullback–Leibler divergence \\[\\begin{align*}\ng(\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\psi}}) = \\mathrm{argmin}_{\\boldsymbol{\\psi}} \\mathsf{KL}\\{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\parallel p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\}.\n\\end{align*}\\]\nSince \\(p(\\boldsymbol{\\theta}, \\boldsymbol{y}) = p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) p(\\boldsymbol{y})\\), \\[\\begin{align*}\n\\mathsf{KL}\\{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\parallel p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\} &= \\mathsf{E}_{g}\\{\\log g(\\boldsymbol{\\theta})\\} - \\mathsf{E}_g\\{\\log p( \\boldsymbol{\\theta}, \\boldsymbol{y})\\} \\\\&\\quad+ \\log p(\\boldsymbol{y}).\n\\end{align*}\\]"
+    "section": "Stein’s lemma",
+    "text": "Stein’s lemma\nConsider \\(h: \\mathbb{R}^d \\to \\mathbb{R}\\) a differentiable function and integration with respect to \\(\\boldsymbol{X} \\sim \\mathsf{Gauss}_d(\\boldsymbol{\\mu}, \\boldsymbol{\\Sigma})\\) such that the gradient is absolutely integrable, \\(\\mathsf{E}_{\\boldsymbol{X}}\\{|\\nabla_i h(\\boldsymbol{X})|\\} &lt; \\infty\\) for \\(i=1, \\ldots, d.\\) Then (Liu, 1994), \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{X}}\\left\\{h(\\boldsymbol{X})(\\boldsymbol{X}-\\boldsymbol{\\mu})\\right\\} = \\boldsymbol{\\Sigma}\\mathsf{E}_{\\boldsymbol{X}}\\left\\{\\nabla h(\\boldsymbol{X})\\right\\}\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#evidence-lower-bound-1",
-    "href": "slides/bayesmod-slides10.html#evidence-lower-bound-1",
+    "objectID": "slides/bayesmod-slides11.html#alternative-expression-for-the-scale",
+    "href": "slides/bayesmod-slides11.html#alternative-expression-for-the-scale",
     "title": "Bayesian modelling",
-    "section": "Evidence lower bound",
-    "text": "Evidence lower bound\nInstead of minimizing the Kullback–Leibler divergence, we can equivalently maximize the so-called evidence lower bound (ELBO) \\[\\begin{align*}\n\\mathsf{ELBO}(g) = \\mathsf{E}_g\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\} - \\mathsf{E}_{g}\\{\\log g(\\boldsymbol{\\theta})\\}\n\\end{align*}\\]\nThe ELBO is a lower bound for the marginal likelihood because a Kullback–Leibler divergence is non-negative and \\[\\begin{align*}\n\\log p(\\boldsymbol{y}) = \\mathsf{ELBO}(g) +  \\mathsf{KL}\\{g(\\boldsymbol{\\theta};\\boldsymbol{\\psi}) \\parallel p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\}.\n\\end{align*}\\]"
+    "section": "Alternative expression for the scale",
+    "text": "Alternative expression for the scale\nIf we apply Stein’s lemma, \\[\\begin{align*}\n  \\nabla_{\\mathbf{L}}\\mathsf{ELBO}(q)&= -\\mathsf{E}_{\\boldsymbol{Z}}\\left\\{ \\frac{\\partial^2 \\psi(\\boldsymbol{\\theta})}{\\partial \\boldsymbol{\\theta} \\partial \\boldsymbol{\\theta}^\\top}\\right\\}\\mathbf{L} + \\mathbf{L}^{-\\top}.\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#use-of-elbo",
-    "href": "slides/bayesmod-slides10.html#use-of-elbo",
+    "objectID": "slides/bayesmod-slides11.html#variational-inference-1",
+    "href": "slides/bayesmod-slides11.html#variational-inference-1",
     "title": "Bayesian modelling",
-    "section": "Use of ELBO",
-    "text": "Use of ELBO\nThe idea is that we will approximate the density \\[p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\approx g(\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\psi}}).\\]\n\nthe ELBO can be used for model comparison (but we compare bounds…)\nwe can sample from \\(q\\) as before."
+    "section": "Variational inference",
+    "text": "Variational inference\nAt a critical point, both of these derivatives must be zero, whence \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{Z}}\\{\\nabla_{\\boldsymbol{\\theta}}\\psi(\\boldsymbol{\\theta})\\} &= \\boldsymbol{0}_p. \\\\\n\\mathsf{E}_{\\boldsymbol{Z}}\\left\\{ \\frac{\\partial^2 \\psi(\\boldsymbol{\\theta})}{\\partial \\boldsymbol{\\theta} \\partial \\boldsymbol{\\theta}^\\top}\\right\\} &= \\boldsymbol{\\Sigma}^{-1}.\n\\end{align*}\\]"
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#heuristics-of-elbo",
-    "href": "slides/bayesmod-slides10.html#heuristics-of-elbo",
+    "objectID": "slides/bayesmod-slides11.html#variational-inference-vs-laplace",
+    "href": "slides/bayesmod-slides11.html#variational-inference-vs-laplace",
     "title": "Bayesian modelling",
-    "section": "Heuristics of ELBO",
-    "text": "Heuristics of ELBO\nMaximize the evidence, subject to a regularization term: \\[\\begin{align*}\n\\mathsf{ELBO}(g) = \\mathsf{E}_g\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\} - \\mathsf{E}_{g}\\{\\log g(\\boldsymbol{\\theta})\\}\n\\end{align*}\\]\nThe ELBO is an objective function comprising:\n\nthe first term will be maximized by taking a distribution placing mass near the MAP of \\(p(\\boldsymbol{y}, \\boldsymbol{\\theta}),\\)\nthe second term can be viewed as a penalty that favours high entropy of the approximating family (higher for distributions which are diffuse)."
+    "section": "Variational inference vs Laplace",
+    "text": "Variational inference vs Laplace\nCompared to the Laplace approximation, the variational Gaussian approximation returns\n\na vector \\(\\boldsymbol{mu}\\) around which the expected value of the gradient is zero\nand similarly \\(\\boldsymbol{\\Sigma}\\) for which the expected value of the curvature (Hessian) is equal to the precision.\n\nThe averaging step is what distinguishes the Laplace and variational approximations."
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#laplace-vs-variational-approximation",
-    "href": "slides/bayesmod-slides10.html#laplace-vs-variational-approximation",
-    "title": "Bayesian modelling",
-    "section": "Laplace vs variational approximation",
-    "text": "Laplace vs variational approximation\n\n\nFigure 1: Skewed density with the Laplace approximation (dashed orange) and variational Gaussian approximation (dotted blue)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#choice-of-approximating-density",
-    "href": "slides/bayesmod-slides10.html#choice-of-approximating-density",
-    "title": "Bayesian modelling",
-    "section": "Choice of approximating density",
-    "text": "Choice of approximating density\nIn practice, the quality of the approximation depends on the choice of \\(g(\\cdot; \\boldsymbol{\\psi}).\\)\n\nWe typically want matching support.\nThe approximation will be affected by the correlation between posterior components \\(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}.\\)\nDerivations can also be done for \\((\\boldsymbol{U}, \\boldsymbol{\\theta})\\), where \\(\\boldsymbol{U}\\) are latent variables from a data augmentation scheme."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#factorization",
-    "href": "slides/bayesmod-slides10.html#factorization",
-    "title": "Bayesian modelling",
-    "section": "Factorization",
-    "text": "Factorization\nWe can consider densities \\(g(;\\boldsymbol{\\psi})\\) that factorize into blocks with parameters \\(\\boldsymbol{\\psi}_1, \\ldots, \\boldsymbol{\\psi}_M,\\) where \\[\\begin{align*}\ng(\\boldsymbol{\\theta}; \\boldsymbol{\\psi}) = \\prod_{j=1}^M g_j(\\boldsymbol{\\theta}_j; \\boldsymbol{\\psi}_j)\n\\end{align*}\\] If we assume that each of the \\(J\\) parameters \\(\\theta_1, \\ldots, \\theta_J\\) are independent, then we obtain a mean-field approximation."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#maximizing-the-elbo-one-step-at-a-time",
-    "href": "slides/bayesmod-slides10.html#maximizing-the-elbo-one-step-at-a-time",
-    "title": "Bayesian modelling",
-    "section": "Maximizing the ELBO one step at a time",
-    "text": "Maximizing the ELBO one step at a time\n\\[\\begin{align*}\n\\mathsf{ELBO}(g) &= \\int \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta}) \\prod_{j=1}^M g_j(\\boldsymbol{\\theta}_j)\\mathrm{d} \\boldsymbol{\\theta} \\\\&\\quad- \\sum_{j=1}^M \\int \\log \\{ g_j(\\boldsymbol{\\theta}_j) \\} g_j(\\boldsymbol{\\theta}_j) \\mathrm{d}  \\boldsymbol{\\theta}_j\n\\\\& \\stackrel{\\boldsymbol{\\theta}_i}{\\propto} \\mathsf{E}_{i}\\left[\\mathsf{E}_{-i}\\left\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\right\\} \\right] - \\mathsf{E}_i\\left[\\log \\{ g_i(\\boldsymbol{\\theta}_i) \\}\\right]\n\\end{align*}\\] which is the negative of a Kullback–Leibler divergence."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#optimal-choice-of-approximating-density",
-    "href": "slides/bayesmod-slides10.html#optimal-choice-of-approximating-density",
-    "title": "Bayesian modelling",
-    "section": "Optimal choice of approximating density",
-    "text": "Optimal choice of approximating density\nThe maximum possible value of zero for the KL is attained when \\[\\log \\{ g_i(\\boldsymbol{\\theta}_i) \\} = \\mathsf{E}_{-i}\\left\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\right\\}.\\] The choice of marginal \\(g_i\\) that maximizes the ELBO is \\[\\begin{align*}\ng^{\\star}_i(\\boldsymbol{\\theta}_i) \\propto \\exp \\left[ \\mathsf{E}_{-i}\\left\\{\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\\right\\}\\right].\n\\end{align*}\\] Often, we look at the kernel of \\(g^{\\star}_j\\) to deduce the normalizing constant."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#coordinate-ascent-variational-inference-cavi",
-    "href": "slides/bayesmod-slides10.html#coordinate-ascent-variational-inference-cavi",
-    "title": "Bayesian modelling",
-    "section": "Coordinate-ascent variational inference (CAVI)",
-    "text": "Coordinate-ascent variational inference (CAVI)\n\nWe can maximize \\(g^{\\star}_j\\) in turn for each \\(j=1, \\ldots, M\\) treating the other parameters as fixed.\nThis scheme is guaranteed to monotonically increase the ELBO until convergence to a local maximum.\nConvergence: monitor ELBO and stop when the change is lower then some present numerical tolerance.\nThe approximation may have multiple local optima: perform random initializations and keep the best one."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#example-of-cavi-mean-field-for-gaussian-target",
-    "href": "slides/bayesmod-slides10.html#example-of-cavi-mean-field-for-gaussian-target",
-    "title": "Bayesian modelling",
-    "section": "Example of CAVI mean-field for Gaussian target",
-    "text": "Example of CAVI mean-field for Gaussian target\nWe consider the example from Section 2.2.2 of Ormerod & Wand (2010) for approximation of a Gaussian distribution, with \\[\\begin{align*}\nY_i &\\sim \\mathsf{Gauss}(\\mu, \\tau^{-1}), \\qquad i =1, \\ldots, n;\\\\\n\\mu &\\sim \\mathsf{Gauss}(\\mu_0, \\tau_0^{-1}) \\\\\n\\tau &\\sim \\mathsf{gamma}(a_0, b_0).\n\\end{align*}\\] This is an example where the full posterior is available in closed-form, so we can compare our approximation with the truth."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-mean",
-    "href": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-mean",
-    "title": "Bayesian modelling",
-    "section": "Variational approximation to Gaussian — mean",
-    "text": "Variational approximation to Gaussian — mean\nWe assume a factorization of the variational approximation \\(g_\\mu(\\mu)g_\\tau(\\tau);\\) the factor for \\(g_\\mu\\) is proportional to \\[\\begin{align*}\n\\log g^{\\star}_\\mu(\\mu) \\propto -\\frac{\\mathsf{E}_{\\tau}(\\tau)}{2} \\sum_{i=1}^n (y_i-\\mu)^2-\\frac{\\tau_0}{2}(\\mu-\\mu_0)^2\n\\end{align*}\\] which is quadratic in \\(\\mu\\) and thus must be Gaussian with precision \\(\\tau_n = \\tau_0 + n\\tau\\) and mean \\(\\tau_n^{-1}\\{\\tau_0\\mu_0 + \\mathsf{E}_{\\tau}(\\tau)n\\overline{y}\\}\\)"
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-precision",
-    "href": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-precision",
-    "title": "Bayesian modelling",
-    "section": "Variational approximation to Gaussian — precision",
-    "text": "Variational approximation to Gaussian — precision\nThe optimal precision factor satisfies \\[\\begin{align*}\n\\ln g^{\\star}_{\\tau}(\\tau) &\\propto (a_0-1 +n/2) \\log \\tau \\\\& \\quad - \\tau {\\color{#c38f16}{\\left[b_0  + \\frac{1}{2} \\mathsf{E}_{\\mu}\\left\\{\\sum_{i=1}^n (y_i-\\mu)^2\\right\\}\\right]}}.\n\\end{align*}\\] This is of the same form as \\(p(\\tau \\mid \\mu, \\boldsymbol{y}),\\) namely a gamma with shape \\(a_n =a_0 +n/2\\) and rate \\({\\color{#c38f16}{b_n}}\\)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#rate-of-the-gamma-for-g_tau",
-    "href": "slides/bayesmod-slides10.html#rate-of-the-gamma-for-g_tau",
-    "title": "Bayesian modelling",
-    "section": "Rate of the gamma for \\(g_\\tau\\)",
-    "text": "Rate of the gamma for \\(g_\\tau\\)\nIt is helpful to rewrite the expected value as \\[\\begin{align*}\n\\mathsf{E}_{\\mu}\\left\\{\\sum_{i=1}^n (y_i-\\mu)^2\\right\\} = \\sum_{i=1}^n \\{y_i - \\mathsf{E}_{\\mu}(\\mu)\\}^2 + n \\mathsf{Var}_{\\mu}(\\mu),\n\\end{align*}\\] so that it depends on the parameters of the distribution of \\(\\mu\\) directly."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#cavi-for-gaussian",
-    "href": "slides/bayesmod-slides10.html#cavi-for-gaussian",
-    "title": "Bayesian modelling",
-    "section": "CAVI for Gaussian",
-    "text": "CAVI for Gaussian\nThe algorithm cycles through the following updates until convergence:\n\n\\(\\mathsf{Va}_{\\mu}(\\mu) = \\{\\tau_0 + n \\mathsf{E}_{\\tau}(\\tau)\\}^{-1},\\)\n\\(\\mathsf{E}_{\\mu}(\\mu) = \\mathsf{Va}_{\\mu}(\\mu)\\{\\tau_0\\mu_0 + \\mathsf{E}_{\\tau}(\\tau)n \\overline{y}\\},\\)\n\\(\\mathsf{E}_{\\tau}(\\tau) = a_n/b_n\\) where \\(b_n\\) is a function of both \\(\\mathsf{E}_{\\mu}(\\mu)\\) and \\(\\mathsf{Var}_{\\mu}(\\mu).\\)\n\nWe only compute the ELBO at the end of each cycle."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#monitoring-convergence",
-    "href": "slides/bayesmod-slides10.html#monitoring-convergence",
-    "title": "Bayesian modelling",
-    "section": "Monitoring convergence",
-    "text": "Monitoring convergence\nThe derivation of the ELBO is straightforward but tedious; we only need to monitor \\[\\begin{align*}\n- \\frac{\\tau_0}{2} \\mathsf{E}_{\\mu}\\{(\\mu - \\mu_0)^2\\} - \\frac{\\log\\tau_n}{2}-a_n\\log b_n\n\\end{align*}\\] for convergence, although other normalizing constants would be necessary if we wanted to approximate the marginal likelihood.\nWe can also consider relative changes in parameter values as tolerance criterion."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#stochastic-optimization",
-    "href": "slides/bayesmod-slides10.html#stochastic-optimization",
-    "title": "Bayesian modelling",
-    "section": "Stochastic optimization",
-    "text": "Stochastic optimization\nWe consider alternative numeric schemes which rely on stochastic optimization (Hoffman et al., 2013).\nThe key idea behind these methods is that\n\nwe can use gradient-based algorithms,\nand approximate the expectations with respect to \\(g\\) by drawing samples from it\n\nAlso allows for minibatch (random subset) selection to reduce computational costs in large samples"
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#black-box-variational-inference",
-    "href": "slides/bayesmod-slides10.html#black-box-variational-inference",
-    "title": "Bayesian modelling",
-    "section": "Black-box variational inference",
-    "text": "Black-box variational inference\nRanganath et al. (2014) shows that the gradient of the ELBO reduces to \\[\\begin{align*}\n\\frac{\\partial}{\\partial \\boldsymbol{\\psi}} \\mathsf{ELBO}(g) &=\\mathsf{E}_{g}\\left\\{\\frac{\\partial \\log g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}} \\times \\log \\left( \\frac{p(\\boldsymbol{\\theta}, \\boldsymbol{y})}{g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}\\right)\\right\\}\n\\end{align*}\\] using the change rule, differentiation under the integral sign (dominated convergence theorem) and the identity \\[\\begin{align*}\n\\frac{\\partial \\log g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}} g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi}) = \\frac{\\partial g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}}\n\\end{align*}\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#black-box-variational-inference-in-practice",
-    "href": "slides/bayesmod-slides10.html#black-box-variational-inference-in-practice",
-    "title": "Bayesian modelling",
-    "section": "Black-box variational inference in practice",
-    "text": "Black-box variational inference in practice\n\nNote that the gradient simplifies for \\(g_i\\) in exponential families (covariance of sufficient statistic with \\(\\log(p/g)\\)).\nThe gradient estimator is particularly noisy, so Ranganath et al. (2014) provide two methods to reduce the variance of this expression using control variates and Rao–Blackwellization."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#automatic-differentiation-variational-inference",
-    "href": "slides/bayesmod-slides10.html#automatic-differentiation-variational-inference",
-    "title": "Bayesian modelling",
-    "section": "Automatic differentiation variational inference",
-    "text": "Automatic differentiation variational inference\nKucukelbir et al. (2017) proposes a stochastic gradient algorithm, but with two main innovations.\n\nThe first is the general use of Gaussian approximating densities for factorized density, with parameter transformations to map from the support of \\(T: \\boldsymbol{\\Theta} \\mapsto \\mathbb{R}^p\\) via \\(T(\\boldsymbol{\\theta})=\\boldsymbol{\\zeta}.\\)\nThe second is to use the resulting location-scale family to obtain an alternative form of the gradient."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#gaussian-full-rank-approximation",
-    "href": "slides/bayesmod-slides10.html#gaussian-full-rank-approximation",
-    "title": "Bayesian modelling",
-    "section": "Gaussian full-rank approximation",
-    "text": "Gaussian full-rank approximation\nConsider an approximation \\(g(\\boldsymbol{\\zeta}; \\boldsymbol{\\psi})\\) where \\(\\boldsymbol{\\psi}\\) consists of\n\nmean parameters \\(\\boldsymbol{\\mu}\\) and\ncovariance \\(\\boldsymbol{\\Sigma}\\), parametrized through a Cholesky decomposition\n\nThe full approximation is of course more flexible when the transformed parameters \\(\\boldsymbol{\\zeta}\\) are correlated, but is more expensive to compute than the mean-field approximation."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#change-of-variable",
-    "href": "slides/bayesmod-slides10.html#change-of-variable",
-    "title": "Bayesian modelling",
-    "section": "Change of variable",
-    "text": "Change of variable\nThe change of variable introduces a Jacobian term \\(\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\) for the approximation to the density \\(p(\\boldsymbol{\\theta}, \\boldsymbol{y})\\), where\n\\[\\begin{align*}\np(\\boldsymbol{\\theta}, \\boldsymbol{y}) = p(\\boldsymbol{\\zeta}, \\boldsymbol{y}) \\left|\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\right|\n\\end{align*}\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#gaussian-entropy",
-    "href": "slides/bayesmod-slides10.html#gaussian-entropy",
-    "title": "Bayesian modelling",
-    "section": "Gaussian entropy",
-    "text": "Gaussian entropy\nThe entropy of the multivariate Gaussian with mean \\(\\boldsymbol{\\mu}\\) and covariance \\(\\boldsymbol{\\Sigma} = \\mathbf{LL}^\\top\\), where \\(\\mathbf{L}\\) is a lower triangular matrix, is \\[\\begin{align*}\n\\mathcal{E}(\\mathbf{L}) = - \\mathsf{E}_g(\\log g) &= \\frac{D+D\\log(2\\pi) + \\log |\\mathbf{LL}^\\top|}{2},\n\\end{align*}\\] and only depends on \\(\\boldsymbol{\\Sigma}\\)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#elbo-with-gaussian-approximation",
-    "href": "slides/bayesmod-slides10.html#elbo-with-gaussian-approximation",
-    "title": "Bayesian modelling",
-    "section": "ELBO with Gaussian approximation",
-    "text": "ELBO with Gaussian approximation\nSince the Gaussian is a location-scale family, we can rewrite the model in terms of a standardized Gaussian variable \\(\\boldsymbol{Z}\\sim \\mathsf{Gauss}_p(\\boldsymbol{0}_p, \\mathbf{I}_p)\\) where \\(\\boldsymbol{\\zeta} = \\boldsymbol{\\mu} + \\mathbf{L}\\boldsymbol{Z}\\) (this transformation has unit Jacobian).\nThe ELBO with the transformation becomes \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{Z}}\\left[ \\log p\\{\\boldsymbol{y}, T^{-1}(\\boldsymbol{\\zeta})\\} + \\log \\left|\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\right|\\right] + \\mathcal{E}(\\mathbf{L}).\n\\end{align*}\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#chain-rule",
-    "href": "slides/bayesmod-slides10.html#chain-rule",
-    "title": "Bayesian modelling",
-    "section": "Chain rule",
-    "text": "Chain rule\nIf \\(\\boldsymbol{\\theta} = T^{-1}(\\boldsymbol{\\zeta})\\) and \\(\\boldsymbol{\\zeta} = \\boldsymbol{\\mu} + \\mathbf{L}\\boldsymbol{z},\\) we have for \\(\\boldsymbol{\\psi}\\) equal to either \\(\\boldsymbol{\\mu}\\) or \\(\\mathbf{L}\\), using the chain rule, \\[\\begin{align*}\n& \\frac{\\partial}{\\partial \\boldsymbol{\\psi}}\\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})\n\\\\&\\quad  = \\frac{\\partial \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{\\partial \\boldsymbol{\\theta}}\n   \\times \\frac{\\partial T^{-1}(\\boldsymbol{\\zeta})}{\\partial \\boldsymbol{\\zeta}}\n\\times \\frac{\\partial (\\boldsymbol{\\mu} + \\mathbf{L}\\boldsymbol{z})}{\\partial \\boldsymbol{\\psi}}\n\\end{align*}\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#gradients-for-advi",
-    "href": "slides/bayesmod-slides10.html#gradients-for-advi",
-    "title": "Bayesian modelling",
-    "section": "Gradients for ADVI",
-    "text": "Gradients for ADVI\nThe gradients of the ELBO with respect to the mean and variance are \\[\\begin{align*}\n\\nabla_{\\boldsymbol{\\mu}} &= \\mathsf{E}_{\\boldsymbol{Z}}\\left\\{\\frac{\\partial \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{\\partial \\boldsymbol{\\theta}} \\frac{\\partial T^{-1}(\\boldsymbol{\\zeta})}{\\partial \\boldsymbol{\\zeta}}  + \\frac{\\partial \\log \\left|\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\right|}{\\partial \\boldsymbol{\\zeta}}\\right\\} \\\\\n\\nabla_{\\mathbf{L}} &= \\mathsf{E}_{\\boldsymbol{Z}}\\left[\\left\\{\\frac{\\partial \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta})}{\\partial \\boldsymbol{\\theta}} \\frac{\\partial T^{-1}(\\boldsymbol{\\zeta})}{\\partial \\boldsymbol{\\zeta}}  + \\frac{\\partial \\log \\left|\\mathbf{J}_{T^{-1}}(\\boldsymbol{\\zeta})\\right|}{\\partial \\boldsymbol{\\zeta}}\\right\\}\\boldsymbol{Z}^\\top\\right] + \\mathbf{L}^{-\\top}.\n\\end{align*}\\] and we can approximate the expectation by drawing standard Gaussian samples \\(\\boldsymbol{Z}_1, \\ldots, \\boldsymbol{Z}_B.\\)"
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#quality-of-approximation",
-    "href": "slides/bayesmod-slides10.html#quality-of-approximation",
-    "title": "Bayesian modelling",
-    "section": "Quality of approximation",
-    "text": "Quality of approximation\nConsider the stochastic volatility model.\n\nFitting HMC-NUTS to the exchange rate data takes 156 seconds for 10K iterations, vs 2 seconds for the mean-field approximation."
-  },
-  {
-    "objectID": "slides/bayesmod-slides10.html#references",
-    "href": "slides/bayesmod-slides10.html#references",
+    "objectID": "slides/bayesmod-slides11.html#references",
+    "href": "slides/bayesmod-slides11.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nHoffman, M. D., Blei, D. M., Wang, C., & Paisley, J. (2013). Stochastic variational inference. Journal of Machine Learning Research, 14(40), 1303–1347. http://jmlr.org/papers/v14/hoffman13a.html\n\n\nKucukelbir, A., Tran, D., Ranganath, R., Gelman, A., & Blei, D. M. (2017). Automatic differentiation variational inference. Journal of Machine Learning Research, 18(14), 1–45. http://jmlr.org/papers/v18/16-107.html\n\n\nOrmerod, J. T., & Wand, M. P. (2010). Explaining variational approximations. The American Statistician, 64(2), 140–153. https://doi.org/10.1198/tast.2010.09058\n\n\nRanganath, R., Gerrish, S., & Blei, D. (2014). Black box variational inference. In S. Kaski & J. Corander (Eds.), Proceedings of the seventeenth international conference on artificial intelligence and statistics (Vol. 33, pp. 814–822). Pmlr. https://proceedings.mlr.press/v33/ranganath14.html"
+    "text": "References\n\n\n\n\nLiu, J. S. (1994). Siegel’s formula via Stein’s identities. Statistics & Probability Letters, 21(3), 247–251. https://doi.org/10.1016/0167-7152(94)90121-X"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors",

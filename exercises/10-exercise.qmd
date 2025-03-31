@@ -5,7 +5,7 @@ title: Exercises 10
 
 ## Exercise 10.1
 
-Suppose that $p(\boldsymbol{\theta})$ is a density with $\boldsymbol{\theta} \in \mathbb{R}^p$ and that we consider a Gaussian approximation $q(\boldsymbol{\theta})$ with mean $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$. Show that the parameters that minimize the Kullback--Leibler $\mathsf{KL}\{p(\boldsymbol{\theta} \parallel q(\boldsymbol{\theta})\}$ are the expectation and variance under $p(\boldsymbol{\theta})$.^[Note that this is not a variational approximation!]
+Suppose that $p(\boldsymbol{\theta})$ is a density with $\boldsymbol{\theta} \in \mathbb{R}^d$ and that we consider a Gaussian approximation $g(\boldsymbol{\theta})$ with mean $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$. Show that the parameters that minimize the Kullback--Leibler $\mathsf{KL}\{p(\boldsymbol{\theta} \parallel g(\boldsymbol{\theta})\}$ are the expectation and variance under $p(\boldsymbol{\theta})$.^[Note that this is not a variational approximation!]
       
 ## Exercise 10.2
 
@@ -18,7 +18,7 @@ $\mu_k \sim \mathsf{Gauss}(0, 100)$, $\tau_k \sim \mathsf{Gamma}(a, b)$ for $k=1
 
 To help with inference, we introduce auxiliary variables $\boldsymbol{U}_1, \ldots, \boldsymbol{U}_n$ where $\boldsymbol{U}_i \sim \mathsf{multinom}(1, \boldsymbol{w})$ that indicates which cluster component the model belongs to, and $\omega_k = \Pr(U_{ik}=1).$
 
-The parameters and latent variables for the posterior of interest are $\boldsymbol{\mu}, \boldsymbol{\tau}, \boldsymbol{w}$ and $\mathbf{U}.$ Consider a factorized decomposition in which each component is independent of the others, $q_{\boldsymbol{w}}(\boldsymbol{w})q_{\boldsymbol{\mu}}(\boldsymbol{\mu})q_{\boldsymbol{\tau}}(\boldsymbol{\tau}) q(\boldsymbol{U}).$
+The parameters and latent variables for the posterior of interest are $\boldsymbol{\mu}, \boldsymbol{\tau}, \boldsymbol{w}$ and $\mathbf{U}.$ Consider a factorized decomposition in which each component is independent of the others, $q_{\boldsymbol{w}}(\boldsymbol{w})q_{\boldsymbol{\mu}}(\boldsymbol{\mu})q_{\boldsymbol{\tau}}(\boldsymbol{\tau}) g(\boldsymbol{U}).$
 
 1. Apply the coordinate ascent algorithm to obtain the distribution for the optimal components.
 2. Write down an expression for the ELBO.
