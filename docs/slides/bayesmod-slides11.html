@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -196,7 +196,11 @@ q(\boldsymbol{\theta}) \propto \exp \left( - \frac{1}{2} \boldsymbol{\theta}^\to
 <h2>Notation</h2>
 <p>Let <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})=\exp\{-\psi(\boldsymbol{\theta})\}\)</span> denote the posterior density.</p>
 <p>Since logarithm is a monotonic transform, we can equivalent minimize <span class="math inline">\(\psi(\boldsymbol{\theta})\)</span> to find the posterior mode.</p>
-<p>Denote - the gradient <span class="math inline">\(\nabla_{\boldsymbol{\theta}} \psi(\boldsymbol{\theta}) = \partial \psi/\partial \boldsymbol{\theta}\)</span> - the Hessian matrix <span class="math inline">\(\mathbf{H}(\boldsymbol{\theta}) = \partial^2 \psi/(\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top).\)</span></p>
+<p>Denote</p>
+<ul>
+<li>the gradient <span class="math inline">\(\nabla_{\boldsymbol{\theta}} \psi(\boldsymbol{\theta}) = \partial \psi/\partial \boldsymbol{\theta}\)</span></li>
+<li>the Hessian matrix <span class="math inline">\(\mathbf{H}(\boldsymbol{\theta}) = \partial^2 \psi/(\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top).\)</span></li>
+</ul>
 </section>
 <section id="newton-algorithm" class="slide level2">
 <h2>Newton algorithm</h2>
@@ -248,18 +252,122 @@ q_{(i+1)}(\boldsymbol{\theta}) &amp;\propto \exp \left\{ - \frac{1}{2} \boldsymb
 <h2>Variational inference vs Laplace</h2>
 <p>Compared to the Laplace approximation, the variational Gaussian approximation returns</p>
 <ul>
-<li>a vector <span class="math inline">\(\boldsymbol{mu}\)</span> around which the expected value of the gradient is zero</li>
-<li>and similarly <span class="math inline">\(\boldsymbol{\Sigma}\)</span> for which the expected value of the curvature (Hessian) is equal to the precision.</li>
+<li>a vector <span class="math inline">\(\boldsymbol{\mu}\)</span> around which the <strong>expected value of the gradient</strong> is zero</li>
+<li>and similarly <span class="math inline">\(\boldsymbol{\Sigma}\)</span> which matches the expected value of the Hessian.</li>
 </ul>
 <p>The averaging step is what distinguishes the Laplace and variational approximations.</p>
+</section>
+<section id="expectation-propagation" class="slide level2">
+<h2>Expectation propagation</h2>
+<p>Expectation propagation is an approximation algorithm proposed by <span class="citation" data-cites="Minka:2001">Minka (<a href="#/references" role="doc-biblioref" onclick="">2001</a>)</span>.</p>
+<p>It is more accurate, but generally slower than variational Bayes.</p>
+<p>However, the algorithm can be parallelized, which makes it fast.</p>
+</section>
+<section id="decomposition" class="slide level2">
+<h2>Decomposition</h2>
+<p>EP builds on a decomposition of the posterior as a product of terms; with likelihood contributions <span class="math inline">\(L_i(\boldsymbol{\theta})\)</span> <span class="math display">\[\begin{align*}
+p(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto p(\boldsymbol{\theta}) \prod_{i=1}^n L_i(\boldsymbol{\theta}) = \prod_{i=0}^n L_i(\boldsymbol{\theta})
+\end{align*}\]</span> We call <span class="math inline">\(L_i\)</span> the “factors” or “sites”, and <span class="math inline">\(L_0(\boldsymbol{\theta})\)</span> is the prior density.</p>
+</section>
+<section id="comment-on-factorization" class="slide level2">
+<h2>Comment on factorization</h2>
+<p>Such factorization is also feasible in graphical models (e.g., autoregressive processes, Markov fields), but needs not be unique.</p>
+<ul>
+<li>Note that it is not equivalent to the factorization of the posterior (mean-field approximation) for variational Bayes, as every term in the EP approximation is a function of the whole vector <span class="math inline">\(\boldsymbol{\theta}.\)</span></li>
+</ul>
+</section>
+<section id="expectation-propagation-approximating-density" class="slide level2">
+<h2>Expectation propagation approximating density</h2>
+<p>Considers a factor structure approximation in which each <span class="math inline">\(q_i\)</span> is Gaussian with precision <span class="math inline">\(\mathbf{Q}_i\)</span> and linear shift <span class="math inline">\(\boldsymbol{r}_i\)</span>, <span class="math display">\[\begin{align*}
+q(\boldsymbol{\theta}) &amp;\propto \prod_{i=1}^n q_i(\boldsymbol{\theta})
+\\&amp; \propto \prod_{i=0}^n \exp \left(-\frac{1}{2} \boldsymbol{\theta}^\top\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top\boldsymbol{r}_i\right)
+\\ &amp;= \exp \left( - \frac{1}{2} \boldsymbol{\theta}^\top \sum_{i=0}^n\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top \sum_{i=0}^n\boldsymbol{r}_i\right).
+\end{align*}\]</span></p>
+</section>
+<section id="step-1-of-expectation-propagation" class="slide level2 smaller">
+<h2>Step 1 of expectation propagation</h2>
+<p>Form the <strong>cavity</strong> by removing one factor <span class="math inline">\(q_j\)</span>, so that <span class="math display">\[\begin{align*}
+q_{-j}(\boldsymbol{\theta}) &amp;= \prod_{\substack{i=0 \\ i \neq j}}^n q_i(\boldsymbol{\theta}) =q(\boldsymbol{\theta})/q_j(\boldsymbol{\theta})\\
+&amp;\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top \left(\sum_{i=0}^n\mathbf{Q}_i - \mathbf{Q}_j\right)\boldsymbol{\theta} \right.\\&amp;+ \left.\boldsymbol{\theta}^\top \left(\sum_{i=0}^n\boldsymbol{r}_i - \boldsymbol{r}_j\right)\right\}.
+\end{align*}\]</span></p>
+</section>
+<section id="step-2-of-expectation-propagation" class="slide level2">
+<h2>Step 2 of expectation propagation</h2>
+<p>Construct an hybrid or tilted distribution <span class="math display">\[\begin{align*}
+h_j(\boldsymbol{\theta}) \propto q_{-j}(\boldsymbol{\theta})L_j(\boldsymbol{\theta}).
+\end{align*}\]</span> The resulting density is unnormalized.</p>
+</section>
+<section id="global-approximation" class="slide level2">
+<h2>Global approximation</h2>
+<p>The overall approximation is Gaussian with precision <span class="math inline">\(\mathbf{Q} = \sum_{i=0}^n\mathbf{Q}_i\)</span> and linear shift <span class="math inline">\(\boldsymbol{r}=\sum_{i=0}^n\boldsymbol{r}_i\)</span></p>
+<p>These parameters are obtained by optimizing each hybrid distribution with a Gaussian.</p>
+<p>That is, we minimize the <span class="math inline">\(\mathsf{KL}(h_j \parallel q_j)\)</span> at each step conditional on the other parameters.</p>
+</section>
+<section id="step-3-of-expectation-propagation" class="slide level2">
+<h2>Step 3 of expectation propagation</h2>
+<p>Compute normalizing constant and moments</p>
+<p><span class="math display">\[\begin{align*}
+c_j &amp;= \int h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta} \\
+\boldsymbol{\mu}_j &amp;= c_{j}^{-1} \int \boldsymbol{\theta} h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+\\ \boldsymbol{\Sigma}_j &amp;= c_j^{-1} (\boldsymbol{\theta} - \boldsymbol{\mu}_j)(\boldsymbol{\theta} - \boldsymbol{\mu}_j)^\top h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span></p>
+</section>
+<section id="comment-on-step-3" class="slide level2">
+<h2>Comment on step 3</h2>
+<p>The normalizing constant, mean and variance in the above are written in terms of <span class="math inline">\(p\)</span>-dimensional integrals.</p>
+<p>For exponential family of distributions, we can perform dimension reduction.</p>
+<p>For example, with generalized linear models, the update for hybrid <span class="math inline">\(j\)</span> depends only on the summary statistic <span class="math inline">\(\mathbf{x}_j\boldsymbol{\theta}\)</span>, where <span class="math inline">\(\mathbf{x}\)</span> is the <span class="math inline">\(j\)</span>th row of the model matrix. Then, the integral is one-dimensional.</p>
+</section>
+<section id="projection-of-gaussians" class="slide level2">
+<h2>Projection of Gaussians</h2>
+<p>Linear combinations of Gaussian vectors are also Gaussian.</p>
+<p>If <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{\mu}, \boldsymbol{\Sigma}),\)</span> then <span class="math display">\[\mathbf{x}\boldsymbol{\beta} \sim \mathsf{Gauss}(\mathbf{x}\boldsymbol{\mu}, \mathbf{x}\boldsymbol{\Sigma}\mathbf{x}^\top)\]</span></p>
+</section>
+<section id="step-4-of-expectation-propagation" class="slide level2 smaller">
+<h2>Step 4 of expectation propagation</h2>
+<p>Convert moments <span class="math inline">\(\boldsymbol{\mu}_j^{*}\)</span> and <span class="math inline">\(\boldsymbol{\Sigma}^{*}_j\)</span> to canonical parameters <span class="math inline">\(\mathbf{Q}_j^{*}\)</span> and <span class="math inline">\(\boldsymbol{r}_j^{*}.\)</span></p>
+<p>Update the global approximation with <span class="math display">\[\begin{align*}
+q(\boldsymbol{\theta}) &amp;\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\mathbf{Q}_i + \mathbf{Q}^{*}_j\right)\boldsymbol{\theta} \right.\\&amp; \left. + \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\boldsymbol{r}_i + \boldsymbol{r}^{*}_j\right)\right\}.
+\end{align*}\]</span></p>
+</section>
+<section id="recap-of-expectation-propagation" class="slide level2">
+<h2>Recap of expectation propagation</h2>
+<p>The EP algorithm iterates the steps until convergence:</p>
+<ol type="1">
+<li>Initialize the site-specific parameters</li>
+<li>Loop over each observation of the likelihood factorization: 2.1 form the cavity and the hybrid distribution 2.2 compute the moments of the hybrid <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\Sigma}\)</span> 2.3 transform back to canonical parameters <span class="math inline">\(\mathbf{Q}\)</span> and <span class="math inline">\(\boldsymbol{r}\)</span> 2.3 update the global approximation</li>
+<li>Declare convergence when change in parameters is less than tolerance.</li>
+</ol>
+<p>The algorithm can be run in parallel.</p>
+</section>
+<section id="improving-convergence" class="slide level2">
+<h2>Improving convergence</h2>
+<p>There is no guarantee that the fixed-point algorithm will converge…</p>
+<p>The algorithm behaves like a smoothed Newton method <span class="citation" data-cites="Dehaene.Barthelme:2018">(<a href="#/references" role="doc-biblioref" onclick="">Dehaene &amp; Barthelmé, 2018</a>)</span>, so we can borrow tricks from numerical optimization to improve convergence.</p>
+<ul>
+<li>linearly interpolate between updates, with weight <span class="math inline">\(0&lt; w\le 1\)</span> to the current update where at step <span class="math inline">\(t\)</span>.</li>
+</ul>
+<p>Some individual factor updates may yield non-positive definite precision for individual terms <span class="math inline">\(\mathbf{Q}_j\)</span>, which is okay as long as the global approximation <span class="math inline">\(\mathbf{Q}\)</span> remains positive.</p>
+</section>
+<section id="example-ep-for-logistic-regression" class="slide level2">
+<h2>Example: EP for logistic regression</h2>
+<p>Consider a binary response <span class="math inline">\(Y \in \{-1, 1\}\)</span> with logistic model <span class="math display">\[\begin{align*}
+\Pr(Y=1 \mid \mathbf{x}, \boldsymbol{\beta}) = \left\{1+\exp(-\mathbf{x}\boldsymbol{\beta})\right\}^{-1} = \mathrm{expit}(\mathbf{x}\boldsymbol{\beta}).
+\end{align*}\]</span> We assume for simplicity that <span class="math inline">\(p(\boldsymbol{\beta})\propto 1;\)</span> a Gaussian prior could also be used.</p>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Dehaene.Barthelme:2018" class="csl-entry" role="listitem">
+Dehaene, G., &amp; Barthelmé, S. (2018). Expectation propagation in the large data limit. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>80</em>(1), 199–217. <a href="https://doi.org/10.1111/rssb.12241">https://doi.org/10.1111/rssb.12241</a>
+</div>
 <div id="ref-Liu:1994" class="csl-entry" role="listitem">
 Liu, J. S. (1994). <span>S</span>iegel’s formula via <span>S</span>tein’s identities. <em>Statistics &amp; Probability Letters</em>, <em>21</em>(3), 247–251. <a href="https://doi.org/10.1016/0167-7152(94)90121-X">https://doi.org/10.1016/0167-7152(94)90121-X</a>
+</div>
+<div id="ref-Minka:2001" class="csl-entry" role="listitem">
+Minka, T. P. (2001). <em>A family of algorithms for approximate <span>B</span>ayesian inference</em> [PhD thesis, Massachusetts Institute of Technology]. <a href="http://hdl.handle.net/1721.1/86583">http://hdl.handle.net/1721.1/86583</a>
 </div>
 </div>
 </section>

@@ -151,6 +151,7 @@ Let $p(\boldsymbol{\theta} \mid \boldsymbol{y})=\exp\{-\psi(\boldsymbol{\theta})
 Since logarithm is a monotonic transform, we can equivalent minimize $\psi(\boldsymbol{\theta})$ to find the posterior mode.
 
 Denote 
+
 - the gradient $\nabla_{\boldsymbol{\theta}} \psi(\boldsymbol{\theta}) = \partial \psi/\partial \boldsymbol{\theta}$
 - the Hessian matrix $\mathbf{H}(\boldsymbol{\theta}) = \partial^2 \psi/(\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top).$
 
@@ -197,8 +198,6 @@ Consider $h: \mathbb{R}^d \to \mathbb{R}$ a differentiable function and integrat
 \end{align*}
 
 
-
-
 ## Alternative expression for the scale
 
 If we apply Stein's lemma,
@@ -218,10 +217,144 @@ At a critical point, both of these derivatives must be zero, whence
 
 Compared to the Laplace approximation, the variational Gaussian approximation returns 
 
-- a vector $\boldsymbol{\mu}$ around which the expected value of the gradient is zero 
-- and similarly $\boldsymbol{\Sigma}$ for which the  expected value of the curvature (Hessian) is equal to the precision. 
+- a vector $\boldsymbol{\mu}$ around which the **expected value of the gradient** is zero
+- and similarly $\boldsymbol{\Sigma}$ which matches the expected value of the Hessian.
 
 The averaging step is what distinguishes the Laplace and variational approximations.
+
+## Expectation propagation
+
+
+Expectation propagation is an approximation algorithm proposed by @Minka:2001.
+
+It is more accurate, but generally slower than variational Bayes.
+
+However, the algorithm can be parallelized, which makes it fast.
+
+
+## Decomposition
+
+EP builds on a decomposition of the posterior as a product of terms; with likelihood contributions $L_i(\boldsymbol{\theta})$
+\begin{align*}
+ p(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto p(\boldsymbol{\theta}) \prod_{i=1}^n L_i(\boldsymbol{\theta}) = \prod_{i=0}^n L_i(\boldsymbol{\theta})
+\end{align*}
+We call $L_i$ the "factors" or "sites", and $L_0(\boldsymbol{\theta})$ is the prior density.
+
+## Comment on factorization
+
+
+Such factorization is also feasible in graphical models (e.g., autoregressive processes, Markov fields), but needs not be unique.
+
+- Note that it is not equivalent to the factorization of the posterior (mean-field approximation) for variational Bayes, as every term in the EP approximation is a function of the whole vector $\boldsymbol{\theta}.$
+
+## Expectation propagation approximating density
+
+Considers a factor structure approximation in which each $q_i$ is Gaussian with precision $\mathbf{Q}_i$ and linear shift $\boldsymbol{r}_i$,
+\begin{align*}
+ q(\boldsymbol{\theta}) &\propto \prod_{i=1}^n q_i(\boldsymbol{\theta})
+ \\& \propto \prod_{i=0}^n \exp \left(-\frac{1}{2} \boldsymbol{\theta}^\top\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top\boldsymbol{r}_i\right)
+ \\ &= \exp \left( - \frac{1}{2} \boldsymbol{\theta}^\top \sum_{i=0}^n\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top \sum_{i=0}^n\boldsymbol{r}_i\right).
+\end{align*}
+
+
+## Step 1 of expectation propagation {.smaller}
+
+Form the **cavity** by removing one factor $q_j$, so that
+\begin{align*}
+ q_{-j}(\boldsymbol{\theta}) &= \prod_{\substack{i=0 \\ i \neq j}}^n q_i(\boldsymbol{\theta}) =q(\boldsymbol{\theta})/q_j(\boldsymbol{\theta})\\
+&\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top \left(\sum_{i=0}^n\mathbf{Q}_i - \mathbf{Q}_j\right)\boldsymbol{\theta} \right.\\&+ \left.\boldsymbol{\theta}^\top \left(\sum_{i=0}^n\boldsymbol{r}_i - \boldsymbol{r}_j\right)\right\}.
+\end{align*}
+
+## Step 2 of expectation propagation
+
+Construct an hybrid or tilted distribution 
+\begin{align*}
+ h_j(\boldsymbol{\theta}) \propto q_{-j}(\boldsymbol{\theta})L_j(\boldsymbol{\theta}).
+\end{align*}
+The resulting density is unnormalized.
+
+## Global approximation
+
+The overall approximation is Gaussian with precision $\mathbf{Q} = \sum_{i=0}^n\mathbf{Q}_i$ and linear shift $\boldsymbol{r}=\sum_{i=0}^n\boldsymbol{r}_i$
+
+These parameters are obtained by optimizing each hybrid distribution with a Gaussian.
+
+That is, we minimize the $\mathsf{KL}(h_j \parallel q_j)$ at each step conditional on the other parameters.
+
+
+## Step 3 of expectation propagation
+
+Compute normalizing constant and moments
+
+\begin{align*}
+ c_j &= \int h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta} \\
+ \boldsymbol{\mu}_j &= c_{j}^{-1} \int \boldsymbol{\theta} h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+ \\ \boldsymbol{\Sigma}_j &= c_j^{-1} (\boldsymbol{\theta} - \boldsymbol{\mu}_j)(\boldsymbol{\theta} - \boldsymbol{\mu}_j)^\top h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}
+
+## Comment on step 3
+
+The normalizing constant, mean and variance in the above are written in terms of $p$-dimensional integrals.
+
+For exponential family of distributions, we can perform dimension reduction. 
+
+
+For example, with generalized linear models, the update for hybrid $j$ depends only on the summary statistic $\mathbf{x}_j\boldsymbol{\theta}$, where $\mathbf{x}$ is the $j$th row of the model matrix. Then, the integral is one-dimensional.
+
+
+## Projection of Gaussians
+
+Linear combinations of Gaussian vectors are also Gaussian.
+
+If $\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{\mu}, \boldsymbol{\Sigma}),$ then 
+$$\mathbf{x}\boldsymbol{\beta} \sim \mathsf{Gauss}(\mathbf{x}\boldsymbol{\mu}, \mathbf{x}\boldsymbol{\Sigma}\mathbf{x}^\top)$$
+
+## Step 4 of expectation propagation {.smaller}
+
+
+Convert moments $\boldsymbol{\mu}_j^{*}$ and $\boldsymbol{\Sigma}^{*}_j$ to canonical parameters $\mathbf{Q}_j^{*}$ and $\boldsymbol{r}_j^{*}.$
+
+
+Update the global approximation with
+\begin{align*}
+q(\boldsymbol{\theta}) &\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\mathbf{Q}_i + \mathbf{Q}^{*}_j\right)\boldsymbol{\theta} \right.\\& \left. + \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\boldsymbol{r}_i + \boldsymbol{r}^{*}_j\right)\right\}.
+\end{align*}
+
+## Recap of expectation propagation
+
+
+The EP algorithm iterates the steps until convergence:
+
+1. Initialize the site-specific parameters
+2. Loop over each observation of the likelihood factorization:
+    2.1 form the cavity and the hybrid distribution
+    2.2 compute the moments of the hybrid $\boldsymbol{\mu}$ and $\boldsymbol{\Sigma}$
+    2.3 transform back to canonical parameters $\mathbf{Q}$ and $\boldsymbol{r}$
+    2.3 update the global approximation
+3. Declare convergence when change in parameters is less than tolerance.
+
+The algorithm can be run in parallel. 
+
+## Improving convergence
+
+There is no guarantee that the fixed-point algorithm will converge...
+
+The algorithm behaves like a smoothed Newton method [@Dehaene.Barthelme:2018], so we can borrow tricks from numerical optimization to improve convergence.
+
+- linearly interpolate between updates, with weight $0< w\le 1$ to the current update where at step $t$.
+
+Some individual factor updates may yield non-positive definite precision for individual terms $\mathbf{Q}_j$, which is okay as long as the global approximation $\mathbf{Q}$ remains positive.
+
+## Example: EP for logistic regression
+
+Consider a binary response $Y \in \{-1, 1\}$ with logistic model
+\begin{align*}
+\Pr(Y=1 \mid \mathbf{x}, \boldsymbol{\beta}) = \left\{1+\exp(-\mathbf{x}\boldsymbol{\beta})\right\}^{-1} = \mathrm{expit}(\mathbf{x}\boldsymbol{\beta}).
+\end{align*}
+We assume for simplicity that $p(\boldsymbol{\beta})\propto 1;$ a Gaussian prior could also be used.
+
+
+
 
 ## References
 

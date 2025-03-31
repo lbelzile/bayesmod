@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Probabilistic programming – Bayesian modelling</title>
+<title>Assignment 3 – Bayesian modelling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -88,10 +88,39 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -113,7 +142,7 @@ div.csl-indent {
 <span class="menu-text">Outline</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../content/index.html" aria-current="page"> 
+    <a class="nav-link" href="../content/index.html"> 
 <span class="menu-text">Content</span></a>
   </li>  
   <li class="nav-item">
@@ -134,218 +163,68 @@ div.csl-indent {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/07-content.html">7: Probabilistic programming</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Overview</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Readings, lectures, and videos</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Installation</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/installation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><strong>R</strong> and RStudio</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/rpackages.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><strong>R</strong> packages</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Course content</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/01-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1: Introduction</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/02-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2: Bayesics</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/03-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3: Priors</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/04-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4: Monte Carlo, Markov chains and Metropolis-Hastings</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/05-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5: Gibbs sampling</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/06-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6: Bayesian workflow</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/07-content.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">7: Probabilistic programming</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/08-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">8: Bayesian regression</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/09-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">9: Deterministic approximations</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/10-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">10: Variational inference</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#content" id="toc-content" class="nav-link active" data-scroll-target="#content">Content</a></li>
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives">Learning objectives</a></li>
-  <li><a href="#readings" id="toc-readings" class="nav-link" data-scroll-target="#readings">Readings</a></li>
-  <li><a href="#complementary-readings" id="toc-complementary-readings" class="nav-link" data-scroll-target="#complementary-readings">Complementary readings</a></li>
-  <li><a href="#slides" id="toc-slides" class="nav-link" data-scroll-target="#slides">Slides</a></li>
-  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/01-content.html">Course content</a></li><li class="breadcrumb-item"><a href="../content/07-content.html">7: Probabilistic programming</a></li></ol></nav><h1 class="title display-7">Probabilistic programming</h1></header>
+<main class="content" id="quarto-document-content">
 
-<header id="title-block-header">
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Assignment 3</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
 
 
 </header>
 
 
-<section id="content" class="level2">
-<h2 class="anchored" data-anchor-id="content">Content</h2>
-<ul>
-<li>Hamiltonian Monte Carlo</li>
-<li>Probabilistic programming</li>
-<li>Stan</li>
-</ul>
+<p>These problems are for credit and to be handed in on ZoneCours on April 28th at the latest at 23:55.</p>
+<section id="problem-3.1" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3.1">Problem 3.1</h2>
+<p>The <a href="../files/data/rats.csv"><code>rats</code> data</a>, extracted from Table 5 of <span class="citation" data-cites="Tarone:1982">Tarone (<a href="#ref-Tarone:1982" role="doc-biblioref">1982</a>)</span>, contains observations from 70 experiments on animal carcinogenesis bioassay conducted with female F344 rats, recording the number of lung cancer tumors developed. Treating the observations as independent, write <span class="math display">\[\begin{align*}
+y_i \mid \theta_i &amp;\sim \mathsf{binom}(n_i, \theta_i), \quad i =1, \ldots, 70 \\
+\theta_i \mid \alpha, \beta &amp; \sim \mathsf{beta}(\alpha, \beta)
+\end{align*}\]</span> with an improper prior <span class="math inline">\(p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\alpha&gt;0, \beta&gt;0).\)</span></p>
+<p>Fit the model using variational inference</p>
+<ol type="1">
+<li>Derive the optimal choice of distribution for <span class="math inline">\(\theta_i\)</span> and use coordinate ascent updates for these parameters</li>
+<li>Assume a full-rank Gaussian approximation for the pair <span class="math inline">\((\alpha, \beta)\)</span> and run stochastic gradient descent using ADVI.</li>
+<li>Plot the ELBO and the posterior distribution; compare with the results of your Gibbs sampler from Assignement 2.</li>
+</ol>
 </section>
-<section id="learning-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
-<p>At the end of the chapter, students should be able to</p>
-<ul>
-<li>code models using Stan</li>
-</ul>
-</section>
-<section id="readings" class="level2">
-<h2 class="anchored" data-anchor-id="readings">Readings</h2>
-<ul>
-<li><span class="citation" data-cites="Betancourt:2017">Betancourt (<a href="#ref-Betancourt:2017" role="doc-biblioref">2017</a>)</span></li>
-<li><span class="citation" data-cites="Neal:2011">Neal (<a href="#ref-Neal:2011" role="doc-biblioref">2011</a>)</span></li>
-<li><a href="http://chi-feng.github.io/mcmc-demo/">Chi Feng’s MCMC gallery</a></li>
-</ul>
-</section>
-<section id="complementary-readings" class="level2">
-<h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
-<ul>
-<li><a href="https://mc-stan.org/docs/stan-users-guide/">Stan user guide</a></li>
-</ul>
-</section>
-<section id="slides" class="level2">
-<h2 class="anchored" data-anchor-id="slides">Slides</h2>
-<p class="text-center">
-<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides7.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides7.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
-</p>
-<div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides7.html">
-</iframe>
-</div>
-</section>
-<section id="code" class="level2">
-<h2 class="anchored" data-anchor-id="code">Code</h2>
-<ul>
-<li>Stochastic volatility model: Stan code <a href="../files/code/stochvol1.stan">1</a> and <a href="../files/code/stochvol2.stan">2</a> and <a href="../files/code/07-stochvol_stan.R"><code>cmdstanr</code> <strong>R</strong> script</a></li>
-<li><a href="../files/code/poisson_smartwatch.stan">Smartwatch example</a> and <a href="../files/code/07-poisson_smartwatch.R"><code>cmdstanr</code> <strong>R</strong> script</a></li>
-</ul>
+<section id="problem-3.2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3.2">Problem 3.2</h2>
+<p>Consider the following hierarchical model: <span class="math display">\[\begin{align*}
+Y \mid X \sim \mathsf{Gauss}(2x + x^{1/2}, \tau^2), \qquad X \sim 3 + \mathsf{expo}(1)
+\end{align*}\]</span></p>
+<ol type="1">
+<li>Using forward sampling, obtain 10 000 draws from <span class="math inline">\(Y\)</span> and plot the marginal density.</li>
+<li>Write code to calculate the marginal density for fixed value of <span class="math inline">\(y\)</span> <span class="math display">\[\begin{align*}
+p(y) = \frac{p(x,y)}{p(x \mid y)}
+\end{align*}\]</span> by approximating the denominator <span class="math inline">\(p(x \mid y)\)</span> using Laplace approximation, using a truncated Gaussian to account for the support constraint since <span class="math inline">\(x \in [3, \infty).\)</span></li>
+<li>Evaluate your algorithm pointwise over 100 observations from the support of <span class="math inline">\(Y\)</span> (deduced from part 1) and compare with the Monte Carlo approximation to the density.</li>
+</ol>
 
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Betancourt:2017" class="csl-entry" role="listitem">
-Betancourt, M. (2017). A conceptual introduction to <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>arXiv Preprint</em>. <a href="https://doi.org/10.48550/arXiv.1701.02434">https://doi.org/10.48550/arXiv.1701.02434</a>
-</div>
-<div id="ref-Neal:2011" class="csl-entry" role="listitem">
-Neal, R. M. (2011). <span>MCMC</span> using <span>H</span>amiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 113–162). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
+<div id="ref-Tarone:1982" class="csl-entry" role="listitem">
+Tarone, R. E. (1982). The use of historical control information in testing for a trend in proportions. <em>Biometrics</em>, <em>38</em>(1), 215–220. <a href="http://www.jstor.org/stable/2530304">http://www.jstor.org/stable/2530304</a>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

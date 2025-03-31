@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.3">
+<meta name="generator" content="quarto-1.7.1">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -88,10 +88,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -350,7 +350,6 @@ window.Quarto = {
   <ul>
   <li><a href="#exercise-6.1" id="toc-exercise-6.1" class="nav-link active" data-scroll-target="#exercise-6.1">Exercise 6.1</a></li>
   <li><a href="#exercise-6.2" id="toc-exercise-6.2" class="nav-link" data-scroll-target="#exercise-6.2">Exercise 6.2</a></li>
-  <li><a href="#exercise-6.3" id="toc-exercise-6.3" class="nav-link" data-scroll-target="#exercise-6.3">Exercise 6.3</a></li>
   </ul>
 </nav>
     </div>
@@ -446,21 +445,22 @@ Y_{ij1} \sim \mathsf{Poisson}\{\exp(\alpha_i +\beta_j + \delta)\},
 Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
 \end{align}\]</span> Does the second model fit significantly better than than the first? Compare the models using WAIC and Bayes factors.</li>
 </ol>
-</section>
-<section id="exercise-6.3" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-6.3">Exercise 6.3</h2>
-<p>The 2000 US presidential election opposed Georges W. Bush (GOP) and Albert A. Gore (Democrat), as well as marginal third party candidates. The tipping state was Florida, worth 25 electors, which Bush won by a narrow margin of 537 votes. There have been many claims that the design of so-called <a href="https://www.palmbeachpost.com/storyimage/LK/20151105/NEWS/812069858/AR/0/AR-812069858.jpg">butterfly ballot</a> used in poor neighborhoods of Palm Beach county led to confusion among voters and that this deprived Gore of some thousands of votes that were instead assigned to a paleoconservative third-party candidate, Patrick Buchanan (Reform). <span class="citation" data-cites="Smith:2002">Smith (<a href="#ref-Smith:2002" role="doc-biblioref">2002</a>)</span> analysed the election results in Palm Beach country, in which a unusually high number of ballots (3407) were cast for Buchanan.</p>
-<p>We are interested in building a model to predict the expected number of votes for Buchanan in Palm Beach county, based only on the information from other county votes. The data set <code>buchanan</code> contains sociodemographic information and votes per county of different candidates.</p>
-<ol type="1">
-<li>Plot the percentage of votes obtained by Buchanan, <code>buch</code>/(<code>buch</code>+<code>totmb</code>), against <span class="math inline">\(\log\)</span><code>popn</code> and comment.</li>
-<li>Fit a binomial logistic model for the votes of Bush versus Gore with <span class="math inline">\(\log\)</span> <code>popn</code>, <code>black</code>, <code>hisp</code>, <code>geq65</code> <code>highsc</code> as covariates.
-<ul>
-<li>Interpret the estimated coefficients <span class="math inline">\(\widehat{\boldsymbol{\beta}}\)</span> for <code>highsc</code> and <code>hisp</code> on the odds scale.</li>
-<li>Calculate the total posterior proportion of votes for Buchanan in Florida.</li>
-</ul></li>
-<li>Look at the posterior predictive checks and leave-one-out probability plot. Is there evidence of overdispersion? Consider how to account for the latter and compare the model with a beta-binomial regression.</li>
-<li>Rerun the model <strong>excluding</strong> the results of Palm Beach county and predict the expected number of Buchanan votes in Palm Beach county. Comment hence on the discrepancy between this forecast and the number of votes received in the election.</li>
-</ol>
+<!--
+
+## Exercise 6.3
+
+The 2000 US presidential election opposed Georges W. Bush (GOP) and Albert A. Gore (Democrat), as well as marginal third party candidates. The tipping state was Florida, worth 25 electors, which Bush won by a narrow margin of 537 votes.  There have been many claims that the design of so-called [butterfly ballot](https://www.palmbeachpost.com/storyimage/LK/20151105/NEWS/812069858/AR/0/AR-812069858.jpg) used in poor neighborhoods of Palm Beach county led to confusion among voters and that this deprived Gore of some thousands of votes that were instead assigned to a paleoconservative third-party candidate, Patrick Buchanan (Reform). @Smith:2002 \href{https://projecteuclid.org/euclid.ss/1049993203}{Smith (2002)} analysed the election results in Palm Beach country, in which a unusually high number of ballots (3407) were cast for Buchanan. 
+
+We are interested in building a model to predict the expected number of votes for Buchanan in Palm Beach county, based only on the information from other county votes. The data set `buchanan` contains sociodemographic information and votes per county of different candidates.
+
+1. Plot the percentage of votes obtained by Buchanan, `buch`/(`buch`+`totmb`), against $\log$`popn` and comment.
+2. Fit a binomial logistic model for the votes of Bush versus Gore with $\log$ `popn`, `black`, `hisp`, `geq65` `highsc` as covariates. 
+    - Interpret the estimated coefficients $\widehat{\boldsymbol{\beta}}$ for `highsc` and `hisp` on the odds scale.
+    - Calculate the total posterior proportion of votes for Buchanan in Florida.
+3. Look at the posterior predictive checks and leave-one-out probability plot.  Is there evidence of overdispersion? Consider how to account for the latter and compare the model with a beta-binomial regression.
+4. Rerun the model **excluding** the results of Palm Beach county and predict the expected number of Buchanan votes in Palm Beach county. Comment hence on the discrepancy between this forecast and the number of votes received in the election.
+
+-->
 
 
 
@@ -475,9 +475,6 @@ Gelman, A., Dyk, D. A. van, Huang, Z., &amp; Boscardin, J. W. (2008). Using redu
 </div>
 <div id="ref-Maher:1982" class="csl-entry" role="listitem">
 Maher, M. J. (1982). Modelling association football scores. <em>Statistica Neerlandica</em>, <em>36</em>(3), 109–118. <a href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">https://doi.org/10.1111/j.1467-9574.1982.tb00782.x</a>
-</div>
-<div id="ref-Smith:2002" class="csl-entry" role="listitem">
-Smith, R. L. (2002). A statistical assessment of <span>B</span>uchanan’s vote in <span>P</span>alm <span>B</span>each <span>C</span>ounty. <em>Statistical Science</em>, <em>17</em>(4), 441–457. <a href="https://doi.org/10.1214/ss/1049993203">https://doi.org/10.1214/ss/1049993203</a>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
