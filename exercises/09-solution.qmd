@@ -29,14 +29,15 @@ By equating the gradient to zero, we find that the posterior mode is $\widehat{\
 b. If we write now instead $\theta = \mathrm{expit}(\vartheta) \equiv \exp(\vartheta)/\{1+\exp(\vartheta)\}$ for $\vartheta \in \mathbb{R},$ gradient and Hessian matrix become
 \begin{align*}
 \frac{\partial k(\vartheta)}{\partial \vartheta} &= 
-\frac{\partial}{\partial \vartheta} (\alpha-1)\vartheta - (\beta-1)\log\{1+\exp(\vartheta)\}
-\\&=(\alpha-1) - \mathrm{expit}(\vartheta)(\beta-1)
+\frac{\partial}{\partial \vartheta} (\alpha-1)\vartheta - (\alpha + \beta-2)\log\{1+\exp(\vartheta)\}
+\\&=(\alpha-1) - \mathrm{expit}(\vartheta)(\alpha + \beta-2)
 \end{align*}
-so that $\widehat{\vartheta}_{\mathrm{MAP}}=\mathrm{logit}\{(\alpha-1)/(\beta-1),$ and 
+so that, thanks to invariance, the mode is simply the corresponding inverse transformation $\widehat{\vartheta}_{\mathrm{MAP}}=\mathrm{logit}(\widehat{\theta}) = \mathrm{logit}\{(\alpha-1)/(\alpha +\beta-2)\},$ and 
 \begin{align*}
-\jmath_{\vartheta}(\vartheta) = -\frac{\partial^2 k(\vartheta)}{\partial \vartheta^2} &= (\beta-1)\frac{\mathrm{expit}(\vartheta)}{1+\exp(\vartheta)}
+\jmath_{\vartheta}(\vartheta) = -\frac{\partial^2 k(\vartheta)}{\partial \vartheta^2} &= (\alpha +\beta-2)\frac{\mathrm{expit}(\vartheta)}{1+\exp(\vartheta)}.
 \end{align*}
-and the Jacobian of the change of variables gives 
+We can also get the Hessian by multiplying by the square of the Jacobian.
+The Jacobian of the change of variables gives 
 \begin{align*}
 f_{\theta}(\theta) = \phi\{\log(\theta)-\log(1-\theta); \widehat{\vartheta}_{\mathrm{MAP}}, -1/\jmath_{\vartheta}(\widehat{\vartheta}_{\mathrm{MAP}})\} \theta^{-1}(1-\theta)^{-1}
 \end{align*}
@@ -56,11 +57,14 @@ gauss_approx_beta <- function(n){
   }
   jm <- neghessian(x = map, alpha = alpha, beta = beta)
   # Gaussian approximation for logit(theta) = vartheta
-  map_v <- qlogis(map)# qlogis((alpha-1)/(beta-1))
+  map_v <- qlogis(map)
+  jac <- plogis(map_v)/(1+exp(map_v))
   neghessian_v <- function(x, alpha, beta){
-    (beta - 1) * plogis(x) / (1 + exp(x))
+    (alpha + beta - 2) * plogis(x) / (1 + exp(x))
   }
   jm_v <- neghessian_v(map_v, alpha = alpha, beta = beta)
+  # Check the hessian is correct
+  stopifnot(isTRUE(all.equal(jac^2*jm, jm_v)))
   dens_logit_gauss <- function(x){
     exp(-log(x) - log(1-x) +
         dnorm(x = qlogis(x), mean = map_v, sd = sqrt(1/jm_v), log = TRUE))
