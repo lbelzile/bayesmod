@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 /* CSS for citations */
 div.csl-bib-body { }
@@ -54,10 +88,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -120,7 +154,7 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-sidebar docked nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -150,7 +184,7 @@ window.Quarto = {
 <span class="menu-text">Exercises</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../evaluations/index.html"> 
+    <a class="nav-link active" href="../evaluations/index.html" aria-current="page"> 
 <span class="menu-text">Evaluations</span></a>
   </li>  
   <li class="nav-item">
@@ -163,16 +197,74 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../evaluations/01-assignment.html">Assignments</a></li><li class="breadcrumb-item"><a href="../evaluations/03-assignment.html">Assignment 3</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Evaluations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/weekly-check-in.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Weekly check-in</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Assignments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/01-assignment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/02-assignment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Assignment 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../evaluations/03-assignment.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Assignment 3</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../evaluations/01-assignment.html">Assignments</a></li><li class="breadcrumb-item"><a href="../evaluations/03-assignment.html">Assignment 3</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Assignment 3</h1>
 </div>
@@ -191,40 +283,46 @@ window.Quarto = {
 </header>
 
 
-<p>These problems are for credit and to be handed in on ZoneCours on April 28th at the latest at 23:55.</p>
+<p>These problems are for credit and to be handed in on ZoneCours on April 29th at the latest at 23:55.</p>
 <section id="problem-3.1" class="level2">
 <h2 class="anchored" data-anchor-id="problem-3.1">Problem 3.1</h2>
-<p>The <a href="../files/data/rats.csv"><code>rats</code> data</a>, extracted from Table 5 of <span class="citation" data-cites="Tarone:1982">Tarone (<a href="#ref-Tarone:1982" role="doc-biblioref">1982</a>)</span>, contains observations from 70 experiments on animal carcinogenesis bioassay conducted with female F344 rats, recording the number of lung cancer tumors developed. Treating the observations as independent, write <span class="math display">\[\begin{align*}
-y_i \mid \theta_i &amp;\sim \mathsf{binom}(n_i, \theta_i), \quad i =1, \ldots, 70 \\
-\theta_i \mid \alpha, \beta &amp; \sim \mathsf{beta}(\alpha, \beta)
-\end{align*}\]</span> with an improper prior <span class="math inline">\(p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\alpha&gt;0, \beta&gt;0).\)</span></p>
-<p>Fit the model using variational inference</p>
+<p>The 2000 US presidential election opposed Georges W. Bush (GOP) and Albert A. Gore (Democrat), as well as marginal third party candidates. The tipping state was Florida, worth 25 electors, which Bush won by a narrow margin of 537 votes. There have been many claims that the design of so-called <a href="https://www.palmbeachpost.com/storyimage/LK/20151105/NEWS/812069858/AR/0/AR-812069858.jpg">butterfly ballot</a> used in poor neighborhoods of Palm Beach county led to confusion among voters and that this deprived Gore of some thousands of votes that were instead assigned to a paleoconservative third-party candidate, Patrick Buchanan (Reform). <span class="citation" data-cites="Smith:2002">Smith (<a href="#ref-Smith:2002" role="doc-biblioref">2002</a>)</span> analysed the election results in Palm Beach country, in which a unusually high number of ballots (3407) were cast for Buchanan.</p>
+<p>We are interested in building a model to predict the expected number of votes for Buchanan in Palm Beach county, based only on the information from other county votes. The data set <a href="../files/data/buchanan.csv"><code>buchanan</code></a> contains sociodemographic information and votes per county of different candidates. The column <code>buch</code> contains the number of votes for Buchanan, and <code>totmb+buch</code> the total number of ballots cast by county.</p>
+<p>In <strong>R</strong>, you can load the data via</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(buchanan, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ol type="1">
-<li>Derive the optimal choice of distribution for <span class="math inline">\(\theta_i\)</span> and use coordinate ascent updates for these parameters</li>
-<li>Assume a full-rank Gaussian approximation for the pair <span class="math inline">\((\alpha, \beta)\)</span> and run stochastic gradient descent using ADVI.</li>
-<li>Plot the ELBO and the posterior distribution; compare with the results of your Gibbs sampler from Assignement 2.</li>
+<li>Plot the percentage of votes obtained by Buchanan, <code>buch</code>/(<code>buch</code>+<code>totmb</code>), against <span class="math inline">\(\log\)</span><code>popn</code> and comment.</li>
+<li>Fit a binomial logistic model for the votes of Buchanan (as a function of the total <code>totmb+buch</code> with <span class="math inline">\(\log\)</span> <code>popn</code>, <code>black</code>, <code>hisp</code>, <code>geq65</code>, <code>highsc</code>, <code>coll</code>, <code>income</code> as covariates and with a <strong>horseshoe</strong> prior. Make sure to standardize the covariates beforehand and to exclude Palm Beach! You can use Stan or other probabilistic programming language interface.
+<ol type="a">
+<li>Return a table of posterior means for the regression coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>.</li>
+<li>Predict the expected number of Buchanan votes in Palm Beach county. Comment hence on the discrepancy between this forecast and the number of votes received in the election.</li>
+<li>Produce posterior predictive checks to check for overdispersion and leave-one-out probability plot. Comment on the latter.</li>
+</ol></li>
+<li>Refit the model, this time using a weakly informative Gaussian prior <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, 10\mathbf{I}_p)\)</span> for all covariates but the intercept (use an improper uniform for the latter). Comment on the impact of the sparsity-inducing horseshoe prior.</li>
 </ol>
 </section>
 <section id="problem-3.2" class="level2">
 <h2 class="anchored" data-anchor-id="problem-3.2">Problem 3.2</h2>
-<p>Consider the following hierarchical model: <span class="math display">\[\begin{align*}
-Y \mid X \sim \mathsf{Gauss}(2x + x^{1/2}, \tau^2), \qquad X \sim 3 + \mathsf{expo}(1)
-\end{align*}\]</span></p>
+<p>Using the <code>buchanan</code> data, orthogonalize the model matrix <span class="math inline">\(\mathbf{X}\)</span> and fit a logistic regression model with the same Gaussian prior.</p>
 <ol type="1">
-<li>Using forward sampling, obtain 10 000 draws from <span class="math inline">\(Y\)</span> and plot the marginal density.</li>
-<li>Write code to calculate the marginal density for fixed value of <span class="math inline">\(y\)</span> <span class="math display">\[\begin{align*}
-p(y) = \frac{p(x,y)}{p(x \mid y)}
-\end{align*}\]</span> by approximating the denominator <span class="math inline">\(p(x \mid y)\)</span> using Laplace approximation, using a truncated Gaussian to account for the support constraint since <span class="math inline">\(x \in [3, \infty).\)</span></li>
-<li>Evaluate your algorithm pointwise over 100 observations from the support of <span class="math inline">\(Y\)</span> (deduced from part 1) and compare with the Monte Carlo approximation to the density.</li>
+<li>Use stochastic gradient descent to fit a mean-field Gaussian variational approximation to the model.</li>
+<li>Using the fitted posterior approximations, draw samples and use the posterior predictive distribution to provide a density estimate and a 89% credible interval for the number of votes for Buchanan in Palm Beach county. Compare with the MCMC based answer of the previous question (with the same prior!)</li>
 </ol>
+<p><strong>Indication</strong>: Let <span class="math inline">\(p(\boldsymbol{\beta}, \mathbf{X}, \boldsymbol{y})\)</span> denote the joint density (the logistic likelihood and the prior), taking <span class="math inline">\(g(\boldsymbol{\beta}) = \prod_{j=0}^p g_j(\beta_j)\)</span> with <span class="math inline">\(g_j\)</span> the density of a <span class="math inline">\(\mathsf{Gauss}(\mu_j, \sigma^2_j)\)</span>. Recall that the gradient for a location-scale family <span class="math inline">\(\beta_j = \mu_j + \sigma_j Z_j\)</span> with location <span class="math inline">\(\mu_j\)</span> and scale <span class="math inline">\(\sigma_j\)</span> <span class="math inline">\((j=0, \ldots, p)\)</span> and <span class="math inline">\(Z_j \sim \mathsf{Gauss}(0,1)\)</span> can be written as <span class="math display">\[\begin{align*}
+\frac{\partial \mathsf{ELBO}(g)}{\partial \mu_j} &amp;= \mathsf{E}_{Z_j} \left\{ \frac{\partial \log p(\beta_j=\mu_j + \sigma_j Z_j, \boldsymbol{\beta}_{-j}, \mathbf{X}, \boldsymbol{y})}{\partial \beta_j}\right\} = 0\\
+\frac{\partial \mathsf{ELBO}(g)}{\partial \sigma_j} &amp;= \mathsf{E}_{Z_j} \left\{ \frac{\partial \log p(\beta_j=\mu_j + \sigma_j Z_j, \boldsymbol{\beta}_{-j}, \mathbf{X}, \boldsymbol{y})}{\partial \beta_j}Z_j\right\} + \sigma^{-1}_j
+\\&amp;=\sigma \mathsf{E}_{Z_j} \left\{ \frac{\partial^2 \log p(\beta_j=\mu_j + \sigma_j Z_j, \boldsymbol{\beta}_{-j}, \mathbf{X}, \boldsymbol{y})}{\partial \beta_j^2}\right\} + \sigma^{-1}_j = 0
+\end{align*}\]</span></p>
 
 
 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Tarone:1982" class="csl-entry" role="listitem">
-Tarone, R. E. (1982). The use of historical control information in testing for a trend in proportions. <em>Biometrics</em>, <em>38</em>(1), 215–220. <a href="http://www.jstor.org/stable/2530304">http://www.jstor.org/stable/2530304</a>
+<div id="ref-Smith:2002" class="csl-entry" role="listitem">
+Smith, R. L. (2002). A statistical assessment of <span>B</span>uchanan’s vote in <span>P</span>alm <span>B</span>each <span>C</span>ounty. <em>Statistical Science</em>, <em>17</em>(4), 441–457. <a href="https://doi.org/10.1214/ss/1049993203">https://doi.org/10.1214/ss/1049993203</a>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

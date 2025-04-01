@@ -95,19 +95,3 @@ Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
 Does the second model fit significantly better than  than the first? Compare the models using WAIC and Bayes factors.
 
 
-<!--
-
-## Exercise 6.3
-
-The 2000 US presidential election opposed Georges W. Bush (GOP) and Albert A. Gore (Democrat), as well as marginal third party candidates. The tipping state was Florida, worth 25 electors, which Bush won by a narrow margin of 537 votes.  There have been many claims that the design of so-called [butterfly ballot](https://www.palmbeachpost.com/storyimage/LK/20151105/NEWS/812069858/AR/0/AR-812069858.jpg) used in poor neighborhoods of Palm Beach county led to confusion among voters and that this deprived Gore of some thousands of votes that were instead assigned to a paleoconservative third-party candidate, Patrick Buchanan (Reform). @Smith:2002 \href{https://projecteuclid.org/euclid.ss/1049993203}{Smith (2002)} analysed the election results in Palm Beach country, in which a unusually high number of ballots (3407) were cast for Buchanan. 
-
-We are interested in building a model to predict the expected number of votes for Buchanan in Palm Beach county, based only on the information from other county votes. The data set `buchanan` contains sociodemographic information and votes per county of different candidates.
-
-1. Plot the percentage of votes obtained by Buchanan, `buch`/(`buch`+`totmb`), against $\log$`popn` and comment.
-2. Fit a binomial logistic model for the votes of Bush versus Gore with $\log$ `popn`, `black`, `hisp`, `geq65` `highsc` as covariates. 
-    - Interpret the estimated coefficients $\widehat{\boldsymbol{\beta}}$ for `highsc` and `hisp` on the odds scale.
-    - Calculate the total posterior proportion of votes for Buchanan in Florida.
-3. Look at the posterior predictive checks and leave-one-out probability plot.  Is there evidence of overdispersion? Consider how to account for the latter and compare the model with a beta-binomial regression.
-4. Rerun the model **excluding** the results of Palm Beach county and predict the expected number of Buchanan votes in Palm Beach county. Comment hence on the discrepancy between this forecast and the number of votes received in the election.
-
--->

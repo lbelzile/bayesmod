@@ -5,36 +5,39 @@ filters:
    - include-code-files
 ---
 
-These problems are for credit and to be handed in on ZoneCours on April 28th at the latest at 23:55.
+These problems are for credit and to be handed in on ZoneCours on April 29th at the latest at 23:55.
 
 ## Problem 3.1
 
-The [`rats` data](/files/data/rats.csv), extracted from Table 5 of @Tarone:1982, contains observations from 70 experiments on  animal carcinogenesis bioassay
-conducted with female F344 rats, recording the number of lung cancer tumors developed. Treating the observations as independent, write
-\begin{align*}
-y_i \mid \theta_i &\sim \mathsf{binom}(n_i, \theta_i), \quad i =1, \ldots, 70 \\
-\theta_i \mid \alpha, \beta & \sim \mathsf{beta}(\alpha, \beta)
-\end{align*}
-with an improper prior $p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\alpha>0, \beta>0).$
 
-Fit the model using variational inference
+The 2000 US presidential election opposed Georges W. Bush (GOP) and Albert A. Gore (Democrat), as well as marginal third party candidates. The tipping state was Florida, worth 25 electors, which Bush won by a narrow margin of 537 votes.  There have been many claims that the design of so-called [butterfly ballot](https://www.palmbeachpost.com/storyimage/LK/20151105/NEWS/812069858/AR/0/AR-812069858.jpg) used in poor neighborhoods of Palm Beach county led to confusion among voters and that this deprived Gore of some thousands of votes that were instead assigned to a paleoconservative third-party candidate, Patrick Buchanan (Reform). @Smith:2002 \href{https://projecteuclid.org/euclid.ss/1049993203}{Smith (2002)} analysed the election results in Palm Beach country, in which a unusually high number of ballots (3407) were cast for Buchanan. 
 
-1. Derive the optimal choice of distribution for $\theta_i$ and use coordinate ascent updates for these parameters
-2. Assume a full-rank Gaussian approximation for the pair $(\alpha, \beta)$ and run stochastic gradient descent using ADVI.
-3. Plot the ELBO and the posterior distribution; compare with the results of your Gibbs sampler from Assignement 2.
- 
+We are interested in building a model to predict the expected number of votes for Buchanan in Palm Beach county, based only on the information from other county votes. The data set [`buchanan`](/files/data/buchanan.csv) contains sociodemographic information and votes per county of different candidates. The column `buch` contains the number of votes for Buchanan, and `totmb+buch` the total number of ballots cast by county.
+
+In **R**, you can load the data via
+```{r}
+data(buchanan, package = "hecbayes")
+```
+
+1. Plot the percentage of votes obtained by Buchanan, `buch`/(`buch`+`totmb`), against $\log$`popn` and comment.
+2. Fit a binomial logistic model for the votes of Buchanan (as a function of the total `totmb+buch` with $\log$ `popn`, `black`, `hisp`, `geq65`, `highsc`, `coll`, `income` as covariates and with a **horseshoe** prior. Make sure to standardize the covariates beforehand and to exclude Palm Beach! You can use Stan or other probabilistic programming language interface.
+    a. Return a table of posterior means for the regression coefficients $\boldsymbol{\beta}$.
+    b. Predict the expected number of Buchanan votes in Palm Beach county. Comment hence on the discrepancy between this forecast and the number of votes received in the election.
+    c. Produce posterior predictive checks to check for overdispersion and leave-one-out probability plot. Comment on the latter.
+3. Refit the model, this time using a weakly informative Gaussian prior $\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, 10\mathbf{I}_p)$ for all covariates but the intercept (use an improper uniform for the latter). Comment on the impact of the sparsity-inducing horseshoe prior.
 
 ## Problem 3.2
 
-Consider the following hierarchical model:
-\begin{align*}
-Y \mid X \sim \mathsf{Gauss}(2x + x^{1/2}, \tau^2), \qquad X \sim 3 + \mathsf{expo}(1)
-\end{align*}
+Using the `buchanan` data, orthogonalize the model matrix $\mathbf{X}$ and fit a logistic regression model with the same Gaussian prior.
 
-1. Using forward sampling, obtain 10 000 draws from $Y$ and plot the marginal density.
-2. Write code to calculate the marginal density for fixed value of $y$
+1. Use stochastic gradient descent to fit a mean-field Gaussian variational approximation to the model. 
+2. Using the fitted posterior approximations, draw samples and use the posterior predictive distribution to provide a density estimate and a 89% credible interval for the number of votes for Buchanan in Palm Beach county. Compare with the MCMC based answer of the previous question (with the same prior!)
+
+**Indication**: 
+Let $p(\boldsymbol{\beta}, \mathbf{X}, \boldsymbol{y})$ denote the joint density (the logistic likelihood and the prior), taking $g(\boldsymbol{\beta}) = \prod_{j=0}^p g_j(\beta_j)$ with $g_j$ the density of a $\mathsf{Gauss}(\mu_j, \sigma^2_j)$. 
+Recall that the gradient for a location-scale family $\beta_j = \mu_j + \sigma_j Z_j$  with location $\mu_j$ and scale $\sigma_j$ $(j=0, \ldots, p)$ and $Z_j \sim \mathsf{Gauss}(0,1)$ can be written as 
 \begin{align*}
-p(y) = \frac{p(x,y)}{p(x \mid y)}
+\frac{\partial \mathsf{ELBO}(g)}{\partial \mu_j} &= \mathsf{E}_{Z_j} \left\{ \frac{\partial \log p(\beta_j=\mu_j + \sigma_j Z_j, \boldsymbol{\beta}_{-j}, \mathbf{X}, \boldsymbol{y})}{\partial \beta_j}\right\} = 0\\
+\frac{\partial \mathsf{ELBO}(g)}{\partial \sigma_j} &= \mathsf{E}_{Z_j} \left\{ \frac{\partial \log p(\beta_j=\mu_j + \sigma_j Z_j, \boldsymbol{\beta}_{-j}, \mathbf{X}, \boldsymbol{y})}{\partial \beta_j}Z_j\right\} + \sigma^{-1}_j 
+\\&=\sigma \mathsf{E}_{Z_j} \left\{ \frac{\partial^2 \log p(\beta_j=\mu_j + \sigma_j Z_j, \boldsymbol{\beta}_{-j}, \mathbf{X}, \boldsymbol{y})}{\partial \beta_j^2}\right\} + \sigma^{-1}_j = 0
 \end{align*}
-by approximating the denominator $p(x \mid y)$ using Laplace approximation, using a truncated Gaussian to account for the support constraint since $x \in [3, \infty).$
-3. Evaluate your algorithm pointwise over 100 observations from the support of $Y$ (deduced from part 1) and compare with the Monte Carlo approximation to the density.

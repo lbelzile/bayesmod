@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -88,10 +88,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -445,22 +445,6 @@ Y_{ij1} \sim \mathsf{Poisson}\{\exp(\alpha_i +\beta_j + \delta)\},
 Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
 \end{align}\]</span> Does the second model fit significantly better than than the first? Compare the models using WAIC and Bayes factors.</li>
 </ol>
-<!--
-
-## Exercise 6.3
-
-The 2000 US presidential election opposed Georges W. Bush (GOP) and Albert A. Gore (Democrat), as well as marginal third party candidates. The tipping state was Florida, worth 25 electors, which Bush won by a narrow margin of 537 votes.  There have been many claims that the design of so-called [butterfly ballot](https://www.palmbeachpost.com/storyimage/LK/20151105/NEWS/812069858/AR/0/AR-812069858.jpg) used in poor neighborhoods of Palm Beach county led to confusion among voters and that this deprived Gore of some thousands of votes that were instead assigned to a paleoconservative third-party candidate, Patrick Buchanan (Reform). @Smith:2002 \href{https://projecteuclid.org/euclid.ss/1049993203}{Smith (2002)} analysed the election results in Palm Beach country, in which a unusually high number of ballots (3407) were cast for Buchanan. 
-
-We are interested in building a model to predict the expected number of votes for Buchanan in Palm Beach county, based only on the information from other county votes. The data set `buchanan` contains sociodemographic information and votes per county of different candidates.
-
-1. Plot the percentage of votes obtained by Buchanan, `buch`/(`buch`+`totmb`), against $\log$`popn` and comment.
-2. Fit a binomial logistic model for the votes of Bush versus Gore with $\log$ `popn`, `black`, `hisp`, `geq65` `highsc` as covariates. 
-    - Interpret the estimated coefficients $\widehat{\boldsymbol{\beta}}$ for `highsc` and `hisp` on the odds scale.
-    - Calculate the total posterior proportion of votes for Buchanan in Florida.
-3. Look at the posterior predictive checks and leave-one-out probability plot.  Is there evidence of overdispersion? Consider how to account for the latter and compare the model with a beta-binomial regression.
-4. Rerun the model **excluding** the results of Palm Beach county and predict the expected number of Buchanan votes in Palm Beach county. Comment hence on the discrepancy between this forecast and the number of votes received in the election.
-
--->
 
 
 
