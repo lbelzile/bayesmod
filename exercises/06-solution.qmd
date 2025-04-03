@@ -174,7 +174,7 @@ where
 - $\beta_j$ the defensive strength of team $j$ and 
 - $\delta$ is the common home advantage. 
 
-The scores in a match and between matches are assumed to be conditionally independent of one another given $\boldsymbol{\alpha}, \boldsymbol{\beta}, \delta$. The data set `efl` contains the results of football (soccer) matches for the 20232-2024 season of the English Football Ligue (EFL) and contains the following variables
+The scores in a match and between matches are assumed to be conditionally independent of one another given $\boldsymbol{\alpha}, \boldsymbol{\beta}, \delta$. The data set [`efl`](/files/data/efl.csv) contains the results of football (soccer) matches for the 20232-2024 season of the English Football Ligue (EFL) and contains the following variables
 
 - `score`: number of goals of `team` during a match
 - `team`: categorical variable giving the name of the team which scored the goals
@@ -200,6 +200,9 @@ Does the second model fit significantly better than  than the first? Compare the
 We use the `brms` package to generate Stan code following **R** syntax. Model 1 can be fit by adding random effects for `team` and `opponent`. These are assigned penalized complexity priors for the scale such that their 0.99 quantile is 1, giving $1-\exp(-\lambda_0) = 0.99$ and thus $\lambda_0=-\log (0.01).$
 
 ```{r}
+#| message: false
+#| warning: false
+library(brms)
 data(efl, package = "hecbayes")
 # Model 1
 fit_brms1 <- brms::brm(formula = score ~ home + (1 | team) + (1 | opponent),
@@ -210,8 +213,11 @@ fit_brms1 <- brms::brm(formula = score ~ home + (1 | team) + (1 | opponent),
                    set_prior("exponential(4.605)", class = "sd", group = "opponent")
                  ),
                  family = poisson, 
-                 silent = 0, 
-                 save_model = "Maher1.stan")
+                 silent = 2, 
+                 open_progress = FALSE,
+                 refresh = 0,
+                 save_model = "Maher1.stan", 
+                 seed = 1)
 summary(fit_brms1)
 # Use S3 generic for prediction, with new data frame
 predict(fit_brms1, newdata = data.frame(home = 1, team = "Man Utd", opponent = "Liverpool"))
@@ -236,7 +242,6 @@ g2 <- ggplot(data = data.frame(delta = exp(sims$b_home)),
   geom_density() + 
   labs(x = expression("home advantage"~exp(delta))) 
 g1 + g2
-```
 
 # Model 2
 fit_brms2 <- brms::brm(formula = score ~ home + (1 | team) + (1 | opponent),
@@ -246,7 +251,11 @@ fit_brms2 <- brms::brm(formula = score ~ home + (1 | team) + (1 | opponent),
                    set_prior("exponential(4.605)", class = "sd", group = "team"),
                    set_prior("exponential(4.605)", class = "sd", group = "opponent")
                  ),
-                 family = poisson, save_model = "Maher2.stan")
+                 family = poisson, 
+                 save_model = "Maher2.stan",
+                 silent = 2, 
+                 open_progress = FALSE,
+                 refresh = 0)
 summary(fit_brms2)
 
 waic(fit_brms1); waic(fit_brms2)
@@ -264,7 +273,7 @@ fit_inla <- INLA::inla(
   score ~ home + f(team, model = "iid", hyper = prec_prior) +
     f(opponent, model = "iid", hyper = prec_prior),
   family = "poisson",
-    data = efl)
+  data = efl)
 marg_delta <- fit_inla$marginals.fixed[[2]]
 inla.pmarginal(q = 0, marginal = inla.smarginal(marg_delta))
 

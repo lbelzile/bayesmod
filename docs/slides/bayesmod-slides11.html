@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -158,7 +158,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Apr 1, 2025</p>
+  <p class="date">Last compiled Thursday Apr 3, 2025</p>
 </section>
 <section id="revisiting-kullbackleibler-divergence" class="slide level2">
 <h2>Revisiting Kullback–Leibler divergence</h2>
@@ -171,7 +171,7 @@ Léo Belzile
 <h2>Forward Kullback–Leibler divergence</h2>
 <p>If <span class="math inline">\(g(\cdot; \boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> is Gaussian approximating density, then we minimize the KL divergence by matching moments: <span class="math display">\[\begin{align*}
 \boldsymbol{\mu}^* &amp;= \mathsf{E}_{f_t}(\boldsymbol{X})\\
-\boldsymbol{\Sigma}^* &amp;= \mathsf{E}_{f_t}\left\{(\boldsymbol{X}-\boldsymbol{\mu})(\boldsymbol{X}-\boldsymbol{\mu})^\top\right\}
+\boldsymbol{\Sigma}^* &amp;= \mathsf{E}_{f_t}\left\{(\boldsymbol{X}-\boldsymbol{\mu}^*)(\boldsymbol{X}-\boldsymbol{\mu}^*)^\top\right\}
 \end{align*}\]</span> See Exercise 10.1 for a derivation.</p>
 </section>
 <section id="variational-inference" class="slide level2">
