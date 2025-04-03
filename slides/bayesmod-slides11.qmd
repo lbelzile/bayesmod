@@ -59,7 +59,7 @@ The Kullback--Leibler divergence between densities $f_t(\cdot)$ and $g(\cdot; \b
 If $g(\cdot; \boldsymbol{\mu}, \boldsymbol{\Sigma})$ is Gaussian approximating density, then we minimize the KL divergence by matching moments:
 \begin{align*}
 \boldsymbol{\mu}^* &= \mathsf{E}_{f_t}(\boldsymbol{X})\\
-\boldsymbol{\Sigma}^* &= \mathsf{E}_{f_t}\left\{(\boldsymbol{X}-\boldsymbol{\mu})(\boldsymbol{X}-\boldsymbol{\mu})^\top\right\}
+\boldsymbol{\Sigma}^* &= \mathsf{E}_{f_t}\left\{(\boldsymbol{X}-\boldsymbol{\mu}^*)(\boldsymbol{X}-\boldsymbol{\mu}^*)^\top\right\}
 \end{align*}
 See Exercise 10.1 for a derivation.
 
