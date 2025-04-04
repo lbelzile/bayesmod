@@ -48,6 +48,57 @@ curve(dgamma(x, shape = an, rate = bn), from = 0, to = 0.5,
       n = 1001,
       ylab = "density", xlab = expression(tau), bty = "n")
 
+#############################################################
+## CAVI algorithm for probit regression
+## example with data augmentation
+#############################################################
+
+# Data augmentation: "a" is latent Gaussian, truncated to be negative for failures and positive for successes
+cavi_probit <- function(y, # response vector (0/1)
+                        X, # model matrix
+                        prior_beta_prec = diag(rep(0.01, ncol(X))),
+                        prior_beta_mean = rep(0, ncol(X)),
+                        maxiter = 1000L,
+                        tol = 1e-4){
+  # Precompute fixed quantity
+  sc <- solve(crossprod(X) + prior_beta_prec)
+  pmu_prior <- prior_beta_prec %*% prior_beta_mean
+  n <- length(y) # number of observations
+  stopifnot(nrow(X) == n)
+  mu_a <- rep(0,n)
+  y <- as.logical(y)
+  ELBO <- numeric(maxiter)
+  lcst <- -0.5*log(det(solve(prior_beta_prec) %*% crossprod(X) + diag(ncol(X))))
+  for(b in seq_len(maxiter)){
+    mu_b <- c(sc %*% (t(X) %*% mu_a + pmu_prior))
+    lp <- c(X %*% mu_b)
+    mu_a <- lp + dnorm(lp)/(pnorm(lp) - ifelse(y, 0,1))
+    ELBO[b] <- sum(pnorm(lp, lower.tail = y, log.p = TRUE)) -
+      0.5*c(t(mu_b - prior_beta_mean) %*% prior_beta_prec %*% (mu_b - prior_beta_mean)) - lcst
+    if(b > 2 && (ELBO[b] - ELBO[b-1]) < tol){
+      break
+    }
+  }
+  list(mu_a = mu_a, mu_beta = mu_b, elbo = ELBO[1:b])
+}
+
+# Example with data from Experiment 2 of Duke and Amir (2023)
+# on the effect of sequential decisions and purchasing formats
+data(DA23_E2, package = "hecedsm")
+X <- model.matrix(~scale(age) + format, data = DA23_E2,
+                  contrasts.arg = list(format = "contr.sum"))
+y <- DA23_E2$purchased
+# Fit the probit model via coordinate-ascent variational inference
+cavi_probit_DA <- cavi_probit(y = y, X = X)
+# Compare posterior mean with frequentist estimates
+cbind(cavi_probit_DA$mu_beta,
+      coef(glm(y ~ X-1, family = binomial("probit"))))
+plot(cavi_probit_DA$elbo,
+     type = "b",
+     ylab = "ELBO",
+     xlab = "number of iterations")
+
+
 
 #############################################################
 ## CAVI algorithm for K-components Gaussian mixture models
