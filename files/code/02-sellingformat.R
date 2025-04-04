@@ -41,16 +41,23 @@ g1 <- ggplot() +
     breaks = c('sequential', 'integrated'),
     values = c('sequential' = cols[1], 'integrated' = cols[2])
   ) +
-  scale_x_continuous(breaks = seq(0, 0.5, by = 0.25),
-                     labels = c("0", "0.25", "0.5")) +
+  scale_x_continuous(
+    breaks = seq(0, 0.5, by = 0.25),
+    labels = c("0", "0.25", "0.5")
+  ) +
   labs(y = "", subtitle = "Posterior density", x = "probability of buying") +
   scale_y_continuous(limits = c(0, NA), expand = expansion()) +
-  theme(legend.position = "inside",
-        legend.position.inside = c(0.9, 0.9))
+  theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
 # Plot posterior odds
-g2 <- ggplot(data = data.frame(ratio = post_oddsratio),
-             mapping = aes(x = ratio)) +
+g2 <- ggplot(
+  data = data.frame(ratio = post_oddsratio),
+  mapping = aes(x = ratio)
+) +
   geom_density() +
-  labs(x = "odds ratio of integrated vs sequential decisions", subtitle = "posterior density", y = "") +
+  labs(
+    x = "odds ratio of integrated vs sequential decisions",
+    subtitle = "posterior density",
+    y = ""
+  ) +
   scale_y_continuous(limits = c(0, NA), expand = expansion())
 g1 + g2

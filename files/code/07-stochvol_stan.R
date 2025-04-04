@@ -5,7 +5,7 @@ library(bayesplot)
 
 data(exchangerate, package = "hecbayes")
 # Compute response from raw spot exchange rates at noon
-y <- 100*diff(log(exchangerate$dexrate))
+y <- 100 * diff(log(exchangerate$dexrate))
 # 'y' is now a series of percentage of log daily differences
 y <- y - mean(y) # mean center
 
@@ -24,7 +24,8 @@ fit <- stochvol2_model$sample(
   data = list(y = y, T = length(y)),
   iter_warmup = 1000,
   iter_sampling = 2500,
-  chains = 4L)
+  chains = 4L
+)
 # Compute posterior summary statistics
 fit$summary()
 # Extract posterior samples

@@ -3,7 +3,7 @@ library(hecbayes)
 library(ggplot2)
 data(exchangerate, package = "hecbayes")
 # Compute response from raw spot exchange rates at noon
-y <- 100*diff(log(exchangerate$dexrate))
+y <- 100 * diff(log(exchangerate$dexrate))
 # 'y' is now a series of percentage of log daily differences
 y <- y - mean(y) # mean center
 
@@ -19,25 +19,32 @@ stochvol_model <- cmdstanr::cmdstan_model(stan_file = file)
 advi_mf <- stochvol_model$variational(
   data = list(y = y, T = length(y)),
   algorithm = "meanfield", # alternative "fullrank"
-  seed = 80601)
+  seed = 80601
+)
 # Note that there is no option to run a factorized
 # density, and "fullrank" is too slow because it includes all
 # latent parameters which scales O(n)
 # Compute posterior summary statistics
 summary <- advi_mf$summary()
-postmean <- which(substr(summary$variable, 1,2) == "h[")
+postmean <- which(substr(summary$variable, 1, 2) == "h[")
 
 # Plot posterior mean of variability
-ggplot(data = data.frame(x = exchangerate$date[-1],
-                  y = exp(summary$mean[postmean]/2)),
-       mapping = aes(x = x, y = y)) +
+ggplot(
+  data = data.frame(
+    x = exchangerate$date[-1],
+    y = exp(summary$mean[postmean] / 2)
+  ),
+  mapping = aes(x = x, y = y)
+) +
   geom_line() +
   labs(x = "date", y = "variability") +
   theme_classic()
 
 # Plot marginal density of autocorrelation phi
-ggplot(data = advi_mf$draws(variables = "phi",format = "df"),
-       mapping = aes(x = phi)) +
+ggplot(
+  data = advi_mf$draws(variables = "phi", format = "df"),
+  mapping = aes(x = phi)
+) +
   geom_density() +
   labs(x = expression(phi)) +
   theme_classic()
