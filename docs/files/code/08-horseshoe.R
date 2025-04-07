@@ -1,4 +1,4 @@
-# Fit Gaussian regression model via 'brms' interface 
+# Fit Gaussian regression model via 'brms' interface
 # using STAN, sampling posterior draws via HMC
 library(brms)
 library(posterior)
@@ -7,12 +7,15 @@ library(bayesplot)
 library(patchwork)
 data(diabetes, package = "lars")
 fitmod <- brms::brm(
-  formula = log(y) ~ x, 
-  iter = 5000L, 
+  formula = log(y) ~ x,
+  iter = 5000L,
   warmup = 1000L,
-  family = gaussian(), 
-  data = diabetes, 
-  prior = set_prior(horseshoe(df = 3, par_ratio = 0.1, main = TRUE), class = "b"),
+  family = gaussian(),
+  data = diabetes,
+  prior = set_prior(
+    horseshoe(df = 3, par_ratio = 0.1, main = TRUE),
+    class = "b"
+  ),
   backend = "cmdstanr", # fitting engine
   control = list(adapt_delta = 0.9), #modify acceptance rate of HMC
   save_model = "fhs.stan"

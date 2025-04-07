@@ -28,27 +28,7 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for citations */
-    div.csl-bib-body { }
-    div.csl-entry {
-      clear: both;
-      margin-bottom: 0em;
-    }
-    .hanging-indent div.csl-entry {
-      margin-left:2em;
-      text-indent:-2em;
-    }
-    div.csl-left-margin {
-      min-width:2em;
-      float:left;
-    }
-    div.csl-right-inline {
-      margin-left:2em;
-      padding-left:1em;
-    }
-    div.csl-indent {
-      margin-left: 2em;
-    }  </style>
+  </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-da069d641d4916e8549bf8dc2b95f825.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -148,7 +128,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Hamiltonian Monte Carlo and probabilistic programming</p>
+  <p class="subtitle">Final review</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -160,230 +140,107 @@ Léo Belzile
 
   <p class="date">Last compiled Monday Apr 7, 2025</p>
 </section>
-<section id="curse-of-dimensionality" class="slide level2">
-<h2>Curse of dimensionality</h2>
-<p>This material is drawn from</p>
+<section id="fundamentals" class="slide level2">
+<h2>Fundamentals</h2>
 <ul>
-<li><span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span>,</li>
-<li><span class="citation" data-cites="Betancourt:2017">Betancourt (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span></li>
+<li>Bayesian inference uses likelihood based inference.</li>
+<li>It complements the likelihood <span class="math inline">\(p(\boldsymbol{y} \mid \boldsymbol{\theta})\)</span> with a prior <span class="math inline">\(p(\boldsymbol{\theta})\)</span>.</li>
+<li>Provided that <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{y})\)</span> is integrable, we get <span class="math display">\[\begin{align*}
+p(\boldsymbol{\theta} \mid \boldsymbol{y}) \stackrel{\boldsymbol{\theta}}{\propto} p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta}).
+\end{align*}\]</span></li>
 </ul>
-<p>Check out these <a href="https://chi-feng.github.io/mcmc-demo/">animations</a> by Chi Feng</p>
 </section>
-<section id="motivation" class="slide level2">
-<h2>Motivation</h2>
-<p>We are interested in calculating expectations of some function <span class="math inline">\(g\)</span> against the posterior. <span class="math display">\[\begin{align*}
-\int_{\mathbb{R}^d} g(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
+<section id="marginal-likelihood" class="slide level2">
+<h2>Marginal likelihood</h2>
+<p>The normalizing constant <span class="math display">\[\begin{align*}
+p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span> to make the posterior a valid density is termed <strong>marginal likelihood</strong>.</p>
+</section>
+<section id="marginal-likelihood-1" class="slide level2">
+<h2>Marginal likelihood</h2>
+<p>Moments of the posterior depend on <span class="math inline">\(p(\boldsymbol{y})\)</span>.</p>
+<p>It is hard to compute because <span class="math inline">\(\boldsymbol{\Theta} \subseteq \mathbb{R}^p\)</span>, and the integral is often high-dimensional.</p>
+<ul>
+<li>Monte Carlo integration (does not typically work because prior need not align with likelihood)</li>
+<li>Numerical integration performance degrades with <span class="math inline">\(p\)</span>, numerical overflow.</li>
+</ul>
+</section>
+<section id="bayes-factors" class="slide level2">
+<h2>Bayes factors</h2>
+<p>The <span class="math inline">\(\color{#6e948c}{\text{Bayes factor}}\)</span> is the ratio of marginal likelihoods, as <span class="math display">\[\begin{align*}
+p(\boldsymbol{y} \mid \mathcal{M}_i) = \int p(y \mid \boldsymbol{\theta}^{(i)}, \mathcal{M}_i) p( \boldsymbol{\theta}^{(i)} \mid \mathcal{M}_i) \mathrm{d}  \boldsymbol{\theta}^{(i)}.
+\end{align*}\]</span> Values of <span class="math inline">\(\mathsf{BF}_{ij}&gt;1\)</span> correspond to model <span class="math inline">\(\mathcal{M}_i\)</span> being more likely than <span class="math inline">\(\mathcal{M}_j\)</span>.</p>
+<ul>
+<li>Strong dependence on the prior <span class="math inline">\(p(\boldsymbol{\theta}^{(i)} \mid \mathcal{M}_i)\)</span>.</li>
+<li>Must use proper priors.</li>
+</ul>
+</section>
+<section id="predictive-distributions" class="slide level2">
+<h2>Predictive distributions</h2>
+<p>Define the <span class="math inline">\(\color{#D55E00}{\text{posterior predictive}}\)</span>, <span class="math display">\[\begin{align*}
+p(y_{\text{new}}\mid \boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#D55E00}{p(\boldsymbol{\theta} \mid \boldsymbol{y})} \mathrm{d} \boldsymbol{\theta}
 \end{align*}\]</span></p>
-<p>The integral is determined by the product of the ``volume’’ of <span class="math inline">\(g(\cdot)\)</span> and the density.</p>
 </section>
-<section id="curse-of-dimensionality-1" class="slide level2">
-<h2>Curse of dimensionality</h2>
-<p>As the dimension of the posterior, <span class="math inline">\(d\)</span>, grows, the mass concentrates in a small region, the so-called <strong>typical set</strong>. The number of regions/directions to consider increases exponentially in <span class="math inline">\(d\)</span>.</p>
-<p>If we start at the stationary distribution, most proposals from a random walk Metropolis will fall outside of the typical set and get rejected.</p>
-<p>This phenomenon also explains the decrease in performance of numerical integration schemes (quadrature).</p>
+<section id="bayesian-inference" class="slide level2">
+<h2>Bayesian inference</h2>
+<p>If we have samples from <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> or an approximation of the joint/marginals, then we can</p>
+<ul>
+<li>use the <strong>posterior</strong> distribution to answer any question that is a function of <span class="math inline">\(\boldsymbol{\theta}\)</span> alone.</li>
+<li>use the <strong>posterior predictive</strong> <span class="math inline">\(p(y_{\text{new}}\mid \boldsymbol{y})\)</span> for prediction or forecasting, and checks of model adequacy.</li>
+</ul>
 </section>
-<section id="better-informed-proposals" class="slide level2">
-<h2>Better informed proposals</h2>
-<p>For differentiable targets, we saw that we can do better than random walk Metropolis–Hastings.</p>
+<section id="point-estimators-and-credible-regions" class="slide level2">
+<h2>Point estimators and credible regions</h2>
+<p>Interpretation is different from frequentist, but methods are similar:</p>
 <ul>
-<li>Idea: use the gradient to make an informed proposal (e.g., in MALA)</li>
-<li>There are two remaining challenges.
+<li>point estimators (MAP, posterior mean and median, etc.) derive from consideration of <strong>loss functions</strong> that return a summary of the posterior.</li>
+<li>credible interval or regions (interval for which the true parameter lies with a certain probability).</li>
+</ul>
+</section>
+<section id="stochastic-approximations" class="slide level2">
+<h2>Stochastic approximations</h2>
+<p>Stochastic approximations rely on sampling methods (rejection sampling, MCMC)</p>
 <ul>
-<li>it makes a single step from the current position. But why stop at one?</li>
-<li>the gradient needs not be aligned with the typical set (Betancourt analogy with satellite in orbit).</li>
+<li>returns (correlated) posterior samples.</li>
+<li>Metropolis–Hastings acceptance ratio bypasses marginal likelihood calculation.</li>
+<li>Marginalization is straightforward.</li>
+</ul>
+</section>
+<section id="markov-chains" class="slide level2">
+<h2>Markov chains</h2>
+<ul>
+<li>Need to assess convergence to the stationary distribution (traceplots)</li>
+<li>Autocorrelation reduces precision of Monte Carlo estimates (<strong>effective sample size</strong>)</li>
+</ul>
+</section>
+<section id="markov-chain-monte-carlo-algorithms" class="slide level2">
+<h2>Markov chain Monte Carlo algorithms</h2>
+<p>We covered in class the following (in decreasing order of efficiency).</p>
+<ul>
+<li>random walk Metropolis</li>
+<li>Metropolis-adjusted Langevin algorithm (MALA)</li>
+<li>Hamiltonian Monte Carlo</li>
+</ul>
+<p>Better sampling performance, but the latter two require gradient and are more expensive to compute.</p>
+</section>
+<section id="model-selection" class="slide level2">
+<h2>Model selection</h2>
+<ul>
+<li>Bernstein-von Mises ensures convergence in total variation of the posterior under weak conditions.</li>
+<li>Distinguish between
+<ul>
+<li><span class="math inline">\(\mathcal{M}\)</span>-closed: true parameter is part of set considered or</li>
+<li><span class="math inline">\(\mathcal{M}\)</span>-open: only misspecified models are considered.</li>
 </ul></li>
+<li>The model that gets selected minimizes the Kullback–Leibler divergence with the truth.</li>
+<li>In discrete parameter settings, we recover the truth with probability 1.</li>
 </ul>
 </section>
-<section id="hamiltonian-monte-carlo" class="slide level2">
-<h2>Hamiltonian Monte Carlo</h2>
-<p>Hamitonian Monte Carlo borrows ideas from Hamiltonian dynamics.</p>
-<p>Consider the evolution over time of a particle characterized by a</p>
-<ul>
-<li>position <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^d\)</span> along with potential energy <span class="math inline">\(U(\boldsymbol{\theta})=- \log p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span></li>
-<li>an added auxiliary vector <span class="math inline">\(\boldsymbol{s} \in \mathbb{R}^d\)</span> of <strong>momentum</strong> (describing mass and velocity) with accompaying kinetic energy <span class="math inline">\(K(\boldsymbol{s})= -\log p(\boldsymbol{s})\)</span>.</li>
-</ul>
-</section>
-<section id="hamiltonian" class="slide level2">
-<h2>Hamiltonian</h2>
-<p>Write the negative of the log of the joint density as <span class="math display">\[H(\boldsymbol{\theta}, \boldsymbol{s}) = -\log p(\boldsymbol{s}) - \log p(\boldsymbol{\theta}) = U(\boldsymbol{\theta}) + K(\boldsymbol{s}).\]</span></p>
-<p>The partial derivatives of the Hamiltonian give the evolution over time of the system: <span class="math display">\[\begin{align*}
-\frac{\mathrm{d} \theta_j}{\mathrm{d} t} = \frac{\partial H}{\partial s_j} &amp;= \frac{\partial K}{\partial s_j}\\
-\frac{\mathrm{d} s_j}{\mathrm{d} t}= - \frac{\partial H}{\partial \theta_j} &amp;= - \frac{\partial U}{\partial \theta_j}, \quad j =1, \ldots, d.
-\end{align*}\]</span></p>
-<p>There is no explicit solution to these differential equations in most settings.</p>
-</section>
-<section id="kinetic-energy" class="slide level2">
-<h2>Kinetic energy</h2>
-<p>The most popular choice of kinetic energy is the Gaussian, <span class="math display">\[\begin{align*}
-K(\boldsymbol{s}) = \frac{1}{2} \boldsymbol{s}^\top \mathbf{M}^{-1}\boldsymbol{s}
-\end{align*}\]</span> the negative of a mean zero log Gaussian density with positive-definite covariance matrix <span class="math inline">\(\mathbf{M}.\)</span></p>
-<p>Typically, we take <span class="math inline">\(\mathbf{M}=\mathrm{diag}\{m_1, \ldots, m_d\}\)</span> diagonal, or else proportional <span class="math inline">\(\mathbf{M} = m \mathbf{I}_d\)</span>.</p>
-</section>
-<section id="properties-of-hamiltonian-dynamics" class="slide level2">
-<h2>Properties of Hamiltonian dynamics</h2>
-<p>The mapping <span class="math inline">\(T_s\)</span> from time <span class="math inline">\(t\)</span> at <span class="math inline">\((\boldsymbol{\theta}(t), \boldsymbol{s}(t))\)</span> to time <span class="math inline">\(t + \varepsilon\)</span>, <span class="math inline">\((\boldsymbol{\theta}(t + \varepsilon), \boldsymbol{s}(t + \varepsilon))\)</span> satisfies the following properties:</p>
-<ul>
-<li>Reversible: MCMC will thus preserve the invariant target distribution</li>
-<li>Conservation of energy: proposals from Hamiltonian dynamics would lead to acceptance probability of 1.</li>
-<li>Symplecticness/volume preserving: the Jacobian of <span class="math inline">\(T_s\)</span> is one — no need to calculate it.</li>
-</ul>
-</section>
-<section id="a-necessary-discretization-step" class="slide level2">
-<h2>A necessary discretization step</h2>
-<p>There is no explicit solution to the Hamiltonian differential equation. We must move away from continuous time…</p>
-<ul>
-<li>For solving the differential equation numerically, Euler’s method doesn’t work because it does not preserve volume, and this leads to divergences.</li>
-</ul>
-</section>
-<section id="leapfrog-integrator" class="slide level2">
-<h2>Leapfrog integrator</h2>
-<p>The leapfrog integrator performs a half step for momentum, then does a full step for the position using the updated components, etc.</p>
-<p><span class="math display">\[\begin{align*}
-s_j(t+\varepsilon/2) &amp;= s_j(t) - \frac{\varepsilon}{2}  \left.\frac{\partial U(\boldsymbol{\theta})}{\partial \theta_j}\right|_{\boldsymbol{\theta}(t)}
-\\
-\theta_j(t+\varepsilon) &amp;= \theta_j(t)  + \varepsilon \frac{s_j(t+\varepsilon/2)}{m_j} \\
-s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\frac{\partial U(\boldsymbol{\theta})}{\partial \theta_j}\right|_{\boldsymbol{\theta}(t + \varepsilon)}
-\end{align*}\]</span></p>
-</section>
-<section id="hamiltonian-monte-carlo-algorithm" class="slide level2">
-<h2>Hamiltonian Monte Carlo algorithm</h2>
-<p>Consider the joint distribution with positions <span class="math inline">\(\boldsymbol{\theta}\)</span> and momentum variables <span class="math inline">\(\boldsymbol{s}\)</span>, <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{s}) \propto \exp \{- H(\boldsymbol{\theta}, \boldsymbol{s})\}.\)</span></p>
-<p>We start with a position vector <span class="math inline">\(\boldsymbol{\theta}_{t-1}\)</span> at step <span class="math inline">\(t-1\)</span>:</p>
-<ol type="1">
-<li>Sample a new momentum vector <span class="math inline">\(\boldsymbol{s}_{t-1} \sim \mathsf{Gauss}(\boldsymbol{0}_d, \mathbf{M}).\)</span></li>
-<li>Use Verlet’s (leapfrog) integrator to evolve the state vector for <span class="math inline">\(L=\lfloor\tau/\varepsilon\rfloor\)</span> steps of size <span class="math inline">\(\varepsilon\)</span> to get a proposal tuple <span class="math inline">\((\boldsymbol{\theta}_t^{\star}, \boldsymbol{s}_t^{\star})\)</span></li>
-</ol>
-</section>
-<section id="hamiltonian-monte-carlo-algorithm-1" class="slide level2">
-<h2>Hamiltonian Monte Carlo algorithm</h2>
-<ol start="3" type="1">
-<li>Flip the momentum variable, <span class="math inline">\(\boldsymbol{s} \mapsto - \boldsymbol{s}.\)</span></li>
-<li>Metropolis step: if <span class="math inline">\(U \sim \mathsf{unif}(0,1) &lt;R\)</span>, where <span class="math display">\[\log R = -H(\boldsymbol{\theta}^{\star}, \boldsymbol{s}^{\star}_{t}) + H(\boldsymbol{\theta}_{t-1}, \boldsymbol{s}_{t-1}),\]</span> set <span class="math inline">\(\boldsymbol{\theta}_t = \boldsymbol{\theta}_t^{\star}\)</span>, else keep the previous value and set <span class="math inline">\(\boldsymbol{\theta}_t = \boldsymbol{\theta}_{t-1}\)</span>.</li>
-<li>Discard the momentum vector</li>
-</ol>
-</section>
-<section id="tuning" class="slide level2">
-<h2>Tuning</h2>
-<p>Hamiltonian Monte Carlo (HMC) has numerous tuning parameters</p>
-<ol type="1">
-<li>size of the leapfrog step <span class="math inline">\(\varepsilon\)</span>.</li>
-<li>length of the integration time <span class="math inline">\(\tau\)</span> (or equivalently the number of steps <span class="math inline">\(L=\lfloor \tau / \varepsilon \rfloor\)</span>).
-<ul>
-<li>too small leads HMC to bear close resemblance to random walk,</li>
-<li>too large leads to wasteful calculations.</li>
-</ul></li>
-<li>choice of the mass matrix <span class="math inline">\(\mathbf{M}\)</span> (pre-conditioner obtained during warmup period).</li>
-</ol>
-</section>
-<section id="leapfrog-and-error" class="slide level2">
-<h2>Leapfrog and error</h2>
-<p>The Störmer–Verlet (leapfrog) integrator is a second order method, so for step size <span class="math inline">\(\varepsilon\)</span>:</p>
-<ul>
-<li>local error <span class="math inline">\(\mathrm{O}(\varepsilon^3)\)</span> and</li>
-<li>global error of size <span class="math inline">\(\mathrm{O}(\varepsilon^2)\)</span> (accumulated error over <span class="math inline">\(L\)</span> steps).</li>
-</ul>
-<p>Leapfrog updates one variable at a time, a shear transformation.</p>
-<p>Leapfrog step should be <span class="math inline">\(\mathrm{O}(d^{-1/4})\)</span> <span class="citation" data-cites="Beskos:2013">(<a href="#/references" role="doc-biblioref" onclick="">Beskos et al., 2013</a>)</span></p>
-</section>
-<section id="optimal-acceptance-rate" class="slide level2">
-<h2>Optimal acceptance rate</h2>
-<p>In practice, we use a Metropolis step to adjust for the discretization of the system.</p>
-<ul>
-<li>This leads to acceptance rates less than the theoretical value of 1.</li>
-<li>with optimal acceptance rate of <span class="math inline">\(0.651\)</span> <span class="citation" data-cites="Beskos:2013">(<a href="#/references" role="doc-biblioref" onclick="">Beskos et al., 2013</a>)</span>; see <span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> for heuristics.</li>
-<li>software like Stan tunes to around 0.8, but can be adjusted in settings.</li>
-</ul>
-</section>
-<section id="its-nuts" class="slide level2">
-<h2>It’s nuts!</h2>
-<ul>
-<li><span class="citation" data-cites="Homan.Gelman:2014">Homan &amp; Gelman (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> propose the no <span class="math inline">\(U\)</span>-turn sampler (NUTS), which continues the trajectory until the sampler turns back, to determine the number of steps <span class="math inline">\(L\)</span>, along with tuning of <span class="math inline">\(\varepsilon.\)</span></li>
-<li>Stan uses an adaptation of NUTS due to <span class="citation" data-cites="Betancourt:2016">Betancourt (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span></li>
-</ul>
-</section>
-<section id="hmc-and-divergences" class="slide level2">
-<h2>HMC and divergences</h2>
-<p>In theory, the energy of the Hamiltonian should stay constant, but the numerical scheme leads to small perturbations (hence the rejection step).</p>
-<ul>
-<li>If the value of the Hamiltonian changes too much, this is identified as a <strong>divergence</strong>. These occur when the geometry of the posterior is heavily constrained (funnel shaped).</li>
-<li>Reparametrization of the model can help improve this: see the <a href="https://mc-stan.org/docs/stan-users-guide/efficiency-tuning.html#reparameterization.section">Stan manual</a>.</li>
-</ul>
-</section>
-<section id="neals-funnel" class="slide level2">
-<h2>Neal’s funnel</h2>
-
-<img data-src="fig/fig-Neal-funnel.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
-<section id="achieving-independence" class="slide level2">
-<h2>Achieving independence</h2>
-<p>We have seen that for differentiable posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, using the gradient information can improve convergence by informing about the direction of the mode.</p>
-<ul>
-<li><span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> discusses how informally, random walk Metropolis requires <span class="math inline">\(\mathrm{O}(d^2)\)</span> steps to get an independent draw, compared to <span class="math inline">\(\mathrm{O}(d^{4/3})\)</span> for MALA.</li>
-<li>HMC scales like <span class="math inline">\(\mathrm{O}(d^{5/4})\)</span>, a notable improvement in performance.</li>
-<li>It however comes at the cost of repeated gradient evaluations (<span class="math inline">\(L\)</span> by update).</li>
-</ul>
-</section>
-<section id="take-home" class="slide level2">
-<h2>Take-home</h2>
-<ul>
-<li>HMC is more efficient than what we have seen, but not a silver bullet: it works very well for not overly complicated models and moderate sample sizes.</li>
-<li>HMC works better than many MCMC, but requires special tuning best left to specialized implementations already available in software.</li>
-<li>Most implementations don’t cover the case of discrete random variables <span class="citation" data-cites="Nishimura:2020">(<a href="#/references" role="doc-biblioref" onclick="">Nishimura et al., 2020</a>)</span>.</li>
-</ul>
-</section>
-<section id="probabilistic-programming" class="slide level2">
-<h2>Probabilistic programming</h2>
-<p>There are several languages and interfaces that implement probabilistic programming where the user has only to specify the likelihood and prior.</p>
-<p>Historically, <a href="https://www.mrc-bsu.cam.ac.uk/software/bugs-project">Bugs</a> paved the way to practitioners.</p>
-<p>It relies on Gibbs sampling (updating one parameter at the time), but is not actively developed. Still the source of many exercises and inspiration for the syntax of other implementations (e.g., Nimble, JAGS).</p>
-</section>
-<section>
-<section id="stan" class="title-slide slide level1 center">
-<h1>Stan</h1>
-<p>The programming language <a href="https://mc-stan.org/">Stan</a> is written in C++ and offers cross-platform interfaces.</p>
-
-<img data-src="fig/Stan.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
-<section id="other-mcmc-software" class="slide level2">
-<h2>Other MCMC software</h2>
-<ul>
-<li><a href="https://r-nimble.org/">Nimble</a>, C++ with <strong>R</strong> interface</li>
-<li><a href="https://turinglang.org/docs/getting-started/">Turing.jl</a>, Julia</li>
-<li><a href="https://www.pymc.io/welcome.html">PyMC</a>, Python</li>
-<li><a href="https://pigeons.run/stable/">Pigeons</a>, Julia</li>
-</ul>
-</section>
-<section id="stochastic-volatility-model" class="slide level2">
-<h2>Stochastic volatility model</h2>
-<p>Financial returns <span class="math inline">\(Y_t\)</span> typically exhibit time-varying variability. The <strong>stochastic volatility</strong> model is a parameter-driven model that specifies <span class="math display">\[\begin{align*}
-Y_t &amp;= \exp(h_t/2) Z_t \\
-h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
-\end{align*}\]</span> where <span class="math inline">\(U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).\)</span></p>
-<p>It is possible to introduce leverage by adding <span class="math inline">\(\mathsf{Cor}(Z_t, U_t) = \rho.\)</span></p>
-</section>
-<section id="references" class="slide level2 smaller scrollable">
+<section id="references" class="slide level2">
 <h2>References</h2>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Beskos:2013" class="csl-entry" role="listitem">
-Beskos, A., Pillai, N., Roberts, G., Sanz-Serna, J.-M., &amp; Stuart, A. (2013). Optimal tuning of the hybrid <span>M</span>onte <span>C</span>arlo algorithm. <em>Bernoulli</em>, <em>19</em>(5a), 1501–1534. <a href="https://doi.org/10.3150/12-bej414">https://doi.org/10.3150/12-bej414</a>
-</div>
-<div id="ref-Betancourt:2016" class="csl-entry" role="listitem">
-Betancourt, M. (2016). Identifying the optimal integration time in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>arXiv</em>. <a href="https://doi.org/10.48550/arXiv.1601.00225">https://doi.org/10.48550/arXiv.1601.00225</a>
-</div>
-<div id="ref-Betancourt:2017" class="csl-entry" role="listitem">
-Betancourt, M. (2017). A conceptual introduction to <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>arXiv Preprint</em>. <a href="https://doi.org/10.48550/arXiv.1701.02434">https://doi.org/10.48550/arXiv.1701.02434</a>
-</div>
-<div id="ref-Homan.Gelman:2014" class="csl-entry" role="listitem">
-Homan, M. D., &amp; Gelman, A. (2014). The no-<span>U</span>-turn sampler: Adaptively setting path lengths in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>Journal of Machine Learning Research</em>, <em>15</em>(1), 1593–1623.
-</div>
-<div id="ref-Neal:2011" class="csl-entry" role="listitem">
-Neal, R. M. (2011). <span>MCMC</span> using <span>H</span>amiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 113–162). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
-</div>
-<div id="ref-Nishimura:2020" class="csl-entry" role="listitem">
-Nishimura, A., Dunson, D. B., &amp; Lu, J. (2020). Discontinuous <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo for discrete parameters and discontinuous likelihoods. <em>Biometrika</em>, <em>107</em>(2), 365–380. <a href="https://doi.org/10.1093/biomet/asz083">https://doi.org/10.1093/biomet/asz083</a>
-</div>
-</div>
-</section></section>
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo"></p>
