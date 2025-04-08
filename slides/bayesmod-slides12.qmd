@@ -138,5 +138,24 @@ Better sampling performance, but the latter two require gradient and are more ex
 - The model that gets selected minimizes the Kullback--Leibler divergence with the truth.
 - In discrete parameter settings, we recover the truth with probability 1.
 
-## References
+## Priors
+
+- Priors don't matter in large sample on the data layer, as likelihood is $\mathrm{O}(n)$ vs $\mathrm{O}(1)$ for the prior.
+- Support constraints have an impact
+- Their impact depends largely on how far they are from the data.
+- Prior sensitivity check: compare posterior vs prior density
+
+## Type of priors
+
+- Different roles (expert opinion, simplification of calculations, regularization).
+- Conditional conjugacy mostly useful for Gibbs sampling, etc.
+- Careful with improper priors (unless they are known to yield valid posterior).
+- Prefer weak priors to near improper priors.
+
+## Prior selection
+
+- Moment matching
+- Prior predictive distribution: draw new observations from likelihood and plot
+
+## 
 
