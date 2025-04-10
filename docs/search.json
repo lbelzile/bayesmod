@@ -2477,6 +2477,18 @@
     ]
   },
   {
+    "objectID": "content/11-content.html#code",
+    "href": "content/11-content.html#code",
+    "title": "Expectation propagation",
+    "section": "Code",
+    "text": "Code\n\nR script of expectation propagation for logistic regression",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "11: Expectation propagation"
+    ]
+  },
+  {
     "objectID": "content/09-content.html#content",
     "href": "content/09-content.html#content",
     "title": "Deterministic approximations",
@@ -3069,7 +3081,7 @@
     "href": "content/08-content.html#code",
     "title": "Regression models",
     "section": "Code",
-    "text": "Code\n\nGaussian regression R script\nHorseshoe prior R script and Stan script",
+    "text": "Code\n\nGaussian regression R script\nHorseshoe prior R script and Stan script\nBayesian model averaging R script",
     "crumbs": [
       "Content",
       "Course content",
@@ -3141,7 +3153,7 @@
     "href": "content/10-content.html#code",
     "title": "Variational inference",
     "section": "Code",
-    "text": "Code\n\nR script of CAVI with Gaussian model\nR script of ADVI for stochastic volatility model",
+    "text": "Code\n\nR script of CAVI with Gaussian model, probit regression, K-components univariate Gaussian mixture model and linear mixed models from Ormerod & Wand (2010)\nR script of ADVI for linear regression model\nR script of ADVI for stochastic volatility model (with Stan)",
     "crumbs": [
       "Content",
       "Course content",
@@ -3976,11 +3988,25 @@
     "text": "Model selection\n\nBernstein-von Mises ensures convergence in total variation of the posterior under weak conditions.\nDistinguish between\n\n\\(\\mathcal{M}\\)-closed: true parameter is part of set considered or\n\\(\\mathcal{M}\\)-open: only misspecified models are considered.\n\nThe model that gets selected minimizes the Kullback–Leibler divergence with the truth.\nIn discrete parameter settings, we recover the truth with probability 1."
   },
   {
-    "objectID": "slides/bayesmod-slides12.html#references",
-    "href": "slides/bayesmod-slides12.html#references",
+    "objectID": "slides/bayesmod-slides12.html#priors",
+    "href": "slides/bayesmod-slides12.html#priors",
     "title": "Bayesian modelling",
-    "section": "References",
-    "text": "References"
+    "section": "Priors",
+    "text": "Priors\n\nPriors don’t matter in large sample on the data layer, as likelihood is \\(\\mathrm{O}(n)\\) vs \\(\\mathrm{O}(1)\\) for the prior.\nSupport constraints have an impact\nTheir impact depends largely on how far they are from the data.\nPrior sensitivity check: compare posterior vs prior density"
+  },
+  {
+    "objectID": "slides/bayesmod-slides12.html#type-of-priors",
+    "href": "slides/bayesmod-slides12.html#type-of-priors",
+    "title": "Bayesian modelling",
+    "section": "Type of priors",
+    "text": "Type of priors\n\nDifferent roles (expert opinion, simplification of calculations, regularization).\nConditional conjugacy mostly useful for Gibbs sampling, etc.\nCareful with improper priors (unless they are known to yield valid posterior).\nPrefer weak priors to near improper priors."
+  },
+  {
+    "objectID": "slides/bayesmod-slides12.html#prior-selection",
+    "href": "slides/bayesmod-slides12.html#prior-selection",
+    "title": "Bayesian modelling",
+    "section": "Prior selection",
+    "text": "Prior selection\n\nMoment matching\nPrior predictive distribution: draw new observations from likelihood and plot"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#priors",

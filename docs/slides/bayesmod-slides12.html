@@ -138,7 +138,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Apr 7, 2025</p>
+  <p class="date">Last compiled Thursday Apr 10, 2025</p>
 </section>
 <section id="fundamentals" class="slide level2">
 <h2>Fundamentals</h2>
@@ -236,8 +236,33 @@ p(y_{\text{new}}\mid \boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new
 <li>In discrete parameter settings, we recover the truth with probability 1.</li>
 </ul>
 </section>
-<section id="references" class="slide level2">
-<h2>References</h2>
+<section id="priors" class="slide level2">
+<h2>Priors</h2>
+<ul>
+<li>Priors don’t matter in large sample on the data layer, as likelihood is <span class="math inline">\(\mathrm{O}(n)\)</span> vs <span class="math inline">\(\mathrm{O}(1)\)</span> for the prior.</li>
+<li>Support constraints have an impact</li>
+<li>Their impact depends largely on how far they are from the data.</li>
+<li>Prior sensitivity check: compare posterior vs prior density</li>
+</ul>
+</section>
+<section id="type-of-priors" class="slide level2">
+<h2>Type of priors</h2>
+<ul>
+<li>Different roles (expert opinion, simplification of calculations, regularization).</li>
+<li>Conditional conjugacy mostly useful for Gibbs sampling, etc.</li>
+<li>Careful with improper priors (unless they are known to yield valid posterior).</li>
+<li>Prefer weak priors to near improper priors.</li>
+</ul>
+</section>
+<section id="prior-selection" class="slide level2">
+<h2>Prior selection</h2>
+<ul>
+<li>Moment matching</li>
+<li>Prior predictive distribution: draw new observations from likelihood and plot</li>
+</ul>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
 
 
 </section>
