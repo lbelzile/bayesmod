@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.1">
+<meta name="generator" content="quarto-1.7.3">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -88,10 +88,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-40a97741d360803f1a66e8f017dcaab6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-508bcad9dcf2c2e1342fa9dd89cfc9ba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-838766c5f6368809fcdd95872b4fb2aa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c5a5a36048aa8a5318bb483672288746.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -294,11 +294,11 @@ window.Quarto = {
 </div>
 <ol type="1">
 <li>Plot the percentage of votes obtained by Buchanan, <code>buch</code>/(<code>buch</code>+<code>totmb</code>), against <span class="math inline">\(\log\)</span><code>popn</code> and comment.</li>
-<li>Fit a binomial logistic model for the votes of Buchanan (as a function of the total <code>totmb+buch</code> with <span class="math inline">\(\log\)</span> <code>popn</code>, <code>black</code>, <code>hisp</code>, <code>geq65</code>, <code>highsc</code>, <code>coll</code>, <code>income</code> as covariates and with a <strong>horseshoe</strong> prior. Make sure to standardize the covariates beforehand and to exclude Palm Beach! You can use Stan or other probabilistic programming language interface.
+<li>Fit a binomial logistic model for the votes of Buchanan (as a function of the total <code>totmb+buch</code> with <span class="math inline">\(\log\)</span> <code>popn</code>, <code>black</code>, <code>hisp</code>, <code>geq65</code>, <code>highsc</code>, <code>coll</code>, <code>income</code> as covariates and with a <strong>horseshoe</strong> prior<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>(https://lbelzile.github.io/MATH80601A/regression.html#prp-horseshoe)] using Markov chain Monte Carlo methods. Make sure to standardize the covariates beforehand and to exclude Palm Beach! You can use Stan or other probabilistic programming language interface.
 <ol type="a">
 <li>Return a table of posterior means for the regression coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>.</li>
 <li>Predict the expected number of Buchanan votes in Palm Beach county. Comment hence on the discrepancy between this forecast and the number of votes received in the election.</li>
-<li>Produce posterior predictive checks to check for overdispersion and leave-one-out probability plot. Comment on the latter.</li>
+<li>Produce posterior predictive checks to check for overdispersion and a leave-one-out probability plot.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Comment on the latter.</li>
 </ol></li>
 <li>Refit the model, this time using a weakly informative Gaussian prior <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, 10\mathbf{I}_p)\)</span> for all covariates but the intercept (use an improper uniform for the latter). Comment on the impact of the sparsity-inducing horseshoe prior.</li>
 </ol>
@@ -320,11 +320,18 @@ window.Quarto = {
 
 </section>
 
+
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-Smith:2002" class="csl-entry" role="listitem">
 Smith, R. L. (2002). A statistical assessment of <span>B</span>uchanan’s vote in <span>P</span>alm <span>B</span>each <span>C</span>ounty. <em>Statistical Science</em>, <em>17</em>(4), 441–457. <a href="https://doi.org/10.1214/ss/1049993203">https://doi.org/10.1214/ss/1049993203</a>
 </div>
-</div></section></div></main> <!-- /main -->
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>See the course notes for the hierarchical representation<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See <a href="prp-cv-predictive-dens">the course notes</a> for details. You need to (1) evaluate the likelihood for each observation and (b) draw a vector from the posterior predictive, both for each of the posterior draws.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
