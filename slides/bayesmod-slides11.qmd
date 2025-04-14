@@ -317,7 +317,7 @@ Convert moments $\boldsymbol{\mu}_j^{*}$ and $\boldsymbol{\Sigma}^{*}_j$ to cano
 
 Update the global approximation with
 \begin{align*}
-q(\boldsymbol{\theta}) &\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\mathbf{Q}_i + \mathbf{Q}^{*}_j\right)\boldsymbol{\theta} \right.\\& \left. + \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\boldsymbol{r}_i + \boldsymbol{r}^{*}_j\right)\right\}.
+q(\boldsymbol{\theta}) &\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\mathbf{Q}_i + \mathbf{Q}^{*}_j\right)\boldsymbol{\theta}  + \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\boldsymbol{r}_i + \boldsymbol{r}^{*}_j\right)\right\}.
 \end{align*}
 
 ## Recap of expectation propagation
@@ -327,13 +327,12 @@ The EP algorithm iterates the steps until convergence:
 
 1. Initialize the site-specific parameters
 2. Loop over each observation of the likelihood factorization:
-    2.1 form the cavity and the hybrid distribution
-    2.2 compute the moments of the hybrid $\boldsymbol{\mu}$ and $\boldsymbol{\Sigma}$
-    2.3 transform back to canonical parameters $\mathbf{Q}$ and $\boldsymbol{r}$
-    2.3 update the global approximation
+    1. form the cavity and the hybrid distribution
+    2. compute the moments of the hybrid $\boldsymbol{\mu}$ and $\boldsymbol{\Sigma}$
+    3. transform back to canonical parameters $\mathbf{Q}$ and $\boldsymbol{r}$
+    4. update the global approximation
 3. Declare convergence when change in parameters is less than tolerance.
 
-The algorithm can be run in parallel. 
 
 ## Improving convergence
 
@@ -343,7 +342,13 @@ The algorithm behaves like a smoothed Newton method [@Dehaene.Barthelme:2018], s
 
 - linearly interpolate between updates, with weight $0< w\le 1$ to the current update where at step $t$.
 
+## Comments on updates
+
+The algorithm can be run in parallel. 
+
 Some individual factor updates may yield non-positive definite precision for individual terms $\mathbf{Q}_j$, which is okay as long as the global approximation $\mathbf{Q}$ remains positive.
+
+Variants (power EP) leads to more smoothing, but change fixed points.
 
 ## Example: EP for logistic regression
 
@@ -353,7 +358,69 @@ Consider a binary response $Y \in \{-1, 1\}$ with logistic model
 \end{align*}
 We assume for simplicity that $p(\boldsymbol{\beta})\propto 1;$ a Gaussian prior could also be used.
 
+## EP for logistic regression
 
+The likelihood contribution of observation $i$ with factors $$L_i(\boldsymbol{\beta}) = \mathrm{expit}(y_i \mathbf{x}_i\boldsymbol{\beta}).$$ 
+
+The approximation of the factor will have parameters $(a\mathbf{x}_i^\top, b\mathbf{x}_i^\top\mathbf{x}_i)$, which only depend on two scalars $a$ and $b.$
+
+## EP iterations
+
+The dynamics of the expectation propagation given vectors of individual contributions $\boldsymbol{a}^{(t)}$ and $\boldsymbol{b}^{(t)}$ at iteration $t$ and the canonical parameters
+\begin{align*}
+\boldsymbol{r}^{(t)} = \sum_{i=1}^n a_i^{(t)}\mathbf{x}_i^\top, \qquad \mathbf{Q}^{(t)} = \sum_{i=1}^n b_i\mathbf{x}_i^\top\mathbf{x}_i,
+\end{align*} initialized to $t=0$, are as follows for step $t$:
+
+## Steps for logistic regression
+
+1. Compute the natural parameters of the cavity distribution \begin{align*}
+\boldsymbol{r}_{-i} &= \boldsymbol{r} - a_i^{(t-1)}\mathbf{x}_i^\top
+\\\mathbf{Q}_{-i} &= \mathbf{Q} - b_i^{(t-1)}\mathbf{x}_i^\top\mathbf{x}_i.
+\end{align*}
+2. Transform the canonical parameters to moments, with $\boldsymbol{\Sigma}_{-i} = \mathbf{Q}_{-i}^{-1}$ and $\boldsymbol{\mu}_{-i} = \mathbf{Q}_{-i}^{-1}\boldsymbol{r}_{-i}$.
+
+
+## Steps for logistic regression
+
+3. Obtain the mean and variance of the conditional distribution with variance $v_i = \mathbf{x}_i\boldsymbol{\Sigma}_{-i}\mathbf{x}_i^\top$ and mean $u_i=\mathbf{x}_i\boldsymbol{\mu}.$
+4. Define the marginal hybrid as
+\begin{align*}
+h_i(z) \propto \mathrm{expit}(y_iz) \exp\left\{-\frac{(z-u)^2}{2v}\right\}.
+\end{align*}
+
+## Steps for logistic regression
+
+5. Compute the normalizing constant, the mean $\mathsf{E}_{h_i}(Z)$ and the variance $\mathsf{Va}_{h_i}(Z)$ by numerical integration.
+```{r}
+#| eval: false
+#| echo: true
+#' @param mu_lc mean of the linear combination
+#' @param sd_lc std. dev of the linear combination
+ep_update <- function(y, mu_lc, sd_lc){
+  # Calculate outside of the loop the cavity
+  fn <- function(x){ dnorm(x, mean = mu_lc, sd = sd_lc)*plogis(y*x)}
+  # Compute normalizing constant
+  cst <- integrate(f = fn, lower = -Inf, upper = Inf)$value
+  mu <- integrate(f = function(x){fn(x)*x}, -Inf, Inf)$value/cst
+  va <- integrate(f = function(x){fn(x)*(x-mu)^2}, -Inf, Inf)$value/cst
+}
+```
+
+## Steps for logistic regression
+
+6. Back-transform the parameters to get the parameters for \begin{align*}a_i^{(t)} &= \mathsf{E}_{h_i}(Z)/\mathsf{Va}_{h_i}(Z) - u/v
+\\ b_i^{(t)} &= 1/\mathsf{Va}_{h_i}(Z).
+\end{align*}
+7. Update the parameters 
+\begin{align*}
+\boldsymbol{r} &\gets \boldsymbol{r}_{-i} + a_i^{(t)}\mathbf{x}_i^\top \\\mathbf{Q} &\gets \mathbf{Q}_{-i} + b_i^{(t)}\mathbf{x}_i^\top\mathbf{x}_i.
+\end{align*}
+
+## Comments on EP for exponential families 
+
+There are explicit formulas for the upgrade of probit regression.
+
+The updates to the parameters for more general exponential families are found in page 23 of @Cseke.Heskes:2011.
 
 
 ## References

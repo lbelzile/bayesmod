@@ -1,63 +1,158 @@
+library(ggplot2)
+library(ggdensity)
+library(patchwork)
+theme_set(theme_classic())
 #############################################################
 ## CAVI algorithm for Gaussian data with conjugate priors
 #############################################################
 ## Simulate fake data
-set.seed(80601)
-y <- rnorm(n = 20, mean = 20, sd = 3)
-hist(y)
-init <- c(0, 1, 1)
-# Prior parameters
+set.seed(1234)
+y <- rnorm(n = 20, mean = 150, sd = sqrt(20))
+n <- length(y)
 a0 <- 0.01
 b0 <- 0.01
 mu0 <- 0
 tau0 <- 1e-4
-# Precompute summary statistics
-n <- length(y)
-sum_y <- sum(y)
-# Initialize algorithm
-E_mu <- init[1]
-var_mu <- init[2]
-E_tau <- init[3]
-# Determine the number of iterations
-B <- 20
-an <- a0 + 0.5 * n
-# Monitor the ELBO
-elbo <- numeric(B)
-for (i in 1:B) {
-  # Update each parameter in turn
-  var_mu <- 1 / (tau0 + n * E_tau)
-  E_mu <- var_mu * (tau0 * mu0 + E_tau * sum_y)
-  bn <- (b0 + 0.5 * sum((y - E_mu)^2) + 0.5 * n * var_mu)
-  E_tau <- an / bn
-  # Recompute the ELBO at the end of each cycle
-  elbo[i] <- -an *
-    log(bn) +
-    0.5 * log(var_mu) -
-    0.5 * tau0 * ((mu0 - E_mu)^2 + var_mu)
+
+CAVI_gauss <- function(
+  y,
+  init = c(mean(y), length(y) / var(y), 1 / var(y)),
+  tol = 1e-4
+) {
+  a0 <- 0.01
+  b0 <- 0.01
+  mu0 <- 0
+  tau0 <- 1e-4
+  n <- length(y)
+  sum_y <- sum(y)
+  E_mu <- init[1]
+  var_mu <- init[2]
+  E_tau <- init[3]
+  B <- 20
+  an <- (a0 + n / 2 - 1)
+  elbo <- numeric(B)
+  lcst <- a0 * log(b0) - lgamma(a0) + 0.5 * (1 + log(tau0) - n * log(2 * pi))
+  for (i in 1:B) {
+    var_mu <- 1 / (E_tau * (tau0 + n))
+    E_mu <- (tau0 * mu0 + sum_y) / (tau0 + n)
+    bn <- b0 +
+      0.5 * (sum((y - E_mu)^2) + n * var_mu) +
+      0.5 * tau0 * ((E_mu - mu0)^2 + var_mu)
+    E_tau <- an / bn
+    elbo[i] <- lcst - an * log(bn) + lgamma(an) + 0.5 * log(var_mu)
+  }
+  list(
+    elbo = elbo,
+    mu_mean = E_mu,
+    mu_var = var_mu,
+    tau_shape = an,
+    tau_rate = bn
+  )
 }
 
-# Monitor the convergence of the ELBO
-plot(1:B, elbo, type = "b")
-# Plot the marginal approximations
-par(mfrow = c(1, 2))
-curve(
-  dnorm(x, mean = E_mu, sd = sqrt(var_mu)),
-  from = E_mu - 3 * sqrt(var_mu),
-  to = E_mu + 3 * sqrt(var_mu),
-  ylab = "density",
-  xlab = expression(mu),
-  bty = "n"
+CAVI_approx <- CAVI_gauss(y = y)
+ggplot(
+  data = data.frame(elbo = CAVI_approx$elbo),
+  mapping = aes(x = seq_along(elbo), y = elbo)
+) +
+  geom_line() +
+  geom_point() +
+  labs(y = "elbo", x = "iteration number")
+
+
+gt <- function(x, y, pars) {
+  dnorm(x, mean = pars$mu_mean, sd = sqrt(pars$mu_var)) *
+    dgamma(y, rate = pars$tau_rate, shape = pars$tau_shape)
+}
+pars_f <- list(
+  mu_mean = (sum(y) + tau0 * mu0) / (n + tau0),
+  mu_var = 1 / (n + tau0),
+  tau_rate = b0 +
+    0.5 * (sum(y^2) + tau0 * mu0^2 - (sum(y) + tau0 * mu0)^2 / (n + tau0)),
+  tau_shape = 0.5 * (n - 1) + a0
+)
+ft <- function(x, y, pars) {
+  dnorm(x, mean = pars$mu_mean, sd = sqrt(pars$mu_var) / sqrt(y)) *
+    dgamma(y, rate = pars$tau_rate, shape = pars$tau_shape)
+}
+
+nsim <- 1e4L
+tau_s <- rgamma(n = nsim, rate = pars_f$tau_rate, shape = pars_f$tau_shape)
+mu_s <- rnorm(
+  n = nsim,
+  mean = pars_f$mu_mean,
+  sd = sqrt(pars_f$mu_var) / sqrt(tau_s)
 )
 
-curve(
-  dgamma(x, shape = an, rate = bn),
-  from = 0,
-  to = 0.5,
-  n = 1001,
-  ylab = "density",
-  xlab = expression(tau),
-  bty = "n"
+g1 <- ggplot() +
+  ggdensity::geom_hdr_fun(
+    fun = ft,
+    probs = c(0.1, 0.25, 0.5, 0.75, 0.9),
+    xlim = range(mu_s),
+    ylim = range(tau_s),
+    n = 1001L,
+    args = list(pars = pars_f)
+  ) +
+  labs(x = expression(mu), y = expression(tau))
+g2 <- ggplot() +
+  geom_point(
+    data = data.frame(tau = 1 / tau_s, mu = mu_s),
+    mapping = aes(x = mu, y = tau)
+  ) +
+  ggdensity::geom_hdr_fun(
+    fun = gt,
+    probs = c(0.1, 0.25, 0.5, 0.75, 0.9),
+    xlim = range(mu_s),
+    ylim = range(tau_s),
+    n = 1001L,
+    args = list(pars = CAVI_approx)
+  ) +
+  labs(x = expression(mu), y = expression(tau))
+g1 + g2 + plot_layout(guides = 'collect') & theme(legend.position = "bottom")
+
+# Marginal densities
+mu_loc <- (tau0 * mu0 + sum(y)) / (tau0 + n)
+mu_scale <- sqrt(
+  (2 * b0 + (n - 1) * var(y) + tau0 * n * (mean(y) - mu0)^2 / (tau0 + n)) /
+    ((tau0 + n) * (n + 2 * a0))
 )
+mu_df <- 2 * a0 + n
+
+g3 <- ggplot() +
+  stat_function(
+    fun = function(x) {
+      dt((x - mu_loc) / mu_scale, df = mu_df)
+    },
+    xlim = range(mu_s)
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(
+      mean = CAVI_approx$mu_mean,
+      sd = sqrt(CAVI_approx$mu_var)
+    ),
+    xlim = range(mu_s),
+    linetype = "dashed"
+  ) +
+  labs(x = expression(mu), y = "density")
+g4 <- ggplot() +
+  stat_function(
+    fun = dgamma,
+    args = list(rate = pars_f$tau_rate, shape = pars_f$tau_shape),
+    xlim = range(tau_s)
+  ) +
+  stat_function(
+    fun = dgamma,
+    args = list(
+      rate = CAVI_approx$tau_rate,
+      shape = CAVI_approx$tau_shape
+    ),
+    xlim = range(tau_s),
+    linetype = "dashed"
+  ) +
+  labs(x = expression(tau), y = "density")
+g3 + g4
+
 
 #############################################################
 ## CAVI algorithm for probit regression

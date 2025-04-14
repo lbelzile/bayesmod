@@ -1642,21 +1642,21 @@
     "href": "slides/bayesmod-slides11.html#step-4-of-expectation-propagation",
     "title": "Bayesian modelling",
     "section": "Step 4 of expectation propagation",
-    "text": "Step 4 of expectation propagation\nConvert moments \\(\\boldsymbol{\\mu}_j^{*}\\) and \\(\\boldsymbol{\\Sigma}^{*}_j\\) to canonical parameters \\(\\mathbf{Q}_j^{*}\\) and \\(\\boldsymbol{r}_j^{*}.\\)\nUpdate the global approximation with \\[\\begin{align*}\nq(\\boldsymbol{\\theta}) &\\propto \\exp \\left\\{ - \\frac{1}{2} \\boldsymbol{\\theta}^\\top \\left(\\sum_{\\substack{i=0 \\\\ i \\neq j}}^n\\mathbf{Q}_i + \\mathbf{Q}^{*}_j\\right)\\boldsymbol{\\theta} \\right.\\\\& \\left. + \\boldsymbol{\\theta}^\\top \\left(\\sum_{\\substack{i=0 \\\\ i \\neq j}}^n\\boldsymbol{r}_i + \\boldsymbol{r}^{*}_j\\right)\\right\\}.\n\\end{align*}\\]"
+    "text": "Step 4 of expectation propagation\nConvert moments \\(\\boldsymbol{\\mu}_j^{*}\\) and \\(\\boldsymbol{\\Sigma}^{*}_j\\) to canonical parameters \\(\\mathbf{Q}_j^{*}\\) and \\(\\boldsymbol{r}_j^{*}.\\)\nUpdate the global approximation with \\[\\begin{align*}\nq(\\boldsymbol{\\theta}) &\\propto \\exp \\left\\{ - \\frac{1}{2} \\boldsymbol{\\theta}^\\top \\left(\\sum_{\\substack{i=0 \\\\ i \\neq j}}^n\\mathbf{Q}_i + \\mathbf{Q}^{*}_j\\right)\\boldsymbol{\\theta}  + \\boldsymbol{\\theta}^\\top \\left(\\sum_{\\substack{i=0 \\\\ i \\neq j}}^n\\boldsymbol{r}_i + \\boldsymbol{r}^{*}_j\\right)\\right\\}.\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides11.html#recap-of-expectation-propagation",
     "href": "slides/bayesmod-slides11.html#recap-of-expectation-propagation",
     "title": "Bayesian modelling",
     "section": "Recap of expectation propagation",
-    "text": "Recap of expectation propagation\nThe EP algorithm iterates the steps until convergence:\n\nInitialize the site-specific parameters\nLoop over each observation of the likelihood factorization: 2.1 form the cavity and the hybrid distribution 2.2 compute the moments of the hybrid \\(\\boldsymbol{\\mu}\\) and \\(\\boldsymbol{\\Sigma}\\) 2.3 transform back to canonical parameters \\(\\mathbf{Q}\\) and \\(\\boldsymbol{r}\\) 2.3 update the global approximation\nDeclare convergence when change in parameters is less than tolerance.\n\nThe algorithm can be run in parallel."
+    "text": "Recap of expectation propagation\nThe EP algorithm iterates the steps until convergence:\n\nInitialize the site-specific parameters\nLoop over each observation of the likelihood factorization:\n\nform the cavity and the hybrid distribution\ncompute the moments of the hybrid \\(\\boldsymbol{\\mu}\\) and \\(\\boldsymbol{\\Sigma}\\)\ntransform back to canonical parameters \\(\\mathbf{Q}\\) and \\(\\boldsymbol{r}\\)\nupdate the global approximation\n\nDeclare convergence when change in parameters is less than tolerance."
   },
   {
     "objectID": "slides/bayesmod-slides11.html#improving-convergence",
     "href": "slides/bayesmod-slides11.html#improving-convergence",
     "title": "Bayesian modelling",
     "section": "Improving convergence",
-    "text": "Improving convergence\nThere is no guarantee that the fixed-point algorithm will converge…\nThe algorithm behaves like a smoothed Newton method (Dehaene & Barthelmé, 2018), so we can borrow tricks from numerical optimization to improve convergence.\n\nlinearly interpolate between updates, with weight \\(0&lt; w\\le 1\\) to the current update where at step \\(t\\).\n\nSome individual factor updates may yield non-positive definite precision for individual terms \\(\\mathbf{Q}_j\\), which is okay as long as the global approximation \\(\\mathbf{Q}\\) remains positive."
+    "text": "Improving convergence\nThere is no guarantee that the fixed-point algorithm will converge…\nThe algorithm behaves like a smoothed Newton method (Dehaene & Barthelmé, 2018), so we can borrow tricks from numerical optimization to improve convergence.\n\nlinearly interpolate between updates, with weight \\(0&lt; w\\le 1\\) to the current update where at step \\(t\\)."
   },
   {
     "objectID": "slides/bayesmod-slides11.html#example-ep-for-logistic-regression",
@@ -1670,7 +1670,7 @@
     "href": "slides/bayesmod-slides11.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nDehaene, G., & Barthelmé, S. (2018). Expectation propagation in the large data limit. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 80(1), 199–217. https://doi.org/10.1111/rssb.12241\n\n\nLiu, J. S. (1994). Siegel’s formula via Stein’s identities. Statistics & Probability Letters, 21(3), 247–251. https://doi.org/10.1016/0167-7152(94)90121-X\n\n\nMinka, T. P. (2001). A family of algorithms for approximate Bayesian inference [PhD thesis, Massachusetts Institute of Technology]. http://hdl.handle.net/1721.1/86583"
+    "text": "References\n\n\n\n\nCseke, B., & Heskes, T. (2011). Approximate marginals in latent Gaussian models. Journal of Machine Learning Research, 12(13), 417–454. http://jmlr.org/papers/v12/cseke11a.html\n\n\nDehaene, G., & Barthelmé, S. (2018). Expectation propagation in the large data limit. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 80(1), 199–217. https://doi.org/10.1111/rssb.12241\n\n\nLiu, J. S. (1994). Siegel’s formula via Stein’s identities. Statistics & Probability Letters, 21(3), 247–251. https://doi.org/10.1016/0167-7152(94)90121-X\n\n\nMinka, T. P. (2001). A family of algorithms for approximate Bayesian inference [PhD thesis, Massachusetts Institute of Technology]. http://hdl.handle.net/1721.1/86583"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#distribution-and-density-function",
@@ -3801,21 +3801,21 @@
     "href": "slides/bayesmod-slides10.html#example-of-cavi-mean-field-for-gaussian-target",
     "title": "Bayesian modelling",
     "section": "Example of CAVI mean-field for Gaussian target",
-    "text": "Example of CAVI mean-field for Gaussian target\nWe consider the example from Section 2.2.2 of Ormerod & Wand (2010) for approximation of a Gaussian distribution, with \\[\\begin{align*}\nY_i &\\sim \\mathsf{Gauss}(\\mu, \\tau^{-1}), \\qquad i =1, \\ldots, n;\\\\\n\\mu &\\sim \\mathsf{Gauss}(\\mu_0, \\tau_0^{-1}) \\\\\n\\tau &\\sim \\mathsf{gamma}(a_0, b_0).\n\\end{align*}\\] This is an example where the full posterior is available in closed-form, so we can compare our approximation with the truth."
+    "text": "Example of CAVI mean-field for Gaussian target\nWe consider the example from Section 2.2.2 of Ormerod & Wand (2010) for approximation of a Gaussian distribution, with \\[\\begin{align*}\nY_i &\\sim \\mathsf{Gauss}(\\mu, \\tau^{-1}), \\qquad i =1, \\ldots, n;\\\\\n\\mu &\\sim \\mathsf{Gauss}\\{\\mu_0, (\\tau\\tau_0)^{-1}\\} \\\\\n\\tau &\\sim \\mathsf{gamma}(a_0, b_0).\n\\end{align*}\\] This is an example where the full posterior is available in closed-form, so we can compare our approximation with the truth."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-mean",
     "href": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-mean",
     "title": "Bayesian modelling",
     "section": "Variational approximation to Gaussian — mean",
-    "text": "Variational approximation to Gaussian — mean\nWe assume a factorization of the variational approximation \\(g_\\mu(\\mu)g_\\tau(\\tau);\\) the factor for \\(g_\\mu\\) is proportional to \\[\\begin{align*}\n\\log g^{\\star}_\\mu(\\mu) \\propto -\\frac{\\mathsf{E}_{\\tau}(\\tau)}{2} \\sum_{i=1}^n (y_i-\\mu)^2-\\frac{\\tau_0}{2}(\\mu-\\mu_0)^2\n\\end{align*}\\] which is quadratic in \\(\\mu\\) and thus must be Gaussian with precision \\(\\tau_n = \\tau_0 + n\\tau\\) and mean \\(\\tau_n^{-1}\\{\\tau_0\\mu_0 + \\mathsf{E}_{\\tau}(\\tau)n\\overline{y}\\}\\)"
+    "text": "Variational approximation to Gaussian — mean\nWe assume a factorization of the variational approximation \\(g_\\mu(\\mu)g_\\tau(\\tau);\\) the factor for \\(g_\\mu\\) is proportional to \\[\\begin{align*}\n\\log g^{\\star}_{\\mu}(\\mu) \\propto -\\frac{\\mathsf{E}_{\\tau}(\\tau)}{2} \\left\\{ \\sum_{i=1}^n (y_i-\\mu)^2-\\frac{\\tau_0}{2}(\\mu-\\mu_0)^2\\right\\},\n\\end{align*}\\] which is quadratic in \\(\\mu\\) and thus must be Gaussian with precision \\(\\tau_n = \\mathsf{E}_{\\tau}(\\tau)(\\tau_0 + n)\\) and mean \\(\\tau_0\\mu_0 +n\\overline{y}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-precision",
     "href": "slides/bayesmod-slides10.html#variational-approximation-to-gaussian-precision",
     "title": "Bayesian modelling",
     "section": "Variational approximation to Gaussian — precision",
-    "text": "Variational approximation to Gaussian — precision\nThe optimal precision factor satisfies \\[\\begin{align*}\n\\ln g^{\\star}_{\\tau}(\\tau) &\\propto (a_0-1 +n/2) \\log \\tau \\\\& \\quad - \\tau {\\color{#c38f16}{\\left[b_0  + \\frac{1}{2} \\mathsf{E}_{\\mu}\\left\\{\\sum_{i=1}^n (y_i-\\mu)^2\\right\\}\\right]}}.\n\\end{align*}\\] This is of the same form as \\(p(\\tau \\mid \\mu, \\boldsymbol{y}),\\) namely a gamma with shape \\(a_n =a_0 +n/2\\) and rate \\({\\color{#c38f16}{b_n}}\\)."
+    "text": "Variational approximation to Gaussian — precision\nThe optimal precision factor satisfies \\[\\begin{align*}\n\\ln g^{\\star}_{\\tau}(\\tau) &\\propto \\log \\tau\\left(\\frac{n+1}{2} + a_0-1\\right)   \\\\&\\quad- \\tau {\\color{#c38f16}{\\left[b_0  + \\frac{\\mathsf{E}_{\\mu}\\left\\{\\sum_{i=1}^n (y_i-\\mu)^2\\right\\}}{2}  + \\frac{\\tau_0\\mathsf{E}{\\mu}\\left\\{(\\mu-\\mu_0)^2\\right\\}}{2}\\right]}}.\n\\end{align*}\\] Thus a gamma with shape \\(a_n =a_0 +n/2\\) and rate \\({\\color{#c38f16}{b_n}}\\)."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#rate-of-the-gamma-for-g_tau",
@@ -3829,14 +3829,14 @@
     "href": "slides/bayesmod-slides10.html#cavi-for-gaussian",
     "title": "Bayesian modelling",
     "section": "CAVI for Gaussian",
-    "text": "CAVI for Gaussian\nThe algorithm cycles through the following updates until convergence:\n\n\\(\\mathsf{Va}_{\\mu}(\\mu) = \\{\\tau_0 + n \\mathsf{E}_{\\tau}(\\tau)\\}^{-1},\\)\n\\(\\mathsf{E}_{\\mu}(\\mu) = \\mathsf{Va}_{\\mu}(\\mu)\\{\\tau_0\\mu_0 + \\mathsf{E}_{\\tau}(\\tau)n \\overline{y}\\},\\)\n\\(\\mathsf{E}_{\\tau}(\\tau) = a_n/b_n\\) where \\(b_n\\) is a function of both \\(\\mathsf{E}_{\\mu}(\\mu)\\) and \\(\\mathsf{Var}_{\\mu}(\\mu).\\)\n\nWe only compute the ELBO at the end of each cycle."
+    "text": "CAVI for Gaussian\nThe algorithm cycles through the following updates until convergence:\n\n\\(\\mathsf{Va}_{\\mu}(\\mu) = \\{\\mathsf{E}_{\\tau}(\\tau)(\\tau_0 + n )\\}^{-1},\\)\n\\(\\mathsf{E}_{\\mu}(\\mu) = \\mathsf{Va}_{\\mu}(\\mu)\\{\\tau_0\\mu_0 + n \\overline{y}\\},\\)\n\\(\\mathsf{E}_{\\tau}(\\tau) = a_n/b_n\\) where \\(b_n\\) is a function of both \\(\\mathsf{E}_{\\mu}(\\mu)\\) and \\(\\mathsf{Var}_{\\mu}(\\mu).\\)\n\nWe only compute the ELBO at the end of each cycle."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#monitoring-convergence",
     "href": "slides/bayesmod-slides10.html#monitoring-convergence",
     "title": "Bayesian modelling",
     "section": "Monitoring convergence",
-    "text": "Monitoring convergence\nThe derivation of the ELBO is straightforward but tedious; we only need to monitor \\[\\begin{align*}\n- \\frac{\\tau_0}{2} \\mathsf{E}_{\\mu}\\{(\\mu - \\mu_0)^2\\} - \\frac{\\log\\tau_n}{2}-a_n\\log b_n\n\\end{align*}\\] for convergence, although other normalizing constants would be necessary if we wanted to approximate the marginal likelihood.\nWe can also consider relative changes in parameter values as tolerance criterion."
+    "text": "Monitoring convergence\nThe derivation of the ELBO is straightforward but tedious; \\[\\begin{align*}\n\\mathsf{ELBO}(g) & = a_0\\log(b_0) -a_n\\log b_n + \\log \\{\\Gamma(a_n)/\\Gamma(a_0)\\}\n\\\\& \\quad - \\frac{n}{2}\\log(2\\pi)+ \\frac{1 + \\log (\\tau_0/\\tau_n)}{2}.\n\\end{align*}\\]\nWe can also consider relative changes in parameter values as tolerance criterion."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#stochastic-optimization",
@@ -3920,7 +3920,7 @@
     "href": "slides/bayesmod-slides10.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nHoffman, M. D., Blei, D. M., Wang, C., & Paisley, J. (2013). Stochastic variational inference. Journal of Machine Learning Research, 14(40), 1303–1347. http://jmlr.org/papers/v14/hoffman13a.html\n\n\nKucukelbir, A., Tran, D., Ranganath, R., Gelman, A., & Blei, D. M. (2017). Automatic differentiation variational inference. Journal of Machine Learning Research, 18(14), 1–45. http://jmlr.org/papers/v18/16-107.html\n\n\nOrmerod, J. T., & Wand, M. P. (2010). Explaining variational approximations. The American Statistician, 64(2), 140–153. https://doi.org/10.1198/tast.2010.09058\n\n\nRanganath, R., Gerrish, S., & Blei, D. (2014). Black box variational inference. In S. Kaski & J. Corander (Eds.), Proceedings of the seventeenth international conference on artificial intelligence and statistics (Vol. 33, pp. 814–822). Pmlr. https://proceedings.mlr.press/v33/ranganath14.html"
+    "text": "References\n\n\n\n\nDuke, K. E., & Amir, O. (2023). The importance of selling formats: When integrating purchase and quantity decisions increases sales. Marketing Science, 42(1), 87–109. https://doi.org/10.1287/mksc.2022.1364\n\n\nHoffman, M. D., Blei, D. M., Wang, C., & Paisley, J. (2013). Stochastic variational inference. Journal of Machine Learning Research, 14(40), 1303–1347. http://jmlr.org/papers/v14/hoffman13a.html\n\n\nKucukelbir, A., Tran, D., Ranganath, R., Gelman, A., & Blei, D. M. (2017). Automatic differentiation variational inference. Journal of Machine Learning Research, 18(14), 1–45. http://jmlr.org/papers/v18/16-107.html\n\n\nOrmerod, J. T., & Wand, M. P. (2010). Explaining variational approximations. The American Statistician, 64(2), 140–153. https://doi.org/10.1198/tast.2010.09058\n\n\nRanganath, R., Gerrish, S., & Blei, D. (2014). Black box variational inference. In S. Kaski & J. Corander (Eds.), Proceedings of the seventeenth international conference on artificial intelligence and statistics (Vol. 33, pp. 814–822). Pmlr. https://proceedings.mlr.press/v33/ranganath14.html"
   },
   {
     "objectID": "slides/bayesmod-slides12.html#fundamentals",
@@ -5195,5 +5195,152 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References\n\n\n\n\nPark, T., & Casella, G. (2008). The Bayesian Lasso. Journal of the American Statistical Association, 103(482), 681–686. https://doi.org/10.1198/016214508000000337\n\n\nRaftery, A. E. (1995). Bayesian model selection in social research. Sociological Methodology, 25, 111–163. https://doi.org/10.2307/271063\n\n\nRue, H., Martino, S., & Chopin, N. (2009). Approximate bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 71(2), 319–392. https://doi.org/10.1111/j.1467-9868.2008.00700.x\n\n\nTierney, L., & Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. Journal of the American Statistical Association, 81(393), 82–86. https://doi.org/10.1080/01621459.1986.10478240\n\n\nvan Niekerk, J., & Rue, H. (2024). Low-rank variational Bayes correction to the Laplace method. Journal of Machine Learning Research, 25(62), 1–25. http://jmlr.org/papers/v25/21-1405.html\n\n\nWood, S. N. (2019). Simplified integrated nested Laplace approximation. Biometrika, 107(1), 223–230. https://doi.org/10.1093/biomet/asz044"
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#ep-for-logistic-regression",
+    "href": "slides/bayesmod-slides11.html#ep-for-logistic-regression",
+    "title": "Bayesian modelling",
+    "section": "EP for logistic regression",
+    "text": "EP for logistic regression\nThe likelihood contribution of observation \\(i\\) with factors \\[L_i(\\boldsymbol{\\beta}) = \\mathrm{expit}(y_i \\mathbf{x}_i\\boldsymbol{\\beta}).\\]\nThe approximation of the factor will have parameters \\((a\\mathbf{x}_i^\\top, b\\mathbf{x}_i^\\top\\mathbf{x}_i)\\), which only depend on two scalars \\(a\\) and \\(b.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#ep-iterations",
+    "href": "slides/bayesmod-slides11.html#ep-iterations",
+    "title": "Bayesian modelling",
+    "section": "EP iterations",
+    "text": "EP iterations\nThe dynamics of the expectation propagation given vectors of individual contributions \\(\\boldsymbol{a}^{(t)}\\) and \\(\\boldsymbol{b}^{(t)}\\) at iteration \\(t\\) and the canonical parameters \\[\\begin{align*}\n\\boldsymbol{r}^{(t)} = \\sum_{i=1}^n a_i^{(t)}\\mathbf{x}_i^\\top, \\qquad \\mathbf{Q}^{(t)} = \\sum_{i=1}^n b_i\\mathbf{x}_i^\\top\\mathbf{x}_i,\n\\end{align*}\\] initialized to \\(t=0\\), are as follows for step \\(t\\):"
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#steps-for-logistic-regression",
+    "href": "slides/bayesmod-slides11.html#steps-for-logistic-regression",
+    "title": "Bayesian modelling",
+    "section": "Steps for logistic regression",
+    "text": "Steps for logistic regression\n\nCompute the natural parameters of the cavity distribution \\[\\begin{align*}\n\\boldsymbol{r}_{-i} &= \\boldsymbol{r} - a_i^{(t-1)}\\mathbf{x}_i^\\top\n\\\\\\mathbf{Q}_{-i} &= \\mathbf{Q} - b_i^{(t-1)}\\mathbf{x}_i^\\top\\mathbf{x}_i.\n\\end{align*}\\]\nTransform the canonical parameters to moments, with \\(\\boldsymbol{\\Sigma}_{-i} = \\mathbf{Q}_{-i}^{-1}\\) and \\(\\boldsymbol{\\mu}_{-i} = \\mathbf{Q}_{-i}^{-1}\\boldsymbol{r}_{-i}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#steps-for-logistic-regression-1",
+    "href": "slides/bayesmod-slides11.html#steps-for-logistic-regression-1",
+    "title": "Bayesian modelling",
+    "section": "Steps for logistic regression",
+    "text": "Steps for logistic regression\n\nObtain the mean and variance of the conditional distribution with variance \\(v_i = \\mathbf{x}_i\\boldsymbol{\\Sigma}_{-i}\\mathbf{x}_i^\\top\\) and mean \\(u_i=\\mathbf{x}_i\\boldsymbol{\\mu}.\\)\nDefine the marginal hybrid as \\[\\begin{align*}\nh_i(z) \\propto \\mathrm{expit}(y_iz) \\exp\\left\\{-\\frac{(z-u)^2}{2v}\\right\\}.\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#steps-for-logistic-regression-2",
+    "href": "slides/bayesmod-slides11.html#steps-for-logistic-regression-2",
+    "title": "Bayesian modelling",
+    "section": "Steps for logistic regression",
+    "text": "Steps for logistic regression\n\nCompute the normalizing constant, the mean \\(\\mathsf{E}_{h_i}(Z)\\) and the variance \\(\\mathsf{Va}_{h_i}(Z)\\) by numerical integration.\n\n\n#' @param mu_lc mean of the linear combination\n#' @param sd_lc std. dev of the linear combination\nep_update &lt;- function(y, mu_lc, sd_lc){\n  # Calculate outside of the loop the cavity\n  fn &lt;- function(x){ dnorm(x, mean = mu_lc, sd = sd_lc)*plogis(y*x)}\n  # Compute normalizing constant\n  cst &lt;- integrate(f = fn, lower = -Inf, upper = Inf)$value\n  mu &lt;- integrate(f = function(x){fn(x)*x}, -Inf, Inf)$value/cst\n  va &lt;- integrate(f = function(x){fn(x)*(x-mu)^2}, -Inf, Inf)$value/cst\n}"
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#steps-for-logistic-regression-3",
+    "href": "slides/bayesmod-slides11.html#steps-for-logistic-regression-3",
+    "title": "Bayesian modelling",
+    "section": "Steps for logistic regression",
+    "text": "Steps for logistic regression\n\nBack-transform the parameters to get the parameters for \\[\\begin{align*}a_i^{(t)} &= \\mathsf{E}_{h_i}(Z)/\\mathsf{Va}_{h_i}(Z) - u/v\n\\\\ b_i^{(t)} &= 1/\\mathsf{Va}_{h_i}(Z).\n\\end{align*}\\]\nUpdate the parameters \\[\\begin{align*}\n\\boldsymbol{r} &\\gets \\boldsymbol{r}_{-i} + a_i^{(t)}\\mathbf{x}_i^\\top \\\\\\mathbf{Q} &\\gets \\mathbf{Q}_{-i} + b_i^{(t)}\\mathbf{x}_i^\\top\\mathbf{x}_i.\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#comments-on-ep-for-exponential-families",
+    "href": "slides/bayesmod-slides11.html#comments-on-ep-for-exponential-families",
+    "title": "Bayesian modelling",
+    "section": "Comments on EP for exponential families",
+    "text": "Comments on EP for exponential families\nThere are explicit formulas for the upgrade of probit regression.\nThe updates to the parameters for more general exponential families are found in page 23 of Cseke & Heskes (2011)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides11.html#comments-on-updates",
+    "href": "slides/bayesmod-slides11.html#comments-on-updates",
+    "title": "Bayesian modelling",
+    "section": "Comments on updates",
+    "text": "Comments on updates\nThe algorithm can be run in parallel.\nSome individual factor updates may yield non-positive definite precision for individual terms \\(\\mathbf{Q}_j\\), which is okay as long as the global approximation \\(\\mathbf{Q}\\) remains positive.\nVariants (power EP) leads to more smoothing, but change fixed points."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#maximization",
+    "href": "slides/bayesmod-slides10.html#maximization",
+    "title": "Bayesian modelling",
+    "section": "Maximization?",
+    "text": "Maximization?\nRecall that alternating these steps is equivalent to maximization of the ELBO.\n\neach iteration performs conditional optimization implicitly (as we minimize the reverse KL divergence)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#bivariate-posterior-density",
+    "href": "slides/bayesmod-slides10.html#bivariate-posterior-density",
+    "title": "Bayesian modelling",
+    "section": "Bivariate posterior density",
+    "text": "Bivariate posterior density\n\n\nFigure 2: Bivariate density posterior for the conjugate Gaussian-gamma model (left) and CAVI approximation (right)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#marginal-posterior-densities",
+    "href": "slides/bayesmod-slides10.html#marginal-posterior-densities",
+    "title": "Bayesian modelling",
+    "section": "Marginal posterior densities",
+    "text": "Marginal posterior densities\n\n\nFigure 3: Marginal posterior density of the mean and precision of the Gaussian (full line), with CAVI approximation (dashed)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#cavi-for-probit-regression",
+    "href": "slides/bayesmod-slides10.html#cavi-for-probit-regression",
+    "title": "Bayesian modelling",
+    "section": "CAVI for probit regression",
+    "text": "CAVI for probit regression\nA probit regression is a generalized linear model with probability of success \\(\\Phi(\\mathbf{x}_i\\boldsymbol{\\beta}),\\) where \\(\\Phi(\\cdot)\\) is the cumulative distribution function of a standard Gaussian variable.\nWe can write the model as \\[\\begin{align*}\np(\\boldsymbol{y} \\mid \\boldsymbol{\\beta}) = \\Phi(\\mathbf{X}\\boldsymbol{\\beta})^{\\boldsymbol{y}}\\Phi(-\\mathbf{X}\\boldsymbol{\\beta})^{\\boldsymbol{1}_n -\\boldsymbol{y}}\n\\end{align*}\\] since \\(1-\\Phi(x) = \\Phi(-x).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#data-augmentation-and-cavi",
+    "href": "slides/bayesmod-slides10.html#data-augmentation-and-cavi",
+    "title": "Bayesian modelling",
+    "section": "Data augmentation and CAVI",
+    "text": "Data augmentation and CAVI\nConsider data augmentation with auxiliary variables \\(Z_i \\mid \\boldsymbol{\\beta}\\sim \\mathsf{Gauss}(\\mathbf{x}_i\\boldsymbol{\\beta}, 1).\\)\nWith \\(\\boldsymbol{\\beta} \\sim \\mathsf{Gauss}_p(\\boldsymbol{\\mu}_0, \\mathbf{Q}_0^{-1}),\\) the model admits conditionals \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\boldsymbol{Z} &\\sim \\mathsf{Gauss}_p\\left\\{\\mathbf{Q}_{\\boldsymbol{\\beta}}^{-1}(\\mathbf{X}\\boldsymbol{Z} + \\mathbf{Q}_0\\boldsymbol{\\mu}_0),  \\mathbf{Q}_{\\boldsymbol{\\beta}}^{-1} \\right\\}\n\\\\\nZ_i \\mid y_i, \\boldsymbol{\\beta} &\\sim \\mathsf{trunc. Gauss}(\\mathbf{x}_i\\boldsymbol{\\beta}, 1, l_i, u_i)\n\\end{align*}\\] where \\(\\mathbf{Q}_{\\boldsymbol{\\beta}}= \\mathbf{X}^\\top\\mathbf{X} + \\mathbf{Q_0},\\) and \\([l_i, u_i]\\) is \\((-\\infty,0)\\) if \\(y_i=0\\) and \\((0, \\infty)\\) if \\(y_i=1.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#cavi-factorization-for-probit-model",
+    "href": "slides/bayesmod-slides10.html#cavi-factorization-for-probit-model",
+    "title": "Bayesian modelling",
+    "section": "CAVI factorization for probit model",
+    "text": "CAVI factorization for probit model\nIf we consider a factorization of the form \\[g_{\\boldsymbol{Z}}(\\boldsymbol{z})g_{\\boldsymbol{\\beta}}(\\boldsymbol{\\beta}),\\] then we exploit the conditionals in the same way as for Gibbs sampling, but substituting unknown parameter functionals by their expectations.\nFurthermore, the optimal form of the density further factorizes as \\[g_{\\boldsymbol{Z}}(\\boldsymbol{z}) = \\prod_{i=1}^n g_{Z_i}(z_i).\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#updates-for-cavi---probit-regression",
+    "href": "slides/bayesmod-slides10.html#updates-for-cavi---probit-regression",
+    "title": "Bayesian modelling",
+    "section": "Updates for CAVI - probit regression",
+    "text": "Updates for CAVI - probit regression\nThe model depends on\n\n\\(\\mu_{\\boldsymbol{Z}}\\), the mean parameter of \\(\\boldsymbol{Z}\\)\n\\(\\mu_{\\boldsymbol{\\beta}},\\) the mean of \\(\\boldsymbol{\\beta}.\\)\n\nConsider the terms in the posterior proportional to \\(Z_i\\), where \\[\\begin{align*}\np(z_i \\mid \\boldsymbol{\\beta}, y_i) \\propto -\\frac{z_i^2 - 2z_i \\mathbf{x}_i\\boldsymbol{\\beta}}{2} \\times \\mathrm{I}(z_i &gt;0)^{y_i}\\mathrm{I}(z_i &lt;0)^{1-y_i}\n\\end{align*}\\] which is linear in \\(\\boldsymbol{\\beta}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#truncated-gaussian",
+    "href": "slides/bayesmod-slides10.html#truncated-gaussian",
+    "title": "Bayesian modelling",
+    "section": "Truncated Gaussian",
+    "text": "Truncated Gaussian\nThe expectation of a univariate truncated Gaussian \\(Z \\sim \\mathsf{trunc. Gauss}(\\mu,\\sigma^2, l, u)\\) is \\[\\begin{align*}\n\\mathsf{E}(Z) = \\mu - \\sigma\\frac{\\phi\\{(u-\\mu/\\sigma)\\} - \\phi\\{(l-\\mu/\\sigma)\\}}{\\Phi\\{(u-\\mu/\\sigma)\\} - \\Phi\\{(l-\\mu/\\sigma)\\}}.\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#update-for-cavi",
+    "href": "slides/bayesmod-slides10.html#update-for-cavi",
+    "title": "Bayesian modelling",
+    "section": "Update for CAVI",
+    "text": "Update for CAVI\nIf we replace \\(\\mu=\\mathbf{x}_i\\mu_{\\boldsymbol{\\beta}}\\), we get the update \\[\\begin{align*}\n\\mu_{Z_i}(z_i) = \\begin{cases}\n\\mathbf{x}_i\\mu_{\\boldsymbol{\\beta}} - \\frac{ \\phi(\\mathbf{x}_i\\mu_{\\boldsymbol{\\beta}})}{1-\\Phi(\\mathbf{x}_i\\mu_{\\boldsymbol{\\beta}})} & y_i = 0;\\\\\n\\mathbf{x}_i\\mu_{\\boldsymbol{\\beta}} + \\frac{ \\phi(\\mathbf{x}_i\\mu_{\\boldsymbol{\\beta}})}{\\Phi(\\mathbf{x}_i\\mu_{\\boldsymbol{\\beta}})} & y_i = 1,\n\\end{cases}\n\\end{align*}\\] since \\(\\phi(x)=\\phi(-x).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#update-for-regression-parameters",
+    "href": "slides/bayesmod-slides10.html#update-for-regression-parameters",
+    "title": "Bayesian modelling",
+    "section": "Update for regression parameters",
+    "text": "Update for regression parameters\nThe optimal form for \\(\\boldsymbol{\\beta}\\) is Gaussian and proceeding similarly, \\[\\begin{align*}\n\\boldsymbol{\\mu}_{\\boldsymbol{\\beta}} = (\\mathbf{X}^\\top\\mathbf{X} + \\mathbf{Q_0})^{-1}(\\mathbf{X}\\boldsymbol{\\mu}_{\\boldsymbol{Z}} + \\mathbf{Q}_0\\boldsymbol{\\mu}_0)\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#example",
+    "href": "slides/bayesmod-slides10.html#example",
+    "title": "Bayesian modelling",
+    "section": "Example",
+    "text": "Example\nWe consider for illustration purposes data from Experiment 2 of Duke & Amir (2023) on the effect of sequential decisions and purchasing formats.\n\nWe fit a model with age of the participant and the binary variable format, which indicate the experimental condition."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#comments",
+    "href": "slides/bayesmod-slides10.html#comments",
+    "title": "Bayesian modelling",
+    "section": "Comments",
+    "text": "Comments\n\nWith vague priors, the coefficients for the mean \\(\\boldsymbol{\\mu}_{\\boldsymbol{\\beta}}=(\\beta_0, \\beta_1, \\beta_2)^\\top\\) matches the frequentist point estimates of the probit regression to four significant digits.\nConvergence is very fast, as shown by the ELBO plot.\nThe marginal density approximations are underdispersed."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#elbo-and-marginal-density-approximation",
+    "href": "slides/bayesmod-slides10.html#elbo-and-marginal-density-approximation",
+    "title": "Bayesian modelling",
+    "section": "ELBO and marginal density approximation",
+    "text": "ELBO and marginal density approximation\n\n\nFigure 4: ELBO (left) and marginal density approximation with true density (full) versus variational approximation (dashed)."
   }
 ]

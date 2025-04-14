@@ -255,7 +255,7 @@ Often, we look at the kernel of $g^{\star}_j$ to deduce the normalizing constant
 We consider the example from Section 2.2.2 of @Ormerod.Wand:2010 for approximation of a Gaussian distribution, with
 \begin{align*}
 Y_i &\sim \mathsf{Gauss}(\mu, \tau^{-1}), \qquad i =1, \ldots, n;\\
-\mu &\sim \mathsf{Gauss}(\mu_0, \tau_0^{-1}) \\
+\mu &\sim \mathsf{Gauss}\{\mu_0, (\tau\tau_0)^{-1}\} \\
 \tau &\sim \mathsf{gamma}(a_0, b_0).
 \end{align*}
 This is an example where the full posterior is available in closed-form, so we can compare our approximation with the truth.
@@ -264,17 +264,17 @@ This is an example where the full posterior is available in closed-form, so we c
 
 We assume a factorization of the variational approximation $g_\mu(\mu)g_\tau(\tau);$ the factor for $g_\mu$ is proportional to
 \begin{align*}
- \log g^{\star}_\mu(\mu) \propto -\frac{\mathsf{E}_{\tau}(\tau)}{2} \sum_{i=1}^n (y_i-\mu)^2-\frac{\tau_0}{2}(\mu-\mu_0)^2
+\log g^{\star}_{\mu}(\mu) \propto -\frac{\mathsf{E}_{\tau}(\tau)}{2} \left\{ \sum_{i=1}^n (y_i-\mu)^2-\frac{\tau_0}{2}(\mu-\mu_0)^2\right\},
 \end{align*}
-which is quadratic in $\mu$ and thus must be Gaussian with precision $\tau_n = \tau_0 + n\tau$ and mean $\tau_n^{-1}\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n\overline{y}\}$
+which is quadratic in $\mu$ and thus must be Gaussian with precision $\tau_n = \mathsf{E}_{\tau}(\tau)(\tau_0 + n)$ and mean $\tau_0\mu_0 +n\overline{y}.$
 
 ## Variational approximation to Gaussian --- precision
 
 The optimal precision factor satisfies
 \begin{align*}
- \ln g^{\star}_{\tau}(\tau) &\propto (a_0-1 +n/2) \log \tau \\& \quad - \tau {\color{#c38f16}{\left[b_0  + \frac{1}{2} \mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\}\right]}}.
+ \ln g^{\star}_{\tau}(\tau) &\propto \log \tau\left(\frac{n+1}{2} + a_0-1\right)   \\&\quad- \tau {\color{#c38f16}{\left[b_0  + \frac{\mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\}}{2}  + \frac{\tau_0\mathsf{E}{\mu}\left\{(\mu-\mu_0)^2\right\}}{2}\right]}}.
 \end{align*}
-This is of the same form as  $p(\tau \mid \mu, \boldsymbol{y}),$ namely a gamma with shape $a_n =a_0 +n/2$ and rate ${\color{#c38f16}{b_n}}$.
+Thus a gamma with shape $a_n =a_0 +n/2$ and rate ${\color{#c38f16}{b_n}}$.
 
 ## Rate of the gamma for $g_\tau$
 
@@ -288,21 +288,403 @@ so that it depends on the parameters of the distribution of $\mu$ directly.
 
 The algorithm cycles through the following updates until convergence:
 
-- $\mathsf{Va}_{\mu}(\mu) = \{\tau_0 + n \mathsf{E}_{\tau}(\tau)\}^{-1},$
-- $\mathsf{E}_{\mu}(\mu) = \mathsf{Va}_{\mu}(\mu)\{\tau_0\mu_0 + \mathsf{E}_{\tau}(\tau)n \overline{y}\},$
+- $\mathsf{Va}_{\mu}(\mu) = \{\mathsf{E}_{\tau}(\tau)(\tau_0 + n )\}^{-1},$
+- $\mathsf{E}_{\mu}(\mu) = \mathsf{Va}_{\mu}(\mu)\{\tau_0\mu_0 + n \overline{y}\},$
 - $\mathsf{E}_{\tau}(\tau) = a_n/b_n$ where $b_n$ is a function of both $\mathsf{E}_{\mu}(\mu)$ and $\mathsf{Var}_{\mu}(\mu).$
 
-We only compute the ELBO at the end of each cycle.
+We only compute the ELBO at the end of each cycle. 
+
+## Maximization?
+
+
+Recall that alternating these steps is **equivalent** to maximization of the ELBO. 
+
+- each iteration performs conditional optimization implicitly (as we minimize the reverse KL divergence).
+
 
 ## Monitoring convergence
 
-The derivation of the ELBO is straightforward but tedious; we only need to monitor
+The derivation of the ELBO is straightforward but tedious; 
 \begin{align*}
-- \frac{\tau_0}{2} \mathsf{E}_{\mu}\{(\mu - \mu_0)^2\} - \frac{\log\tau_n}{2}-a_n\log b_n
+\mathsf{ELBO}(g) & = a_0\log(b_0) -a_n\log b_n + \log \{\Gamma(a_n)/\Gamma(a_0)\}
+\\& \quad - \frac{n}{2}\log(2\pi)+ \frac{1 + \log (\tau_0/\tau_n)}{2}.
 \end{align*}
-for convergence, although other normalizing constants would be necessary if we wanted to approximate the marginal likelihood.
 
 We can also consider relative changes in parameter values as tolerance criterion.
+
+## Bivariate posterior density
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-approx-cavi-gauss
+#| fig-cap: "Bivariate density posterior for the conjugate Gaussian-gamma model (left) and CAVI approximation (right)."
+set.seed(1234)
+y <- rnorm(n = 20, mean = 150, sd = sqrt(20))
+n <- length(y)
+a0 <- 0.01; 
+b0 <- 0.01
+mu0 <- 0; 
+tau0 <- 1e-4
+CAVI_gauss <- function(
+    y,
+    init = c(mean(y), length(y)/var(y), 1/var(y)),
+    tol = 1e-4){
+  a0 <- 0.01; b0 <- 0.01
+  mu0 <- 0; tau0 <- 1e-4
+  n <- length(y); sum_y <- sum(y)
+  E_mu <- init[1]
+  var_mu <- init[2]
+  E_tau <- init[3]
+  B <- 20
+  an <- (a0+n/2-1)
+  elbo <- numeric(B)
+  lcst <- a0*log(b0) - lgamma(a0) + 0.5*(1 + log(tau0) - n*log(2*pi))
+  for(i in 1:B){
+    var_mu <- 1/(E_tau* (tau0 + n))
+    E_mu <- (tau0*mu0 + sum_y)/(tau0 + n)
+    bn <- b0 + 0.5 * (sum((y-E_mu)^2) + n * var_mu) + 0.5 * tau0 * ((E_mu-mu0)^2 + var_mu)
+    E_tau <- an / bn
+    elbo[i] <- lcst - an*log(bn) + lgamma(an) + 0.5*log(var_mu)
+  }
+ list(
+  elbo = elbo, 
+  mu_mean = E_mu, 
+  mu_var = var_mu,
+  tau_shape = an, 
+  tau_rate = bn)
+}
+CAVI_approx <- CAVI_gauss(y = y)
+gt <- function(x,y, pars){
+  dnorm(x, mean = pars$mu_mean, sd = sqrt(pars$mu_var)) * 
+    dgamma(y, rate = pars$tau_rate, shape = pars$tau_shape)
+}
+pars_f <- list(
+  mu_mean = (sum(y) + tau0*mu0)/(n+tau0),
+  mu_var = 1/(n+tau0),
+  tau_rate = b0 + 0.5*(sum(y^2)+tau0*mu0^2 - (sum(y) + tau0*mu0)^2/(n+tau0)),
+  tau_shape = 0.5*(n-1) + a0)
+ft <- function(x,y, pars){
+  dnorm(x, mean = pars$mu_mean, sd = sqrt(pars$mu_var)/sqrt(y)) * 
+    dgamma(y, rate = pars$tau_rate, shape = pars$tau_shape)
+}
+
+nsim <- 1e4L
+tau_s <- rgamma(n = nsim, rate = pars_f$tau_rate, shape = pars_f$tau_shape)
+mu_s <- rnorm(n = nsim,
+              mean = pars_f$mu_mean, sd = sqrt(pars_f$mu_var)/sqrt(tau_s)) 
+
+library(ggdensity)
+g1 <- ggplot() +
+  # ggdensity::geom_hdr(
+  #   data = data.frame(tau = 1/tau_s, mu = mu_s),
+  #   probs = c(0.1, 0.25,0.5,0.75, 0.9),
+  #   mapping = aes(x = mu, y = tau)) +
+  geom_hdr_fun(fun = ft,
+               probs = c(0.1, 0.25,0.5,0.75, 0.9),
+               xlim = range(mu_s),
+               ylim = range(tau_s),
+               n = 1001L,
+               args = list(pars = pars_f)) +
+  labs(x = expression(mu), 
+       y = expression(tau)) +
+theme_classic()
+g2 <- ggplot() +
+  # ggdensity::geom_hdr(
+  #   data = data.frame(tau = 1/tau_s, mu = mu_s),
+  #   probs = c(0.1, 0.25,0.5,0.75, 0.9),
+  #   mapping = aes(x = mu, y = tau)) +
+  geom_hdr_fun(fun = gt,
+               probs = c(0.1, 0.25,0.5,0.75, 0.9),
+               xlim = range(mu_s),
+               ylim = range(tau_s),
+               n = 1001L,
+               args = list(pars = CAVI_approx)) +
+  labs(x = expression(mu), 
+       y = expression(tau)) +
+theme_classic()
+g1 + g2  +
+  plot_layout(guides = 'collect') &
+  theme(legend.position = "bottom")
+```
+
+## Marginal posterior densities
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-gauss-cavi-margdens
+#| fig-cap: "Marginal posterior density of the mean and precision of the Gaussian (full line), with CAVI approximation (dashed)."
+# Marginal densities
+mu_loc <- (tau0*mu0 + sum(y))/(tau0+n)
+mu_scale <- sqrt((2*b0 + (n-1)*var(y) +tau0*n*(mean(y)-mu0)^2/(tau0+n))/((tau0+n)*(n+2*a0)))
+mu_df <- 2*a0 +n
+
+g3 <- ggplot() +
+  stat_function(
+    fun = function(x){
+      dt((x - mu_loc)/mu_scale, 
+         df = mu_df)},
+    xlim = range(mu_s)) +
+  stat_function(
+    fun = dnorm, 
+    args = list(
+      mean = CAVI_approx$mu_mean, 
+      sd = sqrt(CAVI_approx$mu_var)),
+    xlim = range(mu_s),
+    linetype = "dashed")  +
+  labs(x = expression(mu), 
+       y = "density") +
+  theme_classic()
+g4 <- ggplot() +
+  stat_function(
+    fun = dgamma,
+    args = list(rate = pars_f$tau_rate,
+                shape = pars_f$tau_shape),
+    xlim = range(tau_s)) +
+  stat_function(
+    fun = dgamma, 
+    args = list(
+      rate = CAVI_approx$tau_rate, 
+      shape = CAVI_approx$tau_shape),
+    xlim = range(tau_s),
+    linetype = "dashed")  +
+  labs(x = expression(tau), 
+       y = "density") +
+  theme_classic()
+g3 + g4
+```
+
+## CAVI for probit regression
+
+A probit regression is a generalized linear model with probability of success $\Phi(\mathbf{x}_i\boldsymbol{\beta}),$ where $\Phi(\cdot)$ is the cumulative distribution function of a standard Gaussian variable. 
+
+We can write the model as
+\begin{align*}
+p(\boldsymbol{y} \mid \boldsymbol{\beta}) = \Phi(\mathbf{X}\boldsymbol{\beta})^{\boldsymbol{y}}\Phi(-\mathbf{X}\boldsymbol{\beta})^{\boldsymbol{1}_n -\boldsymbol{y}}
+\end{align*}
+since $1-\Phi(x) = \Phi(-x).$
+
+## Data augmentation and CAVI
+
+Consider data augmentation  with auxiliary variables $Z_i \mid \boldsymbol{\beta}\sim \mathsf{Gauss}(\mathbf{x}_i\boldsymbol{\beta}, 1).$ 
+
+With $\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{\mu}_0, \mathbf{Q}_0^{-1}),$ the model admits conditionals
+\begin{align*}
+\boldsymbol{\beta} \mid \boldsymbol{Z} &\sim \mathsf{Gauss}_p\left\{\mathbf{Q}_{\boldsymbol{\beta}}^{-1}(\mathbf{X}\boldsymbol{Z} + \mathbf{Q}_0\boldsymbol{\mu}_0),  \mathbf{Q}_{\boldsymbol{\beta}}^{-1} \right\}
+\\
+Z_i \mid y_i, \boldsymbol{\beta} &\sim \mathsf{trunc. Gauss}(\mathbf{x}_i\boldsymbol{\beta}, 1, l_i, u_i) 
+\end{align*}
+where $\mathbf{Q}_{\boldsymbol{\beta}}= \mathbf{X}^\top\mathbf{X} + \mathbf{Q_0},$ and $[l_i, u_i]$ is $(-\infty,0)$ if $y_i=0$ and $(0, \infty)$ if $y_i=1.$
+
+## CAVI factorization for probit model
+
+We consider a factorization of the form $$g_{\boldsymbol{Z}}(\boldsymbol{z})g_{\boldsymbol{\beta}}(\boldsymbol{\beta}).$$
+
+Then, the optimal form of the density further factorizes as $$g_{\boldsymbol{Z}}(\boldsymbol{z}) = \prod_{i=1}^n g_{Z_i}(z_i).$$
+
+## Gibbs, EM and CAVI
+
+- We exploit the conditionals in the same way as for Gibbs sampling
+- The only difference is that we substitute unknown parameter functionals by their expectations.
+- Also deep links with the expectation-maximization (EM) algorithm, which optimizes at each step parameters after replacing the log posterior of augmented data by their expectation.
+- CAVI however fixes the parameter values (less uncertainty in the posterior because of that).
+
+## Updates for CAVI - probit regression
+
+The model depends on 
+
+- $\mu_{\boldsymbol{Z}}$, the mean parameter of $\boldsymbol{Z}$
+- $\mu_{\boldsymbol{\beta}},$ the mean of $\boldsymbol{\beta}.$
+
+Consider the terms in the posterior proportional to $Z_i$, where 
+\begin{align*}
+p(z_i \mid \boldsymbol{\beta}, y_i) \propto -\frac{z_i^2 - 2z_i \mathbf{x}_i\boldsymbol{\beta}}{2} \times \mathrm{I}(z_i >0)^{y_i}\mathrm{I}(z_i <0)^{1-y_i}
+\end{align*}
+which is linear in $\boldsymbol{\beta}$. 
+
+## Truncated Gaussian
+
+The expectation of a univariate truncated Gaussian $Z \sim \mathsf{trunc. Gauss}(\mu,\sigma^2, l, u)$ is 
+\begin{align*}
+\mathsf{E}(Z) = \mu - \sigma\frac{\phi\{(u-\mu/\sigma)\} - \phi\{(l-\mu/\sigma)\}}{\Phi\{(u-\mu/\sigma)\} - \Phi\{(l-\mu/\sigma)\}}.
+\end{align*}
+
+## Update for CAVI 
+
+If we replace $\mu=\mathbf{x}_i\mu_{\boldsymbol{\beta}}$, we get the update
+\begin{align*}
+\mu_{Z_i}(z_i) = \begin{cases}
+\mathbf{x}_i\mu_{\boldsymbol{\beta}} - \frac{ \phi(\mathbf{x}_i\mu_{\boldsymbol{\beta}})}{1-\Phi(\mathbf{x}_i\mu_{\boldsymbol{\beta}})} & y_i = 0;\\
+\mathbf{x}_i\mu_{\boldsymbol{\beta}} + \frac{ \phi(\mathbf{x}_i\mu_{\boldsymbol{\beta}})}{\Phi(\mathbf{x}_i\mu_{\boldsymbol{\beta}})} & y_i = 1,
+\end{cases}
+\end{align*}
+since $\phi(x)=\phi(-x).$
+
+## Update for regression parameters
+
+The optimal form for $\boldsymbol{\beta}$ is Gaussian and  proceeding similarly,
+\begin{align*}
+\boldsymbol{\mu}_{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X} + \mathbf{Q_0})^{-1}(\mathbf{X}\boldsymbol{\mu}_{\boldsymbol{Z}} + \mathbf{Q}_0\boldsymbol{\mu}_0)
+\end{align*}
+where $\boldsymbol{\mu}_{\boldsymbol{Z}} = \mathsf{E}_{\boldsymbol{Z}}(\boldsymbol{Z}).$
+
+Other parameters of the distribution are known functions of covariates, etc. 
+
+<!--
+The ELBO is
+\begin{align*}
+\mathsf{ELBO} = -\frac{1}{2}(\boldsymbol{z} - \mathbf{X}\boldsymbol{\beta})^\top(\boldsymbol{z} - \mathbf{X}\boldsymbol{\beta})\right\} \times \prod_{i=1}^n \mathrm{I}(z_i > 0)^{y_i}\mathrm{I}(z_i \le 0)^{1-y_i}
+\end{align*}
+where use the fact $\mathsf{E}_{Z_i}\{\mathrm{I}(z_i \le 0)\}=$that the entropy of a $p$-dimensional multivariate Gaussian random vector with precision $\mathbf{Q}$ is $p/2\{1+\log(2\pi)\} - \log |\mathbf{Q}|/2.$
+-->
+
+
+```{r}
+#| eval: true
+#| echo: false
+# Data augmentation: "z" is latent Gaussian, 
+# truncated to be negative for failures 
+# and positive for successes
+cavi_probit <- function(
+  y, # response vector (0/1)
+  X, # model matrix
+  prior_beta_prec = diag(rep(0.01, ncol(X))),
+  prior_beta_mean = rep(0, ncol(X)),
+  maxiter = 1000L,
+  tol = 1e-4
+) {
+  # Precompute fixed quantity
+  sc <- solve(crossprod(X) + prior_beta_prec)
+  pmu_prior <- prior_beta_prec %*% prior_beta_mean
+  n <- length(y) # number of observations
+  stopifnot(nrow(X) == n)
+  mu_z <- rep(0, n)
+  y <- as.logical(y)
+  ELBO <- numeric(maxiter)
+  lcst <- -0.5 *
+    log(det(solve(prior_beta_prec) %*% crossprod(X) + diag(ncol(X))))
+  for (b in seq_len(maxiter)) {
+    mu_b <- c(sc %*% (t(X) %*% mu_z + pmu_prior))
+    lp <- c(X %*% mu_b)
+    mu_z <- lp + dnorm(lp) / (pnorm(lp) - ifelse(y, 0, 1))
+    ELBO[b] <- sum(pnorm(lp, lower.tail = y, log.p = TRUE)) -
+      lcst - 0.5 *
+        c(t(mu_b - prior_beta_mean) %*%
+            prior_beta_prec %*%
+            (mu_b - prior_beta_mean)) 
+    if (b > 2 && (ELBO[b] - ELBO[b - 1]) < tol) {
+      break
+    }
+  }
+  list(mu_z = mu_z, mu_beta = mu_b, elbo = ELBO[1:b])
+}
+```
+
+## Example
+
+We consider for illustration purposes data from Experiment 2 of @Duke.Amir:2023 on the effect of sequential decisions and purchasing formats.
+
+We fit a model with 
+- `age` of the participant (scaled) and 
+- `format,` the binary variable which indicate the experimental condition (sequential vs integrated).
+
+## ELBO and marginal density approximation
+
+```{r}
+#| eval: true
+#| echo: false
+#| cache: true
+#| label: fig-elbo-CAVI-probit
+#| fig-cap: "ELBO (left) and marginal density approximation with true density (full) versus variational approximation (dashed)."
+# Example with data from Experiment 2 of Duke and Amir (2023)
+# on the effect of sequential decisions and purchasing formats
+data(DA23_E2, package = "hecedsm")
+X <- model.matrix(
+  ~ scale(age) + format,
+  data = DA23_E2,
+  contrasts.arg = list(format = "contr.sum")
+)
+y <- DA23_E2$purchased
+# Fit the probit model via coordinate-ascent variational inference
+cavi_probit_DA <- cavi_probit(y = y, X = X)
+# Compare posterior mean with frequentist estimates
+coefs <- cbind(cavi_probit_DA$mu_beta, coef(glm(y ~ X - 1, family = binomial("probit"))))
+library(rust)
+prior_beta_prec = diag(rep(0.01, ncol(X)))
+prior_beta_mean = rep(0, ncol(X))
+loglik <- function(par, y, X) {
+  par <- c(par)
+  sum(
+    y *
+      pnorm(
+        q = c(X %*% c(par)),
+        log.p = TRUE
+      ) +
+      (1 - y) *
+        pnorm(
+          q = c(X %*% c(par)),
+          log.p = TRUE,
+          lower.tail = FALSE
+        )
+  ) +
+    -0.5 *
+      c(
+        t(prior_beta_mean - par) %*% prior_beta_prec %*% (prior_beta_mean - par)
+      )
+}
+pars <- glm(formula = y ~ X - 1, family = binomial("probit"))$coef
+# optim(fn = loglik, par = pars, X = X, y = y, control = list(fnscale = -1))
+samp <- rust::ru(
+  logf = loglik,
+  d = 3,
+  n = 1e5,
+  init = pars,
+  X = X,
+  y = y,
+  trans = "BC"
+)
+
+marg_sd <- sqrt(diag(solve(crossprod(X) + prior_beta_prec)))
+
+
+g1 <- ggplot(data = data.frame(x = samp$sim_vals[, 3])) +
+  geom_density(mapping = aes(x = x)) +
+  stat_function(
+    fun = dnorm,
+    n = 1001,
+    args = list(mean = cavi_probit_DA$mu_beta[3], sd = marg_sd[3]),
+    linetype = "dashed"
+  ) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  labs(x = expression(beta[2]), y = "", subtitle = "density") +
+  theme_classic()
+g2 <- ggplot(
+  data = data.frame(
+    niter = 1:length(cavi_probit_DA$elbo),
+    elbo = cavi_probit_DA$elbo
+  ),
+  mapping = aes(x = niter, y = elbo)
+) +
+  geom_point() +
+  geom_line() +
+  labs(
+    y = "",
+    subtitle = "evidence lower bound (ELBO)",
+    x = "number of iterations"
+  ) +
+  theme_classic()
+g2 + g1
+```
+
+## Comments
+
+- With vague priors, the coefficients for the mean $\boldsymbol{\mu}_{\boldsymbol{\beta}}=(\beta_0, \beta_1, \beta_2)^\top$ matches the frequentist point estimates of the probit regression to four significant digits.
+
+- Convergence is very fast, as shown by the ELBO plot.
+
+- The marginal density approximations are underdispersed.
+
 
 ## Stochastic optimization
 
@@ -333,6 +715,7 @@ using the change rule, differentiation under the integral sign (dominated conver
 - The gradient estimator is particularly noisy, so @Ranganath.Gerrish.Blei:2014 provide two methods to reduce the variance of this expression using control variates and Rao--Blackwellization.
 
 ## Automatic differentiation variational inference
+
 @Kucukelbir:2017 proposes a stochastic gradient algorithm, but with two main innovations.
 
 - The first is the general use of Gaussian approximating densities for factorized density, with parameter transformations to map from the support of $T: \boldsymbol{\Theta} \mapsto \mathbb{R}^p$ via $T(\boldsymbol{\theta})=\boldsymbol{\zeta}.$
