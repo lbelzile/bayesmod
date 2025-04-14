@@ -93,13 +93,11 @@ advi <- function(
       if (!isTRUE(random)) {
         set.seed(b) # make approximation deterministic
       }
-      # browser()
       if (meanfield) {
         eta <- c(mu + expL * rnorm(d))
       } else {
         eta <- c(mu + expL %*% rnorm(d))
       }
-      # browser()
       elbo[i] <- elbo[i] + fn(par = eta, ...)
       g <- grad(par = eta, ...)
       grad_elbo <- grad_elbo + g
@@ -146,8 +144,6 @@ advi <- function(
     step <- eta_step * exp(-(0.5 + 1e-16) * log(i))
     step_mu <- step / (sqrt(s_mu) + delay)
     # The updates are done on the log scale!
-    # If the step size is not made smaller (artificially)
-    # This can lead to divergence
     step_L <- step / (sqrt(s_L) + delay)
     # Adapt size of update
     update_mu <- step_mu * g_mu
