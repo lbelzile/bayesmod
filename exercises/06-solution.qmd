@@ -120,7 +120,7 @@ for(b in seq_len(B)){
   pars3[b, n + 1] <- mu <- rnorm(n = 1, mean = var_mu * sum((es$y - alpha)/es$se^2), sd = sqrt(var_mu)) 
   pars3[b, n + 2] <- sigma_al_st <- sum(alpha_st^2) / rchisq(1, df = n - 1) 
   pars3[b, n + 3] <- a <- rnorm(n = 1, mean = sum(alpha_st*(es$y-mu)/es$se^2)/sum(alpha_st^2/es$se^2), 
-                                sd = sum(alpha_st^2/es$se^2))
+                                sd = sqrt(sum(alpha_st^2/es$se^2)))
   pars3[b, 1:n] <- alpha_st*a
   pars3[b, n + 2] <- sigma_al <- abs(a)*sigma_al_st
 }
@@ -130,20 +130,32 @@ We can write the joint density of $\mu$ and $\boldsymbol{\alpha}$ and integrate 
 
 ```{r}
 #| eval: true
-#| echo: true
+#| echo: false
 # Compare trace plots for mu + alpha
 plot(pars1[, 2] + pars1[, n+1])
 plot(pars1[, 2])
 # Funnel behaviour
-ggplot(
+g1 <- ggplot(
   data = data.frame(
-   beta2 = c(pars1[,2], pars3[,2]), 
-   sigma = c(pars1[,n+2], pars3[,n+2]),
-   parametrization = rep(c("block","expansion"), each = B)),
-  mapping = aes(x = beta2, y = log(sigma), color = parametrization)) +
+   beta2 = c(pars1[,2]), 
+   sigma = c(pars1[,n+2])),
+  mapping = aes(x = beta2, y = log(sigma))) +
   geom_point() +
   scale_color_grey() +
-  labs(x = expression(alpha[2]), y = expression("log"~sigma[alpha])) 
+  labs(x = expression(alpha[2]), 
+       y = expression("log"~sigma[alpha]),
+       caption = "block") 
+g2 <- ggplot(
+  data = data.frame(
+   beta2 = c(pars3[,2]), 
+   sigma = c(pars3[,n+2])),
+  mapping = aes(x = beta2, y = log(sigma))) +
+  geom_point() +
+  scale_color_grey() +
+  labs(x = expression(alpha[2]), 
+       y = expression("log"~sigma[alpha]),
+       caption = "expansion") 
+g1 + g2
 ```
 
 :::

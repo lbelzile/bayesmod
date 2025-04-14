@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -223,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Saturday Apr 12, 2025</p>
+  <p class="date">Last compiled Monday Apr 14, 2025</p>
 </section>
 <section id="rationale-for-deterministic-approximations" class="slide level2">
 <h2>Rationale for deterministic approximations</h2>
@@ -282,7 +282,7 @@ p(\boldsymbol{y}) = \int_{\mathbb{R}^p} p(\boldsymbol{y} \mid \boldsymbol{\theta
 </section>
 <section id="laplace-approximation-to-the-marginal-likelihood-1" class="slide level2">
 <h2>Laplace approximation to the marginal likelihood</h2>
-<p>Evaluating at the maximum a posteriori <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}\)</span> and letting <span class="math inline">\(-\mathbf{H}\)</span> denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get <span class="citation" data-cites="Tierney.Kadane:1986">(<a href="#/references" role="doc-biblioref" onclick="">Tierney &amp; Kadane, 1986</a>)</span> <span class="math display">\[\begin{align*}
+<p>Evaluating at the maximum a posteriori <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}\)</span> and letting <span class="math inline">\(\mathbf{H} = - \log p(\boldsymbol{y}, \boldsymbol{\theta}) / \partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top\)</span> denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get <span class="citation" data-cites="Tierney.Kadane:1986">(<a href="#/references" role="doc-biblioref" onclick="">Tierney &amp; Kadane, 1986</a>)</span> <span class="math display">\[\begin{align*}
 \log p(\boldsymbol{y}) &amp;= \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) + \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) \\&amp;\quad + \frac{p}{2} \log (2\pi) - \frac{1}{2}\log |\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})| + \mathrm{O}(n^{-1})
 \end{align*}\]</span></p>
 </section>
@@ -591,7 +591,7 @@ Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters fr
 <span id="cb4-5"><a></a>  <span class="at">marginal =</span> marg_prec)</span>
 <span id="cb4-6"><a></a>INLA<span class="sc">::</span><span class="fu">inla.qmarginal</span>(marg_var, <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>,  <span class="fl">0.975</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2864905 0.4543037 0.7396820</code></pre>
+<pre><code>[1] 0.2864911 0.4543033 0.7396786</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Posterior marginal mean and variance of phi</span></span>
 <span id="cb6-2"><a></a>mom1 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
@@ -603,7 +603,7 @@ Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters fr
 <span id="cb6-8"><a></a><span class="fu">c</span>(<span class="at">mean =</span> mom1, <span class="at">sd =</span> <span class="fu">sqrt</span>(mom2 <span class="sc">-</span> mom1<span class="sc">^</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       mean          sd 
-0.984052723 0.005762531 </code></pre>
+0.984052715 0.005762476 </code></pre>
 </div>
 </div>
 </section>

@@ -272,9 +272,10 @@ which is quadratic in $\mu$ and thus must be Gaussian with precision $\tau_n = \
 
 The optimal precision factor satisfies
 \begin{align*}
- \ln g^{\star}_{\tau}(\tau) &\propto \log \tau\left(\frac{n+1}{2} + a_0-1\right)   \\&\quad- \tau {\color{#c38f16}{\left[b_0  + \frac{\mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\}}{2}  + \frac{\tau_0\mathsf{E}{\mu}\left\{(\mu-\mu_0)^2\right\}}{2}\right]}}.
+ \ln g^{\star}_{\tau}(\tau) &\propto \log \tau\left(\frac{n+1}{2} + a_0-1\right)   - \tau b_n\\
+ b_n & = b_0  + \frac{\mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\} + \tau_0\mathsf{E}{\mu}\left\{(\mu-\mu_0)^2\right\}}{2}
 \end{align*}
-Thus a gamma with shape $a_n =a_0 +n/2$ and rate ${\color{#c38f16}{b_n}}$.
+Thus a gamma with shape $a_n =a_0 + (n+1)/2$ and rate $b_n$.
 
 ## Rate of the gamma for $g_\tau$
 
@@ -698,6 +699,23 @@ The key idea behind these methods is that
 
 Also allows for minibatch (random subset) selection to reduce computational costs in large samples
 
+
+## Stochastic gradient descent
+
+Consider $f(\boldsymbol{\theta})$ a differentiable function with gradient $\nabla f(\boldsymbol{\theta})$ and $\rho_t$ a Robbins--Munro sequence.
+
+To maximize $f(\boldsymbol{\theta})$, we construct a series of first-order approximations starting from $\boldsymbol{\theta}^{(0)}$ with 
+\begin{align*}
+\boldsymbol{\theta}^{(t)} = \boldsymbol{\theta}^{(t-1)} +\rho_t  \mathsf{E}\left\{\nabla f(\boldsymbol{\theta}^{(t-1)})\right\}.
+\end{align*}
+where the expected value is evaluated via Monte Carlo, until changes in $\|\boldsymbol{\theta}_{t} - \boldsymbol{\theta}_{t-1}\|$ is less than some tolerance value.
+
+## Robbins--Munro sequence
+
+The step sizes must satisfy $$\sum_{t=1}^\infty \rho_t = \infty, \qquad\sum_{t=1}^\infty \rho^2_t< \infty.$$
+
+Parameter-specific scaling helps with updates of parameters on very different scales.
+
 ## Black-box variational inference
 
 @Ranganath.Gerrish.Blei:2014 shows that the gradient of the ELBO reduces to
@@ -711,7 +729,7 @@ using the change rule, differentiation under the integral sign (dominated conver
 
 ## Black-box variational inference in practice
 
-- Note that the gradient simplifies for $g_i$ in exponential families (covariance of sufficient statistic with $\log(p/g)$).
+- Note that the gradient simplifies for $g_i$ in exponential families.
 - The gradient estimator is particularly noisy, so @Ranganath.Gerrish.Blei:2014 provide two methods to reduce the variance of this expression using control variates and Rao--Blackwellization.
 
 ## Automatic differentiation variational inference
@@ -723,20 +741,13 @@ using the change rule, differentiation under the integral sign (dominated conver
 
 ## Gaussian full-rank approximation
 
-Consider an approximation $g(\boldsymbol{\zeta}; \boldsymbol{\psi})$ where $\boldsymbol{\psi}$ consists of
+Consider an approximation $g(\boldsymbol{\theta}; \boldsymbol{\psi})$ where $\boldsymbol{\psi}$ consists of
 
 - mean parameters $\boldsymbol{\mu}$ and
 - covariance $\boldsymbol{\Sigma}$, parametrized through a Cholesky decomposition
 
-The full approximation is of course more flexible when the transformed parameters $\boldsymbol{\zeta}$ are correlated, but is more expensive to compute than the mean-field approximation.
+The full approximation is of course more flexible, but is more expensive to compute than the mean-field approximation.
 
-## Change of variable
-
-The change of variable introduces a Jacobian term $\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})$ for the approximation to the density $p(\boldsymbol{\theta}, \boldsymbol{y})$, where
-
-\begin{align*}
-p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|
-\end{align*}
 
 ## Gaussian entropy
 
@@ -746,13 +757,66 @@ The entropy of the multivariate Gaussian with mean $\boldsymbol{\mu}$ and covari
 \end{align*}
 and only depends on $\boldsymbol{\Sigma}$.
 
-## ELBO with Gaussian approximation
 
-Since the Gaussian is a location-scale family, we can rewrite the model in terms of a standardized Gaussian variable $\boldsymbol{Z}\sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{I}_p)$ where $\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{Z}$ (this transformation has unit Jacobian).
+## Eigendecomposition
 
-The ELBO with the transformation becomes
+We work with the matrix-log of the covariance matrix, defined through it's eigendecomposition (or singular value decomposition) $$\boldsymbol{\Sigma}=\mathbf{V}\mathrm{diag}(\boldsymbol{\lambda})\mathbf{V}^{\top},$$ where $\mathbf{V}$ is a $p\times p$ orthogonal matrix of eigenvectors, whose inverse is equal to it's transpose.
+
+
+## Matrix-log
+
+Most operations on the matrix only affect the eigenvalues $\lambda_1, \ldots, \lambda_p$: the matrix-log $\boldsymbol{\Sigma} = \exp(2\mathbf{M})$ is
 \begin{align*}
- \mathsf{E}_{\boldsymbol{Z}}\left[ \log p\{\boldsymbol{y}, T^{-1}(\boldsymbol{\zeta})\} + \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|\right] + \mathcal{E}(\mathbf{L}).
+\mathbf{M} =\mathbf{V}\mathrm{diag}\left\{ \frac{1}{2}\log(\boldsymbol{\lambda})\right\}\mathbf{V}^\top.
+\end{align*}
+
+
+##  Operations on matrices 
+Other operations on matrices are defined analogously: 
+
+- $\exp(\boldsymbol{\Sigma}) = \mathbf{V}\mathrm{diag}\{ \exp(\boldsymbol{\lambda})\}\mathbf{V}^\top$ 
+- $\log(\boldsymbol{\Sigma}) = \mathbf{V}\mathrm{diag}\{ \log(\boldsymbol{\lambda})\}\mathbf{V}^\top$
+- 
+The symmetrization operator is $\mathsf{symm}(\mathbf{X}) = (\mathbf{X} + \mathbf{X}^\top)/2.$
+
+## Gaussian scale
+
+Since the Gaussian is a location-scale family, we can write $\boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z},$ in terms of a standardized Gaussian,
+\begin{align*}
+\mathsf{ELBO} = \mathsf{E}_{\boldsymbol{Z}}\left\{ p\{\boldsymbol{y}, \boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\right\} + c 
+\\\approx \frac{1}{B}\sum_{b=1}^B p\{\boldsymbol{y}, \boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}_i\} + c
+\end{align*}
+for $\boldsymbol{Z}_1, \ldots, \boldsymbol{Z}_b \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{I}_p),$ with $c=p\{\log(2\pi)+1\}/2 + \mathrm{trace}(\mathbf{M})$.
+
+## Gradients of the ELBO
+
+Write the gradient of the joint log posterior density as $$\nabla p(\boldsymbol{y}, \boldsymbol{\theta}) = {\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}/{\partial \boldsymbol{\theta}}.$$ Then, the gradients of the ELBO are
+\begin{align*}
+ \frac{\partial \mathsf{ELBO}(g)}{\partial \boldsymbol{\mu}} &= \mathsf{E}_{\boldsymbol{Z}}\left\{\nabla p(\boldsymbol{y}, \boldsymbol{\theta})\right\} \\
+ \frac{\partial \mathsf{ELBO}(g)}{\partial \mathbf{M}} &= \mathsf{symm}\left[\mathsf{E}_{\boldsymbol{Z}}\left\{\nabla p(\boldsymbol{y}, \boldsymbol{\theta})\boldsymbol{Z}^\top\exp(\mathbf{M})\right\}\right] + \mathbf{I}_p.
+\end{align*}
+
+
+
+## Gradients of ELBO for location-scale families
+
+We can rewrite the expression for the gradient with respect to the matrix-log $\mathbf{M}$ using integration by part
+\begin{align*}
+  &\mathsf{E}_{\boldsymbol{Z}}\left[\frac{\partial \log p\{\boldsymbol{y}, \boldsymbol{\theta}=\boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\}}{\partial \boldsymbol{\theta}}\boldsymbol{Z}^\top\exp(\mathbf{M})\right]
+ \\& =\mathsf{E}_{\boldsymbol{Z}}\left[\frac{\partial \log p\{\boldsymbol{y}, \boldsymbol{\theta}=\boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\}}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top}\exp(2\mathbf{M})\right].
+\end{align*}
+The first expression typically leads to a more noisy gradient estimator, but the second requires derivation of the Hessian. 
+
+## Change of variable
+
+The change of variable introduces a Jacobian term $\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})$ for the approximation to the density $p(\boldsymbol{\theta}, \boldsymbol{y})$, where
+
+\begin{align*}
+p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|
+\end{align*}
+and we replace the gradient by 
+\begin{align*}
+\nabla p(\boldsymbol{y}, \boldsymbol{\theta}) = \frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}.
 \end{align*}
 
 ## Chain rule
@@ -765,14 +829,6 @@ If $\boldsymbol{\theta} = T^{-1}(\boldsymbol{\zeta})$ and $\boldsymbol{\zeta} = 
 \times \frac{\partial (\boldsymbol{\mu} + \mathbf{L}\boldsymbol{z})}{\partial \boldsymbol{\psi}}
 \end{align*}
 
-## Gradients for ADVI {.smaller}
-
-The gradients of the ELBO with respect to the mean and variance are
-\begin{align*}
- \nabla_{\boldsymbol{\mu}} &= \mathsf{E}_{\boldsymbol{Z}}\left\{\frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}\right\} \\
- \nabla_{\mathbf{L}} &= \mathsf{E}_{\boldsymbol{Z}}\left[\left\{\frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}\right\}\boldsymbol{Z}^\top\right] + \mathbf{L}^{-\top}.
-\end{align*}
-and we can approximate the expectation by drawing standard Gaussian samples $\boldsymbol{Z}_1, \ldots, \boldsymbol{Z}_B.$
 
 ## Quality of approximation
 
@@ -788,7 +844,14 @@ knitr::include_graphics("fig/stochvol-volatility.png")
 
 Fitting HMC-NUTS to the exchange rate data takes 156 seconds for 10K iterations, vs 2 seconds for the mean-field approximation.
 
+## Performance of stochastic gradient descent
 
+The speed of convergence of the stochastic gradient descent depends on multiple factors: 
+
+- the properties of the function. Good performance is obtained for log concave distributions.
+- the level of noise of the gradient estimator. Less noisy gradient estimators are preferable.
+- good starting values, as the algorithm converges to a local maximum.
+- the Robbins--Munro sequence used for the step size, as overly large steps may lead to divergences.
 
 
 

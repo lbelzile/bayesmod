@@ -116,7 +116,7 @@ and take
 
 ## Laplace approximation to the marginal likelihood
 
-Evaluating at the maximum a posteriori $\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}$ and letting $-\mathbf{H}$ denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get [@Tierney.Kadane:1986]
+Evaluating at the maximum a posteriori $\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}$ and letting $\mathbf{H} = - \log p(\boldsymbol{y}, \boldsymbol{\theta}) / \partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top$ denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get [@Tierney.Kadane:1986]
 \begin{align*}
  \log p(\boldsymbol{y}) &= \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) + \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) \\&\quad + \frac{p}{2} \log (2\pi) - \frac{1}{2}\log |\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})| + \mathrm{O}(n^{-1})
 \end{align*}

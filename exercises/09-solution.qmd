@@ -106,7 +106,7 @@ laplace_marginal <- function(n){
 #| warning: false
 #| message: false
 #| label: fig-approx
-#| fig-cap: "Density of Gaussian approximations for $\\theta$ and $\\vartheta$ (log odds scale) versus true posterior as a function of the sample size for $n=25$ (left), $n=50$ (middle) and $n=100$ (right)."
+#| fig-cap: "Density of Gaussian approximations for $\\theta$ and $\\vartheta$ (log odds scale) versus true posterior as a function of the sample size for $n=10$ (left), $n=25$ (middle) and $n=50$ (right)."
 #| fig-width: 8
 #| fig-height: 3
 library(ggplot2)
@@ -118,7 +118,7 @@ g1 <- ggplot(mapping = aes(x = x, y = density,
   geom_line(data = gauss_approx_beta(10)) +
   scale_y_continuous(limits = c(0, NA), expand = expansion()) +
   MetBrewer::scale_color_met_d("Hiroshige") +
-  labs(caption = "n=25")
+  labs(caption = "n=10")
 g2 <- ggplot(mapping = aes(x = x, y = density, 
                            linetype = model, 
                            color = model)) +
@@ -126,7 +126,7 @@ g2 <- ggplot(mapping = aes(x = x, y = density,
   scale_y_continuous(limits = c(0, NA), expand = expansion()) +
   scale_x_continuous(limits = c(0,0.3), expand = expansion()) +
   MetBrewer::scale_color_met_d("Hiroshige") +
-  labs(caption = "n=50")
+  labs(caption = "n=25")
 g3 <- ggplot(mapping = aes(x = x, y = density, 
                            linetype = model, 
                            color = model)) +
@@ -134,7 +134,7 @@ g3 <- ggplot(mapping = aes(x = x, y = density,
   scale_y_continuous(limits = c(0, NA), expand = expansion()) +
   scale_x_continuous(limits = c(0.05,0.2), expand = expansion()) +
   MetBrewer::scale_color_met_d("Hiroshige") +
-  labs(caption = "n=100")
+  labs(caption = "n=50")
 
 g1 + g2 + g3 + plot_layout(guides = 'collect') & theme(legend.position = "top") 
 ```

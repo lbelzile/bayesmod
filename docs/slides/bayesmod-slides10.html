@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-81b5c3e63835cfde897ecd3d35a35a41.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.3">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -315,8 +315,9 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \tau^{-1}), \qquad i =1, \ldots, n;\\
 <section id="variational-approximation-to-gaussian-precision" class="slide level2">
 <h2>Variational approximation to Gaussian — precision</h2>
 <p>The optimal precision factor satisfies <span class="math display">\[\begin{align*}
-\ln g^{\star}_{\tau}(\tau) &amp;\propto \log \tau\left(\frac{n+1}{2} + a_0-1\right)   \\&amp;\quad- \tau {\color{#c38f16}{\left[b_0  + \frac{\mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\}}{2}  + \frac{\tau_0\mathsf{E}{\mu}\left\{(\mu-\mu_0)^2\right\}}{2}\right]}}.
-\end{align*}\]</span> Thus a gamma with shape <span class="math inline">\(a_n =a_0 +n/2\)</span> and rate <span class="math inline">\({\color{#c38f16}{b_n}}\)</span>.</p>
+\ln g^{\star}_{\tau}(\tau) &amp;\propto \log \tau\left(\frac{n+1}{2} + a_0-1\right)   - \tau b_n\\
+b_n &amp; = b_0  + \frac{\mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\} + \tau_0\mathsf{E}{\mu}\left\{(\mu-\mu_0)^2\right\}}{2}
+\end{align*}\]</span> Thus a gamma with shape <span class="math inline">\(a_n =a_0 + (n+1)/2\)</span> and rate <span class="math inline">\(b_n\)</span>.</p>
 </section>
 <section id="rate-of-the-gamma-for-g_tau" class="slide level2">
 <h2>Rate of the gamma for <span class="math inline">\(g_\tau\)</span></h2>
@@ -379,8 +380,17 @@ Z_i \mid y_i, \boldsymbol{\beta} &amp;\sim \mathsf{trunc. Gauss}(\mathbf{x}_i\bo
 </section>
 <section id="cavi-factorization-for-probit-model" class="slide level2">
 <h2>CAVI factorization for probit model</h2>
-<p>If we consider a factorization of the form <span class="math display">\[g_{\boldsymbol{Z}}(\boldsymbol{z})g_{\boldsymbol{\beta}}(\boldsymbol{\beta}),\]</span> then we exploit the conditionals in the same way as for Gibbs sampling, but substituting unknown parameter functionals by their expectations.</p>
-<p>Furthermore, the optimal form of the density further factorizes as <span class="math display">\[g_{\boldsymbol{Z}}(\boldsymbol{z}) = \prod_{i=1}^n g_{Z_i}(z_i).\]</span></p>
+<p>We consider a factorization of the form <span class="math display">\[g_{\boldsymbol{Z}}(\boldsymbol{z})g_{\boldsymbol{\beta}}(\boldsymbol{\beta}).\]</span></p>
+<p>Then, the optimal form of the density further factorizes as <span class="math display">\[g_{\boldsymbol{Z}}(\boldsymbol{z}) = \prod_{i=1}^n g_{Z_i}(z_i).\]</span></p>
+</section>
+<section id="gibbs-em-and-cavi" class="slide level2">
+<h2>Gibbs, EM and CAVI</h2>
+<ul>
+<li>We exploit the conditionals in the same way as for Gibbs sampling</li>
+<li>The only difference is that we substitute unknown parameter functionals by their expectations.</li>
+<li>Also deep links with the expectation-maximization (EM) algorithm, which optimizes at each step parameters after replacing the log posterior of augmented data by their expectation.</li>
+<li>CAVI however fixes the parameter values (less uncertainty in the posterior because of that).</li>
+</ul>
 </section>
 <section id="updates-for-cavi---probit-regression" class="slide level2">
 <h2>Updates for CAVI - probit regression</h2>
@@ -412,7 +422,8 @@ p(z_i \mid \boldsymbol{\beta}, y_i) \propto -\frac{z_i^2 - 2z_i \mathbf{x}_i\bol
 <h2>Update for regression parameters</h2>
 <p>The optimal form for <span class="math inline">\(\boldsymbol{\beta}\)</span> is Gaussian and proceeding similarly, <span class="math display">\[\begin{align*}
 \boldsymbol{\mu}_{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X} + \mathbf{Q_0})^{-1}(\mathbf{X}\boldsymbol{\mu}_{\boldsymbol{Z}} + \mathbf{Q}_0\boldsymbol{\mu}_0)
-\end{align*}\]</span></p>
+\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{\mu}_{\boldsymbol{Z}} = \mathsf{E}_{\boldsymbol{Z}}(\boldsymbol{Z}).\)</span></p>
+<p>Other parameters of the distribution are known functions of covariates, etc.</p>
 <!--
 The ELBO is
 \begin{align*}
@@ -424,10 +435,14 @@ where use the fact $\mathsf{E}_{Z_i}\{\mathrm{I}(z_i \le 0)\}=$that the entropy 
 <section id="example" class="slide level2">
 <h2>Example</h2>
 <p>We consider for illustration purposes data from Experiment 2 of <span class="citation" data-cites="Duke.Amir:2023">Duke &amp; Amir (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span> on the effect of sequential decisions and purchasing formats.</p>
-<ul>
-<li>We fit a model with age of the participant and the binary variable <code>format</code>, which indicate the experimental condition.</li>
-</ul>
+<p>We fit a model with - <code>age</code> of the participant (scaled) and - <code>format,</code> the binary variable which indicate the experimental condition (sequential vs integrated).</p>
 </section>
+<section id="elbo-and-marginal-density-approximation" class="slide level2">
+<h2>ELBO and marginal density approximation</h2>
+
+<img data-src="bayesmod-slides10_files/figure-revealjs/fig-elbo-CAVI-probit-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-elbo-CAVI-probit"><p class="caption">
+Figure&nbsp;4: ELBO (left) and marginal density approximation with true density (full) versus variational approximation (dashed).
+</p></section>
 <section id="comments" class="slide level2">
 <h2>Comments</h2>
 <ul>
@@ -436,12 +451,6 @@ where use the fact $\mathsf{E}_{Z_i}\{\mathrm{I}(z_i \le 0)\}=$that the entropy 
 <li><p>The marginal density approximations are underdispersed.</p></li>
 </ul>
 </section>
-<section id="elbo-and-marginal-density-approximation" class="slide level2">
-<h2>ELBO and marginal density approximation</h2>
-
-<img data-src="bayesmod-slides10_files/figure-revealjs/fig-elbo-CAVI-probit-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-elbo-CAVI-probit"><p class="caption">
-Figure&nbsp;4: ELBO (left) and marginal density approximation with true density (full) versus variational approximation (dashed).
-</p></section>
 <section id="stochastic-optimization" class="slide level2">
 <h2>Stochastic optimization</h2>
 <p>We consider alternative numeric schemes which rely on stochastic optimization <span class="citation" data-cites="Hoffman:2013">(<a href="#/references" role="doc-biblioref" onclick="">Hoffman et al., 2013</a>)</span>.</p>
@@ -451,6 +460,18 @@ Figure&nbsp;4: ELBO (left) and marginal density approximation with true density 
 <li>and approximate the expectations with respect to <span class="math inline">\(g\)</span> by drawing samples from it</li>
 </ul>
 <p>Also allows for minibatch (random subset) selection to reduce computational costs in large samples</p>
+</section>
+<section id="stochastic-gradient-descent" class="slide level2">
+<h2>Stochastic gradient descent</h2>
+<p>Consider <span class="math inline">\(f(\boldsymbol{\theta})\)</span> a differentiable function with gradient <span class="math inline">\(\nabla f(\boldsymbol{\theta})\)</span> and <span class="math inline">\(\rho_t\)</span> a Robbins–Munro sequence.</p>
+<p>To maximize <span class="math inline">\(f(\boldsymbol{\theta})\)</span>, we construct a series of first-order approximations starting from <span class="math inline">\(\boldsymbol{\theta}^{(0)}\)</span> with <span class="math display">\[\begin{align*}
+\boldsymbol{\theta}^{(t)} = \boldsymbol{\theta}^{(t-1)} +\rho_t  \mathsf{E}\left\{\nabla f(\boldsymbol{\theta}^{(t-1)})\right\}.
+\end{align*}\]</span> where the expected value is evaluated via Monte Carlo, until changes in <span class="math inline">\(\|\boldsymbol{\theta}_{t} - \boldsymbol{\theta}_{t-1}\|\)</span> is less than some tolerance value.</p>
+</section>
+<section id="robbinsmunro-sequence" class="slide level2">
+<h2>Robbins–Munro sequence</h2>
+<p>The step sizes must satisfy <span class="math display">\[\sum_{t=1}^\infty \rho_t = \infty, \qquad\sum_{t=1}^\infty \rho^2_t&lt; \infty.\]</span></p>
+<p>Parameter-specific scaling helps with updates of parameters on very different scales.</p>
 </section>
 <section id="black-box-variational-inference" class="slide level2">
 <h2>Black-box variational inference</h2>
@@ -463,7 +484,7 @@ Figure&nbsp;4: ELBO (left) and marginal density approximation with true density 
 <section id="black-box-variational-inference-in-practice" class="slide level2">
 <h2>Black-box variational inference in practice</h2>
 <ul>
-<li>Note that the gradient simplifies for <span class="math inline">\(g_i\)</span> in exponential families (covariance of sufficient statistic with <span class="math inline">\(\log(p/g)\)</span>).</li>
+<li>Note that the gradient simplifies for <span class="math inline">\(g_i\)</span> in exponential families.</li>
 <li>The gradient estimator is particularly noisy, so <span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> provide two methods to reduce the variance of this expression using control variates and Rao–Blackwellization.</li>
 </ul>
 </section>
@@ -477,19 +498,12 @@ Figure&nbsp;4: ELBO (left) and marginal density approximation with true density 
 </section>
 <section id="gaussian-full-rank-approximation" class="slide level2">
 <h2>Gaussian full-rank approximation</h2>
-<p>Consider an approximation <span class="math inline">\(g(\boldsymbol{\zeta}; \boldsymbol{\psi})\)</span> where <span class="math inline">\(\boldsymbol{\psi}\)</span> consists of</p>
+<p>Consider an approximation <span class="math inline">\(g(\boldsymbol{\theta}; \boldsymbol{\psi})\)</span> where <span class="math inline">\(\boldsymbol{\psi}\)</span> consists of</p>
 <ul>
 <li>mean parameters <span class="math inline">\(\boldsymbol{\mu}\)</span> and</li>
 <li>covariance <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, parametrized through a Cholesky decomposition</li>
 </ul>
-<p>The full approximation is of course more flexible when the transformed parameters <span class="math inline">\(\boldsymbol{\zeta}\)</span> are correlated, but is more expensive to compute than the mean-field approximation.</p>
-</section>
-<section id="change-of-variable" class="slide level2">
-<h2>Change of variable</h2>
-<p>The change of variable introduces a Jacobian term <span class="math inline">\(\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\)</span> for the approximation to the density <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{y})\)</span>, where</p>
-<p><span class="math display">\[\begin{align*}
-p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|
-\end{align*}\]</span></p>
+<p>The full approximation is of course more flexible, but is more expensive to compute than the mean-field approximation.</p>
 </section>
 <section id="gaussian-entropy" class="slide level2">
 <h2>Gaussian entropy</h2>
@@ -497,11 +511,53 @@ p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \
 \mathcal{E}(\mathbf{L}) = - \mathsf{E}_g(\log g) &amp;= \frac{D+D\log(2\pi) + \log |\mathbf{LL}^\top|}{2},
 \end{align*}\]</span> and only depends on <span class="math inline">\(\boldsymbol{\Sigma}\)</span>.</p>
 </section>
-<section id="elbo-with-gaussian-approximation" class="slide level2">
-<h2>ELBO with Gaussian approximation</h2>
-<p>Since the Gaussian is a location-scale family, we can rewrite the model in terms of a standardized Gaussian variable <span class="math inline">\(\boldsymbol{Z}\sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{I}_p)\)</span> where <span class="math inline">\(\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{Z}\)</span> (this transformation has unit Jacobian).</p>
-<p>The ELBO with the transformation becomes <span class="math display">\[\begin{align*}
-\mathsf{E}_{\boldsymbol{Z}}\left[ \log p\{\boldsymbol{y}, T^{-1}(\boldsymbol{\zeta})\} + \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|\right] + \mathcal{E}(\mathbf{L}).
+<section id="eigendecomposition" class="slide level2">
+<h2>Eigendecomposition</h2>
+<p>We work with the matrix-log of the covariance matrix, defined through it’s eigendecomposition (or singular value decomposition) <span class="math display">\[\boldsymbol{\Sigma}=\mathbf{V}\mathrm{diag}(\boldsymbol{\lambda})\mathbf{V}^{\top},\]</span> where <span class="math inline">\(\mathbf{V}\)</span> is a <span class="math inline">\(p\times p\)</span> orthogonal matrix of eigenvectors, whose inverse is equal to it’s transpose.</p>
+</section>
+<section id="matrix-log" class="slide level2">
+<h2>Matrix-log</h2>
+<p>Most operations on the matrix only affect the eigenvalues <span class="math inline">\(\lambda_1, \ldots, \lambda_p\)</span>: the matrix-log <span class="math inline">\(\boldsymbol{\Sigma} = \exp(2\mathbf{M})\)</span> is <span class="math display">\[\begin{align*}
+\mathbf{M} =\mathbf{V}\mathrm{diag}\left\{ \frac{1}{2}\log(\boldsymbol{\lambda})\right\}\mathbf{V}^\top.
+\end{align*}\]</span></p>
+</section>
+<section id="operations-on-matrices" class="slide level2">
+<h2>Operations on matrices</h2>
+<p>Other operations on matrices are defined analogously:</p>
+<ul>
+<li><span class="math inline">\(\exp(\boldsymbol{\Sigma}) = \mathbf{V}\mathrm{diag}\{ \exp(\boldsymbol{\lambda})\}\mathbf{V}^\top\)</span></li>
+<li><span class="math inline">\(\log(\boldsymbol{\Sigma}) = \mathbf{V}\mathrm{diag}\{ \log(\boldsymbol{\lambda})\}\mathbf{V}^\top\)</span></li>
+<li>The symmetrization operator is <span class="math inline">\(\mathsf{symm}(\mathbf{X}) = (\mathbf{X} + \mathbf{X}^\top)/2.\)</span></li>
+</ul>
+</section>
+<section id="gaussian-scale" class="slide level2">
+<h2>Gaussian scale</h2>
+<p>Since the Gaussian is a location-scale family, we can write <span class="math inline">\(\boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z},\)</span> in terms of a standardized Gaussian, <span class="math display">\[\begin{align*}
+\mathsf{ELBO} = \mathsf{E}_{\boldsymbol{Z}}\left\{ p\{\boldsymbol{y}, \boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\right\} + c
+\\\approx \frac{1}{B}\sum_{b=1}^B p\{\boldsymbol{y}, \boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}_i\} + c
+\end{align*}\]</span> for <span class="math inline">\(\boldsymbol{Z}_1, \ldots, \boldsymbol{Z}_b \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{I}_p),\)</span> with <span class="math inline">\(c=p\{\log(2\pi)+1\}/2 + \mathrm{trace}(\mathbf{M})\)</span>.</p>
+</section>
+<section id="gradients-of-the-elbo" class="slide level2">
+<h2>Gradients of the ELBO</h2>
+<p>Write the gradient of the joint log posterior density as <span class="math display">\[\nabla p(\boldsymbol{y}, \boldsymbol{\theta}) = {\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}/{\partial \boldsymbol{\theta}}.\]</span> Then, the gradients of the ELBO are <span class="math display">\[\begin{align*}
+\frac{\partial \mathsf{ELBO}(g)}{\partial \boldsymbol{\mu}} &amp;= \mathsf{E}_{\boldsymbol{Z}}\left\{\nabla p(\boldsymbol{y}, \boldsymbol{\theta})\right\} \\
+\frac{\partial \mathsf{ELBO}(g)}{\partial \mathbf{M}} &amp;= \mathsf{symm}\left[\mathsf{E}_{\boldsymbol{Z}}\left\{\nabla p(\boldsymbol{y}, \boldsymbol{\theta})\boldsymbol{Z}^\top\exp(\mathbf{M})\right\}\right] + \mathbf{I}_p.
+\end{align*}\]</span></p>
+</section>
+<section id="gradients-of-elbo-for-location-scale-families" class="slide level2">
+<h2>Gradients of ELBO for location-scale families</h2>
+<p>We can rewrite the expression for the gradient with respect to the matrix-log <span class="math inline">\(\mathbf{M}\)</span> using integration by part <span class="math display">\[\begin{align*}
+  &amp;\mathsf{E}_{\boldsymbol{Z}}\left[\frac{\partial \log p\{\boldsymbol{y}, \boldsymbol{\theta}=\boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\}}{\partial \boldsymbol{\theta}}\boldsymbol{Z}^\top\exp(\mathbf{M})\right]
+\\&amp; =\mathsf{E}_{\boldsymbol{Z}}\left[\frac{\partial \log p\{\boldsymbol{y}, \boldsymbol{\theta}=\boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\}}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top}\exp(2\mathbf{M})\right].
+\end{align*}\]</span> The first expression typically leads to a more noisy gradient estimator, but the second requires derivation of the Hessian.</p>
+</section>
+<section id="change-of-variable" class="slide level2">
+<h2>Change of variable</h2>
+<p>The change of variable introduces a Jacobian term <span class="math inline">\(\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\)</span> for the approximation to the density <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{y})\)</span>, where</p>
+<p><span class="math display">\[\begin{align*}
+p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|
+\end{align*}\]</span> and we replace the gradient by <span class="math display">\[\begin{align*}
+\nabla p(\boldsymbol{y}, \boldsymbol{\theta}) = \frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}.
 \end{align*}\]</span></p>
 </section>
 <section id="chain-rule" class="slide level2">
@@ -513,18 +569,21 @@ p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \
 \times \frac{\partial (\boldsymbol{\mu} + \mathbf{L}\boldsymbol{z})}{\partial \boldsymbol{\psi}}
 \end{align*}\]</span></p>
 </section>
-<section id="gradients-for-advi" class="slide level2 smaller">
-<h2>Gradients for ADVI</h2>
-<p>The gradients of the ELBO with respect to the mean and variance are <span class="math display">\[\begin{align*}
-\nabla_{\boldsymbol{\mu}} &amp;= \mathsf{E}_{\boldsymbol{Z}}\left\{\frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}\right\} \\
-\nabla_{\mathbf{L}} &amp;= \mathsf{E}_{\boldsymbol{Z}}\left[\left\{\frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}\right\}\boldsymbol{Z}^\top\right] + \mathbf{L}^{-\top}.
-\end{align*}\]</span> and we can approximate the expectation by drawing standard Gaussian samples <span class="math inline">\(\boldsymbol{Z}_1, \ldots, \boldsymbol{Z}_B.\)</span></p>
-</section>
 <section id="quality-of-approximation" class="slide level2">
 <h2>Quality of approximation</h2>
 <p>Consider the stochastic volatility model.</p>
 
 <img data-src="fig/stochvol-volatility.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p>Fitting HMC-NUTS to the exchange rate data takes 156 seconds for 10K iterations, vs 2 seconds for the mean-field approximation.</p>
+</section>
+<section id="performance-of-stochastic-gradient-descent" class="slide level2">
+<h2>Performance of stochastic gradient descent</h2>
+<p>The speed of convergence of the stochastic gradient descent depends on multiple factors:</p>
+<ul>
+<li>the properties of the function. Good performance is obtained for log concave distributions.</li>
+<li>the level of noise of the gradient estimator. Less noisy gradient estimators are preferable.</li>
+<li>good starting values, as the algorithm converges to a local maximum.</li>
+<li>the Robbins–Munro sequence used for the step size, as overly large steps may lead to divergences.</li>
+</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>

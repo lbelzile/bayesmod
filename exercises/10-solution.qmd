@@ -35,9 +35,9 @@ Consider a finite mixture model of $K$ univariate Gaussian $\mathsf{Gauss}(\mu_k
 where $\boldsymbol{w} \in \mathbb{S}_{K-1}$ are positive weights that sum to one, meaning $w_1 + \cdots + w_K=1.$ We use conjugate priors 
 $\mu_k \sim \mathsf{Gauss}(0, 100)$, $\tau_k \sim \mathsf{Gamma}(a, b)$ for $k=1, \ldots, K$ and $\boldsymbol{w} \sim \mathsf{Dirichlet}(\alpha)$ for $a, b, \alpha>0$ fixed hyperparameter values.
 
-To help with inference, we introduce auxiliary variables $\boldsymbol{U}_1, \ldots, \boldsymbol{U}_n$ where $\boldsymbol{U}_i \sim \mathsf{multinom}(1, \boldsymbol{w})$ that indicates which cluster component the model belongs to, and $\omega_k = \Pr(U_{ik}=1).$
+To help with inference, we introduce auxiliary variables $\boldsymbol{U}_1, \ldots, \boldsymbol{U}_n$ where $\boldsymbol{U}_i \sim \mathsf{multinom}(1, \boldsymbol{w})$ that indicates which cluster component the model belongs to, and $w_k = \Pr(U_{ik}=1).$
 
-The parameters and latent variables for the posterior of interest are $\boldsymbol{\mu}, \boldsymbol{\tau}, \boldsymbol{w}$ and $\mathbf{U}.$ Consider a factorized decomposition in which each component is independent of the others, $q_{\boldsymbol{w}}(\boldsymbol{w})q_{\boldsymbol{\mu}}(\boldsymbol{\mu})q_{\boldsymbol{\tau}}(\boldsymbol{\tau}) q(\boldsymbol{U}).$
+The parameters and latent variables for the posterior of interest are $\boldsymbol{\mu}, \boldsymbol{\tau}, \boldsymbol{w}$ and $\boldsymbol{U}.$ Consider a factorized decomposition in which each component is independent of the others, $g_{\boldsymbol{w}}(\boldsymbol{w})g_{\boldsymbol{\mu}}(\boldsymbol{\mu})g_{\boldsymbol{\tau}}(\boldsymbol{\tau}) g_{\boldsymbol{U}}(\boldsymbol{u}).$
 
 1. Apply the coordinate ascent algorithm to obtain the distribution for the optimal components.
 2. Write down an expression for the ELBO.
@@ -108,8 +108,8 @@ for(b in seq_len(maxiter)){
 list(elbo = ELBO[1:b],
      mu_mean = mu,
      mu_var = sigma_sq,
-     sigmasq_shape = A,
-     sigmasq_rate = B,
+     sigmasg_shape = A,
+     sigmasg_rate = B,
      weights_alpha = alpha,
      probs = omega,
      mean_probs = alpha/sum(alpha),
@@ -129,7 +129,7 @@ plot(mixt$elbo,
 # Compute posterior mean of mean, variance and probability of each cluster
 post_prob <- mixt$mean_probs
 post_mean <- mixt$mu_mean
-post_sd <- sqrt(mixt$sigmasq_rate/(mixt$sigmasq_shape-1))
+post_sd <- sqrt(mixt$sigmasg_rate/(mixt$sigmasg_shape-1))
 # Plot the mixture density at posterior mean
 curve(post_prob[1]*dnorm(x, mean = post_mean[1], sd = post_sd[1]) +
         post_prob[2]*dnorm(x, mean = post_mean[2], sd = post_sd[2]),
