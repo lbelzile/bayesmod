@@ -48,6 +48,8 @@ The parameters and latent variables for the posterior of interest are $\boldsymb
 :::{.solution}
 
 ```{r}
+#| eval: true
+#| echo: true
 #############################################################
 ## CAVI algorithm for K-components Gaussian mixture models
 #############################################################
@@ -119,6 +121,9 @@ list(elbo = ELBO[1:b],
 ```
 
 ```{r}
+#| eval: true
+#| echo: true
+#| code-fold: true
 # Fit the model
 data(geyser, package = "MASS")
 mixt <- CAVI_gauss_mixt(K = 2, y = geyser$duration)
