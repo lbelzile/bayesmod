@@ -304,7 +304,7 @@ f(y; p) = p(1-p)^{y}, \qquad y = 0, 1, 2, \ldots;
 </ol></li>
 <li>The <a href="../files/data/post_waiting_weibull.csv"><code>post_waiting_weibull</code></a> contains 10K random samples from the posterior of a Weibull model <span class="math inline">\(\mathsf{Weibull}(\lambda, \alpha)\)</span> with a penalized-complexity prior for the shape parameter with <span class="math inline">\(\alpha \sim \mathsf{PC}(\theta=0.5)\)</span> <span class="citation" data-cites="vanNiekerk:2021">(<a href="#ref-vanNiekerk:2021" role="doc-biblioref">Niekerk et al., 2021</a>)</span> and <span class="math inline">\(\lambda \sim \mathsf{inv. gamma}(\gamma, \omega)\)</span> with scale <span class="math inline">\(\gamma=90\)</span> and shape <span class="math inline">\(\omega=4\)</span>.
 <ol type="a">
-<li>Draw <span class="math inline">\(B=1000\)</span> posterior predictive samples of size <span class="math inline">\(n=62\)</span> from the Weibull and exponential models. <em>Each draw should use different parameter values.</em></li>
+<li>Draw <span class="math inline">\(B=1000\)</span> posterior predictive samples of size <span class="math inline">\(n=62\)</span> from the Weibull and exponential models. <em>For each posterior draw, generate a sample of size <span class="math inline">\(n=62\)</span>.</em></li>
 <li>For each, compute (i) the sample mean, (ii) the sample std. deviation and (iii) the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original <code>waiting</code> sample. Hence comment on the adequacy (or lack thereof) of the two models.</li>
 </ol></li>
 </ol>

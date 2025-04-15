@@ -48,6 +48,6 @@ The [`waiting` dataset](/files/data/waiting.csv) contains waiting times (in seco
    c. Derive the posterior distribution and report its parameter values.
    d. Calculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.
 2. The [`post_waiting_weibull`](/files/data/post_waiting_weibull.csv) contains 10K random samples from the posterior of a Weibull model $\mathsf{Weibull}(\lambda, \alpha)$ with a penalized-complexity prior for the shape parameter with $\alpha \sim \mathsf{PC}(\theta=0.5)$ [@vanNiekerk:2021] and  $\lambda \sim \mathsf{inv. gamma}(\gamma, \omega)$ with scale $\gamma=90$ and shape $\omega=4$.
-    a. Draw $B=1000$ posterior predictive samples of size $n=62$ from the Weibull and exponential models. *Each draw should use different parameter values.*
+    a. Draw $B=1000$ posterior predictive samples of size $n=62$ from the Weibull and exponential models. *For each posterior draw, generate a sample of size $n=62$.*
     b. For each, compute (i) the sample mean, (ii) the sample std. deviation and (iii) the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original `waiting` sample. Hence comment on the adequacy (or lack thereof) of the two models.
 

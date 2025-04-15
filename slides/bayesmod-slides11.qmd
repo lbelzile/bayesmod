@@ -251,7 +251,7 @@ Such factorization is also feasible in graphical models (e.g., autoregressive pr
 
 Considers a factor structure approximation in which each $q_i$ is Gaussian with precision $\mathbf{Q}_i$ and linear shift $\boldsymbol{r}_i$,
 \begin{align*}
- q(\boldsymbol{\theta}) &\propto \prod_{i=1}^n q_i(\boldsymbol{\theta})
+ q(\boldsymbol{\theta}) &\propto \prod_{i=0}^n q_i(\boldsymbol{\theta})
  \\& \propto \prod_{i=0}^n \exp \left(-\frac{1}{2} \boldsymbol{\theta}^\top\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top\boldsymbol{r}_i\right)
  \\ &= \exp \left( - \frac{1}{2} \boldsymbol{\theta}^\top \sum_{i=0}^n\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top \sum_{i=0}^n\boldsymbol{r}_i\right).
 \end{align*}
@@ -289,7 +289,7 @@ Compute normalizing constant and moments
 \begin{align*}
  c_j &= \int h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta} \\
  \boldsymbol{\mu}_j &= c_{j}^{-1} \int \boldsymbol{\theta} h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
- \\ \boldsymbol{\Sigma}_j &= c_j^{-1} (\boldsymbol{\theta} - \boldsymbol{\mu}_j)(\boldsymbol{\theta} - \boldsymbol{\mu}_j)^\top h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+ \\ \boldsymbol{\Sigma}_j &= c_j^{-1} \int(\boldsymbol{\theta} - \boldsymbol{\mu}_j)(\boldsymbol{\theta} - \boldsymbol{\mu}_j)^\top h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
 \end{align*}
 
 ## Comment on step 3

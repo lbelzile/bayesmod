@@ -223,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Apr 14, 2025</p>
+  <p class="date">Last compiled Tuesday Apr 15, 2025</p>
 </section>
 <section id="revisiting-kullbackleibler-divergence" class="slide level2">
 <h2>Revisiting Kullback–Leibler divergence</h2>
@@ -344,7 +344,7 @@ p(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto p(\boldsymbol{\theta}) \prod_
 <section id="expectation-propagation-approximating-density" class="slide level2">
 <h2>Expectation propagation approximating density</h2>
 <p>Considers a factor structure approximation in which each <span class="math inline">\(q_i\)</span> is Gaussian with precision <span class="math inline">\(\mathbf{Q}_i\)</span> and linear shift <span class="math inline">\(\boldsymbol{r}_i\)</span>, <span class="math display">\[\begin{align*}
-q(\boldsymbol{\theta}) &amp;\propto \prod_{i=1}^n q_i(\boldsymbol{\theta})
+q(\boldsymbol{\theta}) &amp;\propto \prod_{i=0}^n q_i(\boldsymbol{\theta})
 \\&amp; \propto \prod_{i=0}^n \exp \left(-\frac{1}{2} \boldsymbol{\theta}^\top\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top\boldsymbol{r}_i\right)
 \\ &amp;= \exp \left( - \frac{1}{2} \boldsymbol{\theta}^\top \sum_{i=0}^n\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top \sum_{i=0}^n\boldsymbol{r}_i\right).
 \end{align*}\]</span></p>
@@ -374,7 +374,7 @@ h_j(\boldsymbol{\theta}) \propto q_{-j}(\boldsymbol{\theta})L_j(\boldsymbol{\the
 <p><span class="math display">\[\begin{align*}
 c_j &amp;= \int h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta} \\
 \boldsymbol{\mu}_j &amp;= c_{j}^{-1} \int \boldsymbol{\theta} h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
-\\ \boldsymbol{\Sigma}_j &amp;= c_j^{-1} (\boldsymbol{\theta} - \boldsymbol{\mu}_j)(\boldsymbol{\theta} - \boldsymbol{\mu}_j)^\top h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+\\ \boldsymbol{\Sigma}_j &amp;= c_j^{-1} \int(\boldsymbol{\theta} - \boldsymbol{\mu}_j)(\boldsymbol{\theta} - \boldsymbol{\mu}_j)^\top h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
 \end{align*}\]</span></p>
 </section>
 <section id="comment-on-step-3" class="slide level2">

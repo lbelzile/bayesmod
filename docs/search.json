@@ -1593,7 +1593,7 @@
     "href": "slides/bayesmod-slides11.html#expectation-propagation-approximating-density",
     "title": "Bayesian modelling",
     "section": "Expectation propagation approximating density",
-    "text": "Expectation propagation approximating density\nConsiders a factor structure approximation in which each \\(q_i\\) is Gaussian with precision \\(\\mathbf{Q}_i\\) and linear shift \\(\\boldsymbol{r}_i\\), \\[\\begin{align*}\nq(\\boldsymbol{\\theta}) &\\propto \\prod_{i=1}^n q_i(\\boldsymbol{\\theta})\n\\\\& \\propto \\prod_{i=0}^n \\exp \\left(-\\frac{1}{2} \\boldsymbol{\\theta}^\\top\\mathbf{Q}_i\\boldsymbol{\\theta} + \\boldsymbol{\\theta}^\\top\\boldsymbol{r}_i\\right)\n\\\\ &= \\exp \\left( - \\frac{1}{2} \\boldsymbol{\\theta}^\\top \\sum_{i=0}^n\\mathbf{Q}_i\\boldsymbol{\\theta} + \\boldsymbol{\\theta}^\\top \\sum_{i=0}^n\\boldsymbol{r}_i\\right).\n\\end{align*}\\]"
+    "text": "Expectation propagation approximating density\nConsiders a factor structure approximation in which each \\(q_i\\) is Gaussian with precision \\(\\mathbf{Q}_i\\) and linear shift \\(\\boldsymbol{r}_i\\), \\[\\begin{align*}\nq(\\boldsymbol{\\theta}) &\\propto \\prod_{i=0}^n q_i(\\boldsymbol{\\theta})\n\\\\& \\propto \\prod_{i=0}^n \\exp \\left(-\\frac{1}{2} \\boldsymbol{\\theta}^\\top\\mathbf{Q}_i\\boldsymbol{\\theta} + \\boldsymbol{\\theta}^\\top\\boldsymbol{r}_i\\right)\n\\\\ &= \\exp \\left( - \\frac{1}{2} \\boldsymbol{\\theta}^\\top \\sum_{i=0}^n\\mathbf{Q}_i\\boldsymbol{\\theta} + \\boldsymbol{\\theta}^\\top \\sum_{i=0}^n\\boldsymbol{r}_i\\right).\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides11.html#step-1-of-expectation-propagation",
@@ -1621,7 +1621,7 @@
     "href": "slides/bayesmod-slides11.html#step-3-of-expectation-propagation",
     "title": "Bayesian modelling",
     "section": "Step 3 of expectation propagation",
-    "text": "Step 3 of expectation propagation\nCompute normalizing constant and moments\n\\[\\begin{align*}\nc_j &= \\int h_j(\\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta} \\\\\n\\boldsymbol{\\mu}_j &= c_{j}^{-1} \\int \\boldsymbol{\\theta} h_j(\\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}\n\\\\ \\boldsymbol{\\Sigma}_j &= c_j^{-1} (\\boldsymbol{\\theta} - \\boldsymbol{\\mu}_j)(\\boldsymbol{\\theta} - \\boldsymbol{\\mu}_j)^\\top h_j(\\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\]"
+    "text": "Step 3 of expectation propagation\nCompute normalizing constant and moments\n\\[\\begin{align*}\nc_j &= \\int h_j(\\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta} \\\\\n\\boldsymbol{\\mu}_j &= c_{j}^{-1} \\int \\boldsymbol{\\theta} h_j(\\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}\n\\\\ \\boldsymbol{\\Sigma}_j &= c_j^{-1} \\int(\\boldsymbol{\\theta} - \\boldsymbol{\\mu}_j)(\\boldsymbol{\\theta} - \\boldsymbol{\\mu}_j)^\\top h_j(\\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides11.html#comment-on-step-3",
@@ -3281,7 +3281,7 @@
     "href": "evaluations/01-assignment.html#problem-1.3",
     "title": "Assignment 1",
     "section": "Problem 1.3",
-    "text": "Problem 1.3\nThe waiting dataset contains waiting times (in seconds) from 17:59 until the departure of the next metro at the Universite de Montreal station during week-days over three consecutive months.\n\nAssume first that the waiting time are independent and identically distributed as exponential.\n\nUse a conjugate gamma prior such that the average waiting time \\(1/\\lambda\\) has mean 30 seconds and std. deviation 30 seconds.2 Give the values of the corresponding shape and rate parameters of the prior.\nPlot an histogram of prior predictive draws.\nDerive the posterior distribution and report its parameter values.\nCalculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.\n\nThe post_waiting_weibull contains 10K random samples from the posterior of a Weibull model \\(\\mathsf{Weibull}(\\lambda, \\alpha)\\) with a penalized-complexity prior for the shape parameter with \\(\\alpha \\sim \\mathsf{PC}(\\theta=0.5)\\) (Niekerk et al., 2021) and \\(\\lambda \\sim \\mathsf{inv. gamma}(\\gamma, \\omega)\\) with scale \\(\\gamma=90\\) and shape \\(\\omega=4\\).\n\nDraw \\(B=1000\\) posterior predictive samples of size \\(n=62\\) from the Weibull and exponential models. Each draw should use different parameter values.\nFor each, compute (i) the sample mean, (ii) the sample std. deviation and (iii) the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original waiting sample. Hence comment on the adequacy (or lack thereof) of the two models.",
+    "text": "Problem 1.3\nThe waiting dataset contains waiting times (in seconds) from 17:59 until the departure of the next metro at the Universite de Montreal station during week-days over three consecutive months.\n\nAssume first that the waiting time are independent and identically distributed as exponential.\n\nUse a conjugate gamma prior such that the average waiting time \\(1/\\lambda\\) has mean 30 seconds and std. deviation 30 seconds.2 Give the values of the corresponding shape and rate parameters of the prior.\nPlot an histogram of prior predictive draws.\nDerive the posterior distribution and report its parameter values.\nCalculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.\n\nThe post_waiting_weibull contains 10K random samples from the posterior of a Weibull model \\(\\mathsf{Weibull}(\\lambda, \\alpha)\\) with a penalized-complexity prior for the shape parameter with \\(\\alpha \\sim \\mathsf{PC}(\\theta=0.5)\\) (Niekerk et al., 2021) and \\(\\lambda \\sim \\mathsf{inv. gamma}(\\gamma, \\omega)\\) with scale \\(\\gamma=90\\) and shape \\(\\omega=4\\).\n\nDraw \\(B=1000\\) posterior predictive samples of size \\(n=62\\) from the Weibull and exponential models. For each posterior draw, generate a sample of size \\(n=62\\).\nFor each, compute (i) the sample mean, (ii) the sample std. deviation and (iii) the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original waiting sample. Hence comment on the adequacy (or lack thereof) of the two models.",
     "crumbs": [
       "Evaluations",
       "Assignments",
@@ -5355,7 +5355,7 @@
     "href": "slides/bayesmod-slides9.html#comment-on-stochastic-volatility",
     "title": "Bayesian modelling",
     "section": "Comment on stochastic volatility",
-    "text": "Comment on stochastic volatility\nFigure 3 shows that the correlation \\(\\phi\\) is nearly one, leading to random walk behaviour and high persistence over time (this is also due to the frequency of observations).\nThis strong serial dependence in the variance is in part responsible for the difficulty in fitting this model using MCMC."
+    "text": "Comment on stochastic volatility\nFigure 3 shows that the correlation \\(\\phi\\) is nearly one, leading to random walk behaviour and high persistence over time.\nThis strong serial dependence in the variance is in part responsible for the difficulty in fitting this model using MCMC."
   },
   {
     "objectID": "slides/bayesmod-slides9.html#marginal-approximations",
@@ -5376,7 +5376,7 @@
     "href": "slides/bayesmod-slides9.html#tokyo-binomial-time-series",
     "title": "Bayesian modelling",
     "section": "Tokyo binomial time series",
-    "text": "Tokyo binomial time series\nWe revisit the Tokyo rainfall example, but this time fit the model with INLA rather than MCMC.\nWe specify the mean model without intercept and fit a logistic regression, with a second-order cyclic random walk prior for the coefficients, and the default priors for the other parameters."
+    "text": "Tokyo binomial time series\nWe revisit the Tokyo rainfall example, but this time fit the model with INLA rather than MCMC.\n\nLogistic regression, with a second-order cyclic random walk prior for the coefficients, and the default gamma prior for the precision."
   },
   {
     "objectID": "slides/bayesmod-slides9.html#code-syntax",

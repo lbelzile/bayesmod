@@ -223,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Apr 14, 2025</p>
+  <p class="date">Last compiled Tuesday Apr 15, 2025</p>
 </section>
 <section id="rationale-for-deterministic-approximations" class="slide level2">
 <h2>Rationale for deterministic approximations</h2>
@@ -573,7 +573,7 @@ Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters fr
 </p></section>
 <section id="comment-on-stochastic-volatility" class="slide level2">
 <h2>Comment on stochastic volatility</h2>
-<p><a href="#/fig-stochvol-inla" class="quarto-xref">Figure&nbsp;3</a> shows that the correlation <span class="math inline">\(\phi\)</span> is nearly one, leading to random walk behaviour and high persistence over time (this is also due to the frequency of observations).</p>
+<p><a href="#/fig-stochvol-inla" class="quarto-xref">Figure&nbsp;3</a> shows that the correlation <span class="math inline">\(\phi\)</span> is nearly one, leading to random walk behaviour and high persistence over time.</p>
 <p>This strong serial dependence in the variance is in part responsible for the difficulty in fitting this model using MCMC.</p>
 </section>
 <section id="marginal-approximations" class="slide level2">
@@ -610,7 +610,9 @@ Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters fr
 <section id="tokyo-binomial-time-series" class="slide level2">
 <h2>Tokyo binomial time series</h2>
 <p>We revisit the Tokyo rainfall example, but this time fit the model with <code>INLA</code> rather than MCMC.</p>
-<p>We specify the mean model without intercept and fit a logistic regression, with a second-order cyclic random walk prior for the coefficients, and the default priors for the other parameters.</p>
+<ul>
+<li>Logistic regression, with a second-order cyclic random walk prior for the coefficients, and the default gamma prior for the precision.</li>
+</ul>
 </section>
 <section id="code-syntax" class="slide level2">
 <h2>Code syntax</h2>
