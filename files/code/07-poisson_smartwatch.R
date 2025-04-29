@@ -58,3 +58,61 @@ bayesplot::mcmc_areas(
       "kappa" = expression(kappa)
     )
   )
+
+# Load some posterior samples from the model
+data(posterior_smartwatch, package = "hecbayes")
+# Match coefficients to column of posterior
+coef_beta <- paste0("beta[", as.integer(smartwatch$task), "]")
+id_beta <- match(coef_beta, colnames(posterior_smartwatch))
+coef_alpha <- paste0("alpha[", as.integer(smartwatch$id), "]")
+id_alpha <- match(coef_alpha, colnames(posterior_smartwatch))
+# Create containers for pointwise log likelihood and posterior predictive
+B <- nrow(posterior_smartwatch)
+y <- smartwatch$nviolation
+n <- length(y)
+loglik_pt <- matrix(nrow = B, ncol = n)
+postpred <- matrix(nrow = B, ncol = n)
+# Sample from posterior predictive / evaluate log likelihood
+for (b in seq_len(B)) {
+  loglik_pt[b, ] <- dpois(
+    x = smartwatch$nviolation,
+    lambda = exp(
+      posterior_smartwatch[b, id_alpha] + posterior_smartwatch[b, id_beta]
+    ),
+    log = TRUE
+  )
+  postpred[b, ] <- rpois(
+    n = n,
+    lambda = exp(
+      posterior_smartwatch[b, id_alpha] + posterior_smartwatch[b, id_beta]
+    )
+  )
+}
+# Watanabe's widely available information criterion
+WAIC <- function(loglik_pt) {
+  -mean(apply(loglik_pt, 2, mean)) + mean(apply(loglik_pt, 2, var))
+}
+WAIC(loglik_pt)
+# LOO-CV P-P plot with importance sampling estimator
+ploo <- numeric(n)
+for (i in seq_along(y)) {
+  ploo[i] <- weighted.mean(x = I(postpred[, i] <= y[i]), w = is_wgt[, i])
+}
+ggplot(
+  data = data.frame(ploo = sort(ploo), punif = ppoints(n)),
+  mapping = aes(x = punif, y = ploo)
+) +
+  geom_abline(slope = 1, intercept = 0) +
+  geom_point() +
+  labs(x = "uniform", y = "LOO-PIT")
+
+# Automatically with PSIS instead
+loo_test <- loo::loo(loglik_pt, save_psis = TRUE)
+# log unstandardized weights for leave-one-out
+lw <- weights(loo_test$psis_object)
+bayesplot::ppc_loo_pit_qq(
+  y = y, # n vector of response
+  yrep = postpred, # B x n matrix of posterior predictive values
+  lw = lw
+) + # B x n matrix of log weights
+  theme_classic()
