@@ -10,7 +10,7 @@ parameters {
 }
 model {
   mu ~ normal(0, 100);
+  tau ~ student_t(3, 0, 5);
   eta ~ normal(0, tau);
-  tau ~ student_t(3, 0, 5); 
   y ~ normal(mu + eta, se_y);
 }

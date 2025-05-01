@@ -22,7 +22,7 @@ with an improper prior $p(\alpha, \beta) = (\alpha + \beta)^{-5/2}\mathrm{I}(\al
 1. Derive the conditional distributions of $p(\theta_i \mid \alpha, \beta, \boldsymbol{y})$, $p(\alpha \mid \beta, \boldsymbol{\theta})$ and $p(\beta \mid \alpha, \boldsymbol{\theta}).$
 2. Implement a Gibbs sampling algorithm simulating in turn from each of these conditionals. You can sample the $\theta_i$ easily since the prior is conditionally conjugate. For the other two parameters, $\alpha$ and $\beta$, try using one of the following methods:  rejection sampling (try an exponential distribution), ratio-of-uniform [@Wakefield.Gelfand.Smith:1991] via the **R** package [`rust`](https://doi.org/10.32614/CRAN.package.rust), adaptive rejection sampling [@Martino:2018;@Gilks.Wild:1992] via the [`ars`](https://doi.org/10.32614/CRAN.package.ars) **R** package^[Adaptive rejection sampling method works for log-concave distributions, which is the case for both the conditional of the hyperparameters $\alpha$ and $\beta$.] or slice sampling [@Neal:2003].^[If everything fails for you, you can use Metropolis.]
 3. Use instead a sampling algorithm with a Gibbs step for $\boldsymbol{\theta}$ and a random walk Metropolis--Hastings step for $\alpha$ and $\beta$. 
-4. Reparametrize the model in terms of $\log(\beta)$ and $\log(\alpha)/\log(\beta)$ instead and run a Metropolis--Hasting step for the two parameters.
+4. Reparametrize the model in terms of $\log(\beta)$ and $\log(\alpha)-\log(\beta)$ instead and run a Metropolis--Hasting step for the two parameters.
 5. For each sampler and parametrization, plot the bivariate histogram/density/scatter plot for $(\alpha, \beta)$, plus correlograms for both parameters. Comment on the mixing of the algorithms.
  
 

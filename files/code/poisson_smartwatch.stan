@@ -13,9 +13,9 @@ parameters {
 }
 
 model {
+  kappa ~ exponential(0.6);
   beta ~ normal(0, 10);
   alpha ~ normal(0, sqrt(J * inv(J - 1)) * kappa);
-  kappa ~ exponential(0.6);
   y ~ poisson_log(alpha[id] + beta[fixed]);
 }
 
