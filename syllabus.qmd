@@ -60,8 +60,9 @@ I will provide slides and videos. In addition to those, there will be assigned r
 
 Course notes for the class can be found [online](https://lbelzile.github.io/MATH80601A/)
 
-I also recommend the following two references, @Villani:2023 and @Held.Bove:2020, which most closely follow the content and philosophy of the course.
+I also recommend the following three references [@BayesianWorkflow:2026; @Villani:2023; @Held.Bove:2020], which most closely follow the content and philosophy of the course.
 
+- A. Gelman, A. Vehtari, R. McElreath et al. (2026). Bayesian Workflow, Chapman and Hall.
 - M. Villani [Bayesian Learning](https://mattiasvillani.com/BayesianLearningBook/) book (work in progress).
 - L. Held and D. Sabanés Bové (2020).  Likelihood and Bayesian Inference With Applications in Biology and Medicine, 2nd edition, Springer, doi:[10.1007/978-3-662-60792-3](https://doi.org/10.1007/978-3-662-60792-3)
 
@@ -70,9 +71,6 @@ Additional references include @Gelman:2013, @McElreath:2020 and @Johnson.Ott.Dog
 - A. Gelman, J. Carlin, H. Stern, D. Dunson, A. Vehtari and D. Rubin (2013). [**Bayesian Data Analysis**](http://www.stat.columbia.edu/~gelman/book/), 3rd edition, CRC press. doi:[10.1201/b16018](https://doi.org/10.1201/b16018)
 - R. McElreath  (2020). [**Statistical Rethinking:<br>A Bayesian Course with Examples in R and Stan**](https://xcelab.net/rm/statistical-rethinking/), 2nd edition, CRC Press.
 - A.A. Johnson, M.Q. Ott, and M. Dogucu (2022). [**Bayes Rules!<br>An Introduction to Applied Bayesian Modeling**](https://www.bayesrulesbook.com/), 1st edition, CRC Press. Free available [online](https://www.bayesrulesbook.com/).
-
-
-
 
 
 
@@ -92,6 +90,7 @@ Week 1: **Tools of the trade**
 - Likelihood
 - Monte Carlo integration
 
+See [Bayesian learning: the prequel](https://github.com/mattiasvillani/BayesianLearningBook/raw/main/pdf/PreBayesBook.pdf) by Mathias Villani
 
 Week 2: **Basics of Bayesian inference**
 
@@ -110,7 +109,7 @@ Week 3: **Prior beliefs**
 - Penalized complexity prior
 - Prior sensitivity analysis
 
- 
+<!--
 Week 4: **Markov chain Monte Carlo methods**
 
 - Monte Carlo methods
@@ -169,26 +168,28 @@ Week 12: **Final review**
 
 - Expectation propagation
 - Course recap
+-->
 
 # Evaluations
 
 
-Your final grade will be based on weekly problem sets and check-ins, a midterm and a final examination. All evaluations are individual work.
+Your final grade will be based on assignments, quizzes, a midterm and a final examination. All evaluations are individual work.
 
-The midterm and final are closed book exams. Students are forbidden to use generative artificial intelligence (AI) tools. Any reference should be adequately cited.
+The midterm and final are closed book exams. Any reference should be adequately cited.
 
-There will be weekly exercises pertaining to the class material, one of which must be handed in for credit. We will discuss the other exercises at the beginning of the next class.
+There will be weekly exercises, which we will discuss at the beginning of the next class.
 
-The midterm will take place on Monday, March 3rd from 15:30--18:30. The final is cumulative and will take place on Tuesday, April 15th from 18:30--21:30.
+The midterm will take place on Monday, October 26th from 12:00-15:00. 
+
+The final will take place on Monday, December 14th from 18:30--21:30.
 
 
 ```{r assignments-grades, include=FALSE}
 assignments <- tibble::tribble(
   ~Points,  ~Assignment,
-  10 * 0.5 , "Weekly check-in (10 × 0.5 pt)",
-  10 * 3 ,   "Assignments",
+  10 * 3 ,   "Assignments and quizzes",
   30      ,  "Midterm examination (30 pts)",
-  35      ,  "Final examination (35 pts)",
+  40      ,  "Final examination (40 pts)",
 )
 
 grading <- tibble::tribble(
@@ -200,6 +201,7 @@ grading <- tibble::tribble(
 )
 ```
 
+<!--
 ## Weekly check-in
 
 Every week, after you finish working through the content, I want to hear about what you learned and what questions you still have. To facilitate this, and to encourage engagement with the course content, you’ll need to write a small feedback in *ZoneCours*. This should be ~150 words.
@@ -222,7 +224,7 @@ I will grade these check-ins using a check system:
 
 Notice that is essentially a pass/fail or completion-based system. I'm not grading your writing ability, I'm not counting the exact number of words you're writing, and I'm not looking for encyclopedic citations of every single reading to prove that you did indeed read everything. I'm looking for thoughtful engagement, that's all. Do good work and you'll get a ✔.
 
-
+-->
 <!--
 Team work counts towards your final grade only if you score more than 50% on individual evaluations.
 -->
@@ -251,18 +253,15 @@ grading %>%
 
 ## Student hours
 
-Monday before class or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.
+Tuesday before class or by appointment. My office, 4.850, is located next to the southern elevators in Côte-Sainte-Catherine building.
 
 Please watch this video:
 
 <iframe src="https://player.vimeo.com/video/270014784" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="display: block; margin: 0 auto 1rem;"></iframe>
 
-Student hours are set times dedicated to all of you (most professors call these "office hours"; I don't^[There's fairly widespread misunderstanding about what office hours actually are! [Many students often think that they are the times I *shouldn't* be disturbed](https://www.chronicle.com/article/Can-This-Man-Change-How-Elite/245714/), which is the exact opposite of what they're for!]). This means that I will be in my office waiting for you to come by if you want to talk to me in person (or remotely) with whatever questions you have. This is the best and easiest way to find me and the best chance for discussing class material and concerns.
-
-
 ## Intellectual integrity
 
-Please don't cheat! The [official policy](https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/REG_intellectual-integrity-students-v2.pdf) lists the school rules regarding plagiarism and academic integrity.
+The [official policy](https://www.hec.ca/direction_services/secretariat_general/juridique/reglements_politiques/documents/REG_intellectual-integrity-students-v2.pdf) lists the school rules regarding plagiarism and academic integrity.
 
 ## Student services
 

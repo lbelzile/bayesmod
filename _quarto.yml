@@ -35,13 +35,13 @@ website:
         file: content/index.qmd
       - text: "Exercises"
         file: exercises/index.qmd
-      - text: "Evaluations"
-        file: evaluations/index.qmd
+#      - text: "Evaluations"
+#        file: evaluations/index.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/MATH80601A/"
- #     - icon: box
- #       href: "https://lbelzile.github.io/hecbayesmod"
- #       aria-label: Datasets
+#      - icon: box
+#        href: "https://lbelzile.github.io/hecbayesmod"
+#        aria-label: Datasets
 
   sidebar:
     - title: "Content"
@@ -66,24 +66,24 @@ website:
               file: content/02-content.qmd
             - text: "3: Priors"
               file: content/03-content.qmd
-            - text: "4: Monte Carlo, Markov chains and Metropolis-Hastings"
-              file: content/04-content.qmd
-            - text: "5: Gibbs sampling"
-              file: content/05-content.qmd
-            - text: "6: Bayesian workflow"
-              file: content/06-content.qmd
-            - text: "7: Probabilistic programming"
-              file: content/07-content.qmd
-            - text: "8: Bayesian regression"
-              file: content/08-content.qmd
-            - text: "9: Deterministic approximations"
-              file: content/09-content.qmd
-            - text: "10: Variational inference"
-              file: content/10-content.qmd
-            - text: "11: Expectation propagation"
-              file: content/11-content.qmd
-            - text: "12: Review"
-              file: content/12-content.qmd
+#        - text: "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+#              file: content/04-content.qmd
+#            - text: "5: Gibbs sampling"
+#              file: content/05-content.qmd
+#            - text: "6: Bayesian workflow"
+#              file: content/06-content.qmd
+#            - text: "7: Probabilistic programming"
+#              file: content/07-content.qmd
+#            - text: "8: Bayesian regression"
+#              file: content/08-content.qmd
+#            - text: "9: Deterministic approximations"
+#              file: content/09-content.qmd
+#            - text: "10: Variational inference"
+#              file: content/10-content.qmd
+#            - text: "11: Expectation propagation"
+#              file: content/11-content.qmd
+#            - text: "12: Review"
+#              file: content/12-content.qmd
     - title: "Exercises"
       style: "docked"
       search: false
@@ -96,49 +96,49 @@ website:
                file: exercises/01-exercise.qmd
              - text: "2. Bayesics"
                file: exercises/02-exercise.qmd
-             - text: "3. Priors"
-               file: exercises/03-exercise.qmd
-             - text: "4. Monte Carlo methods"
-               file: exercises/04-exercise.qmd
-             - text: "5. Gibbs sampling"
-               file: exercises/05-exercise.qmd
-             - text: "6. Bayesian workflow"
-               file: exercises/06-exercise.qmd
-             - text: "9. Deterministic approximations"
-               file: exercises/09-exercise.qmd
-             - text: "10: Variational inference"
-               file: exercises/10-exercise.qmd
-        - section: "Solutions"
-          contents:
-             - text: "1. Introduction"
-               file: exercises/01-solution.qmd
-             - text: "2. Bayesics"
-               file: exercises/02-solution.qmd
-             - text: "3. Priors"
-               file: exercises/03-solution.qmd
-             - text: "4. Monte Carlo methods"
-               file: exercises/04-solution.qmd
-             - text: "5. Gibbs sampling"
-               file: exercises/05-solution.qmd
-             - text: "6. Bayesian workflow"
-               file: exercises/06-solution.qmd
-             - text: "9. Deterministic approximations"
-               file: exercises/09-solution.qmd
-             - text: "10. Variational inference"
-               file: exercises/10-solution.qmd
-    - title: "Evaluations"
-      style: "docked"
-      search: false
-      foreground: "#000000"
-      contents:
-         - evaluations/index.qmd
-         - text: "Weekly check-in"
-           file: evaluations/weekly-check-in.qmd
-         - section: "Assignments"
-           contents:
-              - evaluations/01-assignment.qmd
-              - evaluations/02-assignment.qmd
-              - evaluations/03-assignment.qmd
+#             - text: "3. Priors"
+#               file: exercises/03-exercise.qmd
+#             - text: "4. Monte Carlo methods"
+#               file: exercises/04-exercise.qmd
+#             - text: "5. Gibbs sampling"
+#               file: exercises/05-exercise.qmd
+#             - text: "6. Bayesian workflow"
+#               file: exercises/06-exercise.qmd
+#             - text: "9. Deterministic approximations"
+#               file: exercises/09-exercise.qmd
+#             - text: "10: Variational inference"
+#               file: exercises/10-exercise.qmd
+#        - section: "Solutions"
+#          contents:
+#             - text: "1. Introduction"
+#               file: exercises/01-solution.qmd
+#             - text: "2. Bayesics"
+#               file: exercises/02-solution.qmd
+#             - text: "3. Priors"
+#               file: exercises/03-solution.qmd
+#             - text: "4. Monte Carlo methods"
+#               file: exercises/04-solution.qmd
+#             - text: "5. Gibbs sampling"
+#               file: exercises/05-solution.qmd
+#             - text: "6. Bayesian workflow"
+#               file: exercises/06-solution.qmd
+#             - text: "9. Deterministic approximations"
+#               file: exercises/09-solution.qmd
+#             - text: "10. Variational inference"
+#               file: exercises/10-solution.qmd
+#    - title: "Evaluations"
+#      style: "docked"
+#      search: false
+#      foreground: "#000000"
+#      contents:
+#         - evaluations/index.qmd
+#         - text: "Weekly check-in"
+#           file: evaluations/weekly-check-in.qmd
+#         - section: "Assignments"
+#           contents:
+#              - evaluations/01-assignment.qmd
+#              - evaluations/02-assignment.qmd
+#              - evaluations/03-assignment.qmd
   page-footer:
     left: |
       Content {{< fa brands creative-commons >}} {{< var course.copyright_year >}} by [{{< var instructor.name_no_title >}}]({{< var instructor.url >}})<br>

@@ -238,7 +238,7 @@ Marginally, $Y \sim \mathsf{neg. binom}(p)$ where $p=(k+1)^{-1}.$
 
 ## Moments of negative binomial
 
-By the laws of iterated expectation and iterative variance,
+By the laws of iterated expectation and iterated variance,
 \begin{align*}
 \mathsf{E}(Y) &= \mathsf{E}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda\} \\& = \mathsf{E}(\Lambda) = \mu\\
 \mathsf{Va}(Y) &= \mathsf{E}_{\Lambda}\{\mathsf{Va}(Y \mid \Lambda)\} + \mathsf{Va}_{\Lambda}\{\mathsf{E}(Y \mid \Lambda)\} \\&= \mathsf{E}(\Lambda) + \mathsf{Va}(\Lambda) \\&= \mu + \mu/k.
@@ -257,7 +257,7 @@ Using the chain rule, the density of $\boldsymbol{Y}$ is
 \begin{align*}
 f_{\boldsymbol{Y}}(\boldsymbol{y}) = f_{\boldsymbol{X}}\left\{\boldsymbol{g}^{-1}(\boldsymbol{y})\right\} \left| \mathbf{J}_{\boldsymbol{g}^{-1}}(\boldsymbol{y})\right| = f_{\boldsymbol{X}}(\boldsymbol{x}) \left| \mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})\right|^{-1}
 \end{align*}
-where $\mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})$ is the Jacobian matrix with $i,j$th element $\partial [\boldsymbol{g}(\boldsymbol{x})]_i / \partial x_j.$
+where $\mathbf{J}_{\boldsymbol{g}}(\boldsymbol{x})$ is the Jacobian matrix with $(i,j)$th element $\partial [\boldsymbol{g}(\boldsymbol{x})]_i / \partial x_j.$
 
 ## Gaussian location-scale
 

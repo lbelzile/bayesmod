@@ -17,9 +17,12 @@ parameters {
 }
 
 model {
-  y ~ normal(alpha[RCP] + beta[GCM], sigma);
+  // TODO: Add priors for sigma, tau, omega
   alpha ~ normal(mu, omega);
   beta ~ normal(0, sqrt(L * inv(L - 1)) * tau);
-  // TODO: Add priors for sigma, tau, omega here
+  // TODO: if you remove the hard-constraint, change scale to tau
+  // beta ~ normal(0, tau);
+  y ~ normal(alpha[RCP] + beta[GCM], sigma);
+  
 }
 
