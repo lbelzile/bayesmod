@@ -1,0 +1,64 @@
+---
+title: "Software and packages"
+---
+
+There are numerous options for Bayesian scientific computing, including probabilistic programming languages. I will be using [Stan](https://mc-stan.org/), as it offers cross-platform support and uses Hamiltonian Monte Carlo.  [JAGS](https://mcmc-jags.sourceforge.io/) has very good automatic differentiation, but relies on Gibbs sampling. Other interfaces are platform-specific: below is a list of the main software (**R**, Python and Julia), along with associated packages.
+
+
+# **R**
+
+The **R** programming language contains many packages on the Comprehensive R Archive Network (CRAN) dedicated for Bayesian analysis; see the [CRAN Task View](https://cran.r-project.org/web/views/Bayesian.html)
+
+Among the packages worth exploring are `NIMBLE` (<https://r-nimble.org/>), which allows for different samplers.
+
+To install all **R** packages used throughout the course, use the command
+
+```{r}
+#| eval: false
+#| echo: true
+install.packages("cmdstanr",
+                 repos = c("https://mc-stan.org/r-packages/",
+                           getOption("repos")))
+```
+
+I also use `priorsense`, `bayesplot` and `loo`. Good high-level interface include `brms`.
+
+For beginners (without knowledge of Markov chain Monte Carlo), the packages `bang` + `rust`, and [`rethinking`](https://github.com/rmcelreath/rethinking) from  @McElreath:2020 are useful.
+
+- The `INLA` **R** package(<https://www.r-inla.org/>), which uses integrated nested Laplace approximations (INLA) for inference in latent Gaussian models, is not on the CRAN.
+
+```{r}
+#| eval: false
+install.packages("BiocManager")
+BiocManager::install("graph")
+BiocManager::install("Rgraphviz")
+install.packages(
+  "INLA",
+  repos = c(getOption("repos"),
+            INLA = "https://inla.r-inla-download.org/R/stable"),
+  dep = TRUE)
+```
+
+I have bundled many datasets used in class in a **R** package available from this Github repository:
+
+```{r}
+#| eval: false
+# Download databases for course
+remotes::install_github("lbelzile/hecbayes")
+```
+
+
+# Python
+
+Python can be installed through the [`uv` package manager](https://docs.astral.sh/uv/), which I recommend over other alternatives. 
+
+Beyond Stan via `CmdStanPy`, the most popular Python library for Bayesian data analysis is [`PyMC`](https://www.pymc.io/welcome.html).
+
+
+# Julia
+
+The [Julia Programming Language](https://julialang.org/) (<https://julialang.org/>) has [numerous packages](https://juliapackages.com/c/bayesian) for Bayesian analysis,
+including notably
+
+- [`Pigeons`](https://pigeons.run/dev/) 
+- [`Turing`](https://turinglang.org/)

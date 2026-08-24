@@ -54,10 +54,10 @@ website:
             - content/index.qmd
         - section: "Installation"
           contents:
-            - text: "**R** and RStudio"
-              file: content/installation.qmd
-            - text: "**R** packages"
-              file: content/rpackages.qmd
+#            - text: "**R** and RStudio"
+#              file: content/installation.qmd
+            - text: "Software and packages"
+              file: content/packages.qmd
         - section: "Course content"
           contents:
             - text: "1: Introduction"
@@ -90,7 +90,7 @@ website:
       foreground: "#000000"
       contents:
         - "exercises/index.qmd"
-        - section: "Exercises"
+        - section: "Problem sets"
           contents:
              - text: "1. Introduction"
                file: exercises/01-exercise.qmd

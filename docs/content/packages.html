@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Solution 1 – Bayesian modelling</title>
+<title>Software and packages – Bayesian modelling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -68,39 +122,10 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -122,7 +147,7 @@ window.Quarto = {
 <span class="menu-text">Outline</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../content/index.html"> 
+    <a class="nav-link active" href="../content/index.html" aria-current="page"> 
 <span class="menu-text">Content</span></a>
   </li>  
   <li class="nav-item">
@@ -139,116 +164,165 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/packages.html">Installation</a></li><li class="breadcrumb-item"><a href="../content/packages.html">Software and packages</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Overview</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Readings, lectures, and videos</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Installation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/packages.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Software and packages</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Course content</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/01-content.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1: Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/02-content.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2: Bayesics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/03-content.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3: Priors</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-1.1" id="toc-exercise-1.1" class="nav-link active" data-scroll-target="#exercise-1.1">Exercise 1.1</a></li>
-  <li><a href="#exercise-1.2" id="toc-exercise-1.2" class="nav-link" data-scroll-target="#exercise-1.2">Exercise 1.2</a></li>
+  <li><a href="#r" id="toc-r" class="nav-link active" data-scroll-target="#r"><strong>R</strong></a></li>
+  <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python">Python</a></li>
+  <li><a href="#julia" id="toc-julia" class="nav-link" data-scroll-target="#julia">Julia</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/packages.html">Installation</a></li><li class="breadcrumb-item"><a href="../content/packages.html">Software and packages</a></li></ol></nav><h1 class="title display-7">Software and packages</h1></header>
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Solution 1</h1>
-</div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
+<header id="title-block-header">
 
 
 </header>
 
 
-<section id="exercise-1.1" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-1.1">Exercise 1.1</h2>
-<p>Linear mixed effect regression model specifies that response vectors for individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\boldsymbol{Y}_i \in \mathbb{R}^k\)</span>, are Gaussian. The model includes model matrix <span class="math inline">\(\mathbf{X}_i\)</span> with fixed effect coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>, and another <span class="math inline">\(k\times l\)</span> model matrix <span class="math inline">\(\mathbf{Z}_i\)</span> with random effects. The hierarchical formulation of the model is <span class="math display">\[\begin{align*}
-\boldsymbol{Y}_i \mid \mathcal{B}_i=\boldsymbol{b}_i &amp;\sim \mathsf{Gauss}_k(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\boldsymbol{b}_i, \sigma^2 \mathbf{I}_k) \\
-\mathcal{B}_i &amp; \sim \mathsf{Gauss}_l(\boldsymbol{0}_k, \boldsymbol{\Omega})
-\end{align*}\]</span></p>
-<ol type="a">
-<li>Using the tower property, derive the marginal mean and covariance matrix of <span class="math inline">\(\boldsymbol{Y}_i\)</span></li>
-<li>Hence obtain the parameters of the joint distribution of <span class="math inline">\((\boldsymbol{Y}_i^\top, \mathcal{B}_i^\top)^\top.\)</span></li>
-</ol>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>Using the law of iterated expectation and variance</p>
-<p><span class="math display">\[\begin{align*}
-\mathsf{E}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i) &amp; =\mathsf{E}_{\mathcal{B}_i}\left\{\mathsf{E}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}(\boldsymbol{Y}_i)\right\} \\&amp;=  \mathsf{E}_{\mathcal{B}_i}(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\mathcal{B}_i) \\&amp;= \mathbf{X}_i\boldsymbol{\beta}
-\end{align*}\]</span></p>
-<p><span class="math display">\[\begin{align*}
-\mathsf{Va}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i) &amp; =\mathsf{Va}_{\mathcal{B}_i}\left\{\mathsf{E}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}(\boldsymbol{Y}_i)\right\} + \mathsf{E}_{\mathcal{B}_i}\left\{\mathsf{Va}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}(\boldsymbol{Y}_i)\right\} \\&amp;=  \mathsf{Va}_{\mathcal{B}_i}(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\mathcal{B}_i) +\mathsf{E}_{\mathcal{B}_i}(\sigma^2\mathbf{I}_k) \\&amp;= \mathbf{Z}_i\boldsymbol{\Omega}\boldsymbol{Z}_i^\top + \sigma^2\mathbf{I}_k.
-\end{align*}\]</span></p>
-<p>Since the conditional and marginal are Gaussian, and the product of their density functions is also <span class="math inline">\(\exp(-\cdot)\)</span>, with <span class="math inline">\(\cdot\)</span> quadratic in <span class="math inline">\(\boldsymbol{Y}_i\)</span> and <span class="math inline">\(\mathcal{B}_i\)</span>, it must be multivariate Gaussian. As the latter is fully characterized by the mean and variance, it suffices to derive the covariance between <span class="math inline">\(\boldsymbol{Y}_i\)</span> and <span class="math inline">\(\mathcal{B}_i\)</span>, which is the only missing piece of information. The latter is by definition</p>
-<p><span class="math display">\[\begin{align*}
-\mathsf{Co}(\boldsymbol{Y}_i,\mathcal{B}_i) &amp; = \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\left[\left\{\boldsymbol{Y}_i - \mathsf{E}_{\boldsymbol{Y}_i}(\boldsymbol{Y}_i)\right\}\left\{\mathcal{B}_i - \mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i)\right\}^\top\right]
-\\&amp;= \mathsf{E}_{\boldsymbol{Y}_i,\mathcal{B}_i}\{(\boldsymbol{Y}_i - \mathbf{X}_i\boldsymbol{\beta})\mathcal{B}_i^\top\}
-\\&amp;= \mathsf{E}_{\mathcal{B}_i}\left[\mathsf{E}_{\boldsymbol{Y}_i \mid \mathcal{B}_i}\{(\boldsymbol{Y}_i - \mathbf{X}_i\boldsymbol{\beta})\mathcal{B}_i^\top\}\right]
-\\&amp;= \mathbf{Z}_i\mathsf{E}_{\mathcal{B}_i}(\mathcal{B}_i\mathcal{B}_i^\top)
-\\&amp;=\mathbf{Z}_i\boldsymbol{\Omega}
-\end{align*}\]</span></p>
-<p>and so we find <span class="math display">\[\begin{align*}
-\begin{pmatrix}\boldsymbol{Y}_i \\ \mathcal{B}_i
-\end{pmatrix}\sim \mathsf{Gauss}_{k+l} \left\{ \begin{pmatrix} \mathbf{X}_i \boldsymbol{\beta} \\ \boldsymbol{0}_l \end{pmatrix}, \begin{pmatrix} \mathbf{Z}_i\boldsymbol{\Omega}\boldsymbol{Z}_i^\top + \sigma^2\mathbf{I}_k &amp; \mathbf{Z}_i\boldsymbol{\Omega} \\ \boldsymbol{\Omega}\mathbf{Z}_i^\top &amp; \boldsymbol{\Omega}\end{pmatrix}\right\}.
-\end{align*}\]</span></p>
+<p>There are numerous options for Bayesian scientific computing, including probabilistic programming languages. I will be using <a href="https://mc-stan.org/">Stan</a>, as it offers cross-platform support and uses Hamiltonian Monte Carlo. <a href="https://mcmc-jags.sourceforge.io/">JAGS</a> has very good automatic differentiation, but relies on Gibbs sampling. Other interfaces are platform-specific: below is a list of the main software (<strong>R</strong>, Python and Julia), along with associated packages.</p>
+<section id="r" class="level1">
+<h1><strong>R</strong></h1>
+<p>The <strong>R</strong> programming language contains many packages on the Comprehensive R Archive Network (CRAN) dedicated for Bayesian analysis; see the <a href="https://cran.r-project.org/web/views/Bayesian.html">CRAN Task View</a></p>
+<p>Among the packages worth exploring are <code>NIMBLE</code> (<a href="https://r-nimble.org/" class="uri">https://r-nimble.org/</a>), which allows for different samplers.</p>
+<p>To install all <strong>R</strong> packages used throughout the course, use the command</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I also use <code>priorsense</code>, <code>bayesplot</code> and <code>loo</code>. Good high-level interface include <code>brms</code>.</p>
+<p>For beginners (without knowledge of Markov chain Monte Carlo), the packages <code>bang</code> + <code>rust</code>, and <a href="https://github.com/rmcelreath/rethinking"><code>rethinking</code></a> from <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#ref-McElreath:2020" role="doc-biblioref">2020</a>)</span> are useful.</p>
+<ul>
+<li>The <code>INLA</code> <strong>R</strong> package(<a href="https://www.r-inla.org/" class="uri">https://www.r-inla.org/</a>), which uses integrated nested Laplace approximations (INLA) for inference in latent Gaussian models, is not on the CRAN.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"graph"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"Rgraphviz"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"INLA"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">repos =</span> <span class="fu">c</span>(<span class="fu">getOption</span>(<span class="st">"repos"</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">INLA =</span> <span class="st">"https://inla.r-inla-download.org/R/stable"</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">dep =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I have bundled many datasets used in class in a <strong>R</strong> package available from this Github repository:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download databases for course</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"lbelzile/hecbayes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="exercise-1.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-1.2">Exercise 1.2</h2>
-<p>Consider a simple random sample of size <span class="math inline">\(n\)</span> from the Wald distribution, with density <span class="math display">\[\begin{align*}
-f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y &gt; 0)
-\end{align*}\]</span> for location <span class="math inline">\(\nu &gt;0\)</span> and shape <span class="math inline">\(\tau&gt;0.\)</span> You may take for given that the expected value of the Wald distribution is <span class="math inline">\(\mathsf{E}(Y) = \nu.\)</span></p>
-<p>Write down the likelihood and show that it can be written in terms of the sufficient statistics <span class="math inline">\(\sum_{i=1}^n y_i\)</span> and <span class="math inline">\(\sum_{i=1} y_i^{-1}.\)</span></p>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>The log likelihood for an independent and identically distributed sample is, up to terms not depending on the parameters, <span class="math display">\[\begin{align*}
-\ell(\nu, \lambda) \stackrel{\nu, \lambda}{\propto} \frac{n}{2} \ln(\lambda) -  \frac{\lambda}{2\nu^2} \sum_{i=1}^n y_i + \frac{n\lambda}{\nu} - \frac{\lambda}{2} \sum_{i=1}^n \frac{1}{y_i}
-\end{align*}\]</span> and we readily see that the model is an exponential family with sufficient statistics <span class="math inline">\(t_1(\boldsymbol{y}) = \sum_{i=1}^n y_i\)</span> and <span class="math inline">\(t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}.\)</span></p>
-<p>We derive the score vector and information, <span class="math display">\[\begin{align*}
-U(\nu, \lambda) &amp;= \begin{pmatrix} \frac{\partial \ell(\nu, \lambda)}{\partial \nu} \\\frac{\partial \ell(\nu, \lambda)}{\partial \lambda} \end{pmatrix}
-\\&amp;= \begin{pmatrix}
-\frac{\lambda \sum_{i=1}^n y_i}{\nu^3} - \frac{n\lambda}{\nu^2} \\
-\frac{n}{2\lambda} +  \frac{\sum_{i=1}^n y_i}{2\nu^2}  + \frac{n}{\nu} - \frac{\sum_{i=1}^n y_i^{-1}}{2}
-\end{pmatrix}
-\end{align*}\]</span> and <span class="math display">\[\begin{align*}
-j(\nu, \lambda) &amp;= -\begin{pmatrix} \frac{\partial^2 \ell(\nu, \lambda)}{\partial \nu^2} &amp; \frac{\partial^2 \ell(\nu, \lambda)}{\partial \nu \partial \lambda} \\ \frac{\partial^2 \ell(\nu, \lambda)}{\partial \lambda \partial \nu } &amp; \frac{\partial^2 \ell(\nu, \lambda)}{\partial \lambda^2} \end{pmatrix}
-\\&amp;= \begin{pmatrix}
-\frac{3\lambda \sum_{i=1}^n y_i}{\nu^4} - \frac{2n\lambda}{\nu^3} &amp; -\frac{\sum_{i=1}^n y_i}{\nu^3} + \frac{n}{\nu^2} \\
--\frac{\sum_{i=1}^n y_i}{\nu^3} + \frac{n}{\nu^2} &amp;\frac{n}{2\lambda^2}
-\end{pmatrix}
-\end{align*}\]</span> To compute the expected information, we need to consider the random counterpart of this and replace values of <span class="math inline">\(Y_i\)</span> by their <span class="math inline">\(\mathsf{E}(Y_i)=\nu\)</span>, so <span class="math display">\[\begin{align*}
-i(\nu, \lambda) = \begin{pmatrix}
-\frac{n\lambda}{\nu^3} &amp; 0 \\
-0 &amp;\frac{n}{2\lambda^2}
-\end{pmatrix}
-\end{align*}\]</span> and the parameters are asymptotically independent. <!--
-The joint prior is of the form
-\begin{align*}
-p(\lambda) &\propto \lambda^{\alpha-1}\exp(-\lambda \beta) \\
-p(\nu \mid \lambda) & \propto \frac{(\lambda \tau)^{1/2}}{\nu^2}\exp\left\{-\frac{\lambda\tau }{2}(\nu^{-1}-\mu)^2\right\},
-\end{align*}
-where the last step follows from a change of variable.
---></p>
-</div>
+<section id="python" class="level1">
+<h1>Python</h1>
+<p>Python can be installed through the <a href="https://docs.astral.sh/uv/"><code>uv</code> package manager</a>, which I recommend over other alternatives.</p>
+<p>Beyond Stan via <code>CmdStanPy</code>, the most popular Python library for Bayesian data analysis is <a href="https://www.pymc.io/welcome.html"><code>PyMC</code></a>.</p>
+</section>
+<section id="julia" class="level1">
+<h1>Julia</h1>
+<p>The <a href="https://julialang.org/">Julia Programming Language</a> (<a href="https://julialang.org/" class="uri">https://julialang.org/</a>) has <a href="https://juliapackages.com/c/bayesian">numerous packages</a> for Bayesian analysis, including notably</p>
+<ul>
+<li><a href="https://pigeons.run/dev/"><code>Pigeons</code></a></li>
+<li><a href="https://turinglang.org/"><code>Turing</code></a></li>
+</ul>
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-McElreath:2020" class="csl-entry" role="listitem">
+McElreath, R. (2020). <em>Statistical rethinking: A <span>B</span>ayesian course with examples in <span>R</span> and <span>STAN</span></em> (2nd ed.). Chapman; Hall/CRC.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
