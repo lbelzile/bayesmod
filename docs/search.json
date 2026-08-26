@@ -25,7 +25,7 @@
     "href": "syllabus.html#weekly-check-in",
     "title": "Outline",
     "section": "Weekly check-in",
-    "text": "Weekly check-in\nEvery week, after you finish working through the content, I want to hear about what you learned and what questions you still have. To facilitate this, and to encourage engagement with the course content, you’ll need to write a small feedback in ZoneCours. This should be ~150 words.\nYou should answer the following three questions each week:\n\nWhat was the most exciting thing you learned from the session? Why?\nWhat was the muddiest thing from the session this week? What are you still wondering about?\nWhich activity did you find the most useful? What could have been skipped?\n\nThe weekly check-in is an occasion for you to ask for clarification, highlight areas or topics for which examples could be added, or list superfluous activities and content. I will read these before the next class, answer individually through the feedback form or at the beginning of class.\nThe submission module is on ZoneCours for convenience even if it carries no weight. \n\n\n\n\n\n\n\n\nAssignment\nPoints\n\n\n\n\nAssignments and quizzes\n30\n\n\nMidterm examination (30 pts)\n30\n\n\nFinal examination (40 pts)\n40\n\n\nTotal\n100"
+    "text": "Weekly check-in\nEvery week, after you finish working through the content, I want to hear about what you learned and what questions you still have. To facilitate this, and to encourage engagement with the course content, you’ll need to write a small feedback in ZoneCours. This should be ~150 words.\nYou should answer the following three questions each week:\n\nWhat was the most exciting thing you learned from the session? Why?\nWhat was the muddiest thing from the session this week? What are you still wondering about?\nWhich activity did you find the most useful? What could have been skipped?\n\nThe weekly check-in is an occasion for you to ask for clarification, highlight areas or topics for which examples could be added, or list superfluous activities and content. I will read these before the next class, answer individually through the feedback form or at the beginning of class.\nThe submission module is on ZoneCours for convenience even if it carries no weight."
   },
   {
     "objectID": "syllabus.html#student-hours",
@@ -1747,7 +1747,7 @@
     "href": "slides/bayesmod-slides1.html#marginal-density",
     "title": "Bayesian modelling",
     "section": "Marginal density",
-    "text": "Marginal density\nThe marginal density \\(f_{\\boldsymbol{X}_{1:k}}(\\boldsymbol{x}_{1:k})\\) of an absolutely continuous subvector \\(\\boldsymbol{X}_{1:k}=(X_1, \\ldots, X_k)^\\top\\) is \\[\\begin{align*}\n\\int_{-\\infty}^\\infty \\cdots  \\int_{-\\infty}^\\infty  f_{\\boldsymbol{X}}(x_1, \\ldots, x_k, z_{k+1}, \\ldots, z_{d}) \\mathrm{d} z_{k+1} \\cdots \\mathrm{d}z_d.\n\\end{align*}\\] through integration from the joint density."
+    "text": "Marginal density\nThe marginal density \\(f_{\\boldsymbol{X}_{1:k}}(\\boldsymbol{x}_{1:k})\\) continuous subvector \\(\\boldsymbol{X}_{1:k}=(X_1, \\ldots, X_k)^\\top\\) of \\(\\boldsymbol{X} = (X_1, \\ldots, X_d)^\\top\\) is \\[\\begin{align*}\n\\int_{-\\infty}^\\infty \\cdots  \\int_{-\\infty}^\\infty  f_{\\boldsymbol{X}}(x_1, \\ldots, x_k, z_{k+1}, \\ldots, z_{d}) \\mathrm{d} z_{k+1} \\cdots \\mathrm{d}z_d.\n\\end{align*}\\] through integration from the joint density."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#conditional-distribution",
@@ -1803,7 +1803,7 @@
     "href": "slides/bayesmod-slides1.html#affine-transformations",
     "title": "Bayesian modelling",
     "section": "Affine transformations",
-    "text": "Affine transformations\nIf \\(\\boldsymbol{Y}\\) is \\(d\\)-dimensional and \\(\\mathbf{A}\\) is \\(p \\times d\\) and \\(\\boldsymbol{b}\\) is a \\(p\\) vector, then\n\\[\\begin{align*}\n\\mathsf{E}(\\boldsymbol{AY} + \\boldsymbol{b}) &= \\boldsymbol{A}\\mathsf{E}(\\boldsymbol{Y}) + \\boldsymbol{b},\\\\\n\\mathsf{Va}(\\boldsymbol{AY} + \\boldsymbol{b}) &= \\boldsymbol{A}\\mathsf{Va}(\\boldsymbol{Y})\\boldsymbol{A}^\\top.\n\\end{align*}\\]"
+    "text": "Affine transformations\nIf \\(\\boldsymbol{Y}\\) is \\(d\\)-dimensional and \\(\\mathbf{A}\\) is \\(p \\times d\\) and \\(\\boldsymbol{b}\\) is a \\(p\\) vector, then\n\\[\\begin{align*}\n\\mathsf{E}(\\mathbf{A}\\boldsymbol{Y} + \\boldsymbol{b}) &= \\mathbf{A}\\mathsf{E}(\\boldsymbol{Y}) + \\boldsymbol{b},\\\\\n\\mathsf{Va}(\\mathbf{A}\\boldsymbol{Y} + \\boldsymbol{b}) &= \\mathbf{A}\\mathsf{Va}(\\boldsymbol{Y})\\mathbf{A}^\\top.\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#law-of-iterated-expectation-and-variance",
@@ -1880,7 +1880,7 @@
     "href": "slides/bayesmod-slides1.html#conditional-distribution-of-gaussian-subvectors",
     "title": "Bayesian modelling",
     "section": "Conditional distribution of Gaussian subvectors",
-    "text": "Conditional distribution of Gaussian subvectors\nLet \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{\\mu}, \\boldsymbol{Q}^{-1})\\) and consider the partition \\[\\begin{align*}\n\\boldsymbol{Y} = \\begin{pmatrix} \\boldsymbol{Y}_1 \\\\ \\boldsymbol{Y}_2\\end{pmatrix}, \\quad\n\\boldsymbol{\\mu} = \\begin{pmatrix} \\boldsymbol{\\mu}_1 \\\\ \\boldsymbol{\\mu}_2\\end{pmatrix}, \\quad\n\\boldsymbol{Q} = \\begin{pmatrix} \\boldsymbol{Q}_{11} & \\boldsymbol{Q}_{12}\\\\ \\boldsymbol{Q}_{21} & \\boldsymbol{\\Sigma}_{22}\\end{pmatrix},\n\\end{align*}\\] where \\(\\boldsymbol{Y}_1\\) is a \\(k \\times 1\\) and \\(\\boldsymbol{Y}_2\\) is a \\((d-k) \\times 1\\) vector for some \\(1\\leq k &lt; d.\\)\nThen, we have the conditional distribution \\[\\begin{align*}\n\\boldsymbol{Y}_1 \\mid \\boldsymbol{Y}_2 =\\boldsymbol{y}_2 &\\sim \\mathsf{Gauss}_k(\\boldsymbol{\\mu}_1-\\boldsymbol{Q}_{11}^{-1}\\boldsymbol{Q}_{12}(\\boldsymbol{y}_2-\\boldsymbol{\\mu}_2), \\boldsymbol{Q}^{-1}_{11})\n\\end{align*}\\]"
+    "text": "Conditional distribution of Gaussian subvectors\nLet \\(\\boldsymbol{Y} \\sim \\mathsf{Gauss}_d(\\boldsymbol{\\mu}, \\boldsymbol{Q}^{-1})\\) and consider the partition \\[\\begin{align*}\n\\boldsymbol{Y} = \\begin{pmatrix} \\boldsymbol{Y}_1 \\\\ \\boldsymbol{Y}_2\\end{pmatrix}, \\quad\n\\boldsymbol{\\mu} = \\begin{pmatrix} \\boldsymbol{\\mu}_1 \\\\ \\boldsymbol{\\mu}_2\\end{pmatrix}, \\quad\n\\boldsymbol{Q} = \\begin{pmatrix} \\boldsymbol{Q}_{11} & \\boldsymbol{Q}_{12}\\\\ \\boldsymbol{Q}_{21} & \\boldsymbol{Q}_{22}\\end{pmatrix},\n\\end{align*}\\] where \\(\\boldsymbol{Y}_1\\) is a \\(k \\times 1\\) and \\(\\boldsymbol{Y}_2\\) is a \\((d-k) \\times 1\\) vector for some \\(1\\leq k &lt; d.\\)\nThen, we have the conditional distribution \\[\\begin{align*}\n\\boldsymbol{Y}_1 \\mid \\boldsymbol{Y}_2 =\\boldsymbol{y}_2 &\\sim \\mathsf{Gauss}_k\\left\\{\\boldsymbol{\\mu}_1-\\boldsymbol{Q}_{11}^{-1}\\boldsymbol{Q}_{12}(\\boldsymbol{y}_2-\\boldsymbol{\\mu}_2), \\boldsymbol{Q}^{-1}_{11}\\right\\}.\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#likelihood",
@@ -1894,14 +1894,14 @@
     "href": "slides/bayesmod-slides1.html#likelihood-for-independent-observations",
     "title": "Bayesian modelling",
     "section": "Likelihood for independent observations",
-    "text": "Likelihood for independent observations\nIf the joint density factorizes, \\[\\begin{align*}\nL(\\boldsymbol{\\theta}; \\boldsymbol{y})=\\prod_{i=1}^n f_i(y_i; \\boldsymbol{\\theta}) = f_1(y_1; \\boldsymbol{\\theta}) \\times \\cdots \\times f_n(y_n; \\boldsymbol{\\theta}).\n\\end{align*}\\] The corresponding log likelihood function for independent and identically distributions observations is \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}; \\boldsymbol{y}) = \\sum_{i=1}^n \\ln f(y_i; \\boldsymbol{\\theta})\n\\end{align*}\\]"
+    "text": "Likelihood for independent observations\nIf the joint density factorizes, \\[\\begin{align*}\nL(\\boldsymbol{\\theta}; \\boldsymbol{y})=\\prod_{i=1}^n f_i(y_i; \\boldsymbol{\\theta}) = f_1(y_1; \\boldsymbol{\\theta}) \\times \\cdots \\times f_n(y_n; \\boldsymbol{\\theta}).\n\\end{align*}\\] The corresponding log likelihood function for independent and identically distributions observations is \\[\\begin{align*}\n\\ell(\\boldsymbol{\\theta}; \\boldsymbol{y}) = \\sum_{i=1}^n \\log f(y_i; \\boldsymbol{\\theta})\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#score",
     "href": "slides/bayesmod-slides1.html#score",
     "title": "Bayesian modelling",
     "section": "Score",
-    "text": "Score\nLet \\(\\ell(\\boldsymbol{\\theta}),\\) \\(\\boldsymbol{\\theta} \\in \\boldsymbol{\\Theta} \\subseteq \\mathbb{R}^p,\\) be the log likelihood function. The gradient of the log likelihood, termed score is the \\(p\\)-vector \\[U(\\boldsymbol{\\theta}) = \\frac{\\partial \\ell(\\boldsymbol{\\theta})}{ \\partial \\boldsymbol{\\theta}}.\\]"
+    "text": "Score\nLet \\(\\ell(\\boldsymbol{\\theta}),\\) \\(\\boldsymbol{\\theta} \\in \\boldsymbol{\\Theta} \\subseteq \\mathbb{R}^p,\\) be the log likelihood function. The gradient of the log likelihood, termed score is the \\(p\\)-vector \\[U(\\boldsymbol{\\theta}; \\boldsymbol{y}) = \\frac{\\partial \\ell(\\boldsymbol{\\theta}; \\boldsymbol{y})}{ \\partial \\boldsymbol{\\theta}}.\\]"
   },
   {
     "objectID": "slides/bayesmod-slides1.html#information-matrix",
@@ -1922,7 +1922,7 @@
     "href": "slides/bayesmod-slides1.html#note-on-information-matrices",
     "title": "Bayesian modelling",
     "section": "Note on information matrices",
-    "text": "Note on information matrices\nInformation matrices are symmetric and provide information about the variability of \\(\\widehat{\\boldsymbol{\\theta}}.\\)\nThe information of an iid sample of size \\(n\\)is \\(n\\) times that of a single observation\n\ninformation accumulates at a linear rate."
+    "text": "Note on information matrices\nInformation matrices are symmetric and provide information about the variability of \\(\\widehat{\\boldsymbol{\\theta}}.\\)\nThe information of an iid sample of size \\(n\\) is \\(n\\) times that of a single observation\n\ninformation accumulates at a linear rate."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#information-for-the-gaussian-distribution",
@@ -1992,7 +1992,7 @@
     "href": "slides/bayesmod-slides1.html#estimation-of-integrals",
     "title": "Bayesian modelling",
     "section": "Estimation of integrals",
-    "text": "Estimation of integrals\nSuppose we can simulate \\(B\\) i.i.d. variables with the same distribution, \\(x_1, \\ldots, x_B\\) with distribution \\(F\\).\nWe want to compute \\(\\mathsf{E}\\{g(X)\\}=\\int g(x) f(x) \\mathrm{d} x=\\mu_g\\) for some functional \\(g(\\cdot)\\)\n\n\\(g(x)=x\\) (mean)\n\\(g(x) = \\mathsf{I}(x \\in A)\\) (probability of event)\netc."
+    "text": "Estimation of integrals\nSuppose we can simulate \\(B\\) i.i.d. variables with the same distribution, \\(x_1, \\ldots, x_B\\) with distribution \\(F\\).\nWe want to compute \\(\\mathsf{E}\\{g(X)\\}=\\int g(x) f(x) \\mathrm{d} x=\\mu_g\\) for some functional \\(g(\\cdot)\\)\n\n\\(g(x)=x\\) (mean)\n\\(g(x) = \\mathsf{I}(x \\in A)\\): probability of event, since \\(\\mathsf{E}\\{\\mathsf{I}(X \\in A)\\} = \\Pr(X \\in A)\\)\netc."
   },
   {
     "objectID": "slides/bayesmod-slides1.html#vanilla-monte-carlo-integration",
@@ -2586,7 +2586,7 @@
     "href": "content/01-content.html#complementary-readings",
     "title": "Introduction",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nChapter 1 of Wood (2015)\nChapter 4 and 6.1 of Davison (2003)\nChapters 2 and 3 of Robert & Casella (2004)\nChapters 1–6 of Casella & Berger (2002)",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nVillani, M. (2025). Draft of Bayesian Learning - the prequel\nChapter 1 of Wood (2015)\nChapter 4 and 6.1 of Davison (2003)\nChapters 2 and 3 of Robert & Casella (2004)\nChapters 1–6 of Casella & Berger (2002)",
     "crumbs": [
       "Content",
       "Course content",

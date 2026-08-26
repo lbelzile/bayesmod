@@ -187,9 +187,9 @@ The midterm and final are closed book exams.
 ```{r assignments-grades, include=FALSE}
 assignments <- tibble::tribble(
   ~Points,  ~Assignment,
-  10 * 3 ,   "Assignments and quizzes",
-  30      ,  "Midterm examination (30 pts)",
-  40      ,  "Final examination (40 pts)",
+  10 * 3 ,   "Assignments",
+  30      ,  "Midterm examination",
+  40      ,  "Final examination",
 )
 
 grading <- tibble::tribble(
@@ -200,23 +200,6 @@ grading <- tibble::tribble(
   "B+",  "75-80%",  "F",  "<60%"
 )
 ```
-
-## Weekly check-in
-
-Every week, after you finish working through the content, I want to hear about what you learned and what questions you still have. To facilitate this, and to encourage engagement with the course content, you’ll need to write a small feedback in *ZoneCours*. This should be ~150 words.
-
-You should answer the following three questions each week:
-
-- What was the most exciting thing you learned from the session? Why?
-- What was the muddiest thing from the session this week? What are you still wondering about?
-- Which activity did you find the most useful? What could have been skipped?
-
-The weekly check-in is an occasion for you to ask for clarification, highlight areas or topics for which examples could be added, or list superfluous activities and content. I will read these before the next class, answer individually through the feedback form or at the beginning of class.
-
-The submission module is on ZoneCours for convenience even if it carries no weight.
-<!--
-Team work counts towards your final grade only if you score more than 50% on individual evaluations.
--->
 
 <div class="centered-table">
 
@@ -239,6 +222,23 @@ grading %>%
 ```
 
 </div>
+
+## Weekly check-in
+
+Every week, after you finish working through the content, I want to hear about what you learned and what questions you still have. To facilitate this, and to encourage engagement with the course content, you’ll need to write a small feedback in *ZoneCours*. This should be ~150 words.
+
+You should answer the following three questions each week:
+
+- What was the most exciting thing you learned from the session? Why?
+- What was the muddiest thing from the session this week? What are you still wondering about?
+- Which activity did you find the most useful? What could have been skipped?
+
+The weekly check-in is an occasion for you to ask for clarification, highlight areas or topics for which examples could be added, or list superfluous activities and content. I will read these before the next class, answer individually through the feedback form or at the beginning of class.
+
+The submission module is on ZoneCours for convenience even if it carries no weight.
+<!--
+Team work counts towards your final grade only if you score more than 50% on individual evaluations.
+-->
 
 ## Student hours
 

@@ -79,7 +79,7 @@ The **marginal distribution** of a subvector $\boldsymbol{X}_{1:k}=(X_1, \ldots,
 
 ## Marginal density
 
-The **marginal density** $f_{\boldsymbol{X}_{1:k}}(\boldsymbol{x}_{1:k})$ of an absolutely continuous subvector $\boldsymbol{X}_{1:k}=(X_1, \ldots, X_k)^\top$ is
+The **marginal density** $f_{\boldsymbol{X}_{1:k}}(\boldsymbol{x}_{1:k})$ continuous subvector $\boldsymbol{X}_{1:k}=(X_1, \ldots, X_k)^\top$ of $\boldsymbol{X} = (X_1, \ldots, X_d)^\top$ is
 \begin{align*}
  \int_{-\infty}^\infty \cdots  \int_{-\infty}^\infty  f_{\boldsymbol{X}}(x_1, \ldots, x_k, z_{k+1}, \ldots, z_{d}) \mathrm{d} z_{k+1} \cdots \mathrm{d}z_d.
 \end{align*}
@@ -167,8 +167,8 @@ which reduces in the unidimensional setting to $\mathsf{Va}(Y) = \mathsf{E}\{Y -
 If $\boldsymbol{Y}$ is $d$-dimensional and $\mathbf{A}$ is $p \times d$ and $\boldsymbol{b}$ is a $p$ vector, then
 
 \begin{align*}
-\mathsf{E}(\boldsymbol{AY} + \boldsymbol{b}) &= \boldsymbol{A}\mathsf{E}(\boldsymbol{Y}) + \boldsymbol{b},\\
-\mathsf{Va}(\boldsymbol{AY} + \boldsymbol{b}) &= \boldsymbol{A}\mathsf{Va}(\boldsymbol{Y})\boldsymbol{A}^\top.
+\mathsf{E}(\mathbf{A}\boldsymbol{Y} + \boldsymbol{b}) &= \mathbf{A}\mathsf{E}(\boldsymbol{Y}) + \boldsymbol{b},\\
+\mathsf{Va}(\mathbf{A}\boldsymbol{Y} + \boldsymbol{b}) &= \mathbf{A}\mathsf{Va}(\boldsymbol{Y})\mathbf{A}^\top.
 \end{align*}
 
 ## Law of iterated expectation and variance
@@ -283,14 +283,14 @@ Let $\boldsymbol{Y} \sim \mathsf{Gauss}_d(\boldsymbol{\mu}, \boldsymbol{Q}^{-1})
 \begin{align*}
  \boldsymbol{Y} = \begin{pmatrix} \boldsymbol{Y}_1 \\ \boldsymbol{Y}_2\end{pmatrix}, \quad 
  \boldsymbol{\mu} = \begin{pmatrix} \boldsymbol{\mu}_1 \\ \boldsymbol{\mu}_2\end{pmatrix}, \quad 
- \boldsymbol{Q} = \begin{pmatrix} \boldsymbol{Q}_{11} & \boldsymbol{Q}_{12}\\ \boldsymbol{Q}_{21} & \boldsymbol{\Sigma}_{22}\end{pmatrix},
+ \boldsymbol{Q} = \begin{pmatrix} \boldsymbol{Q}_{11} & \boldsymbol{Q}_{12}\\ \boldsymbol{Q}_{21} & \boldsymbol{Q}_{22}\end{pmatrix},
 \end{align*}
 where $\boldsymbol{Y}_1$ is a $k \times 1$ and $\boldsymbol{Y}_2$ is a $(d-k) \times 1$ vector for some $1\leq k < d.$
 
 
 Then, we have the conditional distribution 
 \begin{align*}
-\boldsymbol{Y}_1 \mid \boldsymbol{Y}_2 =\boldsymbol{y}_2 &\sim \mathsf{Gauss}_k(\boldsymbol{\mu}_1-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{Q}^{-1}_{11})
+\boldsymbol{Y}_1 \mid \boldsymbol{Y}_2 =\boldsymbol{y}_2 &\sim \mathsf{Gauss}_k\left\{\boldsymbol{\mu}_1-\boldsymbol{Q}_{11}^{-1}\boldsymbol{Q}_{12}(\boldsymbol{y}_2-\boldsymbol{\mu}_2), \boldsymbol{Q}^{-1}_{11}\right\}.
 \end{align*}
 
 
@@ -309,13 +309,13 @@ L(\boldsymbol{\theta}; \boldsymbol{y})=\prod_{i=1}^n f_i(y_i; \boldsymbol{\theta
 \end{align*}
 The corresponding log likelihood function for independent and identically distributions observations is
 \begin{align*}
-\ell(\boldsymbol{\theta}; \boldsymbol{y}) = \sum_{i=1}^n \ln f(y_i; \boldsymbol{\theta})
+\ell(\boldsymbol{\theta}; \boldsymbol{y}) = \sum_{i=1}^n \log f(y_i; \boldsymbol{\theta})
 \end{align*}
 
 ## Score
 
 Let $\ell(\boldsymbol{\theta}),$ $\boldsymbol{\theta} \in \boldsymbol{\Theta} \subseteq \mathbb{R}^p,$ be the log likelihood function. The gradient of the log likelihood, termed **score** is the $p$-vector
-$$U(\boldsymbol{\theta}) = \frac{\partial \ell(\boldsymbol{\theta})}{ \partial \boldsymbol{\theta}}.$$
+$$U(\boldsymbol{\theta}; \boldsymbol{y}) = \frac{\partial \ell(\boldsymbol{\theta}; \boldsymbol{y})}{ \partial \boldsymbol{\theta}}.$$
 
 ## Information matrix
 
@@ -337,7 +337,7 @@ i(\boldsymbol{\theta}) = \mathsf{E}\left\{U(\boldsymbol{\theta}; \boldsymbol{Y})
 
 Information matrices are symmetric and provide information about the variability of $\widehat{\boldsymbol{\theta}}.$
 
-The information of an iid sample of size $n$is $n$ times that of a single observation 
+The information of an iid sample of size $n$ is $n$ times that of a single observation 
 
 - information accumulates at a linear rate.
 
@@ -432,7 +432,7 @@ Suppose we can simulate $B$ i.i.d. variables with the same distribution, $x_1, \
 We want to compute $\mathsf{E}\{g(X)\}=\int g(x) f(x) \mathrm{d} x=\mu_g$ for some functional $g(\cdot)$
 
 - $g(x)=x$ (mean)
-- $g(x) = \mathsf{I}(x \in A)$ (probability of event)
+- $g(x) = \mathsf{I}(x \in A)$: probability of event,  since $\mathsf{E}\{\mathsf{I}(X \in A)\} = \Pr(X \in A)$
 - etc.
 
 ## Vanilla Monte Carlo integration
