@@ -287,7 +287,7 @@ The symbol $\propto$, for proportionality, means dropping all terms not an argum
 :::
 
 
-## Marginal likelihood
+## Marginal likelihood of beta-binomial model
 
 
 The marginal likelihood for the $Y \mid P=p \sim \mathsf{binom}(n,p)$ model with prior $P \sim \mathsf{beta}(\alpha, \beta)$ is
@@ -297,13 +297,18 @@ p_{Y}(y) = \binom{n}{y} \frac{\mathrm{beta}(\alpha + y, \beta + n - y)}{\mathrm{
 where $\mathrm{beta}(\alpha, \beta) = \Gamma(\alpha)\Gamma(\beta)/\Gamma(\alpha+\beta)$ is the beta function.
 
 
-## Experiments and likelihoods {.smaller}
+
+## Experiments and likelihoods 
+
+::: {style="font-size: 95%;"}
 
 Consider the following sampling mechanism, which lead to $k$ successes out of $n$ independent trials, with the same probability of success $\theta$.
 
 1. Bernoulli: sample fixed number of observations with $L(\theta; y) =\theta^k(1-\theta)^{n-k}$
 2. binomial: same, but record only total number of successes so $L(\theta; y) =\binom{n}{k}\theta^k(1-\theta)^{n-k}$
 3. negative binomial: sample data until you obtain a predetermined number of successes, whence $L(\theta; y) =\binom{n-1}{k-1}\theta^k(1-\theta)^{n-k}$
+
+:::
 
 ## Likelihood principle
 
@@ -444,7 +449,7 @@ For example,
 - The marginal likelihood does not depend on $\boldsymbol{\theta}$
    - (a normalizing constant)
 - For the posterior density to be *proper*,
-   - the marginal likelihood must be a finite!
+   - the marginal likelihood must be finite!
    - in continuous models, the posterior is proper whenever the prior function is proper.
 
 
@@ -804,8 +809,9 @@ The first case, which we have already encountered, allows us to query moments (m
 :::
 
 
-## Bayesian inference in practice {.smaller}
+## Bayesian inference in practice 
 
+::: {style="font-size: 85%;"}
 
 Most of the field revolves around the creation of algorithms that either 
 
@@ -813,6 +819,8 @@ Most of the field revolves around the creation of algorithms that either
    - (Monte Carlo and Markov chain Monte Carlo methods)
 - provide accurate numerical approximation, including for marginalizing out all but one parameter.   
   - (integrated nested Laplace approximations, variational inference, etc.)
+  
+:::
 
 ## Predictive distributions
 
@@ -822,9 +830,11 @@ p(y_{\text{new}}\mid \boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new
 \end{align*}
 and the $\color{#56B4E9}{\text{prior predictive}}$ 
 \begin{align*}
-p(y_{\text{new}}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#56B4E9}{p(\boldsymbol{\theta})} \mathrm{d} \boldsymbol{\theta}
+p(y_{\text{new}}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#56B4E9}{p(\boldsymbol{\theta})} \mathrm{d} \boldsymbol{\theta}.
 \end{align*}
-is useful for determining whether the prior is sensical.
+
+
+The prior predictive is useful for determining whether the prior is informative or sensical
 
 ## Analytical derivation of predictive distribution
 
