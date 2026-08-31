@@ -1257,7 +1257,7 @@
     "href": "slides/bayesmod-slides2.html#experiments-and-likelihoods",
     "title": "Bayesian modelling",
     "section": "Experiments and likelihoods",
-    "text": "Experiments and likelihoods\nConsider the following sampling mechanism, which lead to \\(k\\) successes out of \\(n\\) independent trials, with the same probability of success \\(\\theta\\).\n\nBernoulli: sample fixed number of observations with \\(L(\\theta; y) =\\theta^k(1-\\theta)^{n-k}\\)\nbinomial: same, but record only total number of successes so \\(L(\\theta; y) =\\binom{n}{k}\\theta^k(1-\\theta)^{n-k}\\)\nnegative binomial: sample data until you obtain a predetermined number of successes, whence \\(L(\\theta; y) =\\binom{n-1}{k-1}\\theta^k(1-\\theta)^{n-k}\\)"
+    "text": "Experiments and likelihoods\n\nConsider the following sampling mechanism, which lead to \\(k\\) successes out of \\(n\\) independent trials, with the same probability of success \\(\\theta\\).\n\nBernoulli: sample fixed number of observations with \\(L(\\theta; y) =\\theta^k(1-\\theta)^{n-k}\\)\nbinomial: same, but record only total number of successes so \\(L(\\theta; y) =\\binom{n}{k}\\theta^k(1-\\theta)^{n-k}\\)\nnegative binomial: sample data until you obtain a predetermined number of successes, whence \\(L(\\theta; y) =\\binom{n-1}{k-1}\\theta^k(1-\\theta)^{n-k}\\)"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#likelihood-principle",
@@ -1271,14 +1271,14 @@
     "href": "slides/bayesmod-slides2.html#integration",
     "title": "Bayesian modelling",
     "section": "Integration",
-    "text": "Integration\nWe could approximate the \\(\\color{#E69F00}{\\text{marginal likelihood}}\\) through either\n\nnumerical integration (cubature)\nMonte Carlo simulations\n\nIn more complicated models, we will try to sample observations by bypassing completely this calculation.\n\nThe likelihood terms can be small (always less than one and decreasing for discrete data), so watch out for numerical overflow when evaluating normalizing constants."
+    "text": "Integration\nWe could approximate the \\(\\color{#E69F00}{\\text{marginal likelihood}}\\) through either\n\nnumerical integration (cubature)\nMonte Carlo simulations\n\nbut accurate approximations are still elusive (Methodiev:2025?).\nIn more complicated models, we will try to sample from the posterior directly by bypassing completely the calculation of \\(p(\\boldsymbol{y}).\\)\n\nThe likelihood terms can be small (always less than one and decreasing for discrete data), so watch out for numerical overflow when evaluating normalizing constants."
   },
   {
     "objectID": "slides/bayesmod-slides2.html#numerical-example-of-monte-carlo-integration",
     "href": "slides/bayesmod-slides2.html#numerical-example-of-monte-carlo-integration",
     "title": "Bayesian modelling",
     "section": "Numerical example of (Monte Carlo) integration",
-    "text": "Numerical example of (Monte Carlo) integration\n\ny &lt;- 6L # number of successes \nn &lt;- 14L # number of trials\nalpha &lt;- beta &lt;- 1.5 # prior parameters\nunnormalized_posterior &lt;- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n\n1.066906e-05 with absolute error &lt; 1e-12\n\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n\n[1] 1.066906e-05\n\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n\n[1] 1.061693e-05"
+    "text": "Numerical example of (Monte Carlo) integration\n\ny &lt;- 6L # number of successes \nn &lt;- 14L # number of trials\nalpha &lt;- beta &lt;- 1.5 # prior parameters\nunnormalized_posterior &lt;- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n\n1.066906e-05 with absolute error &lt; 1e-12\n\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n\n[1] 1.066906e-05\n\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n\n[1] 1.067821e-05"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#marginal-posterior",
@@ -1306,7 +1306,7 @@
     "href": "slides/bayesmod-slides2.html#validity-of-the-posterior",
     "title": "Bayesian modelling",
     "section": "Validity of the posterior",
-    "text": "Validity of the posterior\n\nThe marginal likelihood does not depend on \\(\\boldsymbol{\\theta}\\)\n\n(a normalizing constant)\n\nFor the posterior density to be proper,\n\nthe marginal likelihood must be a finite!\nin continuous models, the posterior is proper whenever the prior function is proper."
+    "text": "Validity of the posterior\n\nThe marginal likelihood does not depend on \\(\\boldsymbol{\\theta}\\)\n\n(a normalizing constant)\n\nFor the posterior density to be proper,\n\nthe marginal likelihood must be finite!\nwe need \\(\\int p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta})p(\\boldsymbol{\\theta} \\mathrm{d} \\boldsymbol{\\theta} &lt; \\infty\\) for any datum \\(\\boldsymbol{y}.\\) It is therefore desirable to have a proper prior \\(p(\\boldsymbol{\\theta})\\) satisfying \\(\\intp(\\boldsymbol{\\theta})\\mathrm{d} \\boldsymbol{\\theta} &lt; \\infty.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#different-priors-give-different-posteriors",
@@ -1362,14 +1362,14 @@
     "href": "slides/bayesmod-slides2.html#bayesian-inference-in-practice",
     "title": "Bayesian modelling",
     "section": "Bayesian inference in practice",
-    "text": "Bayesian inference in practice\nMost of the field revolves around the creation of algorithms that either\n\ncircumvent the calculation of the normalizing constant\n\n(Monte Carlo and Markov chain Monte Carlo methods)\n\nprovide accurate numerical approximation, including for marginalizing out all but one parameter.\n\n(integrated nested Laplace approximations, variational inference, etc.)"
+    "text": "Bayesian inference in practice\n\nMost of the field revolves around the creation of algorithms that either\n\ncircumvent the calculation of the normalizing constant\n\n(Monte Carlo and Markov chain Monte Carlo methods)\n\nprovide accurate numerical approximation, including for marginalizing out all but one parameter.\n\n(integrated nested Laplace approximations, variational inference, etc.)"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#predictive-distributions",
     "href": "slides/bayesmod-slides2.html#predictive-distributions",
     "title": "Bayesian modelling",
     "section": "Predictive distributions",
-    "text": "Predictive distributions\nDefine the \\(\\color{#D55E00}{\\text{posterior predictive}}\\), \\[\\begin{align*}\np(y_{\\text{new}}\\mid \\boldsymbol{y}) = \\int_{\\boldsymbol{\\Theta}} p(y_{\\text{new}} \\mid \\boldsymbol{\\theta}) \\color{#D55E00}{p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})} \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\] and the \\(\\color{#56B4E9}{\\text{prior predictive}}\\) \\[\\begin{align*}\np(y_{\\text{new}}) = \\int_{\\boldsymbol{\\Theta}} p(y_{\\text{new}} \\mid \\boldsymbol{\\theta}) \\color{#56B4E9}{p(\\boldsymbol{\\theta})} \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\] is useful for determining whether the prior is sensical."
+    "text": "Predictive distributions\nDefine the \\(\\color{#D55E00}{\\text{posterior predictive}}\\), \\[\\begin{align*}\np(y_{\\text{new}}\\mid \\boldsymbol{y}) = \\int_{\\boldsymbol{\\Theta}} p(y_{\\text{new}} \\mid \\boldsymbol{\\theta}) \\color{#D55E00}{p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})} \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\] and the \\(\\color{#56B4E9}{\\text{prior predictive}}\\) \\[\\begin{align*}\np(y_{\\text{new}}) = \\int_{\\boldsymbol{\\Theta}} p(y_{\\text{new}} \\mid \\boldsymbol{\\theta}) \\color{#56B4E9}{p(\\boldsymbol{\\theta})} \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]\nThe prior predictive is useful for determining whether the prior is informative or sensical"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#analytical-derivation-of-predictive-distribution",
@@ -2855,7 +2855,7 @@
     "href": "content/packages.html",
     "title": "Software and packages",
     "section": "",
-    "text": "There are numerous options for Bayesian scientific computing, including probabilistic programming languages. I will be using Stan, as it offers cross-platform support and uses Hamiltonian Monte Carlo. JAGS has very good automatic differentiation, but relies on Gibbs sampling. Other interfaces are platform-specific: below is a list of the main software (R, Python and Julia), along with associated packages.\n\nR\nThe R programming language contains many packages on the Comprehensive R Archive Network (CRAN) dedicated for Bayesian analysis; see the CRAN Task View\nAmong the packages worth exploring are NIMBLE (https://r-nimble.org/), which allows for different samplers.\nTo install all R packages used throughout the course, use the command\n\ninstall.packages(\"cmdstanr\",\n                 repos = c(\"https://mc-stan.org/r-packages/\",\n                           getOption(\"repos\")))\n\nI also use priorsense, bayesplot and loo. Good high-level interface include brms.\nFor beginners (without knowledge of Markov chain Monte Carlo), the packages bang + rust, and rethinking from McElreath (2020) are useful.\n\nThe INLA R package(https://www.r-inla.org/), which uses integrated nested Laplace approximations (INLA) for inference in latent Gaussian models, is not on the CRAN.\n\n\ninstall.packages(\"BiocManager\")\nBiocManager::install(\"graph\")\nBiocManager::install(\"Rgraphviz\")\ninstall.packages(\n  \"INLA\",\n  repos = c(getOption(\"repos\"),\n            INLA = \"https://inla.r-inla-download.org/R/stable\"),\n  dep = TRUE)\n\nI have bundled many datasets used in class in a R package available from this Github repository:\n\n# Download databases for course\nremotes::install_github(\"lbelzile/hecbayes\")\n\n\n\nPython\nPython can be installed through the uv package manager, which I recommend over other alternatives.\nBeyond Stan via CmdStanPy, the most popular Python library for Bayesian data analysis is PyMC.\n\n\nJulia\nThe Julia Programming Language (https://julialang.org/) has numerous packages for Bayesian analysis, including notably\n\nPigeons\nTuring\n\n\n\n\n\n\nReferences\n\nMcElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and STAN (2nd ed.). Chapman; Hall/CRC.",
+    "text": "There are numerous options for Bayesian scientific computing, including probabilistic programming languages. I will be using Stan, a probabilistic programming language using Hamiltonian Monte Carlo, as it offers cross-platform support. JAGS has very good automatic differentiation, but is more old-school Gibbs sampling. Other interfaces are platform-specific: below is a list of the main software (R, Python and Julia), along with associated packages.\n\nR\nThe R programming language contains many packages on the Comprehensive R Archive Network (CRAN) dedicated for Bayesian analysis; see the CRAN Task View on Bayesian statistics.\nAmong the packages worth exploring are NIMBLE (https://r-nimble.org/).\nTo install Stan with R, use the following commands:\n\ninstall.packages(\"cmdstanr\",\n                 repos = c(\"https://mc-stan.org/r-packages/\",\n                           getOption(\"repos\")))\n\nI also use priorsense, bayesplot and loo packages for day-to-day analysis. Good high-level interface to Stan in R include brms, which allows for regression models with formula interface.\nFor beginners (without knowledge of Markov chain Monte Carlo), the packages bang + rust, and rethinking from McElreath (2020) are also useful.\n\nThe INLA R package (https://www.r-inla.org/), which uses integrated nested Laplace approximations (INLA) for inference in latent Gaussian models, is not on the CRAN.\n\n\ninstall.packages(\"BiocManager\")\nBiocManager::install(\"graph\")\nBiocManager::install(\"Rgraphviz\")\ninstall.packages(\n  \"INLA\",\n  repos = c(getOption(\"repos\"),\n            INLA = \"https://inla.r-inla-download.org/R/stable\"),\n  dep = TRUE)\n\nI have bundled many datasets used in class in a R package available from this Github repository:\n\n# Download databases for course\nremotes::install_github(\"lbelzile/hecbayes\")\n\n\n\nPython\nPython can be installed through the uv package manager, which I recommend over other alternatives.\nBeyond Stan via CmdStanPy, the most popular Python library for Bayesian data analysis is PyMC.\n\n\nJulia\nThe Julia Programming Language (https://julialang.org/) has numerous packages for Bayesian analysis, including notably\n\nPigeons\nTuring\n\n\n\n\n\n\nReferences\n\nMcElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and STAN (2nd ed.). Chapman; Hall/CRC.",
     "crumbs": [
       "Content",
       "Installation",
@@ -4758,5 +4758,19 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References\n\n\n\n\nPark, T., & Casella, G. (2008). The Bayesian Lasso. Journal of the American Statistical Association, 103(482), 681–686. https://doi.org/10.1198/016214508000000337\n\n\nRaftery, A. E. (1995). Bayesian model selection in social research. Sociological Methodology, 25, 111–163. https://doi.org/10.2307/271063\n\n\nRue, H., Martino, S., & Chopin, N. (2009). Approximate bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 71(2), 319–392. https://doi.org/10.1111/j.1467-9868.2008.00700.x\n\n\nTierney, L., & Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. Journal of the American Statistical Association, 81(393), 82–86. https://doi.org/10.1080/01621459.1986.10478240\n\n\nvan Niekerk, J., & Rue, H. (2024). Low-rank variational Bayes correction to the Laplace method. Journal of Machine Learning Research, 25(62), 1–25. http://jmlr.org/papers/v25/21-1405.html\n\n\nWood, S. N. (2019). Simplified integrated nested Laplace approximation. Biometrika, 107(1), 223–230. https://doi.org/10.1093/biomet/asz044"
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#marginal-likelihood-of-beta-binomial-model",
+    "href": "slides/bayesmod-slides2.html#marginal-likelihood-of-beta-binomial-model",
+    "title": "Bayesian modelling",
+    "section": "Marginal likelihood of beta-binomial model",
+    "text": "Marginal likelihood of beta-binomial model\nThe marginal likelihood for the \\(Y \\mid P=p \\sim \\mathsf{binom}(n,p)\\) model with prior \\(P \\sim \\mathsf{beta}(\\alpha, \\beta)\\) is \\[\\begin{align*}\np_{Y}(y) = \\binom{n}{y} \\frac{\\mathrm{beta}(\\alpha + y, \\beta + n - y)}{\\mathrm{beta}(\\alpha, \\beta)}, \\quad y \\in\\{0, \\ldots,n\\}.\n\\end{align*}\\] where \\(\\mathrm{beta}(\\alpha, \\beta) = \\Gamma(\\alpha)\\Gamma(\\beta)/\\Gamma(\\alpha+\\beta)\\) is the beta function."
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#posterior-moments",
+    "href": "slides/bayesmod-slides2.html#posterior-moments",
+    "title": "Bayesian modelling",
+    "section": "Posterior moments",
+    "text": "Posterior moments\nWe can compute moments of the posterior as summary statistics:\n\\[\n\\int_{\\boldsymbol{\\Theta}}g(\\boldsymbol{\\theta}) p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta} =  \\int_{\\boldsymbol{\\Theta}}g(\\boldsymbol{\\theta}) \\frac{p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta})p(\\boldsymbol{\\theta})}{p(\\boldsymbol{y})} \\mathrm{d} \\boldsymbol{\\theta}\n\\] but analytical approximations would require knowledge of the marginal likelihood \\(p(\\boldsymbol{y}).\\)"
   }
 ]

@@ -2,16 +2,16 @@
 title: "Software and packages"
 ---
 
-There are numerous options for Bayesian scientific computing, including probabilistic programming languages. I will be using [Stan](https://mc-stan.org/), as it offers cross-platform support and uses Hamiltonian Monte Carlo.  [JAGS](https://mcmc-jags.sourceforge.io/) has very good automatic differentiation, but relies on Gibbs sampling. Other interfaces are platform-specific: below is a list of the main software (**R**, Python and Julia), along with associated packages.
+There are numerous options for Bayesian scientific computing, including probabilistic programming languages. I will be using [Stan](https://mc-stan.org/), a probabilistic programming language using Hamiltonian Monte Carlo, as it offers cross-platform support.  [JAGS](https://mcmc-jags.sourceforge.io/) has very good automatic differentiation, but is more old-school Gibbs sampling. Other interfaces are platform-specific: below is a list of the main software (**R**, Python and Julia), along with associated packages.
 
 
 # **R**
 
-The **R** programming language contains many packages on the Comprehensive R Archive Network (CRAN) dedicated for Bayesian analysis; see the [CRAN Task View](https://cran.r-project.org/web/views/Bayesian.html)
+The **R** programming language contains many packages on the Comprehensive R Archive Network (CRAN) dedicated for Bayesian analysis; see the [CRAN Task View](https://cran.r-project.org/web/views/Bayesian.html) on Bayesian statistics.
 
-Among the packages worth exploring are `NIMBLE` (<https://r-nimble.org/>), which allows for different samplers.
+Among the packages worth exploring are `NIMBLE` (<https://r-nimble.org/>).
 
-To install all **R** packages used throughout the course, use the command
+To install Stan with **R**, use the following commands:
 
 ```{r}
 #| eval: false
@@ -21,11 +21,11 @@ install.packages("cmdstanr",
                            getOption("repos")))
 ```
 
-I also use `priorsense`, `bayesplot` and `loo`. Good high-level interface include `brms`.
+I also use `priorsense`, `bayesplot` and `loo` packages for day-to-day analysis. Good high-level interface to Stan in **R** include `brms`, which allows for regression models with formula interface.
 
-For beginners (without knowledge of Markov chain Monte Carlo), the packages `bang` + `rust`, and [`rethinking`](https://github.com/rmcelreath/rethinking) from  @McElreath:2020 are useful.
+For beginners (without knowledge of Markov chain Monte Carlo), the packages `bang` + `rust`, and [`rethinking`](https://github.com/rmcelreath/rethinking) from  @McElreath:2020 are also useful.
 
-- The `INLA` **R** package(<https://www.r-inla.org/>), which uses integrated nested Laplace approximations (INLA) for inference in latent Gaussian models, is not on the CRAN.
+- The `INLA` **R** package (<https://www.r-inla.org/>), which uses integrated nested Laplace approximations (INLA) for inference in latent Gaussian models, is not on the CRAN.
 
 ```{r}
 #| eval: false

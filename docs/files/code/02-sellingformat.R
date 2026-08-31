@@ -8,9 +8,49 @@ data("sellingformat", package = "hecbayes")
 #  Put uniform prior on 0/1 for the binomial probability of success
 #  the conjugate posterior is beta(y + 1, n - y + 1)
 
+# Calculation of the marginal likelihood
+log_marg_post_bern <- function(n, y) {
+  lbeta(1 + y, 1 + n - y)
+}
+
+# Extract summary statistics (sufficient statistics)
+n <- sum(cont)
+n0 <- colSums(cont)['quantity-integrated']
+n1 <- colSums(cont)['quantity-sequential']
+y0 <- cont["1", "quantity-integrated"]
+y1 <- cont["1", "quantity-sequential"]
+y <- y0 + y1
+
+# Alternative model (one proportion for each subgroup)
+BF1 <- log_marg_post_bern(n = n0, y = y0) + # integrated
+  log_marg_post_bern(n = n1, y = y1) # sequential decision
+# Null model (same proportion regardless of experimental variable)
+BF0 <- log_marg_post_bern(n = n, y = y) # pooled
+# Bayes factor
+exp(BF0 - BF1)
+
+# Normalizing constant is marginal likelihood
+# whose log is about -110
+# so too small for accurate numerical integration
+# Integrate instead a binomial likelihood
+# and remove this from the normalizing constant later
+marg_binom <- integrate(
+  f = function(x) {
+    dbinom(x = y0, size = n0, prob = x)
+  },
+  lower = 0,
+  upper = 1
+)
+# Compare the numerical approximation with the true
+c(
+  "numerical" = log(marg_binom$value) - lchoose(n0, y0),
+  "exact" = log_marg_post_bern(n = n0, y = y0)
+)
+
+
 # Sample from the posterior
-post_p_int <- rbeta(n = 1e4L, shape1 = 47, shape2 = 153)
-post_p_seq <- rbeta(n = 1e4L, shape1 = 24, shape2 = 177)
+post_p_int <- rbeta(n = 1e4L, shape1 = y0 + 1, shape2 = n0 - y0 + 1)
+post_p_seq <- rbeta(n = 1e4L, shape1 = y1 + 1, shape2 = n1 - y1 + 1)
 # Probability of superiority (akin to one-sided test of mu2 > mu1)
 mean(post_p_int > post_p_seq)
 # Reparametrization in terms of odds
@@ -19,6 +59,30 @@ post_odds_seq <- (post_p_seq / (1 - post_p_seq))
 # Posterior odds
 post_oddsratio <- post_odds_int / post_odds_seq
 
+# Pinball loss
+pinball <- function(y, qlev = 0.5) {
+  ifelse(y < 0, (qlev - 1) * y, qlev * y)
+}
+
+# Posterior summary via loss functions
+# Computing the 80% by minimizing a loss function
+q80 <- optimize(
+  f = function(x) {
+    mean(pinball(post_oddsratio - x, 0.8))
+  },
+  interval = c(0, 1e10)
+)$minimum
+# Compare answer with empirical quantile
+quantile(post_oddsratio, 0.8)
+
+# 80% Highest posterior density interval
+hdiD <- HDInterval::hdi(
+  density(post_oddsratio),
+  credMass = 0.80
+)
+# Equitailed confidence intervals
+quantile(post_oddsratio, probs = c(0.1, 0.9))
+
 # Plot posterior densities for probability of buying the product
 cols <- MetBrewer::met.brewer("Hiroshige", 2)
 g1 <- ggplot() +
@@ -26,14 +90,14 @@ g1 <- ggplot() +
     fun = dbeta,
     xlim = c(0, 0.5),
     n = 1001,
-    args = list(shape1 = 47, shape2 = 153),
+    args = list(shape1 = y0 + 1, shape2 = n0 - y0 + 1),
     mapping = aes(col = "integrated")
   ) +
   stat_function(
     fun = dbeta,
     xlim = c(0, 0.5),
     n = 1001,
-    args = list(shape1 = 24, shape2 = 177),
+    args = list(shape1 = y1 + 1, shape2 = n1 - y1 + 1),
     mapping = aes(col = "sequential")
   ) +
   scale_color_manual(
@@ -45,9 +109,19 @@ g1 <- ggplot() +
     breaks = seq(0, 0.5, by = 0.25),
     labels = c("0", "0.25", "0.5")
   ) +
-  labs(y = "", subtitle = "Posterior density", x = "probability of buying") +
-  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
-  theme(legend.position = "inside", legend.position.inside = c(0.9, 0.9))
+  labs(
+    y = "",
+    subtitle = "Posterior density",
+    x = "probability of buying"
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion()
+  ) +
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(0.9, 0.9)
+  )
 # Plot posterior odds
 g2 <- ggplot(
   data = data.frame(ratio = post_oddsratio),
@@ -59,5 +133,8 @@ g2 <- ggplot(
     subtitle = "posterior density",
     y = ""
   ) +
-  scale_y_continuous(limits = c(0, NA), expand = expansion())
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion()
+  )
 g1 + g2

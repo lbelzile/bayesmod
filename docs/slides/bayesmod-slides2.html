@@ -227,7 +227,7 @@ Léo Belzile, HEC Montréal
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Aug 25, 2026</p>
+  <p class="date">Last compiled Sunday Aug 30, 2026</p>
 </section>
 <section id="probability-vs-frequency" class="slide level2">
 <h2>Probability vs frequency</h2>
@@ -397,20 +397,22 @@ L(\theta; y)p(\theta) &amp; \stackrel{\theta}{\propto} \theta^{y}(1-\theta)^{n-y
 <p>The symbol <span class="math inline">\(\propto\)</span>, for proportionality, means dropping all terms not an argument of the left hand side.</p>
 </div>
 </section>
-<section id="marginal-likelihood" class="slide level2">
-<h2>Marginal likelihood</h2>
+<section id="marginal-likelihood-of-beta-binomial-model" class="slide level2">
+<h2>Marginal likelihood of beta-binomial model</h2>
 <p>The marginal likelihood for the <span class="math inline">\(Y \mid P=p \sim \mathsf{binom}(n,p)\)</span> model with prior <span class="math inline">\(P \sim \mathsf{beta}(\alpha, \beta)\)</span> is <span class="math display">\[\begin{align*}
 p_{Y}(y) = \binom{n}{y} \frac{\mathrm{beta}(\alpha + y, \beta + n - y)}{\mathrm{beta}(\alpha, \beta)}, \quad y \in\{0, \ldots,n\}.
 \end{align*}\]</span> where <span class="math inline">\(\mathrm{beta}(\alpha, \beta) = \Gamma(\alpha)\Gamma(\beta)/\Gamma(\alpha+\beta)\)</span> is the beta function.</p>
 </section>
-<section id="experiments-and-likelihoods" class="slide level2 smaller">
+<section id="experiments-and-likelihoods" class="slide level2">
 <h2>Experiments and likelihoods</h2>
+<div style="font-size: 95%;">
 <p>Consider the following sampling mechanism, which lead to <span class="math inline">\(k\)</span> successes out of <span class="math inline">\(n\)</span> independent trials, with the same probability of success <span class="math inline">\(\theta\)</span>.</p>
 <ol type="1">
 <li>Bernoulli: sample fixed number of observations with <span class="math inline">\(L(\theta; y) =\theta^k(1-\theta)^{n-k}\)</span></li>
 <li>binomial: same, but record only total number of successes so <span class="math inline">\(L(\theta; y) =\binom{n}{k}\theta^k(1-\theta)^{n-k}\)</span></li>
 <li>negative binomial: sample data until you obtain a predetermined number of successes, whence <span class="math inline">\(L(\theta; y) =\binom{n-1}{k-1}\theta^k(1-\theta)^{n-k}\)</span></li>
 </ol>
+</div>
 </section>
 <section id="likelihood-principle" class="slide level2">
 <h2>Likelihood principle</h2>
@@ -427,7 +429,8 @@ p_{Y}(y) = \binom{n}{y} \frac{\mathrm{beta}(\alpha + y, \beta + n - y)}{\mathrm{
 <li>numerical integration (cubature)</li>
 <li>Monte Carlo simulations</li>
 </ul>
-<p>In more complicated models, we will try to sample observations by bypassing completely this calculation.</p>
+<p>but accurate approximations are still elusive <span class="citation" data-cites="Methodiev:2025">(<a href="#/references" role="doc-biblioref" onclick=""><strong>Methodiev:2025?</strong></a>)</span>.</p>
+<p>In more complicated models, we will try to sample from the posterior directly by bypassing completely the calculation of <span class="math inline">\(p(\boldsymbol{y}).\)</span></p>
 <div style="font-size: 65%;">
 <p>The likelihood terms can be small (always less than one and decreasing for discrete data), so watch out for numerical overflow when evaluating normalizing constants.</p>
 </div>
@@ -455,7 +458,7 @@ p_{Y}(y) = \binom{n}{y} \frac{\mathrm{beta}(\alpha + y, \beta + n - y)}{\mathrm{
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># Monte Carlo integration</span></span>
 <span id="cb5-2"><a></a><span class="fu">mean</span>(<span class="fu">unnormalized_posterior</span>(<span class="fu">runif</span>(<span class="fl">1e5</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.061693e-05</code></pre>
+<pre><code>[1] 1.067821e-05</code></pre>
 </div>
 </div>
 </section>
@@ -492,8 +495,8 @@ Figure&nbsp;2: Scaled Binomial likelihood for six successes out of 14 trials, <s
 </ul></li>
 <li>For the posterior density to be <em>proper</em>,
 <ul>
-<li>the marginal likelihood must be a finite!</li>
-<li>in continuous models, the posterior is proper whenever the prior function is proper.</li>
+<li>the marginal likelihood must be finite!</li>
+<li>we need <span class="math inline">\(\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta} \mathrm{d} \boldsymbol{\theta} &lt; \infty\)</span> for any datum <span class="math inline">\(\boldsymbol{y}.\)</span> It is therefore desirable to have a proper prior <span class="math inline">\(p(\boldsymbol{\theta})\)</span> satisfying <span class="math inline">\(\intp(\boldsymbol{\theta})\mathrm{d} \boldsymbol{\theta} &lt; \infty.\)</span></li>
 </ul></li>
 </ul>
 </section>
@@ -552,15 +555,6 @@ p(\boldsymbol{y} \mid \mathcal{M}_i) = \int p(y \mid \boldsymbol{\theta}^{(i)}, 
 <li>Must use proper priors.</li>
 </ul>
 </section>
-<section id="bayes-factor-for-the-binomial-model" class="slide level2">
-<h2>Bayes factor for the binomial model</h2>
-<p>Consider two models with <span class="math inline">\(Y \mid P^{(i)}=p \sim \mathsf{binom}(n, p)\)</span> and</p>
-<ul>
-<li><span class="math inline">\(P^{(1)}\sim \mathsf{unif}(0,1)\)</span></li>
-<li><span class="math inline">\(P^{(2)}\sim \mathsf{1}_{p=0.5}\)</span>.</li>
-</ul>
-
-<img data-src="bayesmod-slides2_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="summarizing-posterior-distributions" class="slide level2">
 <h2>Summarizing posterior distributions</h2>
 <!-- In frequentist statistics, we focus on a point estimator $\widehat{\boldsymbol{\theta}}$, such as the maximum likelihood estimator, and attempt to derive it's distribution, often relying on approximate large-sample distributions. In contrast, t -->
@@ -584,8 +578,16 @@ p(\boldsymbol{y} \mid \mathcal{M}_i) = \int p(y \mid \boldsymbol{\theta}^{(i)}, 
           display:block!important;
       }</style></aside>
 </section>
-<section id="bayesian-inference-in-practice" class="slide level2 smaller">
+<section id="posterior-moments" class="slide level2">
+<h2>Posterior moments</h2>
+<p>We can compute moments of the posterior as summary statistics:</p>
+<p><span class="math display">\[
+\int_{\boldsymbol{\Theta}}g(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta} =  \int_{\boldsymbol{\Theta}}g(\boldsymbol{\theta}) \frac{p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta})}{p(\boldsymbol{y})} \mathrm{d} \boldsymbol{\theta}
+\]</span> but analytical approximations would require knowledge of the marginal likelihood <span class="math inline">\(p(\boldsymbol{y}).\)</span></p>
+</section>
+<section id="bayesian-inference-in-practice" class="slide level2">
 <h2>Bayesian inference in practice</h2>
+<div style="font-size: 85%;">
 <p>Most of the field revolves around the creation of algorithms that either</p>
 <ul>
 <li>circumvent the calculation of the normalizing constant
@@ -597,14 +599,16 @@ p(\boldsymbol{y} \mid \mathcal{M}_i) = \int p(y \mid \boldsymbol{\theta}^{(i)}, 
 <li>(integrated nested Laplace approximations, variational inference, etc.)</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="predictive-distributions" class="slide level2">
 <h2>Predictive distributions</h2>
 <p>Define the <span class="math inline">\(\color{#D55E00}{\text{posterior predictive}}\)</span>, <span class="math display">\[\begin{align*}
 p(y_{\text{new}}\mid \boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#D55E00}{p(\boldsymbol{\theta} \mid \boldsymbol{y})} \mathrm{d} \boldsymbol{\theta}
 \end{align*}\]</span> and the <span class="math inline">\(\color{#56B4E9}{\text{prior predictive}}\)</span> <span class="math display">\[\begin{align*}
-p(y_{\text{new}}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#56B4E9}{p(\boldsymbol{\theta})} \mathrm{d} \boldsymbol{\theta}
-\end{align*}\]</span> is useful for determining whether the prior is sensical.</p>
+p(y_{\text{new}}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#56B4E9}{p(\boldsymbol{\theta})} \mathrm{d} \boldsymbol{\theta}.
+\end{align*}\]</span></p>
+<p>The prior predictive is useful for determining whether the prior is informative or sensical</p>
 </section>
 <section id="analytical-derivation-of-predictive-distribution" class="slide level2">
 <h2>Analytical derivation of predictive distribution</h2>

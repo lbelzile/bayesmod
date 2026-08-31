@@ -274,21 +274,21 @@ div.csl-indent {
 </header>
 
 
-<p>There are numerous options for Bayesian scientific computing, including probabilistic programming languages. I will be using <a href="https://mc-stan.org/">Stan</a>, as it offers cross-platform support and uses Hamiltonian Monte Carlo. <a href="https://mcmc-jags.sourceforge.io/">JAGS</a> has very good automatic differentiation, but relies on Gibbs sampling. Other interfaces are platform-specific: below is a list of the main software (<strong>R</strong>, Python and Julia), along with associated packages.</p>
+<p>There are numerous options for Bayesian scientific computing, including probabilistic programming languages. I will be using <a href="https://mc-stan.org/">Stan</a>, a probabilistic programming language using Hamiltonian Monte Carlo, as it offers cross-platform support. <a href="https://mcmc-jags.sourceforge.io/">JAGS</a> has very good automatic differentiation, but is more old-school Gibbs sampling. Other interfaces are platform-specific: below is a list of the main software (<strong>R</strong>, Python and Julia), along with associated packages.</p>
 <section id="r" class="level1">
 <h1><strong>R</strong></h1>
-<p>The <strong>R</strong> programming language contains many packages on the Comprehensive R Archive Network (CRAN) dedicated for Bayesian analysis; see the <a href="https://cran.r-project.org/web/views/Bayesian.html">CRAN Task View</a></p>
-<p>Among the packages worth exploring are <code>NIMBLE</code> (<a href="https://r-nimble.org/" class="uri">https://r-nimble.org/</a>), which allows for different samplers.</p>
-<p>To install all <strong>R</strong> packages used throughout the course, use the command</p>
+<p>The <strong>R</strong> programming language contains many packages on the Comprehensive R Archive Network (CRAN) dedicated for Bayesian analysis; see the <a href="https://cran.r-project.org/web/views/Bayesian.html">CRAN Task View</a> on Bayesian statistics.</p>
+<p>Among the packages worth exploring are <code>NIMBLE</code> (<a href="https://r-nimble.org/" class="uri">https://r-nimble.org/</a>).</p>
+<p>To install Stan with <strong>R</strong>, use the following commands:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"cmdstanr"</span>,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">repos =</span> <span class="fu">c</span>(<span class="st">"https://mc-stan.org/r-packages/"</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">getOption</span>(<span class="st">"repos"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>I also use <code>priorsense</code>, <code>bayesplot</code> and <code>loo</code>. Good high-level interface include <code>brms</code>.</p>
-<p>For beginners (without knowledge of Markov chain Monte Carlo), the packages <code>bang</code> + <code>rust</code>, and <a href="https://github.com/rmcelreath/rethinking"><code>rethinking</code></a> from <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#ref-McElreath:2020" role="doc-biblioref">2020</a>)</span> are useful.</p>
+<p>I also use <code>priorsense</code>, <code>bayesplot</code> and <code>loo</code> packages for day-to-day analysis. Good high-level interface to Stan in <strong>R</strong> include <code>brms</code>, which allows for regression models with formula interface.</p>
+<p>For beginners (without knowledge of Markov chain Monte Carlo), the packages <code>bang</code> + <code>rust</code>, and <a href="https://github.com/rmcelreath/rethinking"><code>rethinking</code></a> from <span class="citation" data-cites="McElreath:2020">McElreath (<a href="#ref-McElreath:2020" role="doc-biblioref">2020</a>)</span> are also useful.</p>
 <ul>
-<li>The <code>INLA</code> <strong>R</strong> package(<a href="https://www.r-inla.org/" class="uri">https://www.r-inla.org/</a>), which uses integrated nested Laplace approximations (INLA) for inference in latent Gaussian models, is not on the CRAN.</li>
+<li>The <code>INLA</code> <strong>R</strong> package (<a href="https://www.r-inla.org/" class="uri">https://www.r-inla.org/</a>), which uses integrated nested Laplace approximations (INLA) for inference in latent Gaussian models, is not on the CRAN.</li>
 </ul>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
