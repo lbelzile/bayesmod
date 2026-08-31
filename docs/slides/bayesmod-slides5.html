@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -17,9 +17,6 @@
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
   <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -32,9 +29,8 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -45,7 +41,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -118,7 +114,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-0889ea6b10ab650f3a364291bfeaa97a.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-da069d641d4916e8549bf8dc2b95f825.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -227,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Aug 25, 2026</p>
+  <p class="date">Last compiled Monday Aug 31, 2026</p>
 </section>
 <section id="reminder-metropolishastings-algorithm" class="slide level2">
 <h2>Reminder: Metropolis–Hastings algorithm</h2>
@@ -351,18 +347,18 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <section id="mala-data-set-up" class="slide level2">
 <h2>MALA: data set-up</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
 <span id="cb1-2"><a></a><span class="co"># Select data for a single question</span></span>
 <span id="cb1-3"><a></a>qdata <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
 <span id="cb1-4"><a></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(question <span class="sc">==</span> <span class="st">"yes"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb1-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">y =</span> clicks<span class="sc">/</span>impressions,</span>
-<span id="cb1-6"><a></a>                <span class="at">no =</span> impressions)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-6"><a></a>                <span class="at">no =</span> impressions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-define-functions" class="slide level2">
 <h2>MALA: define functions</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># Create functions with the same signature (...) for the algorithm</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># Create functions with the same signature (...) for the algorithm</span></span>
 <span id="cb2-2"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data, ...){</span>
 <span id="cb2-3"><a></a>  mu <span class="ot">&lt;-</span> par[<span class="dv">1</span>]; sigma <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
 <span id="cb2-4"><a></a>  no <span class="ot">&lt;-</span> data<span class="sc">$</span>no</span>
@@ -373,26 +369,26 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb2-9"><a></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> mu, <span class="at">mean =</span> <span class="fl">0.01</span>, <span class="at">sd =</span> <span class="fl">0.1</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
 <span id="cb2-10"><a></a>  <span class="fu">dexp</span>(sigma, <span class="at">rate =</span> <span class="fl">0.7</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
 <span id="cb2-11"><a></a>  <span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> y, <span class="at">mean =</span> mu, <span class="at">sd =</span> sigma<span class="sc">/</span><span class="fu">sqrt</span>(no), <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-12"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-12"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-compute-gradient-of-log-posterior" class="slide level2">
 <h2>MALA: compute gradient of log posterior</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>logpost_grad <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data, ...){</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>logpost_grad <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data, ...){</span>
 <span id="cb3-2"><a></a>   no <span class="ot">&lt;-</span> data<span class="sc">$</span>no</span>
 <span id="cb3-3"><a></a>  y <span class="ot">&lt;-</span> data<span class="sc">$</span>y</span>
 <span id="cb3-4"><a></a>  mu <span class="ot">&lt;-</span> par[<span class="dv">1</span>]; sigma <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
 <span id="cb3-5"><a></a>  <span class="fu">c</span>(<span class="fu">sum</span>(no<span class="sc">*</span>(y<span class="sc">-</span>mu))<span class="sc">/</span>sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span>(mu <span class="sc">-</span> <span class="fl">0.01</span>)<span class="sc">/</span><span class="fl">0.01</span>,</span>
 <span id="cb3-6"><a></a>    <span class="sc">-</span><span class="fu">length</span>(y)<span class="sc">/</span>sigma <span class="sc">+</span> <span class="fu">sum</span>(no<span class="sc">*</span>(y<span class="sc">-</span>mu)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>sigma<span class="sc">^</span><span class="dv">3</span> <span class="sc">-</span><span class="fl">0.7</span></span>
 <span id="cb3-7"><a></a>  )</span>
-<span id="cb3-8"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-8"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-compute-maximum-a-posteriori" class="slide level2">
 <h2>MALA: compute maximum a posteriori</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Starting values - MAP</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Starting values - MAP</span></span>
 <span id="cb4-2"><a></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
 <span id="cb4-3"><a></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="fu">mean</span>(qdata<span class="sc">$</span>y), <span class="fl">0.5</span>),</span>
 <span id="cb4-4"><a></a>  <span class="at">fn =</span> <span class="cf">function</span>(x){<span class="sc">-</span><span class="fu">logpost</span>(x, <span class="at">data =</span> qdata)},</span>
@@ -400,24 +396,24 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb4-6"><a></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb4-7"><a></a>  <span class="at">method =</span> <span class="st">"BFGS"</span>)</span>
 <span id="cb4-8"><a></a><span class="co"># Check convergence </span></span>
-<span id="cb4-9"><a></a><span class="fu">logpost_grad</span>(map<span class="sc">$</span>par, <span class="at">data =</span> qdata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-9"><a></a><span class="fu">logpost_grad</span>(map<span class="sc">$</span>par, <span class="at">data =</span> qdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-starting-values-and-mass-matrix" class="slide level2">
 <h2>MALA: starting values and mass matrix</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># Set initial parameter values</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># Set initial parameter values</span></span>
 <span id="cb5-2"><a></a>curr <span class="ot">&lt;-</span> map<span class="sc">$</span>par </span>
 <span id="cb5-3"><a></a><span class="co"># Compute a mass matrix</span></span>
 <span id="cb5-4"><a></a>Amat <span class="ot">&lt;-</span> <span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
 <span id="cb5-5"><a></a><span class="co"># Cholesky root - for random number generation</span></span>
-<span id="cb5-6"><a></a>cholA <span class="ot">&lt;-</span> <span class="fu">chol</span>(Amat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-6"><a></a>cholA <span class="ot">&lt;-</span> <span class="fu">chol</span>(Amat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-containers-and-setup" class="slide level2">
 <h2>MALA: containers and setup</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Create containers for MCMC</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Create containers for MCMC</span></span>
 <span id="cb6-2"><a></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L <span class="co"># number of iterations</span></span>
 <span id="cb6-3"><a></a>warmup <span class="ot">&lt;-</span> <span class="fl">1e3</span>L <span class="co"># adaptation period</span></span>
 <span id="cb6-4"><a></a>npar <span class="ot">&lt;-</span> <span class="dv">2</span>L</span>
@@ -427,13 +423,13 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb6-8"><a></a>acceptance <span class="ot">&lt;-</span> attempts <span class="ot">&lt;-</span> <span class="dv">0</span> </span>
 <span id="cb6-9"><a></a><span class="fu">colnames</span>(chains) <span class="ot">&lt;-</span> <span class="fu">names</span>(curr) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"mu"</span>,<span class="st">"sigma"</span>)</span>
 <span id="cb6-10"><a></a><span class="co"># Proposal variance proportional to inverse hessian at MAP</span></span>
-<span id="cb6-11"><a></a>prop_var <span class="ot">&lt;-</span> <span class="fu">diag</span>(prop_sd) <span class="sc">%*%</span> Amat <span class="sc">%*%</span> <span class="fu">diag</span>(prop_sd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-11"><a></a>prop_var <span class="ot">&lt;-</span> <span class="fu">diag</span>(prop_sd) <span class="sc">%*%</span> Amat <span class="sc">%*%</span> <span class="fu">diag</span>(prop_sd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-sample-proposal-with-newton-step" class="slide level2">
 <h2>MALA: sample proposal with Newton step</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(B <span class="sc">+</span> warmup)){</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(B <span class="sc">+</span> warmup)){</span>
 <span id="cb7-2"><a></a>  ind <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">1</span>, i <span class="sc">-</span> warmup)</span>
 <span id="cb7-3"><a></a>  <span class="co"># Compute the proposal mean for the Newton step</span></span>
 <span id="cb7-4"><a></a>  prop_mean <span class="ot">&lt;-</span> <span class="fu">c</span>(curr <span class="sc">+</span> damping <span class="sc">*</span> </span>
@@ -443,13 +439,13 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb7-8"><a></a>    <span class="at">n =</span> <span class="dv">1</span>,</span>
 <span id="cb7-9"><a></a>    <span class="at">mean =</span> prop_mean, </span>
 <span id="cb7-10"><a></a>    <span class="at">sigma =</span> prop_var))</span>
-<span id="cb7-11"><a></a><span class="co">#  [...]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-11"><a></a><span class="co">#  [...]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-reverse-step" class="slide level2">
 <h2>MALA: reverse step</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>  <span class="co"># Compute the reverse step</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>  <span class="co"># Compute the reverse step</span></span>
 <span id="cb8-2"><a></a>  curr_mean <span class="ot">&lt;-</span> <span class="fu">c</span>(prop <span class="sc">+</span> damping <span class="sc">*</span> </span>
 <span id="cb8-3"><a></a>     Amat <span class="sc">%*%</span> <span class="fu">logpost_grad</span>(prop, <span class="at">data =</span> qdata))</span>
 <span id="cb8-4"><a></a>  <span class="co"># log of ratio of bivariate Gaussian densities</span></span>
@@ -463,25 +459,25 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb8-12"><a></a>      <span class="at">sigma =</span> prop_var, </span>
 <span id="cb8-13"><a></a>      <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
 <span id="cb8-14"><a></a>  <span class="fu">logpost</span>(prop, <span class="at">data =</span> qdata) <span class="sc">-</span> </span>
-<span id="cb8-15"><a></a>    <span class="fu">logpost</span>(curr, <span class="at">data =</span> qdata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-15"><a></a>    <span class="fu">logpost</span>(curr, <span class="at">data =</span> qdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-metropolishastings-ratio" class="slide level2">
 <h2>MALA: Metropolis–Hastings ratio</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>  <span class="cf">if</span>(logmh <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>))){</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>  <span class="cf">if</span>(logmh <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>))){</span>
 <span id="cb9-2"><a></a>    curr <span class="ot">&lt;-</span> prop</span>
 <span id="cb9-3"><a></a>    acceptance <span class="ot">&lt;-</span> acceptance <span class="sc">+</span> <span class="dv">1</span>L</span>
 <span id="cb9-4"><a></a>  }</span>
 <span id="cb9-5"><a></a>  attempts <span class="ot">&lt;-</span> attempts <span class="sc">+</span> <span class="dv">1</span>L</span>
 <span id="cb9-6"><a></a>  <span class="co"># Save current value</span></span>
-<span id="cb9-7"><a></a>  chains[ind,] <span class="ot">&lt;-</span> curr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-7"><a></a>  chains[ind,] <span class="ot">&lt;-</span> curr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-adaptation" class="slide level2">
 <h2>MALA: adaptation</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>  <span class="cf">if</span>(i <span class="sc">%%</span> <span class="dv">100</span> <span class="sc">&amp;</span> i <span class="sc">&lt;</span> warmup){</span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>  <span class="cf">if</span>(i <span class="sc">%%</span> <span class="dv">100</span> <span class="sc">&amp;</span> i <span class="sc">&lt;</span> warmup){</span>
 <span id="cb10-2"><a></a>    <span class="co"># Check acceptance rate and increase/decrease variance</span></span>
 <span id="cb10-3"><a></a>    out <span class="ot">&lt;-</span> hecbayes<span class="sc">::</span><span class="fu">adaptive</span>(</span>
 <span id="cb10-4"><a></a>      <span class="at">attempts =</span> attempts, <span class="co"># counter for number of attempts</span></span>
@@ -493,7 +489,7 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb10-10"><a></a>    attempts <span class="ot">&lt;-</span> out<span class="sc">$</span>att <span class="co"># idem, otherwise unchanged</span></span>
 <span id="cb10-11"><a></a>    prop_var <span class="ot">&lt;-</span> <span class="fu">diag</span>(prop_sd) <span class="sc">%*%</span> Amat <span class="sc">%*%</span> <span class="fu">diag</span>(prop_sd)</span>
 <span id="cb10-12"><a></a>  }</span>
-<span id="cb10-13"><a></a><span class="er">}</span> <span class="co"># End of MCMC for loop</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-13"><a></a><span class="er">}</span> <span class="co"># End of MCMC for loop</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="gibbs-sampling" class="slide level2">
@@ -933,173 +929,190 @@ Tanner, M. A., &amp; Wong, W. H. (1987). The calculation of posterior distributi
     </script>
 
     <script id="quarto-html-after-body" type="application/javascript">
-      window.document.addEventListener("DOMContentLoaded", function (event) {
-        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-        tabsets.forEach(function(tabset) {
-          const tabby = new Tabby('#' + tabset.id);
-        });
-        const isCodeAnnotation = (el) => {
-          for (const clz of el.classList) {
-            if (clz.startsWith('code-annotation-')) {                     
-              return true;
-            }
-          }
-          return false;
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
         }
-        const onCopySuccess = function(e) {
-          // button target
-          const button = e.trigger;
-          // don't keep focus
-          button.blur();
-          // flash "checked"
-          button.classList.add('code-copy-button-checked');
-          var currentTitle = button.getAttribute("title");
-          button.setAttribute("title", "Copied!");
-          let tooltip;
-          if (window.bootstrap) {
-            button.setAttribute("data-bs-toggle", "tooltip");
-            button.setAttribute("data-bs-placement", "left");
-            button.setAttribute("data-bs-title", "Copied!");
-            tooltip = new bootstrap.Tooltip(button, 
-              { trigger: "manual", 
-                customClass: "code-copy-button-tooltip",
-                offset: [0, -8]});
-            tooltip.show();    
-          }
-          setTimeout(function() {
-            if (tooltip) {
-              tooltip.hide();
-              button.removeAttribute("data-bs-title");
-              button.removeAttribute("data-bs-toggle");
-              button.removeAttribute("data-bs-placement");
-            }
-            button.setAttribute("title", currentTitle);
-            button.classList.remove('code-copy-button-checked');
-          }, 1000);
-          // clear code selection
-          e.clearSelection();
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
         }
-        const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-        }
-        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-          text: getTextToCopy
-        });
-        clipboard.on('success', onCopySuccess);
-        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-            text: getTextToCopy,
-            container: window.document.getElementById('quarto-embedded-source-code-modal')
-          });
-          clipboardModal.on('success', onCopySuccess);
-        }
-          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var mailtoRegex = new RegExp(/^mailto:/);
-            var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
-          var isInternal = (href) => {
-              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-          }
-          // Inspect non-navigation links and adorn them if external
-         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-          for (var i=0; i<links.length; i++) {
-            const link = links[i];
-            if (!isInternal(link.href)) {
-              // undo the damage that might have been done by quarto-nav.js in the case of
-              // links that we want to consider external
-              if (link.dataset.originalHref !== undefined) {
-                link.href = link.dataset.originalHref;
-              }
-            }
-          }
-        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-          const config = {
-            allowHTML: true,
-            maxWidth: 500,
-            delay: 100,
-            arrow: false,
-            appendTo: function(el) {
-                return el.closest('section.slide') || el.parentElement;
-            },
-            interactive: true,
-            interactiveBorder: 10,
-            theme: 'light-border',
-            placement: 'bottom-start',
-          };
-          if (contentFn) {
-            config.content = contentFn;
-          }
-          if (onTriggerFn) {
-            config.onTrigger = onTriggerFn;
-          }
-          if (onUntriggerFn) {
-            config.onUntrigger = onUntriggerFn;
-          }
-            config['offset'] = [0,0];
-            config['maxWidth'] = 700;
-          window.tippy(el, config); 
-        }
-        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-        for (var i=0; i<noterefs.length; i++) {
-          const ref = noterefs[i];
-          tippyHover(ref, function() {
-            // use id or data attribute instead here
-            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-            try { href = new URL(href).hash; } catch {}
-            const id = href.replace(/^#\/?/, "");
-            const note = window.document.getElementById(id);
-            if (note) {
-              return note.innerHTML;
-            } else {
-              return "";
-            }
-          });
-        }
-        const findCites = (el) => {
-          const parentEl = el.parentElement;
-          if (parentEl) {
-            const cites = parentEl.dataset.cites;
-            if (cites) {
-              return {
-                el,
-                cites: cites.split(' ')
-              };
-            } else {
-              return findCites(el.parentElement)
-            }
-          } else {
-            return undefined;
-          }
-        };
-        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-        for (var i=0; i<bibliorefs.length; i++) {
-          const ref = bibliorefs[i];
-          const citeInfo = findCites(ref);
-          if (citeInfo) {
-            tippyHover(citeInfo.el, function() {
-              var popup = window.document.createElement('div');
-              citeInfo.cites.forEach(function(cite) {
-                var citeDiv = window.document.createElement('div');
-                citeDiv.classList.add('hanging-indent');
-                citeDiv.classList.add('csl-entry');
-                var biblioDiv = window.document.getElementById('ref-' + cite);
-                if (biblioDiv) {
-                  citeDiv.innerHTML = biblioDiv.innerHTML;
-                }
-                popup.appendChild(citeDiv);
-              });
-              return popup.innerHTML;
-            });
-          }
-        }
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      </script>
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
     
 
 </body></html>

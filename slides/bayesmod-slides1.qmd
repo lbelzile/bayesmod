@@ -445,22 +445,6 @@ We substitute expected value by sample average of
 - law of large number guarantees convergence of $\widehat{\mu}_g \to \mu_g$ if the latter is finite.
 - Under finite second moments, central limit theorem gives $$\sqrt{B}(\widehat{\mu}_g - \mu_g) \sim \mathsf{No}(0, \sigma^2_g).$$
 
-## Importance sampling
-
-Consider density $q$ instead with $\mathrm{supp}(p) \subseteq \mathrm{supp}(q).$ Then,
-\begin{align*}
-\mathsf{E}\{g(X)\} = \int_{\mathcal{X}} g(x) \frac{p(x)}{q(x)} q(x) \mathrm{d} x
-\end{align*}
-and we can proceed similarly by drawing samples from $q$. 
-
-
-## Importance sampling estimator
-
-An alternative Monte Carlo estimator uses the weighted average
-\begin{align*}
-\widetilde{\mathsf{E}}\{g(X)\} =\frac{B^{-1} \sum_{b=1}^B w_b g(x_b) }{B^{-1}\sum_{b=1}^B w_b}.
-\end{align*}
-with weights $w_b = p(x_b)/q(x_b)$. The latter equal 1 on average, so one could omit the denominator without harm. 
 
 ## Standard errors
 

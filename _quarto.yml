@@ -35,8 +35,8 @@ website:
         file: content/index.qmd
       - text: "Exercises"
         file: exercises/index.qmd
-#      - text: "Evaluations"
-#        file: evaluations/index.qmd
+      - text: "Evaluations"
+        file: evaluations/index.qmd
       - text: "Notes"
         href: "https://lbelzile.github.io/MATH80601A/"
 #      - icon: box
@@ -108,10 +108,10 @@ website:
 #               file: exercises/09-exercise.qmd
 #             - text: "10: Variational inference"
 #               file: exercises/10-exercise.qmd
-#        - section: "Solutions"
-#          contents:
-#             - text: "1. Introduction"
-#               file: exercises/01-solution.qmd
+        - section: "Solutions"
+          contents:
+             - text: "1. Introduction"
+               file: exercises/01-solution.qmd
 #             - text: "2. Bayesics"
 #               file: exercises/02-solution.qmd
 #             - text: "3. Priors"
@@ -126,17 +126,17 @@ website:
 #               file: exercises/09-solution.qmd
 #             - text: "10. Variational inference"
 #               file: exercises/10-solution.qmd
-#    - title: "Evaluations"
-#      style: "docked"
-#      search: false
-#      foreground: "#000000"
-#      contents:
-#         - evaluations/index.qmd
+    - title: "Evaluations"
+      style: "docked"
+      search: false
+      foreground: "#000000"
+      contents:
+         - evaluations/index.qmd
 #         - text: "Weekly check-in"
 #           file: evaluations/weekly-check-in.qmd
-#         - section: "Assignments"
-#           contents:
-#              - evaluations/01-assignment.qmd
+         - section: "Assignments"
+           contents:
+              - evaluations/01-assignment.qmd
 #              - evaluations/02-assignment.qmd
 #              - evaluations/03-assignment.qmd
   page-footer:
