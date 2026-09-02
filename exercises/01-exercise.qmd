@@ -7,7 +7,7 @@ title: "Exercises 1"
 Linear mixed effect regression model specifies that response vectors for individual $i$, $\boldsymbol{Y}_i \in \mathbb{R}^k$, are Gaussian. The model includes model matrix $\mathbf{X}_i$ with fixed effect coefficients $\boldsymbol{\beta}$, and another $k\times l$ model matrix  $\mathbf{Z}_i$ with random effects. The hierarchical formulation of the model is
 \begin{align*}
 \boldsymbol{Y}_i \mid \mathcal{B}_i=\boldsymbol{b}_i &\sim \mathsf{Gauss}_k(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\boldsymbol{b}_i, \sigma^2 \mathbf{I}_k) \\
-\mathcal{B}_i & \sim \mathsf{Gauss}_l(\boldsymbol{0}_k, \boldsymbol{\Omega})
+\mathcal{B}_i & \sim \mathsf{Gauss}_l(\boldsymbol{0}_l, \boldsymbol{\Omega})
 \end{align*}
 
 

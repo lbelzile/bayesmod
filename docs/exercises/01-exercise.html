@@ -247,7 +247,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="exercise-1.1">Exercise 1.1</h2>
 <p>Linear mixed effect regression model specifies that response vectors for individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\boldsymbol{Y}_i \in \mathbb{R}^k\)</span>, are Gaussian. The model includes model matrix <span class="math inline">\(\mathbf{X}_i\)</span> with fixed effect coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>, and another <span class="math inline">\(k\times l\)</span> model matrix <span class="math inline">\(\mathbf{Z}_i\)</span> with random effects. The hierarchical formulation of the model is <span class="math display">\[\begin{align*}
 \boldsymbol{Y}_i \mid \mathcal{B}_i=\boldsymbol{b}_i &amp;\sim \mathsf{Gauss}_k(\mathbf{X}_i\boldsymbol{\beta} + \mathbf{Z}_i\boldsymbol{b}_i, \sigma^2 \mathbf{I}_k) \\
-\mathcal{B}_i &amp; \sim \mathsf{Gauss}_l(\boldsymbol{0}_k, \boldsymbol{\Omega})
+\mathcal{B}_i &amp; \sim \mathsf{Gauss}_l(\boldsymbol{0}_l, \boldsymbol{\Omega})
 \end{align*}\]</span></p>
 <ol type="a">
 <li>Using the tower property, derive the marginal mean and covariance matrix of <span class="math inline">\(\boldsymbol{Y}_i\)</span></li>

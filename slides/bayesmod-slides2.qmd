@@ -213,12 +213,104 @@ The uniform is a special case when both shapes are unity.
 
 :::
 
+## Illustration of beta distributions
+
+```{r}
+#| eval: true
+#| echo: false
+g1 <- ggplot() +
+    stat_function(fun =  function(x){
+        dbeta(x, shape1 = 0.5, shape2 = 0.5)},
+        alpha = 0.2,
+        col = "#17154f",
+        fill = "#17154f",
+        geom = "area") +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  scale_x_continuous(
+    limits = c(0, NA), expand = expansion(),
+    breaks = seq(0,1, by = 0.25), 
+    labels = c("0","0.25","0.5","0.75","1")) + 
+  labs(x = "", y = "density", caption = "beta(0.5, 0.5)") +
+  theme_classic()
+g2 <- ggplot() +
+    stat_function(fun =  function(x){
+        dbeta(x, shape1 = 0.5, shape2 = 1)},
+        alpha = 0.2,
+        col = "#17154f",
+        fill = "#17154f",
+        geom = "area") +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  scale_x_continuous(
+    limits = c(0, NA), expand = expansion(),
+    breaks = seq(0,1, by = 0.25), 
+    labels = c("0","0.25","0.5","0.75","1")) + 
+  labs(x = "", y = "density", caption = "beta(0.5, 1)") +
+  theme_classic()
+g3 <- ggplot() +
+    stat_function(fun =  function(x){
+        dbeta(x, shape1 = 1.5, shape2 = 1.5)},
+        alpha = 0.2,
+        col = "#17154f", 
+        fill = "#17154f",
+        geom = "area") +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  scale_x_continuous(
+    limits = c(0, NA), expand = expansion(),
+    breaks = seq(0,1, by = 0.25), 
+    labels = c("0","0.25","0.5","0.75","1")) + 
+  labs(x = "", y = "density", caption = "beta(1.5, 1.5)") +
+  theme_classic()
+g4 <- ggplot() +
+    stat_function(fun =  function(x){
+        dbeta(x, shape1 = 0.5, shape2 = 1.5)},
+        alpha = 0.2,
+        col = "#17154f",
+        fill = "#17154f",
+        geom = "area") +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  scale_x_continuous(
+    limits = c(0, NA), expand = expansion(),
+    breaks = seq(0,1, by = 0.25), 
+    labels = c("0","0.25","0.5","0.75","1")) + 
+  labs(x = "", y = "density", caption = "beta(0.5, 1.5)") +
+  theme_classic()
+g5 <- ggplot() +
+    stat_function(fun =  function(x){
+        dbeta(x, shape1 = 1, shape2 = 1)},
+        alpha = 0.2,
+        col = "#17154f",
+        fill = "#17154f",
+        geom = "area") +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  scale_x_continuous(
+    limits = c(0, NA), expand = expansion(),
+    breaks = seq(0,1, by = 0.25), 
+    labels = c("0","0.25","0.5","0.75","1")) + 
+  labs(x = "", y = "density", caption = "beta(1, 1)") +
+  theme_classic()
+g6 <- ggplot() +
+    stat_function(fun =  function(x){
+        dbeta(x, shape1 = 1.5, shape2 = 1.5)},
+        alpha = 0.2,
+        col = "#17154f",
+        fill = "#17154f",
+        geom = "area") +
+  scale_y_continuous(limits = c(0, NA), expand = expansion()) +
+  scale_x_continuous(
+    limits = c(0, NA), expand = expansion(),
+    breaks = seq(0,1, by = 0.25), 
+    labels = c("0","0.25","0.5","0.75","1")) + 
+  labs(x = "", y = "density", caption = "beta(1.5, 1.5)") +
+  theme_classic()
+(g1 + g2 + g3) / (g4 + g5 + g6)
+```
+
 ## Beta-binomial example
 
 
 
 
-We write $Y \sim \mathsf{binom}(n, \theta)$ for $\theta \in [0,1]$; the likelihood is $$L(\theta; y) = \binom{n}{y} \theta^y(1-\theta)^{n-y}.$$
+We write $Y \mid \theta \sim \mathsf{binom}(n, \theta)$ for $\theta \in [0,1]$; the likelihood is $$L(\theta; y) = \binom{n}{y} \theta^y(1-\theta)^{n-y}.$$
 
 Consider a beta prior, $\theta \sim \mathsf{beta}(\alpha, \beta)$, with density
 $$
@@ -454,7 +546,8 @@ For example,
    - (a normalizing constant)
 - For the posterior density to be *proper*,
    - the marginal likelihood must be finite!
-   - we need $\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta} \mathrm{d} \boldsymbol{\theta} < \infty$ for any datum $\boldsymbol{y}.$ It is therefore desirable to have a proper prior $p(\boldsymbol{\theta})$ satisfying $\intp(\boldsymbol{\theta})\mathrm{d} \boldsymbol{\theta} < \infty.$
+   - We need $\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta} < \infty$ for any datum $\boldsymbol{y}.$ 
+   - It is therefore desirable to have a proper prior $p(\boldsymbol{\theta})$ satisfying $\int p(\boldsymbol{\theta})\mathrm{d} \boldsymbol{\theta} < \infty.$
 
 
 ## Different priors give different posteriors
@@ -1259,5 +1352,38 @@ qbeta(c(alpha/2, 1-alpha/2), shape1 = 0.5, shape2 = 0.2)
 (hdiD <- HDInterval::hdi(density(postsamp), credMass = 1-alpha, allowSplit = TRUE))
 ```
 
-## References
 
+## Learning objectives
+
+- explain some of the conceptual differences between frequentist and Bayesian inference.
+- define key notions (prior, marginal likelihood, Bayes factor, credible intervals, etc.) of Bayesian inference.
+- distinguish between questions that relate to the posterior distribution versus the posterior predictive.
+- calculate and compute numerically summaries of posterior distributions (point estimators and credible intervals) given a posterior sample.
+
+
+## Summary
+
+* Bayesians treat both parameter and observations as random, the former due to uncertainty about the true value.
+    - Inference is performed conditional on observed data, and summarized in the posterior.
+* Bayesians specify both 
+    - a prior for the parameter
+    - a likelihood specifying the data generating mechanism. 
+* Sequential updating (new likelihood contributions) leads to update of the posterior distribution.
+
+## Summary 
+
+* Bayesian inference is complicated by the fact that there is more often than not no closed-form expression for the posterior distribution. 
+     - Evaluation of the normalizing constant, the so-called marginal likelihood, is challenging, especially in high dimensional settings.
+     - Bayesians typically use approximations to the posterior distribution, or draw samples from it.
+* Rather than hypothesis testing, Bayesian methods rely on the posterior distribution of parameters, or on Bayes factor for model comparisons.
+
+## Summary
+
+* The posterior predictive distribution is used for model assessment and prediction
+   - it has a higher variance than the data generating distribution due to parameter uncertainty.
+* Loss functions can be used to summarize a posterior distribution into a numerical summary of interest.
+* Uncertainty is reflected by credible sets or credible intervals, which encode the posterior probability that the true value $\boldsymbol{\theta}$ belongs to the set.
+
+
+
+## References

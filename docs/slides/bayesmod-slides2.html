@@ -223,7 +223,7 @@ Léo Belzile, HEC Montréal
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Aug 31, 2026</p>
+  <p class="date">Last compiled Wednesday Sep 2, 2026</p>
 </section>
 <section id="probability-vs-frequency" class="slide level2">
 <h2>Probability vs frequency</h2>
@@ -365,9 +365,13 @@ f(y; \theta) = \binom{n}{y} \theta^y (1-\theta)^{n-y}, \qquad y = 0, \ldots, n.
           display:block!important;
       }</style></aside>
 </section>
+<section id="illustration-of-beta-distributions" class="slide level2">
+<h2>Illustration of beta distributions</h2>
+
+<img data-src="bayesmod-slides2_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
 <section id="beta-binomial-example" class="slide level2">
 <h2>Beta-binomial example</h2>
-<p>We write <span class="math inline">\(Y \sim \mathsf{binom}(n, \theta)\)</span> for <span class="math inline">\(\theta \in [0,1]\)</span>; the likelihood is <span class="math display">\[L(\theta; y) = \binom{n}{y} \theta^y(1-\theta)^{n-y}.\]</span></p>
+<p>We write <span class="math inline">\(Y \mid \theta \sim \mathsf{binom}(n, \theta)\)</span> for <span class="math inline">\(\theta \in [0,1]\)</span>; the likelihood is <span class="math display">\[L(\theta; y) = \binom{n}{y} \theta^y(1-\theta)^{n-y}.\]</span></p>
 <p>Consider a beta prior, <span class="math inline">\(\theta \sim \mathsf{beta}(\alpha, \beta)\)</span>, with density <span class="math display">\[
 p(\theta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta) }\theta^{\alpha-1}(1-\theta)^{\beta - 1}.
 \]</span></p>
@@ -492,7 +496,8 @@ Figure&nbsp;2: Scaled Binomial likelihood for six successes out of 14 trials, <s
 <li>For the posterior density to be <em>proper</em>,
 <ul>
 <li>the marginal likelihood must be finite!</li>
-<li>we need <span class="math inline">\(\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta} \mathrm{d} \boldsymbol{\theta} &lt; \infty\)</span> for any datum <span class="math inline">\(\boldsymbol{y}.\)</span> It is therefore desirable to have a proper prior <span class="math inline">\(p(\boldsymbol{\theta})\)</span> satisfying <span class="math inline">\(\intp(\boldsymbol{\theta})\mathrm{d} \boldsymbol{\theta} &lt; \infty.\)</span></li>
+<li>We need <span class="math inline">\(\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta} &lt; \infty\)</span> for any datum <span class="math inline">\(\boldsymbol{y}.\)</span></li>
+<li>It is therefore desirable to have a proper prior <span class="math inline">\(p(\boldsymbol{\theta})\)</span> satisfying <span class="math inline">\(\int p(\boldsymbol{\theta})\mathrm{d} \boldsymbol{\theta} &lt; \infty.\)</span></li>
 </ul></li>
 </ul>
 </section>
@@ -726,6 +731,52 @@ attr(,"height")
 [1] 0.3898784</code></pre>
 </div>
 </div>
+</section>
+<section id="learning-objectives" class="slide level2">
+<h2>Learning objectives</h2>
+<ul>
+<li>explain some of the conceptual differences between frequentist and Bayesian inference.</li>
+<li>define key notions (prior, marginal likelihood, Bayes factor, credible intervals, etc.) of Bayesian inference.</li>
+<li>distinguish between questions that relate to the posterior distribution versus the posterior predictive.</li>
+<li>calculate and compute numerically summaries of posterior distributions (point estimators and credible intervals) given a posterior sample.</li>
+</ul>
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<ul>
+<li>Bayesians treat both parameter and observations as random, the former due to uncertainty about the true value.
+<ul>
+<li>Inference is performed conditional on observed data, and summarized in the posterior.</li>
+</ul></li>
+<li>Bayesians specify both
+<ul>
+<li>a prior for the parameter</li>
+<li>a likelihood specifying the data generating mechanism.</li>
+</ul></li>
+<li>Sequential updating (new likelihood contributions) leads to update of the posterior distribution.</li>
+</ul>
+</section>
+<section id="summary-1" class="slide level2">
+<h2>Summary</h2>
+<ul>
+<li>Bayesian inference is complicated by the fact that there is more often than not no closed-form expression for the posterior distribution.
+<ul>
+<li>Evaluation of the normalizing constant, the so-called marginal likelihood, is challenging, especially in high dimensional settings.</li>
+<li>Bayesians typically use approximations to the posterior distribution, or draw samples from it.</li>
+</ul></li>
+<li>Rather than hypothesis testing, Bayesian methods rely on the posterior distribution of parameters, or on Bayes factor for model comparisons.</li>
+</ul>
+</section>
+<section id="summary-2" class="slide level2">
+<h2>Summary</h2>
+<ul>
+<li>The posterior predictive distribution is used for model assessment and prediction
+<ul>
+<li>it has a higher variance than the data generating distribution due to parameter uncertainty.</li>
+</ul></li>
+<li>Loss functions can be used to summarize a posterior distribution into a numerical summary of interest.</li>
+<li>Uncertainty is reflected by credible sets or credible intervals, which encode the posterior probability that the true value <span class="math inline">\(\boldsymbol{\theta}\)</span> belongs to the set.</li>
+</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
