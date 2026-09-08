@@ -94,78 +94,6 @@ How to elicit reasonable values for them?
    - draw a parameter value from the prior $\boldsymbol{\theta}_0$
    - for each, generate a new observation from the model $f(y_{\text{new}} \mid \boldsymbol{\theta}_0)$ via the prior prediction distribution.
 
-## Stipulating inputs on standardized scales
-
-Working with standardized response and inputs $$x_i \mapsto (x_i - \overline{x})/\mathrm{sd}(\boldsymbol{x}),$$
-
-- the slope is the correlation between explanatory $\mathrm{X}$ and response $Y$
-- the intercept should be mean zero
-- are there sensible bounds for the range of the response?
-
-
-##  Example - simple linear regression
-
-Consider the relationship between height ($Y,$ in cm) and weight ($X,$ in kg) among humans adults.^[Section 4.4.1 of @McElreath:2020]
-
-Model using a simple linear regression
-
-\begin{align*}
-Y_i &\sim \mathsf{Gauss}(\mu_i, \sigma^2) \\
-\mu_i &= \beta_0 + \beta_1(\mathrm{x}_i - \overline{x}) \\
-\beta_0 &\sim \mathsf{Gauss}(178, 20^2) \\
-\sigma &\sim \mathsf{unif}(0, 50)
-\end{align*}
-What about the slope parameter prior $p(\beta_1)$?
-
-
-## Priors for the slope {.smaller}
-
-```{r}
-#| eval: true
-#| echo: false
-#| label: fig-priors-draw-height-weight
-#| fig-cap: "Prior draws of linear regressions with different priors: vague $\\beta_1 \\sim \\mathsf{Gauss}(0, 100)$ (left) and lognormal $\\ln(\\beta_1) \\sim \\mathsf{Gauss}(0,1)$ (right). Figure 4.5 of @McElreath:2020. The Guiness record for the world's tallest person is 272cm."
-data(Howell1, package = "rethinking") 
-hwdata <- Howell1 |> dplyr::filter(age >= 18)
-alpha <- rnorm(n = 100, mean = 178, sd = 20)
-beta_prior1 <- rnorm(n = 100, mean = 0, sd = 10)
-beta_prior2 <- rlnorm(n = 100)
-set.seed(80601)
-xbar <- mean(hwdata$weight)
-g1 <- ggplot() +
-  geom_hline(yintercept = c(272), linetype = "dashed") +
-  geom_hline(yintercept = 0) +
-  geom_abline(intercept = alpha - beta_prior1*xbar,
-              slope = beta_prior1,
-              alpha = 0.1) +
-  scale_x_continuous(limits = c(30, 65),
-                     expand = c(0,0)) +
-  scale_y_continuous(limits = c(-100, 400),
-                     expand = c(0,0)) +
-  labs(x = "weight (in kg)",
-       y = "",
-       subtitle = "height (in cm)",
-       caption = latex2exp::TeX(r'($\beta_1 \sim$ Normal(0, 100))')) +
-  theme_classic()
-g2 <- ggplot() +
-  geom_hline(yintercept = c(272), linetype = "dashed") +
-  geom_hline(yintercept = 0) +
-  geom_abline(intercept = alpha - beta_prior2*xbar,
-              slope = beta_prior2,
-              alpha = 0.1) +
-  scale_x_continuous(limits = c(30, 65),
-                     expand = c(0,0)) +
-  scale_y_continuous(limits = c(-100, 400),
-                     expand = c(0,0)) +
-  labs(x = "weight (in kg)",
-       y = "",
-       subtitle = "height (in cm)",
-       caption = latex2exp::TeX(r'($\ln(\beta_1) \sim$ Normal(0, 1))')) +
-  theme_classic()
-g1 + g2
-
-```
-
 ## Conjugate priors
 
 A prior density $p(\boldsymbol{\theta})$ is conjugate for likelihood $L(\boldsymbol{\theta}; \boldsymbol{y})$ if the product $L(\boldsymbol{\theta}; \boldsymbol{y})p(\boldsymbol{\theta}),$ after renormalization, is of the same parametric family as the prior.
@@ -183,7 +111,7 @@ The support of $f$ must not depend on $\boldsymbol{\theta}.$
 :::
 
 
-## Conjugate priors for common exponential families {.smaller}
+## Conjugate priors for common exponential families 
 
 | distribution | unknown parameter |  conjugate prior |
 |-------------------|:-----------------|:-----------------|
@@ -324,11 +252,11 @@ ggplot() +
 
 :::{#thm-proper-priors}
 
-A sufficient condition for a prior to yield a proper (i.e., integrable) posterior density function is that it is (proportional) to a density function.
+If $p(\boldsymbol{\theta})$ is a proper prior and the likelihood $\mathcal{L}(\boldsymbol{\theta}; \boldsymbol{y})$ is well-defined, then the posterior $$p(\boldsymbol{\theta} \mid \boldsymbol{y}) \stackrel{\boldsymbol{\theta}}{\propto} \mathcal{L}(\boldsymbol{\theta}; \boldsymbol{y})p(\boldsymbol{\theta})$$ is almost surely proper.
 
 :::
 
-- If we pick an improper prior, we need to check that the posterior is well-defined.
+- If we pick an improper prior, however, we need to check that the posterior is well-defined.
 - The answer to this question may depend on the sample size.
 
 
@@ -572,14 +500,13 @@ the case $\alpha=1$ corresponding to the model.
 Suppose that we are generating posterior samples with $B$ simulations $\boldsymbol{\theta}_1, \dots \boldsymbol{\theta}_B.$
 
 If we keep track of both
+
 - the prior $p(\boldsymbol{\theta}_b)$ and 
 - the likelihood $p(\boldsymbol{y} \mid \boldsymbol{\theta}_b)\propto \mathcal{L}(\boldsymbol{\theta}_b)$ 
 
-for each posterior draw $\boldsymbol{\theta}_b,$ we can use importance sampling [@Kallioinen:2023] to estimate this without rerunning the sampling.
+for each posterior draw $\boldsymbol{\theta}_b,$ we can use importance sampling [@Kallioinen:2023] to estimate the posterior for different values of $\alpha$ without re-estimating the model.
 
 This is implemented in the **R** package [`priorsense`](https://n-kall.github.io/priorsense/index.html) [@Kallioinen:2026].
-
- proposes using power scaling via an importance sampling scheme.
 
 
 ## Learning objectives

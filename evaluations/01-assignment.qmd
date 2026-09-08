@@ -23,3 +23,24 @@ d.  Generate 10K samples from the marginal distribution of $Y$ if $\alpha_1=4.5$
 - Simulating first from $P_i\sim \mathsf{beta}(4.5, 1.5)$, 
 - Next, generate $Y_i \mid P_i$ for $i=1, \ldots, 10 000$. 
 - Discard the values of $P_i$ and keep only those for $Y_i$'s. 
+
+
+
+## Problem 1.2
+
+The [`waiting` dataset](/files/data/waiting.csv) contains waiting times (in seconds) from 17:59 until the departure of the next metro at the Universite de Montreal station during week-days over three consecutive months.
+
+Assume first that the waiting time are independent and identically distributed as exponential.
+
+a. Use a conjugate gamma prior such that the average waiting time $1/\lambda$ has mean 30 seconds and std. deviation 30 seconds.^[Hint: if $\Lambda \sim \mathsf{gamma}(\alpha, \beta)$, then the reciprocal rate follows $1/\Lambda \sim \mathsf{inv. gamma}(\alpha, \beta)$ with $\mathsf{E}(\Lambda^{-1}) = \beta/(\alpha-1)$ for $\alpha>1$ and $\mathsf{Va}(\Lambda^{-1}) = \beta^2/\{(\alpha-1)^2(\alpha-2)\}$. Solve to find the values of the parameters and check numerically by generating data from the inverse gamma distribution.] 
+    - Give the values of the corresponding shape and rate parameters of the prior.
+    - Plot an histogram of $1000$ prior predictive draws.
+c. Derive the posterior distribution and report its parameter values.
+d. Calculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.
+e. Perform a prior sensitivity analysis.
+
+The [`post_waiting_weibull`](/files/data/post_waiting_weibull.csv) contains 10K random samples from the posterior of a Weibull model $\mathsf{Weibull}(\lambda, \alpha)$ with a penalized-complexity prior for the shape parameter $\alpha \sim \mathsf{PC}(\theta=0.5)$ [@vanNiekerk:2021] and  $\lambda \sim \mathsf{inv. gamma}(\gamma, \omega)$ with scale $\gamma=90$ and shape $\omega=4$.
+
+
+f. Draw $B=1000$ posterior predictive samples of size $n=62$ from the Weibull and exponential models. *For each posterior draw, generate a sample of size $n=62$.*
+g. For each, compute the sample mean, ( the sample std. deviation and  the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original `waiting` sample. Hence comment on the adequacy (or lack thereof) of the two models.

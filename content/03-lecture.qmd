@@ -1,0 +1,152 @@
+---
+title: "Lecture 3"
+author: "Léo Belzile"
+toc: false
+---
+
+# Upworthy archive
+
+
+
+```{r}
+#| eval: true
+#| echo: true
+library(patchwork)
+library(ggplot2)
+theme_set(theme_classic())
+suppressPackageStartupMessages(library(brms, warn.conflicts = FALSE))
+library(priorsense)
+data(upworthy_question, package = "hecbayes")
+# Moment matching - posterior parameters
+alpha <- 0.25
+beta <- 25
+summary_stats <- upworthy_question |>
+  dplyr::group_by(question) |>
+  dplyr::summarize(
+    total_impressions = sum(impressions),
+    total_clicks = sum(clicks)) |>
+  dplyr::ungroup() |>
+  as.vector()
+n_yes <- summary_stats$total_impressions[1]
+y_yes <- summary_stats$total_clicks[1]
+n_no <-  summary_stats$total_impressions[2]
+y_no <- summary_stats$total_clicks[2]
+set.seed(1234)
+post_data_upworthy_question <- 
+  data.frame( 
+  yes = rgamma(n = 1e4, shape = alpha + y_yes, rate = beta + n_yes),
+  no = rgamma(n = 1e4,  shape = alpha + y_no, rate = beta + n_no))
+# Posterior mean of risk ratio
+post_mean <- with(post_data_upworthy_question, mean(no/yes))
+```
+
+We could also use `brms` interface to Stan to fit the Poisson regression model. The parameter here by default is on the log scale and is set on the difference between groups, but we remove the intercept so that both parameter have the same prior.
+Since we are taking a Gaussian prior for the log rate, we can consider a log-Gaussian distribution, and taking a mean of $\log(0.01)=-4.6$ with a standard deviation of $1$ gives more or less reasonable proportions. The parameters are sampled using Markov chain Monte Carlo (more later in the trimester), but the output consists of posterior samples.
+
+```{r}
+#| message: false
+#| warning: false
+#| cache: true
+headline_mod <- brm(
+  clicks ~ offset(log(impressions)) + 0 + question, 
+  family = poisson(link = "log"),
+  data = upworthy_question,
+  prior = set_prior(
+    prior = "normal(-4.60517, 1)",  
+    # log(0.01) = -4.60517
+    class = "b"),
+  backend = "cmdstanr",
+  silent = 2
+  )
+# Summary for model coefficients
+fixef(headline_mod, probs = c(0.25,0.75))
+
+post_samp <- brms::posterior_samples(
+  headline_mod, 
+  pars = c("questionno","questionyes"))
+```
+
+
+```{r}
+#| label: fig-comparison
+#| fig-cap: "Posterior for the difference in mean for the Poisson regression model (blue) and the same model with an informative conjugate gamma prior (red)."
+ggplot() +
+ geom_density(
+    data = post_samp,
+    mapping = aes(x = (b_questionyes - b_questionno)),
+    alpha = 0.5, 
+    col = 4) +
+  geom_density(
+    data = post_data_upworthy_question,
+    mapping = aes(x = log(yes)-log(no)),
+    alpha = 0.5, 
+    linetype = "dashed",
+    col = 2) +
+  labs(x = "log of rate difference", y = "",
+       caption = expression(log(lambda["yes"]) - log(lambda["no"]))) +
+  theme_classic()
+```
+
+We can use the `priorsense` package to perform a sensitivity analysis of the regression parameter for the log mean difference. The results here indicate little impact of the prior, which is totally unsurprising given the sample size.
+
+```{r}
+#| cache: true
+#| label: fig-post-sensitivity
+#| fig-cap: "Prior sensitivity analysis and density of the posterior for different values of the powered prior."
+priorsense::powerscale_sensitivity(headline_mod)
+priorsense::powerscale_plot_dens(headline_mod)
+```
+
+
+## Distraction from smartwatches
+
+The following code is Stan code (mean-centered for the random effect) for the Poisson "mixed effect" model of @Brodeur:2021.
+
+```
+data {
+  int<lower=0> N;
+  int<lower=1> K; // nb fixed effect levels for distraction type
+  int<lower=1> J; // nb random effect levels for individuals
+  array[N] int<lower=0> y;    // vector of data
+  array[N] int<lower=1, upper=J> id;
+  array[N] int<lower=1, upper=K> fixed;
+}
+parameters {
+  vector[K] beta;
+   sum_to_zero_vector[J] alpha;
+  real<lower=0> kappa;
+}
+
+model {
+  kappa ~ exponential(0.6);
+  beta ~ normal(0, 10);
+  alpha ~ normal(0, sqrt(J * inv(J - 1)) * kappa);
+  y ~ poisson_log(alpha[id] + beta[fixed]);
+}
+```
+
+but this model is also easily fitted in `brms`, albeit with
+slightly different priors.
+
+```{r}
+#| cache: true
+#| message: false
+#| warning: false
+data(smartwatch, package = "hecbayes")
+# Random effect model with default priors
+smartwatch_mod <- brm(
+  nviolation ~ 0 + task + (1 | id),
+  data = smartwatch,
+  family = poisson(link = "log"),
+  set_prior(
+    prior = "normal(0, 5)", 
+    class = "b"),
+  backend = "cmdstanr", # faster than rstan
+  silent = 2) # remove verbose output
+summary(smartwatch_mod)
+fixef(smartwatch_mod)
+
+conditional_effects(x = smartwatch_mod,
+                    effects =  "task",
+                    prob = 0.8)
+```
