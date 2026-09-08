@@ -92,9 +92,9 @@ How to elicit reasonable values for them?
 - use moment matching to get sensible values
 - trial-and-error using the prior predictive
    - draw a parameter value from the prior $\boldsymbol{\theta}_0$
-   - for each, generate a new observation from the model $f(y_{\text{new}} \mid \boldsymbol{\theta}_0)$
+   - for each, generate a new observation from the model $f(y_{\text{new}} \mid \boldsymbol{\theta}_0)$ via the prior prediction distribution.
 
-## Example of simple linear regression
+## Stipulating inputs on standardized scales
 
 Working with standardized response and inputs $$x_i \mapsto (x_i - \overline{x})/\mathrm{sd}(\boldsymbol{x}),$$
 
@@ -228,7 +228,7 @@ The conditional posterior $p(\mu \mid \sigma)$ is Gaussian with
 We treat $\texttt{impression}$ as a known offset.
 
 
-## Headlines
+## Example - Headlines
 
 Consider an A/B test from November 23st, 2014, that compared four different headlines for a story on Sesame Street workshop with interviews of children whose parents were in jail and visiting them in prisons. The headlines tested were:
 
@@ -260,7 +260,7 @@ For $Y \sim \mathsf{gamma}(\alpha, \beta)$ with $\beta$ the rate parameter, we h
 \begin{align*}
 \mathsf{E}(Y)=\alpha/\beta, \qquad \mathsf{Va}(Y)=\alpha/\beta^2.
 \end{align*}
-We can solve for $\beta =\mathsf{E}_0(\lambda)/\mathsf{Va}_0(\lambda)$ and then use the mean relationship to retrieve $\alpha.
+We can solve for $\beta =\mathsf{E}_0(\lambda)/\mathsf{Va}_0(\lambda)$ and then use the mean relationship to retrieve $\alpha$.
 
 ```{r}
 #| eval: true
@@ -366,7 +366,7 @@ The improper prior $p(\sigma) \propto \sigma^{-1}$ is equivalent to an inverse g
 The limiting posterior is thus improper for random effects scales, so the value of $\epsilon$ matters.
 
 
-## MDI prior for generalized Pareto
+## An example of truncating priors
 
 Let $Y_i \sim \mathsf{GP}(\sigma, \xi)$ be generalized Pareto with density $$f(x) = \sigma^{-1}(1+\xi x/\sigma)_{+}^{-1/\xi-1}$$ for $\sigma>0$ and $\xi \in \mathbb{R},$ and $x_{+} =\max\{0, x\}.$
 
@@ -531,7 +531,7 @@ Consider different priors for $\tau$
 knitr::include_graphics("fig/fig-sensitivity.png")
 ``` 
 
-Basically indistinguishable results for the random scale..
+Basically indistinguishable results for the random scale.
 
 ## Eight schools example
 
@@ -556,6 +556,66 @@ Given the large sample in each school, we treat $\sigma_i$ as fixed data by usin
 #| fig-cap: "Posterior density of the school-specific random effects standard deviation $\\tau$ under different priors."
 knitr::include_graphics("fig/eightschools-stddev-raneff.png")
 ``` 
+
+## Power-scaling of prior
+
+Rerunning the analysis with different priors can be expensive.
+
+An alternative idea considers power scaling of the prior distribution, 
+$$
+p(\boldsymbol{\theta})^{\alpha}p(\boldsymbol{y} \mid \boldsymbol{\theta}), \qquad \alpha > 0;
+$$
+the case $\alpha=1$ corresponding to the model.
+
+## Power-scaling with simulated samples
+
+Suppose that we are generating posterior samples with $B$ simulations $\boldsymbol{\theta}_1, \dots \boldsymbol{\theta}_B.$
+
+If we keep track of both
+- the prior $p(\boldsymbol{\theta}_b)$ and 
+- the likelihood $p(\boldsymbol{y} \mid \boldsymbol{\theta}_b)\propto \mathcal{L}(\boldsymbol{\theta}_b)$ 
+
+for each posterior draw $\boldsymbol{\theta}_b,$ we can use importance sampling [@Kallioinen:2023] to estimate this without rerunning the sampling.
+
+This is implemented in the **R** package [`priorsense`](https://n-kall.github.io/priorsense/index.html) [@Kallioinen:2026].
+
+ proposes using power scaling via an importance sampling scheme.
+
+
+## Learning objectives
+
+At the end of the chapter, students should be able to
+
+- define and distinguish between improper, weak and informative priors.
+- propose conjugate priors for exponential families.
+- assess by using the prior predictive distribution the compatibility of the prior with the model.
+- use moment matching to specify the parameters of a prior distribution.
+- perform sensitivity analysis by running a model with different priors and assessing changes to the posterior distribution.
+
+
+## Summary (1/3)
+
+* Priors are chosen before viewing the data.
+* From an asymptotic perspective, the prior contribution is constant while the contribution of the likelihood typically grows linearly with the sample size.
+* This is not necessarily the case for parameters that are poorly resolved (typically in hierarchy).
+
+## Summary (2/3)
+
+* Some priors are chosen for computational convenience
+  - conjugate priors lead to closed-form (only exponential family)
+  - improper, vague or flat priors
+* Improper priors may lead to improper posterior.
+* Priors are generally not invariant to reparametrization.
+   - penalized-complexity or Jeffrey priors (1D only) are, by construction.
+   
+
+
+## Summary (3/3)
+
+* Reasonable parameter values can be specified 
+   - through moment matching
+   - after looking at prior predictive simulations.
+* Conducting prior sensitivity analyses (via power scaling or otherwise) is necessary to understand the impact of the prior.
 
 ## References
 
