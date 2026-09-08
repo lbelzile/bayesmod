@@ -150,3 +150,79 @@ conditional_effects(x = smartwatch_mod,
                     effects =  "task",
                     prob = 0.8)
 ```
+
+## Climate change mean temperature increase
+
+Different climate models and runs give rise to different average estimates of temperature increase. We can consider a very simple hierarchical model to capture this, assuming that data are Gaussian with model-specific "random effects". The data are unbalanced: some climate models offer a single run, other mutliples.
+
+
+```{r}
+library(bang) # Bayesian analysis with ROU
+data(temp2)
+RCP26 <- temp2 |> dplyr::filter(RCP == "rcp26")
+anova_mod1 <- bang::hanova1(
+  resp = RCP26$index,
+  prior = "bda", # uniform on mu, log(sigma), sigma_a
+  fac = RCP26$GCM)
+anova_mod2 <- bang::hanova1(
+  resp = RCP26$index,
+  prior = "unif", # uniform on mu, sigma, sigma_a
+  fac = RCP26$GCM)
+anova_mod3 <- bang::hanova1(
+  resp = RCP26$index,
+  prior = "cauchy", # half-Cauchy  for the scale
+  fac = RCP26$GCM)
+```
+
+
+The model is of the form, for $r = 1, \ldots, R$:
+$$
+Y_{i(r),r} \sim \mathsf{Gauss}(\mu + \alpha_r, \sigma^2),
+\alpha_r \sim \mathsf{Gauss}(0, \sigma^2_\alpha)
+$$
+and we need a prior $p(\mu, \sigma_{\alpha}, \sigma).$ There are numerous priors that could be considered here.
+
+- $p(\mu, \sigma_{\alpha}, \sigma) \propto \sigma^{-1}$ (location-scale, improper if $R < 3.$
+- $p(\mu, \sigma_{\alpha}, \sigma) \propto 1$ (improper)
+- $p(\mu, \sigma_{\alpha}, \sigma) \propto (1+\sigma^2_{\alpha}/S_{\alpha}^2)^{-1}(1+\sigma^2/S^2)^{-1}$ on $\mathbb{R} \times [0,\infty)^2.$ This corresponds to half-Cauchy distribution on the positive reals with a scale of $S$ and $S_{\alpha}$ (default 10).
+
+Below, we plot the posterior density for each of the $\alpha_r$ $(r=1, \ldots, R)$ for each of the three priors. There appears to be little difference to the first level, even for factor levels with few observations. Changing altogether the prior on the "random effect" from Gaussian to Cauchy would have more impact, as there is inherently a lot of regularization due to the prior in this specific application.
+
+```{r}
+summary(anova_mod1,
+        which_pop = c("theta[1]", "theta[8]"),
+        params = "pop")
+summary(anova_mod1,
+        params = "hyper")
+ggplot() +
+  geom_density(
+    data = anova_mod1$theta_sim_vals |>
+      as.data.frame() |>
+      tidyr::pivot_longer(
+        cols = everything(),
+        names_to = "GCM",
+        values_to = "post"),
+    mapping = aes(x = post, group = GCM))  +
+  geom_density(
+    data = anova_mod3$theta_sim_vals |>
+      as.data.frame() |>
+      tidyr::pivot_longer(
+        cols = everything(),
+        names_to = "GCM",
+        values_to = "post"),
+    mapping = aes(x = post, group = GCM),
+    col = "#ef8a47")  +
+  geom_density(
+    data = anova_mod2$theta_sim_vals |>
+      as.data.frame() |>
+      tidyr::pivot_longer(
+        cols = everything(),
+        names_to = "GCM",
+        values_to = "post"),
+    mapping = aes(x = post, group = GCM),
+    col = "#72bcd5")  +
+  labs(x = "posterior mean") +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
