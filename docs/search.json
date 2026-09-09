@@ -1285,7 +1285,7 @@
     "href": "slides/bayesmod-slides2.html#numerical-example-of-monte-carlo-integration",
     "title": "Bayesian modelling",
     "section": "Numerical example of (Monte Carlo) integration",
-    "text": "Numerical example of (Monte Carlo) integration\n\ny &lt;- 6L # number of successes \nn &lt;- 14L # number of trials\nalpha &lt;- beta &lt;- 1.5 # prior parameters\nunnormalized_posterior &lt;- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n\n1.066906e-05 with absolute error &lt; 1e-12\n\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n\n[1] 1.066906e-05\n\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n\n[1] 1.061693e-05"
+    "text": "Numerical example of (Monte Carlo) integration\n\ny &lt;- 6L # number of successes \nn &lt;- 14L # number of trials\nalpha &lt;- beta &lt;- 1.5 # prior parameters\nunnormalized_posterior &lt;- function(theta){\n  theta^(y+alpha-1) * (1-theta)^(n-y + beta - 1)\n}\nintegrate(f = unnormalized_posterior,\n          lower = 0,\n          upper = 1)\n\n1.066906e-05 with absolute error &lt; 1e-12\n\n# Compare with known constant\nbeta(y + alpha, n - y + beta)\n\n[1] 1.066906e-05\n\n# Monte Carlo integration\nmean(unnormalized_posterior(runif(1e5)))\n\n[1] 1.067821e-05"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#marginal-posterior",
@@ -3778,7 +3778,7 @@
     "href": "slides/bayesmod-slides3.html#impact-of-the-prior",
     "title": "Bayesian modelling",
     "section": "Impact of the prior",
-    "text": "Impact of the prior\nThe posterior is a compromise prior and likelihood:\n\nthe more informative the prior, the more the posterior resembles it.\nin large samples, the effect of the prior is often negligible"
+    "text": "Impact of the prior\nThe posterior is a compromise between prior and likelihood:\n\nthe more informative the prior, the more the posterior resembles it.\nin large samples, the effect of the prior is often negligible"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#controversial",
@@ -3792,7 +3792,7 @@
     "href": "slides/bayesmod-slides3.html#choosing-priors",
     "title": "Bayesian modelling",
     "section": "Choosing priors",
-    "text": "Choosing priors\nInfinite number of choice, but many default choices…\n\nconditionally conjugate priors (ease of interpretation, computational advantages)\nflat priors and vague priors (mostly uninformative)\ninformative priors (expert opinion)\nJeffrey’s priors (improper, invariant to reparametrization)\npenalized complexity (regularization)\nshrinkage priors (variable selection, reduce overfitting)"
+    "text": "Choosing priors\nInfinite number of choice, but many default choices…\n\nconditionally conjugate priors (ease of interpretation, computational advantages)\nflat priors and vague priors (mostly uninformative)\nweakly informative priors\ninformative priors (expert opinion)\ninvariant to reparametrization (Jeffrey, penalized complexity)\nshrinkage priors (variable selection, reduce overfitting)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#determining-hyperparameters",
@@ -3813,21 +3813,21 @@
     "href": "slides/bayesmod-slides3.html#conjugate-priors-for-common-exponential-families",
     "title": "Bayesian modelling",
     "section": "Conjugate priors for common exponential families",
-    "text": "Conjugate priors for common exponential families\n\n\n\n\n\n\n\n\ndistribution\nunknown parameter\nconjugate prior\n\n\n\n\n\\(Y \\sim \\mathsf{expo}(\\lambda)\\)\n\\(\\lambda\\)\n\\(\\lambda \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Poisson}(\\mu)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{binom}(n, \\theta)\\)\n\\(\\theta\\)\n\\(\\theta \\sim \\mathsf{Be}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{Gauss}(\\nu, \\omega^2)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\sigma\\)\n\\(\\sigma^{-2} \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu, \\sigma\\)\n\\(\\mu \\mid \\sigma^2 \\sim \\mathsf{Gauss}(\\nu, \\omega \\sigma^2),\\) \\(\\sigma^{-2} \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)"
+    "text": "Conjugate priors for common exponential families\n\n\n\n\n\n\n\n\ndistribution\nunknown parameter\nconjugate prior\n\n\n\n\n\\(Y \\sim \\mathsf{expo}(\\lambda)\\)\n\\(\\lambda\\)\n\\(\\lambda \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Poisson}(\\mu)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{binom}(n, \\theta)\\)\n\\(\\theta\\)\n\\(\\theta \\sim \\mathsf{Be}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu\\)\n\\(\\mu \\sim \\mathsf{Gauss}(\\nu, \\omega^2)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\sigma\\)\n\\(\\sigma^{2} \\sim \\mathsf{inv. gamma}(\\alpha, \\beta)\\)\n\n\n\\(Y \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\n\\(\\mu, \\sigma\\)\n\\(\\mu \\mid \\sigma^2 \\sim \\mathsf{Gauss}(\\nu, \\omega \\sigma^2),\\) \\(\\sigma^{2} \\sim \\mathsf{inv. gamma}(\\alpha, \\beta)\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-prior-for-the-poisson",
     "href": "slides/bayesmod-slides3.html#conjugate-prior-for-the-poisson",
     "title": "Bayesian modelling",
     "section": "Conjugate prior for the Poisson",
-    "text": "Conjugate prior for the Poisson\nIf \\(Y \\sim \\mathsf{Poisson}(\\mu)\\) with density \\(f(y) = \\mu^x\\exp(-\\mu x)/x!,\\) then for \\(\\mu \\sim \\mathsf{gamma}(\\alpha, \\beta)\\) with \\(\\alpha, \\beta\\) fixed. Consider an i.i.d. sample with mean \\(\\overline{y}.\\) The posterior density is\n\\[\np(\\mu \\mid y) \\stackrel{\\mu}{\\propto} \\mu^{n\\overline{y}} \\exp\\left(-\\mu n\\overline{y}\\right) \\mu^{\\alpha-1} \\exp(-\\beta \\mu)\n\\] so must be gamma \\(\\mathsf{gamma}(n\\overline{y} + \\alpha, n\\overline{y} + \\beta).\\)\nParameter interpretation: \\(\\alpha\\) events in \\(\\beta\\) time intervals."
+    "text": "Conjugate prior for the Poisson\nIf \\(Y \\sim \\mathsf{Poisson}(\\mu)\\) with density \\(f(y) = \\mu^x\\exp(-\\mu)/x!,\\) then for \\(\\mu \\sim \\mathsf{gamma}(\\alpha, \\beta)\\) with \\(\\alpha, \\beta\\) fixed. Consider an i.i.d. sample with mean \\(\\overline{y}.\\) The posterior density is\n\\[\np(\\mu \\mid y) \\stackrel{\\mu}{\\propto} \\mu^{n\\overline{y}} \\exp\\left(-\\mu n\\right) \\mu^{\\alpha-1} \\exp(-\\beta \\mu)\n\\] so must be \\(\\mathsf{gamma}(n\\overline{y} + \\alpha, n + \\beta).\\)\nParameter interpretation: \\(\\alpha\\) events in \\(\\beta\\) time intervals."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conjugate-prior-for-gaussian-known-variance",
     "href": "slides/bayesmod-slides3.html#conjugate-prior-for-gaussian-known-variance",
     "title": "Bayesian modelling",
     "section": "Conjugate prior for Gaussian (known variance)",
-    "text": "Conjugate prior for Gaussian (known variance)\nConsider an iid sample, \\(Y_i \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\) and let \\(\\mu \\mid \\sigma \\sim \\mathsf{Gauss}(\\nu, \\sigma^2\\tau^2).\\) Then, \\[\\begin{align*}\np(\\mu, \\sigma) &\\propto \\frac{p(\\sigma)}{\\sigma^{n+1}} \\exp\\left\\{ -\\frac{1}{2\\sigma^2}\\sum_{i=1}^n (y_{i}-\\mu)^2\\right\\} \\exp\\left\\{-\\frac{1}{2\\sigma^2\\tau^2}(\\mu - \\nu)^2\\right\\}\n\\\\&\\propto \\frac{p(\\sigma)}{\\sigma^{n+1}} \\exp\\left\\{\\left(\\sum_{i=1}^n y_{i} + \\frac{\\nu}{\\tau^2}\\right)\\frac{\\mu}{\\sigma^2} - \\left( \\frac{n}{2} +\\frac{1}{2\\tau^2}\\right)\\frac{\\mu^2}{\\sigma^2}\\right\\}.\n\\end{align*}\\]\nThe conditional posterior \\(p(\\mu \\mid \\sigma)\\) is Gaussian with\n\nmean \\((n\\overline{y}\\tau^2 + \\nu)/(n\\tau^2 + 1)\\) and\nprecision (reciprocal variance) \\((n + 1/\\tau^2)/\\sigma^2.\\)"
+    "text": "Conjugate prior for Gaussian (known variance)\nConsider an iid sample, \\(Y_i \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\) and let \\(\\mu \\mid \\sigma \\sim \\mathsf{Gauss}(\\nu, \\sigma^2\\tau^2).\\) Then, \\[\\begin{align*}\np(\\mu, \\sigma) &\\propto \\frac{p(\\sigma)}{\\sigma^{n+1}} \\exp\\left\\{ -\\frac{1}{2\\sigma^2}\\sum_{i=1}^n (y_{i}-\\mu)^2\\right\\} \\exp\\left\\{-\\frac{1}{2\\sigma^2\\tau^2}(\\mu - \\nu)^2\\right\\}\n\\\\&\\propto \\frac{p(\\sigma)}{\\sigma^{n+1}} \\exp\\left\\{\\left(\\sum_{i=1}^n y_{i} + \\frac{\\nu}{\\tau^2}\\right)\\frac{\\mu}{\\sigma^2} - \\left( \\frac{n}{2} +\\frac{1}{2\\tau^2}\\right)\\frac{\\mu^2}{\\sigma^2}\\right\\}.\n\\end{align*}\\]\nThe conditional posterior \\(p(\\mu \\mid \\sigma)\\) is Gaussian with\n\nmean \\((n\\tau^2\\overline{y} + \\nu)/(n\\tau^2 + 1)\\) and\nprecision (reciprocal variance) \\((n + 1/\\tau^2)/\\sigma^2.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#upworthy-examples",
@@ -3876,7 +3876,7 @@
     "href": "slides/bayesmod-slides3.html#proper-posterior-in-a-random-effect-model",
     "title": "Bayesian modelling",
     "section": "Proper posterior in a random effect model",
-    "text": "Proper posterior in a random effect model\nConsider a Gaussian random effect model with \\(n\\) independent observations in \\(J\\) groups\nThe \\(i\\)th observation in group \\(j\\) is \\[\\begin{align*}\nY_{ij} &\\sim \\mathsf{Gauss}(\\mu_{ij}, \\sigma^2) \\\\\n\\mu_{ij}&= \\mathbf{X}_i \\boldsymbol{\\beta} + \\alpha_j,  \\\\\n\\alpha_j &\\sim \\mathsf{Gauss}(0, \\tau^2)\\\\\n...\n\\end{align*}\\]"
+    "text": "Proper posterior in a random effect model\nConsider a Gaussian one-way ANOVA (random effect) model with \\(n\\) independent observations in \\(J\\) groups.\nThe \\(i_{(j)}\\)th observation in group \\(j\\) is \\[\\begin{align*}\nY_{i_{(j)}j} &\\sim \\mathsf{Gauss}(\\mu + \\alpha_j, \\sigma^2) \\\\\n\\alpha_j &\\sim \\mathsf{Gauss}(0, \\tau^2)\n\\end{align*}\\]\nThe parameters of the model are \\(\\mu, \\sigma^2, \\tau^2\\), and the population parameters \\(\\alpha_1, \\ldots, \\alpha_J.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#conditions-for-a-proper-posterior",
@@ -3890,7 +3890,7 @@
     "href": "slides/bayesmod-slides3.html#improper-priors-as-limiting-cases",
     "title": "Bayesian modelling",
     "section": "Improper priors as limiting cases",
-    "text": "Improper priors as limiting cases\nWe can view the improper prior as a limiting case \\[\\sigma \\sim \\mathsf{unif}(0, t), \\qquad t \\to \\infty.\\]\nThe Haldane prior for \\(\\theta\\) in a binomial model is \\(\\theta^{-1}(1-\\theta)^{-1},\\) a limiting \\(\\mathsf{Be}(0,0)\\) distribution.\nThe improper prior \\(p(\\sigma) \\propto \\sigma^{-1}\\) is equivalent to an inverse gamma \\(\\mathsf{inv. gamma}(\\epsilon, \\epsilon)\\) when \\(\\epsilon \\to 0.\\)\nThe limiting posterior is thus improper for random effects scales, so the value of \\(\\epsilon\\) matters."
+    "text": "Improper priors as limiting cases\nWe can view the improper prior as a limiting case \\[\\sigma \\sim \\mathsf{unif}(0, t), \\qquad t \\to \\infty.\\]\nThe Haldane prior for \\(\\theta\\) in a binomial model is \\(\\theta^{-1}(1-\\theta)^{-1},\\) a limiting \\(\\mathsf{Be}(0,0)\\) distribution.\nThe improper prior \\(p(\\sigma) \\propto \\sigma^{-1}\\) is equivalent to an inverse gamma \\(\\mathsf{inv. gamma}(\\epsilon, \\epsilon)\\) when \\(\\epsilon \\to 0.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#an-example-of-truncating-priors",
@@ -3911,35 +3911,35 @@
     "href": "slides/bayesmod-slides3.html#flat-priors",
     "title": "Bayesian modelling",
     "section": "Flat priors",
-    "text": "Flat priors\nUniform prior over the support of \\(\\theta,\\) \\[p(\\theta) \\propto 1.\\]\nImproper prior unless \\(\\theta \\in [a,b]\\) for finite \\(a, b.\\)"
+    "text": "Flat priors\nUniform prior over the support of \\(\\theta,\\) \\[p(\\theta) \\propto 1.\\]\nImproper prior unless \\(\\theta \\in [a,b]\\) for finite \\(a &lt; b.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#flat-priors-for-scale-parameters",
     "href": "slides/bayesmod-slides3.html#flat-priors-for-scale-parameters",
     "title": "Bayesian modelling",
     "section": "Flat priors for scale parameters",
-    "text": "Flat priors for scale parameters\nConsider a scale parameter \\(\\sigma &gt; 0.\\)\n\nWe could truncate the range, e.g., \\(\\sigma \\sim \\mathsf{unif}(0, 50),\\) but this is not ‘uninformative’, as extreme values of \\(\\sigma\\) are as likely as small ones.\nThese priors are not invariant: if \\(p\\{\\log(\\sigma)\\} \\propto 1\\) implies \\(p(\\sigma) \\propto \\sigma^{-1}\\) so can be informative on another scale."
+    "text": "Flat priors for scale parameters\nConsider a scale parameter \\(\\sigma &gt; 0.\\)\n\nWe could truncate the range, e.g., \\(\\sigma \\sim \\mathsf{unif}(0, 50),\\) but this is not ‘uninformative’, as extreme values of \\(\\sigma\\) are as likely as small ones.\nThese priors are not invariant: if \\(p\\{\\log(\\sigma)\\} \\propto 1\\) implies \\(p(\\sigma) \\propto \\sigma^{-1}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#vague-priors",
     "href": "slides/bayesmod-slides3.html#vague-priors",
     "title": "Bayesian modelling",
     "section": "Vague priors",
-    "text": "Vague priors\nVague priors are very diffuse proper prior.\nFor example, a vague Gaussian prior for regression coefficients on standardized data, \\[\\boldsymbol{\\beta} \\sim \\mathsf{Gauss}_p(\\mathbf{0}_p, 100\\mathbf{I}_p).\\]\n\nif we consider a logistic regression with a binary variable \\(\\mathrm{X}_j \\in \\{0,1\\},\\) then \\(\\beta_j =5\\) gives odds ratios of 150, and \\(\\beta_j=10\\) of around 22K…"
+    "text": "Vague priors\nVague priors are very diffuse proper prior.\nFor example, a vague Gaussian prior for regression coefficients on standardized data, \\[\\boldsymbol{\\beta} \\sim \\mathsf{Gauss}_p(\\mathbf{0}_p, 100\\mathbf{I}_p).\\]\nIf we consider a logistic regression with a binary variable \\(\\mathrm{X}_j \\in \\{0,1\\},\\) then \\(\\beta_j =5\\) gives odds ratios of 150, and \\(\\beta_j=10\\) of around 22K…"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#invariance-and-jeffreys-prior",
     "href": "slides/bayesmod-slides3.html#invariance-and-jeffreys-prior",
     "title": "Bayesian modelling",
     "section": "Invariance and Jeffrey’s prior",
-    "text": "Invariance and Jeffrey’s prior\nIn single-parameter models, the Jeffrey’s prior \\[p(\\theta) \\propto |\\imath(\\theta)|^{1/2},\\] proportional to the square root of the determinant of the Fisher information matrix, is invariant to any (differentiable) reparametrization."
+    "text": "Invariance and Jeffrey’s prior\nIn single-parameter models, the Jeffrey’s prior \\[p(\\theta) \\propto |\\imath(\\theta)|^{1/2},\\] proportional to the square root of the determinant of the Fisher information matrix, is invariant to any (differentiable) reparametrization.\nIt needs not be a proper distribution."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#jeffreys-prior-for-the-binomial-distribution",
     "href": "slides/bayesmod-slides3.html#jeffreys-prior-for-the-binomial-distribution",
     "title": "Bayesian modelling",
     "section": "Jeffrey’s prior for the binomial distribution",
-    "text": "Jeffrey’s prior for the binomial distribution\nConsider \\(Y \\sim \\mathsf{binom}(1, \\theta).\\) The negative of the second derivative of the log likelihood with respect to \\(p\\) is \\[\n\\jmath(\\theta) = - \\partial^2 \\ell(\\theta; y) / \\partial \\theta^2 = y/\\theta^2 + (1-y)/(1-\\theta)^2.\n\\]\nSince \\(\\mathsf{E}(Y)=\\theta,\\) the Fisher information is \\[\\imath(\\vartheta) = \\mathsf{E}\\{\\jmath(\\theta)\\}=1/\\theta + 1/(1-\\theta) = 1/\\{\\theta(1-\\theta)\\}.\\] Jeffrey’s prior is therefore \\(p(\\theta) \\propto \\theta^{-1/2}(1-\\theta)^{-1/2},\\) a conjugate Beta prior \\(\\mathsf{Be}(0.5,0.5).\\)"
+    "text": "Jeffrey’s prior for the binomial distribution\nConsider \\(Y \\sim \\mathsf{binom}(1, \\theta).\\) The negative of the second derivative of the log likelihood with respect to \\(p\\) is \\[\n\\jmath(\\theta) = - \\partial^2 \\ell(\\theta; y) / \\partial \\theta^2 = y/\\theta^2 + (1-y)/(1-\\theta)^2.\n\\]\nSince \\(\\mathsf{E}(Y)=\\theta,\\) the Fisher information is \\[\\imath(\\theta) = \\mathsf{E}\\{\\jmath(\\theta)\\}=1/\\theta + 1/(1-\\theta) = 1/\\{\\theta(1-\\theta)\\}.\\] Jeffrey’s prior is therefore \\(p(\\theta) \\propto \\theta^{-1/2}(1-\\theta)^{-1/2},\\) a conjugate Beta prior \\(\\mathsf{Be}(0.5,0.5).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides3.html#invariant-priors-for-location-scale-families",
@@ -4009,7 +4009,7 @@
     "href": "slides/bayesmod-slides3.html#sensitivity-analysis-for-smartwatch-data",
     "title": "Bayesian modelling",
     "section": "Sensitivity analysis for smartwatch data",
-    "text": "Sensitivity analysis for smartwatch data\n\n\nFigure 3: Posterior density of \\(\\tau\\) for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.\nBasically indistinguishable results for the random scale."
+    "text": "Sensitivity analysis for smartwatch data\n\n\nFigure 2: Posterior density of \\(\\tau\\) for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.\nBasically indistinguishable results for the random scale."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#eight-schools-example",
@@ -4023,7 +4023,7 @@
     "href": "slides/bayesmod-slides3.html#sensibility-analysis-for-eight-schools-example",
     "title": "Bayesian modelling",
     "section": "Sensibility analysis for eight schools example",
-    "text": "Sensibility analysis for eight schools example\n\n\nFigure 4: Posterior density of the school-specific random effects standard deviation \\(\\tau\\) under different priors."
+    "text": "Sensibility analysis for eight schools example\n\n\nFigure 3: Posterior density of the school-specific random effects standard deviation \\(\\tau\\) under different priors."
   },
   {
     "objectID": "slides/bayesmod-slides3.html#power-scaling-of-prior",
@@ -4969,5 +4969,47 @@
     "title": "Lecture 3",
     "section": "Climate change mean temperature increase",
     "text": "Climate change mean temperature increase\nDifferent climate models and runs give rise to different average estimates of temperature increase. We can consider a very simple hierarchical model to capture this, assuming that data are Gaussian with model-specific “random effects”. The data are unbalanced: some climate models offer a single run, other mutliples.\n\nlibrary(bang) # Bayesian analysis with ROU\ndata(temp2)\nRCP26 &lt;- temp2 |&gt; dplyr::filter(RCP == \"rcp26\")\nanova_mod1 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"bda\", # uniform on mu, log(sigma), sigma_a\n  fac = RCP26$GCM)\nanova_mod2 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"unif\", # uniform on mu, sigma, sigma_a\n  fac = RCP26$GCM)\nanova_mod3 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"cauchy\", # half-Cauchy  for the scale\n  fac = RCP26$GCM)\n\nThe model is of the form, for \\(r = 1, \\ldots, R\\): \\[\nY_{i(r),r} \\sim \\mathsf{Gauss}(\\mu + \\alpha_r, \\sigma^2),\n\\alpha_r \\sim \\mathsf{Gauss}(0, \\sigma^2_\\alpha)\n\\] and we need a prior \\(p(\\mu, \\sigma_{\\alpha}, \\sigma).\\) There are numerous priors that could be considered here.\n\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto \\sigma^{-1}\\) (location-scale, improper if \\(R &lt; 3.\\)\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto 1\\) (improper)\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto (1+\\sigma^2_{\\alpha}/S_{\\alpha}^2)^{-1}(1+\\sigma^2/S^2)^{-1}\\) on \\(\\mathbb{R} \\times [0,\\infty)^2.\\) This corresponds to half-Cauchy distribution on the positive reals with a scale of \\(S\\) and \\(S_{\\alpha}\\) (default 10).\n\nBelow, we plot the posterior density for each of the \\(\\alpha_r\\) \\((r=1, \\ldots, R)\\) for each of the three priors. There appears to be little difference to the first level, even for factor levels with few observations. Changing altogether the prior on the “random effect” from Gaussian to Cauchy would have more impact, as there is inherently a lot of regularization due to the prior in this specific application.\n\nsummary(anova_mod1,\n        which_pop = c(\"theta[1]\", \"theta[8]\"),\n        params = \"pop\")\n\n    theta[1]         theta[8]    \n Min.   :0.9415   Min.   :1.485  \n 1st Qu.:1.0875   1st Qu.:1.546  \n Median :1.1280   Median :1.557  \n Mean   :1.1264   Mean   :1.557  \n 3rd Qu.:1.1650   3rd Qu.:1.569  \n Max.   :1.3788   Max.   :1.621  \n\nsummary(anova_mod1,\n        params = \"hyper\")\n\nru bounding box:  \n               box         vals1        vals2 conv\na        1.0000000  0.0000000000  0.000000000    0\nb1minus -0.1466810 -0.2326509993  0.001997345    0\nb2minus -0.1475368 -0.0004397797 -0.234538810    0\nb1plus   0.1755008  0.3048045193  0.001126515    0\nb2plus   0.1739269 -0.0010104517  0.300416382    0\n\nestimated probability of acceptance:  \n[1] 0.5167959\n\nsample summary \n       mu          sigma[alpha]        sigma        \n Min.   :0.8903   Min.   :0.2823   Min.   :0.04121  \n 1st Qu.:1.1817   1st Qu.:0.4012   1st Qu.:0.05233  \n Median :1.2458   Median :0.4402   Median :0.05605  \n Mean   :1.2408   Mean   :0.4490   Mean   :0.05698  \n 3rd Qu.:1.3007   3rd Qu.:0.4885   3rd Qu.:0.06113  \n Max.   :1.5148   Max.   :0.7210   Max.   :0.09077  \n\nggplot() +\n  geom_density(\n    data = anova_mod1$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM))  +\n  geom_density(\n    data = anova_mod3$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM),\n    col = \"#ef8a47\")  +\n  geom_density(\n    data = anova_mod2$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM),\n    col = \"#72bcd5\")  +\n  labs(x = \"posterior mean\") +\n  theme_classic() +\n  theme(legend.position = \"none\")"
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#summary-13",
+    "href": "slides/bayesmod-slides2.html#summary-13",
+    "title": "Bayesian modelling",
+    "section": "Summary (1/3)",
+    "text": "Summary (1/3)\n\nBayesians treat both parameter and observations as random, the former due to uncertainty about the true value.\n\nInference is performed conditional on observed data, and summarized in the posterior.\n\nBayesians specify both\n\na prior for the parameter\na likelihood specifying the data generating mechanism.\n\nSequential updating (new likelihood contributions) leads to update of the posterior distribution."
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#summary-23",
+    "href": "slides/bayesmod-slides2.html#summary-23",
+    "title": "Bayesian modelling",
+    "section": "Summary (2/3)",
+    "text": "Summary (2/3)\n\nBayesian inference is complicated by the fact that there is more often than not no closed-form expression for the posterior distribution.\n\nEvaluation of the normalizing constant, the so-called marginal likelihood, is challenging, especially in high dimensional settings.\nBayesians typically use approximations to the posterior distribution, or draw samples from it.\n\nRather than hypothesis testing, Bayesian methods rely on the posterior distribution of parameters, or on Bayes factor for model comparisons."
+  },
+  {
+    "objectID": "slides/bayesmod-slides2.html#summary-33",
+    "href": "slides/bayesmod-slides2.html#summary-33",
+    "title": "Bayesian modelling",
+    "section": "Summary (3/3)",
+    "text": "Summary (3/3)\n\nThe posterior predictive distribution is used for model assessment and prediction\n\nit has a higher variance than the data generating distribution due to parameter uncertainty.\n\nLoss functions can be used to summarize a posterior distribution into a numerical summary of interest.\nUncertainty is reflected by credible sets or credible intervals, which encode the posterior probability that the true value \\(\\boldsymbol{\\theta}\\) belongs to the set."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#multivariate-parameters",
+    "href": "slides/bayesmod-slides3.html#multivariate-parameters",
+    "title": "Bayesian modelling",
+    "section": "Multivariate parameters",
+    "text": "Multivariate parameters\nIn multiparameters models, we often take the parameters to be (conditionally) independent a priori."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#upworthy-example",
+    "href": "slides/bayesmod-slides3.html#upworthy-example",
+    "title": "Bayesian modelling",
+    "section": "Upworthy example",
+    "text": "Upworthy example\n\nThe Upworthy Research Archive (Matias et al., 2021) contains results for 22743 experiments, with a click through rate of 1.58% on average and a standard deviation of 1.23%.\nWe consider an A/B test that compared four different headlines for a story.\nWe model the conversion rate for each using \\(\\texttt{click}_i \\sim \\mathsf{Poisson}(\\lambda_i\\texttt{impression}_i).\\)\n\nWe treat \\(\\texttt{impression}\\) as a known offset."
+  },
+  {
+    "objectID": "slides/bayesmod-slides3.html#proof",
+    "href": "slides/bayesmod-slides3.html#proof",
+    "title": "Bayesian modelling",
+    "section": "Proof",
+    "text": "Proof\nConsider a bijective transformation \\(\\theta \\mapsto \\vartheta.\\) Under suitable regularity conditions, the chain rule implies that \\[\\begin{align*}\ni(\\vartheta) &= - \\mathsf{E} \\left(\\frac{\\partial^2 \\ell(\\vartheta)}{\\partial^2 \\vartheta}\\right)\n\\\\&= - \\mathsf{E}\\left(\\frac{\\partial^2 \\ell(\\theta)}{\\partial \\theta^2}\\right) \\left( \\frac{\\mathrm{d} \\theta}{\\mathrm{d} \\vartheta} \\right)^2 + \\mathsf{E}\\left(\\frac{\\partial \\ell(\\theta)}{\\partial \\theta}\\right) \\frac{\\mathrm{d}^2 \\theta}{\\mathrm{d} \\vartheta^2}\n\\end{align*}\\] Since the score has mean zero, \\(\\mathsf{E}\\left\\{\\partial \\ell(\\theta)/\\partial \\theta\\right\\}=0\\) and so \\[\\begin{align*}\n\\imath^{1/2}(\\vartheta) = \\imath^{1/2}(\\theta) \\left| \\frac{\\mathrm{d} \\theta}{\\mathrm{d} \\vartheta} \\right|,\n\\end{align*}\\] implying invariance."
   }
 ]

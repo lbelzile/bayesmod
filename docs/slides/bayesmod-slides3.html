@@ -227,7 +227,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Sep 7, 2026</p>
+  <p class="date">Last compiled Tuesday Sep 8, 2026</p>
 </section>
 <section id="priors" class="slide level2">
 <h2>Priors</h2>
@@ -240,10 +240,10 @@ Léo Belzile
 </section>
 <section id="impact-of-the-prior" class="slide level2">
 <h2>Impact of the prior</h2>
-<p>The posterior is a compromise prior and likelihood:</p>
+<p>The posterior is a compromise between prior and likelihood:</p>
 <ul>
-<li>the more informative the prior, the more the posterior resembles it.</li>
-<li>in large samples, the effect of the prior is often negligible</li>
+<li><p>the more informative the prior, the more the posterior resembles it.</p></li>
+<li><p>in large samples, the effect of the prior is often negligible</p></li>
 </ul>
 </section>
 <section id="controversial" class="slide level2">
@@ -260,24 +260,42 @@ Léo Belzile
 <ul>
 <li>conditionally conjugate priors (ease of interpretation, computational advantages)</li>
 <li>flat priors and vague priors (mostly uninformative)</li>
+<li>weakly informative priors</li>
 <li>informative priors (expert opinion)</li>
-<li>Jeffrey’s priors (improper, invariant to reparametrization)</li>
-<li>penalized complexity (regularization)</li>
+<li>invariant to reparametrization (Jeffrey, penalized complexity)</li>
 <li>shrinkage priors (variable selection, reduce overfitting)</li>
 </ul>
 </section>
-<section id="determining-hyperparameters" class="slide level2">
-<h2>Determining hyperparameters</h2>
-<p>We term <strong>hyperparameters</strong> the parameters of the (hyper)priors.</p>
-<p>How to elicit reasonable values for them?</p>
+<section id="multivariate-parameters" class="slide level2">
+<h2>Multivariate parameters</h2>
+<p>In multiparameters models, we often take the parameters to be (conditionally) independent a priori.</p>
+</section>
+<section id="flat-priors" class="slide level2">
+<h2>Flat priors</h2>
+<p>Uniform prior over the support of <span class="math inline">\(\theta,\)</span> <span class="math display">\[p(\theta) \propto 1.\]</span></p>
+<p>Improper prior unless <span class="math inline">\(\theta \in [a,b]\)</span> for finite <span class="math inline">\(a &lt; b.\)</span></p>
+</section>
+<section id="flat-priors-for-scale-parameters" class="slide level2">
+<h2>Flat priors for scale parameters</h2>
+<p>Consider a scale parameter <span class="math inline">\(\sigma &gt; 0.\)</span></p>
 <ul>
-<li>use moment matching to get sensible values</li>
-<li>trial-and-error using the prior predictive
-<ul>
-<li>draw a parameter value from the prior <span class="math inline">\(\boldsymbol{\theta}_0\)</span></li>
-<li>for each, generate a new observation from the model <span class="math inline">\(f(y_{\text{new}} \mid \boldsymbol{\theta}_0)\)</span> via the prior prediction distribution.</li>
-</ul></li>
+<li>We could truncate the range, e.g., <span class="math inline">\(\sigma \sim \mathsf{unif}(0, 50),\)</span> but this is not ‘uninformative’, as extreme values of <span class="math inline">\(\sigma\)</span> are as likely as small ones.</li>
+<li>These priors are not invariant: if <span class="math inline">\(p\{\log(\sigma)\} \propto 1\)</span> implies <span class="math inline">\(p(\sigma) \propto \sigma^{-1}.\)</span></li>
 </ul>
+</section>
+<section id="invariant-priors-for-location-scale-families" class="slide level2">
+<h2>Invariant priors for location-scale families</h2>
+<p>For a location-scale family with location <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma,\)</span> the independent priors <span class="math display">\[\begin{align*}
+p(\mu) &amp;\propto 1\\
+p(\sigma) &amp;\propto \sigma^{-1}
+\end{align*}\]</span> are location-scale invariant.</p>
+<p>The results are invariant to affine transformations of the units, <span class="math inline">\(\vartheta = a + b \theta.\)</span></p>
+</section>
+<section id="vague-priors" class="slide level2">
+<h2>Vague priors</h2>
+<p>Vague priors are very diffuse proper prior.</p>
+<p>For example, a vague Gaussian prior for regression coefficients on standardized data, <span class="math display">\[\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\mathbf{0}_p, 100\mathbf{I}_p).\]</span></p>
+<p>If we consider a logistic regression with a binary variable <span class="math inline">\(\mathrm{X}_j \in \{0,1\},\)</span> then <span class="math inline">\(\beta_j =5\)</span> gives odds ratios of 150, and <span class="math inline">\(\beta_j=10\)</span> of around 22K…</p>
 </section>
 <section id="conjugate-priors" class="slide level2">
 <h2>Conjugate priors</h2>
@@ -328,22 +346,22 @@ f(y; \boldsymbol{\theta}) = \exp\left\{ \sum_{k=1}^K Q_k(\boldsymbol{\theta}) t_
 <tr class="odd">
 <td><span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \sigma^2)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\sigma\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\sigma^{2} \sim \mathsf{inv. gamma}(\alpha, \beta)\)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(Y \sim \mathsf{Gauss}(\mu, \sigma^2)\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\mu, \sigma\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2),\)</span> <span class="math inline">\(\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2),\)</span> <span class="math inline">\(\sigma^{2} \sim \mathsf{inv. gamma}(\alpha, \beta)\)</span></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="conjugate-prior-for-the-poisson" class="slide level2">
 <h2>Conjugate prior for the Poisson</h2>
-<p>If <span class="math inline">\(Y \sim \mathsf{Poisson}(\mu)\)</span> with density <span class="math inline">\(f(y) = \mu^x\exp(-\mu x)/x!,\)</span> then for <span class="math inline">\(\mu \sim \mathsf{gamma}(\alpha, \beta)\)</span> with <span class="math inline">\(\alpha, \beta\)</span> fixed. Consider an i.i.d. sample with mean <span class="math inline">\(\overline{y}.\)</span> The posterior density is</p>
+<p>If <span class="math inline">\(Y \sim \mathsf{Poisson}(\mu)\)</span> with density <span class="math inline">\(f(y) = \mu^x\exp(-\mu)/x!,\)</span> then for <span class="math inline">\(\mu \sim \mathsf{gamma}(\alpha, \beta)\)</span> with <span class="math inline">\(\alpha, \beta\)</span> fixed. Consider an i.i.d. sample with mean <span class="math inline">\(\overline{y}.\)</span> The posterior density is</p>
 <p><span class="math display">\[
-p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\overline{y}\right) \mu^{\alpha-1} \exp(-\beta \mu)
-\]</span> so must be gamma <span class="math inline">\(\mathsf{gamma}(n\overline{y} + \alpha, n\overline{y} + \beta).\)</span></p>
+p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\right) \mu^{\alpha-1} \exp(-\beta \mu)
+\]</span> so must be <span class="math inline">\(\mathsf{gamma}(n\overline{y} + \alpha, n + \beta).\)</span></p>
 <p><em>Parameter interpretation</em>: <span class="math inline">\(\alpha\)</span> events in <span class="math inline">\(\beta\)</span> time intervals.</p>
 </section>
 <section id="conjugate-prior-for-gaussian-known-variance" class="slide level2 smaller">
@@ -354,12 +372,18 @@ p(\mu, \sigma) &amp;\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}
 \end{align*}\]</span></p>
 <p>The conditional posterior <span class="math inline">\(p(\mu \mid \sigma)\)</span> is Gaussian with</p>
 <ul>
-<li>mean <span class="math inline">\((n\overline{y}\tau^2 + \nu)/(n\tau^2 + 1)\)</span> and</li>
+<li>mean <span class="math inline">\((n\tau^2\overline{y} + \nu)/(n\tau^2 + 1)\)</span> and</li>
 <li>precision (reciprocal variance) <span class="math inline">\((n + 1/\tau^2)/\sigma^2.\)</span></li>
 </ul>
 </section>
-<section id="upworthy-examples" class="slide level2">
-<h2>Upworthy examples</h2>
+<section id="improper-priors-as-limiting-cases" class="slide level2">
+<h2>Improper priors as limiting cases</h2>
+<p>We can view the improper prior as a limiting case <span class="math display">\[\sigma \sim \mathsf{unif}(0, t), \qquad t \to \infty.\]</span></p>
+<p>The Haldane prior for <span class="math inline">\(\theta\)</span> in a binomial model is <span class="math inline">\(\theta^{-1}(1-\theta)^{-1},\)</span> a limiting <span class="math inline">\(\mathsf{Be}(0,0)\)</span> distribution.</p>
+<p>The improper prior <span class="math inline">\(p(\sigma) \propto \sigma^{-1}\)</span> is equivalent to an inverse gamma <span class="math inline">\(\mathsf{inv. gamma}(\epsilon, \epsilon)\)</span> when <span class="math inline">\(\epsilon \to 0.\)</span></p>
+</section>
+<section id="upworthy-example" class="slide level2">
+<h2>Upworthy example</h2>
 <ul>
 <li>The Upworthy Research Archive <span class="citation" data-cites="Matias:2021">(<a href="#/references" role="doc-biblioref" onclick="">Matias et al., 2021</a>)</span> contains results for 22743 experiments, with a click through rate of 1.58% on average and a standard deviation of 1.23%.</li>
 <li>We consider an A/B test that compared four different headlines for a story.</li>
@@ -415,6 +439,19 @@ p(\mu, \sigma) &amp;\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}
 </div>
 </div>
 </section>
+<section id="determining-hyperparameters" class="slide level2">
+<h2>Determining hyperparameters</h2>
+<p>We term <strong>hyperparameters</strong> the parameters of the (hyper)priors.</p>
+<p>How to elicit reasonable values for them?</p>
+<ul>
+<li>use moment matching to get sensible values</li>
+<li>trial-and-error using the prior predictive
+<ul>
+<li>draw a parameter value from the prior <span class="math inline">\(\boldsymbol{\theta}_0\)</span></li>
+<li>for each, generate a new observation from the model <span class="math inline">\(f(y_{\text{new}} \mid \boldsymbol{\theta}_0)\)</span> via the prior prediction distribution.</li>
+</ul></li>
+</ul>
+</section>
 <section id="moment-matching-for-gamma-distribution" class="slide level2">
 <h2>Moment matching for gamma distribution</h2>
 <p>For <span class="math inline">\(Y \sim \mathsf{gamma}(\alpha, \beta)\)</span> with <span class="math inline">\(\beta\)</span> the rate parameter, we have <span class="math display">\[\begin{align*}
@@ -451,13 +488,12 @@ Figure&nbsp;1: Gamma posteriors of the conversion rate for the Upworthy Sesame s
 </section>
 <section id="proper-posterior-in-a-random-effect-model" class="slide level2">
 <h2>Proper posterior in a random effect model</h2>
-<p>Consider a Gaussian random effect model with <span class="math inline">\(n\)</span> independent observations in <span class="math inline">\(J\)</span> groups</p>
-<p>The <span class="math inline">\(i\)</span>th observation in group <span class="math inline">\(j\)</span> is <span class="math display">\[\begin{align*}
-Y_{ij} &amp;\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
-\mu_{ij}&amp;= \mathbf{X}_i \boldsymbol{\beta} + \alpha_j,  \\
-\alpha_j &amp;\sim \mathsf{Gauss}(0, \tau^2)\\
-...
+<p>Consider a Gaussian one-way ANOVA (random effect) model with <span class="math inline">\(n\)</span> independent observations in <span class="math inline">\(J\)</span> groups.</p>
+<p>The <span class="math inline">\(i_{(j)}\)</span>th observation in group <span class="math inline">\(j\)</span> is <span class="math display">\[\begin{align*}
+Y_{i_{(j)}j} &amp;\sim \mathsf{Gauss}(\mu + \alpha_j, \sigma^2) \\
+\alpha_j &amp;\sim \mathsf{Gauss}(0, \tau^2)
 \end{align*}\]</span></p>
+<p>The parameters of the model are <span class="math inline">\(\mu, \sigma^2, \tau^2\)</span>, and the population parameters <span class="math inline">\(\alpha_1, \ldots, \alpha_J.\)</span></p>
 </section>
 <section id="conditions-for-a-proper-posterior" class="slide level2">
 <h2>Conditions for a proper posterior</h2>
@@ -469,67 +505,52 @@ Y_{ij} &amp;\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
 <blockquote>
 <p>in a hierarchical model the data can never rule out a group-level variance of zero, and so [a] prior distribution cannot put an infinite mass in this area</p>
 </blockquote>
-</section>
-<section id="improper-priors-as-limiting-cases" class="slide level2">
-<h2>Improper priors as limiting cases</h2>
-<p>We can view the improper prior as a limiting case <span class="math display">\[\sigma \sim \mathsf{unif}(0, t), \qquad t \to \infty.\]</span></p>
-<p>The Haldane prior for <span class="math inline">\(\theta\)</span> in a binomial model is <span class="math inline">\(\theta^{-1}(1-\theta)^{-1},\)</span> a limiting <span class="math inline">\(\mathsf{Be}(0,0)\)</span> distribution.</p>
-<p>The improper prior <span class="math inline">\(p(\sigma) \propto \sigma^{-1}\)</span> is equivalent to an inverse gamma <span class="math inline">\(\mathsf{inv. gamma}(\epsilon, \epsilon)\)</span> when <span class="math inline">\(\epsilon \to 0.\)</span></p>
-<p>The limiting posterior is thus improper for random effects scales, so the value of <span class="math inline">\(\epsilon\)</span> matters.</p>
-</section>
-<section id="an-example-of-truncating-priors" class="slide level2">
-<h2>An example of truncating priors</h2>
-<p>Let <span class="math inline">\(Y_i \sim \mathsf{GP}(\sigma, \xi)\)</span> be generalized Pareto with density <span class="math display">\[f(x) = \sigma^{-1}(1+\xi x/\sigma)_{+}^{-1/\xi-1}\]</span> for <span class="math inline">\(\sigma&gt;0\)</span> and <span class="math inline">\(\xi \in \mathbb{R},\)</span> and <span class="math inline">\(x_{+} =\max\{0, x\}.\)</span></p>
-<p>Consider the maximum data information (MDI) <span class="math display">\[p(\xi) \propto \exp(-\xi).\]</span></p>
-<p>Since <span class="math inline">\(\lim_{\xi \to -\infty} \exp(-\xi) = \infty,\)</span> the prior density increases without bound as <span class="math inline">\(\xi\)</span> becomes smaller.</p>
-</section>
-<section id="truncated-mdi-for-generalized-pareto-distribution" class="slide level2">
-<h2>Truncated MDI for generalized Pareto distribution</h2>
-<p>The MDI prior leads to an improper posterior without modification.</p>
+<!--
+The limiting posterior is thus improper for random effects scales, so the value of $\epsilon$ matters.
+-->
+<!--
+## An example of truncating priors
 
-<img data-src="bayesmod-slides3_files/figure-revealjs/fig-mdiprior-1.png" style="width:100.0%" class="r-stretch quarto-figure-center" id="fig-mdiprior"><p class="caption">
-Figure&nbsp;2: Unscaled maximum data information (MDI) prior density.
-</p><p>If we restrict the range of the MDI prior <span class="math inline">\(p(\xi)\)</span> to <span class="math inline">\(\xi \geq -1,\)</span> then <span class="math inline">\(p(\xi + 1) \sim \mathsf{expo}(1)\)</span> and posterior is proper.</p>
-</section>
-<section id="flat-priors" class="slide level2">
-<h2>Flat priors</h2>
-<p>Uniform prior over the support of <span class="math inline">\(\theta,\)</span> <span class="math display">\[p(\theta) \propto 1.\]</span></p>
-<p>Improper prior unless <span class="math inline">\(\theta \in [a,b]\)</span> for finite <span class="math inline">\(a, b.\)</span></p>
-</section>
-<section id="flat-priors-for-scale-parameters" class="slide level2">
-<h2>Flat priors for scale parameters</h2>
-<p>Consider a scale parameter <span class="math inline">\(\sigma &gt; 0.\)</span></p>
-<ul>
-<li>We could truncate the range, e.g., <span class="math inline">\(\sigma \sim \mathsf{unif}(0, 50),\)</span> but this is not ‘uninformative’, as extreme values of <span class="math inline">\(\sigma\)</span> are as likely as small ones.</li>
-<li>These priors are not invariant: if <span class="math inline">\(p\{\log(\sigma)\} \propto 1\)</span> implies <span class="math inline">\(p(\sigma) \propto \sigma^{-1}\)</span> so can be informative on another scale.</li>
-</ul>
-</section>
-<section id="vague-priors" class="slide level2">
-<h2>Vague priors</h2>
-<p>Vague priors are very diffuse proper prior.</p>
-<p>For example, a vague Gaussian prior for regression coefficients on standardized data, <span class="math display">\[\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\mathbf{0}_p, 100\mathbf{I}_p).\]</span></p>
-<ul>
-<li>if we consider a logistic regression with a binary variable <span class="math inline">\(\mathrm{X}_j \in \{0,1\},\)</span> then <span class="math inline">\(\beta_j =5\)</span> gives odds ratios of 150, and <span class="math inline">\(\beta_j=10\)</span> of around 22K…</li>
-</ul>
+Let $Y_i \sim \mathsf{GP}(\sigma, \xi)$ be generalized Pareto with density $$f(x) = \sigma^{-1}(1+\xi x/\sigma)_{+}^{-1/\xi-1}$$ for $\sigma>0$ and $\xi \in \mathbb{R},$ and $x_{+} =\max\{0, x\}.$
+
+
+Consider the maximum data information (MDI) $$p(\xi) \propto \exp(-\xi).$$
+
+Since $\lim_{\xi \to -\infty} \exp(-\xi) = \infty,$ the prior density increases without bound as $\xi$ becomes smaller.
+
+## Truncated MDI for generalized Pareto distribution
+
+The MDI prior leads to an improper posterior without modification.
+
+::: {.cell}
+::: {.cell-output-display}
+![Unscaled maximum data information (MDI) prior density.](bayesmod-slides3_files/figure-revealjs/fig-mdiprior-1.png){#fig-mdiprior width=100%}
+:::
+:::
+
+If we restrict the range of the MDI prior $p(\xi)$ to $\xi \geq -1,$ then $p(\xi + 1) \sim \mathsf{expo}(1)$ and posterior is proper.
+-->
 </section>
 <section id="invariance-and-jeffreys-prior" class="slide level2">
 <h2>Invariance and Jeffrey’s prior</h2>
 <p>In single-parameter models, the <strong>Jeffrey’s prior</strong> <span class="math display">\[p(\theta) \propto |\imath(\theta)|^{1/2},\]</span> proportional to the square root of the determinant of the Fisher information matrix, is invariant to any (differentiable) reparametrization.</p>
+<p>It needs not be a proper distribution.</p>
+</section>
+<section id="proof" class="slide level2">
+<h2>Proof</h2>
+<p>Consider a bijective transformation <span class="math inline">\(\theta \mapsto \vartheta.\)</span> Under suitable regularity conditions, the chain rule implies that <span class="math display">\[\begin{align*}
+i(\vartheta) &amp;= - \mathsf{E} \left(\frac{\partial^2 \ell(\vartheta)}{\partial^2 \vartheta}\right)
+\\&amp;= - \mathsf{E}\left(\frac{\partial^2 \ell(\theta)}{\partial \theta^2}\right) \left( \frac{\mathrm{d} \theta}{\mathrm{d} \vartheta} \right)^2 + \mathsf{E}\left(\frac{\partial \ell(\theta)}{\partial \theta}\right) \frac{\mathrm{d}^2 \theta}{\mathrm{d} \vartheta^2}
+\end{align*}\]</span> Since the score has mean zero, <span class="math inline">\(\mathsf{E}\left\{\partial \ell(\theta)/\partial \theta\right\}=0\)</span> and so <span class="math display">\[\begin{align*}
+\imath^{1/2}(\vartheta) = \imath^{1/2}(\theta) \left| \frac{\mathrm{d} \theta}{\mathrm{d} \vartheta} \right|,
+\end{align*}\]</span> implying invariance.</p>
 </section>
 <section id="jeffreys-prior-for-the-binomial-distribution" class="slide level2">
 <h2>Jeffrey’s prior for the binomial distribution</h2>
 <p>Consider <span class="math inline">\(Y \sim \mathsf{binom}(1, \theta).\)</span> The negative of the second derivative of the log likelihood with respect to <span class="math inline">\(p\)</span> is <span class="math display">\[
 \jmath(\theta) = - \partial^2 \ell(\theta; y) / \partial \theta^2 = y/\theta^2 + (1-y)/(1-\theta)^2.
 \]</span></p>
-<p>Since <span class="math inline">\(\mathsf{E}(Y)=\theta,\)</span> the Fisher information is <span class="math display">\[\imath(\vartheta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = 1/\{\theta(1-\theta)\}.\]</span> Jeffrey’s prior is therefore <span class="math inline">\(p(\theta) \propto \theta^{-1/2}(1-\theta)^{-1/2},\)</span> a conjugate Beta prior <span class="math inline">\(\mathsf{Be}(0.5,0.5).\)</span></p>
-</section>
-<section id="invariant-priors-for-location-scale-families" class="slide level2">
-<h2>Invariant priors for location-scale families</h2>
-<p>For a location-scale family with location <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma,\)</span> the independent priors <span class="math display">\[\begin{align*}
-p(\mu) &amp;\propto 1\\
-p(\sigma) &amp;\propto \sigma^{-1}
-\end{align*}\]</span> are location-scale invariant.</p>
-<p>The results are invariant to affine transformations of the units, <span class="math inline">\(\vartheta = a + b \theta.\)</span></p>
+<p>Since <span class="math inline">\(\mathsf{E}(Y)=\theta,\)</span> the Fisher information is <span class="math display">\[\imath(\theta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = 1/\{\theta(1-\theta)\}.\]</span> Jeffrey’s prior is therefore <span class="math inline">\(p(\theta) \propto \theta^{-1/2}(1-\theta)^{-1/2},\)</span> a conjugate Beta prior <span class="math inline">\(\mathsf{Be}(0.5,0.5).\)</span></p>
 </section>
 <section id="penalized-complexity-priors" class="slide level2">
 <h2>Penalized complexity priors</h2>
@@ -602,7 +623,7 @@ p(\sigma) &amp;\propto \sigma^{-1}
 <h2>Sensitivity analysis for smartwatch data</h2>
 
 <img data-src="fig/fig-sensitivity.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-tau"><p class="caption">
-Figure&nbsp;3: Posterior density of <span class="math inline">\(\tau\)</span> for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.
+Figure&nbsp;2: Posterior density of <span class="math inline">\(\tau\)</span> for four different priors. The circle denotes the median and the bars the 50% and 95% percentile credible intervals.
 </p><p>Basically indistinguishable results for the random scale.</p>
 </section>
 <section id="eight-schools-example" class="slide level2">
@@ -619,7 +640,7 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu + \eta_i, \sigma_i^2)\\
 <h2>Sensibility analysis for eight schools example</h2>
 
 <img data-src="fig/eightschools-stddev-raneff.png" width="600" class="r-stretch quarto-figure-center" id="fig-posterior-eightschool"><p class="caption">
-Figure&nbsp;4: Posterior density of the school-specific random effects standard deviation <span class="math inline">\(\tau\)</span> under different priors.
+Figure&nbsp;3: Posterior density of the school-specific random effects standard deviation <span class="math inline">\(\tau\)</span> under different priors.
 </p></section>
 <section id="power-scaling-of-prior" class="slide level2">
 <h2>Power-scaling of prior</h2>

@@ -227,7 +227,7 @@ Léo Belzile, HEC Montréal
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Sep 7, 2026</p>
+  <p class="date">Last compiled Tuesday Sep 8, 2026</p>
 </section>
 <section id="probability-vs-frequency" class="slide level2">
 <h2>Probability vs frequency</h2>
@@ -462,7 +462,7 @@ p_{Y}(y) = \binom{n}{y} \frac{\mathrm{beta}(\alpha + y, \beta + n - y)}{\mathrm{
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># Monte Carlo integration</span></span>
 <span id="cb5-2"><a></a><span class="fu">mean</span>(<span class="fu">unnormalized_posterior</span>(<span class="fu">runif</span>(<span class="fl">1e5</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.061693e-05</code></pre>
+<pre><code>[1] 1.067821e-05</code></pre>
 </div>
 </div>
 </section>
@@ -745,8 +745,8 @@ attr(,"height")
 <li>calculate and compute numerically summaries of posterior distributions (point estimators and credible intervals) given a posterior sample.</li>
 </ul>
 </section>
-<section id="summary" class="slide level2">
-<h2>Summary</h2>
+<section id="summary-13" class="slide level2">
+<h2>Summary (1/3)</h2>
 <ul>
 <li>Bayesians treat both parameter and observations as random, the former due to uncertainty about the true value.
 <ul>
@@ -760,8 +760,8 @@ attr(,"height")
 <li>Sequential updating (new likelihood contributions) leads to update of the posterior distribution.</li>
 </ul>
 </section>
-<section id="summary-1" class="slide level2">
-<h2>Summary</h2>
+<section id="summary-23" class="slide level2">
+<h2>Summary (2/3)</h2>
 <ul>
 <li>Bayesian inference is complicated by the fact that there is more often than not no closed-form expression for the posterior distribution.
 <ul>
@@ -771,8 +771,8 @@ attr(,"height")
 <li>Rather than hypothesis testing, Bayesian methods rely on the posterior distribution of parameters, or on Bayes factor for model comparisons.</li>
 </ul>
 </section>
-<section id="summary-2" class="slide level2">
-<h2>Summary</h2>
+<section id="summary-33" class="slide level2">
+<h2>Summary (3/3)</h2>
 <ul>
 <li>The posterior predictive distribution is used for model assessment and prediction
 <ul>

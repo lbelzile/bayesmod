@@ -60,10 +60,14 @@ We need to determine a suitable prior.
 
 ## Impact of the prior
 
-The posterior is a compromise prior and likelihood:
+The posterior is a compromise between prior and likelihood:
 
 - the more informative the prior, the more the posterior resembles it.
+
+
 - in large samples, the effect of the prior is often negligible
+
+
 
 ## Controversial?
 
@@ -78,21 +82,51 @@ Infinite number of choice, but many default choices...
 
 - conditionally conjugate priors (ease of interpretation, computational advantages)
 - flat priors and vague priors (mostly uninformative)
+- weakly informative priors
 - informative priors (expert opinion)
-- Jeffrey's priors (improper, invariant to reparametrization)
-- penalized complexity (regularization)
+- invariant to reparametrization (Jeffrey, penalized complexity)
 - shrinkage priors (variable selection, reduce overfitting)
 
-## Determining hyperparameters
+## Multivariate parameters
 
-We term **hyperparameters** the parameters of the (hyper)priors.
+In multiparameters models, we often take the parameters to be (conditionally) independent a priori.
 
-How to elicit reasonable values for them?
+## Flat priors
 
-- use moment matching to get sensible values
-- trial-and-error using the prior predictive
-   - draw a parameter value from the prior $\boldsymbol{\theta}_0$
-   - for each, generate a new observation from the model $f(y_{\text{new}} \mid \boldsymbol{\theta}_0)$ via the prior prediction distribution.
+Uniform prior over the support of $\theta,$ $$p(\theta) \propto 1.$$ 
+
+Improper prior unless $\theta \in [a,b]$ for finite $a < b.$
+
+## Flat priors for scale parameters
+
+Consider a scale parameter $\sigma > 0.$
+
+- We could truncate the range, e.g., $\sigma \sim \mathsf{unif}(0, 50),$ but this is not 'uninformative', as extreme values of $\sigma$ are as likely as small ones.
+- These priors are not invariant: if $p\{\log(\sigma)\} \propto 1$ implies $p(\sigma) \propto \sigma^{-1}.$
+
+
+## Invariant priors for location-scale families
+
+For a location-scale family with location $\mu$ and scale $\sigma,$ the independent priors
+\begin{align*}
+p(\mu) &\propto 1\\
+p(\sigma) &\propto \sigma^{-1}
+\end{align*}
+are location-scale invariant.
+
+The results are invariant to affine transformations of the units, $\vartheta = a + b \theta.$
+
+
+## Vague priors
+
+Vague priors are very diffuse proper prior.
+
+For example, a vague Gaussian prior for regression coefficients on standardized data, $$\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\mathbf{0}_p, 100\mathbf{I}_p).$$
+
+
+If we consider a logistic regression with a binary variable $\mathrm{X}_j \in \{0,1\},$ then $\beta_j =5$ gives odds ratios of 150, and $\beta_j=10$ of around 22K... 
+
+
 
 ## Conjugate priors
 
@@ -119,17 +153,17 @@ The support of $f$ must not depend on $\boldsymbol{\theta}.$
 |  $Y \sim \mathsf{Poisson}(\mu)$ | $\mu$|  $\mu \sim \mathsf{gamma}(\alpha, \beta)$  |
 | $Y \sim \mathsf{binom}(n, \theta)$ | $\theta$ | $\theta \sim \mathsf{Be}(\alpha, \beta)$ |
 | $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu$ | $\mu \sim \mathsf{Gauss}(\nu, \omega^2)$ |
-| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\sigma$ | $\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)$ |
-| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu, \sigma$ | $\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2),$ $\sigma^{-2} \sim \mathsf{gamma}(\alpha, \beta)$ |
+| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\sigma$ | $\sigma^{2} \sim \mathsf{inv. gamma}(\alpha, \beta)$ |
+| $Y \sim \mathsf{Gauss}(\mu, \sigma^2)$ | $\mu, \sigma$ | $\mu \mid \sigma^2 \sim \mathsf{Gauss}(\nu, \omega \sigma^2),$ $\sigma^{2} \sim \mathsf{inv. gamma}(\alpha, \beta)$ |
 
 ## Conjugate prior for the Poisson 
 
-If $Y \sim \mathsf{Poisson}(\mu)$ with density $f(y) = \mu^x\exp(-\mu x)/x!,$ then for $\mu \sim \mathsf{gamma}(\alpha, \beta)$ with $\alpha, \beta$ fixed. Consider an i.i.d. sample with mean $\overline{y}.$ The posterior density is
+If $Y \sim \mathsf{Poisson}(\mu)$ with density $f(y) = \mu^x\exp(-\mu)/x!,$ then for $\mu \sim \mathsf{gamma}(\alpha, \beta)$ with $\alpha, \beta$ fixed. Consider an i.i.d. sample with mean $\overline{y}.$ The posterior density is
 
 $$
-p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\overline{y}\right) \mu^{\alpha-1} \exp(-\beta \mu)
+p(\mu \mid y) \stackrel{\mu}{\propto} \mu^{n\overline{y}} \exp\left(-\mu n\right) \mu^{\alpha-1} \exp(-\beta \mu)
 $$
-so must be gamma $\mathsf{gamma}(n\overline{y} + \alpha, n\overline{y} + \beta).$
+so must be $\mathsf{gamma}(n\overline{y} + \alpha, n + \beta).$
 
 *Parameter interpretation*: $\alpha$ events in $\beta$ time intervals.
 
@@ -143,10 +177,20 @@ p(\mu, \sigma) &\propto \frac{p(\sigma)}{\sigma^{n+1}} \exp\left\{ -\frac{1}{2\s
 
 The conditional posterior $p(\mu \mid \sigma)$ is Gaussian with
 
-- mean $(n\overline{y}\tau^2 + \nu)/(n\tau^2 + 1)$ and 
+- mean $(n\tau^2\overline{y} + \nu)/(n\tau^2 + 1)$ and 
 - precision (reciprocal variance) $(n + 1/\tau^2)/\sigma^2.$
 
-## Upworthy examples
+
+## Improper priors as limiting cases
+
+We can view the improper prior as a limiting case $$\sigma \sim \mathsf{unif}(0, t), \qquad t \to \infty.$$
+
+The Haldane prior for $\theta$ in a binomial model is $\theta^{-1}(1-\theta)^{-1},$ a limiting $\mathsf{Be}(0,0)$ distribution. 
+
+The improper prior $p(\sigma) \propto \sigma^{-1}$ is equivalent to an inverse gamma $\mathsf{inv. gamma}(\epsilon, \epsilon)$ when $\epsilon \to 0.$
+
+
+## Upworthy example
 
 - The Upworthy Research Archive [@Matias:2021] contains results for 22743 experiments, with a click through rate of 1.58% on average and a standard deviation of 1.23%.
 - We consider an A/B test that compared four different headlines for a story.
@@ -182,6 +226,17 @@ knitr::kable(abtest)
 
 
 
+## Determining hyperparameters
+
+We term **hyperparameters** the parameters of the (hyper)priors.
+
+How to elicit reasonable values for them?
+
+- use moment matching to get sensible values
+- trial-and-error using the prior predictive
+   - draw a parameter value from the prior $\boldsymbol{\theta}_0$
+   - for each, generate a new observation from the model $f(y_{\text{new}} \mid \boldsymbol{\theta}_0)$ via the prior prediction distribution.
+   
 ## Moment matching for gamma distribution
 
 For $Y \sim \mathsf{gamma}(\alpha, \beta)$ with $\beta$ the rate parameter, we have
@@ -263,15 +318,16 @@ If $p(\boldsymbol{\theta})$ is a proper prior and the likelihood $\mathcal{L}(\b
 ## Proper posterior in a random effect model
 
 
-Consider a Gaussian random effect model with $n$ independent observations in $J$ groups 
+Consider a Gaussian one-way ANOVA (random effect) model with $n$ independent observations in $J$ groups.
 
-The $i$th observation  in group $j$ is
+The $i_{(j)}$th observation in group $j$ is
 \begin{align*}
-Y_{ij} &\sim \mathsf{Gauss}(\mu_{ij}, \sigma^2) \\
-\mu_{ij}&= \mathbf{X}_i \boldsymbol{\beta} + \alpha_j,  \\
-\alpha_j &\sim \mathsf{Gauss}(0, \tau^2)\\
-...
+Y_{i_{(j)}j} &\sim \mathsf{Gauss}(\mu + \alpha_j, \sigma^2) \\
+\alpha_j &\sim \mathsf{Gauss}(0, \tau^2)
 \end{align*}
+
+The parameters of the model are $\mu, \sigma^2, \tau^2$, and the population parameters $\alpha_1, \ldots, \alpha_J.$
+
 
 ## Conditions for a proper posterior
 
@@ -282,18 +338,11 @@ As @Gelman:2006 states:
 
 > in a hierarchical model the data can never rule out a group-level variance of zero, and so [a] prior distribution cannot put an infinite mass in this area
 
-
-## Improper priors as limiting cases
-
-We can view the improper prior as a limiting case $$\sigma \sim \mathsf{unif}(0, t), \qquad t \to \infty.$$
-
-The Haldane prior for $\theta$ in a binomial model is $\theta^{-1}(1-\theta)^{-1},$ a limiting $\mathsf{Be}(0,0)$ distribution. 
-
-The improper prior $p(\sigma) \propto \sigma^{-1}$ is equivalent to an inverse gamma $\mathsf{inv. gamma}(\epsilon, \epsilon)$ when $\epsilon \to 0.$
-
+<!--
 The limiting posterior is thus improper for random effects scales, so the value of $\epsilon$ matters.
+-->
 
-
+<!--
 ## An example of truncating priors
 
 Let $Y_i \sim \mathsf{GP}(\sigma, \xi)$ be generalized Pareto with density $$f(x) = \sigma^{-1}(1+\xi x/\sigma)_{+}^{-1/\xi-1}$$ for $\sigma>0$ and $\xi \in \mathbb{R},$ and $x_{+} =\max\{0, x\}.$
@@ -325,32 +374,26 @@ ggplot() +
 ```
 
 If we restrict the range of the MDI prior $p(\xi)$ to $\xi \geq -1,$ then $p(\xi + 1) \sim \mathsf{expo}(1)$ and posterior is proper.
-
-## Flat priors
-
-Uniform prior over the support of $\theta,$ $$p(\theta) \propto 1.$$ 
-
-Improper prior unless $\theta \in [a,b]$ for finite $a, b.$
-
-## Flat priors for scale parameters
-
-Consider a scale parameter $\sigma > 0.$
-
-- We could truncate the range, e.g., $\sigma \sim \mathsf{unif}(0, 50),$ but this is not 'uninformative', as extreme values of $\sigma$ are as likely as small ones.
-- These priors are not invariant: if $p\{\log(\sigma)\} \propto 1$ implies $p(\sigma) \propto \sigma^{-1}$ so can be informative on another scale.
-
-## Vague priors
-
-Vague priors are very diffuse proper prior.
-
-For example, a vague Gaussian prior for regression coefficients on standardized data, $$\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\mathbf{0}_p, 100\mathbf{I}_p).$$
-
-- if we consider a logistic regression with a binary variable $\mathrm{X}_j \in \{0,1\},$ then $\beta_j =5$ gives odds ratios of 150, and $\beta_j=10$ of around 22K... 
+-->
 
 ## Invariance and Jeffrey's prior
 
 In single-parameter models, the **Jeffrey's prior** $$p(\theta) \propto |\imath(\theta)|^{1/2},$$ proportional to the square root of the determinant of the Fisher information matrix, is invariant to any (differentiable) reparametrization.
 
+It needs not be a proper distribution.
+
+## Proof 
+
+Consider a bijective transformation $\theta \mapsto \vartheta.$ Under suitable regularity conditions, the chain rule implies that 
+\begin{align*}
+i(\vartheta) &= - \mathsf{E} \left(\frac{\partial^2 \ell(\vartheta)}{\partial^2 \vartheta}\right)
+\\&= - \mathsf{E}\left(\frac{\partial^2 \ell(\theta)}{\partial \theta^2}\right) \left( \frac{\mathrm{d} \theta}{\mathrm{d} \vartheta} \right)^2 + \mathsf{E}\left(\frac{\partial \ell(\theta)}{\partial \theta}\right) \frac{\mathrm{d}^2 \theta}{\mathrm{d} \vartheta^2}
+\end{align*}
+Since the score has mean zero, $\mathsf{E}\left\{\partial \ell(\theta)/\partial \theta\right\}=0$ and so
+\begin{align*}
+\imath^{1/2}(\vartheta) = \imath^{1/2}(\theta) \left| \frac{\mathrm{d} \theta}{\mathrm{d} \vartheta} \right|,
+\end{align*}
+implying invariance.
 
 ## Jeffrey's prior for the binomial distribution
 
@@ -359,20 +402,9 @@ $$
 \jmath(\theta) = - \partial^2 \ell(\theta; y) / \partial \theta^2 = y/\theta^2 + (1-y)/(1-\theta)^2.
 $$
 
-Since $\mathsf{E}(Y)=\theta,$ the Fisher information is $$\imath(\vartheta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = 1/\{\theta(1-\theta)\}.$$
+Since $\mathsf{E}(Y)=\theta,$ the Fisher information is $$\imath(\theta) = \mathsf{E}\{\jmath(\theta)\}=1/\theta + 1/(1-\theta) = 1/\{\theta(1-\theta)\}.$$
 Jeffrey's prior is therefore $p(\theta) \propto \theta^{-1/2}(1-\theta)^{-1/2},$ a conjugate Beta prior $\mathsf{Be}(0.5,0.5).$
 
-
-## Invariant priors for location-scale families
-
-For a location-scale family with location $\mu$ and scale $\sigma,$ the independent priors
-\begin{align*}
-p(\mu) &\propto 1\\
-p(\sigma) &\propto \sigma^{-1}
-\end{align*}
-are location-scale invariant.
-
-The results are invariant to affine transformations of the units, $\vartheta = a + b \theta.$
 
 
 
