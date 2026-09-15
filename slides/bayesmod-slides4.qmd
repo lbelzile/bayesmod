@@ -277,7 +277,192 @@ X <- sqrt(a^2 + 2*rexp(niter))
 samp <- X[runif(niter)*X <= a]
 ```
 
+## Monte Carlo integration 
 
+Calculate $\mathsf{E}_{X}\{g(X)\}$ of $X$ with density function $p$ on $\mathcal{X}.$ 
+
+Monte Carlo integration proceeds by drawing $B$ independent samples $x_1, \ldots, x_B$ from $p$ on $\mathcal{X}$ and evaluating the empirical average of $g,$
+\begin{align*}
+\mathsf{E}\{g(X)\} = \int_{\mathcal{X}} g(x) p(x) \mathrm{d} x \approx \widehat{\mathsf{E}}\{g(X)\}=\frac{1}{B}\sum_{b=1}^B g(x_b).
+\end{align*}
+
+
+## Importance sampling
+
+We can calculate the integral $\mathsf{E}\{g(X)\} = \int_{\mathcal{X}} g(x) p(x) \mathrm{d}x$ by considering instead draws from a density $q(\cdot)$ if $\mathcal{X} \subseteq \mathrm{supp}(q).$ Then,
+\begin{align*}
+\mathsf{E}\{g(X)\} = \int_{\mathcal{X}} g(x) \frac{p(x)}{q(x)} q(x) \mathrm{d} x.
+\end{align*}
+
+
+## Monte Carlo estimator for importance sampling
+
+An alternative Monte Carlo estimator, which is biased but has lower variance, is obtained by drawing independent $x_1, \ldots, x_B$ from $q$ and taking instead the weighted average of
+\begin{align*}
+\widetilde{\mathsf{E}}\{g(X)\} =\frac{B^{-1} \sum_{b=1}^B w_b g(x_b) }{B^{-1}\sum_{b=1}^B w_b}.
+\end{align*}
+with weights $w_b = p(x_b)/q(x_b).$ The latter equal 1 on average, so one could omit the denominator without harm.
+
+
+## Importance sampling for the variance of a beta distribution
+
+Consider $X \sim \mathsf{beta}(\alpha, \alpha)$ for $\alpha > 1$, with expectation $\mathsf{E}(X)=0.5$ since the density is symmetric. 
+
+The variance is $$\mathsf{Va}(X) = \mathsf{E}\{(X - 0.5)^2\}=\frac{1}{4 \cdot (2\alpha+1)}.$$ 
+
+
+We consider an equiweighted (bimodal) mixture of $\mathsf{beta}(\alpha, 3\alpha)$ and $\mathsf{beta}(3\alpha, \alpha)$ as importance sampling density.
+
+
+
+## Importance sampling for variance of a beta distribution
+
+```{r}
+#| eval: true
+#| echo: false
+#| warning: false
+#| message: false
+#| out-width: '95%'
+#| fig-align: 'center'
+B <- 2e4L; alpha <- 1.5; factor <- 3
+# Mode at the mean 0.5
+X0 <- rbeta(n = B, alpha, alpha)
+px <- function(x){dbeta(x, alpha, alpha)}
+# Importance sampling density - mixture of two betas (alpha, factor*alpha)
+X1 <- ifelse(
+  runif(B) < 0.5,
+  rbeta(B, alpha, factor*alpha), 
+  rbeta(B, factor*alpha, alpha))
+qx <- function(x){
+  0.5*dbeta(x, alpha, factor*alpha) + 0.5*dbeta(x, factor*alpha, alpha)}
+# Function to integrate - gives variance of a symmetric beta distribution
+g <- function(x){(x - 0.5)^2}
+# Weights for importance sampling
+w <- px(X1)/qx(X1)
+# Compute quantities in a sequential manner
+mc_est_seq <- cumsum(g(X0))/seq_len(B)
+mc_var_seq <- sapply(1:B, function(i){var(g(X0[1:i]))/i})
+# Importance sampling estimator
+is_est_seq <- cumsum(g(X1)*w)/cumsum(w)
+is_var_seq <- sapply(1:B, function(i){sum(w[1:i]^2*(g(X1[1:i]) - is_est_seq[i])^2)/ sum(w[1:i])^2})
+mc_est <- mean(g(X0))
+mc_var <- var(g(X0))/B
+# Importance sampling weighted mean and variance
+is_est <- weighted.mean(g(X1), w = w) # equivalent to mean(g(X1)*w)/mean(w)
+is_var <- sum(w^2*(g(X1) - is_est)^2)/ (sum(w)^2)
+# True value for the beta variance
+th_est <- 1/(4*(2*alpha+1))
+# Function to integrate
+fn <- function(x){(x - 0.5)^2 * dbeta(x, alpha, alpha)}
+palette <- MetBrewer::met.brewer(name = "Hiroshige",n = 2)
+df1 <- data.frame(
+  nsim = 1:B,
+  ymc = mc_est_seq,
+  yis = is_est_seq,
+  interv1 = qnorm(0.975)*sqrt(mc_var_seq),
+  interv2 = qnorm(0.975)*sqrt(is_var_seq))
+g1 <- ggplot(data = df1[-(1:100),]) +
+  geom_ribbon(mapping = aes(x = nsim,
+                            y = ymc,
+                            ymin = ymc - interv1,
+                            ymax = ymc + interv1),
+              alpha = 0.4,
+              color = palette[1],
+              fill = palette[1]) +
+  geom_ribbon(mapping = aes(x = nsim,
+                            y = yis,
+                            ymin = yis - interv2,
+                            ymax = yis + interv2),
+              alpha = 0.4,
+              color = palette[2],
+              fill = palette[2]) +
+  geom_hline(yintercept = th_est) +
+  geom_line(aes(x = nsim, y = ymc), color = palette[1]) +
+  geom_line(aes(x = nsim, y = yis), color = palette[2]) +
+  scale_x_continuous(trans = "sqrt",
+                     labels = scales::unit_format(unit = "K", scale = 1e-3)) +
+  scale_y_continuous(limits = c(0.04, 0.08), expand = expansion()) +
+  labs(x = "number of simulations",
+       y = "",
+       subtitle = "Variance estimation") +
+  theme_classic()
+g2 <- ggplot() +
+  stat_function(fun = function(x){fn(x)*px(x)}, xlim = c(0,1)) +
+  scale_x_continuous(limits = c(0,1),
+                     breaks = seq(0, 1, by = 0.25),
+                     labels = c("0","0.25","0.5","0.75","1")) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(add = c(0, 0.01))) +
+  labs(x = "x", y = "", subtitle = expression(f(x)==(x-0.5)^2*p(x)))+
+  theme_classic()
+g3 <- ggplot() +
+  stat_function(fun = px, xlim = c(0,1), color = palette[1]) +
+  stat_function(fun = qx, linetype = "dashed", color = palette[2], xlim = c(0,1)) +
+  scale_x_continuous(limits = c(0,1),
+                     breaks = seq(0, 1, by = 0.25),
+                     labels = c("0","0.25","0.5","0.75","1")) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(add = c(0, 0.1))) +
+  labs(x = "x", y = "", subtitle = "density of Monte Carlo generator")+
+  theme_classic()
+g4 <- ggplot() +
+  stat_function(fun = function(x){px(x)/qx(x)}, xlim = c(0,1)) +
+  geom_segment(data = data.frame(x = X1[1:50], y = w[1:50]), mapping = aes(x = x, yend = y, y = 0)) +
+  scale_x_continuous(limits = c(0,1),
+                     breaks = seq(0, 1, by = 0.25),
+                     labels = c("0","0.25","0.5","0.75","1")) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(add = c(0,0.1))) +
+  labs(y = "", x = "x", subtitle = "weights")+
+  theme_classic()
+(g2 + g3) / (g4 + g1) +
+  theme_classic()
+# par(mfrow = c(1,3), bty = "l")
+# curve(fn, from = 0, to = 1, ylab = expression(f[n](x)), ylim = c(0, .125), yaxs ="i")
+# curve(px, from = 0, to = 1, ylim = c(0, 1.4), yaxs = "i", xlim = c(0,1), xaxs = "i")
+# curve(qx, from = 0, to = 1, add = TRUE, lty = 2, col = "gray")
+## Weight curve
+# curve(expr = px(x)/qx(x), from = 0, to = 1, n = 1001, xlim = c(0,1), xaxs = "i", ylab = "weights")
+# points(X1[1:50], w[1:50], type = "h")
+
+```
+
+## Code for importance sampling of beta variance
+
+```{r}
+#| eval: true
+#| echo: true
+B <- 2e4L; alpha <- 1.5; factor <- 3
+# Mode at the mean 0.5
+X0 <- rbeta(n = B, alpha, alpha)
+px <- function(x){dbeta(x, alpha, alpha)}
+# Importance sampling density - mixture of two betas (alpha, factor*alpha)
+X1 <- ifelse(
+  runif(B) < 0.5,
+  rbeta(B, alpha, factor*alpha), 
+  rbeta(B, factor*alpha, alpha))
+qx <- function(x){
+  0.5*dbeta(x, alpha, factor*alpha) + 0.5*dbeta(x, factor*alpha, alpha)}
+# Function to integrate - gives variance of a symmetric beta distribution
+g <- function(x){(x - 0.5)^2}
+# Weights for importance sampling
+w <- px(X1)/qx(X1)
+```
+
+## Code for importance sampling of beta variance (continued)
+
+```{r}
+
+# Monte Carlo integration
+mc_est <- mean(g(X0))
+mc_var <- var(g(X0))/B
+# Importance sampling weighted mean and variance
+is_est <- weighted.mean(g(X1), w = w) # equivalent to mean(g(X1)*w)/mean(w)
+is_var <- sum(w^2*(g(X1) - is_est)^2)/ (sum(w)^2)
+# True value for the beta variance
+th_est <- 1/(4*(2*alpha+1))
+# Point estimates and differences
+round(c(true = th_est, "monte carlo" = mc_est, "importance sampling" = is_est),4)
+# Ratio of std. errors for means
+mc_var/is_var # value > 1 means that IS is more efficient
+```
 
 
 ## Markov chains
@@ -482,7 +667,7 @@ $$
 This suggests
 
 - Fitting an $\mathsf{AR}(p)$ model (selecting $p$ via $\mathsf{AIC}$) using Yule--Walker or any other method.
-- Calculate the spectral density at zero with the plug-ins $\widehat{\phi}_1, \ldots, \widehat{\phi}_p$ and $\widehat{\sigma}^2.$
+- Calculating the spectral density at zero with the plug-ins $\widehat{\phi}_1, \ldots, \widehat{\phi}_p$ and $\widehat{\sigma}^2.$
 
 ## Spectral estimation in **R**
 
