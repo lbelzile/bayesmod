@@ -119,9 +119,9 @@ Are my chains long enough to compute reliable summaries?
 
 Compute the sample size we would have with independent draws by taking
 $$
-\mathsf{ESS} = \frac{B}{\left\{1+2\sum_{t=1}^\infty \gamma_t\right\}}
+\mathsf{ESS} = \frac{B}{\left\{1+2\sum_{t=1}^\infty \rho_t\right\}}
 $$ 
-where $\gamma_t$ is the lag $t$ autocorrelation. 
+where $\rho_t$ is the lag $t$ autocorrelation. 
 
 The relative effective sample size is simply $\mathsf{ESS}/B$: small values indicate pathological or inefficient samplers. 
 

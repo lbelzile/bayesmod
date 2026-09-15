@@ -893,7 +893,7 @@
     "href": "slides/bayesmod-slides4.html#accept-reject-crude-version",
     "title": "Bayesian modelling",
     "section": "Accept-reject (crude version)",
-    "text": "Accept-reject (crude version)\n\nSimulate \\(X \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\nreject any draw if \\(X &lt; a\\) or \\(X&gt; b\\).\n\nThe acceptance rate is \\(C^{-1} = \\{\\Phi(\\beta) - \\Phi(\\alpha)\\}\\)\n\n# Standard Gaussian truncated on [0,1]\ncandidate &lt;- rnorm(1e5)\ntrunc_samp &lt;- candidate[candidate &gt;= 0 & candidate &lt;= 1]\n# Acceptance rate\nlength(trunc_samp)/1e5\n\n[1] 0.34289\n\n# Theoretical acceptance rate\npnorm(1)-pnorm(0)\n\n[1] 0.3413447"
+    "text": "Accept-reject (crude version)\n\nSimulate \\(X \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\nreject any draw if \\(X &lt; a\\) or \\(X&gt; b\\).\n\nThe acceptance rate is \\(C^{-1} = \\{\\Phi(\\beta) - \\Phi(\\alpha)\\}\\)\n\n# Standard Gaussian truncated on [0,1]\ncandidate &lt;- rnorm(1e5)\ntrunc_samp &lt;- candidate[candidate &gt;= 0 & candidate &lt;= 1]\n# Acceptance rate\nlength(trunc_samp)/1e5\n\n[1] 0.33972\n\n# Theoretical acceptance rate\npnorm(1)-pnorm(0)\n\n[1] 0.3413447"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#accept-reject-for-truncated-gaussian",
@@ -977,14 +977,14 @@
     "href": "slides/bayesmod-slides4.html#effective-sample-size",
     "title": "Bayesian modelling",
     "section": "Effective sample size",
-    "text": "Effective sample size\nThe effective sample size is, loosely speaking, the equivalent number of observations if the \\(B\\) marginal posterior draws where independent and more formally \\[\n\\mathsf{ESS} = \\frac{B}{\\left\\{1+2\\sum_{t=1}^\\infty \\rho_t\\right\\}}\n\\] where \\(\\rho_t\\) is the lag \\(t\\) correlation."
+    "text": "Effective sample size\nThe effective sample size is, loosely speaking, the equivalent number of observations if the \\(B\\) marginal posterior draws where independent and more formally \\[\n\\mathsf{ESS} = \\frac{B}{\\sum_{t=-\\infty}^\\infty \\rho_t}= \\frac{B}{\\left\\{1+2\\sum_{t=1}^\\infty \\rho_t\\right\\}}\n\\] where \\(\\rho_t\\) is the lag \\(t\\) correlation, since \\(\\rho_{t} = \\rho_{-t}\\) and \\(\\rho_0=1.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#effective-sample-size-for-ar1",
     "href": "slides/bayesmod-slides4.html#effective-sample-size-for-ar1",
     "title": "Bayesian modelling",
     "section": "Effective sample size for AR(1)",
-    "text": "Effective sample size for AR(1)\nThe lag-\\(k\\) correlation of the stationary autoregressive process of order 1 is \\(\\phi^k\\), so \\[1+2\\sum_{t=1}^\\infty \\rho_t = 1 + 2 \\left(\\frac{1}{1-\\phi}-1\\right) = \\frac{1+\\phi}{1-\\phi}.\\]"
+    "text": "Effective sample size for AR(1)\nThe lag-\\(k\\) correlation of the stationary autoregressive process of order 1 is \\(\\phi^k\\), so \\[1+2\\sum_{t=1}^\\infty \\rho_t = 1 + 2 \\left(\\frac{1}{1-\\phi}-1\\right) = \\frac{1+\\phi}{1-\\phi}.\\]\nwhereas the unconditional variance of the \\(\\mathsf{AR}(1)\\) process is\n\\[\\tau^2 = \\frac{\\sigma^2}{1-\\phi^2}.\\]"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#inefficiency-curve-for-ar1",
@@ -1005,7 +1005,7 @@
     "href": "slides/bayesmod-slides4.html#correlogram",
     "title": "Bayesian modelling",
     "section": "Correlogram",
-    "text": "Correlogram\nWe can look at the autocorrelation function to check the efficiency.\n\n\nFigure 4: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number."
+    "text": "Correlogram\nWe can look at the autocorrelation function to check the efficiency.\n\n\nFigure 5: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#convergence-of-markov-chains",
@@ -1047,7 +1047,7 @@
     "href": "slides/bayesmod-slides4.html#convergence-of-markov-chains-1",
     "title": "Bayesian modelling",
     "section": "Convergence of Markov chains",
-    "text": "Convergence of Markov chains\n\n\nFigure 5: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right)."
+    "text": "Convergence of Markov chains\n\n\nFigure 6: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right)."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#markov-chain-monte-carlo",
@@ -1103,7 +1103,7 @@
     "href": "slides/bayesmod-slides4.html#implementation-details-data-and-containers",
     "title": "Bayesian modelling",
     "section": "Implementation details: data and containers",
-    "text": "Implementation details: data and containers\nIn regression models, scale inputs if possible.\n\ndata(upworthy_question, package = \"hecbayes\")\n# Compute sufficient statistics\ndata &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(ntot = sum(impressions),\n                   y = sum(clicks))\n# Create containers for MCMC\nniter &lt;- 1e4L\nchain &lt;- matrix(0, nrow = niter, ncol = 2L)\ncolnames(chain) &lt;- c(\"beta\",\"kappa\")"
+    "text": "Implementation details: data and containers\nIn regression models, scale inputs if possible.\n\n# Load data\ndata(upworthy_question, package = \"hecbayes\")\n# Compute sufficient statistics\ndata &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(ntot = sum(impressions),\n                   y = sum(clicks))\n# Create containers for MCMC\nniter &lt;- 1e4L\nchain &lt;- matrix(0, nrow = niter, ncol = 2L)\ncolnames(chain) &lt;- c(\"beta\",\"kappa\")"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#implementation-details-log-posterior-function",
@@ -1131,7 +1131,7 @@
     "href": "slides/bayesmod-slides4.html#implementation-details-analysis-of-output",
     "title": "Bayesian modelling",
     "section": "Implementation details: analysis of output",
-    "text": "Implementation details: analysis of output\n\n# Posterior summaries\nsummary(coda::as.mcmc(chain))\n# Computing standard errors using batch means\nsqrt(diag(mcmc::olbm(chain, batch.length = niter/40)))\n\n1. Empirical mean and standard deviation for each variable,\n   plus standard error of the mean:\n\n          Mean       SD  Naive SE Time-series SE\nbeta  -4.51268 0.001697 1.697e-05      6.176e-05\nkappa  0.07075 0.002033 2.033e-05      9.741e-05\n\n2. Quantiles for each variable:\n\n          2.5%      25%      50%      75%    97.5%\nbeta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929\nkappa  0.06673  0.06933  0.07077  0.07212  0.07463"
+    "text": "Implementation details: analysis of output\n\n# Posterior summaries\nsummary(coda::as.mcmc(chain))\n\n1. Empirical mean and standard deviation for each variable,\n   plus standard error of the mean:\n\n          Mean       SD  Naive SE Time-series SE\nbeta  -4.51268 0.001697 1.697e-05      6.176e-05\nkappa  0.07075 0.002033 2.033e-05      9.741e-05\n\n2. Quantiles for each variable:\n\n          2.5%      25%      50%      75%    97.5%\nbeta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929\nkappa  0.06673  0.06933  0.07077  0.07212  0.07463"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#standard-errors-for-posterior-means-batch-means",
@@ -1145,7 +1145,7 @@
     "href": "slides/bayesmod-slides4.html#illustration-of-batch-means",
     "title": "Bayesian modelling",
     "section": "Illustration of batch means",
-    "text": "Illustration of batch means\n\n\nFigure 6: Calculation of the standard error of the posterior mean using the batch method."
+    "text": "Illustration of batch means\n\n\nFigure 4: Calculation of the standard error of the posterior mean using the batch method."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#standard-errors-for-posterior-means-autoregressive",
@@ -1159,7 +1159,7 @@
     "href": "slides/bayesmod-slides4.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nBotev, Z., & L’Écuyer, P. (2017). Simulation from the normal distribution truncated to an interval in the tail. Proceedings of the 10th EAI International Conference on Performance Evaluation Methodologies and Tools on 10th EAI International Conference on Performance Evaluation Methodologies and Tools, 23–29. https://doi.org/10.4108/eai.25-10-2016.2266879\n\n\nDevroye, L. (1986). Non-uniform random variate generation. Springer. http://www.nrbook.com/devroye/\n\n\nGeyer, C. J. (2011). Introduction to Markov chain Monte Carlo. In S. Brooks, A. Gelman, G. Jones, & X. L. Meng (Eds.), Handbook of Markov chain Monte Carlo (pp. 3–48). CRC Press. https://doi.org/10.1201/b10905"
+    "text": "References\n\n\n\n\nBotev, Z., & L’Écuyer, P. (2017). Simulation from the normal distribution truncated to an interval in the tail. Proceedings of the 10th EAI International Conference on Performance Evaluation Methodologies and Tools on 10th EAI International Conference on Performance Evaluation Methodologies and Tools, 23–29. https://doi.org/10.4108/eai.25-10-2016.2266879\n\n\nDevroye, L. (1986). Non-uniform random variate generation. Springer. http://www.nrbook.com/devroye/\n\n\nGeyer, C. J. (2011). Introduction to Markov chain Monte Carlo. In S. Brooks, A. Gelman, G. Jones, & X. L. Meng (Eds.), Handbook of Markov chain Monte Carlo (pp. 3–48). CRC Press. https://doi.org/10.1201/b10905\n\n\nHeidelberger, P., & Welch, P. D. (1981). A spectral method for confidence interval generation and run length control in simulations. Communications of the ACM, 24(4), 233–245. https://doi.org/10.1145/358598.358630\n\n\nPercival, D. B., & Walden, A. T. (2020). Spectral analysis for univariate time series. Cambridge University Press. https://doi.org/10.1017/9781139235723"
   },
   {
     "objectID": "slides/bayesmod-slides2.html#probability-vs-frequency",
@@ -5089,5 +5089,68 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References\n\n\n\n\nPark, T., & Casella, G. (2008). The Bayesian Lasso. Journal of the American Statistical Association, 103(482), 681–686. https://doi.org/10.1198/016214508000000337\n\n\nRaftery, A. E. (1995). Bayesian model selection in social research. Sociological Methodology, 25, 111–163. https://doi.org/10.2307/271063\n\n\nRue, H., Martino, S., & Chopin, N. (2009). Approximate bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 71(2), 319–392. https://doi.org/10.1111/j.1467-9868.2008.00700.x\n\n\nTierney, L., & Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. Journal of the American Statistical Association, 81(393), 82–86. https://doi.org/10.1080/01621459.1986.10478240\n\n\nvan Niekerk, J., & Rue, H. (2024). Low-rank variational Bayes correction to the Laplace method. Journal of Machine Learning Research, 25(62), 1–25. http://jmlr.org/papers/v25/21-1405.html\n\n\nWood, S. N. (2019). Simplified integrated nested Laplace approximation. Biometrika, 107(1), 223–230. https://doi.org/10.1093/biomet/asz044"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#standard-errors-for-posterior-means",
+    "href": "slides/bayesmod-slides4.html#standard-errors-for-posterior-means",
+    "title": "Bayesian modelling",
+    "section": "Standard errors for posterior means",
+    "text": "Standard errors for posterior means\nWe can fit an high-order autoregressive process \\(\\mathsf{AR}(p)\\) using standard methods (Yule–Walker equations, maximum likelihood, spectral estimation), estimate the unconditional variance, and use the adjustment factor.\n\nESS &lt;- function(x){\n  # Fit an AR(p) using Yule-Walker\n  ar_mod &lt;- ar.yw(x)\n  # Compute the ACF (truncated series at high lag)\n  # The +1 in the formula is for lag zero, the 2 to account for the symmetry\n  acf_th &lt;- ARMAacf(ar = ar_mod$ar, lag.max = 100)[-1]\n  # Compute the unconditional variance\n  uvar &lt;- var(x) / (1 + 2 * sum(acf_th))\n  ar_mod$var.pred / (1 - sum(ar_mod$ar))^2\n  # Compute the effective sample size\n  ess &lt;- length(x)/ (1 + 2 * sum(acf_th))\n  return(c(\"ess\" = ess, \"var\" = uvar))\n}"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#standard-error-of-mean-for-first-order-autoregressive-process",
+    "href": "slides/bayesmod-slides4.html#standard-error-of-mean-for-first-order-autoregressive-process",
+    "title": "Bayesian modelling",
+    "section": "Standard error of mean for first-order autoregressive process",
+    "text": "Standard error of mean for first-order autoregressive process\n\nphi &lt;- 0.8 # lag-one autocorrelation\nsigma &lt;- 2 # std. deviation of white noise\nB &lt;- 1e4L # chain length\nx &lt;- arima.sim( # generate AR(1)\n  model = list(ar = phi),\n  n = B,\n  rand.gen = rnorm,\n  sd = sigma\n)\n# Effective sample size / B\ness_factor_ar1 &lt;- 1 / (-1 + 2 / (1 - phi))\n# Unconditional variance tau_sq, obtained from var(x)\nuvar_ar1 &lt;- sigma^2 / (1 - phi^2)\n# Theoretical std. error of sample mean\nse_mean_ar1 &lt;- sqrt(uvar_ar1 / B / ess_factor_ar1)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#standard-errors-via-nonparametric-spectral-analysis",
+    "href": "slides/bayesmod-slides4.html#standard-errors-via-nonparametric-spectral-analysis",
+    "title": "Bayesian modelling",
+    "section": "Standard errors via nonparametric spectral analysis",
+    "text": "Standard errors via nonparametric spectral analysis\nSuppose that \\(X_1, \\ldots, X_B\\) is a mean-stationary sequence.\nHeidelberger & Welch (1981) recall that the variance of the sample mean is \\(S(0) / B,\\) where \\(S(\\cdot)\\) is the spectrum evaluated at zero and \\[\nS(0) = \\sum_{k=-\\infty}^\\infty \\gamma_k.\n\\] They propose to approximate \\(S(0)\\) by\n\ncalculating the raw periodogram (unsmoothed)\nfitting a gamma GLM to the log periodogram with a polynomial trend."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#standard-errors-via-parametric-spectral-analysis",
+    "href": "slides/bayesmod-slides4.html#standard-errors-via-parametric-spectral-analysis",
+    "title": "Bayesian modelling",
+    "section": "Standard errors via parametric spectral analysis",
+    "text": "Standard errors via parametric spectral analysis\nAny continuous spectral density function can be approximated by an \\(\\mathsf{AR}(p)\\) process (for \\(p\\) potentially infinitely large).\nFor an autoregressive process of order \\(p\\), the spectral density of the \\(\\mathsf{AR}(p)\\) is (Percival & Walden, 2020, eq. 446b) \\[\nS(0) = \\frac{\\sigma^2}{\\left(1 - \\sum_{j=1}^p \\phi_j\\right)^2}.\n\\] This suggests\n\nFitting an \\(\\mathsf{AR}(p)\\) model (selecting \\(p\\) via \\(\\mathsf{AIC}\\)) using Yule–Walker or any other method.\nCalculate the spectral density at zero with the plug-ins \\(\\widehat{\\phi}_1, \\ldots, \\widehat{\\phi}_p\\) and \\(\\widehat{\\sigma}^2.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#spectral-estimation-of-effective-sample-size",
+    "href": "slides/bayesmod-slides4.html#spectral-estimation-of-effective-sample-size",
+    "title": "Bayesian modelling",
+    "section": "Spectral estimation of effective sample size",
+    "text": "Spectral estimation of effective sample size\n\n# Heidelberg and Welch (1981)\ncoda::spectrum0(x)\n\n$spec\n[1] 108.9271\n\n# Code from coda::effectiveSize\nar_mod &lt;- ar.yw(x)\nsuvar &lt;- ar_mod$var.pred / (1 - sum(ar_mod$ar))^2\nse3 &lt;- sqrt(suvar / B) # variance of sample mean of AR(p)\ness3 &lt;- var(x) / suvar * B"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#standard-errors-estimation-via-nonparametric-spectral-analysis",
+    "href": "slides/bayesmod-slides4.html#standard-errors-estimation-via-nonparametric-spectral-analysis",
+    "title": "Bayesian modelling",
+    "section": "Standard errors estimation via nonparametric spectral analysis",
+    "text": "Standard errors estimation via nonparametric spectral analysis\nSuppose that \\(X_1, \\ldots, X_B\\) is a mean-stationary sequence.\nHeidelberger & Welch (1981) recall that the variance of the sample mean is \\(S(0) / B,\\) where \\(S(\\cdot)\\) is the spectrum evaluated at zero and \\[\nS(0) = \\sum_{k=-\\infty}^\\infty \\gamma_k.\n\\] They propose to approximate \\(S(0)\\) by\n\ncalculating the raw periodogram (unsmoothed)\nfitting a gamma GLM to the log periodogram with a polynomial trend."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#standard-errors-estimation-via-parametric-spectral-analysis",
+    "href": "slides/bayesmod-slides4.html#standard-errors-estimation-via-parametric-spectral-analysis",
+    "title": "Bayesian modelling",
+    "section": "Standard errors estimation via parametric spectral analysis",
+    "text": "Standard errors estimation via parametric spectral analysis\nAny continuous spectral density function can be approximated by an \\(\\mathsf{AR}(p)\\) process (for \\(p\\) potentially infinitely large).\nFor an autoregressive process of order \\(p\\), the spectral density of the \\(\\mathsf{AR}(p)\\) is (Percival & Walden, 2020, eq. 446b) \\[\nS(0) = \\frac{\\sigma^2}{\\left(1 - \\sum_{j=1}^p \\phi_j\\right)^2}.\n\\] This suggests\n\nFitting an \\(\\mathsf{AR}(p)\\) model (selecting \\(p\\) via \\(\\mathsf{AIC}\\)) using Yule–Walker or any other method.\nCalculate the spectral density at zero with the plug-ins \\(\\widehat{\\phi}_1, \\ldots, \\widehat{\\phi}_p\\) and \\(\\widehat{\\sigma}^2.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#spectral-estimation-in-r",
+    "href": "slides/bayesmod-slides4.html#spectral-estimation-in-r",
+    "title": "Bayesian modelling",
+    "section": "Spectral estimation in R",
+    "text": "Spectral estimation in R\n\n# Heidelberg and Welch (1981)\ncoda::spectrum0(x)\n\n$spec\n[1] 108.9271\n\n# Code from coda::effectiveSize\nar_mod &lt;- ar.yw(x)\nsuvar &lt;- ar_mod$var.pred / (1 - sum(ar_mod$ar))^2\nse3 &lt;- sqrt(suvar / B) # variance of sample mean of AR(p)\ness3 &lt;- var(x) / suvar * B"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#standard-errors-for-posterior-means-using-batch-means",
+    "href": "slides/bayesmod-slides4.html#standard-errors-for-posterior-means-using-batch-means",
+    "title": "Bayesian modelling",
+    "section": "Standard errors for posterior means using batch means",
+    "text": "Standard errors for posterior means using batch means\nGeyer (2011) recommends to segment the time series into batches\n\nBreak the chain of length \\(B\\) (after burn in) in \\(K\\) blocks of size \\(\\approx K/B.\\)\nCompute the sample mean of each segment.\nCompute the standard deviation of the segments mean.\nRescale by \\(K^{-1/2}\\) to get standard error of the global mean."
   }
 ]

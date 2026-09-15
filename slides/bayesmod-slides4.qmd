@@ -378,16 +378,19 @@ which is a function of
 
 The effective sample size is, loosely speaking, the equivalent number of observations if the $B$ marginal posterior draws where independent and more formally
 $$
-\mathsf{ESS} = \frac{B}{\left\{1+2\sum_{t=1}^\infty \rho_t\right\}}
+\mathsf{ESS} = \frac{B}{\sum_{t=-\infty}^\infty \rho_t}= \frac{B}{\left\{1+2\sum_{t=1}^\infty \rho_t\right\}} 
 $$ 
-where $\rho_t$ is the lag $t$ correlation.
+where $\rho_t$ is the lag $t$ correlation, since $\rho_{t} = \rho_{-t}$ and $\rho_0=1.$
+
 
 ## Effective sample size for AR(1)
 
 The lag-$k$ correlation of the stationary autoregressive process of order 1 is $\phi^k$, so
 $$1+2\sum_{t=1}^\infty \rho_t = 1 + 2 \left(\frac{1}{1-\phi}-1\right) = \frac{1+\phi}{1-\phi}.$$
 
+whereas the unconditional variance of the $\mathsf{AR}(1)$ process is 
 
+$$\tau^2 = \frac{\sigma^2}{1-\phi^2}.$$
 
 ## Inefficiency curve for AR(1) {.smaller}
 
@@ -431,6 +434,112 @@ The price to pay for having correlated samples is
 :::
 
 The higher the autocorrelation, the larger the variability of our estimators.
+
+
+## Standard error of mean for first-order autoregressive process
+
+```{r}
+#| eval: true
+#| echo: true
+phi <- 0.8 # lag-one autocorrelation
+sigma <- 2 # std. deviation of white noise
+B <- 1e4L # chain length
+x <- arima.sim( # generate AR(1)
+  model = list(ar = phi),
+  n = B,
+  rand.gen = rnorm,
+  sd = sigma
+)
+# Effective sample size / B
+ess_factor_ar1 <- 1 / (-1 + 2 / (1 - phi))
+# Unconditional variance tau_sq, obtained from var(x)
+uvar_ar1 <- sigma^2 / (1 - phi^2)
+# Theoretical std. error of sample mean
+se_mean_ar1 <- sqrt(uvar_ar1 / B / ess_factor_ar1)
+```
+
+## Standard errors estimation via nonparametric spectral analysis
+
+Suppose that $X_1, \ldots, X_B$ is a mean-stationary sequence.
+
+@Heidelberger.Welch:1981 recall that the variance of the sample mean is $S(0) / B,$ where $S(\cdot)$ is the spectrum evaluated at zero and
+$$
+S(0) = \sum_{k=-\infty}^\infty \gamma_k.
+$$
+They propose to approximate $S(0)$ by
+
+- calculating the raw periodogram (unsmoothed)
+- fitting a gamma GLM to the log periodogram with a polynomial trend.
+
+## Standard errors estimation via parametric spectral analysis
+
+Any continuous spectral density function can be approximated by an $\mathsf{AR}(p)$ process (for $p$ potentially infinitely large).
+
+For an autoregressive process of order $p$, the spectral density of the $\mathsf{AR}(p)$ is [@Percival.Walden:2020, eq. 446b]
+$$
+S(0) = \frac{\sigma^2}{\left(1 - \sum_{j=1}^p \phi_j\right)^2}.
+$$
+This suggests
+
+- Fitting an $\mathsf{AR}(p)$ model (selecting $p$ via $\mathsf{AIC}$) using Yule--Walker or any other method.
+- Calculate the spectral density at zero with the plug-ins $\widehat{\phi}_1, \ldots, \widehat{\phi}_p$ and $\widehat{\sigma}^2.$
+
+## Spectral estimation in **R**
+
+```{r}
+# Heidelberg and Welch (1981)
+coda::spectrum0(x)
+# Code from coda::effectiveSize
+ar_mod <- ar.yw(x)
+suvar <- ar_mod$var.pred / (1 - sum(ar_mod$ar))^2
+se3 <- sqrt(suvar / B) # variance of sample mean of AR(p)
+ess3 <- var(x) / suvar * B
+```
+
+## Standard errors for posterior means using batch means
+
+@Geyer:2011 recommends to segment the time series into batches
+
+1. Break the chain of length $B$ (after burn in) in $K$ blocks of size $\approx K/B.$
+2. Compute the sample mean of each segment.
+3. Compute the standard deviation of the segments mean.
+4. Rescale by $K^{-1/2}$ to get standard error of the global mean.
+
+## Illustration of batch means
+
+
+
+```{r}
+#| label: fig-mcmc-batchmean
+#| eval: true
+#| echo: false
+#| fig-cap: "Calculation of the standard error of the posterior mean using the batch method."
+set.seed(123450)
+chain <- as.numeric(arima.sim(model = list(ar = c(0.9)), n = 2000)) + 0.4
+batchMean <- function(x, batchSize = 100){
+  niter <- length(x)
+    nbatch <- niter%/%batchSize
+    niter <- nbatch * batchSize
+    ibatch <- rep(1:nbatch, each = batchSize)[1:niter]
+    batchMeans <- t(sapply(split(data.frame(x[1:niter]), ibatch),
+        function(batch) apply(batch, 2, mean)))
+    return(as.numeric(batchMeans))
+}
+ggplot() +
+  geom_line(data = data.frame(t = 1:2000,
+                         chain = chain),
+       mapping = aes(x = t,
+                     y = chain),
+       alpha = 0.1) +
+  geom_segment(data = data.frame(x0 = seq(1, 2000, by = 100),
+                                 x1 = seq(100, 2000, by = 100),
+                                 y = batchMean(chain, batchSize = 100)),
+               mapping = aes(x = x0, y = y, yend = y, xend = x1),
+               linetype = "dashed") +
+  geom_hline(yintercept = mean(chain)) +
+  labs(x = "iteration number", y = "") +
+  theme_classic()
+```
 
 
 ## Correlogram
@@ -635,7 +744,7 @@ In regression models, scale inputs if possible.
 ```{r}
 #| eval: false
 #| echo: true
-#| # Load data
+# Load data
 data(upworthy_question, package = "hecbayes")
 # Compute sufficient statistics
 data <- upworthy_question |>
@@ -726,8 +835,6 @@ for(i in seq_len(niter)){
 #| echo: true
 # Posterior summaries
 summary(coda::as.mcmc(chain))
-# Computing standard errors using batch means
-sqrt(diag(mcmc::olbm(chain, batch.length = niter/40)))
 ```
 
 ```
@@ -744,57 +851,6 @@ kappa  0.07075 0.002033 2.033e-05      9.741e-05
 beta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929
 kappa  0.06673  0.06933  0.07077  0.07212  0.07463
 ```
-
-## Standard errors for posterior means -- batch means
-
-@Geyer:2011 recommends to segment the time series into batches
-
-1. Break the chain of length $B$ (after burn in) in $K$ blocks of size $\approx K/B.$
-2. Compute the sample mean of each segment.
-3. Compute the standard deviation of the segments mean.
-4. Rescale by $K^{-1/2}$ to get standard error of the global mean.
-
-## Illustration of batch means
-
-
-
-```{r}
-#| label: fig-mcmc-batchmean
-#| eval: true
-#| echo: false
-#| fig-cap: "Calculation of the standard error of the posterior mean using the batch method."
-set.seed(123450)
-chain <- as.numeric(arima.sim(model = list(ar = c(0.9)), n = 2000)) + 0.4
-batchMean <- function(x, batchSize = 100){
-  niter <- length(x)
-    nbatch <- niter%/%batchSize
-    niter <- nbatch * batchSize
-    ibatch <- rep(1:nbatch, each = batchSize)[1:niter]
-    batchMeans <- t(sapply(split(data.frame(x[1:niter]), ibatch),
-        function(batch) apply(batch, 2, mean)))
-    return(as.numeric(batchMeans))
-}
-ggplot() +
-  geom_line(data = data.frame(t = 1:2000,
-                         chain = chain),
-       mapping = aes(x = t,
-                     y = chain),
-       alpha = 0.1) +
-  geom_segment(data = data.frame(x0 = seq(1, 2000, by = 100),
-                                 x1 = seq(100, 2000, by = 100),
-                                 y = batchMean(chain, batchSize = 100)),
-               mapping = aes(x = x0, y = y, yend = y, xend = x1),
-               linetype = "dashed") +
-  geom_hline(yintercept = mean(chain)) +
-  labs(x = "iteration number", y = "") +
-  theme_classic()
-```
-
-## Standard errors for posterior means -- autoregressive
-
-We can also fit an high-order autoregressive process $\mathsf{AR}(p)$ and approximate the unconditional variance by that, and divide by $\sqrt{T}$.
-
-- Standard methods (Yule--Walker equations, maximum likelihood, spectral estimation) apply.
 
 
 
