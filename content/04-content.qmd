@@ -1,28 +1,29 @@
 ---
-title: "Markov chains and Metropolis--Hastings"
+title: "Monte Carlo methods"
 ---
 
 
 ## Content
 
-- Rejection sampling
+- Monte Carlo methods: rejection sampling, importance sampling
 - Basics of Markov chains
-- Metropolis--Hastings algorithm
+
 
 
 ## Learning objectives
 
 At the end of the chapter, students should be able to
 
-- understand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ
-- implement a Metropolis--Hastings algorithm to draw samples from the posterior
-- use output of MCMC to obtain estimates and standard errors
-- use efficient proposals and tuning for MCMC
+- simulate from target distribution using rejection sampling
+- estimate integrals using importance sampling
+- explain under which circumstances can Markov chain output can be used in place of independent Monte Carlo
+- calculate standard errors for sample means of Markov chain
+- understand the inefficiency due to autocorrelation of Monte Carlo integration based on draws from Markov chains.
 
 ## Readings
 
 
-- [@Geyer:2011](https://www.mcmchandbook.net/HandbookChapter1.pdf) --- up to 1.17
+- [@Geyer:2011](https://www.cs.tufts.edu/~nr/cs257/archive/charles-geyer/mcmctutorial.pdf) --- up to 1.17
 - [Chapters 4](https://lbelzile.github.io/MATH80601A/montecarlo.html) [and 5](https://lbelzile.github.io/MATH80601A/mcmc.html) of the course notes
 
 
@@ -40,4 +41,10 @@ At the end of the chapter, students should be able to
 <div class="ratio ratio-16x9">
 <iframe class="slide-deck" src="../slides/bayesmod-slides4.html"></iframe>
 </div>
+
+
+## Code
+
+
+- [Code demonstration](04-lecture.qmd)
 

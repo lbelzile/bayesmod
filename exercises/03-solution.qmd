@@ -5,33 +5,51 @@ draft: false
 
 ## Exercise 3.1
 
-Consider a simple random sample of size $n$ from the Wald distribution, with density
+**Difficult**: Consider a simple random sample of size $n$ from the inverse Gaussian (Wald) distribution, with density
 \begin{align*}
 f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y > 0)
 \end{align*}
-for location $\nu >0$ and shape $\tau>0$. 
+for location $\nu >0$ and shape $\lambda>0$. 
 
 a. Show that the joint prior
 $$ p(\lambda) \sim \mathsf{gamma}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{Gauss}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
 b. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
-c. Derive the marginal posterior $p(\lambda)$.
+c. Derive the marginal posterior $p(\lambda \mid \boldsymbol{y})$.
 
 
 
 ::: {.solution}
 
-a. To show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get
+a. First, note that the prior is for $g(\nu) = 1/\nu$, so the change of variable to get the corresponding function for $\nu$ gives $p(1/\nu) / \nu^2$, including the Jacobian of the transformation.
+
+The exact parametric form of the product of prior (conditional for $\nu \mid \lambda$ and that of $\lambda$ is 
+
+\begin{align*}
+p(\nu, \lambda)&= \frac{\beta^{\alpha}}{\Gamma(\alpha)}\lambda^{\alpha-1}\exp(-\beta \lambda) \frac{(\lambda\tau)^{1/2}}{\sqrt{2\pi}\nu^2}
+\exp\left\{-\frac{\tau\lambda}{2} \left(\nu^{-1}-\mu\right)^2\right\}
+\\&=\stackrel{\nu,\lambda}{\propto} \frac{\lambda^{\alpha - 1/2}}{\nu^2}\exp \left\{ -\frac{\lambda}{2} \left(\frac{\tau}{\nu^{2}} - 2\frac{\tau\mu}{\nu} + \tau\mu^2 + 2\beta\right)\right\}
+\end{align*}
+
+To show conjugacy, we must prove that the posterior is of the same family as the prior. 
+
+The likelihood contribution for an independent and identically distributed sample is proportional to
+$$
+p(\boldsymbol{y} \mid \lambda, \nu) \stackrel{\lambda, \nu}{\propto} 
+\lambda^{n/2} \exp\left\{ -\frac{\lambda}{2} \left( \frac{1}{\nu^2}\sum_{i=1}^n y_i - \frac{2n}{\nu} +\sum_{i=1}^n y_i^{-1}\right)\right\}.
+$$
+
+Write $t_1(\boldsymbol{y}=\sum_{i=1}^n y_i$ and $t_2(\boldsymbol{y}) = \sum_{i=1}^n y_i^{-1}$. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get
 \begin{align*}
 p(\lambda, \nu \mid \boldsymbol{y}) &\propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau}{\nu^{2}}-2\frac{\tau\mu}{\nu} + \tau\mu^2 +\frac{t_1(\boldsymbol{y})}{\nu^2} -  \frac{2n}{\nu} + t_2(\boldsymbol{y})\right\}\right] \\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp(-\lambda \beta) \exp\left[ -\frac{\lambda}{2}\left\{\frac{\tau + t_1(\boldsymbol{y})}{\nu^2} - 2\frac{\tau\mu+n}{\nu} + \tau\mu^2 + t_2(\boldsymbol{y})\right\} \right]
 \\& \propto \frac{\lambda^{(n+1)/2+\alpha-1}}{\nu^2}\exp\left[-\lambda \left\{\beta + \frac{c_3-c_1c_2^2}{2}\right\}\right] \exp\left\{ -\frac{\lambda c_1}{2}\left(\nu^{-1} - c_2\right)^2\right\} 
 \end{align*}
 where $c_1=\{\tau + t_1(\boldsymbol{y})\}$, $c_2 =(\tau\mu+n)/c_1$ and $c_3 =\tau\mu^2 + t_2(\boldsymbol{y})$.
 
-b. We see that the joint posterior as the product of two densities, say $q(\lambda \mid \boldsymbol{y})p(1/\nu \mid \lambda)$; $q(\lambda \mid \boldsymbol{y})$ is the density of a gamma distribution with shape $a = (n+1)/2+\alpha$ and rate $b=\beta + (c_3-c_1c_2^2)/2$, whereas the other is a reciprocal Gaussian with mean parameter $c_2$ and precision $\lambda c_1$. $\mathsf{gamma}\left\{(n+1)/2+\alpha\right\}$
+b. We see that the joint posterior is the product of two densities, say $p(\lambda \mid \boldsymbol{y})p(1/\nu \mid \lambda)$; $p(\lambda \mid \boldsymbol{y})$ is the density of a gamma distribution with shape $a = (n+1)/2+\alpha$ and rate $b=\beta + (c_3-c_1c_2^2)/2$, whereas the other is a reciprocal Gaussian with mean parameter $c_2$ and precision $\lambda c_1$.
 
-c. To get the marginal $p(\lambda \mid \boldsymbol{y})$, we need to integrate with respect to $\nu$. Making the change of variable $\mu = 1/\nu$, we recover a Gaussian kernel
+c. To get the marginal $p(\lambda \mid \boldsymbol{y})$, we need to integrate with respect to $\nu$. Making the change of variable $\xi = 1/\nu$, we recover a Gaussian kernel
 \begin{align*}
-p(\lambda \mid \boldsymbol{y}) &= \lambda^{a-1}\exp(-b\lambda)\int_{\mathbb{R}}\exp\left\{ -\frac{\lambda c_1}{2}\left(\mu - c_2\right)^2\right\}  \mathrm{d} \mu 
+p(\lambda \mid \boldsymbol{y}) &= \lambda^{a-1}\exp(-b\lambda)\int_{\mathbb{R}}\exp\left\{ -\frac{\lambda c_1}{2}\left(\xi - c_2\right)^2\right\}  \mathrm{d} \xi 
 \\&\propto \lambda^{a-1}\exp(-b\lambda) \lambda^{-1/2}
 \end{align*}
 so we conclude that, marginally, $\lambda \sim \mathsf{gamma}(n+ \alpha, b)$.
@@ -85,20 +103,35 @@ The beta distribution has expected value $\alpha/(\alpha+\beta)$ and variance $\
 Since the system of equations is nonlinear, we need to solve numerically to find the two unknown value of the parameters or else simply substitute $\beta = \alpha (1-\mu)/\mu$ in the equation for the variance.
 
 ```{r}
+# Numerical root finding 
 beta_moments <- function(par, mean, variance){
   alpha <- par[1]
   beta <- par[2]
   c(alpha/(alpha+beta) - mean,
     alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)
 }
-# Numerical root finding algorithm
 # We need to give good starting values
 rootSolve::multiroot(f = beta_moments,
                      start = c(0.1, 0.8),
                      positive = TRUE,
                      mean = 0.1, 
                      variance = 0.04)
-
+# Alternative 2 :  minimize an objective function
+# l2 norm of the difference between parameters
+beta_match <- function(par, mean, variance){
+  # Make unconstrained
+  alpha <- exp(par[1]); beta <- exp(par[2]) 
+  sqrt((alpha/(alpha+beta) - mean)^2 +
+        (alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)^2)
+}
+# Minimize objective function
+exp(optim(
+  par = log(c(0.1,0.8)), 
+  fn = beta_match,,
+  mean = 0.1, 
+  variance = 0.04)$par)
+# Could do even simpler and isolate a parameter
+# Leads to a univariate problem
 alpha <- uniroot(f = function(alpha, mean = 0.1, variance = 0.04){
   beta <- alpha*(1-mean)/mean
   alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance}, 
@@ -107,7 +140,7 @@ beta <- alpha*(1-0.1)/0.1
 c(alpha = alpha, beta = beta)
 ```
 
-and we find $\alpha = 0.125$ and $\beta=1.125$.
+and we find, regardless of the method we use, the same solution: $\alpha = 0.125$ and $\beta=1.125$.
 
 Let $a = -\mu/\sigma$ and $b = (1-\mu)/\sigma$ denote the standardized lower and upper bounds, respectively. The density of the truncated Gaussian with location $\mu$ and scale $\sigma$ on the unit interval is
 \begin{align*}

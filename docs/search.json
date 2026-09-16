@@ -851,7 +851,7 @@
     "href": "slides/bayesmod-slides4.html#simulation-algorithms-accept-reject",
     "title": "Bayesian modelling",
     "section": "Simulation algorithms: accept-reject",
-    "text": "Simulation algorithms: accept-reject\n\nTarget: sample from density \\(p(x)\\) (hard to sample from)\nProposal: find a density \\(q(x)\\) with nested support, \\(\\mathrm{supp}(p) \\subseteq \\mathrm{supp}(q)\\), such that for all \\(x \\in \\mathrm{supp}(p)\\), \\[\\frac{p(x)}{q(x)} \\leq C, \\quad C \\geq 1.\\] Uses the fundamental theorem of simulation by finding an enveloppe \\(Cq(x)\\) that is over the density \\(p(x).\\)"
+    "text": "Simulation algorithms: accept-reject\n\nTarget: sample from density \\(p(x)\\) (hard to sample from)\nProposal: find a density \\(q(x)\\) with nested support, \\(\\mathrm{supp}(p) \\subseteq \\mathrm{supp}(q)\\), such that for all \\(x \\in \\mathrm{supp}(p)\\), \\[\\frac{p(x)}{q(x)} \\leq C, \\quad C \\geq 1.\\] Uses the fundamental theorem of simulation by finding an envelope \\(Cq(x)\\) that is over the density \\(p(x).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#rejection-sampling-algorithm",
@@ -879,7 +879,7 @@
     "href": "slides/bayesmod-slides4.html#designing-a-good-proposal-density",
     "title": "Bayesian modelling",
     "section": "Designing a good proposal density",
-    "text": "Designing a good proposal density\nGood choices must satisfy the following constraints:\n\npick a family \\(q(x)\\) so that \\[C = \\mathrm{argmax}_x \\frac{p(x)}{q(x)}\\] is as close to 1 as possible.\nyou can use numerical optimization with target \\[f(x) =\\log p(x) - \\log q(x)\\] to find the mode \\(x^\\star\\) and the upper bound \\(C = \\exp f(x^\\star).\\)"
+    "text": "Designing a good proposal density\nGood choices must satisfy the following constraints:\n\npick a family \\(q(x)\\) so that \\[C = \\mathrm{argmax}_x{p(x)}/{q(x)}\\] is as close to 1 as possible.\nyou can use numerical optimization with target \\[\\log R(x) =\\log p(x) - \\log q(x)\\] to find the mode \\(x^\\star\\) and the upper bound \\(C = R(x^\\star).\\)\nif \\(q(x; \\boldsymbol{\\theta})\\) is a function of the parameter \\(\\boldsymbol{\\theta}\\), search for \\[\\mathrm{argmin}_{\\boldsymbol{\\theta}} \\mathrm{argmax}_x \\{\\log p(x) - \\log q(x; \\boldsymbol{\\theta})\\}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#truncated-gaussian-via-accept-reject",
@@ -893,7 +893,7 @@
     "href": "slides/bayesmod-slides4.html#accept-reject-crude-version",
     "title": "Bayesian modelling",
     "section": "Accept-reject (crude version)",
-    "text": "Accept-reject (crude version)\n\nSimulate \\(X \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\nreject any draw if \\(X &lt; a\\) or \\(X&gt; b\\).\n\nThe acceptance rate is \\(C^{-1} = \\{\\Phi(\\beta) - \\Phi(\\alpha)\\}\\)\n\n# Standard Gaussian truncated on [0,1]\ncandidate &lt;- rnorm(1e5)\ntrunc_samp &lt;- candidate[candidate &gt;= 0 & candidate &lt;= 1]\n# Acceptance rate\nlength(trunc_samp)/1e5\n\n[1] 0.34289\n\n# Theoretical acceptance rate\npnorm(1)-pnorm(0)\n\n[1] 0.3413447"
+    "text": "Accept-reject (crude version)\n\nSimulate \\(X \\sim \\mathsf{Gauss}(\\mu, \\sigma^2)\\)\nreject any draw if \\(X &lt; a\\) or \\(X&gt; b\\).\n\nThe acceptance rate is \\(C^{-1} = \\{\\Phi(\\beta) - \\Phi(\\alpha)\\}\\)\n\n# Standard Gaussian truncated on [0,1]\ncandidate &lt;- rnorm(1e5)\ntrunc_samp &lt;- candidate[candidate &gt;= 0 & candidate &lt;= 1]\n# Acceptance rate\nlength(trunc_samp)/1e5\n\n[1] 0.33972\n\n# Theoretical acceptance rate\npnorm(1)-pnorm(0)\n\n[1] 0.3413447"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#accept-reject-for-truncated-gaussian",
@@ -907,14 +907,14 @@
     "href": "slides/bayesmod-slides4.html#simulating-tails-of-gaussian-variables",
     "title": "Bayesian modelling",
     "section": "Simulating tails of Gaussian variables",
-    "text": "Simulating tails of Gaussian variables\nWe consider simulation from a standard Gaussian truncated above \\(a&gt;0\\)\nWrite the density of the truncated Gaussian as (Devroye, 1986, p. 381)\\[f(x) = \\frac{\\exp(-x^2/2)}{\\int_{a}^{\\infty}\\exp(-z^2/2)\\mathrm{d} z}  =\\frac{\\exp(-x^2/2)}{c_1}.\\]\nNote that, for \\(x \\geq a\\), \\[c_1f(x) \\leq \\frac{x}{a}\\exp\\left(-\\frac{x^2}{2}\\right)= a^{-1}\\exp\\left(-\\frac{a^2}{2}\\right)g(x);\\] where \\(g(x)\\) is the density of a Rayleigh variable shifted by \\(a\\).\n\nThe constant \\(C= \\exp(-a^2/2)(c_1a)^{-1}\\) approaches 1 quickly as \\(a \\to \\infty\\) (asymptotically optimality)."
+    "text": "Simulating tails of Gaussian variables\nWe consider simulation from a standard Gaussian truncated above \\(a&gt;0\\)\nWrite the density of the truncated Gaussian as (Devroye, 1986, p. 381)\\[f(x) = \\frac{\\exp(-x^2/2)}{\\int_{a}^{\\infty}\\exp(-z^2/2)\\mathrm{d} z}  =\\frac{\\exp(-x^2/2)}{c_1}.\\]\nNote that, for \\(x \\geq a\\), \\(x/a &gt; 1\\) and \\[c_1f(x) \\leq \\frac{x}{a}\\exp\\left(-\\frac{x^2}{2}\\right)= a^{-1}\\exp\\left(-\\frac{a^2}{2}\\right)g(x);\\] where \\(g(x)=x\\exp\\{(a^2-x^2)/2\\}\\mathsf{1}_{x \\ge a}\\) is the density of a Rayleigh variable shifted by \\(a\\).\n\nThe constant \\(C= \\exp(-a^2/2)(c_1a)^{-1}\\) approaches 1 quickly as \\(a \\to \\infty\\) (asymptotically optimal)."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#accept-reject-truncated-gaussian-with-rayleigh",
     "href": "slides/bayesmod-slides4.html#accept-reject-truncated-gaussian-with-rayleigh",
     "title": "Bayesian modelling",
     "section": "Accept-reject: truncated Gaussian with Rayleigh",
-    "text": "Accept-reject: truncated Gaussian with Rayleigh\nThe shifted Rayleigh has distribution function \\[G(x) = 1-\\exp\\{(a^2-x^2)/2\\}, x \\geq a.\\]\n\n\n\n\n\n\nMarsaglia algorithm\n\n\n\nGenerate a shifted Rayleigh above \\(a\\), \\(X \\gets  \\{a^2 - 2\\log(U)\\}^{1/2}\\) for \\(U \\sim \\mathsf{unif}(0,1)\\)\nAccept \\(X\\) if \\(XV \\leq a\\), where \\(V \\sim \\mathsf{unif}(0,1)\\).\n\n\n\n\nFor sampling on \\([a,b]\\) with \\(a\\) very large, propose from a Rayleigh truncated above at \\(b\\) (Botev & L’Écuyer, 2017).\n\na &lt;- 8.3\nniter &lt;- 1000L\nX &lt;- sqrt(a^2 + 2*rexp(niter))\nsamp &lt;- X[runif(niter)*X &lt;= a]"
+    "text": "Accept-reject: truncated Gaussian with Rayleigh\nThe shifted Rayleigh has distribution function \\[G(x) = 1-\\exp\\{(a^2-x^2)/2\\}, x \\geq a.\\]\n\n\n\n\n\n\nMarsaglia algorithm\n\n\n\nGenerate a shifted Rayleigh above \\(a\\), \\(X \\gets  \\{a^2 - 2\\log(U)\\}^{1/2}\\) for \\(U \\sim \\mathsf{unif}(0,1)\\)\nAccept \\(X\\) if \\(XV \\leq a\\), where \\(V \\sim \\mathsf{unif}(0,1)\\).\n\n\n\n\nFor sampling on \\([a,b]\\) with \\(a\\) very large, propose from a Rayleigh truncated above at \\(b\\) (Botev & L’Écuyer, 2017).\n\na &lt;- 8.3\nniter &lt;- 1000L\nX &lt;- sqrt(a^2 + 2*rexp(niter))\nsamp &lt;- X[runif(niter)*X &lt;= a]\n\n\nAccept if \\(U \\leq \\frac{f(x)}{g(x)} \\times \\frac{1}{C} = \\frac{\\exp(-x^2/2)/c_1}{x\\exp\\{(a^2-x^2)/2\\}} \\times \\exp(a^2/2)c_1a = \\frac{a}{x}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#monte-carlo-integration",
@@ -963,7 +963,7 @@
     "href": "slides/bayesmod-slides4.html#code-for-importance-sampling-of-beta-variance-continued",
     "title": "Bayesian modelling",
     "section": "Code for importance sampling of beta variance (continued)",
-    "text": "Code for importance sampling of beta variance (continued)\n\n# Monte Carlo integration\nmc_est &lt;- mean(g(X0))\nmc_var &lt;- var(g(X0))/B\n# Importance sampling weighted mean and variance\nis_est &lt;- weighted.mean(g(X1), w = w) # equivalent to mean(g(X1)*w)/mean(w)\nis_var &lt;- sum(w^2*(g(X1) - is_est)^2)/ (sum(w)^2)\n# True value for the beta variance\nth_est &lt;- 1/(4*(2*alpha+1))\n# Point estimates and differences\nround(c(true = th_est, \"monte carlo\" = mc_est, \"importance sampling\" = is_est),4)\n\n               true         monte carlo importance sampling \n             0.0625              0.0629              0.0627 \n\n# Ratio of std. errors for means\nmc_var/is_var # value &gt; 1 means that IS is more efficient\n\n[1] 1.107183"
+    "text": "Code for importance sampling of beta variance (continued)\n\n# Monte Carlo integration\nmc_est &lt;- mean(g(X0))\nmc_var &lt;- var(g(X0))/B\n# Importance sampling weighted mean and variance\nis_est &lt;- weighted.mean(g(X1), w = w) # equivalent to mean(g(X1)*w)/mean(w)\nis_var &lt;- sum(w^2*(g(X1) - is_est)^2)/ (sum(w)^2)\n# True value for the beta variance\nth_est &lt;- 1/(4*(2*alpha+1))\n# Point estimates and differences\nround(c(true = th_est, \"monte carlo\" = mc_est, \"importance sampling\" = is_est),4)\n\n               true         monte carlo importance sampling \n             0.0625              0.0627              0.0618 \n\n# Ratio of std. errors for means\nmc_var/is_var # value &gt; 1 means that IS is more efficient\n\n[1] 1.119518"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#markov-chains",
@@ -987,6 +987,20 @@
     "text": "Stationarity and Markov property\nA stochastic process is\n\n(strongly) stationary if the distribution of \\(\\{X_1, \\ldots, X_t\\}\\) is the same as that of \\(\\{X_{n+1}, \\ldots X_{t+n}\\}\\) for any value of \\(n\\) and given \\(t\\).\nweakly stationary if \\(\\mathsf{E}(X_t) = \\mu\\) for all \\(t\\), and \\(\\mathsf{Cov}(X_t, X_{t+h}) = \\gamma_h\\) does not depend on \\(t\\).\nMarkov if it satisfies the Markov property: given the current state of the chain, the future only depends on the current state and not on the past.\n\n\nStrong stationarity implies weak stationarity."
   },
   {
+    "objectID": "slides/bayesmod-slides4.html#law-of-large-number-ergodic-theorem",
+    "href": "slides/bayesmod-slides4.html#law-of-large-number-ergodic-theorem",
+    "title": "Bayesian modelling",
+    "section": "Law of large number (ergodic theorem)",
+    "text": "Law of large number (ergodic theorem)\nLet \\(\\{Y_t\\}\\) is a weakly stationary sequence with mean \\(\\mathsf{E}(Y_t)=\\mu\\) and \\(\\gamma_h = \\mathsf{Cov}(Y_t, Y_{t+h})\\). Then, if the autocovariance series is convergent, meaning \\[\\sum_{t=0}^\\infty |\\gamma_h| &lt; \\infty,\\] then \\(\\{Y_t\\}\\) is ergodic for the mean and \\(\\overline{Y} \\stackrel{\\mathrm{p}}{\\to} \\mu\\).\nErgodicity means that two segments of a time series far enough apart act as independent."
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#ergodicity-and-transformations",
+    "href": "slides/bayesmod-slides4.html#ergodicity-and-transformations",
+    "title": "Bayesian modelling",
+    "section": "Ergodicity and transformations",
+    "text": "Ergodicity and transformations\nThe ergodic theorem is a law of large numbers for stochastic processes that allows for serial dependence between observations, provided the latter is not too large.\nAny transformation \\(g(\\cdot)\\) of a stationary and ergodic process \\(\\{Y_t\\}\\) retains the properties, so \\(\\overline{g} = T^{-1} \\sum_{t=1}^T g(Y_t) \\to \\mathsf{E}\\{g(Y_t)\\}\\) as \\(T \\to \\infty.\\)"
+  },
+  {
     "objectID": "slides/bayesmod-slides4.html#autoregressive-process-of-order-1",
     "href": "slides/bayesmod-slides4.html#autoregressive-process-of-order-1",
     "title": "Bayesian modelling",
@@ -998,14 +1012,14 @@
     "href": "slides/bayesmod-slides4.html#unconditional-moments-via-tower-law",
     "title": "Bayesian modelling",
     "section": "Unconditional moments via tower law",
-    "text": "Unconditional moments via tower law\nIf the process is weakly stationary, then \\(\\mathsf{E}_{Y_{t}}(Y_t)=\\mathsf{E}_{Y_{t-1}}(Y_{t-1})\\) \\[\\begin{align*}\n\\mathsf{E}_{Y_{t}}(Y_t) &= \\mathsf{E}_{Y_{t-1}}\\left\\{\\mathsf{E}_{Y_{t} \\mid Y_{t-1}}(Y_t)\\right\\}\n\\\\&= \\mu(1-\\phi) + \\phi\\mathsf{E}_{Y_{t-1}}(Y_{t-1})\n\\end{align*}\\] and so the unconditional mean is \\(\\mu\\). For the variance, we have \\[\\begin{align*}\n\\mathsf{Va}_{Y_{t}}(Y_t) &= \\mathsf{E}_{Y_{t-1}}\\left\\{\\mathsf{Va}_{Y_{t} \\mid Y_{t-1}}(Y_t)\\right\\} + \\mathsf{Va}_{Y_{t-1}}\\left\\{\\mathsf{E}_{Y_{t} \\mid Y_{t-1}}(Y_t)\\right\\}\\\\\n& = \\sigma^2 + \\mathsf{Va}_{Y_{t-1}}\\left\\{\\mu + \\phi(Y_{t-1} - \\mu)\\right\\}\n\\\\&= \\sigma^2 + \\phi^2 \\mathsf{Va}_{Y_{t-1}}(Y_{t-1}).\n\\end{align*}\\] and the unconditional variance is \\(\\mathsf{Va}_{Y_t}(Y_t) = \\sigma^2/(1-\\phi^2).\\)"
+    "text": "Unconditional moments via tower law\nIf the process is weakly stationary, then \\(\\mathsf{E}_{Y_{t}}(Y_t)=\\mathsf{E}_{Y_{t-1}}(Y_{t-1})\\) \\[\\begin{align*}\n\\mathsf{E}_{Y_{t}}(Y_t) &= \\mathsf{E}_{Y_{t-1}}\\left\\{\\mathsf{E}_{Y_{t} \\mid Y_{t-1}}(Y_t)\\right\\}\n\\\\&= \\mu(1-\\phi) + \\phi\\mathsf{E}_{Y_{t-1}}(Y_{t-1})\n\\end{align*}\\] and so the unconditional mean is \\(\\mu\\). For the variance, we have \\[\\begin{align*}\n\\mathsf{Va}_{Y_{t}}(Y_t) &= \\mathsf{E}_{Y_{t-1}}\\left\\{\\mathsf{Va}_{Y_{t} \\mid Y_{t-1}}(Y_t)\\right\\} + \\mathsf{Va}_{Y_{t-1}}\\left\\{\\mathsf{E}_{Y_{t} \\mid Y_{t-1}}(Y_t)\\right\\}\\\\\n& = \\sigma^2 + \\mathsf{Va}_{Y_{t-1}}\\left\\{\\mu + \\phi(Y_{t-1} - \\mu)\\right\\}\n\\\\&= \\sigma^2 + \\phi^2 \\mathsf{Va}_{Y_{t-1}}(Y_{t-1}).\n\\end{align*}\\] and the unconditional variance is \\[\\mathsf{Va}(Y_t) = \\tau^2 = \\sigma^2/(1-\\phi^2).\\]"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#autocovariance-and-markov-property",
     "href": "slides/bayesmod-slides4.html#autocovariance-and-markov-property",
     "title": "Bayesian modelling",
     "section": "Autocovariance and Markov property",
-    "text": "Autocovariance and Markov property\nThe covariance at lag \\(k\\), in terms of innovations, gives \\[\\begin{align*}\n\\gamma_k = \\mathsf{Co}(Y_t, Y_{t-k}) = \\mathsf{Va}(\\phi Y_{t-1}, Y_{t-k}) + \\mathsf{Va}(\\varepsilon_t, Y_{t-k}) = \\phi \\gamma_{k-1}\n\\end{align*}\\] since \\(\\varepsilon_t\\) is independent of the past. We thus find \\[\\gamma_k = \\phi^k\\mathsf{Va}(Y_t).\\]\nThe \\(\\mathsf{AR}(1)\\) process is first-order Markov since the conditional distribution \\(p(Y_t \\mid Y_{t-1}, \\ldots, Y_{t-p})\\) equals \\(p(Y_t \\mid Y_{t-1}).\\)"
+    "text": "Autocovariance and Markov property\nThe covariance at lag \\(h\\), in terms of innovations, gives \\[\\begin{align*}\n\\gamma_h = \\mathsf{Co}(Y_t, Y_{t-h}) = \\mathsf{Va}(\\phi Y_{t-1}, Y_{t-h}) + \\mathsf{Va}(\\varepsilon_t, Y_{t-h}) = \\phi \\gamma_{h-1}\n\\end{align*}\\] since \\(\\varepsilon_t\\) is independent of the past. We thus find \\[\\rho_h = \\phi^h, \\qquad \\gamma_h = \\phi^h\\mathsf{Va}(Y_t).\\]\nThe \\(\\mathsf{AR}(1)\\) process is first-order Markov since the conditional distribution \\(p(Y_t \\mid Y_{t-1}, \\ldots, Y_{t-p})\\) equals \\(p(Y_t \\mid Y_{t-1}).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#variance-of-sample-average",
@@ -1019,7 +1033,14 @@
     "href": "slides/bayesmod-slides4.html#variance-of-sample-average-redux",
     "title": "Bayesian modelling",
     "section": "Variance of sample average, redux",
-    "text": "Variance of sample average, redux\nIf the second moments are finite, the scaled limiting variance of the sample mean simplifies to \\[\\begin{align*}\n\\lim_{T \\to \\infty} T\\mathsf{Va}\\left(\\overline{Y}_T\\right) = \\tau^2 \\left\\{1+2\\sum_{t=1}^\\infty \\rho_t\\right\\}.\n\\end{align*}\\] which is a function of\n\nthe unconditional variance \\(\\tau^2\\)\nthe lag-\\(k\\) autocorrelation, \\(\\mathsf{Cor}(Y_{t}, Y_{t+k})=\\rho_k.\\)"
+    "text": "Variance of sample average, redux\nIf the second moments are finite, the scaled limiting variance of the sample mean simplifies to \\[\\begin{align*}\n\\lim_{T \\to \\infty} T\\mathsf{Va}\\left(\\overline{Y}_T\\right) = \\tau^2 \\left\\{1+2\\sum_{t=1}^\\infty \\rho_t\\right\\}.\n\\end{align*}\\] which is a function of\n\nthe unconditional variance \\(\\tau^2\\)\nthe lag-\\(h\\) autocorrelation, \\(\\mathsf{Cor}(Y_{t}, Y_{t+h})=\\rho_h.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides4.html#correlogram",
+    "href": "slides/bayesmod-slides4.html#correlogram",
+    "title": "Bayesian modelling",
+    "section": "Correlogram",
+    "text": "Correlogram\nFor a weakly stationary process, it is instructive to look at the autocorrelation \\(\\rho_h=\\mathsf{Cor}(Y_t, Y_{t+h}).\\)\n\n\nFigure 3: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-h sample autocorrelation against lag number."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#effective-sample-size",
@@ -1033,14 +1054,14 @@
     "href": "slides/bayesmod-slides4.html#effective-sample-size-for-ar1",
     "title": "Bayesian modelling",
     "section": "Effective sample size for AR(1)",
-    "text": "Effective sample size for AR(1)\nThe lag-\\(k\\) correlation of the stationary autoregressive process of order 1 is \\(\\phi^k\\), so \\[1+2\\sum_{t=1}^\\infty \\rho_t = 1 + 2 \\left(\\frac{1}{1-\\phi}-1\\right) = \\frac{1+\\phi}{1-\\phi}.\\]\nwhereas the unconditional variance of the \\(\\mathsf{AR}(1)\\) process is\n\\[\\tau^2 = \\frac{\\sigma^2}{1-\\phi^2}.\\]"
+    "text": "Effective sample size for AR(1)\nThe lag-\\(h\\) correlation of the stationary autoregressive process of order 1 is \\(\\phi^h\\), so \\[1+2\\sum_{h=1}^\\infty \\rho_h = 1 + 2 \\left(\\frac{1}{1-\\phi}-1\\right) = \\frac{1+\\phi}{1-\\phi}.\\]\nwhereas the unconditional variance of the \\(\\mathsf{AR}(1)\\) process is\n\\[\\tau^2 = \\frac{\\sigma^2}{1-\\phi^2}.\\]"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#inefficiency-curve-for-ar1",
     "href": "slides/bayesmod-slides4.html#inefficiency-curve-for-ar1",
     "title": "Bayesian modelling",
     "section": "Inefficiency curve for AR(1)",
-    "text": "Inefficiency curve for AR(1)\n\n\nFigure 3: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with unit marginal variance (dashed). Right: variance ratio for positive correlations for selected range.\nTo get the same precision for the mean of \\(\\mathsf{AR}(1)\\) process with \\(\\phi \\approx 0.75\\) than with i.i.d. data, we would need 7 times as many observations."
+    "text": "Inefficiency curve for AR(1)\n\n\nFigure 4: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with unit marginal variance (dashed). Right: variance ratio for positive correlations for selected range.\nTo get the same precision for the mean of \\(\\mathsf{AR}(1)\\) process with \\(\\phi \\approx 0.75\\) than with i.i.d. data, we would need 7 times as many observations."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#morale-of-the-story",
@@ -1061,7 +1082,7 @@
     "href": "slides/bayesmod-slides4.html#standard-errors-estimation-via-nonparametric-spectral-analysis",
     "title": "Bayesian modelling",
     "section": "Standard errors estimation via nonparametric spectral analysis",
-    "text": "Standard errors estimation via nonparametric spectral analysis\nSuppose that \\(X_1, \\ldots, X_B\\) is a mean-stationary sequence.\nHeidelberger & Welch (1981) recall that the variance of the sample mean is \\(S(0) / B,\\) where \\(S(\\cdot)\\) is the spectrum evaluated at zero and \\[\nS(0) = \\sum_{k=-\\infty}^\\infty \\gamma_k.\n\\] They propose to approximate \\(S(0)\\) by\n\ncalculating the raw periodogram (unsmoothed)\nfitting a gamma GLM to the log periodogram with a polynomial trend."
+    "text": "Standard errors estimation via nonparametric spectral analysis\nSuppose that \\(X_1, \\ldots, X_B\\) is a mean-stationary sequence.\nHeidelberger & Welch (1981) recall that the variance of the sample mean is \\(S(0) / B,\\) where \\(S(\\cdot)\\) is the spectrum evaluated at zero and \\[\nS(0) = \\sum_{h=-\\infty}^\\infty \\gamma_h.\n\\] They propose to approximate \\(S(0)\\) by\n\ncalculating the raw periodogram (unsmoothed)\nfitting a gamma GLM to the log periodogram with a polynomial trend."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#standard-errors-estimation-via-parametric-spectral-analysis",
@@ -1075,7 +1096,7 @@
     "href": "slides/bayesmod-slides4.html#spectral-estimation-in-r",
     "title": "Bayesian modelling",
     "section": "Spectral estimation in R",
-    "text": "Spectral estimation in R\n\n# Heidelberg and Welch (1981)\ncoda::spectrum0(x)\n\n$spec\n[1] 115.9407\n\n# Code from coda::effectiveSize\nar_mod &lt;- ar.yw(x)\nsuvar &lt;- ar_mod$var.pred / (1 - sum(ar_mod$ar))^2\nse3 &lt;- sqrt(suvar / B) # variance of sample mean of AR(p)\ness3 &lt;- var(x) / suvar * B"
+    "text": "Spectral estimation in R\n\n# Heidelberg and Welch (1981)\ncoda::spectrum0(x)\n\n$spec\n[1] 83.04257\n\n# Code from coda::effectiveSize\nar_mod &lt;- ar.yw(x)\nsuvar &lt;- ar_mod$var.pred / (1 - sum(ar_mod$ar))^2\nse3 &lt;- sqrt(suvar / B) # variance of sample mean of AR(p)\ness3 &lt;- var(x) / suvar * B"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#standard-errors-for-posterior-means-using-batch-means",
@@ -1089,21 +1110,14 @@
     "href": "slides/bayesmod-slides4.html#illustration-of-batch-means",
     "title": "Bayesian modelling",
     "section": "Illustration of batch means",
-    "text": "Illustration of batch means\n\n\nFigure 4: Calculation of the standard error of the posterior mean using the batch method."
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#correlogram",
-    "href": "slides/bayesmod-slides4.html#correlogram",
-    "title": "Bayesian modelling",
-    "section": "Correlogram",
-    "text": "Correlogram\nWe can look at the autocorrelation function to check the efficiency.\n\n\nFigure 5: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number."
+    "text": "Illustration of batch means\n\n\nFigure 5: Calculation of the standard error of the posterior mean using the batch method."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#convergence-of-markov-chains",
     "href": "slides/bayesmod-slides4.html#convergence-of-markov-chains",
     "title": "Bayesian modelling",
     "section": "Convergence of Markov chains",
-    "text": "Convergence of Markov chains\nIf a Markov chain is irreducible and acyclic, it has a unique stationary distribution.\n\nirreducibility: means that the chain can move from anywhere to anywhere, so it doesn’t get stuck in part of the space forever.\nacyclic: cyclical chains loop around and visit periodically a state"
+    "text": "Convergence of Markov chains\nIf a Markov chain is irreducible and acyclic, it has a unique stationary distribution.\n\nirreducibility: means that the chain can move from anywhere to anywhere, so it doesn’t get stuck in part of the space forever.\nacyclic: cyclical chains loop around and visit periodically a state\n\nThe ergodic theorem holds even if the chain is cyclical."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#examples-of-cyclical-or-reducible-chains",
@@ -1111,20 +1125,6 @@
     "title": "Bayesian modelling",
     "section": "Examples of cyclical or reducible chains",
     "text": "Examples of cyclical or reducible chains\nConsider discrete Markov chains over the integers \\(1, 2, 3\\) with transition matrices\n\\[\nP_1 = \\begin{pmatrix}\n0.5 & 0.3 & 0.2 \\\\\n0 & 0.4 & 0.6 \\\\\n0 & 0.5 & 0.5\n\\end{pmatrix},\n\\quad\nP_2 = \\begin{pmatrix}\n0 & 0 & 1 \\\\\n1 & 0 & 0 \\\\\n0 & 1 & 0\n\\end{pmatrix}.\n\\] Chain 1 is reducible to \\(\\{2, 3\\}\\), chain 2 is cyclical."
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#law-of-large-number-ergodic-theorem",
-    "href": "slides/bayesmod-slides4.html#law-of-large-number-ergodic-theorem",
-    "title": "Bayesian modelling",
-    "section": "Law of large number (ergodic theorem)",
-    "text": "Law of large number (ergodic theorem)\nErgodicity means that two segments of a time series far enough apart act as independent.\nLet \\(\\{Y_t\\}\\) is a weakly stationary sequence with mean \\(\\mathsf{E}(Y_t)=\\mu\\) and \\(\\gamma_h = \\mathsf{Cov}(Y_t, Y_{t+h})\\). Then, if the autocovariance series is convergent, meaning \\[\\sum_{t=0}^\\infty |\\gamma_h| &lt; \\infty,\\] then \\(\\{Y_t\\}\\) is ergodic for the mean and \\(\\overline{Y} \\stackrel{\\mathrm{p}}{\\to} \\mu\\)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#ergodicity-and-transformations",
-    "href": "slides/bayesmod-slides4.html#ergodicity-and-transformations",
-    "title": "Bayesian modelling",
-    "section": "Ergodicity and transformations",
-    "text": "Ergodicity and transformations\nThe ergodic theorem is a law of large numbers for stochastic processes that allows for serial dependence between observations, provided the latter is not too large.\nAny transformation \\(g(\\cdot)\\) of a stationary and ergodic process \\(\\{Y_t\\}\\) retains the properties, so \\(\\overline{g} = T^{-1} \\sum_{t=1}^T g(Y_t) \\to \\mathsf{E}\\{g(Y_t)\\}\\) as \\(T \\to \\infty.\\)\nThe ergodic theorem holds even if the chain is cyclical."
   },
   {
     "objectID": "slides/bayesmod-slides4.html#convergence-and-stationary-distribution",
@@ -1141,88 +1141,11 @@
     "text": "Convergence of Markov chains\n\n\nFigure 6: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right)."
   },
   {
-    "objectID": "slides/bayesmod-slides4.html#markov-chain-monte-carlo",
-    "href": "slides/bayesmod-slides4.html#markov-chain-monte-carlo",
+    "objectID": "slides/bayesmod-slides4.html#summary",
+    "href": "slides/bayesmod-slides4.html#summary",
     "title": "Bayesian modelling",
-    "section": "Markov chain Monte Carlo",
-    "text": "Markov chain Monte Carlo\nWe consider simulating from a distribution with associated density function proportional to \\(p(\\cdot)\\)\n\nusing an algorithm that generates a Markov chain ,\nwithout requiring knowledge of the normalizing factor.\n\nWe use a conditional density \\(q(\\boldsymbol{\\theta} \\mid \\boldsymbol{\\theta}^{\\text{cur}})\\) to generate proposals from the current value \\(\\boldsymbol{\\theta}^{\\text{cur}}.\\)"
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#metropolishastings-algorithm",
-    "href": "slides/bayesmod-slides4.html#metropolishastings-algorithm",
-    "title": "Bayesian modelling",
-    "section": "Metropolis–Hastings algorithm",
-    "text": "Metropolis–Hastings algorithm\nStarting from an initial value \\(\\boldsymbol{\\theta}_0\\): for \\(t=1, \\ldots, T\\)\n\ndraw a proposal value \\(\\boldsymbol{\\theta}_t^{\\star} \\sim q(\\boldsymbol{\\theta} \\mid \\boldsymbol{\\theta}_{t-1})\\).\nCompute the acceptance ratio \\[\nR = \\frac{p(\\boldsymbol{\\theta}_t^{\\star})}{p(\\boldsymbol{\\theta}_{t-1})}\\frac{q(\\boldsymbol{\\theta}_{t-1} \\mid \\boldsymbol{\\theta}_t^{\\star} )}{q(\\boldsymbol{\\theta}_t^{\\star} \\mid \\boldsymbol{\\theta}_{t-1})}\n\\]\nWith probability \\(\\alpha=\\min\\{R, 1\\}\\), accept the proposal and set \\(\\boldsymbol{\\theta}_t \\gets \\boldsymbol{\\theta}_t^{\\star}\\), otherwise set the value to the previous state, \\(\\boldsymbol{\\theta}_t \\gets \\boldsymbol{\\theta}_{t-1}\\)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#theory",
-    "href": "slides/bayesmod-slides4.html#theory",
-    "title": "Bayesian modelling",
-    "section": "Theory",
-    "text": "Theory\nThe Metropolis–Hastings algorithm satisfies a technical condition (detailed balance) that ensures that the Markov chain generated is reversible.\n\nThus, any draw from the posterior will generate a new realization from the posterior.\nProvided the starting value has non-zero probability under the posterior, the chain will converge to the stationarity distribution (albeit perhaps slowly)."
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#interpretation",
-    "href": "slides/bayesmod-slides4.html#interpretation",
-    "title": "Bayesian modelling",
-    "section": "Interpretation",
-    "text": "Interpretation\n\nIf \\(R&gt;1\\), the proposal has higher density and we always accept the move.\nIf we reject the move, the Markov chain stays at the current value, which induces autocorrelation.\nSince the acceptance probability depends only on the density through ratios, normalizing factors of \\(p\\) and \\(q\\) cancel out."
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#symmetric-proposals-and-random-walk",
-    "href": "slides/bayesmod-slides4.html#symmetric-proposals-and-random-walk",
-    "title": "Bayesian modelling",
-    "section": "Symmetric proposals and random walk",
-    "text": "Symmetric proposals and random walk\nIf the proposal is symmetric, the ratio of proposal densities is \\[q(\\boldsymbol{\\theta}_{t-1} \\mid \\boldsymbol{\\theta}_t^{\\star} ) / q(\\boldsymbol{\\theta}_t^{\\star} \\mid \\boldsymbol{\\theta}_{t-1}) = 1.\\]\nCommon examples include random walk proposals \\[\\boldsymbol{\\theta}_t^{\\star} \\gets \\boldsymbol{\\theta}_{t-1} + \\tau Z,\\] where \\(Z \\sim \\mathsf{Gauss}(0,1).\\)"
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#independent-proposals",
-    "href": "slides/bayesmod-slides4.html#independent-proposals",
-    "title": "Bayesian modelling",
-    "section": "Independent proposals",
-    "text": "Independent proposals\n\nIf we pick instead a global proposal, we must ensure that \\(q\\) samples in far regions (recall rejection sampling), otherwise …\nGood proposals include heavy tailed distribution such as Student-\\(t\\) with small degrees of freedom,\ncentered at the maximum a posteriori \\(\\widehat{\\boldsymbol{\\theta}}\\) and\nwith scale matrix proportional to \\(-\\mathbf{H}^{-1}(\\boldsymbol{\\theta}_t^{\\star})\\), where \\(\\mathbf{H}(\\cdot)\\) is the Hessian of the (unnormalized) log posterior."
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#upworthy-data-example",
-    "href": "slides/bayesmod-slides4.html#upworthy-data-example",
-    "title": "Bayesian modelling",
-    "section": "Upworthy data example",
-    "text": "Upworthy data example\nWe model the Poisson rates for headlines with questions or not. Our model is \\[\\begin{align*}\nY_{i} &\\sim \\mathsf{Poisson}(n_i\\lambda_i), \\qquad (i=1,2)\\\\\n\\lambda_1 &= \\exp(\\beta + \\kappa) \\\\\n\\lambda_2 &= \\exp(\\beta) \\\\\n\\beta & \\sim \\mathsf{Gauss}(\\log 0.01, 1.5) \\\\\n\\kappa &\\sim \\mathsf{Gauss}(0, 1)\n\\end{align*}\\]"
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#implementation-details-data-and-containers",
-    "href": "slides/bayesmod-slides4.html#implementation-details-data-and-containers",
-    "title": "Bayesian modelling",
-    "section": "Implementation details: data and containers",
-    "text": "Implementation details: data and containers\nIn regression models, scale inputs if possible.\n\n# Load data\ndata(upworthy_question, package = \"hecbayes\")\n# Compute sufficient statistics\ndata &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(ntot = sum(impressions),\n                   y = sum(clicks))\n# Create containers for MCMC\nniter &lt;- 1e4L\nchain &lt;- matrix(0, nrow = niter, ncol = 2L)\ncolnames(chain) &lt;- c(\"beta\",\"kappa\")"
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#implementation-details-log-posterior-function",
-    "href": "slides/bayesmod-slides4.html#implementation-details-log-posterior-function",
-    "title": "Bayesian modelling",
-    "section": "Implementation details: log posterior function",
-    "text": "Implementation details: log posterior function\nPerform all calculations on the log scale to avoid numerical overflow!\n\n# Code log posterior as sum of log likelihood and log prior\nloglik &lt;- function(par, counts = data$y, offset = data$ntot, ...){\n  lambda &lt;- exp(c(par[1] + log(offset[1]), par[1] + par[2] + log(offset[2])))\n sum(dpois(x = counts, lambda = lambda, log = TRUE))\n}\n# Note common signature of function\nlogprior &lt;- function(par, ...){\n  dnorm(x = par[1], mean = log(0.01), sd = 1.5, log = TRUE) +\n    dnorm(x = par[2], log = TRUE)\n}\nlogpost &lt;- function(par, ...){\n  loglik(par, ...) + logprior(par, ...)\n}"
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#implementation-details-proposals",
-    "href": "slides/bayesmod-slides4.html#implementation-details-proposals",
-    "title": "Bayesian modelling",
-    "section": "Implementation details: proposals",
-    "text": "Implementation details: proposals\nUse good starting values for your Markov chains, such as maximum a posteriori.\n\n# Compute maximum a posteriori (MAP)\nmap &lt;- optim(\n  par = c(-4, 0.07),\n  fn = logpost,\n  control = list(fnscale = -1),\n  offset = data$ntot,\n  counts = data$y,\n  hessian = TRUE)\n# Use MAP as starting value\ncur &lt;- map$par\n# Compute logpost_cur - we can keep track of this to reduce calculations\nlogpost_cur &lt;- logpost(cur)\n# Proposal covariance\ncov_map &lt;- -2*solve(map$hessian)\nchol &lt;- chol(cov_map)"
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#implementation-details-metropolishastings-algorithm",
-    "href": "slides/bayesmod-slides4.html#implementation-details-metropolishastings-algorithm",
-    "title": "Bayesian modelling",
-    "section": "Implementation details: Metropolis–Hastings algorithm",
-    "text": "Implementation details: Metropolis–Hastings algorithm\nUse seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.\n\nset.seed(80601)\nnaccept &lt;- 0L\nfor(i in seq_len(niter)){\n  # Multivariate normal proposal - symmetric random walk\n  prop &lt;- c(rnorm(n = 2) %*% chol + cur)\n  logpost_prop &lt;- logpost(prop)\n  logR &lt;- logpost_prop - logpost_cur\n  if(logR &gt; -rexp(1)){\n    cur &lt;- prop\n    logpost_cur &lt;- logpost_prop\n    naccept &lt;- naccept + 1L\n  }\n  chain[i,] &lt;- cur\n}"
-  },
-  {
-    "objectID": "slides/bayesmod-slides4.html#implementation-details-analysis-of-output",
-    "href": "slides/bayesmod-slides4.html#implementation-details-analysis-of-output",
-    "title": "Bayesian modelling",
-    "section": "Implementation details: analysis of output",
-    "text": "Implementation details: analysis of output\n\n# Posterior summaries\nsummary(coda::as.mcmc(chain))\n\n1. Empirical mean and standard deviation for each variable,\n   plus standard error of the mean:\n\n          Mean       SD  Naive SE Time-series SE\nbeta  -4.51268 0.001697 1.697e-05      6.176e-05\nkappa  0.07075 0.002033 2.033e-05      9.741e-05\n\n2. Quantiles for each variable:\n\n          2.5%      25%      50%      75%    97.5%\nbeta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929\nkappa  0.06673  0.06933  0.07077  0.07212  0.07463"
+    "section": "Summary",
+    "text": "Summary\n\nMonte Carlo methods often rely on easy-to-simulate distributions \\(q(x)\\) to draw from a target \\(p(x).\\)\nRejection sampling: find"
   },
   {
     "objectID": "slides/bayesmod-slides4.html#references",
@@ -2238,7 +2161,7 @@
     "crumbs": [
       "Exercises",
       "Problem sets",
-      "5. Gibbs sampling"
+      "5. Markov chain Monte Carlo"
     ]
   },
   {
@@ -2250,7 +2173,7 @@
     "crumbs": [
       "Exercises",
       "Problem sets",
-      "5. Gibbs sampling"
+      "5. Markov chain Monte Carlo"
     ]
   },
   {
@@ -2262,7 +2185,7 @@
     "crumbs": [
       "Exercises",
       "Problem sets",
-      "5. Gibbs sampling"
+      "5. Markov chain Monte Carlo"
     ]
   },
   {
@@ -2318,7 +2241,7 @@
     "href": "exercises/03-exercise.html",
     "title": "Exercises 3",
     "section": "",
-    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{gamma}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{Gauss}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).",
+    "text": "Difficult: Consider a simple random sample of size \\(n\\) from the inverse Gaussian (Wald) distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\lambda&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{gamma}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{Gauss}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda \\mid \\boldsymbol{y}).\\)",
     "crumbs": [
       "Exercises",
       "Problem sets",
@@ -2330,7 +2253,7 @@
     "href": "exercises/03-exercise.html#exercise-3.1",
     "title": "Exercises 3",
     "section": "",
-    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{gamma}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{Gauss}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).",
+    "text": "Difficult: Consider a simple random sample of size \\(n\\) from the inverse Gaussian (Wald) distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\lambda&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{gamma}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{Gauss}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda \\mid \\boldsymbol{y}).\\)",
     "crumbs": [
       "Exercises",
       "Problem sets",
@@ -2634,257 +2557,131 @@
     "href": "content/05-content.html#content",
     "title": "Markov chain Monte Carlo",
     "section": "Content",
-    "text": "Content\n\nMetropolis-adjusted Langevin algorithm (MALA)\nGibbs sampling\nData augmentation"
+    "text": "Content\n\nMetropolis–Hastings algorithm\nMetropolis-adjusted Langevin algorithm (MALA)\nGibbs sampling\nData augmentation",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Markov chain Monte Carlo"
+    ]
   },
   {
     "objectID": "content/05-content.html#learning-objectives",
     "href": "content/05-content.html#learning-objectives",
     "title": "Markov chain Monte Carlo",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nimplement Gibbs sampling\nderive the conditional distributions of a model for Gibbs sampling"
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nimplement a Metropolis–Hastings algorithm to draw samples from the posterior\nuse efficient proposals and tuning for MCMC\nimplement Gibbs sampling\nderive the conditional distributions of a model for Gibbs sampling",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Markov chain Monte Carlo"
+    ]
   },
   {
     "objectID": "content/05-content.html#readings",
     "href": "content/05-content.html#readings",
     "title": "Markov chain Monte Carlo",
     "section": "Readings",
-    "text": "Readings\n\nChapters 5 and 6 of the course notes"
+    "text": "Readings\n\nChapters 5 and 6 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Markov chain Monte Carlo"
+    ]
   },
   {
     "objectID": "content/05-content.html#complementary-readings",
     "href": "content/05-content.html#complementary-readings",
     "title": "Markov chain Monte Carlo",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\nAlbert (2009), chapters 6 and 10 (several examples)\nMcElreath (2020), chapter 9 (non technical)\nNeal (2003) (slice sampling)"
+    "text": "Complementary readings\n\nAlbert (2009), chapters 6 and 10 (several examples)\nMcElreath (2020), chapter 9 (non technical)\nNeal (2003) (slice sampling)",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "5: Markov chain Monte Carlo"
+    ]
   },
   {
     "objectID": "content/05-content.html#slides",
     "href": "content/05-content.html#slides",
     "title": "Markov chain Monte Carlo",
     "section": "Slides",
-    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides"
-  },
-  {
-    "objectID": "content/03-lecture.html#distraction-from-smartwatches",
-    "href": "content/03-lecture.html#distraction-from-smartwatches",
-    "title": "Lecture 3",
-    "section": "Distraction from smartwatches",
-    "text": "Distraction from smartwatches\nThe following code is Stan code (mean-centered for the random effect) for the Poisson “mixed effect” model of Brodeur et al. (2021).\ndata {\n  int&lt;lower=0&gt; N;\n  int&lt;lower=1&gt; K; // nb fixed effect levels for distraction type\n  int&lt;lower=1&gt; J; // nb random effect levels for individuals\n  array[N] int&lt;lower=0&gt; y;    // vector of data\n  array[N] int&lt;lower=1, upper=J&gt; id;\n  array[N] int&lt;lower=1, upper=K&gt; fixed;\n}\nparameters {\n  vector[K] beta;\n   sum_to_zero_vector[J] alpha;\n  real&lt;lower=0&gt; kappa;\n}\n\nmodel {\n  kappa ~ exponential(0.6);\n  beta ~ normal(0, 10);\n  alpha ~ normal(0, sqrt(J * inv(J - 1)) * kappa);\n  y ~ poisson_log(alpha[id] + beta[fixed]);\n}\nbut this model is also easily fitted in brms, albeit with slightly different priors.\n\ndata(smartwatch, package = \"hecbayes\")\n# Random effect model with default priors\nsmartwatch_mod &lt;- brm(\n  nviolation ~ 0 + task + (1 | id),\n  data = smartwatch,\n  family = poisson(link = \"log\"),\n  set_prior(\n    prior = \"normal(0, 5)\", \n    class = \"b\"),\n  backend = \"cmdstanr\", # faster than rstan\n  silent = 2) # remove verbose output\nsummary(smartwatch_mod)\n\n Family: poisson \n  Links: mu = log \nFormula: nviolation ~ 0 + task + (1 | id) \n   Data: smartwatch (Number of observations: 124) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nMultilevel Hyperparameters:\n~id (Number of levels: 31) \n              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsd(Intercept)     0.56      0.08     0.42     0.75 1.00      885     1777\n\nRegression Coefficients:\n            Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\ntaskphone       1.77      0.12     1.52     2.02 1.01      631     1237\ntaskwatch       1.73      0.13     1.48     1.98 1.01      624      982\ntaskspeaker     1.79      0.13     1.54     2.03 1.01      618     1184\ntasktexting     2.43      0.11     2.20     2.65 1.01      543      970\n\nDraws were sampled using sample(hmc). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nfixef(smartwatch_mod)\n\n            Estimate Est.Error     Q2.5    Q97.5\ntaskphone   1.769084 0.1247112 1.521574 2.015402\ntaskwatch   1.731203 0.1254586 1.483068 1.975162\ntaskspeaker 1.793016 0.1253032 1.538412 2.032189\ntasktexting 2.433497 0.1146008 2.203393 2.648241\n\nconditional_effects(x = smartwatch_mod,\n                    effects =  \"task\",\n                    prob = 0.8)"
-  },
-  {
-    "objectID": "content/03-lecture.html#climate-change-mean-temperature-increase",
-    "href": "content/03-lecture.html#climate-change-mean-temperature-increase",
-    "title": "Lecture 3",
-    "section": "Climate change mean temperature increase",
-    "text": "Climate change mean temperature increase\nDifferent climate models and runs give rise to different average estimates of temperature increase. We can consider a very simple hierarchical model to capture this, assuming that data are Gaussian with model-specific “random effects”. The data are unbalanced: some climate models offer a single run, other mutliples.\n\nlibrary(bang) # Bayesian analysis with ROU\ndata(temp2)\nRCP26 &lt;- temp2 |&gt; dplyr::filter(RCP == \"rcp26\")\nanova_mod1 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"bda\", # uniform on mu, log(sigma), sigma_a\n  fac = RCP26$GCM)\nanova_mod2 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"unif\", # uniform on mu, sigma, sigma_a\n  fac = RCP26$GCM)\nanova_mod3 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"cauchy\", # half-Cauchy  for the scale\n  fac = RCP26$GCM)\n\nThe model is of the form, for \\(r = 1, \\ldots, R\\): \\[\nY_{i(r),r} \\sim \\mathsf{Gauss}(\\mu + \\alpha_r, \\sigma^2),\n\\alpha_r \\sim \\mathsf{Gauss}(0, \\sigma^2_\\alpha)\n\\] and we need a prior \\(p(\\mu, \\sigma_{\\alpha}, \\sigma).\\) There are numerous priors that could be considered here.\n\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto \\sigma^{-1}\\) (location-scale, improper if \\(R &lt; 3.\\)\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto 1\\) (improper)\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto (1+\\sigma^2_{\\alpha}/S_{\\alpha}^2)^{-1}(1+\\sigma^2/S^2)^{-1}\\) on \\(\\mathbb{R} \\times [0,\\infty)^2.\\) This corresponds to half-Cauchy distribution on the positive reals with a scale of \\(S\\) and \\(S_{\\alpha}\\) (default 10).\n\nBelow, we plot the posterior density for each of the \\(\\alpha_r\\) \\((r=1, \\ldots, R)\\) for each of the three priors. There appears to be little difference to the first level, even for factor levels with few observations. Changing altogether the prior on the “random effect” from Gaussian to Cauchy would have more impact, as there is inherently a lot of regularization due to the prior in this specific application.\n\nsummary(anova_mod1,\n        which_pop = c(\"theta[1]\", \"theta[8]\"),\n        params = \"pop\")\n\n    theta[1]         theta[8]    \n Min.   :0.9415   Min.   :1.485  \n 1st Qu.:1.0875   1st Qu.:1.546  \n Median :1.1280   Median :1.557  \n Mean   :1.1264   Mean   :1.557  \n 3rd Qu.:1.1650   3rd Qu.:1.569  \n Max.   :1.3788   Max.   :1.621  \n\nsummary(anova_mod1,\n        params = \"hyper\")\n\nru bounding box:  \n               box         vals1        vals2 conv\na        1.0000000  0.0000000000  0.000000000    0\nb1minus -0.1466810 -0.2326509993  0.001997345    0\nb2minus -0.1475368 -0.0004397797 -0.234538810    0\nb1plus   0.1755008  0.3048045193  0.001126515    0\nb2plus   0.1739269 -0.0010104517  0.300416382    0\n\nestimated probability of acceptance:  \n[1] 0.5167959\n\nsample summary \n       mu          sigma[alpha]        sigma        \n Min.   :0.8903   Min.   :0.2823   Min.   :0.04121  \n 1st Qu.:1.1817   1st Qu.:0.4012   1st Qu.:0.05233  \n Median :1.2458   Median :0.4402   Median :0.05605  \n Mean   :1.2408   Mean   :0.4490   Mean   :0.05698  \n 3rd Qu.:1.3007   3rd Qu.:0.4885   3rd Qu.:0.06113  \n Max.   :1.5148   Max.   :0.7210   Max.   :0.09077  \n\nggplot() +\n  geom_density(\n    data = anova_mod1$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM))  +\n  geom_density(\n    data = anova_mod3$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM),\n    col = \"#ef8a47\")  +\n  geom_density(\n    data = anova_mod2$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM),\n    col = \"#72bcd5\")  +\n  labs(x = \"posterior mean\") +\n  theme_classic() +\n  theme(legend.position = \"none\")"
-  },
-  {
-    "objectID": "content/02-lecture.html#bayes-factor-and-model-comparison",
-    "href": "content/02-lecture.html#bayes-factor-and-model-comparison",
-    "title": "Lecture 2",
-    "section": "Bayes factor and model comparison",
-    "text": "Bayes factor and model comparison\nWe consider the number of purchased out of the total, treating records as independent Bernoulli observations with a flat (uniform prior). We also consider a simple model comparison where the null hypothesis is that the selling format has no impact on the decision to buy or not (no treatment effect). We write \\(y=\\sum_{i=1}^n y_i\\) and \\(y_1 = \\sum_{i=1}^n x_iy_i,\\) \\(n_1 = \\sum_{i=1}^n x_i\\) and \\(y_0+y_1=y\\), \\(n_0+n_1=n.\\) The subscript indicates the groups \\(0\\) (quantity-integrated) and \\(1\\) (quantity-sequential)$.\nWith a uniform prior, the unnormalized posterior for the null model is \\[\\mathcal{L}_0(\\theta) = \\theta^y(1-\\theta)^{n-y}\\] and that of the alternative model is \\[\\mathcal{L}_0(\\theta_0, \\theta_1) = \\theta_0^{y_0}(1-\\theta_0)^{n_0-y_0}\\theta_1^{y_1}(1-\\theta_1)^{n_1-y_1},\\] the marginal likelihood is \\(\\mathrm{beta}(y+1, n-y+1).\\) From these, we can compute directly the Bayes factor\n\n# Calculation of the marginal likelihood\nlog_marg_post_bern &lt;- function(n, y) {\n  lbeta(1 + y, 1 + n - y)\n}\n\n# Extract summary statistics (sufficient statistics)\nn &lt;- sum(cont)\nn0 &lt;- colSums(cont)['quantity-integrated']\nn1 &lt;- colSums(cont)['quantity-sequential']\ny0 &lt;- cont[\"1\", \"quantity-integrated\"]\ny1 &lt;- cont[\"1\", \"quantity-sequential\"]\ny &lt;- y0 + y1\n\n# Alternative model (one proportion for each subgroup)\nBF1 &lt;- log_marg_post_bern(n = n0, y = y0) + # integrated\n  log_marg_post_bern(n = n1, y = y1) # sequential decision\n# Null model (same proportion regardless of experimental variable)\nBF0 &lt;- log_marg_post_bern(n = n, y = y) # pooled\n# Bayes factor\nexp(BF0 - BF1)\n\n[1] 0.09345664\n\n# Normalizing constant is marginal likelihood\n# whose log is about -110\n# so too small for accurate numerical integration\n# Integrate instead a binomial likelihood\n# and remove this from the normalizing constant later\nmarg_binom &lt;- integrate(\n  f = function(x) {\n    dbinom(x = y0, size = n0, prob = x)\n  },\n  lower = 0,\n  upper = 1\n)\n# Compare the numerical approximation with the true\nc(\n  \"numerical\" = log(marg_binom$value) - lchoose(n0, y0),\n  \"exact\" = log_marg_post_bern(n = n0, y = y0)\n)\n\nnumerical.quantity-integrated                         exact \n                    -109.9198                     -109.9198"
-  },
-  {
-    "objectID": "content/02-lecture.html#maximum-a-posteriori",
-    "href": "content/02-lecture.html#maximum-a-posteriori",
-    "title": "Lecture 2",
-    "section": "Maximum a posteriori",
-    "text": "Maximum a posteriori\nWith a beta-binomial model, the posterior for the probability of buying is \\(\\mathsf{beta}(47, 153)\\) for quantity-integrated and \\(\\mathsf{beta}(24, 177)\\) for quantity-sequential.\nWe can proceed (analogous to the frequentist setting) to maximimization of the unnormalized log posterior to find the mode of the latter. This is unnecessary in this example (since the likelihood and the prior factorize) and we know the posterior distribution analytically; the mode for \\(\\mathsf{beta}(\\alpha_1, \\alpha_2)\\) is \\((\\alpha_1-1)/(\\alpha_1 + \\alpha_2 -2).\\)\nIt may be useful in more complex models to consider a change of variable so that our random variables live on the real line directly. This implies a change of variable, say here from \\(\\theta \\in [0,1]\\) to \\(\\vartheta \\in \\mathbb{R}\\) via \\(\\vartheta =g(\\theta)\\log(\\theta)-\\log(1-\\theta),\\) the quantile function of the logistic distribution. The Jacobian of the transformation is \\(\\theta(1-\\theta)\\) and this yields an ajusted posterior (after modifying the prior) \\[p(\\vartheta \\mid y) = p(y \\mid \\theta)\\theta(1-\\theta).\\]\nNote that, as a result, the mode is not invariant to reparametrization (so the MAP under the transformed model is not \\(\\widehat{\\vartheta}_{\\mathrm{map}} \\neq g(\\widehat{\\theta}_{\\mathrm{map}})\\).\n\n# Unnormalized log-posterior\nlogpost &lt;- function(theta, y, n){\n y * log(theta) + (n - y) * log(1 - theta) # prior is uniform\n}\n# Maximum a posteriori\nmap &lt;- optimize(\n  f = logpost, \n  maximum = TRUE, \n  interval = c(0, 1), \n  y = y1, \n  n = n1)\n\npar(mfrow = c(1,2), bty = \"l\")\n# Plot the posterior density\ncurve(expr = dbeta(x, shape1 = 24, shape2 = 177), \n      from = 0, \n      to = 0.4, \n      n = 1001L,\n      ylab = \"posterior density\",\n      xlab = expression(theta))\nabline(v = 23/197)\nabline(v = map$maximum, lty = 2)\n# Plot the posterior on the unconstrained space\ncurve(expr = dbeta(plogis(x), shape1 = 24, shape2 = 177) * plogis(x) * (1-plogis(x)),\n      from = -3, \n      to = 0, \n      n = 1001L,\n      ylab = \"posterior density\",\n      xlab = expression(\"logit\"~theta))\n# Mode is not invariant (due to Jacobian adjustment)\nplogis(map$maximum)\n\n[1] 0.5288639\n\n\n\n\n\n\n\n\nFigure 1: Posterior density of the parameter for the beta-binomial model for the quantity-sequential experimental group."
-  },
-  {
-    "objectID": "content/02-lecture.html#posterior-summary",
-    "href": "content/02-lecture.html#posterior-summary",
-    "title": "Lecture 2",
-    "section": "Posterior summary",
-    "text": "Posterior summary\nWe consider in this section a simple functional of the posterior parameters \\(\\theta_0\\) and \\(\\theta_1,\\) the odds ratio. We can compute the latter from \\[O = \\frac{\\Pr(Y=1 \\mid \\texttt{integrated})}{\\Pr(Y=0 \\mid \\texttt{integrated})}\\frac{\\Pr(Y=0 \\mid \\texttt{sequential})}{\\Pr(Y=1 \\mid \\texttt{sequential})} = \\frac{\\theta_0}{1-\\theta_0}\\frac{(1-\\theta_1)}{\\theta_1},\\] Since this is not tractable, we sample directly draws from the posterior of \\(\\theta_0\\) and \\(\\theta_1\\) and combine them to obtain samples of the odds, from which we can extract any summary of interest. We can also compute the probability of superiority, say, \\(\\Pr(\\theta_0 &gt; \\theta_1).\\)\n\n# Sample from the posterior\npost_p_int &lt;- rbeta(n = 1e4L, shape1 = y0 + 1, shape2 = n0 - y0 + 1)\npost_p_seq &lt;- rbeta(n = 1e4L, shape1 = y1 + 1, shape2 = n1 - y1 + 1)\n# Probability of superiority (akin to one-sided test of mu2 &gt; mu1)\nmean(post_p_int &gt; post_p_seq)\n\n[1] 0.9986\n\n# Reparametrization in terms of odds\npost_odds_int &lt;- (post_p_int / (1 - post_p_int))\npost_odds_seq &lt;- (post_p_seq / (1 - post_p_seq))\n# Posterior odds\npost_oddsratio &lt;- post_odds_int / post_odds_seq\n\nWe can also compute summaries of the posterior by minimizing a loss function. Below, this is done for the quantile function using Monte Carlo integration.\n\n# Pinball loss\npinball &lt;- function(y, qlev = 0.5) {\n  ifelse(y &lt; 0, (qlev - 1) * y, qlev * y)\n}\n\n# Posterior summary via loss functions\n# Computing the 80% by minimizing a loss function\nq80 &lt;- optimize(\n  f = function(x) {\n    mean(pinball(post_oddsratio - x, 0.8))\n  },\n  interval = c(0, 1e10)\n)$minimum\n# Compare answer with empirical quantile\nquantile(post_oddsratio, 0.8)\n\n     80% \n2.891041 \n\n# 80% Highest posterior density interval\nhdiD &lt;- HDInterval::hdi(\n  density(post_oddsratio),\n  credMass = 0.80\n)\n# Equitailed confidence intervals\nquantile(post_oddsratio, probs = c(0.1, 0.9))\n\n     10%      90% \n1.613962 3.267642 \n\n\nFinally, we can visualize the posterior of the two parameters \\(\\theta_0\\) and \\(\\theta_1\\), and their odds ratio \\(O.\\)\n\n# Plot posterior densities for probability of buying the product\ncols &lt;- MetBrewer::met.brewer(\"Hiroshige\", 2)\ng1 &lt;- ggplot() +\n  stat_function(\n    fun = dbeta,\n    xlim = c(0, 0.5),\n    n = 1001,\n    args = list(shape1 = y0 + 1, shape2 = n0 - y0 + 1),\n    mapping = aes(col = \"integrated\")\n  ) +\n  stat_function(\n    fun = dbeta,\n    xlim = c(0, 0.5),\n    n = 1001,\n    args = list(shape1 = y1 + 1, shape2 = n1 - y1 + 1),\n    mapping = aes(col = \"sequential\")\n  ) +\n  scale_color_manual(\n    name = 'Sales format',\n    breaks = c('sequential', 'integrated'),\n    values = c('sequential' = cols[1], 'integrated' = cols[2])\n  ) +\n  scale_x_continuous(\n    breaks = seq(0, 0.5, by = 0.25),\n    labels = c(\"0\", \"0.25\", \"0.5\")\n  ) +\n  labs(\n    y = \"\",\n    subtitle = \"Posterior density\",\n    x = \"probability of buying\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, NA),\n    expand = expansion()\n  ) +\n  theme_classic() +\n  theme(\n    legend.position = \"inside\",\n    legend.position.inside = c(0.9, 0.9)\n  )\n# Plot posterior odds\ng2 &lt;- ggplot(\n  data = data.frame(ratio = post_oddsratio),\n  mapping = aes(x = ratio)\n) +\n  geom_density() +\n  labs(\n    x = \"odds ratio of integrated vs sequential decisions\",\n    subtitle = \"posterior density\",\n    y = \"\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, NA),\n    expand = expansion()\n  ) +\n  theme_classic()\ng1 + g2\n\n\n\n\n\n\n\nFigure 2: Posterior density of \\(\\theta_0\\) and \\(\\theta_1\\) (left) and of their odds ratio (right)."
-  },
-  {
-    "objectID": "content/02-lecture.html#model-likelihood",
-    "href": "content/02-lecture.html#model-likelihood",
-    "title": "Lecture 2",
-    "section": "Model likelihood",
-    "text": "Model likelihood\nThe generalized Pareto distribution with scale \\(\\tau&gt;0\\) and shape \\(\\xi \\in \\mathbb{R}\\) has distribution and density functions equal to, respectively \\[\\begin{align*}\nF(x) &=\n\\begin{cases}\n1 - \\left(1+\\frac{\\xi}{\\tau}x\\right)_{+}^{-1/\\xi} & \\xi \\neq 0 \\\\\n1 - \\exp(-x/\\tau) & \\xi=0\n\\end{cases}, \\quad x \\geq 0; \\\\\nf(x) &=\n\\begin{cases}\n\\tau^{-1}\\left(1+\\frac{\\xi}{\\tau}x\\right)_{+}^{-1/\\xi-1} & \\xi \\neq 0 \\\\\n\\tau^{-1}\\exp(-x/\\tau) & \\xi=0\n\\end{cases}\\quad x \\geq 0;\n\\end{align*}\\] with \\(x_{+} = \\max\\{x, 0\\}.\\) The case \\(\\xi=0\\) corresponding to the exponential distribution with rate \\(\\tau^{-1}\\). The distribution is used to model excesses over a large threshold \\(u\\), as extreme value theory dictates that, under broad conditions, \\(Y-u \\mid Y &gt; u \\sim \\mathsf{gen. Pareto}(\\tau_u, \\xi)\\) as \\(u\\) tends to the endpoint of the support of \\(Y\\), regardless of the underlying distribution of \\(Y\\).\nThe generalized Pareto model only describes the \\(n_u\\) exceedances above \\(u,\\) so we need to incorporate in the likelihood a binomial contribution for the probability \\(\\zeta_u\\) of exceeding the threshold \\(u.\\)\nWe use the distribution to model Danish fire insurance claims (in million krones) from the evir package. The log likelihood for the full model for \\(y_i&gt;u=10\\) million krones is \\[\\begin{align*}\n\\ell(\\tau, \\xi, \\zeta_u) &\\propto -109 \\log \\tau + \\sum_{i=1}^{109} (1+1/\\xi)\\log\\left(1+\\xi\\frac{y_i-10}{\\tau}\\right)_{+} + \\\\& \\quad   109\\log \\zeta_u + 2058 \\log(1-\\zeta_u),\n\\end{align*}\\] Provided that the priors for \\((\\tau, \\xi)\\) are independent of those for \\(\\zeta_u,\\) the posterior also factorizes as a product, so \\(\\zeta_u\\) and \\((\\tau, \\xi)\\) are a posteriori independent."
-  },
-  {
-    "objectID": "content/02-lecture.html#posterior-sampling",
-    "href": "content/02-lecture.html#posterior-sampling",
-    "title": "Lecture 2",
-    "section": "Posterior sampling",
-    "text": "Posterior sampling\nWe use a Monte Carlo algorithm, known as the ratio-of-uniform method, to obtain exact samples from the posterior of the binomial - generalized Pareto model. The results are given in a list with two matrices containing the samples of \\((\\tau, \\xi)\\) and those of \\(\\zeta_u\\), which we combine in a single data frame.\n\ndata(danish, package = \"evir\")\n# Using ratio-of-uniform, generate posterior samples\n# from the binomial - generalized Pareto model\nu &lt;- 10\npost_samp &lt;- revdbayes::rpost_rcpp(\n  n = 1000L, # number of posterior sample\n  model = \"bingp\", # model (pre-coded)\n  data = danish,\n  prior = revdbayes::set_prior(prior = \"mdi\", model = \"gp\"), \n  thresh = u\n)\n# Generates in $sim_vals the scale and shape parameters\n# and in '$bin_sim_vals' the binomial probability 'probexc'\n# Combine samples into a matrix\npost_samp &lt;- cbind(post_samp$sim_vals, post_samp$bin_sim_vals)\ncolnames(post_samp) &lt;- c('scale', 'shape', \"probexc\")\npost_samp &lt;- as.data.frame(post_samp)\n\n# Plot the bivariate posterior of the generalized Pareto parameters\nggplot(\n  data = post_samp,\n  mapping = aes(x = scale, y = shape)\n) +\n  geom_point() +\n  labs(x = expression(tau), y = expression(xi)) +\n  theme_classic() +\n  theme(axis.title.y = element_text(angle = 0))\n\n\n\n\n\n\n\nFigure 3: Bivariate posterior of the scale \\(\\tau\\) and shape \\(\\xi\\) of the generalized Pareto distribution fitted to claims exceeding 10M krones."
-  },
-  {
-    "objectID": "content/02-lecture.html#value-at-risk-calculation",
-    "href": "content/02-lecture.html#value-at-risk-calculation",
-    "title": "Lecture 2",
-    "section": "Value-at-risk calculation",
-    "text": "Value-at-risk calculation\nEquipped with the posterior samples, we can now compute the value-at-risk (VaR), corresponding to a high quantile of the distribution. For any \\(\\alpha &gt; 1-\\zeta_u,\\) the \\(q_{\\alpha}\\) quantile can be written in terms of the generalized Pareto survival function times the probability of exceedance above the threshold, \\[\\begin{align*}\n1- \\alpha  &= \\Pr(Y &gt; q_\\alpha \\mid Y &gt; u) \\Pr(Y &gt; u)\n\\\\ &= \\left(1+\\xi \\frac{q_{\\alpha}-u}{\\tau}\\right)_{+}^{-1/\\xi}\\zeta_u\n\\end{align*}\\] and solving for \\(q_{\\alpha}\\) gives \\[\\begin{align*}\nq_{\\alpha} = u+ \\frac{\\tau}{\\xi} \\left\\{\\left(\\frac{\\zeta_u}{1-\\alpha}\\right)^\\xi-1\\right\\}.\n\\end{align*}\\]\n\nVaR_post &lt;- with(\n  post_samp, # data frame of posterior draws\n  u + scale/shape * ((probexc / 0.01)^shape - 1)\n)\nhead(VaR_post)\n\n[1] 25.89404 24.22463 27.22380 37.24916 27.54289 32.62303\n\ng1 &lt;- ggplot(data = data.frame(x = VaR_post)) +\n  geom_density(mapping = aes(x = x)) +\n  labs(\n    subtitle = \"posterior density\",\n    x = \"value-at-risk 0.99 (in millions krone)\",\n    y = \"\"\n  ) +\n  scale_y_continuous(limits = c(0, 0.15), expand = c(0, 0)) +\n  theme_classic()"
-  },
-  {
-    "objectID": "content/02-lecture.html#custom-loss-specification",
-    "href": "content/02-lecture.html#custom-loss-specification",
-    "title": "Lecture 2",
-    "section": "Custom loss specification",
-    "text": "Custom loss specification\nSuppose that we prefer to under-estimate the value-at-risk rather than overestimate: this could be captured by the custom loss function \\[\\begin{align*}\nc(q, q_0) =\n\\begin{cases}\n0.5(0.99q - q_0), & q &gt; q_0 \\\\\n0.75(q_0 - 1.01q), & q &lt; q_0.\n\\end{cases}\n\\end{align*}\\] For a given value of the value-at-risk \\(q_0\\) evaluated on a grid, we thus compute \\[\\begin{align*}\nr(q_0) = \\int_{\\boldsymbol{\\Theta}}c(q(\\boldsymbol{\\theta}), q_0) p (\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\] and we seek to minimize the risk, \\(\\widehat{q} =\\mathrm{argmin}_{q_0 \\in \\mathbb{R}_{+}} r(q_0).\\)\n\n# Loss functions\nloss &lt;- function(qhat, q) {\n  mean(ifelse(q &gt; qhat, 0.5 * (0.99 * q - qhat), 0.75 * (qhat - 1.01 * q)))\n}\n# Create a grid of values over which to estimate the loss for VaR\n# Normally, we could simply minimize the loss\n# but we want to plot the corresponding objective function\nnvals &lt;- 101L\nVaR_grid &lt;- seq(\n  from = quantile(VaR_post, 0.01),\n  to = quantile(VaR_post, 0.99),\n  length.out = nvals\n)\n# Create a container to store results\nrisk &lt;- numeric(length = nvals)\nfor (i in seq_len(nvals)) {\n  # Compute integral (Monte Carlo average over draws)\n  risk[i] &lt;- loss(q = VaR_post, qhat = VaR_grid[i])\n}\n\n\n# Plot loss function\ng2 &lt;- ggplot(\n  data = data.frame(\n    loss = risk - min(risk),\n    quantile = VaR_grid\n  )\n) +\n  geom_line(mapping = aes(x = quantile, y = loss)) +\n  geom_vline(xintercept = VaR_grid[which.min(risk)], linewidth = 0.1) +\n  geom_vline(\n    xintercept = mean(VaR_post),\n    linetype = \"dashed\",\n    linewidth = 0.1\n  ) +\n  scale_y_continuous(limits = c(0, 9), expand = c(0, 0)) +\n  labs(\n    x = \"value-at-risk 0.99 (in millions krone)\",\n    subtitle = \"custom loss function (full)\"\n  ) +\n  theme_classic()\ng1 + g2\n\n\n\n\n\n\n\nFigure 4: Posterior density (left) and losses functions for the 0.99 value-at-risk for the Danish fire insurance data. The vertical lines denote point estimates of the quantiles that minimize the loss functions."
-  },
-  {
-    "objectID": "content/01-lecture.html#hierarchical-model",
-    "href": "content/01-lecture.html#hierarchical-model",
-    "title": "Lecture 1",
-    "section": "Hierarchical model",
-    "text": "Hierarchical model\nWe use the hierarchical Poisson–gamma model to account for overdispersion. This gives an example of how to simulate from the marginal model (here negative binomial) by forward sampling: we first generate the means \\(\\Lambda\\) from the gamma distribution, then for each value of \\(\\Lambda\\), we generate a corresponding count. The functions for random number generation in base R are vectorized with respect to their arguments.\n\n# Sample the means of the Poisson\nn &lt;- 1000L\nk &lt;- 0.5 # dispersion\nmu &lt;- 4 # mean\n#  The gamma distribution has a mean of 4 and variance of 8\nLambda &lt;- rgamma(n = n, shape = k*mu, rate = k)\n# Functions r* for random number generation are vectorized wrt arguments\nY &lt;- rpois(n = n, lambda = Lambda)\n\nWe can use Monte Carlo integration to compute moments \\(\\mathsf{E}_Y(Y)\\) and \\(\\mathsf{Var}_Y(Y)\\) and compare these estimates with the numbers derived analytically.\n\n# Calculate the empirical mean and variance of the counts\n# This is a form of Monte Carlo integration\nrbind(empirical = c(\"mean\" = mean(Y), \"variance\" = var(Y)),\n      theoretical = c(\"mean\" = mu, \"variance\" = mu + mu/k))\n\n            mean variance\nempirical    3.9       11\ntheoretical  4.0       12\n\n\nWe established that the marginal distribution of \\(Y\\) from the Poisson mixture of gamma is negative binomial. We can compare the theoretical mass function with the Monte Carlo estimate (proportion for each integer) to see whether they match, up to sampling variability.\n\n# Create a bar plot manually and compare with marginal CDF of neg. binom\nplot(\n  x = sort(unique(Y)), \n  y = table(Y) / length(Y),\n  type = \"h\",\n  xlab = \"x\",\n  ylab = \"probability\"\n  )\nsegments(\n  x0 = 0:max(Y) - 0.25,\n  x1 = 0:max(Y) + 0.25, \n  y0 = dnbinom(0:max(Y), prob = 1 - 1/(k + 1), size = k*mu), \n  col = 2)\n\n\n\n\n\n\n\nFigure 1"
-  },
-  {
-    "objectID": "content/01-lecture.html#change-of-variable-formula-and-jacobian",
-    "href": "content/01-lecture.html#change-of-variable-formula-and-jacobian",
-    "title": "Lecture 1",
-    "section": "Change of variable formula and Jacobian",
-    "text": "Change of variable formula and Jacobian\nWe consider Example 1.5 from the course notes (gamma to inverse gamma). We use \\(y = g(x) = 1/x\\), whose Jacobian is \\(J_g=1/x^2\\) in the formula for the density \\(f(y) = f_x\\{g(x)\\}|J_g|.\\) The resulting density integrates to unity over \\(\\mathbb{R}_{+}\\).\n\nshape &lt;- 0.5; rate &lt;- 2\n# Jacobian of transformation 1/x is 1/x^2\ndinvgamma &lt;- function(x, rate, shape){\n    dgamma(1/x, rate = rate, shape = shape) / x^2\n}\nintegrate(f = dinvgamma, lower = 0, upper = Inf, rate = rate, shape = shape)\n\n1 with absolute error &lt; 1.1e-05\n\npar(mfrow = c(1,2))\ncurve(\n  expr = dgamma(x, rate = rate, shape = shape), \n  from = 0, \n  to = 10, \n  ylab = \"density\", \n  sub = \"gamma\")\ncurve(\n  expr = dinvgamma(x, rate = rate, shape = shape), \n  from = 0, \n  to = 10, \n  ylab = \"density\", \n  sub = \"gamma\")\n\n\n\n\n\n\n\nFigure 2: Density of \\(X \\sim \\mathsf{gamma}(0.5,2)\\) with shape 0.5 and rate 2 (left) and \\(Y=g(X) \\sim \\mathsf{inv. gamma}(0.5,2)\\) (right), obtained through a change of variable \\(g(x) = 1/x\\)."
-  },
-  {
-    "objectID": "content/01-lecture.html#first-order-autoregressive-process",
-    "href": "content/01-lecture.html#first-order-autoregressive-process",
-    "title": "Lecture 1",
-    "section": "First-order autoregressive process",
-    "text": "First-order autoregressive process\nThe autoregressive of order 1 model, defined as \\[\nY_t = \\mu +\\phi(Y_{t-1}-\\mu) + \\varepsilon_t,\n\\] where \\(\\varepsilon_t\\) are independent and identically distributed white noise, typically mean zero Gaussian, is stationary if \\(|\\phi &lt;1|\\). By the law of iterated variance, we find that the unconditional variance is \\(\\sigma^2/(1-\\phi^2)\\), and increases with \\(t\\) otherwise if \\(|\\phi| \\ge 1.\\) The code below shows simulations of three instances: one with positive correlation, which seems to show local nonstationarity although the process is mean-stationary, the second with negative correlation which oscillates around the truth. The last, initialized at zero, is a random walk which drifts towards infinity as \\(t\\) increases.\n\nsimulate_ar1 &lt;- function(n, phi, mu = 0, sigma = 1){\n y &lt;- numeric(n) # container of size n\n # simulate from marginal if process is stationary\n y[1] &lt;- ifelse(abs(phi) &lt; 1,\n  rnorm(n = 1, sd = sigma / sqrt(1-phi^2)),\n  0)\n for(i in 2:n){\n  y[i] &lt;- mu + phi * (y[i-1]-mu) + rnorm(n = 1, sd = sigma)\n }\n return(y)\n}\nset.seed(2026)\npar(mfrow = c(1, 3), bty = \"l\")\n# Strong positive correlation\nplot(\n  simulate_ar1(n = 100, phi = 0.75), \n  type = \"l\", \n  ylab = \"observation\", \n  xlab = \"time\")\n# Negative correlation (oscillates around the mean)\nplot(\n  simulate_ar1(n = 100, phi = -0.5),\n  type = \"l\", \n  ylab = \"observation\", \n  xlab = \"time\")\n# Non-stationary (increasing variance)\nplot(\n  simulate_ar1(n = 100, phi = 1), \n  type = \"l\", \n  ylab = \"observation\", \n  xlab = \"time\")\n\n\n\n\n\n\n\nFigure 3: Time series of first-order autoregressive process draws with standard Gaussian innovations and different autocorrelation parameters: \\(\\phi=0.75\\) (left), \\(\\phi=-0.5\\) (middle) and \\(\\phi=1\\) (right, non-stationary process).\n\n\n\n\n\nValues of \\(|\\phi| \\geq 1\\) yields nonstationary processes, whose variance increases over time."
-  },
-  {
-    "objectID": "content/01-lecture.html#monte-carlo-estimation",
-    "href": "content/01-lecture.html#monte-carlo-estimation",
-    "title": "Lecture 1",
-    "section": "Monte Carlo estimation",
-    "text": "Monte Carlo estimation\nMonte Carlo integration, which relies on the law of large numbers, replaces integration by sample averages. The precision of the estimate increases with the number of draws \\(B\\) (the sample variance decreases at rate \\(B^{-1}\\)). The illustration below with gamma variates with shape of \\(\\alpha =1/2\\) and rate \\(\\beta=2\\) for three expected values: the first is a probability, the second the expected value, and the third the first reciprocal moment which is undefined, as the integral diverges whenever \\(\\alpha \\le 1\\). We can see this lack of existence translates into erratic jumps in the estimates path.\n\nset.seed(80601)\nB &lt;- 1e5L # number of simulation\nBseq &lt;- seq_len(B)\n# Parameters for shape and rate\nalpha &lt;- 0.5; beta &lt;- 2\npv &lt;- pgamma(1, shape = alpha, rate = beta)\nsamp &lt;- rgamma(n = B, shape = alpha, rate = beta)\n# Running means of the parameters\nint1 &lt;- cumsum(samp &lt; 1) / Bseq\nint2 &lt;- cumsum(samp) / Bseq\nint3 &lt;- cumsum(1/samp) / Bseq\npar(mfrow = c(1,3), bty = \"l\")\nplot(\n  x = Bseq[-(1:20)], \n  y = int1[-(1:20)], \n  xlab = \"number of draws\", \n  ylab = \"Monte Carlo estimate\", \n  type = \"l\")\nplot(\n  x = Bseq[-(1:20)], \n  y = int2[-(1:20)], \n  xlab = \"number of draws\", \n  ylab = \"Monte Carlo estimate\", \n  type = \"l\")\nplot(\n  x = Bseq[-(1:20)], \n  y = int3[-(1:20)], \n  xlab = \"number of draws\", \n  ylab = \"Monte Carlo estimate\", \n  type = \"l\")\n# Compute std. error of estimator of total size (assuming it exists)\nse1 &lt;- sqrt(var(samp &lt; 1) / B)\n# 95% Wald-based confidence interval\nconfint &lt;- mean(samp &lt; 1) + se1 * qnorm(c(0.025,0.975))\n# Compare with truth\npv\n\n[1] 0.95\n\n\n\n\n\n\n\n\nFigure 4: Monte Carlo estimates (running means) as a function of the sample size for \\(\\Pr(Y&gt;1)\\), \\(\\mathsf{E}(Y)\\) and \\(\\mathsf{E}(1/Y)\\) (divergent) for \\(Y \\sim \\mathsf{gamma}(0.5,2)\\)."
-  },
-  {
-    "objectID": "content/01-content.html#content",
-    "href": "content/01-content.html#content",
-    "title": "Introduction",
-    "section": "Content",
-    "text": "Content\n\nMarginalization and conditioning\nReview of probability distributions\nLikelihood\nMonte Carlo integration",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/01-content.html#readings",
-    "href": "content/01-content.html#readings",
-    "title": "Introduction",
-    "section": "Readings",
-    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 1 of the course notes",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/01-content.html#complementary-readings",
-    "href": "content/01-content.html#complementary-readings",
-    "title": "Introduction",
-    "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nVillani, M. (2025). Draft of Bayesian Learning - the prequel\nChapter 1 of Wood (2015)\nChapter 4 and 6.1 of Davison (2003)\nChapters 2 and 3 of Robert & Casella (2004)\nChapters 1–6 of Casella & Berger (2002)",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/01-content.html#slides",
-    "href": "content/01-content.html#slides",
-    "title": "Introduction",
-    "section": "Slides",
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
     "crumbs": [
       "Content",
       "Course content",
-      "1: Introduction"
+      "5: Markov chain Monte Carlo"
     ]
   },
   {
-    "objectID": "content/01-content.html#code",
-    "href": "content/01-content.html#code",
-    "title": "Introduction",
-    "section": "Code",
-    "text": "Code\n\nCode demonstration\nR script for commented examples from course notes and slides",
-    "crumbs": [
-      "Content",
-      "Course content",
-      "1: Introduction"
-    ]
-  },
-  {
-    "objectID": "content/02-content.html#content",
-    "href": "content/02-content.html#content",
-    "title": "Bayesics",
+    "objectID": "content/04-content.html#content",
+    "href": "content/04-content.html#content",
+    "title": "Monte Carlo methods",
     "section": "Content",
-    "text": "Content\n\nProbability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model",
+    "text": "Content\n\nMonte Carlo methods: rejection sampling, importance sampling\nBasics of Markov chains",
     "crumbs": [
       "Content",
       "Course content",
-      "2: Bayesics"
+      "4: Monte Carlo methods"
     ]
   },
   {
-    "objectID": "content/02-content.html#learning-objectives",
-    "href": "content/02-content.html#learning-objectives",
-    "title": "Bayesics",
+    "objectID": "content/04-content.html#learning-objectives",
+    "href": "content/04-content.html#learning-objectives",
+    "title": "Monte Carlo methods",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ndefine key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference\nperform inference in conjugate models with a single parameter\ncalculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)\nexplain some of the conceptual differences between frequentist and Bayesian inference",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nsimulate from target distribution using rejection sampling\nestimate integrals using importance sampling\nexplain under which circumstances can Markov chain output can be used in place of independent Monte Carlo\ncalculate standard errors for sample means of Markov chain\nunderstand the inefficiency due to autocorrelation of Monte Carlo integration based on draws from Markov chains.",
     "crumbs": [
       "Content",
       "Course content",
-      "2: Bayesics"
+      "4: Monte Carlo methods"
     ]
   },
   {
-    "objectID": "content/02-content.html#readings",
-    "href": "content/02-content.html#readings",
-    "title": "Bayesics",
+    "objectID": "content/04-content.html#readings",
+    "href": "content/04-content.html#readings",
+    "title": "Monte Carlo methods",
     "section": "Readings",
-    "text": "Readings\n\nChapter 2 of the course notes",
+    "text": "Readings\n\nGeyer (2011) — up to 1.17\nChapters 4 and 5 of the course notes",
     "crumbs": [
       "Content",
       "Course content",
-      "2: Bayesics"
+      "4: Monte Carlo methods"
     ]
   },
   {
-    "objectID": "content/02-content.html#complementary-readings",
-    "href": "content/02-content.html#complementary-readings",
-    "title": "Bayesics",
+    "objectID": "content/04-content.html#complementary-readings",
+    "href": "content/04-content.html#complementary-readings",
+    "title": "Monte Carlo methods",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nEdwards et al. (1992)\nJohnson et al. (2022), chapters 2–4 and sections 8.1, 8.3\nVillani (2023), chapters 1 and 2\nAlbert (2009), chapters 2 and 3",
+    "text": "Complementary readings\n\nGreen et al. (2015) (overview of MCMC methods)",
     "crumbs": [
       "Content",
       "Course content",
-      "2: Bayesics"
+      "4: Monte Carlo methods"
     ]
   },
   {
-    "objectID": "content/02-content.html#slides",
-    "href": "content/02-content.html#slides",
-    "title": "Bayesics",
+    "objectID": "content/04-content.html#slides",
+    "href": "content/04-content.html#slides",
+    "title": "Monte Carlo methods",
     "section": "Slides",
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
     "crumbs": [
       "Content",
       "Course content",
-      "2: Bayesics"
+      "4: Monte Carlo methods"
     ]
   },
   {
-    "objectID": "content/02-content.html#code",
-    "href": "content/02-content.html#code",
-    "title": "Bayesics",
+    "objectID": "content/04-content.html#code",
+    "href": "content/04-content.html#code",
+    "title": "Monte Carlo methods",
     "section": "Code",
-    "text": "Code\n\nCode demonstration\nR script for Example 2.4 of the course notes",
+    "text": "Code\n\nCode demonstration",
     "crumbs": [
       "Content",
       "Course content",
-      "2: Bayesics"
+      "4: Monte Carlo methods"
     ]
   },
   {
@@ -2960,64 +2757,241 @@
     ]
   },
   {
-    "objectID": "content/04-content.html#content",
-    "href": "content/04-content.html#content",
-    "title": "Markov chains and Metropolis–Hastings",
+    "objectID": "content/02-content.html#content",
+    "href": "content/02-content.html#content",
+    "title": "Bayesics",
     "section": "Content",
-    "text": "Content\n\nRejection sampling\nBasics of Markov chains\nMetropolis–Hastings algorithm",
+    "text": "Content\n\nProbability\nKey concepts: prior, posterior and interpretation\nPredictive distributions\nMarginal likelihood and numerical integration\nCredible intervals, loss functions and posterior summaries\nThe beta binomial conjugate model",
     "crumbs": [
       "Content",
       "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+      "2: Bayesics"
     ]
   },
   {
-    "objectID": "content/04-content.html#learning-objectives",
-    "href": "content/04-content.html#learning-objectives",
-    "title": "Markov chains and Metropolis–Hastings",
+    "objectID": "content/02-content.html#learning-objectives",
+    "href": "content/02-content.html#learning-objectives",
+    "title": "Bayesics",
     "section": "Learning objectives",
-    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\nunderstand how ordinary Monte Carlo and Markov chain Monte Carlo (MCMC) methods differ\nimplement a Metropolis–Hastings algorithm to draw samples from the posterior\nuse output of MCMC to obtain estimates and standard errors\nuse efficient proposals and tuning for MCMC",
+    "text": "Learning objectives\nAt the end of the chapter, students should be able to\n\ndefine key notions (posterior distribution, posterior predictive, marginal likelihood, credible intervals) of Bayesian inference\nperform inference in conjugate models with a single parameter\ncalculate and compute numerically summaries of posterior distributions (point estimators and credible intervals)\nexplain some of the conceptual differences between frequentist and Bayesian inference",
     "crumbs": [
       "Content",
       "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+      "2: Bayesics"
     ]
   },
   {
-    "objectID": "content/04-content.html#readings",
-    "href": "content/04-content.html#readings",
-    "title": "Markov chains and Metropolis–Hastings",
+    "objectID": "content/02-content.html#readings",
+    "href": "content/02-content.html#readings",
+    "title": "Bayesics",
     "section": "Readings",
-    "text": "Readings\n\nGeyer (2011) — up to 1.17\nChapters 4 and 5 of the course notes",
+    "text": "Readings\n\nChapter 2 of the course notes",
     "crumbs": [
       "Content",
       "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+      "2: Bayesics"
     ]
   },
   {
-    "objectID": "content/04-content.html#complementary-readings",
-    "href": "content/04-content.html#complementary-readings",
-    "title": "Markov chains and Metropolis–Hastings",
+    "objectID": "content/02-content.html#complementary-readings",
+    "href": "content/02-content.html#complementary-readings",
+    "title": "Bayesics",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\nGreen et al. (2015) (overview of MCMC methods)",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nEdwards et al. (1992)\nJohnson et al. (2022), chapters 2–4 and sections 8.1, 8.3\nVillani (2023), chapters 1 and 2\nAlbert (2009), chapters 2 and 3",
     "crumbs": [
       "Content",
       "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+      "2: Bayesics"
     ]
   },
   {
-    "objectID": "content/04-content.html#slides",
-    "href": "content/04-content.html#slides",
-    "title": "Markov chains and Metropolis–Hastings",
+    "objectID": "content/02-content.html#slides",
+    "href": "content/02-content.html#slides",
+    "title": "Bayesics",
     "section": "Slides",
     "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
     "crumbs": [
       "Content",
       "Course content",
-      "4: Monte Carlo, Markov chains and Metropolis-Hastings"
+      "2: Bayesics"
     ]
+  },
+  {
+    "objectID": "content/02-content.html#code",
+    "href": "content/02-content.html#code",
+    "title": "Bayesics",
+    "section": "Code",
+    "text": "Code\n\nCode demonstration\nR script for Example 2.4 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "2: Bayesics"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#content",
+    "href": "content/01-content.html#content",
+    "title": "Introduction",
+    "section": "Content",
+    "text": "Content\n\nMarginalization and conditioning\nReview of probability distributions\nLikelihood\nMonte Carlo integration",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#readings",
+    "href": "content/01-content.html#readings",
+    "title": "Introduction",
+    "section": "Readings",
+    "text": "Readings\n\n\n\n\n\n\nWarning\n\n\n\nThese readings should be completed before class, to ensure timely understanding and let us discuss the concepts together through various examples and case studies — the strict minimum being the course notes.\n\n\n\nChapter 1 of the course notes",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#complementary-readings",
+    "href": "content/01-content.html#complementary-readings",
+    "title": "Introduction",
+    "section": "Complementary readings",
+    "text": "Complementary readings\n\n\n\n\n\n\nWarning\n\n\n\nComplementary readings are additional sources of information that are not required readings, but may be useful substitutes. Sometimes, they go beyond the scope of what we cover and provide more details.\n\n\n\nVillani, M. (2025). Draft of Bayesian Learning - the prequel\nChapter 1 of Wood (2015)\nChapter 4 and 6.1 of Davison (2003)\nChapters 2 and 3 of Robert & Casella (2004)\nChapters 1–6 of Casella & Berger (2002)",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#slides",
+    "href": "content/01-content.html#slides",
+    "title": "Introduction",
+    "section": "Slides",
+    "text": "Slides\n\n  View all slides in new window   Download PDF of all slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-content.html#code",
+    "href": "content/01-content.html#code",
+    "title": "Introduction",
+    "section": "Code",
+    "text": "Code\n\nCode demonstration\nR script for commented examples from course notes and slides",
+    "crumbs": [
+      "Content",
+      "Course content",
+      "1: Introduction"
+    ]
+  },
+  {
+    "objectID": "content/01-lecture.html#hierarchical-model",
+    "href": "content/01-lecture.html#hierarchical-model",
+    "title": "Lecture 1",
+    "section": "Hierarchical model",
+    "text": "Hierarchical model\nWe use the hierarchical Poisson–gamma model to account for overdispersion. This gives an example of how to simulate from the marginal model (here negative binomial) by forward sampling: we first generate the means \\(\\Lambda\\) from the gamma distribution, then for each value of \\(\\Lambda\\), we generate a corresponding count. The functions for random number generation in base R are vectorized with respect to their arguments.\n\n# Sample the means of the Poisson\nn &lt;- 1000L\nk &lt;- 0.5 # dispersion\nmu &lt;- 4 # mean\n#  The gamma distribution has a mean of 4 and variance of 8\nLambda &lt;- rgamma(n = n, shape = k*mu, rate = k)\n# Functions r* for random number generation are vectorized wrt arguments\nY &lt;- rpois(n = n, lambda = Lambda)\n\nWe can use Monte Carlo integration to compute moments \\(\\mathsf{E}_Y(Y)\\) and \\(\\mathsf{Var}_Y(Y)\\) and compare these estimates with the numbers derived analytically.\n\n# Calculate the empirical mean and variance of the counts\n# This is a form of Monte Carlo integration\nrbind(empirical = c(\"mean\" = mean(Y), \"variance\" = var(Y)),\n      theoretical = c(\"mean\" = mu, \"variance\" = mu + mu/k))\n\n            mean variance\nempirical    3.9       11\ntheoretical  4.0       12\n\n\nWe established that the marginal distribution of \\(Y\\) from the Poisson mixture of gamma is negative binomial. We can compare the theoretical mass function with the Monte Carlo estimate (proportion for each integer) to see whether they match, up to sampling variability.\n\n# Create a bar plot manually and compare with marginal CDF of neg. binom\nplot(\n  x = sort(unique(Y)), \n  y = table(Y) / length(Y),\n  type = \"h\",\n  xlab = \"x\",\n  ylab = \"probability\"\n  )\nsegments(\n  x0 = 0:max(Y) - 0.25,\n  x1 = 0:max(Y) + 0.25, \n  y0 = dnbinom(0:max(Y), prob = 1 - 1/(k + 1), size = k*mu), \n  col = 2)\n\n\n\n\n\n\n\nFigure 1"
+  },
+  {
+    "objectID": "content/01-lecture.html#change-of-variable-formula-and-jacobian",
+    "href": "content/01-lecture.html#change-of-variable-formula-and-jacobian",
+    "title": "Lecture 1",
+    "section": "Change of variable formula and Jacobian",
+    "text": "Change of variable formula and Jacobian\nWe consider Example 1.5 from the course notes (gamma to inverse gamma). We use \\(y = g(x) = 1/x\\), whose Jacobian is \\(J_g=1/x^2\\) in the formula for the density \\(f(y) = f_x\\{g(x)\\}|J_g|.\\) The resulting density integrates to unity over \\(\\mathbb{R}_{+}\\).\n\nshape &lt;- 0.5; rate &lt;- 2\n# Jacobian of transformation 1/x is 1/x^2\ndinvgamma &lt;- function(x, rate, shape){\n    dgamma(1/x, rate = rate, shape = shape) / x^2\n}\nintegrate(f = dinvgamma, lower = 0, upper = Inf, rate = rate, shape = shape)\n\n1 with absolute error &lt; 1.1e-05\n\npar(mfrow = c(1,2))\ncurve(\n  expr = dgamma(x, rate = rate, shape = shape), \n  from = 0, \n  to = 10, \n  ylab = \"density\", \n  sub = \"gamma\")\ncurve(\n  expr = dinvgamma(x, rate = rate, shape = shape), \n  from = 0, \n  to = 10, \n  ylab = \"density\", \n  sub = \"gamma\")\n\n\n\n\n\n\n\nFigure 2: Density of \\(X \\sim \\mathsf{gamma}(0.5,2)\\) with shape 0.5 and rate 2 (left) and \\(Y=g(X) \\sim \\mathsf{inv. gamma}(0.5,2)\\) (right), obtained through a change of variable \\(g(x) = 1/x\\)."
+  },
+  {
+    "objectID": "content/01-lecture.html#first-order-autoregressive-process",
+    "href": "content/01-lecture.html#first-order-autoregressive-process",
+    "title": "Lecture 1",
+    "section": "First-order autoregressive process",
+    "text": "First-order autoregressive process\nThe autoregressive of order 1 model, defined as \\[\nY_t = \\mu +\\phi(Y_{t-1}-\\mu) + \\varepsilon_t,\n\\] where \\(\\varepsilon_t\\) are independent and identically distributed white noise, typically mean zero Gaussian, is stationary if \\(|\\phi &lt;1|\\). By the law of iterated variance, we find that the unconditional variance is \\(\\sigma^2/(1-\\phi^2)\\), and increases with \\(t\\) otherwise if \\(|\\phi| \\ge 1.\\) The code below shows simulations of three instances: one with positive correlation, which seems to show local nonstationarity although the process is mean-stationary, the second with negative correlation which oscillates around the truth. The last, initialized at zero, is a random walk which drifts towards infinity as \\(t\\) increases.\n\nsimulate_ar1 &lt;- function(n, phi, mu = 0, sigma = 1){\n y &lt;- numeric(n) # container of size n\n # simulate from marginal if process is stationary\n y[1] &lt;- ifelse(abs(phi) &lt; 1,\n  rnorm(n = 1, sd = sigma / sqrt(1-phi^2)),\n  0)\n for(i in 2:n){\n  y[i] &lt;- mu + phi * (y[i-1]-mu) + rnorm(n = 1, sd = sigma)\n }\n return(y)\n}\nset.seed(2026)\npar(mfrow = c(1, 3), bty = \"l\")\n# Strong positive correlation\nplot(\n  simulate_ar1(n = 100, phi = 0.75), \n  type = \"l\", \n  ylab = \"observation\", \n  xlab = \"time\")\n# Negative correlation (oscillates around the mean)\nplot(\n  simulate_ar1(n = 100, phi = -0.5),\n  type = \"l\", \n  ylab = \"observation\", \n  xlab = \"time\")\n# Non-stationary (increasing variance)\nplot(\n  simulate_ar1(n = 100, phi = 1), \n  type = \"l\", \n  ylab = \"observation\", \n  xlab = \"time\")\n\n\n\n\n\n\n\nFigure 3: Time series of first-order autoregressive process draws with standard Gaussian innovations and different autocorrelation parameters: \\(\\phi=0.75\\) (left), \\(\\phi=-0.5\\) (middle) and \\(\\phi=1\\) (right, non-stationary process).\n\n\n\n\n\nValues of \\(|\\phi| \\geq 1\\) yields nonstationary processes, whose variance increases over time."
+  },
+  {
+    "objectID": "content/01-lecture.html#monte-carlo-estimation",
+    "href": "content/01-lecture.html#monte-carlo-estimation",
+    "title": "Lecture 1",
+    "section": "Monte Carlo estimation",
+    "text": "Monte Carlo estimation\nMonte Carlo integration, which relies on the law of large numbers, replaces integration by sample averages. The precision of the estimate increases with the number of draws \\(B\\) (the sample variance decreases at rate \\(B^{-1}\\)). The illustration below with gamma variates with shape of \\(\\alpha =1/2\\) and rate \\(\\beta=2\\) for three expected values: the first is a probability, the second the expected value, and the third the first reciprocal moment which is undefined, as the integral diverges whenever \\(\\alpha \\le 1\\). We can see this lack of existence translates into erratic jumps in the estimates path.\n\nset.seed(80601)\nB &lt;- 1e5L # number of simulation\nBseq &lt;- seq_len(B)\n# Parameters for shape and rate\nalpha &lt;- 0.5; beta &lt;- 2\npv &lt;- pgamma(1, shape = alpha, rate = beta)\nsamp &lt;- rgamma(n = B, shape = alpha, rate = beta)\n# Running means of the parameters\nint1 &lt;- cumsum(samp &lt; 1) / Bseq\nint2 &lt;- cumsum(samp) / Bseq\nint3 &lt;- cumsum(1/samp) / Bseq\npar(mfrow = c(1,3), bty = \"l\")\nplot(\n  x = Bseq[-(1:20)], \n  y = int1[-(1:20)], \n  xlab = \"number of draws\", \n  ylab = \"Monte Carlo estimate\", \n  type = \"l\")\nplot(\n  x = Bseq[-(1:20)], \n  y = int2[-(1:20)], \n  xlab = \"number of draws\", \n  ylab = \"Monte Carlo estimate\", \n  type = \"l\")\nplot(\n  x = Bseq[-(1:20)], \n  y = int3[-(1:20)], \n  xlab = \"number of draws\", \n  ylab = \"Monte Carlo estimate\", \n  type = \"l\")\n# Compute std. error of estimator of total size (assuming it exists)\nse1 &lt;- sqrt(var(samp &lt; 1) / B)\n# 95% Wald-based confidence interval\nconfint &lt;- mean(samp &lt; 1) + se1 * qnorm(c(0.025,0.975))\n# Compare with truth\npv\n\n[1] 0.95\n\n\n\n\n\n\n\n\nFigure 4: Monte Carlo estimates (running means) as a function of the sample size for \\(\\Pr(Y&gt;1)\\), \\(\\mathsf{E}(Y)\\) and \\(\\mathsf{E}(1/Y)\\) (divergent) for \\(Y \\sim \\mathsf{gamma}(0.5,2)\\)."
+  },
+  {
+    "objectID": "content/02-lecture.html#bayes-factor-and-model-comparison",
+    "href": "content/02-lecture.html#bayes-factor-and-model-comparison",
+    "title": "Lecture 2",
+    "section": "Bayes factor and model comparison",
+    "text": "Bayes factor and model comparison\nWe consider the number of purchased out of the total, treating records as independent Bernoulli observations with a flat (uniform prior). We also consider a simple model comparison where the null hypothesis is that the selling format has no impact on the decision to buy or not (no treatment effect). We write \\(y=\\sum_{i=1}^n y_i\\) and \\(y_1 = \\sum_{i=1}^n x_iy_i,\\) \\(n_1 = \\sum_{i=1}^n x_i\\) and \\(y_0+y_1=y\\), \\(n_0+n_1=n.\\) The subscript indicates the groups \\(0\\) (quantity-integrated) and \\(1\\) (quantity-sequential)$.\nWith a uniform prior, the unnormalized posterior for the null model is \\[\\mathcal{L}_0(\\theta) = \\theta^y(1-\\theta)^{n-y}\\] and that of the alternative model is \\[\\mathcal{L}_0(\\theta_0, \\theta_1) = \\theta_0^{y_0}(1-\\theta_0)^{n_0-y_0}\\theta_1^{y_1}(1-\\theta_1)^{n_1-y_1},\\] the marginal likelihood is \\(\\mathrm{beta}(y+1, n-y+1).\\) From these, we can compute directly the Bayes factor\n\n# Calculation of the marginal likelihood\nlog_marg_post_bern &lt;- function(n, y) {\n  lbeta(1 + y, 1 + n - y)\n}\n\n# Extract summary statistics (sufficient statistics)\nn &lt;- sum(cont)\nn0 &lt;- colSums(cont)['quantity-integrated']\nn1 &lt;- colSums(cont)['quantity-sequential']\ny0 &lt;- cont[\"1\", \"quantity-integrated\"]\ny1 &lt;- cont[\"1\", \"quantity-sequential\"]\ny &lt;- y0 + y1\n\n# Alternative model (one proportion for each subgroup)\nBF1 &lt;- log_marg_post_bern(n = n0, y = y0) + # integrated\n  log_marg_post_bern(n = n1, y = y1) # sequential decision\n# Null model (same proportion regardless of experimental variable)\nBF0 &lt;- log_marg_post_bern(n = n, y = y) # pooled\n# Bayes factor\nexp(BF0 - BF1)\n\n[1] 0.09345664\n\n# Normalizing constant is marginal likelihood\n# whose log is about -110\n# so too small for accurate numerical integration\n# Integrate instead a binomial likelihood\n# and remove this from the normalizing constant later\nmarg_binom &lt;- integrate(\n  f = function(x) {\n    dbinom(x = y0, size = n0, prob = x)\n  },\n  lower = 0,\n  upper = 1\n)\n# Compare the numerical approximation with the true\nc(\n  \"numerical\" = log(marg_binom$value) - lchoose(n0, y0),\n  \"exact\" = log_marg_post_bern(n = n0, y = y0)\n)\n\nnumerical.quantity-integrated                         exact \n                    -109.9198                     -109.9198"
+  },
+  {
+    "objectID": "content/02-lecture.html#maximum-a-posteriori",
+    "href": "content/02-lecture.html#maximum-a-posteriori",
+    "title": "Lecture 2",
+    "section": "Maximum a posteriori",
+    "text": "Maximum a posteriori\nWith a beta-binomial model, the posterior for the probability of buying is \\(\\mathsf{beta}(47, 153)\\) for quantity-integrated and \\(\\mathsf{beta}(24, 177)\\) for quantity-sequential.\nWe can proceed (analogous to the frequentist setting) to maximimization of the unnormalized log posterior to find the mode of the latter. This is unnecessary in this example (since the likelihood and the prior factorize) and we know the posterior distribution analytically; the mode for \\(\\mathsf{beta}(\\alpha_1, \\alpha_2)\\) is \\((\\alpha_1-1)/(\\alpha_1 + \\alpha_2 -2).\\)\nIt may be useful in more complex models to consider a change of variable so that our random variables live on the real line directly. This implies a change of variable, say here from \\(\\theta \\in [0,1]\\) to \\(\\vartheta \\in \\mathbb{R}\\) via \\(\\vartheta =g(\\theta)\\log(\\theta)-\\log(1-\\theta),\\) the quantile function of the logistic distribution. The Jacobian of the transformation is \\(\\theta(1-\\theta)\\) and this yields an ajusted posterior (after modifying the prior) \\[p(\\vartheta \\mid y) = p(y \\mid \\theta)\\theta(1-\\theta).\\]\nNote that, as a result, the mode is not invariant to reparametrization (so the MAP under the transformed model is not \\(\\widehat{\\vartheta}_{\\mathrm{map}} \\neq g(\\widehat{\\theta}_{\\mathrm{map}})\\).\n\n# Unnormalized log-posterior\nlogpost &lt;- function(theta, y, n){\n y * log(theta) + (n - y) * log(1 - theta) # prior is uniform\n}\n# Maximum a posteriori\nmap &lt;- optimize(\n  f = logpost, \n  maximum = TRUE, \n  interval = c(0, 1), \n  y = y1, \n  n = n1)\n\npar(mfrow = c(1,2), bty = \"l\")\n# Plot the posterior density\ncurve(expr = dbeta(x, shape1 = 24, shape2 = 177), \n      from = 0, \n      to = 0.4, \n      n = 1001L,\n      ylab = \"posterior density\",\n      xlab = expression(theta))\nabline(v = 23/197)\nabline(v = map$maximum, lty = 2)\n# Plot the posterior on the unconstrained space\ncurve(expr = dbeta(plogis(x), shape1 = 24, shape2 = 177) * plogis(x) * (1-plogis(x)),\n      from = -3, \n      to = 0, \n      n = 1001L,\n      ylab = \"posterior density\",\n      xlab = expression(\"logit\"~theta))\n# Mode is not invariant (due to Jacobian adjustment)\nplogis(map$maximum)\n\n[1] 0.5288639\n\n\n\n\n\n\n\n\nFigure 1: Posterior density of the parameter for the beta-binomial model for the quantity-sequential experimental group."
+  },
+  {
+    "objectID": "content/02-lecture.html#posterior-summary",
+    "href": "content/02-lecture.html#posterior-summary",
+    "title": "Lecture 2",
+    "section": "Posterior summary",
+    "text": "Posterior summary\nWe consider in this section a simple functional of the posterior parameters \\(\\theta_0\\) and \\(\\theta_1,\\) the odds ratio. We can compute the latter from \\[O = \\frac{\\Pr(Y=1 \\mid \\texttt{integrated})}{\\Pr(Y=0 \\mid \\texttt{integrated})}\\frac{\\Pr(Y=0 \\mid \\texttt{sequential})}{\\Pr(Y=1 \\mid \\texttt{sequential})} = \\frac{\\theta_0}{1-\\theta_0}\\frac{(1-\\theta_1)}{\\theta_1},\\] Since this is not tractable, we sample directly draws from the posterior of \\(\\theta_0\\) and \\(\\theta_1\\) and combine them to obtain samples of the odds, from which we can extract any summary of interest. We can also compute the probability of superiority, say, \\(\\Pr(\\theta_0 &gt; \\theta_1).\\)\n\n# Sample from the posterior\npost_p_int &lt;- rbeta(n = 1e4L, shape1 = y0 + 1, shape2 = n0 - y0 + 1)\npost_p_seq &lt;- rbeta(n = 1e4L, shape1 = y1 + 1, shape2 = n1 - y1 + 1)\n# Probability of superiority (akin to one-sided test of mu2 &gt; mu1)\nmean(post_p_int &gt; post_p_seq)\n\n[1] 0.9986\n\n# Reparametrization in terms of odds\npost_odds_int &lt;- (post_p_int / (1 - post_p_int))\npost_odds_seq &lt;- (post_p_seq / (1 - post_p_seq))\n# Posterior odds\npost_oddsratio &lt;- post_odds_int / post_odds_seq\n\nWe can also compute summaries of the posterior by minimizing a loss function. Below, this is done for the quantile function using Monte Carlo integration.\n\n# Pinball loss\npinball &lt;- function(y, qlev = 0.5) {\n  ifelse(y &lt; 0, (qlev - 1) * y, qlev * y)\n}\n\n# Posterior summary via loss functions\n# Computing the 80% by minimizing a loss function\nq80 &lt;- optimize(\n  f = function(x) {\n    mean(pinball(post_oddsratio - x, 0.8))\n  },\n  interval = c(0, 1e10)\n)$minimum\n# Compare answer with empirical quantile\nquantile(post_oddsratio, 0.8)\n\n     80% \n2.891041 \n\n# 80% Highest posterior density interval\nhdiD &lt;- HDInterval::hdi(\n  density(post_oddsratio),\n  credMass = 0.80\n)\n# Equitailed confidence intervals\nquantile(post_oddsratio, probs = c(0.1, 0.9))\n\n     10%      90% \n1.613962 3.267642 \n\n\nFinally, we can visualize the posterior of the two parameters \\(\\theta_0\\) and \\(\\theta_1\\), and their odds ratio \\(O.\\)\n\n# Plot posterior densities for probability of buying the product\ncols &lt;- MetBrewer::met.brewer(\"Hiroshige\", 2)\ng1 &lt;- ggplot() +\n  stat_function(\n    fun = dbeta,\n    xlim = c(0, 0.5),\n    n = 1001,\n    args = list(shape1 = y0 + 1, shape2 = n0 - y0 + 1),\n    mapping = aes(col = \"integrated\")\n  ) +\n  stat_function(\n    fun = dbeta,\n    xlim = c(0, 0.5),\n    n = 1001,\n    args = list(shape1 = y1 + 1, shape2 = n1 - y1 + 1),\n    mapping = aes(col = \"sequential\")\n  ) +\n  scale_color_manual(\n    name = 'Sales format',\n    breaks = c('sequential', 'integrated'),\n    values = c('sequential' = cols[1], 'integrated' = cols[2])\n  ) +\n  scale_x_continuous(\n    breaks = seq(0, 0.5, by = 0.25),\n    labels = c(\"0\", \"0.25\", \"0.5\")\n  ) +\n  labs(\n    y = \"\",\n    subtitle = \"Posterior density\",\n    x = \"probability of buying\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, NA),\n    expand = expansion()\n  ) +\n  theme_classic() +\n  theme(\n    legend.position = \"inside\",\n    legend.position.inside = c(0.9, 0.9)\n  )\n# Plot posterior odds\ng2 &lt;- ggplot(\n  data = data.frame(ratio = post_oddsratio),\n  mapping = aes(x = ratio)\n) +\n  geom_density() +\n  labs(\n    x = \"odds ratio of integrated vs sequential decisions\",\n    subtitle = \"posterior density\",\n    y = \"\"\n  ) +\n  scale_y_continuous(\n    limits = c(0, NA),\n    expand = expansion()\n  ) +\n  theme_classic()\ng1 + g2\n\n\n\n\n\n\n\nFigure 2: Posterior density of \\(\\theta_0\\) and \\(\\theta_1\\) (left) and of their odds ratio (right)."
+  },
+  {
+    "objectID": "content/02-lecture.html#model-likelihood",
+    "href": "content/02-lecture.html#model-likelihood",
+    "title": "Lecture 2",
+    "section": "Model likelihood",
+    "text": "Model likelihood\nThe generalized Pareto distribution with scale \\(\\tau&gt;0\\) and shape \\(\\xi \\in \\mathbb{R}\\) has distribution and density functions equal to, respectively \\[\\begin{align*}\nF(x) &=\n\\begin{cases}\n1 - \\left(1+\\frac{\\xi}{\\tau}x\\right)_{+}^{-1/\\xi} & \\xi \\neq 0 \\\\\n1 - \\exp(-x/\\tau) & \\xi=0\n\\end{cases}, \\quad x \\geq 0; \\\\\nf(x) &=\n\\begin{cases}\n\\tau^{-1}\\left(1+\\frac{\\xi}{\\tau}x\\right)_{+}^{-1/\\xi-1} & \\xi \\neq 0 \\\\\n\\tau^{-1}\\exp(-x/\\tau) & \\xi=0\n\\end{cases}\\quad x \\geq 0;\n\\end{align*}\\] with \\(x_{+} = \\max\\{x, 0\\}.\\) The case \\(\\xi=0\\) corresponding to the exponential distribution with rate \\(\\tau^{-1}\\). The distribution is used to model excesses over a large threshold \\(u\\), as extreme value theory dictates that, under broad conditions, \\(Y-u \\mid Y &gt; u \\sim \\mathsf{gen. Pareto}(\\tau_u, \\xi)\\) as \\(u\\) tends to the endpoint of the support of \\(Y\\), regardless of the underlying distribution of \\(Y\\).\nThe generalized Pareto model only describes the \\(n_u\\) exceedances above \\(u,\\) so we need to incorporate in the likelihood a binomial contribution for the probability \\(\\zeta_u\\) of exceeding the threshold \\(u.\\)\nWe use the distribution to model Danish fire insurance claims (in million krones) from the evir package. The log likelihood for the full model for \\(y_i&gt;u=10\\) million krones is \\[\\begin{align*}\n\\ell(\\tau, \\xi, \\zeta_u) &\\propto -109 \\log \\tau + \\sum_{i=1}^{109} (1+1/\\xi)\\log\\left(1+\\xi\\frac{y_i-10}{\\tau}\\right)_{+} + \\\\& \\quad   109\\log \\zeta_u + 2058 \\log(1-\\zeta_u),\n\\end{align*}\\] Provided that the priors for \\((\\tau, \\xi)\\) are independent of those for \\(\\zeta_u,\\) the posterior also factorizes as a product, so \\(\\zeta_u\\) and \\((\\tau, \\xi)\\) are a posteriori independent."
+  },
+  {
+    "objectID": "content/02-lecture.html#posterior-sampling",
+    "href": "content/02-lecture.html#posterior-sampling",
+    "title": "Lecture 2",
+    "section": "Posterior sampling",
+    "text": "Posterior sampling\nWe use a Monte Carlo algorithm, known as the ratio-of-uniform method, to obtain exact samples from the posterior of the binomial - generalized Pareto model. The results are given in a list with two matrices containing the samples of \\((\\tau, \\xi)\\) and those of \\(\\zeta_u\\), which we combine in a single data frame.\n\ndata(danish, package = \"evir\")\n# Using ratio-of-uniform, generate posterior samples\n# from the binomial - generalized Pareto model\nu &lt;- 10\npost_samp &lt;- revdbayes::rpost_rcpp(\n  n = 1000L, # number of posterior sample\n  model = \"bingp\", # model (pre-coded)\n  data = danish,\n  prior = revdbayes::set_prior(prior = \"mdi\", model = \"gp\"), \n  thresh = u\n)\n# Generates in $sim_vals the scale and shape parameters\n# and in '$bin_sim_vals' the binomial probability 'probexc'\n# Combine samples into a matrix\npost_samp &lt;- cbind(post_samp$sim_vals, post_samp$bin_sim_vals)\ncolnames(post_samp) &lt;- c('scale', 'shape', \"probexc\")\npost_samp &lt;- as.data.frame(post_samp)\n\n# Plot the bivariate posterior of the generalized Pareto parameters\nggplot(\n  data = post_samp,\n  mapping = aes(x = scale, y = shape)\n) +\n  geom_point() +\n  labs(x = expression(tau), y = expression(xi)) +\n  theme_classic() +\n  theme(axis.title.y = element_text(angle = 0))\n\n\n\n\n\n\n\nFigure 3: Bivariate posterior of the scale \\(\\tau\\) and shape \\(\\xi\\) of the generalized Pareto distribution fitted to claims exceeding 10M krones."
+  },
+  {
+    "objectID": "content/02-lecture.html#value-at-risk-calculation",
+    "href": "content/02-lecture.html#value-at-risk-calculation",
+    "title": "Lecture 2",
+    "section": "Value-at-risk calculation",
+    "text": "Value-at-risk calculation\nEquipped with the posterior samples, we can now compute the value-at-risk (VaR), corresponding to a high quantile of the distribution. For any \\(\\alpha &gt; 1-\\zeta_u,\\) the \\(q_{\\alpha}\\) quantile can be written in terms of the generalized Pareto survival function times the probability of exceedance above the threshold, \\[\\begin{align*}\n1- \\alpha  &= \\Pr(Y &gt; q_\\alpha \\mid Y &gt; u) \\Pr(Y &gt; u)\n\\\\ &= \\left(1+\\xi \\frac{q_{\\alpha}-u}{\\tau}\\right)_{+}^{-1/\\xi}\\zeta_u\n\\end{align*}\\] and solving for \\(q_{\\alpha}\\) gives \\[\\begin{align*}\nq_{\\alpha} = u+ \\frac{\\tau}{\\xi} \\left\\{\\left(\\frac{\\zeta_u}{1-\\alpha}\\right)^\\xi-1\\right\\}.\n\\end{align*}\\]\n\nVaR_post &lt;- with(\n  post_samp, # data frame of posterior draws\n  u + scale/shape * ((probexc / 0.01)^shape - 1)\n)\nhead(VaR_post)\n\n[1] 25.89404 24.22463 27.22380 37.24916 27.54289 32.62303\n\ng1 &lt;- ggplot(data = data.frame(x = VaR_post)) +\n  geom_density(mapping = aes(x = x)) +\n  labs(\n    subtitle = \"posterior density\",\n    x = \"value-at-risk 0.99 (in millions krone)\",\n    y = \"\"\n  ) +\n  scale_y_continuous(limits = c(0, 0.15), expand = c(0, 0)) +\n  theme_classic()"
+  },
+  {
+    "objectID": "content/02-lecture.html#custom-loss-specification",
+    "href": "content/02-lecture.html#custom-loss-specification",
+    "title": "Lecture 2",
+    "section": "Custom loss specification",
+    "text": "Custom loss specification\nSuppose that we prefer to under-estimate the value-at-risk rather than overestimate: this could be captured by the custom loss function \\[\\begin{align*}\nc(q, q_0) =\n\\begin{cases}\n0.5(0.99q - q_0), & q &gt; q_0 \\\\\n0.75(q_0 - 1.01q), & q &lt; q_0.\n\\end{cases}\n\\end{align*}\\] For a given value of the value-at-risk \\(q_0\\) evaluated on a grid, we thus compute \\[\\begin{align*}\nr(q_0) = \\int_{\\boldsymbol{\\Theta}}c(q(\\boldsymbol{\\theta}), q_0) p (\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\] and we seek to minimize the risk, \\(\\widehat{q} =\\mathrm{argmin}_{q_0 \\in \\mathbb{R}_{+}} r(q_0).\\)\n\n# Loss functions\nloss &lt;- function(qhat, q) {\n  mean(ifelse(q &gt; qhat, 0.5 * (0.99 * q - qhat), 0.75 * (qhat - 1.01 * q)))\n}\n# Create a grid of values over which to estimate the loss for VaR\n# Normally, we could simply minimize the loss\n# but we want to plot the corresponding objective function\nnvals &lt;- 101L\nVaR_grid &lt;- seq(\n  from = quantile(VaR_post, 0.01),\n  to = quantile(VaR_post, 0.99),\n  length.out = nvals\n)\n# Create a container to store results\nrisk &lt;- numeric(length = nvals)\nfor (i in seq_len(nvals)) {\n  # Compute integral (Monte Carlo average over draws)\n  risk[i] &lt;- loss(q = VaR_post, qhat = VaR_grid[i])\n}\n\n\n# Plot loss function\ng2 &lt;- ggplot(\n  data = data.frame(\n    loss = risk - min(risk),\n    quantile = VaR_grid\n  )\n) +\n  geom_line(mapping = aes(x = quantile, y = loss)) +\n  geom_vline(xintercept = VaR_grid[which.min(risk)], linewidth = 0.1) +\n  geom_vline(\n    xintercept = mean(VaR_post),\n    linetype = \"dashed\",\n    linewidth = 0.1\n  ) +\n  scale_y_continuous(limits = c(0, 9), expand = c(0, 0)) +\n  labs(\n    x = \"value-at-risk 0.99 (in millions krone)\",\n    subtitle = \"custom loss function (full)\"\n  ) +\n  theme_classic()\ng1 + g2\n\n\n\n\n\n\n\nFigure 4: Posterior density (left) and losses functions for the 0.99 value-at-risk for the Danish fire insurance data. The vertical lines denote point estimates of the quantiles that minimize the loss functions."
+  },
+  {
+    "objectID": "content/03-lecture.html#distraction-from-smartwatches",
+    "href": "content/03-lecture.html#distraction-from-smartwatches",
+    "title": "Lecture 3",
+    "section": "Distraction from smartwatches",
+    "text": "Distraction from smartwatches\nThe following code is Stan code (mean-centered for the random effect) for the Poisson “mixed effect” model of Brodeur et al. (2021).\ndata {\n  int&lt;lower=0&gt; N;\n  int&lt;lower=1&gt; K; // nb fixed effect levels for distraction type\n  int&lt;lower=1&gt; J; // nb random effect levels for individuals\n  array[N] int&lt;lower=0&gt; y;    // vector of data\n  array[N] int&lt;lower=1, upper=J&gt; id;\n  array[N] int&lt;lower=1, upper=K&gt; fixed;\n}\nparameters {\n  vector[K] beta;\n   sum_to_zero_vector[J] alpha;\n  real&lt;lower=0&gt; kappa;\n}\n\nmodel {\n  kappa ~ exponential(0.6);\n  beta ~ normal(0, 10);\n  alpha ~ normal(0, sqrt(J * inv(J - 1)) * kappa);\n  y ~ poisson_log(alpha[id] + beta[fixed]);\n}\nbut this model is also easily fitted in brms, albeit with slightly different priors.\n\ndata(smartwatch, package = \"hecbayes\")\n# Random effect model with default priors\nsmartwatch_mod &lt;- brm(\n  nviolation ~ 0 + task + (1 | id),\n  data = smartwatch,\n  family = poisson(link = \"log\"),\n  set_prior(\n    prior = \"normal(0, 5)\", \n    class = \"b\"),\n  backend = \"cmdstanr\", # faster than rstan\n  silent = 2) # remove verbose output\nsummary(smartwatch_mod)\n\n Family: poisson \n  Links: mu = log \nFormula: nviolation ~ 0 + task + (1 | id) \n   Data: smartwatch (Number of observations: 124) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nMultilevel Hyperparameters:\n~id (Number of levels: 31) \n              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsd(Intercept)     0.56      0.08     0.42     0.75 1.00      885     1777\n\nRegression Coefficients:\n            Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\ntaskphone       1.77      0.12     1.52     2.02 1.01      631     1237\ntaskwatch       1.73      0.13     1.48     1.98 1.01      624      982\ntaskspeaker     1.79      0.13     1.54     2.03 1.01      618     1184\ntasktexting     2.43      0.11     2.20     2.65 1.01      543      970\n\nDraws were sampled using sample(hmc). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nfixef(smartwatch_mod)\n\n            Estimate Est.Error     Q2.5    Q97.5\ntaskphone   1.769084 0.1247112 1.521574 2.015402\ntaskwatch   1.731203 0.1254586 1.483068 1.975162\ntaskspeaker 1.793016 0.1253032 1.538412 2.032189\ntasktexting 2.433497 0.1146008 2.203393 2.648241\n\nconditional_effects(x = smartwatch_mod,\n                    effects =  \"task\",\n                    prob = 0.8)"
+  },
+  {
+    "objectID": "content/03-lecture.html#climate-change-mean-temperature-increase",
+    "href": "content/03-lecture.html#climate-change-mean-temperature-increase",
+    "title": "Lecture 3",
+    "section": "Climate change mean temperature increase",
+    "text": "Climate change mean temperature increase\nDifferent climate models and runs give rise to different average estimates of temperature increase. We can consider a very simple hierarchical model to capture this, assuming that data are Gaussian with model-specific “random effects”. The data are unbalanced: some climate models offer a single run, other mutliples.\n\nlibrary(bang) # Bayesian analysis with ROU\ndata(temp2)\nRCP26 &lt;- temp2 |&gt; dplyr::filter(RCP == \"rcp26\")\nanova_mod1 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"bda\", # uniform on mu, log(sigma), sigma_a\n  fac = RCP26$GCM)\nanova_mod2 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"unif\", # uniform on mu, sigma, sigma_a\n  fac = RCP26$GCM)\nanova_mod3 &lt;- bang::hanova1(\n  resp = RCP26$index,\n  prior = \"cauchy\", # half-Cauchy  for the scale\n  fac = RCP26$GCM)\n\nThe model is of the form, for \\(r = 1, \\ldots, R\\): \\[\nY_{i(r),r} \\sim \\mathsf{Gauss}(\\mu + \\alpha_r, \\sigma^2),\n\\alpha_r \\sim \\mathsf{Gauss}(0, \\sigma^2_\\alpha)\n\\] and we need a prior \\(p(\\mu, \\sigma_{\\alpha}, \\sigma).\\) There are numerous priors that could be considered here.\n\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto \\sigma^{-1}\\) (location-scale, improper if \\(R &lt; 3.\\)\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto 1\\) (improper)\n\\(p(\\mu, \\sigma_{\\alpha}, \\sigma) \\propto (1+\\sigma^2_{\\alpha}/S_{\\alpha}^2)^{-1}(1+\\sigma^2/S^2)^{-1}\\) on \\(\\mathbb{R} \\times [0,\\infty)^2.\\) This corresponds to half-Cauchy distribution on the positive reals with a scale of \\(S\\) and \\(S_{\\alpha}\\) (default 10).\n\nBelow, we plot the posterior density for each of the \\(\\alpha_r\\) \\((r=1, \\ldots, R)\\) for each of the three priors. There appears to be little difference to the first level, even for factor levels with few observations. Changing altogether the prior on the “random effect” from Gaussian to Cauchy would have more impact, as there is inherently a lot of regularization due to the prior in this specific application.\n\nsummary(anova_mod1,\n        which_pop = c(\"theta[1]\", \"theta[8]\"),\n        params = \"pop\")\n\n    theta[1]         theta[8]    \n Min.   :0.9415   Min.   :1.485  \n 1st Qu.:1.0875   1st Qu.:1.546  \n Median :1.1280   Median :1.557  \n Mean   :1.1264   Mean   :1.557  \n 3rd Qu.:1.1650   3rd Qu.:1.569  \n Max.   :1.3788   Max.   :1.621  \n\nsummary(anova_mod1,\n        params = \"hyper\")\n\nru bounding box:  \n               box         vals1        vals2 conv\na        1.0000000  0.0000000000  0.000000000    0\nb1minus -0.1466810 -0.2326509993  0.001997345    0\nb2minus -0.1475368 -0.0004397797 -0.234538810    0\nb1plus   0.1755008  0.3048045193  0.001126515    0\nb2plus   0.1739269 -0.0010104517  0.300416382    0\n\nestimated probability of acceptance:  \n[1] 0.5167959\n\nsample summary \n       mu          sigma[alpha]        sigma        \n Min.   :0.8903   Min.   :0.2823   Min.   :0.04121  \n 1st Qu.:1.1817   1st Qu.:0.4012   1st Qu.:0.05233  \n Median :1.2458   Median :0.4402   Median :0.05605  \n Mean   :1.2408   Mean   :0.4490   Mean   :0.05698  \n 3rd Qu.:1.3007   3rd Qu.:0.4885   3rd Qu.:0.06113  \n Max.   :1.5148   Max.   :0.7210   Max.   :0.09077  \n\nggplot() +\n  geom_density(\n    data = anova_mod1$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM))  +\n  geom_density(\n    data = anova_mod3$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM),\n    col = \"#ef8a47\")  +\n  geom_density(\n    data = anova_mod2$theta_sim_vals |&gt;\n      as.data.frame() |&gt;\n      tidyr::pivot_longer(\n        cols = everything(),\n        names_to = \"GCM\",\n        values_to = \"post\"),\n    mapping = aes(x = post, group = GCM),\n    col = \"#72bcd5\")  +\n  labs(x = \"posterior mean\") +\n  theme_classic() +\n  theme(legend.position = \"none\")"
+  },
+  {
+    "objectID": "content/04-lecture.html#beta-density-with-gaussian-proposal",
+    "href": "content/04-lecture.html#beta-density-with-gaussian-proposal",
+    "title": "Lecture 4",
+    "section": "Beta density with Gaussian proposal",
+    "text": "Beta density with Gaussian proposal\nConsider a symmetric beta distribution and suppose we don’t know how to generate from it for a second… Since the mean is at \\(0.5\\), we could propose \\(X \\sim \\mathsf{Gauss}(0.5, \\sigma)\\) or a truncated version thereof on [\\(0,1\\)].\nWe can compute the value of \\(C^{\\star} = \\mathsf{argmin}_\\sigma\\mathsf{argmax}_xp(x)/q(x; \\sigma)\\) or equivalently of the difference of log densities, since this is more numerically stable. We do so below using numerical optimization.\n\nlogpx &lt;- function(x){ dbeta(x, shape1 = 3, shape2 = 3, log = TRUE)}\nlogqx &lt;- function(x, sd0){ dnorm(x, mean = 0.5, sd = sd0, log = TRUE)}\n# Find the worst case C for the Gaussian with sd = sd0\nopt_C &lt;- function(sd0){\n  logC &lt;- optimize(f = function(x){logpx(x) - logqx(x, sd0)}, \n         maximum = TRUE, \n         lower = 0, \n         upper = 1)$objective\n  exp(logC)\n}\nC_opt &lt;-  optimize(f = opt_C, lower = 0, upper = 100)\n# Best fitting standard deviation\n(sd0 &lt;- C_opt$minimum)\n\n[1] 0.2236243\n\n(C &lt;- C_opt$objective)\n\n[1] 1.108928\n\n\nWe can compare the plot and the scaled proposal density, and see how\n\n# Plot the curve and the proposal\ncurve(\n  expr = dbeta(x, 3,3), \n  from = 0, \n  to = 1, \n  ylab = \"density\",\n  ylim = c(0, 2.5))\ncurve(dnorm(\n  x, 0.5, sd = sd0)*C, \n  from = 0, \n  to = 1, \n  col = 2, \n  lwd = 2, \n  add = TRUE)\n\n\n\n\n\n\n\n\nWe could reduce \\(C\\) further by truncating the Gaussian to the unit interval, as some proposals fall outside. This probability, with the optimal value of \\(\\sigma_0\\), is quite small.\n\npnorm(q = 1, mean = 0.5, sd = sd0) - pnorm(q = 0, mean = 0.5, sd = sd0)\n\n[1] 0.9746412\n\n\nAll draws larger than 1 or smaller than 0 have probability zero since they are outside of the support of the beta distribution. We use rejection sampling and compute the acceptance rate, comparing the empirical with the theoretical value of 1/C\n\nB &lt;- 1e4L # number of proposals\nprop_qx &lt;- rnorm(B, mean = 0.5, sd = sd0)\nkeep &lt;- -rexp(B) &lt; logpx(prop_qx) - logqx(prop_qx, sd = sd0) - log(C)\nsamp &lt;- prop_qx[keep]\nmean(keep) # empirical acceptance rate\n\n[1] 0.9026\n\n1 / C #theoretical acceptance rate\n\n[1] 0.9017716\n\n\nFinally, we can check through standard methods that the samples we obtain indeed follow a beta distribution, below using a Kolmogorov-Smirnov test and looking at the quantile-quantile plot.\n\n# Quantile-quantile plot\nplot(x = qbeta(ppoints(length(samp)), shape1 = 3, shape2 = 3),\n     y = sort(samp),\n     panel.first = {abline(a = 0, b = 1)},\n     xlab = \"theoretical quantiles\",\n     ylab = \"empirical quantiles\")\n\n\n\n\n\n\n\n# Test of equality of distribution\nks.test(x = samp, pbeta, shape1 = 3, shape2 = 3)\n\n\n    Asymptotic one-sample Kolmogorov-Smirnov test\n\ndata:  samp\nD = 0.0096404, p-value = 0.3712\nalternative hypothesis: two-sided"
+  },
+  {
+    "objectID": "content/04-lecture.html#marsaglia-algorithm-for-gaussian-upper-tail",
+    "href": "content/04-lecture.html#marsaglia-algorithm-for-gaussian-upper-tail",
+    "title": "Lecture 4",
+    "section": "Marsaglia algorithm for Gaussian upper tail",
+    "text": "Marsaglia algorithm for Gaussian upper tail\nWe consider next the Marsaglia algorithm to simulate from the upper tail of a standard normal distribution.\n\n# The usual way does not work\na0 &lt;- 10\npa &lt;- pnorm(-a0, lower.tail = FALSE)\nqnorm(pa + runif(1) * pa)\n\nWarning in qnorm(pa + runif(1) * pa): NaNs produced\n\n\n[1] NaN\n\na_seq &lt;- seq(10, 50, by = 10)\n# The usual way does not work due to numerical overflow\npnorm(a_seq)\n\n[1] 1 1 1 1 1\n\n\n\n# Marsaglia algorithm\na &lt;- 50\nniter &lt;- 1000L\nX &lt;- sqrt(a^2 + 2*rexp(niter))\nsamp &lt;- X[runif(niter)*X &lt;= a]\n\n\n# Compute reciprocal of bound C\nrecipC &lt;- sapply(a_seq, function(a){\n  integrate(f = function(x){\n    a * exp(-x^2/2 + a^2/2)}, \n    lower = a, \n    upper = Inf)$value})\n1/recipC\n\n[1] 1.009809 1.002488 1.001109 1.000624 1.000400"
   },
   {
     "objectID": "content/06-content.html#content",
@@ -3315,7 +3289,7 @@
     "href": "exercises/03-solution.html",
     "title": "Solution 3",
     "section": "",
-    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{gamma}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{Gauss}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).\n\n\nSolution. \n\nTo show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get \\[\\begin{align*}\np(\\lambda, \\nu \\mid \\boldsymbol{y}) &\\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau}{\\nu^{2}}-2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 +\\frac{t_1(\\boldsymbol{y})}{\\nu^2} -  \\frac{2n}{\\nu} + t_2(\\boldsymbol{y})\\right\\}\\right] \\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau + t_1(\\boldsymbol{y})}{\\nu^2} - 2\\frac{\\tau\\mu+n}{\\nu} + \\tau\\mu^2 + t_2(\\boldsymbol{y})\\right\\} \\right]\n\\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp\\left[-\\lambda \\left\\{\\beta + \\frac{c_3-c_1c_2^2}{2}\\right\\}\\right] \\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\nu^{-1} - c_2\\right)^2\\right\\}\n\\end{align*}\\] where \\(c_1=\\{\\tau + t_1(\\boldsymbol{y})\\}\\), \\(c_2 =(\\tau\\mu+n)/c_1\\) and \\(c_3 =\\tau\\mu^2 + t_2(\\boldsymbol{y})\\).\nWe see that the joint posterior as the product of two densities, say \\(q(\\lambda \\mid \\boldsymbol{y})p(1/\\nu \\mid \\lambda)\\); \\(q(\\lambda \\mid \\boldsymbol{y})\\) is the density of a gamma distribution with shape \\(a = (n+1)/2+\\alpha\\) and rate \\(b=\\beta + (c_3-c_1c_2^2)/2\\), whereas the other is a reciprocal Gaussian with mean parameter \\(c_2\\) and precision \\(\\lambda c_1\\). \\(\\mathsf{gamma}\\left\\{(n+1)/2+\\alpha\\right\\}\\)\nTo get the marginal \\(p(\\lambda \\mid \\boldsymbol{y})\\), we need to integrate with respect to \\(\\nu\\). Making the change of variable \\(\\mu = 1/\\nu\\), we recover a Gaussian kernel \\[\\begin{align*}\np(\\lambda \\mid \\boldsymbol{y}) &= \\lambda^{a-1}\\exp(-b\\lambda)\\int_{\\mathbb{R}}\\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\mu - c_2\\right)^2\\right\\}  \\mathrm{d} \\mu\n\\\\&\\propto \\lambda^{a-1}\\exp(-b\\lambda) \\lambda^{-1/2}\n\\end{align*}\\] so we conclude that, marginally, \\(\\lambda \\sim \\mathsf{gamma}(n+ \\alpha, b)\\).",
+    "text": "Difficult: Consider a simple random sample of size \\(n\\) from the inverse Gaussian (Wald) distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\lambda&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{gamma}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{Gauss}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda \\mid \\boldsymbol{y})\\).\n\n\nSolution. \n\nFirst, note that the prior is for \\(g(\\nu) = 1/\\nu\\), so the change of variable to get the corresponding function for \\(\\nu\\) gives \\(p(1/\\nu) / \\nu^2\\), including the Jacobian of the transformation.\n\nThe exact parametric form of the product of prior (conditional for \\(\\nu \\mid \\lambda\\) and that of \\(\\lambda\\) is\n\\[\\begin{align*}\np(\\nu, \\lambda)&= \\frac{\\beta^{\\alpha}}{\\Gamma(\\alpha)}\\lambda^{\\alpha-1}\\exp(-\\beta \\lambda) \\frac{(\\lambda\\tau)^{1/2}}{\\sqrt{2\\pi}\\nu^2}\n\\exp\\left\\{-\\frac{\\tau\\lambda}{2} \\left(\\nu^{-1}-\\mu\\right)^2\\right\\}\n\\\\&=\\stackrel{\\nu,\\lambda}{\\propto} \\frac{\\lambda^{\\alpha - 1/2}}{\\nu^2}\\exp \\left\\{ -\\frac{\\lambda}{2} \\left(\\frac{\\tau}{\\nu^{2}} - 2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 + 2\\beta\\right)\\right\\}\n\\end{align*}\\]\nTo show conjugacy, we must prove that the posterior is of the same family as the prior.\nThe likelihood contribution for an independent and identically distributed sample is proportional to \\[\np(\\boldsymbol{y} \\mid \\lambda, \\nu) \\stackrel{\\lambda, \\nu}{\\propto}\n\\lambda^{n/2} \\exp\\left\\{ -\\frac{\\lambda}{2} \\left( \\frac{1}{\\nu^2}\\sum_{i=1}^n y_i - \\frac{2n}{\\nu} +\\sum_{i=1}^n y_i^{-1}\\right)\\right\\}.\n\\]\nWrite \\(t_1(\\boldsymbol{y}=\\sum_{i=1}^n y_i\\) and \\(t_2(\\boldsymbol{y}) = \\sum_{i=1}^n y_i^{-1}\\). Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get \\[\\begin{align*}\np(\\lambda, \\nu \\mid \\boldsymbol{y}) &\\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau}{\\nu^{2}}-2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 +\\frac{t_1(\\boldsymbol{y})}{\\nu^2} -  \\frac{2n}{\\nu} + t_2(\\boldsymbol{y})\\right\\}\\right] \\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau + t_1(\\boldsymbol{y})}{\\nu^2} - 2\\frac{\\tau\\mu+n}{\\nu} + \\tau\\mu^2 + t_2(\\boldsymbol{y})\\right\\} \\right]\n\\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp\\left[-\\lambda \\left\\{\\beta + \\frac{c_3-c_1c_2^2}{2}\\right\\}\\right] \\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\nu^{-1} - c_2\\right)^2\\right\\}\n\\end{align*}\\] where \\(c_1=\\{\\tau + t_1(\\boldsymbol{y})\\}\\), \\(c_2 =(\\tau\\mu+n)/c_1\\) and \\(c_3 =\\tau\\mu^2 + t_2(\\boldsymbol{y})\\).\n\nWe see that the joint posterior is the product of two densities, say \\(p(\\lambda \\mid \\boldsymbol{y})p(1/\\nu \\mid \\lambda)\\); \\(p(\\lambda \\mid \\boldsymbol{y})\\) is the density of a gamma distribution with shape \\(a = (n+1)/2+\\alpha\\) and rate \\(b=\\beta + (c_3-c_1c_2^2)/2\\), whereas the other is a reciprocal Gaussian with mean parameter \\(c_2\\) and precision \\(\\lambda c_1\\).\nTo get the marginal \\(p(\\lambda \\mid \\boldsymbol{y})\\), we need to integrate with respect to \\(\\nu\\). Making the change of variable \\(\\xi = 1/\\nu\\), we recover a Gaussian kernel \\[\\begin{align*}\np(\\lambda \\mid \\boldsymbol{y}) &= \\lambda^{a-1}\\exp(-b\\lambda)\\int_{\\mathbb{R}}\\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\xi - c_2\\right)^2\\right\\}  \\mathrm{d} \\xi\n\\\\&\\propto \\lambda^{a-1}\\exp(-b\\lambda) \\lambda^{-1/2}\n\\end{align*}\\] so we conclude that, marginally, \\(\\lambda \\sim \\mathsf{gamma}(n+ \\alpha, b)\\).",
     "crumbs": [
       "Exercises",
       "Solutions",
@@ -3327,7 +3301,7 @@
     "href": "exercises/03-solution.html#exercise-3.1",
     "title": "Solution 3",
     "section": "",
-    "text": "Consider a simple random sample of size \\(n\\) from the Wald distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\tau&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{gamma}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{Gauss}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda)\\).\n\n\nSolution. \n\nTo show conjugacy, we must prove that the posterior is of the same family. Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get \\[\\begin{align*}\np(\\lambda, \\nu \\mid \\boldsymbol{y}) &\\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau}{\\nu^{2}}-2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 +\\frac{t_1(\\boldsymbol{y})}{\\nu^2} -  \\frac{2n}{\\nu} + t_2(\\boldsymbol{y})\\right\\}\\right] \\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau + t_1(\\boldsymbol{y})}{\\nu^2} - 2\\frac{\\tau\\mu+n}{\\nu} + \\tau\\mu^2 + t_2(\\boldsymbol{y})\\right\\} \\right]\n\\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp\\left[-\\lambda \\left\\{\\beta + \\frac{c_3-c_1c_2^2}{2}\\right\\}\\right] \\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\nu^{-1} - c_2\\right)^2\\right\\}\n\\end{align*}\\] where \\(c_1=\\{\\tau + t_1(\\boldsymbol{y})\\}\\), \\(c_2 =(\\tau\\mu+n)/c_1\\) and \\(c_3 =\\tau\\mu^2 + t_2(\\boldsymbol{y})\\).\nWe see that the joint posterior as the product of two densities, say \\(q(\\lambda \\mid \\boldsymbol{y})p(1/\\nu \\mid \\lambda)\\); \\(q(\\lambda \\mid \\boldsymbol{y})\\) is the density of a gamma distribution with shape \\(a = (n+1)/2+\\alpha\\) and rate \\(b=\\beta + (c_3-c_1c_2^2)/2\\), whereas the other is a reciprocal Gaussian with mean parameter \\(c_2\\) and precision \\(\\lambda c_1\\). \\(\\mathsf{gamma}\\left\\{(n+1)/2+\\alpha\\right\\}\\)\nTo get the marginal \\(p(\\lambda \\mid \\boldsymbol{y})\\), we need to integrate with respect to \\(\\nu\\). Making the change of variable \\(\\mu = 1/\\nu\\), we recover a Gaussian kernel \\[\\begin{align*}\np(\\lambda \\mid \\boldsymbol{y}) &= \\lambda^{a-1}\\exp(-b\\lambda)\\int_{\\mathbb{R}}\\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\mu - c_2\\right)^2\\right\\}  \\mathrm{d} \\mu\n\\\\&\\propto \\lambda^{a-1}\\exp(-b\\lambda) \\lambda^{-1/2}\n\\end{align*}\\] so we conclude that, marginally, \\(\\lambda \\sim \\mathsf{gamma}(n+ \\alpha, b)\\).",
+    "text": "Difficult: Consider a simple random sample of size \\(n\\) from the inverse Gaussian (Wald) distribution, with density \\[\\begin{align*}\nf(y; \\nu, \\lambda) = \\left(\\frac{\\lambda}{2\\pi y^{3}}\\right)^{1/2} \\exp\\left\\{ - \\frac{\\lambda (y-\\nu)^2}{2\\nu^2y}\\right\\}\\mathrm{I}(y &gt; 0)\n\\end{align*}\\] for location \\(\\nu &gt;0\\) and shape \\(\\lambda&gt;0\\).\n\nShow that the joint prior \\[ p(\\lambda) \\sim \\mathsf{gamma}(\\alpha, \\beta), \\quad p(1/\\nu \\mid \\lambda) \\sim  \\mathsf{Gauss}(\\mu, \\tau^{-1}\\lambda^{-1}),\\] the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.\nDerive the parameters of the posterior distribution and provide an interpretation of the prior parameters. Hint: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.\nDerive the marginal posterior \\(p(\\lambda \\mid \\boldsymbol{y})\\).\n\n\nSolution. \n\nFirst, note that the prior is for \\(g(\\nu) = 1/\\nu\\), so the change of variable to get the corresponding function for \\(\\nu\\) gives \\(p(1/\\nu) / \\nu^2\\), including the Jacobian of the transformation.\n\nThe exact parametric form of the product of prior (conditional for \\(\\nu \\mid \\lambda\\) and that of \\(\\lambda\\) is\n\\[\\begin{align*}\np(\\nu, \\lambda)&= \\frac{\\beta^{\\alpha}}{\\Gamma(\\alpha)}\\lambda^{\\alpha-1}\\exp(-\\beta \\lambda) \\frac{(\\lambda\\tau)^{1/2}}{\\sqrt{2\\pi}\\nu^2}\n\\exp\\left\\{-\\frac{\\tau\\lambda}{2} \\left(\\nu^{-1}-\\mu\\right)^2\\right\\}\n\\\\&=\\stackrel{\\nu,\\lambda}{\\propto} \\frac{\\lambda^{\\alpha - 1/2}}{\\nu^2}\\exp \\left\\{ -\\frac{\\lambda}{2} \\left(\\frac{\\tau}{\\nu^{2}} - 2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 + 2\\beta\\right)\\right\\}\n\\end{align*}\\]\nTo show conjugacy, we must prove that the posterior is of the same family as the prior.\nThe likelihood contribution for an independent and identically distributed sample is proportional to \\[\np(\\boldsymbol{y} \\mid \\lambda, \\nu) \\stackrel{\\lambda, \\nu}{\\propto}\n\\lambda^{n/2} \\exp\\left\\{ -\\frac{\\lambda}{2} \\left( \\frac{1}{\\nu^2}\\sum_{i=1}^n y_i - \\frac{2n}{\\nu} +\\sum_{i=1}^n y_i^{-1}\\right)\\right\\}.\n\\]\nWrite \\(t_1(\\boldsymbol{y}=\\sum_{i=1}^n y_i\\) and \\(t_2(\\boldsymbol{y}) = \\sum_{i=1}^n y_i^{-1}\\). Multiplying the likelihood with the joint prior and expanding the squares in the exponential terms, we get \\[\\begin{align*}\np(\\lambda, \\nu \\mid \\boldsymbol{y}) &\\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau}{\\nu^{2}}-2\\frac{\\tau\\mu}{\\nu} + \\tau\\mu^2 +\\frac{t_1(\\boldsymbol{y})}{\\nu^2} -  \\frac{2n}{\\nu} + t_2(\\boldsymbol{y})\\right\\}\\right] \\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp(-\\lambda \\beta) \\exp\\left[ -\\frac{\\lambda}{2}\\left\\{\\frac{\\tau + t_1(\\boldsymbol{y})}{\\nu^2} - 2\\frac{\\tau\\mu+n}{\\nu} + \\tau\\mu^2 + t_2(\\boldsymbol{y})\\right\\} \\right]\n\\\\& \\propto \\frac{\\lambda^{(n+1)/2+\\alpha-1}}{\\nu^2}\\exp\\left[-\\lambda \\left\\{\\beta + \\frac{c_3-c_1c_2^2}{2}\\right\\}\\right] \\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\nu^{-1} - c_2\\right)^2\\right\\}\n\\end{align*}\\] where \\(c_1=\\{\\tau + t_1(\\boldsymbol{y})\\}\\), \\(c_2 =(\\tau\\mu+n)/c_1\\) and \\(c_3 =\\tau\\mu^2 + t_2(\\boldsymbol{y})\\).\n\nWe see that the joint posterior is the product of two densities, say \\(p(\\lambda \\mid \\boldsymbol{y})p(1/\\nu \\mid \\lambda)\\); \\(p(\\lambda \\mid \\boldsymbol{y})\\) is the density of a gamma distribution with shape \\(a = (n+1)/2+\\alpha\\) and rate \\(b=\\beta + (c_3-c_1c_2^2)/2\\), whereas the other is a reciprocal Gaussian with mean parameter \\(c_2\\) and precision \\(\\lambda c_1\\).\nTo get the marginal \\(p(\\lambda \\mid \\boldsymbol{y})\\), we need to integrate with respect to \\(\\nu\\). Making the change of variable \\(\\xi = 1/\\nu\\), we recover a Gaussian kernel \\[\\begin{align*}\np(\\lambda \\mid \\boldsymbol{y}) &= \\lambda^{a-1}\\exp(-b\\lambda)\\int_{\\mathbb{R}}\\exp\\left\\{ -\\frac{\\lambda c_1}{2}\\left(\\xi - c_2\\right)^2\\right\\}  \\mathrm{d} \\xi\n\\\\&\\propto \\lambda^{a-1}\\exp(-b\\lambda) \\lambda^{-1/2}\n\\end{align*}\\] so we conclude that, marginally, \\(\\lambda \\sim \\mathsf{gamma}(n+ \\alpha, b)\\).",
     "crumbs": [
       "Exercises",
       "Solutions",
@@ -3351,7 +3325,7 @@
     "href": "exercises/03-solution.html#exercise-3.3",
     "title": "Solution 3",
     "section": "Exercise 3.3",
-    "text": "Exercise 3.3\nConsider a binomial model with an unknown probability of successes \\(\\theta \\in [0,1]\\) model. Suppose your prior guess for \\(\\theta\\) has mean \\(0.1\\) and standard deviation \\(0.2\\)\nUsing moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.\nPlot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location \\(\\mu=0.1\\) and scale \\(\\sigma=0.2\\).1\n\nSolution. The beta distribution has expected value \\(\\alpha/(\\alpha+\\beta)\\) and variance \\(\\alpha\\beta(\\alpha+\\beta)^{-2}(\\alpha+\\beta+1)^{-1}\\).\nSince the system of equations is nonlinear, we need to solve numerically to find the two unknown value of the parameters or else simply substitute \\(\\beta = \\alpha (1-\\mu)/\\mu\\) in the equation for the variance.\n\nbeta_moments &lt;- function(par, mean, variance){\n  alpha &lt;- par[1]\n  beta &lt;- par[2]\n  c(alpha/(alpha+beta) - mean,\n    alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)\n}\n# Numerical root finding algorithm\n# We need to give good starting values\nrootSolve::multiroot(f = beta_moments,\n                     start = c(0.1, 0.8),\n                     positive = TRUE,\n                     mean = 0.1, \n                     variance = 0.04)\n\n$root\n[1] 0.125 1.125\n\n$f.root\n[1] 5.504125e-12 4.298423e-12\n\n$iter\n[1] 5\n\n$estim.precis\n[1] 4.901274e-12\n\nalpha &lt;- uniroot(f = function(alpha, mean = 0.1, variance = 0.04){\n  beta &lt;- alpha*(1-mean)/mean\n  alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance}, \n  interval = c(1e-4, 1))$root\nbeta &lt;- alpha*(1-0.1)/0.1\nc(alpha = alpha, beta = beta)\n\nalpha  beta \n0.125 1.125 \n\n\nand we find \\(\\alpha = 0.125\\) and \\(\\beta=1.125\\).\nLet \\(a = -\\mu/\\sigma\\) and \\(b = (1-\\mu)/\\sigma\\) denote the standardized lower and upper bounds, respectively. The density of the truncated Gaussian with location \\(\\mu\\) and scale \\(\\sigma\\) on the unit interval is \\[\\begin{align*}\nf(x; \\mu, \\sigma) = \\frac{1}{\\sigma}\\frac{\\phi\\left(\\frac{x - \\mu}{\\sigma}\\right)}{\\Phi(b) - \\Phi(a)},\n\\end{align*}\\] where \\(\\phi\\) is the density of a standard Gaussian \\(\\mathsf{Gauss}(0,1)\\) and \\(\\Phi\\) the corresponding distribution function.\n\n\n\n\n\n\n\n\n\nFigure 1: Beta (full line) and truncated Gaussian (dashed line) prior densities.\n\n\n\n\n\nThe beta distribution, while matching the moments, is implying very low chance of success with a mode at zero. By contrast, the truncated Gaussian (which does not have mean \\(\\mu\\) and variance \\(\\sigma^2\\)) has the mode at \\(\\mu=0.1\\). Which one is preferable depends on the context; we could also match the parameters of the truncated Gaussian.",
+    "text": "Exercise 3.3\nConsider a binomial model with an unknown probability of successes \\(\\theta \\in [0,1]\\) model. Suppose your prior guess for \\(\\theta\\) has mean \\(0.1\\) and standard deviation \\(0.2\\)\nUsing moment matching, return values for the parameters of the conjugate beta prior corresponding to your opinion.\nPlot the resulting beta prior and compare it with a truncated Gaussian distribution on the unit interval with location \\(\\mu=0.1\\) and scale \\(\\sigma=0.2\\).1\n\nSolution. The beta distribution has expected value \\(\\alpha/(\\alpha+\\beta)\\) and variance \\(\\alpha\\beta(\\alpha+\\beta)^{-2}(\\alpha+\\beta+1)^{-1}\\).\nSince the system of equations is nonlinear, we need to solve numerically to find the two unknown value of the parameters or else simply substitute \\(\\beta = \\alpha (1-\\mu)/\\mu\\) in the equation for the variance.\n\n# Numerical root finding \nbeta_moments &lt;- function(par, mean, variance){\n  alpha &lt;- par[1]\n  beta &lt;- par[2]\n  c(alpha/(alpha+beta) - mean,\n    alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)\n}\n# We need to give good starting values\nrootSolve::multiroot(f = beta_moments,\n                     start = c(0.1, 0.8),\n                     positive = TRUE,\n                     mean = 0.1, \n                     variance = 0.04)\n\n$root\n[1] 0.125 1.125\n\n$f.root\n[1] 5.504125e-12 4.298423e-12\n\n$iter\n[1] 5\n\n$estim.precis\n[1] 4.901274e-12\n\n# Alternative 2 :  minimize an objective function\n# l2 norm of the difference between parameters\nbeta_match &lt;- function(par, mean, variance){\n  # Make unconstrained\n  alpha &lt;- exp(par[1]); beta &lt;- exp(par[2]) \n  sqrt((alpha/(alpha+beta) - mean)^2 +\n        (alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance)^2)\n}\n# Minimize objective function\nexp(optim(\n  par = log(c(0.1,0.8)), \n  fn = beta_match,,\n  mean = 0.1, \n  variance = 0.04)$par)\n\n[1] 0.125 1.125\n\n# Could do even simpler and isolate a parameter\n# Leads to a univariate problem\nalpha &lt;- uniroot(f = function(alpha, mean = 0.1, variance = 0.04){\n  beta &lt;- alpha*(1-mean)/mean\n  alpha*beta/(alpha+beta)^2/(alpha+beta+1) - variance}, \n  interval = c(1e-4, 1))$root\nbeta &lt;- alpha*(1-0.1)/0.1\nc(alpha = alpha, beta = beta)\n\nalpha  beta \n0.125 1.125 \n\n\nand we find, regardless of the method we use, the same solution: \\(\\alpha = 0.125\\) and \\(\\beta=1.125\\).\nLet \\(a = -\\mu/\\sigma\\) and \\(b = (1-\\mu)/\\sigma\\) denote the standardized lower and upper bounds, respectively. The density of the truncated Gaussian with location \\(\\mu\\) and scale \\(\\sigma\\) on the unit interval is \\[\\begin{align*}\nf(x; \\mu, \\sigma) = \\frac{1}{\\sigma}\\frac{\\phi\\left(\\frac{x - \\mu}{\\sigma}\\right)}{\\Phi(b) - \\Phi(a)},\n\\end{align*}\\] where \\(\\phi\\) is the density of a standard Gaussian \\(\\mathsf{Gauss}(0,1)\\) and \\(\\Phi\\) the corresponding distribution function.\n\n\n\n\n\n\n\n\n\nFigure 1: Beta (full line) and truncated Gaussian (dashed line) prior densities.\n\n\n\n\n\nThe beta distribution, while matching the moments, is implying very low chance of success with a mode at zero. By contrast, the truncated Gaussian (which does not have mean \\(\\mu\\) and variance \\(\\sigma^2\\)) has the mode at \\(\\mu=0.1\\). Which one is preferable depends on the context; we could also match the parameters of the truncated Gaussian.",
     "crumbs": [
       "Exercises",
       "Solutions",
@@ -4320,6 +4294,90 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References\n\n\n\n\nBrodeur, M., Ruer, P., Léger, P.-M., & Sénécal, S. (2021). Smartwatches are more distracting than mobile phones while driving: Results from an experimental study. Accident Analysis & Prevention, 149, 105846. https://doi.org/10.1016/j.aap.2020.105846\n\n\nGelman, A. (2006). Prior distributions for variance parameters in hierarchical models (comment on article by Browne and Draper). Bayesian Analysis, 1(3), 515–534. https://doi.org/10.1214/06-ba117a\n\n\nKallioinen, N., Paananen, T., Bürkner, P.-C., & Vehtari, A. (2023). Detecting and diagnosing prior and likelihood sensitivity with power-scaling. Statistics and Computing, 34(1), 57. https://doi.org/10.1007/s11222-023-10366-5\n\n\nKallioinen, N., Paananen, T., Bürkner, P.-C., & Vehtari, A. (2026). priorsense: Efficient prior and likelihood sensitivity checks for Bayesian models in R. Journal of Open Source Software, 11(123). https://doi.org/10.21105/joss.11036\n\n\nMatias, J. N., Munger, K., Le Quere, M. A., & Ebersole, C. (2021). The Upworthy Research Archive, a time series of 32,487 experiments in U.S. media. Scientific Data, 8(195). https://doi.org/10.1038/s41597-021-00934-7\n\n\nRubin, D. B. (1981). Estimation in parallel randomized experiments. Journal of Educational Statistics, 6(4), 377–401. https://doi.org/10.3102/10769986006004377\n\n\nSimpson, D., Rue, H., Riebler, A., Martins, T. G., & Sørbye, S. H. (2017). Penalising model component complexity: A principled, practical approach to constructing priors. Statistical Science, 32(1), 1–28. https://doi.org/10.1214/16-sts576"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#markov-chain-monte-carlo",
+    "href": "slides/bayesmod-slides5.html#markov-chain-monte-carlo",
+    "title": "Bayesian modelling",
+    "section": "Markov chain Monte Carlo",
+    "text": "Markov chain Monte Carlo\nWe consider simulating from a distribution with associated density function proportional to \\(p(\\cdot)\\)\n\nusing an algorithm that generates a Markov chain ,\nwithout requiring knowledge of the normalizing factor.\n\nWe use a conditional density \\(q(\\boldsymbol{\\theta} \\mid \\boldsymbol{\\theta}^{\\text{cur}})\\) to generate proposals from the current value \\(\\boldsymbol{\\theta}^{\\text{cur}}.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#metropolishastings-algorithm",
+    "href": "slides/bayesmod-slides5.html#metropolishastings-algorithm",
+    "title": "Bayesian modelling",
+    "section": "Metropolis–Hastings algorithm",
+    "text": "Metropolis–Hastings algorithm\nStarting from an initial value \\(\\boldsymbol{\\theta}_0\\): for \\(t=1, \\ldots, T\\)\n\ndraw a proposal value \\(\\boldsymbol{\\theta}_t^{\\star} \\sim q(\\boldsymbol{\\theta} \\mid \\boldsymbol{\\theta}_{t-1})\\).\nCompute the acceptance ratio \\[\nR = \\frac{p(\\boldsymbol{\\theta}_t^{\\star})}{p(\\boldsymbol{\\theta}_{t-1})}\\frac{q(\\boldsymbol{\\theta}_{t-1} \\mid \\boldsymbol{\\theta}_t^{\\star} )}{q(\\boldsymbol{\\theta}_t^{\\star} \\mid \\boldsymbol{\\theta}_{t-1})}\n\\]\nWith probability \\(\\alpha=\\min\\{R, 1\\}\\), accept the proposal and set \\(\\boldsymbol{\\theta}_t \\gets \\boldsymbol{\\theta}_t^{\\star}\\), otherwise set the value to the previous state, \\(\\boldsymbol{\\theta}_t \\gets \\boldsymbol{\\theta}_{t-1}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#theory",
+    "href": "slides/bayesmod-slides5.html#theory",
+    "title": "Bayesian modelling",
+    "section": "Theory",
+    "text": "Theory\nThe Metropolis–Hastings algorithm satisfies a technical condition (detailed balance) that ensures that the Markov chain generated is reversible.\n\nThus, any draw from the posterior will generate a new realization from the posterior.\nProvided the starting value has non-zero probability under the posterior, the chain will converge to the stationarity distribution (albeit perhaps slowly)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#interpretation",
+    "href": "slides/bayesmod-slides5.html#interpretation",
+    "title": "Bayesian modelling",
+    "section": "Interpretation",
+    "text": "Interpretation\n\nIf \\(R&gt;1\\), the proposal has higher density and we always accept the move.\nIf we reject the move, the Markov chain stays at the current value, which induces autocorrelation.\nSince the acceptance probability depends only on the density through ratios, normalizing factors of \\(p\\) and \\(q\\) cancel out."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#symmetric-proposals-and-random-walk",
+    "href": "slides/bayesmod-slides5.html#symmetric-proposals-and-random-walk",
+    "title": "Bayesian modelling",
+    "section": "Symmetric proposals and random walk",
+    "text": "Symmetric proposals and random walk\nIf the proposal is symmetric, the ratio of proposal densities is \\[q(\\boldsymbol{\\theta}_{t-1} \\mid \\boldsymbol{\\theta}_t^{\\star} ) / q(\\boldsymbol{\\theta}_t^{\\star} \\mid \\boldsymbol{\\theta}_{t-1}) = 1.\\]\nCommon examples include random walk proposals \\[\\boldsymbol{\\theta}_t^{\\star} \\gets \\boldsymbol{\\theta}_{t-1} + \\tau Z,\\] where \\(Z \\sim \\mathsf{Gauss}(0,1).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#independent-proposals",
+    "href": "slides/bayesmod-slides5.html#independent-proposals",
+    "title": "Bayesian modelling",
+    "section": "Independent proposals",
+    "text": "Independent proposals\n\nIf we pick instead a global proposal, we must ensure that \\(q\\) samples in far regions (recall rejection sampling), otherwise …\nGood proposals include heavy tailed distribution such as Student-\\(t\\) with small degrees of freedom,\ncentered at the maximum a posteriori \\(\\widehat{\\boldsymbol{\\theta}}\\) and\nwith scale matrix proportional to \\(-\\mathbf{H}^{-1}(\\boldsymbol{\\theta}_t^{\\star})\\), where \\(\\mathbf{H}(\\cdot)\\) is the Hessian of the (unnormalized) log posterior."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#upworthy-data-example",
+    "href": "slides/bayesmod-slides5.html#upworthy-data-example",
+    "title": "Bayesian modelling",
+    "section": "Upworthy data example",
+    "text": "Upworthy data example\nWe model the Poisson rates for headlines with questions or not. Our model is \\[\\begin{align*}\nY_{i} &\\sim \\mathsf{Poisson}(n_i\\lambda_i), \\qquad (i=1,2)\\\\\n\\lambda_1 &= \\exp(\\beta + \\kappa) \\\\\n\\lambda_2 &= \\exp(\\beta) \\\\\n\\beta & \\sim \\mathsf{Gauss}(\\log 0.01, 1.5) \\\\\n\\kappa &\\sim \\mathsf{Gauss}(0, 1)\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#implementation-details-data-and-containers",
+    "href": "slides/bayesmod-slides5.html#implementation-details-data-and-containers",
+    "title": "Bayesian modelling",
+    "section": "Implementation details: data and containers",
+    "text": "Implementation details: data and containers\nIn regression models, scale inputs if possible.\n\n# Load data\ndata(upworthy_question, package = \"hecbayes\")\n# Compute sufficient statistics\ndata &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(ntot = sum(impressions),\n                   y = sum(clicks))\n# Create containers for MCMC\nniter &lt;- 1e4L\nchain &lt;- matrix(0, nrow = niter, ncol = 2L)\ncolnames(chain) &lt;- c(\"beta\",\"kappa\")"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#implementation-details-log-posterior-function",
+    "href": "slides/bayesmod-slides5.html#implementation-details-log-posterior-function",
+    "title": "Bayesian modelling",
+    "section": "Implementation details: log posterior function",
+    "text": "Implementation details: log posterior function\nPerform all calculations on the log scale to avoid numerical overflow!\n\n# Code log posterior as sum of log likelihood and log prior\nloglik &lt;- function(par, counts = data$y, offset = data$ntot, ...){\n  lambda &lt;- exp(c(par[1] + log(offset[1]), par[1] + par[2] + log(offset[2])))\n sum(dpois(x = counts, lambda = lambda, log = TRUE))\n}\n# Note common signature of function\nlogprior &lt;- function(par, ...){\n  dnorm(x = par[1], mean = log(0.01), sd = 1.5, log = TRUE) +\n    dnorm(x = par[2], log = TRUE)\n}\nlogpost &lt;- function(par, ...){\n  loglik(par, ...) + logprior(par, ...)\n}"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#implementation-details-proposals",
+    "href": "slides/bayesmod-slides5.html#implementation-details-proposals",
+    "title": "Bayesian modelling",
+    "section": "Implementation details: proposals",
+    "text": "Implementation details: proposals\nUse good starting values for your Markov chains, such as maximum a posteriori.\n\n# Compute maximum a posteriori (MAP)\nmap &lt;- optim(\n  par = c(-4, 0.07),\n  fn = logpost,\n  control = list(fnscale = -1),\n  offset = data$ntot,\n  counts = data$y,\n  hessian = TRUE)\n# Use MAP as starting value\ncur &lt;- map$par\n# Compute logpost_cur - we can keep track of this to reduce calculations\nlogpost_cur &lt;- logpost(cur)\n# Proposal covariance\ncov_map &lt;- -2*solve(map$hessian)\nchol &lt;- chol(cov_map)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#implementation-details-metropolishastings-algorithm",
+    "href": "slides/bayesmod-slides5.html#implementation-details-metropolishastings-algorithm",
+    "title": "Bayesian modelling",
+    "section": "Implementation details: Metropolis–Hastings algorithm",
+    "text": "Implementation details: Metropolis–Hastings algorithm\nUse seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.\n\nset.seed(80601)\nnaccept &lt;- 0L\nfor(i in seq_len(niter)){\n  # Multivariate normal proposal - symmetric random walk\n  prop &lt;- c(rnorm(n = 2) %*% chol + cur)\n  logpost_prop &lt;- logpost(prop)\n  logR &lt;- logpost_prop - logpost_cur\n  if(logR &gt; -rexp(1)){\n    cur &lt;- prop\n    logpost_cur &lt;- logpost_prop\n    naccept &lt;- naccept + 1L\n  }\n  chain[i,] &lt;- cur\n}"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#implementation-details-analysis-of-output",
+    "href": "slides/bayesmod-slides5.html#implementation-details-analysis-of-output",
+    "title": "Bayesian modelling",
+    "section": "Implementation details: analysis of output",
+    "text": "Implementation details: analysis of output\n\n# Posterior summaries\nsummary(coda::as.mcmc(chain))\n\n1. Empirical mean and standard deviation for each variable,\n   plus standard error of the mean:\n\n          Mean       SD  Naive SE Time-series SE\nbeta  -4.51268 0.001697 1.697e-05      6.176e-05\nkappa  0.07075 0.002033 2.033e-05      9.741e-05\n\n2. Quantiles for each variable:\n\n          2.5%      25%      50%      75%    97.5%\nbeta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929\nkappa  0.06673  0.06933  0.07077  0.07212  0.07463"
   },
   {
     "objectID": "slides/bayesmod-slides5.html#reminder-metropolishastings-algorithm",

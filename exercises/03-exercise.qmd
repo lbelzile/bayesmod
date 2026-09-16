@@ -4,16 +4,16 @@ title: "Exercises 3"
 
 ## Exercise 3.1
 
-Consider a simple random sample of size $n$ from the Wald distribution, with density
+**Difficult**: Consider a simple random sample of size $n$ from the inverse Gaussian (Wald) distribution, with density
 \begin{align*}
 f(y; \nu, \lambda) = \left(\frac{\lambda}{2\pi y^{3}}\right)^{1/2} \exp\left\{ - \frac{\lambda (y-\nu)^2}{2\nu^2y}\right\}\mathrm{I}(y > 0)
 \end{align*}
-for location $\nu >0$ and shape $\tau>0$. 
+for location $\nu >0$ and shape $\lambda>0$. 
 
 a. Show that the joint prior
 $$ p(\lambda) \sim \mathsf{gamma}(\alpha, \beta), \quad p(1/\nu \mid \lambda) \sim  \mathsf{Gauss}(\mu, \tau^{-1}\lambda^{-1}),$$ the product of a gamma and a reciprocal Gaussian, is conjugate for the Wald distribution parameters.
 b. Derive the parameters of the posterior distribution and provide an interpretation of the prior parameters. *Hint*: write down the posterior parameters as a weighted average of data-dependent quantities and prior parameters.
-c. Derive the marginal posterior $p(\lambda)$.
+c. Derive the marginal posterior $p(\lambda \mid \boldsymbol{y}).$
 
 
 ## Exercise 3.2

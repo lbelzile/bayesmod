@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.7.1">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -29,8 +32,9 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -41,7 +45,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -114,7 +118,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-da069d641d4916e8549bf8dc2b95f825.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-0889ea6b10ab650f3a364291bfeaa97a.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -213,7 +217,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Monte Carlo methods, Markov chains and the Metropolis–Hastings algorithm</p>
+  <p class="subtitle">Monte Carlo methods and Markov chains</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -223,7 +227,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Sep 15, 2026</p>
+  <p class="date">Last compiled Wednesday Sep 16, 2026</p>
 </section>
 <section id="bayesian-inference-beyond-conjugate-models" class="slide level2">
 <h2>Bayesian inference beyond conjugate models</h2>
@@ -266,7 +270,7 @@ Figure&nbsp;1: Illustration of the fundamental theorem of simulation. All points
 <h2>Simulation algorithms: accept-reject</h2>
 <ul>
 <li><strong>Target</strong>: sample from density <span class="math inline">\(p(x)\)</span> (hard to sample from)</li>
-<li><strong>Proposal</strong>: find a density <span class="math inline">\(q(x)\)</span> with nested support, <span class="math inline">\(\mathrm{supp}(p) \subseteq \mathrm{supp}(q)\)</span>, such that for all <span class="math inline">\(x \in \mathrm{supp}(p)\)</span>, <span class="math display">\[\frac{p(x)}{q(x)} \leq C, \quad C \geq 1.\]</span> <em>Uses the fundamental theorem of simulation by finding an enveloppe <span class="math inline">\(Cq(x)\)</span> that is over the density <span class="math inline">\(p(x).\)</span></em></li>
+<li><strong>Proposal</strong>: find a density <span class="math inline">\(q(x)\)</span> with nested support, <span class="math inline">\(\mathrm{supp}(p) \subseteq \mathrm{supp}(q)\)</span>, such that for all <span class="math inline">\(x \in \mathrm{supp}(p)\)</span>, <span class="math display">\[\frac{p(x)}{q(x)} \leq C, \quad C \geq 1.\]</span> <em>Uses the fundamental theorem of simulation by finding an envelope <span class="math inline">\(Cq(x)\)</span> that is over the density <span class="math inline">\(p(x).\)</span></em></li>
 </ul>
 </section>
 <section id="rejection-sampling-algorithm" class="slide level2">
@@ -301,8 +305,9 @@ Figure&nbsp;2: Target density (full) and scaled proposal density (dashed): the v
 <h2>Designing a good proposal density</h2>
 <p>Good choices must satisfy the following constraints:</p>
 <ul>
-<li>pick a family <span class="math inline">\(q(x)\)</span> so that <span class="math display">\[C = \mathrm{argmax}_x \frac{p(x)}{q(x)}\]</span> is as close to 1 as possible.</li>
-<li>you can use numerical optimization with target <span class="math display">\[f(x) =\log p(x) - \log q(x)\]</span> to find the mode <span class="math inline">\(x^\star\)</span> and the upper bound <span class="math inline">\(C = \exp f(x^\star).\)</span></li>
+<li>pick a family <span class="math inline">\(q(x)\)</span> so that <span class="math display">\[C = \mathrm{argmax}_x{p(x)}/{q(x)}\]</span> is as close to 1 as possible.</li>
+<li>you can use numerical optimization with target <span class="math display">\[\log R(x) =\log p(x) - \log q(x)\]</span> to find the mode <span class="math inline">\(x^\star\)</span> and the upper bound <span class="math inline">\(C = R(x^\star).\)</span></li>
+<li>if <span class="math inline">\(q(x; \boldsymbol{\theta})\)</span> is a function of the parameter <span class="math inline">\(\boldsymbol{\theta}\)</span>, search for <span class="math display">\[\mathrm{argmin}_{\boldsymbol{\theta}} \mathrm{argmax}_x \{\log p(x) - \log q(x; \boldsymbol{\theta})\}\]</span></li>
 </ul>
 </section>
 <section id="truncated-gaussian-via-accept-reject" class="slide level2">
@@ -319,16 +324,16 @@ p(x; \mu, \sigma, a, b) = \frac{1}{\sigma}\frac{\phi\left(\frac{x-\mu}{\sigma}\r
 </ol>
 <p>The acceptance rate is <span class="math inline">\(C^{-1} = \{\Phi(\beta) - \Phi(\alpha)\}\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># Standard Gaussian truncated on [0,1]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># Standard Gaussian truncated on [0,1]</span></span>
 <span id="cb1-2"><a></a>candidate <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e5</span>)</span>
 <span id="cb1-3"><a></a>trunc_samp <span class="ot">&lt;-</span> candidate[candidate <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> candidate <span class="sc">&lt;=</span> <span class="dv">1</span>]</span>
 <span id="cb1-4"><a></a><span class="co"># Acceptance rate</span></span>
-<span id="cb1-5"><a></a><span class="fu">length</span>(trunc_samp)<span class="sc">/</span><span class="fl">1e5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a></a><span class="fu">length</span>(trunc_samp)<span class="sc">/</span><span class="fl">1e5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.34289</code></pre>
+<pre><code>[1] 0.33972</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Theoretical acceptance rate</span></span>
-<span id="cb3-2"><a></a><span class="fu">pnorm</span>(<span class="dv">1</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Theoretical acceptance rate</span></span>
+<span id="cb3-2"><a></a><span class="fu">pnorm</span>(<span class="dv">1</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.3413447</code></pre>
 </div>
@@ -351,9 +356,9 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <h2>Simulating tails of Gaussian variables</h2>
 <p>We consider simulation from a standard Gaussian truncated above <span class="math inline">\(a&gt;0\)</span></p>
 <p>Write the density of the truncated Gaussian as <span class="citation" data-cites="Devroye:1986">(<a href="#/references" role="doc-biblioref" onclick="">Devroye, 1986, p. 381</a>)</span><span class="math display">\[f(x) = \frac{\exp(-x^2/2)}{\int_{a}^{\infty}\exp(-z^2/2)\mathrm{d} z}  =\frac{\exp(-x^2/2)}{c_1}.\]</span></p>
-<p>Note that, for <span class="math inline">\(x \geq a\)</span>, <span class="math display">\[c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);\]</span> where <span class="math inline">\(g(x)\)</span> is the density of a Rayleigh variable shifted by <span class="math inline">\(a\)</span>.</p>
+<p>Note that, for <span class="math inline">\(x \geq a\)</span>, <span class="math inline">\(x/a &gt; 1\)</span> and <span class="math display">\[c_1f(x) \leq \frac{x}{a}\exp\left(-\frac{x^2}{2}\right)= a^{-1}\exp\left(-\frac{a^2}{2}\right)g(x);\]</span> where <span class="math inline">\(g(x)=x\exp\{(a^2-x^2)/2\}\mathsf{1}_{x \ge a}\)</span> is the density of a Rayleigh variable shifted by <span class="math inline">\(a\)</span>.</p>
 <div style="font-size: 50%;">
-<p>The constant <span class="math inline">\(C= \exp(-a^2/2)(c_1a)^{-1}\)</span> approaches 1 quickly as <span class="math inline">\(a \to \infty\)</span> (asymptotically optimality).</p>
+<p>The constant <span class="math inline">\(C= \exp(-a^2/2)(c_1a)^{-1}\)</span> approaches 1 quickly as <span class="math inline">\(a \to \infty\)</span> (asymptotically optimal).</p>
 </div>
 </section>
 <section id="accept-reject-truncated-gaussian-with-rayleigh" class="slide level2 smaller">
@@ -377,10 +382,13 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 </div>
 <p>For sampling on <span class="math inline">\([a,b]\)</span> with <span class="math inline">\(a\)</span> very large, propose from a Rayleigh truncated above at <span class="math inline">\(b\)</span> <span class="citation" data-cites="LEcuyer.Botev:2017">(<a href="#/references" role="doc-biblioref" onclick="">Botev &amp; L’Écuyer, 2017</a>)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>a <span class="ot">&lt;-</span> <span class="fl">8.3</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>a <span class="ot">&lt;-</span> <span class="fl">8.3</span></span>
 <span id="cb5-2"><a></a>niter <span class="ot">&lt;-</span> <span class="dv">1000</span>L</span>
 <span id="cb5-3"><a></a>X <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(a<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span><span class="fu">rexp</span>(niter))</span>
-<span id="cb5-4"><a></a>samp <span class="ot">&lt;-</span> X[<span class="fu">runif</span>(niter)<span class="sc">*</span>X <span class="sc">&lt;=</span> a]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-4"><a></a>samp <span class="ot">&lt;-</span> X[<span class="fu">runif</span>(niter)<span class="sc">*</span>X <span class="sc">&lt;=</span> a]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div style="font-size: 80%;">
+<p>Accept if <span class="math inline">\(U \leq \frac{f(x)}{g(x)} \times \frac{1}{C} = \frac{\exp(-x^2/2)/c_1}{x\exp\{(a^2-x^2)/2\}} \times \exp(a^2/2)c_1a = \frac{a}{x}.\)</span></p>
 </div>
 </section>
 <section id="monte-carlo-integration" class="slide level2">
@@ -415,7 +423,7 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <section id="code-for-importance-sampling-of-beta-variance" class="slide level2">
 <h2>Code for importance sampling of beta variance</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>B <span class="ot">&lt;-</span> <span class="fl">2e4</span>L; alpha <span class="ot">&lt;-</span> <span class="fl">1.5</span>; factor <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>B <span class="ot">&lt;-</span> <span class="fl">2e4</span>L; alpha <span class="ot">&lt;-</span> <span class="fl">1.5</span>; factor <span class="ot">&lt;-</span> <span class="dv">3</span></span>
 <span id="cb6-2"><a></a><span class="co"># Mode at the mean 0.5</span></span>
 <span id="cb6-3"><a></a>X0 <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="at">n =</span> B, alpha, alpha)</span>
 <span id="cb6-4"><a></a>px <span class="ot">&lt;-</span> <span class="cf">function</span>(x){<span class="fu">dbeta</span>(x, alpha, alpha)}</span>
@@ -429,13 +437,13 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <span id="cb6-12"><a></a><span class="co"># Function to integrate - gives variance of a symmetric beta distribution</span></span>
 <span id="cb6-13"><a></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(x){(x <span class="sc">-</span> <span class="fl">0.5</span>)<span class="sc">^</span><span class="dv">2</span>}</span>
 <span id="cb6-14"><a></a><span class="co"># Weights for importance sampling</span></span>
-<span id="cb6-15"><a></a>w <span class="ot">&lt;-</span> <span class="fu">px</span>(X1)<span class="sc">/</span><span class="fu">qx</span>(X1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-15"><a></a>w <span class="ot">&lt;-</span> <span class="fu">px</span>(X1)<span class="sc">/</span><span class="fu">qx</span>(X1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="code-for-importance-sampling-of-beta-variance-continued" class="slide level2">
 <h2>Code for importance sampling of beta variance (continued)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># Monte Carlo integration</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co"># Monte Carlo integration</span></span>
 <span id="cb7-2"><a></a>mc_est <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">g</span>(X0))</span>
 <span id="cb7-3"><a></a>mc_var <span class="ot">&lt;-</span> <span class="fu">var</span>(<span class="fu">g</span>(X0))<span class="sc">/</span>B</span>
 <span id="cb7-4"><a></a><span class="co"># Importance sampling weighted mean and variance</span></span>
@@ -444,15 +452,15 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <span id="cb7-7"><a></a><span class="co"># True value for the beta variance</span></span>
 <span id="cb7-8"><a></a>th_est <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">4</span><span class="sc">*</span>(<span class="dv">2</span><span class="sc">*</span>alpha<span class="sc">+</span><span class="dv">1</span>))</span>
 <span id="cb7-9"><a></a><span class="co"># Point estimates and differences</span></span>
-<span id="cb7-10"><a></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">true =</span> th_est, <span class="st">"monte carlo"</span> <span class="ot">=</span> mc_est, <span class="st">"importance sampling"</span> <span class="ot">=</span> is_est),<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-10"><a></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">true =</span> th_est, <span class="st">"monte carlo"</span> <span class="ot">=</span> mc_est, <span class="st">"importance sampling"</span> <span class="ot">=</span> is_est),<span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               true         monte carlo importance sampling 
-             0.0625              0.0629              0.0627 </code></pre>
+             0.0625              0.0627              0.0618 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># Ratio of std. errors for means</span></span>
-<span id="cb9-2"><a></a>mc_var<span class="sc">/</span>is_var <span class="co"># value &gt; 1 means that IS is more efficient</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="co"># Ratio of std. errors for means</span></span>
+<span id="cb9-2"><a></a>mc_var<span class="sc">/</span>is_var <span class="co"># value &gt; 1 means that IS is more efficient</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.107183</code></pre>
+<pre><code>[1] 1.119518</code></pre>
 </div>
 </div>
 </section>
@@ -483,6 +491,16 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <p>Strong stationarity implies weak stationarity.</p>
 </div>
 </section>
+<section id="law-of-large-number-ergodic-theorem" class="slide level2">
+<h2>Law of large number (ergodic theorem)</h2>
+<p>Let <span class="math inline">\(\{Y_t\}\)</span> is a weakly stationary sequence with mean <span class="math inline">\(\mathsf{E}(Y_t)=\mu\)</span> and <span class="math inline">\(\gamma_h = \mathsf{Cov}(Y_t, Y_{t+h})\)</span>. Then, if the autocovariance series is convergent, meaning <span class="math display">\[\sum_{t=0}^\infty |\gamma_h| &lt; \infty,\]</span> then <span class="math inline">\(\{Y_t\}\)</span> is ergodic for the mean and <span class="math inline">\(\overline{Y} \stackrel{\mathrm{p}}{\to} \mu\)</span>.</p>
+<p>Ergodicity means that two segments of a time series far enough apart act as independent.</p>
+</section>
+<section id="ergodicity-and-transformations" class="slide level2">
+<h2>Ergodicity and transformations</h2>
+<p>The ergodic theorem is a law of large numbers for stochastic processes that allows for serial dependence between observations, provided the latter is not too large.</p>
+<p>Any transformation <span class="math inline">\(g(\cdot)\)</span> of a stationary and ergodic process <span class="math inline">\(\{Y_t\}\)</span> retains the properties, so <span class="math inline">\(\overline{g} = T^{-1} \sum_{t=1}^T g(Y_t) \to \mathsf{E}\{g(Y_t)\}\)</span> as <span class="math inline">\(T \to \infty.\)</span></p>
+</section>
 <section id="autoregressive-process-of-order-1" class="slide level2">
 <h2>Autoregressive process of order 1</h2>
 <p>Consider a first-order autoregressive process, or <span class="math inline">\(\mathsf{AR}(1)\)</span>,</p>
@@ -503,13 +521,13 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 \mathsf{Va}_{Y_{t}}(Y_t) &amp;= \mathsf{E}_{Y_{t-1}}\left\{\mathsf{Va}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\} + \mathsf{Va}_{Y_{t-1}}\left\{\mathsf{E}_{Y_{t} \mid Y_{t-1}}(Y_t)\right\}\\
 &amp; = \sigma^2 + \mathsf{Va}_{Y_{t-1}}\left\{\mu + \phi(Y_{t-1} - \mu)\right\}
 \\&amp;= \sigma^2 + \phi^2 \mathsf{Va}_{Y_{t-1}}(Y_{t-1}).
-\end{align*}\]</span> and the unconditional variance is <span class="math inline">\(\mathsf{Va}_{Y_t}(Y_t) = \sigma^2/(1-\phi^2).\)</span></p>
+\end{align*}\]</span> and the unconditional variance is <span class="math display">\[\mathsf{Va}(Y_t) = \tau^2 = \sigma^2/(1-\phi^2).\]</span></p>
 </section>
 <section id="autocovariance-and-markov-property" class="slide level2">
 <h2>Autocovariance and Markov property</h2>
-<p>The covariance at lag <span class="math inline">\(k\)</span>, in terms of innovations, gives <span class="math display">\[\begin{align*}
-\gamma_k = \mathsf{Co}(Y_t, Y_{t-k}) = \mathsf{Va}(\phi Y_{t-1}, Y_{t-k}) + \mathsf{Va}(\varepsilon_t, Y_{t-k}) = \phi \gamma_{k-1}
-\end{align*}\]</span> since <span class="math inline">\(\varepsilon_t\)</span> is independent of the past. We thus find <span class="math display">\[\gamma_k = \phi^k\mathsf{Va}(Y_t).\]</span></p>
+<p>The covariance at lag <span class="math inline">\(h\)</span>, in terms of innovations, gives <span class="math display">\[\begin{align*}
+\gamma_h = \mathsf{Co}(Y_t, Y_{t-h}) = \mathsf{Va}(\phi Y_{t-1}, Y_{t-h}) + \mathsf{Va}(\varepsilon_t, Y_{t-h}) = \phi \gamma_{h-1}
+\end{align*}\]</span> since <span class="math inline">\(\varepsilon_t\)</span> is independent of the past. We thus find <span class="math display">\[\rho_h = \phi^h, \qquad \gamma_h = \phi^h\mathsf{Va}(Y_t).\]</span></p>
 <p>The <span class="math inline">\(\mathsf{AR}(1)\)</span> process is first-order Markov since the conditional distribution <span class="math inline">\(p(Y_t \mid Y_{t-1}, \ldots, Y_{t-p})\)</span> equals <span class="math inline">\(p(Y_t \mid Y_{t-1}).\)</span></p>
 </section>
 <section id="variance-of-sample-average" class="slide level2">
@@ -527,9 +545,16 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 \end{align*}\]</span> which is a function of</p>
 <ul>
 <li>the unconditional variance <span class="math inline">\(\tau^2\)</span></li>
-<li>the lag-<span class="math inline">\(k\)</span> autocorrelation, <span class="math inline">\(\mathsf{Cor}(Y_{t}, Y_{t+k})=\rho_k.\)</span></li>
+<li>the lag-<span class="math inline">\(h\)</span> autocorrelation, <span class="math inline">\(\mathsf{Cor}(Y_{t}, Y_{t+h})=\rho_h.\)</span></li>
 </ul>
 </section>
+<section id="correlogram" class="slide level2">
+<h2>Correlogram</h2>
+<p>For a weakly stationary process, it is instructive to look at the autocorrelation <span class="math inline">\(\rho_h=\mathsf{Cor}(Y_t, Y_{t+h}).\)</span></p>
+
+<img data-src="bayesmod-slides4_files/figure-revealjs/fig-correlograms-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-correlograms"><p class="caption">
+Figure&nbsp;3: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-h sample autocorrelation against lag number.
+</p></section>
 <section id="effective-sample-size" class="slide level2">
 <h2>Effective sample size</h2>
 <p>The effective sample size is, loosely speaking, the equivalent number of observations if the <span class="math inline">\(B\)</span> marginal posterior draws where independent and more formally <span class="math display">\[
@@ -538,7 +563,7 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 </section>
 <section id="effective-sample-size-for-ar1" class="slide level2">
 <h2>Effective sample size for AR(1)</h2>
-<p>The lag-<span class="math inline">\(k\)</span> correlation of the stationary autoregressive process of order 1 is <span class="math inline">\(\phi^k\)</span>, so <span class="math display">\[1+2\sum_{t=1}^\infty \rho_t = 1 + 2 \left(\frac{1}{1-\phi}-1\right) = \frac{1+\phi}{1-\phi}.\]</span></p>
+<p>The lag-<span class="math inline">\(h\)</span> correlation of the stationary autoregressive process of order 1 is <span class="math inline">\(\phi^h\)</span>, so <span class="math display">\[1+2\sum_{h=1}^\infty \rho_h = 1 + 2 \left(\frac{1}{1-\phi}-1\right) = \frac{1+\phi}{1-\phi}.\]</span></p>
 <p>whereas the unconditional variance of the <span class="math inline">\(\mathsf{AR}(1)\)</span> process is</p>
 <p><span class="math display">\[\tau^2 = \frac{\sigma^2}{1-\phi^2}.\]</span></p>
 </section>
@@ -546,7 +571,7 @@ X \sim \mu + \sigma\Phi^{-1}\left[\Phi(\alpha) + \{\Phi(\beta)-\Phi(\alpha)\}U\r
 <h2>Inefficiency curve for AR(1)</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-ar1-variance-1.png" width="768" class="r-stretch quarto-figure-center" id="fig-ar1-variance"><p class="caption">
-Figure&nbsp;3: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with unit marginal variance (dashed). Right: variance ratio for positive correlations for selected range.
+Figure&nbsp;4: Left: scaled asymptotic variance of the sample mean for AR(1) (full line) and independent observations with unit marginal variance (dashed). Right: variance ratio for positive correlations for selected range.
 </p><p>To get the same precision for the mean of <span class="math inline">\(\mathsf{AR}(1)\)</span> process with <span class="math inline">\(\phi \approx 0.75\)</span> than with i.i.d. data, we would need 7 times as many observations.</p>
 </section>
 <section id="morale-of-the-story" class="slide level2">
@@ -560,7 +585,7 @@ Figure&nbsp;3: Left: scaled asymptotic variance of the sample mean for AR(1) (fu
 <section id="standard-error-of-mean-for-first-order-autoregressive-process" class="slide level2">
 <h2>Standard error of mean for first-order autoregressive process</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>phi <span class="ot">&lt;-</span> <span class="fl">0.8</span> <span class="co"># lag-one autocorrelation</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>phi <span class="ot">&lt;-</span> <span class="fl">0.8</span> <span class="co"># lag-one autocorrelation</span></span>
 <span id="cb11-2"><a></a>sigma <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="co"># std. deviation of white noise</span></span>
 <span id="cb11-3"><a></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L <span class="co"># chain length</span></span>
 <span id="cb11-4"><a></a>x <span class="ot">&lt;-</span> <span class="fu">arima.sim</span>( <span class="co"># generate AR(1)</span></span>
@@ -574,14 +599,14 @@ Figure&nbsp;3: Left: scaled asymptotic variance of the sample mean for AR(1) (fu
 <span id="cb11-12"><a></a><span class="co"># Unconditional variance tau_sq, obtained from var(x)</span></span>
 <span id="cb11-13"><a></a>uvar_ar1 <span class="ot">&lt;-</span> sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> phi<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb11-14"><a></a><span class="co"># Theoretical std. error of sample mean</span></span>
-<span id="cb11-15"><a></a>se_mean_ar1 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(uvar_ar1 <span class="sc">/</span> B <span class="sc">/</span> ess_factor_ar1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-15"><a></a>se_mean_ar1 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(uvar_ar1 <span class="sc">/</span> B <span class="sc">/</span> ess_factor_ar1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="standard-errors-estimation-via-nonparametric-spectral-analysis" class="slide level2">
 <h2>Standard errors estimation via nonparametric spectral analysis</h2>
 <p>Suppose that <span class="math inline">\(X_1, \ldots, X_B\)</span> is a mean-stationary sequence.</p>
 <p><span class="citation" data-cites="Heidelberger.Welch:1981">Heidelberger &amp; Welch (<a href="#/references" role="doc-biblioref" onclick="">1981</a>)</span> recall that the variance of the sample mean is <span class="math inline">\(S(0) / B,\)</span> where <span class="math inline">\(S(\cdot)\)</span> is the spectrum evaluated at zero and <span class="math display">\[
-S(0) = \sum_{k=-\infty}^\infty \gamma_k.
+S(0) = \sum_{h=-\infty}^\infty \gamma_h.
 \]</span> They propose to approximate <span class="math inline">\(S(0)\)</span> by</p>
 <ul>
 <li>calculating the raw periodogram (unsmoothed)</li>
@@ -602,17 +627,17 @@ S(0) = \frac{\sigma^2}{\left(1 - \sum_{j=1}^p \phi_j\right)^2}.
 <section id="spectral-estimation-in-r" class="slide level2">
 <h2>Spectral estimation in <strong>R</strong></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="co"># Heidelberg and Welch (1981)</span></span>
-<span id="cb12-2"><a></a>coda<span class="sc">::</span><span class="fu">spectrum0</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="co"># Heidelberg and Welch (1981)</span></span>
+<span id="cb12-2"><a></a>coda<span class="sc">::</span><span class="fu">spectrum0</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$spec
-[1] 115.9407</code></pre>
+[1] 83.04257</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="co"># Code from coda::effectiveSize</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="co"># Code from coda::effectiveSize</span></span>
 <span id="cb14-2"><a></a>ar_mod <span class="ot">&lt;-</span> <span class="fu">ar.yw</span>(x)</span>
 <span id="cb14-3"><a></a>suvar <span class="ot">&lt;-</span> ar_mod<span class="sc">$</span>var.pred <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">sum</span>(ar_mod<span class="sc">$</span>ar))<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb14-4"><a></a>se3 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(suvar <span class="sc">/</span> B) <span class="co"># variance of sample mean of AR(p)</span></span>
-<span id="cb14-5"><a></a>ess3 <span class="ot">&lt;-</span> <span class="fu">var</span>(x) <span class="sc">/</span> suvar <span class="sc">*</span> B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-5"><a></a>ess3 <span class="ot">&lt;-</span> <span class="fu">var</span>(x) <span class="sc">/</span> suvar <span class="sc">*</span> B</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="standard-errors-for-posterior-means-using-batch-means" class="slide level2">
@@ -629,14 +654,7 @@ S(0) = \frac{\sigma^2}{\left(1 - \sum_{j=1}^p \phi_j\right)^2}.
 <h2>Illustration of batch means</h2>
 
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-mcmc-batchmean-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-mcmc-batchmean"><p class="caption">
-Figure&nbsp;4: Calculation of the standard error of the posterior mean using the batch method.
-</p></section>
-<section id="correlogram" class="slide level2">
-<h2>Correlogram</h2>
-<p>We can look at the autocorrelation function to check the efficiency.</p>
-
-<img data-src="bayesmod-slides4_files/figure-revealjs/fig-correlograms-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-correlograms"><p class="caption">
-Figure&nbsp;5: Correlogram of two Markov chains. These plots, often called acf or autocorrelation functions, show the lag-k sample autocorrelation against lag number.
+Figure&nbsp;5: Calculation of the standard error of the posterior mean using the batch method.
 </p></section>
 <section id="convergence-of-markov-chains" class="slide level2">
 <h2>Convergence of Markov chains</h2>
@@ -645,6 +663,7 @@ Figure&nbsp;5: Correlogram of two Markov chains. These plots, often called acf o
 <li><strong>irreducibility</strong>: means that the chain can move from anywhere to anywhere, so it doesn’t get stuck in part of the space forever.</li>
 <li><strong>acyclic</strong>: cyclical chains loop around and visit periodically a state</li>
 </ul>
+<p>The ergodic theorem holds even if the chain is cyclical.</p>
 </section>
 <section id="examples-of-cyclical-or-reducible-chains" class="slide level2">
 <h2>Examples of cyclical or reducible chains</h2>
@@ -662,17 +681,6 @@ P_2 = \begin{pmatrix}
 0 &amp; 1 &amp; 0
 \end{pmatrix}.
 \]</span> Chain 1 is reducible to <span class="math inline">\(\{2, 3\}\)</span>, chain 2 is cyclical.</p>
-</section>
-<section id="law-of-large-number-ergodic-theorem" class="slide level2">
-<h2>Law of large number (ergodic theorem)</h2>
-<p>Ergodicity means that two segments of a time series far enough apart act as independent.</p>
-<p>Let <span class="math inline">\(\{Y_t\}\)</span> is a weakly stationary sequence with mean <span class="math inline">\(\mathsf{E}(Y_t)=\mu\)</span> and <span class="math inline">\(\gamma_h = \mathsf{Cov}(Y_t, Y_{t+h})\)</span>. Then, if the autocovariance series is convergent, meaning <span class="math display">\[\sum_{t=0}^\infty |\gamma_h| &lt; \infty,\]</span> then <span class="math inline">\(\{Y_t\}\)</span> is ergodic for the mean and <span class="math inline">\(\overline{Y} \stackrel{\mathrm{p}}{\to} \mu\)</span>.</p>
-</section>
-<section id="ergodicity-and-transformations" class="slide level2">
-<h2>Ergodicity and transformations</h2>
-<p>The ergodic theorem is a law of large numbers for stochastic processes that allows for serial dependence between observations, provided the latter is not too large.</p>
-<p>Any transformation <span class="math inline">\(g(\cdot)\)</span> of a stationary and ergodic process <span class="math inline">\(\{Y_t\}\)</span> retains the properties, so <span class="math inline">\(\overline{g} = T^{-1} \sum_{t=1}^T g(Y_t) \to \mathsf{E}\{g(Y_t)\}\)</span> as <span class="math inline">\(T \to \infty.\)</span></p>
-<p>The ergodic theorem holds even if the chain is cyclical.</p>
 </section>
 <section id="convergence-and-stationary-distribution" class="slide level2">
 <h2>Convergence and stationary distribution</h2>
@@ -692,161 +700,12 @@ P = \begin{pmatrix}
 <img data-src="bayesmod-slides4_files/figure-revealjs/fig-discrete-markov-chain-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-discrete-markov-chain"><p class="caption">
 Figure&nbsp;6: Discrete Markov chain on integers from 1 to 5, with traceplot of 1000 first iterations (left) and running mean plots of sample proportion of each state visited (right).
 </p></section>
-<section id="markov-chain-monte-carlo" class="slide level2">
-<h2>Markov chain Monte Carlo</h2>
-<p>We consider simulating from a distribution with associated density function proportional to <span class="math inline">\(p(\cdot)\)</span></p>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
 <ul>
-<li>using an algorithm that generates a Markov chain ,</li>
-<li>without requiring knowledge of the normalizing factor.</li>
+<li>Monte Carlo methods often rely on easy-to-simulate distributions <span class="math inline">\(q(x)\)</span> to draw from a target <span class="math inline">\(p(x).\)</span></li>
+<li>Rejection sampling: find</li>
 </ul>
-<p>We use a conditional density <span class="math inline">\(q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{cur}})\)</span> to generate proposals from the current value <span class="math inline">\(\boldsymbol{\theta}^{\text{cur}}.\)</span></p>
-</section>
-<section id="metropolishastings-algorithm" class="slide level2">
-<h2>Metropolis–Hastings algorithm</h2>
-<p>Starting from an initial value <span class="math inline">\(\boldsymbol{\theta}_0\)</span>: for <span class="math inline">\(t=1, \ldots, T\)</span></p>
-<ol type="1">
-<li>draw a proposal value <span class="math inline">\(\boldsymbol{\theta}_t^{\star} \sim q(\boldsymbol{\theta} \mid \boldsymbol{\theta}_{t-1})\)</span>.</li>
-<li>Compute the acceptance ratio <span class="math display">\[
-R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
-\]</span></li>
-<li>With probability <span class="math inline">\(\alpha=\min\{R, 1\}\)</span>, accept the proposal and set <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}\)</span>, otherwise set the value to the previous state, <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}\)</span>.</li>
-</ol>
-</section>
-<section id="theory" class="slide level2">
-<h2>Theory</h2>
-<p>The Metropolis–Hastings algorithm satisfies a technical condition (detailed balance) that ensures that the Markov chain generated is reversible.</p>
-<ul>
-<li>Thus, any draw from the posterior will generate a new realization from the posterior.</li>
-<li>Provided the starting value has non-zero probability under the posterior, the chain will converge to the stationarity distribution (albeit perhaps slowly).</li>
-</ul>
-</section>
-<section id="interpretation" class="slide level2">
-<h2>Interpretation</h2>
-<ul>
-<li>If <span class="math inline">\(R&gt;1\)</span>, the proposal has higher density and we always accept the move.</li>
-<li>If we reject the move, the Markov chain stays at the current value, which induces autocorrelation.</li>
-<li>Since the acceptance probability depends only on the density through ratios, normalizing factors of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> cancel out.</li>
-</ul>
-</section>
-<section id="symmetric-proposals-and-random-walk" class="slide level2">
-<h2>Symmetric proposals and random walk</h2>
-<p>If the proposal is symmetric, the ratio of proposal densities is <span class="math display">\[q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} ) / q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1}) = 1.\]</span></p>
-<p>Common examples include random walk proposals <span class="math display">\[\boldsymbol{\theta}_t^{\star} \gets \boldsymbol{\theta}_{t-1} + \tau Z,\]</span> where <span class="math inline">\(Z \sim \mathsf{Gauss}(0,1).\)</span></p>
-</section>
-<section id="independent-proposals" class="slide level2">
-<h2>Independent proposals</h2>
-<ul>
-<li><p>If we pick instead a global proposal, we must ensure that <span class="math inline">\(q\)</span> samples in far regions (recall rejection sampling), otherwise …</p></li>
-<li><p>Good proposals include heavy tailed distribution such as Student-<span class="math inline">\(t\)</span> with small degrees of freedom,</p></li>
-<li><p>centered at the maximum a posteriori <span class="math inline">\(\widehat{\boldsymbol{\theta}}\)</span> and</p></li>
-<li><p>with scale matrix proportional to <span class="math inline">\(-\mathbf{H}^{-1}(\boldsymbol{\theta}_t^{\star})\)</span>, where <span class="math inline">\(\mathbf{H}(\cdot)\)</span> is the Hessian of the (unnormalized) log posterior.</p></li>
-</ul>
-</section>
-<section id="upworthy-data-example" class="slide level2">
-<h2>Upworthy data example</h2>
-<p>We model the Poisson rates for headlines with questions or not. Our model is <span class="math display">\[\begin{align*}
-Y_{i} &amp;\sim \mathsf{Poisson}(n_i\lambda_i), \qquad (i=1,2)\\
-\lambda_1 &amp;= \exp(\beta + \kappa) \\
-\lambda_2 &amp;= \exp(\beta) \\
-\beta &amp; \sim \mathsf{Gauss}(\log 0.01, 1.5) \\
-\kappa &amp;\sim \mathsf{Gauss}(0, 1)
-\end{align*}\]</span></p>
-</section>
-<section id="implementation-details-data-and-containers" class="slide level2">
-<h2>Implementation details: data and containers</h2>
-<p>In regression models, scale inputs if possible.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a><span class="co"># Load data</span></span>
-<span id="cb15-2"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb15-3"><a></a><span class="co"># Compute sufficient statistics</span></span>
-<span id="cb15-4"><a></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
-<span id="cb15-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
-<span id="cb15-6"><a></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
-<span id="cb15-7"><a></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
-<span id="cb15-8"><a></a><span class="co"># Create containers for MCMC</span></span>
-<span id="cb15-9"><a></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
-<span id="cb15-10"><a></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> <span class="dv">2</span>L)</span>
-<span id="cb15-11"><a></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="implementation-details-log-posterior-function" class="slide level2">
-<h2>Implementation details: log posterior function</h2>
-<p>Perform all calculations on the log scale to avoid numerical overflow!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
-<span id="cb16-2"><a></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
-<span id="cb16-3"><a></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
-<span id="cb16-4"><a></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb16-5"><a></a>}</span>
-<span id="cb16-6"><a></a><span class="co"># Note common signature of function</span></span>
-<span id="cb16-7"><a></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb16-8"><a></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb16-9"><a></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb16-10"><a></a>}</span>
-<span id="cb16-11"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb16-12"><a></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
-<span id="cb16-13"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="implementation-details-proposals" class="slide level2">
-<h2>Implementation details: proposals</h2>
-<p>Use good starting values for your Markov chains, such as maximum a posteriori.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
-<span id="cb17-2"><a></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
-<span id="cb17-3"><a></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
-<span id="cb17-4"><a></a>  <span class="at">fn =</span> logpost,</span>
-<span id="cb17-5"><a></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
-<span id="cb17-6"><a></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
-<span id="cb17-7"><a></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
-<span id="cb17-8"><a></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-9"><a></a><span class="co"># Use MAP as starting value</span></span>
-<span id="cb17-10"><a></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
-<span id="cb17-11"><a></a><span class="co"># Compute logpost_cur - we can keep track of this to reduce calculations</span></span>
-<span id="cb17-12"><a></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
-<span id="cb17-13"><a></a><span class="co"># Proposal covariance</span></span>
-<span id="cb17-14"><a></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
-<span id="cb17-15"><a></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="implementation-details-metropolishastings-algorithm" class="slide level2">
-<h2>Implementation details: Metropolis–Hastings algorithm</h2>
-<p>Use seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
-<span id="cb18-2"><a></a>naccept <span class="ot">&lt;-</span> <span class="dv">0</span>L</span>
-<span id="cb18-3"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
-<span id="cb18-4"><a></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
-<span id="cb18-5"><a></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
-<span id="cb18-6"><a></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
-<span id="cb18-7"><a></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
-<span id="cb18-8"><a></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
-<span id="cb18-9"><a></a>    cur <span class="ot">&lt;-</span> prop</span>
-<span id="cb18-10"><a></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
-<span id="cb18-11"><a></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> <span class="dv">1</span>L</span>
-<span id="cb18-12"><a></a>  }</span>
-<span id="cb18-13"><a></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
-<span id="cb18-14"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="implementation-details-analysis-of-output" class="slide level2">
-<h2>Implementation details: analysis of output</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="co"># Posterior summaries</span></span>
-<span id="cb19-2"><a></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<pre><code>1. Empirical mean and standard deviation for each variable,
-   plus standard error of the mean:
-
-          Mean       SD  Naive SE Time-series SE
-beta  -4.51268 0.001697 1.697e-05      6.176e-05
-kappa  0.07075 0.002033 2.033e-05      9.741e-05
-
-2. Quantiles for each variable:
-
-          2.5%      25%      50%      75%    97.5%
-beta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929
-kappa  0.06673  0.06933  0.07077  0.07212  0.07463</code></pre>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
@@ -1125,190 +984,173 @@ Percival, D. B., &amp; Walden, A. T. (2020). <em>Spectral analysis for univariat
     </script>
 
     <script id="quarto-html-after-body" type="application/javascript">
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-      const toggleBodyColorMode = (bsSheetEl) => {
-        const mode = bsSheetEl.getAttribute("data-mode");
-        const bodyEl = window.document.querySelector("body");
-        if (mode === "dark") {
-          bodyEl.classList.add("quarto-dark");
-          bodyEl.classList.remove("quarto-light");
-        } else {
-          bodyEl.classList.add("quarto-light");
-          bodyEl.classList.remove("quarto-dark");
-        }
-      }
-      const toggleBodyColorPrimary = () => {
-        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-        if (bsSheetEl) {
-          toggleBodyColorMode(bsSheetEl);
-        }
-      }
-      toggleBodyColorPrimary();  
-      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-      tabsets.forEach(function(tabset) {
-        const tabby = new Tabby('#' + tabset.id);
-      });
-      const isCodeAnnotation = (el) => {
-        for (const clz of el.classList) {
-          if (clz.startsWith('code-annotation-')) {                     
-            return true;
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
           }
+          return false;
         }
-        return false;
-      }
-      const onCopySuccess = function(e) {
-        // button target
-        const button = e.trigger;
-        // don't keep focus
-        button.blur();
-        // flash "checked"
-        button.classList.add('code-copy-button-checked');
-        var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
-        let tooltip;
-        if (window.bootstrap) {
-          button.setAttribute("data-bs-toggle", "tooltip");
-          button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
-          tooltip = new bootstrap.Tooltip(button, 
-            { trigger: "manual", 
-              customClass: "code-copy-button-tooltip",
-              offset: [0, -8]});
-          tooltip.show();    
-        }
-        setTimeout(function() {
-          if (tooltip) {
-            tooltip.hide();
-            button.removeAttribute("data-bs-title");
-            button.removeAttribute("data-bs-toggle");
-            button.removeAttribute("data-bs-placement");
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
           }
-          button.setAttribute("title", currentTitle);
-          button.classList.remove('code-copy-button-checked');
-        }, 1000);
-        // clear code selection
-        e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
-      });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
         }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
             }
           }
-        }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-        const config = {
-          allowHTML: true,
-          maxWidth: 500,
-          delay: 100,
-          arrow: false,
-          appendTo: function(el) {
-              return el.closest('section.slide') || el.parentElement;
-          },
-          interactive: true,
-          interactiveBorder: 10,
-          theme: 'light-border',
-          placement: 'bottom-start',
-        };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
-          config['offset'] = [0,0];
-          config['maxWidth'] = 700;
-        window.tippy(el, config); 
-      }
-      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-      for (var i=0; i<noterefs.length; i++) {
-        const ref = noterefs[i];
-        tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-          try { href = new URL(href).hash; } catch {}
-          const id = href.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
           }
-        });
-      }
-      const findCites = (el) => {
-        const parentEl = el.parentElement;
-        if (parentEl) {
-          const cites = parentEl.dataset.cites;
-          if (cites) {
-            return {
-              el,
-              cites: cites.split(' ')
-            };
-          } else {
-            return findCites(el.parentElement)
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
           }
-        } else {
-          return undefined;
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
         }
-      };
-      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-      for (var i=0; i<bibliorefs.length; i++) {
-        const ref = bibliorefs[i];
-        const citeInfo = findCites(ref);
-        if (citeInfo) {
-          tippyHover(citeInfo.el, function() {
-            var popup = window.document.createElement('div');
-            citeInfo.cites.forEach(function(cite) {
-              var citeDiv = window.document.createElement('div');
-              citeDiv.classList.add('hanging-indent');
-              citeDiv.classList.add('csl-entry');
-              var biblioDiv = window.document.getElementById('ref-' + cite);
-              if (biblioDiv) {
-                citeDiv.innerHTML = biblioDiv.innerHTML;
-              }
-              popup.appendChild(citeDiv);
-            });
-            return popup.innerHTML;
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
           });
         }
-      }
-    });
-    </script>
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
     
 
 </body></html>
