@@ -687,8 +687,206 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb16-13"><a></a><span class="er">}</span> <span class="co"># End of MCMC for loop</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="strategies" class="slide level2">
+<h2>Strategies</h2>
+<p>Many diagnostics require running multiple chains</p>
+<ul>
+<li>check within vs between variance,</li>
+<li>determine whether they converge to the same target.</li>
+</ul>
+</section>
+<section id="correct-implementation" class="slide level2">
+<h2>Correct implementation</h2>
+<p>We can generate artificial data to check the procedure.</p>
+<p>Simulation-based calibration <span class="citation" data-cites="Talts:2020">(<a href="#/references" role="doc-biblioref" onclick="">Talts et al., 2020</a>)</span> proceeds with, in order</p>
+<ol type="1">
+<li><span class="math inline">\(\boldsymbol{\theta}_0 \sim p(\boldsymbol{\theta}),\)</span></li>
+<li><span class="math inline">\(\boldsymbol{y}_0 \sim p(\boldsymbol{y} \mid \boldsymbol{\theta}_0),\)</span></li>
+<li><span class="math inline">\(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_B \sim p(\boldsymbol{\theta} \mid \boldsymbol{y}_0 ).\)</span></li>
+</ol>
+</section>
+<section id="simulation-based-calibration" class="slide level2">
+<h2>Simulation-based calibration</h2>
+<ul>
+<li>Conditional on the simulated <span class="math inline">\(\boldsymbol{y}\)</span>, the distribution of <span class="math inline">\(\boldsymbol{\theta}_0\)</span> is the same as that of <span class="math inline">\(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_B.\)</span></li>
+<li>We do a dimension reduction step taking the test function <span class="math inline">\(t(\cdot)\)</span> to get the rank of the prior draw among the posterior ones, breaking ties at random if any.</li>
+<li>These steps are repeated <span class="math inline">\(K\)</span> times, yielding <span class="math inline">\(K\)</span> test functions <span class="math inline">\(T_1, \ldots, T_K.\)</span> We then test for uniformity using results from <span class="citation" data-cites="Sailynoja:2022">Säilynoja et al. (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>.</li>
+</ul>
+</section>
+<section id="breaking-down-the-markov-chain" class="slide level2">
+<h2>Breaking down the Markov chain</h2>
+<p>We distinguish between three phases</p>
+<ul>
+<li><strong>burn in</strong> period: initial draws allowing the algorithm to converge to it’s stationary distribution (discarded)</li>
+<li><strong>warmup</strong> adaptation period: tuning period for the proposal std. deviation, etc. (discarded)</li>
+<li>sampling period: draws post burn in and warmup that are kept for inference</li>
+</ul>
+<p>We can optionally <strong>thin</strong> by keeping one every <span class="math inline">\(k\)</span> iterations from the sampling period to reduce the storage.</p>
+</section>
+<section id="visual-diagnostic-trace-plots" class="slide level2">
+<h2>Visual diagnostic: trace plots</h2>
+<p>Display the Markov chain sample path as a function of the number of iterations.</p>
+<ul>
+<li>Ideally, run multiple chains to see if they converge to the same mode (for multimodal behaviour).</li>
+<li>Markov chains should look like a fat hairy caterpillar!</li>
+<li>Check the <code>bayesplot</code> and <code>coda</code> <strong>R</strong> packages (trace plot, trace rank, correlograms, marginal densities, etc.)</li>
+</ul>
+</section>
+<section id="checking-convergence-with-multiple-chains" class="slide level2">
+<h2>Checking convergence with multiple chains</h2>
+
+<img data-src="fig/catterpillar_traceplots.png" class="r-stretch quarto-figure-center"><p class="caption">Four healthy parallel chains for parameters.</p></section>
+<section id="trace-rank-plot" class="slide level2">
+<h2>Trace rank plot</h2>
+<p>A <strong>trace rank</strong> plot compares the rank of the values of the different chain at a given iteration.</p>
+<ul>
+<li>With good mixing, the ranks should switch frequently and be distributed uniformly across integers.</li>
+</ul>
+</section>
+<section id="effective-sample-size" class="slide level2">
+<h2>Effective sample size</h2>
+<p>Are my chains long enough to compute reliable summaries?</p>
+<p>Compute the sample size we would have with independent draws by taking <span class="math display">\[
+\mathsf{ESS} = \frac{B}{\left\{1+2\sum_{t=1}^\infty \rho_t\right\}}
+\]</span> where <span class="math inline">\(\rho_t\)</span> is the lag <span class="math inline">\(t\)</span> autocorrelation.</p>
+<p>The relative effective sample size is simply <span class="math inline">\(\mathsf{ESS}/B\)</span>: small values indicate pathological or inefficient samplers.</p>
+</section>
+<section id="how-many-samples" class="slide level2">
+<h2>How many samples?</h2>
+<p>We want our average estimate to be reliable!</p>
+<ul>
+<li><p>We probably need <span class="math inline">\(\mathsf{ESS}\)</span> to be several hundred</p></li>
+<li><p>We can estimate the variance of the target to know the precision</p></li>
+<li><p>(related question: how many significant digits to report?)</p></li>
+</ul>
+</section>
+<section id="lack-of-stationarity" class="slide level2">
+<h2>Lack of stationarity</h2>
+
+<img data-src="bayesmod-slides5_files/figure-revealjs/fig-badstart-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-badstart"><p class="caption">
+Figure&nbsp;3: Traceplots of three Markov chains for the same target with different initial values for the first 500 iterations (left) and trace rank plot after discarding these (right). The latter is indicative of the speed of mixing.
+</p></section>
+<section id="gelmanrubin-diagnostic" class="slide level2">
+<h2>Gelman–Rubin diagnostic</h2>
+<p>Suppose we run <span class="math inline">\(M\)</span> chains for <span class="math inline">\(B\)</span> iterations, post burn in.</p>
+<p>Denote by <span class="math inline">\(\theta_{bm}\)</span> the <span class="math inline">\(b\)</span>th draw of the <span class="math inline">\(m\)</span>th chain, we compute the global average <span class="math display">\[\overline{\theta} = \frac{1}{BM}\sum_{b=1}^B \sum_{m=1}^m \theta_{bm}\]</span> and similarly the chain-specific sample average and variances, respectively <span class="math inline">\(\overline{\theta}_m\)</span> and <span class="math inline">\(\widehat{\sigma}^2_m\)</span> (<span class="math inline">\(m=1, \ldots, M\)</span>).</p>
+</section>
+<section id="sum-of-square-decomposition" class="slide level2">
+<h2>Sum of square decomposition</h2>
+<p>The between-chain variance and within-chain variance estimator are <span class="math display">\[\begin{align*}
+\mathsf{Va}_{\text{between}} &amp;= \frac{B}{M-1}\sum_{m=1}^M (\overline{\theta}_m - \overline{\theta})^2\\
+\mathsf{Va}_{\text{within}} &amp;= \frac{1}{M}\sum_{m=1}^m \widehat{\sigma}^2_m
+\end{align*}\]</span></p>
+</section>
+<section id="potential-scale-reduction-statistic" class="slide level2">
+<h2>Potential scale reduction statistic</h2>
+<p>The Gelman–Rubin diagnostic, denoted <span class="math inline">\(\widehat{R}\)</span>, is obtained by running multiple chains and considering the difference between within-chain and between-chains variances,</p>
+<p><span class="math display">\[\begin{align*}
+\widehat{R} = \left(\frac{\mathsf{Va}_{\text{within}}(B-1) + \mathsf{Va}_{\text{between}}}{B\mathsf{Va}_{\text{within}}}\right)^{1/2}
+\end{align*}\]</span></p>
+<p>Any value of <span class="math inline">\(\widehat{R}\)</span> larger 1 is indicative of problems of convergence.</p>
+</section>
+<section id="bad-chains" class="slide level2">
+<h2>Bad chains</h2>
+
+<img data-src="bayesmod-slides5_files/figure-revealjs/fig-rhat-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-rhat"><p class="caption">
+Figure&nbsp;4: Two pairs of Markov chains: the top ones seem stationary, but with different modes and <span class="math inline">\(\widehat{R} \approx 3.4\)</span>. The chains on the right hover around zero, but do not appear stable, with <span class="math inline">\(\widehat{R} \approx 1.6\)</span>.
+</p></section>
+<section id="one-chain-or-multiple-chains" class="slide level2">
+<h2>One chain or multiple chains?</h2>
+<p>Generally, it is preferable to run a single chain for a longer period than run multiple chains sequentially</p>
+<ul>
+<li>there is a cost to initializing multiple times with different starting values since we must discard initial draws.</li>
+<li>but with parallel computations, multiple chains are more frequent nowadays.</li>
+<li>multiple diagnostics require running several chains.</li>
+</ul>
+</section>
+<section id="posterior-predictive-checks" class="slide level2">
+<h2>Posterior predictive checks</h2>
+<ol type="1">
+<li>For each of the <span class="math inline">\(B\)</span> draws from the posterior, simulate <span class="math inline">\(n\)</span> observations from the posterior predictive <span class="math inline">\(p(\widetilde{\boldsymbol{y}} \mid \boldsymbol{y})\)</span></li>
+<li>For each replicate, compute a summary statistics (median, quantiles, std. dev., etc.)</li>
+<li>Compare it with the same summary computed for the sample <span class="math inline">\(\boldsymbol{y}\)</span>.</li>
+</ol>
+</section>
+<section id="posterior-predictive-checks-1" class="slide level2">
+<h2>Posterior predictive checks</h2>
+
+<img data-src="fig/fig-posterior-pred-check.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-pred-check"><p class="caption">
+Figure&nbsp;5: Posterior predictive checks for the standard deviation (top) and density of posterior draws (bottom) for hierarchical Poisson model with individual effects (left) and simpler model with only conditions (right).
+</p></section>
+<section id="log-pointwise-predictive-density" class="slide level2">
+<h2>Log pointwise predictive density</h2>
+<p>Consider the expected value of the observation-wise log density with respect to the posterior distribution <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, <span class="math display">\[\begin{align*}
+\mathsf{LPPD}_i = \mathsf{E}_{\boldsymbol{\theta} \mid \boldsymbol{y}} \left\{ \log p(y_i \mid \boldsymbol{\theta})\right\},
+\end{align*}\]</span></p>
+<p>The higher the value of <span class="math inline">\(\mathsf{LPPD}_i\)</span>, the better the fit for that observation.</p>
+</section>
+<section id="widely-available-information-criterion" class="slide level2">
+<h2>Widely available information criterion</h2>
+<p>To build an information criterion, we add a penalization factor that approximates the effective number of parameters in the model, with <span class="math display">\[\begin{align*}
+n\mathsf{WAIC} = -\sum_{i=1}^n \mathsf{LPPD}_i + \sum_{i=1}^n \mathsf{Va}_{\boldsymbol{\theta} \mid \boldsymbol{y}}\{\log p(y_i \mid \boldsymbol{\theta})\}
+\end{align*}\]</span> where we use again the empirical variance to compute the rightmost term.</p>
+<p>Smaller values of <span class="math inline">\(\mathsf{WAIC}\)</span> are better.</p>
+</section>
+<section id="pseudo-code-for-waic" class="slide level2">
+<h2>Pseudo-code for WAIC</h2>
+<p>Evaluate the log likelihood for each posterior draw and each observation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="co">#' WAIC</span></span>
+<span id="cb17-2"><a></a><span class="co">#' @param loglik_pt B by n matrix of pointwise log likelihood</span></span>
+<span id="cb17-3"><a></a>WAIC <span class="ot">&lt;-</span> <span class="cf">function</span>(loglik_pt){</span>
+<span id="cb17-4"><a></a>  <span class="sc">-</span><span class="fu">mean</span>(<span class="fu">apply</span>(loglik_pt, <span class="dv">2</span>, mean)) <span class="sc">+</span>  <span class="fu">mean</span>(<span class="fu">apply</span>(loglik_pt, <span class="dv">2</span>, var))</span>
+<span id="cb17-5"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="bayesian-leave-one-out-cross-validation" class="slide level2">
+<h2>Bayesian leave-one-out cross validation</h2>
+<p>In Bayesian setting, we can use the leave-one-out predictive density <span class="math display">\[p(y_i \mid \boldsymbol{y}_{-i})\]</span> as a measure of predictive accuracy.</p>
+<p>We can use importance sampling to approximate the latter.</p>
+<p>Requirement: need to keep track of the log likelihood of each observation for each posterior draw (<span class="math inline">\(B \times n\)</span> values).</p>
+</section>
+<section id="loo-cv-diagnostics" class="slide level2">
+<h2>LOO-CV diagnostics</h2>
+<p>We can draw <span class="math inline">\(B\)</span> samples from <span class="math inline">\(p(\widetilde{y} \mid \boldsymbol{y}_{-i})\)</span> and compute the rank of <span class="math inline">\(y_i\)</span>.</p>
+<p>Under perfect calibration, ranks should be uniform.</p>
+</section>
+<section id="leave-one-out-with-quantile-quantile-plots" class="slide level2">
+<h2>Leave-one-out with quantile-quantile plots</h2>
+
+<img data-src="fig/fig-loocv-qqplots.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-loocv"><p class="caption">
+Figure&nbsp;6: Quantile-quantile plots based on leave-one-out cross validation for model for the hierarchical Poisson model fitted to the Upworthy data with the individual random effects (left) and without (right).
+</p></section>
+<section id="deviance-information-criterion" class="slide level2">
+<h2>Deviance information criterion</h2>
+<p>The <strong>deviance</strong> information criterion of <span class="citation" data-cites="Spiegelhalter:2002">Spiegelhalter et al. (<a href="#/references" role="doc-biblioref" onclick="">2002</a>)</span> is <span class="math display">\[\begin{align*}
+\mathsf{DIC} = -2 \ell(\widetilde{\boldsymbol{\theta}}) + 2 p_D
+\end{align*}\]</span> where <span class="math inline">\(p_D\)</span> is the posterior expectation of the deviance relative to the point estimator of the parameter <span class="math inline">\(\widetilde{\boldsymbol{\theta}}\)</span> (e.g., the maximum a posteriori or the posterior mean) <span class="math display">\[\begin{align*}
+p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \boldsymbol{y}\}= \int 2 \{ \ell(\widetilde{\boldsymbol{\theta}}) - \ell(\boldsymbol{\theta})\} p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span></p>
+</section>
+<section id="criticism-of-dic" class="slide level2">
+<h2>Criticism of DIC</h2>
+<ul>
+<li>The DIC can be easily evaluated by keeping track of the log likelihood evaluated at each posterior draw from a Markov chain Monte Carlo algorithm.</li>
+<li>The penalty term <span class="math inline">\(p_D\)</span> is however not invariant to reparametrizations.</li>
+<li>A Gaussian approximation to the MLE under suitable regularity conditions shows that the <span class="math inline">\(\mathsf{DIC}\)</span> is equivalent in large samples to <span class="math inline">\(\mathsf{AIC}.\)</span></li>
+</ul>
+</section>
 <section id="summary" class="slide level2">
 <h2>Summary</h2>
+<ul>
+<li>Metropolis–Hastings generalizes rejection sampling by building a Markov chain and providing a mechanism for sampling.</li>
+<li>Small proposal variance leads to high acceptance rate, but small step sizes. Large variance proposals leads to many rejections, in which case the previous value is carried forward. Both extreme scenarios lead to large autocorrelation.</li>
+<li>The proposal density can be anything, but must ideally account for the support and allow for exploration of the state.</li>
+<li>Good initial starting values can be obtained by computing maximum a posteriori estimates.</li>
+<li>Initializing multiple chains at different starting values can be used to check convergence to the stationary distribution.</li>
+<li>Mixing will improve if strongly correlated parameters are sampled together.</li>
+<li>The optimal acceptance rate depends on the dimension, but guidelines for random walk Metropolis are to have 0.44 for a single parameter model and 0.234 for multivariate targets; see <span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> for a heuristic derivation.</li>
+<li>To obtain the target acceptance rate, users must tune the variance of the proposal kernel. This is typically achieved by running the chain for some period, computing the empirical acceptance rate and increasing (respectively decreasing) the variance if the acceptance rate is too high (too low).</li>
+<li>Metropolis-adjusted Langevin algorithm (MALA) uses the gradient information to inform the proposal; it is akin to a Newton step.</li>
+<li>The detailed balance requires a function <span class="math inline">\(g\)</span> such that <span class="math inline">\(g(r) = rg(1/r).\)</span> Taking <span class="math inline">\(g(r) = \min(1,r)\)</span> as in Metropolis–Hasting rule leads to the lowest asymptotic variance <span class="citation" data-cites="Peskun:1973">(<a href="#/references" role="doc-biblioref" onclick="">Peskun, 1973</a>)</span>.</li>
+</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
@@ -701,11 +899,26 @@ Green, P. J. (2001). A primer on <span>M</span>arkov chain <span>M</span>onte <s
 <div id="ref-Kallioinen:2023" class="csl-entry" role="listitem">
 Kallioinen, N., Paananen, T., Bürkner, P.-C., &amp; Vehtari, A. (2023). Detecting and diagnosing prior and likelihood sensitivity with power-scaling. <em>Statistics and Computing</em>, <em>34</em>(1), 57. <a href="https://doi.org/10.1007/s11222-023-10366-5">https://doi.org/10.1007/s11222-023-10366-5</a>
 </div>
+<div id="ref-Neal:2011" class="csl-entry" role="listitem">
+Neal, R. M. (2011). <span>MCMC</span> using <span>H</span>amiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 113–162). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
+</div>
+<div id="ref-Peskun:1973" class="csl-entry" role="listitem">
+Peskun, P. H. (1973). Optimum <span>M</span>onte-<span>C</span>arlo sampling using <span>M</span>arkov chains. <em>Biometrika</em>, <em>60</em>(3), 607–612. <a href="https://doi.org/10.1093/biomet/60.3.607">https://doi.org/10.1093/biomet/60.3.607</a>
+</div>
 <div id="ref-Rue.Held:2005" class="csl-entry" role="listitem">
 Rue, H., &amp; Held, L. (2005). <em><span>G</span>aussian <span>M</span>arkov random fields: Theory and applications</em> (p. 280). CRC Press.
 </div>
+<div id="ref-Sailynoja:2022" class="csl-entry" role="listitem">
+Säilynoja, T., Bürkner, P.-C., &amp; Vehtari, A. (2022). Graphical test for discrete uniformity and its applications in goodness-of-fit evaluation and multiple sample comparison. <em>Statistics and Computing</em>, <em>32</em>(2), 32. <a href="https://doi.org/10.1007/s11222-022-10090-6">https://doi.org/10.1007/s11222-022-10090-6</a>
+</div>
 <div id="ref-Sherlock:2013" class="csl-entry" role="listitem">
 Sherlock, C. (2013). Optimal scaling of the random walk <span>M</span>etropolis: General criteria for the 0.234 acceptance rule. <em>Journal of Applied Probability</em>, <em>50</em>(1), 1–15. <a href="https://doi.org/10.1239/jap/1363784420">https://doi.org/10.1239/jap/1363784420</a>
+</div>
+<div id="ref-Spiegelhalter:2002" class="csl-entry" role="listitem">
+Spiegelhalter, D. J., Best, N. G., Carlin, B. P., &amp; Van Der Linde, A. (2002). Bayesian measures of model complexity and fit. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>64</em>(4), 583–639. <a href="https://doi.org/10.1111/1467-9868.00353">https://doi.org/10.1111/1467-9868.00353</a>
+</div>
+<div id="ref-Talts:2020" class="csl-entry" role="listitem">
+Talts, S., Betancourt, M., Simpson, D., Vehtari, A., &amp; Gelman, A. (2020). <em>Validating <span>B</span>ayesian inference algorithms with simulation-based calibration</em>. <a href="https://doi.org/10.48550/arXiv.1804.06788">https://doi.org/10.48550/arXiv.1804.06788</a>
 </div>
 </div>
 </section>

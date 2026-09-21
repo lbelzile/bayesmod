@@ -4706,14 +4706,14 @@
     "href": "slides/bayesmod-slides5.html#summary",
     "title": "Bayesian modelling",
     "section": "Summary",
-    "text": "Summary"
+    "text": "Summary\n\nMetropolis–Hastings generalizes rejection sampling by building a Markov chain and providing a mechanism for sampling.\nSmall proposal variance leads to high acceptance rate, but small step sizes. Large variance proposals leads to many rejections, in which case the previous value is carried forward. Both extreme scenarios lead to large autocorrelation.\nThe proposal density can be anything, but must ideally account for the support and allow for exploration of the state.\nGood initial starting values can be obtained by computing maximum a posteriori estimates.\nInitializing multiple chains at different starting values can be used to check convergence to the stationary distribution.\nMixing will improve if strongly correlated parameters are sampled together.\nThe optimal acceptance rate depends on the dimension, but guidelines for random walk Metropolis are to have 0.44 for a single parameter model and 0.234 for multivariate targets; see Neal (2011) for a heuristic derivation.\nTo obtain the target acceptance rate, users must tune the variance of the proposal kernel. This is typically achieved by running the chain for some period, computing the empirical acceptance rate and increasing (respectively decreasing) the variance if the acceptance rate is too high (too low).\nMetropolis-adjusted Langevin algorithm (MALA) uses the gradient information to inform the proposal; it is akin to a Newton step.\nThe detailed balance requires a function \\(g\\) such that \\(g(r) = rg(1/r).\\) Taking \\(g(r) = \\min(1,r)\\) as in Metropolis–Hasting rule leads to the lowest asymptotic variance (Peskun, 1973)."
   },
   {
     "objectID": "slides/bayesmod-slides5.html#references",
     "href": "slides/bayesmod-slides5.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nGreen, P. J. (2001). A primer on Markov chain Monte Carlo. Monographs on Statistics and Applied Probability, 87, 1–62.\n\n\nKallioinen, N., Paananen, T., Bürkner, P.-C., & Vehtari, A. (2023). Detecting and diagnosing prior and likelihood sensitivity with power-scaling. Statistics and Computing, 34(1), 57. https://doi.org/10.1007/s11222-023-10366-5\n\n\nRue, H., & Held, L. (2005). Gaussian Markov random fields: Theory and applications (p. 280). CRC Press.\n\n\nSherlock, C. (2013). Optimal scaling of the random walk Metropolis: General criteria for the 0.234 acceptance rule. Journal of Applied Probability, 50(1), 1–15. https://doi.org/10.1239/jap/1363784420"
+    "text": "References\n\n\n\n\nGreen, P. J. (2001). A primer on Markov chain Monte Carlo. Monographs on Statistics and Applied Probability, 87, 1–62.\n\n\nKallioinen, N., Paananen, T., Bürkner, P.-C., & Vehtari, A. (2023). Detecting and diagnosing prior and likelihood sensitivity with power-scaling. Statistics and Computing, 34(1), 57. https://doi.org/10.1007/s11222-023-10366-5\n\n\nNeal, R. M. (2011). MCMC using Hamiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, & X. L. Meng (Eds.), Handbook of Markov chain Monte Carlo (pp. 113–162). CRC Press. https://doi.org/10.1201/b10905-5\n\n\nPeskun, P. H. (1973). Optimum Monte-Carlo sampling using Markov chains. Biometrika, 60(3), 607–612. https://doi.org/10.1093/biomet/60.3.607\n\n\nRue, H., & Held, L. (2005). Gaussian Markov random fields: Theory and applications (p. 280). CRC Press.\n\n\nSäilynoja, T., Bürkner, P.-C., & Vehtari, A. (2022). Graphical test for discrete uniformity and its applications in goodness-of-fit evaluation and multiple sample comparison. Statistics and Computing, 32(2), 32. https://doi.org/10.1007/s11222-022-10090-6\n\n\nSherlock, C. (2013). Optimal scaling of the random walk Metropolis: General criteria for the 0.234 acceptance rule. Journal of Applied Probability, 50(1), 1–15. https://doi.org/10.1239/jap/1363784420\n\n\nSpiegelhalter, D. J., Best, N. G., Carlin, B. P., & Van Der Linde, A. (2002). Bayesian measures of model complexity and fit. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 64(4), 583–639. https://doi.org/10.1111/1467-9868.00353\n\n\nTalts, S., Betancourt, M., Simpson, D., Vehtari, A., & Gelman, A. (2020). Validating Bayesian inference algorithms with simulation-based calibration. https://doi.org/10.48550/arXiv.1804.06788"
   },
   {
     "objectID": "slides/bayesmod-slides7.html#curse-of-dimensionality",
@@ -5323,5 +5323,180 @@
     "title": "Bayesian modelling",
     "section": "Implementation details: Metropolis–Hastings",
     "text": "Implementation details: Metropolis–Hastings\nUse seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.\n\nset.seed(80601)\nnaccept &lt;- 0L\nfor(i in seq_len(niter)){\n  # Multivariate normal proposal - symmetric random walk\n  prop &lt;- c(rnorm(n = 2) %*% chol + cur)\n  logpost_prop &lt;- logpost(prop)\n  logR &lt;- logpost_prop - logpost_cur\n  if(logR &gt; -rexp(1)){# accept move\n    cur &lt;- prop\n    logpost_cur &lt;- logpost_v[i] &lt;- logpost_prop\n    naccept &lt;- naccept + 1L\n  }\n  logpost_v[i] &lt;- logpost_cur \n  chain[i,] &lt;- cur\n}"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#strategies",
+    "href": "slides/bayesmod-slides5.html#strategies",
+    "title": "Bayesian modelling",
+    "section": "Strategies",
+    "text": "Strategies\nMany diagnostics require running multiple chains\n\ncheck within vs between variance,\ndetermine whether they converge to the same target."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#correct-implementation",
+    "href": "slides/bayesmod-slides5.html#correct-implementation",
+    "title": "Bayesian modelling",
+    "section": "Correct implementation",
+    "text": "Correct implementation\nWe can generate artificial data to check the procedure.\nSimulation-based calibration (Talts et al., 2020) proceeds with, in order\n\n\\(\\boldsymbol{\\theta}_0 \\sim p(\\boldsymbol{\\theta}),\\)\n\\(\\boldsymbol{y}_0 \\sim p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}_0),\\)\n\\(\\boldsymbol{\\theta}_1, \\ldots, \\boldsymbol{\\theta}_B \\sim p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}_0 ).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#simulation-based-calibration",
+    "href": "slides/bayesmod-slides5.html#simulation-based-calibration",
+    "title": "Bayesian modelling",
+    "section": "Simulation-based calibration",
+    "text": "Simulation-based calibration\n\nConditional on the simulated \\(\\boldsymbol{y}\\), the distribution of \\(\\boldsymbol{\\theta}_0\\) is the same as that of \\(\\boldsymbol{\\theta}_1, \\ldots, \\boldsymbol{\\theta}_B.\\)\nWe do a dimension reduction step taking the test function \\(t(\\cdot)\\) to get the rank of the prior draw among the posterior ones, breaking ties at random if any.\nThese steps are repeated \\(K\\) times, yielding \\(K\\) test functions \\(T_1, \\ldots, T_K.\\) We then test for uniformity using results from Säilynoja et al. (2022)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#breaking-down-the-markov-chain",
+    "href": "slides/bayesmod-slides5.html#breaking-down-the-markov-chain",
+    "title": "Bayesian modelling",
+    "section": "Breaking down the Markov chain",
+    "text": "Breaking down the Markov chain\nWe distinguish between three phases\n\nburn in period: initial draws allowing the algorithm to converge to it’s stationary distribution (discarded)\nwarmup adaptation period: tuning period for the proposal std. deviation, etc. (discarded)\nsampling period: draws post burn in and warmup that are kept for inference\n\nWe can optionally thin by keeping one every \\(k\\) iterations from the sampling period to reduce the storage."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#visual-diagnostic-trace-plots",
+    "href": "slides/bayesmod-slides5.html#visual-diagnostic-trace-plots",
+    "title": "Bayesian modelling",
+    "section": "Visual diagnostic: trace plots",
+    "text": "Visual diagnostic: trace plots\nDisplay the Markov chain sample path as a function of the number of iterations.\n\nIdeally, run multiple chains to see if they converge to the same mode (for multimodal behaviour).\nMarkov chains should look like a fat hairy caterpillar!\nCheck the bayesplot and coda R packages (trace plot, trace rank, correlograms, marginal densities, etc.)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#checking-convergence-with-multiple-chains",
+    "href": "slides/bayesmod-slides5.html#checking-convergence-with-multiple-chains",
+    "title": "Bayesian modelling",
+    "section": "Checking convergence with multiple chains",
+    "text": "Checking convergence with multiple chains\n\nFour healthy parallel chains for parameters."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#trace-rank-plot",
+    "href": "slides/bayesmod-slides5.html#trace-rank-plot",
+    "title": "Bayesian modelling",
+    "section": "Trace rank plot",
+    "text": "Trace rank plot\nA trace rank plot compares the rank of the values of the different chain at a given iteration.\n\nWith good mixing, the ranks should switch frequently and be distributed uniformly across integers."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#effective-sample-size",
+    "href": "slides/bayesmod-slides5.html#effective-sample-size",
+    "title": "Bayesian modelling",
+    "section": "Effective sample size",
+    "text": "Effective sample size\nAre my chains long enough to compute reliable summaries?\nCompute the sample size we would have with independent draws by taking \\[\n\\mathsf{ESS} = \\frac{B}{\\left\\{1+2\\sum_{t=1}^\\infty \\rho_t\\right\\}}\n\\] where \\(\\rho_t\\) is the lag \\(t\\) autocorrelation.\nThe relative effective sample size is simply \\(\\mathsf{ESS}/B\\): small values indicate pathological or inefficient samplers."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#how-many-samples",
+    "href": "slides/bayesmod-slides5.html#how-many-samples",
+    "title": "Bayesian modelling",
+    "section": "How many samples?",
+    "text": "How many samples?\nWe want our average estimate to be reliable!\n\nWe probably need \\(\\mathsf{ESS}\\) to be several hundred\nWe can estimate the variance of the target to know the precision\n(related question: how many significant digits to report?)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#lack-of-stationarity",
+    "href": "slides/bayesmod-slides5.html#lack-of-stationarity",
+    "title": "Bayesian modelling",
+    "section": "Lack of stationarity",
+    "text": "Lack of stationarity\n\n\nFigure 3: Traceplots of three Markov chains for the same target with different initial values for the first 500 iterations (left) and trace rank plot after discarding these (right). The latter is indicative of the speed of mixing."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#gelmanrubin-diagnostic",
+    "href": "slides/bayesmod-slides5.html#gelmanrubin-diagnostic",
+    "title": "Bayesian modelling",
+    "section": "Gelman–Rubin diagnostic",
+    "text": "Gelman–Rubin diagnostic\nSuppose we run \\(M\\) chains for \\(B\\) iterations, post burn in.\nDenote by \\(\\theta_{bm}\\) the \\(b\\)th draw of the \\(m\\)th chain, we compute the global average \\[\\overline{\\theta} = \\frac{1}{BM}\\sum_{b=1}^B \\sum_{m=1}^m \\theta_{bm}\\] and similarly the chain-specific sample average and variances, respectively \\(\\overline{\\theta}_m\\) and \\(\\widehat{\\sigma}^2_m\\) (\\(m=1, \\ldots, M\\))."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#sum-of-square-decomposition",
+    "href": "slides/bayesmod-slides5.html#sum-of-square-decomposition",
+    "title": "Bayesian modelling",
+    "section": "Sum of square decomposition",
+    "text": "Sum of square decomposition\nThe between-chain variance and within-chain variance estimator are \\[\\begin{align*}\n\\mathsf{Va}_{\\text{between}} &= \\frac{B}{M-1}\\sum_{m=1}^M (\\overline{\\theta}_m - \\overline{\\theta})^2\\\\\n\\mathsf{Va}_{\\text{within}} &= \\frac{1}{M}\\sum_{m=1}^m \\widehat{\\sigma}^2_m\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#potential-scale-reduction-statistic",
+    "href": "slides/bayesmod-slides5.html#potential-scale-reduction-statistic",
+    "title": "Bayesian modelling",
+    "section": "Potential scale reduction statistic",
+    "text": "Potential scale reduction statistic\nThe Gelman–Rubin diagnostic, denoted \\(\\widehat{R}\\), is obtained by running multiple chains and considering the difference between within-chain and between-chains variances,\n\\[\\begin{align*}\n\\widehat{R} = \\left(\\frac{\\mathsf{Va}_{\\text{within}}(B-1) + \\mathsf{Va}_{\\text{between}}}{B\\mathsf{Va}_{\\text{within}}}\\right)^{1/2}\n\\end{align*}\\]\nAny value of \\(\\widehat{R}\\) larger 1 is indicative of problems of convergence."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#bad-chains",
+    "href": "slides/bayesmod-slides5.html#bad-chains",
+    "title": "Bayesian modelling",
+    "section": "Bad chains",
+    "text": "Bad chains\n\n\nFigure 4: Two pairs of Markov chains: the top ones seem stationary, but with different modes and \\(\\widehat{R} \\approx 3.4\\). The chains on the right hover around zero, but do not appear stable, with \\(\\widehat{R} \\approx 1.6\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#one-chain-or-multiple-chains",
+    "href": "slides/bayesmod-slides5.html#one-chain-or-multiple-chains",
+    "title": "Bayesian modelling",
+    "section": "One chain or multiple chains?",
+    "text": "One chain or multiple chains?\nGenerally, it is preferable to run a single chain for a longer period than run multiple chains sequentially\n\nthere is a cost to initializing multiple times with different starting values since we must discard initial draws.\nbut with parallel computations, multiple chains are more frequent nowadays.\nmultiple diagnostics require running several chains."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#posterior-predictive-checks",
+    "href": "slides/bayesmod-slides5.html#posterior-predictive-checks",
+    "title": "Bayesian modelling",
+    "section": "Posterior predictive checks",
+    "text": "Posterior predictive checks\n\nFor each of the \\(B\\) draws from the posterior, simulate \\(n\\) observations from the posterior predictive \\(p(\\widetilde{\\boldsymbol{y}} \\mid \\boldsymbol{y})\\)\nFor each replicate, compute a summary statistics (median, quantiles, std. dev., etc.)\nCompare it with the same summary computed for the sample \\(\\boldsymbol{y}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#posterior-predictive-checks-1",
+    "href": "slides/bayesmod-slides5.html#posterior-predictive-checks-1",
+    "title": "Bayesian modelling",
+    "section": "Posterior predictive checks",
+    "text": "Posterior predictive checks\n\n\nFigure 5: Posterior predictive checks for the standard deviation (top) and density of posterior draws (bottom) for hierarchical Poisson model with individual effects (left) and simpler model with only conditions (right)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#log-pointwise-predictive-density",
+    "href": "slides/bayesmod-slides5.html#log-pointwise-predictive-density",
+    "title": "Bayesian modelling",
+    "section": "Log pointwise predictive density",
+    "text": "Log pointwise predictive density\nConsider the expected value of the observation-wise log density with respect to the posterior distribution \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\), \\[\\begin{align*}\n\\mathsf{LPPD}_i = \\mathsf{E}_{\\boldsymbol{\\theta} \\mid \\boldsymbol{y}} \\left\\{ \\log p(y_i \\mid \\boldsymbol{\\theta})\\right\\},\n\\end{align*}\\]\nThe higher the value of \\(\\mathsf{LPPD}_i\\), the better the fit for that observation."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#widely-available-information-criterion",
+    "href": "slides/bayesmod-slides5.html#widely-available-information-criterion",
+    "title": "Bayesian modelling",
+    "section": "Widely available information criterion",
+    "text": "Widely available information criterion\nTo build an information criterion, we add a penalization factor that approximates the effective number of parameters in the model, with \\[\\begin{align*}\nn\\mathsf{WAIC} = -\\sum_{i=1}^n \\mathsf{LPPD}_i + \\sum_{i=1}^n \\mathsf{Va}_{\\boldsymbol{\\theta} \\mid \\boldsymbol{y}}\\{\\log p(y_i \\mid \\boldsymbol{\\theta})\\}\n\\end{align*}\\] where we use again the empirical variance to compute the rightmost term.\nSmaller values of \\(\\mathsf{WAIC}\\) are better."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#pseudo-code-for-waic",
+    "href": "slides/bayesmod-slides5.html#pseudo-code-for-waic",
+    "title": "Bayesian modelling",
+    "section": "Pseudo-code for WAIC",
+    "text": "Pseudo-code for WAIC\nEvaluate the log likelihood for each posterior draw and each observation.\n\n#' WAIC\n#' @param loglik_pt B by n matrix of pointwise log likelihood\nWAIC &lt;- function(loglik_pt){\n  -mean(apply(loglik_pt, 2, mean)) +  mean(apply(loglik_pt, 2, var))\n}"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#bayesian-leave-one-out-cross-validation",
+    "href": "slides/bayesmod-slides5.html#bayesian-leave-one-out-cross-validation",
+    "title": "Bayesian modelling",
+    "section": "Bayesian leave-one-out cross validation",
+    "text": "Bayesian leave-one-out cross validation\nIn Bayesian setting, we can use the leave-one-out predictive density \\[p(y_i \\mid \\boldsymbol{y}_{-i})\\] as a measure of predictive accuracy.\nWe can use importance sampling to approximate the latter.\nRequirement: need to keep track of the log likelihood of each observation for each posterior draw (\\(B \\times n\\) values)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#loo-cv-diagnostics",
+    "href": "slides/bayesmod-slides5.html#loo-cv-diagnostics",
+    "title": "Bayesian modelling",
+    "section": "LOO-CV diagnostics",
+    "text": "LOO-CV diagnostics\nWe can draw \\(B\\) samples from \\(p(\\widetilde{y} \\mid \\boldsymbol{y}_{-i})\\) and compute the rank of \\(y_i\\).\nUnder perfect calibration, ranks should be uniform."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#leave-one-out-with-quantile-quantile-plots",
+    "href": "slides/bayesmod-slides5.html#leave-one-out-with-quantile-quantile-plots",
+    "title": "Bayesian modelling",
+    "section": "Leave-one-out with quantile-quantile plots",
+    "text": "Leave-one-out with quantile-quantile plots\n\n\nFigure 6: Quantile-quantile plots based on leave-one-out cross validation for model for the hierarchical Poisson model fitted to the Upworthy data with the individual random effects (left) and without (right)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#deviance-information-criterion",
+    "href": "slides/bayesmod-slides5.html#deviance-information-criterion",
+    "title": "Bayesian modelling",
+    "section": "Deviance information criterion",
+    "text": "Deviance information criterion\nThe deviance information criterion of Spiegelhalter et al. (2002) is \\[\\begin{align*}\n\\mathsf{DIC} = -2 \\ell(\\widetilde{\\boldsymbol{\\theta}}) + 2 p_D\n\\end{align*}\\] where \\(p_D\\) is the posterior expectation of the deviance relative to the point estimator of the parameter \\(\\widetilde{\\boldsymbol{\\theta}}\\) (e.g., the maximum a posteriori or the posterior mean) \\[\\begin{align*}\np_D = \\mathsf{E}\\{D(\\boldsymbol{\\theta}, \\widetilde{\\boldsymbol{\\theta}}) \\mid \\boldsymbol{y}\\}= \\int 2 \\{ \\ell(\\widetilde{\\boldsymbol{\\theta}}) - \\ell(\\boldsymbol{\\theta})\\} p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#criticism-of-dic",
+    "href": "slides/bayesmod-slides5.html#criticism-of-dic",
+    "title": "Bayesian modelling",
+    "section": "Criticism of DIC",
+    "text": "Criticism of DIC\n\nThe DIC can be easily evaluated by keeping track of the log likelihood evaluated at each posterior draw from a Markov chain Monte Carlo algorithm.\nThe penalty term \\(p_D\\) is however not invariant to reparametrizations.\nA Gaussian approximation to the MLE under suitable regularity conditions shows that the \\(\\mathsf{DIC}\\) is equivalent in large samples to \\(\\mathsf{AIC}.\\)"
   }
 ]
