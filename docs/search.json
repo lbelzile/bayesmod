@@ -4349,21 +4349,21 @@
     "href": "slides/bayesmod-slides5.html#implementation-details-data-and-containers",
     "title": "Bayesian modelling",
     "section": "Implementation details: data and containers",
-    "text": "Implementation details: data and containers\nIn regression models, scale inputs if possible.\n\n# Load data\ndata(upworthy_question, package = \"hecbayes\")\n# Compute sufficient statistics\ndata &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(ntot = sum(impressions),\n                   y = sum(clicks))\n# Create containers for MCMC\nniter &lt;- 1e4L\nchain &lt;- matrix(0, nrow = niter, ncol = 2L)\ncolnames(chain) &lt;- c(\"beta\",\"kappa\")"
+    "text": "Implementation details: data and containers\nIn regression models, scale inputs if possible.\n\n# Load data\ndata(upworthy_question, package = \"hecbayes\")\n# Compute sufficient statistics\ndata &lt;- upworthy_question |&gt;\n  dplyr::group_by(question) |&gt;\n  dplyr::summarize(ntot = sum(impressions),\n                   y = sum(clicks))\n# Create containers for MCMC\nniter &lt;- 1e4L\nchain &lt;- matrix(0, nrow = niter, ncol = 2L)\ncolnames(chain) &lt;- c(\"beta\",\"kappa\")\nlogpost_v &lt;- numeric(niter)"
   },
   {
     "objectID": "slides/bayesmod-slides5.html#implementation-details-log-posterior-function",
     "href": "slides/bayesmod-slides5.html#implementation-details-log-posterior-function",
     "title": "Bayesian modelling",
     "section": "Implementation details: log posterior function",
-    "text": "Implementation details: log posterior function\nPerform all calculations on the log scale to avoid numerical overflow!\n\n# Code log posterior as sum of log likelihood and log prior\nloglik &lt;- function(par, counts = data$y, offset = data$ntot, ...){\n  lambda &lt;- exp(c(par[1] + log(offset[1]), par[1] + par[2] + log(offset[2])))\n sum(dpois(x = counts, lambda = lambda, log = TRUE))\n}\n# Note common signature of function\nlogprior &lt;- function(par, ...){\n  dnorm(x = par[1], mean = log(0.01), sd = 1.5, log = TRUE) +\n    dnorm(x = par[2], log = TRUE)\n}\nlogpost &lt;- function(par, ...){\n  loglik(par, ...) + logprior(par, ...)\n}"
+    "text": "Implementation details: log posterior function\nPerform all calculations on the log scale to avoid numerical overflow!\n\n# Code log posterior as sum of log likelihood and log prior\nloglik &lt;- function(par, counts = data$y, offset = data$ntot, ...){\n  lambda &lt;- exp(c(par[1] + log(offset[1]), \n                  par[1] + par[2] + log(offset[2])))\n sum(dpois(x = counts, lambda = lambda, log = TRUE))\n}\n# Note common signature of function\nlogprior &lt;- function(par, ...){\n  dnorm(x = par[1], mean = log(0.01), sd = 1.5, log = TRUE) +\n    dnorm(x = par[2], log = TRUE)\n}\nlogpost &lt;- function(par, ...){\n  loglik(par, ...) + logprior(par, ...)\n}"
   },
   {
     "objectID": "slides/bayesmod-slides5.html#implementation-details-proposals",
     "href": "slides/bayesmod-slides5.html#implementation-details-proposals",
     "title": "Bayesian modelling",
     "section": "Implementation details: proposals",
-    "text": "Implementation details: proposals\nUse good starting values for your Markov chains, such as maximum a posteriori.\n\n# Compute maximum a posteriori (MAP)\nmap &lt;- optim(\n  par = c(-4, 0.07),\n  fn = logpost,\n  control = list(fnscale = -1),\n  offset = data$ntot,\n  counts = data$y,\n  hessian = TRUE)\n# Use MAP as starting value\ncur &lt;- map$par\n# Compute logpost_cur - we can keep track of this to reduce calculations\nlogpost_cur &lt;- logpost(cur)\n# Proposal covariance\ncov_map &lt;- -2*solve(map$hessian)\nchol &lt;- chol(cov_map)"
+    "text": "Implementation details: proposals\nUse good starting values for your Markov chains, such as maximum a posteriori.\n\n# Compute maximum a posteriori (MAP)\nmap &lt;- optim(\n  par = c(-4, 0.07),\n  fn = logpost,\n  control = list(fnscale = -1),\n  offset = data$ntot,\n  counts = data$y,\n  hessian = TRUE)\n# Use MAP as starting value\ncur &lt;- map$par\n# Keep track of log posterior to reduce calculations\nlogpost_cur &lt;- logpost(cur)\n# Proposal covariance\ncov_map &lt;- -2*solve(map$hessian)\nchol &lt;- chol(cov_map)"
   },
   {
     "objectID": "slides/bayesmod-slides5.html#implementation-details-metropolishastings-algorithm",
@@ -4398,7 +4398,7 @@
     "href": "slides/bayesmod-slides5.html#what-proposal",
     "title": "Bayesian modelling",
     "section": "What proposal?",
-    "text": "What proposal?\nThe independence Metropolis–Hastings uses a global proposal \\(q\\) which does not depend on the current state (typically centered at the MAP)\nThis may be problematic with multimodal targets.\nThe Gaussian random walk takes \\(\\boldsymbol{\\theta}_t^{\\star} =\\boldsymbol{\\theta}_{t-1}+ \\sigma_\\text{p}Z\\), where \\(Z \\sim \\mathsf{Gauss}(0,1)\\) and \\(\\sigma_\\text{p}\\) is the proposal standard deviation. Random walks allow us to explore the space."
+    "text": "What proposal?\nThe independence Metropolis–Hastings uses a global proposal \\(q\\) which does not depend on the current state (typically centered at the MAP)\n\nThis may be problematic with multimodal targets.\n\nThe Gaussian random walk takes \\(\\boldsymbol{\\theta}_t^{\\star} =\\boldsymbol{\\theta}_{t-1}+ \\sigma_\\text{p}Z\\), where \\(Z \\sim \\mathsf{Gauss}(0,1)\\) and \\(\\sigma_\\text{p}\\) is the proposal standard deviation. Random walks allow us to explore the space."
   },
   {
     "objectID": "slides/bayesmod-slides5.html#burn-in",
@@ -4664,7 +4664,7 @@
     "href": "slides/bayesmod-slides5.html#data-augmentation-with-scale-mixture-of-gaussian",
     "title": "Bayesian modelling",
     "section": "Data augmentation with scale mixture of Gaussian",
-    "text": "Data augmentation with scale mixture of Gaussian\nThe Laplace distribution with mean \\(\\mu\\) and scale \\(\\sigma\\) has density \\[\\begin{align*}\nf(x; \\mu, \\sigma) = \\frac{1}{2\\sigma}\\exp\\left(-\\frac{|x-\\mu|}{\\sigma}\\right),\n\\end{align*}\\] and can be expressed as a scale mixture of Gaussians, where \\(Y \\mid \\tau \\sim \\mathsf{Laplace}(\\mu, \\tau)\\) is equivalent to \\(Z \\mid \\tau \\sim \\mathsf{Gauss}(\\mu, \\tau)\\) and \\(\\tau \\sim \\mathsf{expo}\\{(2\\sigma)^{-1}\\}\\)."
+    "text": "Data augmentation with scale mixture of Gaussian\nThe Laplace distribution with mean \\(\\mu\\) and scale \\(\\sigma\\) has density \\[\\begin{align*}\nf(x; \\mu, \\sigma) = \\frac{1}{2\\sigma}\\exp\\left(-\\frac{|x-\\mu|}{\\sigma}\\right),\n\\end{align*}\\] and can be expressed as a scale mixture of Gaussians, where \\(Y \\sim \\mathsf{Laplace}(\\mu, \\tau)\\) is equivalent to \\(Y \\mid \\tau \\sim \\mathsf{Gauss}(\\mu, \\tau)\\) and \\(\\tau \\sim \\mathsf{expo}\\{(2\\sigma)^{-1}\\}\\)."
   },
   {
     "objectID": "slides/bayesmod-slides5.html#joint-posterior-for-laplace-model",
@@ -4706,14 +4706,14 @@
     "href": "slides/bayesmod-slides5.html#summary",
     "title": "Bayesian modelling",
     "section": "Summary",
-    "text": "Summary\n\nGibbs sampling is a special case of Metropolis–Hastings algorithm that leads to acceptance\nWe need to get the conditional distribution"
+    "text": "Summary"
   },
   {
     "objectID": "slides/bayesmod-slides5.html#references",
     "href": "slides/bayesmod-slides5.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nDyk, D. A. van, & Meng, X.-L. (2001). The art of data augmentation. Journal of Computational and Graphical Statistics, 10(1), 1–50. https://doi.org/10.1198/10618600152418584\n\n\nGeweke, J. (2004). Getting it right: Joint distribution tests of posterior simulators. Journal of the American Statistical Association, 99(467), 799–804. https://doi.org/10.1198/016214504000001132\n\n\nHobert, J. (2011). The data augmentation algorithm: Theory and methodology. In S. Brooks, A. Gelman, G. Jones, & X. L. Meng (Eds.), Handbook of Markov chain Monte Carlo (pp. 253–293). CRC Press. https://doi.org/10.1201/b10905-11\n\n\nPark, T., & Casella, G. (2008). The Bayesian Lasso. Journal of the American Statistical Association, 103(482), 681–686. https://doi.org/10.1198/016214508000000337\n\n\nRue, H., & Held, L. (2005). Gaussian Markov random fields: Theory and applications (p. 280). CRC Press.\n\n\nSherlock, C. (2013). Optimal scaling of the random walk Metropolis: General criteria for the 0.234 acceptance rule. Journal of Applied Probability, 50(1), 1–15. https://doi.org/10.1239/jap/1363784420\n\n\nTanner, M. A., & Wong, W. H. (1987). The calculation of posterior distributions by data augmentation. Journal of the American Statistical Association, 82(398), 528–540. https://doi.org/10.1080/01621459.1987.10478458"
+    "text": "References\n\n\n\n\nGreen, P. J. (2001). A primer on Markov chain Monte Carlo. Monographs on Statistics and Applied Probability, 87, 1–62.\n\n\nKallioinen, N., Paananen, T., Bürkner, P.-C., & Vehtari, A. (2023). Detecting and diagnosing prior and likelihood sensitivity with power-scaling. Statistics and Computing, 34(1), 57. https://doi.org/10.1007/s11222-023-10366-5\n\n\nRue, H., & Held, L. (2005). Gaussian Markov random fields: Theory and applications (p. 280). CRC Press.\n\n\nSherlock, C. (2013). Optimal scaling of the random walk Metropolis: General criteria for the 0.234 acceptance rule. Journal of Applied Probability, 50(1), 1–15. https://doi.org/10.1239/jap/1363784420"
   },
   {
     "objectID": "slides/bayesmod-slides7.html#curse-of-dimensionality",
@@ -5267,5 +5267,61 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References\n\n\n\n\nPark, T., & Casella, G. (2008). The Bayesian Lasso. Journal of the American Statistical Association, 103(482), 681–686. https://doi.org/10.1198/016214508000000337\n\n\nRaftery, A. E. (1995). Bayesian model selection in social research. Sociological Methodology, 25, 111–163. https://doi.org/10.2307/271063\n\n\nRue, H., Martino, S., & Chopin, N. (2009). Approximate bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 71(2), 319–392. https://doi.org/10.1111/j.1467-9868.2008.00700.x\n\n\nTierney, L., & Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. Journal of the American Statistical Association, 81(393), 82–86. https://doi.org/10.1080/01621459.1986.10478240\n\n\nvan Niekerk, J., & Rue, H. (2024). Low-rank variational Bayes correction to the Laplace method. Journal of Machine Learning Research, 25(62), 1–25. http://jmlr.org/papers/v25/21-1405.html\n\n\nWood, S. N. (2019). Simplified integrated nested Laplace approximation. Biometrika, 107(1), 223–230. https://doi.org/10.1093/biomet/asz044"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#metropolishastings-algorithm-1",
+    "href": "slides/bayesmod-slides5.html#metropolishastings-algorithm-1",
+    "title": "Bayesian modelling",
+    "section": "Metropolis–Hastings algorithm",
+    "text": "Metropolis–Hastings algorithm\nStarting from an initial value \\(\\boldsymbol{\\theta}_0\\):\n\ndraw a proposal value \\(\\boldsymbol{\\theta}_t^{\\star} \\sim q(\\boldsymbol{\\theta} \\mid \\boldsymbol{\\theta}_{t-1})\\).\nCompute the acceptance ratio \\[\nR = \\frac{p(\\boldsymbol{\\theta}_t^{\\star})}{p(\\boldsymbol{\\theta}_{t-1})}\\frac{q(\\boldsymbol{\\theta}_{t-1} \\mid \\boldsymbol{\\theta}_t^{\\star} )}{q(\\boldsymbol{\\theta}_t^{\\star} \\mid \\boldsymbol{\\theta}_{t-1})}\n\\]\nWith probability \\(\\min\\{R, 1\\}\\), accept the proposal and set \\(\\boldsymbol{\\theta}_t \\gets \\boldsymbol{\\theta}_t^{\\star}\\), otherwise set the value to the previous state, \\(\\boldsymbol{\\theta}_t \\gets \\boldsymbol{\\theta}_{t-1}\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#assessing-convergence",
+    "href": "slides/bayesmod-slides5.html#assessing-convergence",
+    "title": "Bayesian modelling",
+    "section": "Assessing convergence",
+    "text": "Assessing convergence\nHow do we assess convergence of a MCMC algorithm?\n\nthe algorithm implementation must be correct,\nthe chain must have converged to the target posterior.\nthe effective sample size must be sufficiently large for inference."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#multiple-chains",
+    "href": "slides/bayesmod-slides5.html#multiple-chains",
+    "title": "Bayesian modelling",
+    "section": "Multiple chains",
+    "text": "Multiple chains"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#tracking-the-log-posterior",
+    "href": "slides/bayesmod-slides5.html#tracking-the-log-posterior",
+    "title": "Bayesian modelling",
+    "section": "Tracking the log posterior",
+    "text": "Tracking the log posterior\nOne can store (separately) at each iteration the values of the\n\nlog likelihood\nlog prior\n\nThese can be used for prior or likelihood sensitivity (Kallioinen et al., 2023)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#typical-set",
+    "href": "slides/bayesmod-slides5.html#typical-set",
+    "title": "Bayesian modelling",
+    "section": "Typical set",
+    "text": "Typical set\nWe call the typical set the values that are taken mostly by the log posterior The unnormalized"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#blank-run",
+    "href": "slides/bayesmod-slides5.html#blank-run",
+    "title": "Bayesian modelling",
+    "section": "Blank run",
+    "text": "Blank run\nTo check that the algorithm is correctly implemented:\n\nremove the log likelihood component\nrun the algorithm with just the prior\n\nThe resulting draws should be drawn from the prior if the latter is proper (Green, 2001, p. 55)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#implementation-details-algorithm",
+    "href": "slides/bayesmod-slides5.html#implementation-details-algorithm",
+    "title": "Bayesian modelling",
+    "section": "Implementation details: algorithm",
+    "text": "Implementation details: algorithm\nUse seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.\n\nset.seed(80601)\nnaccept &lt;- 0L\nfor(i in seq_len(niter)){\n  # Multivariate normal proposal - symmetric random walk\n  prop &lt;- c(rnorm(n = 2) %*% chol + cur)\n  logpost_prop &lt;- logpost(prop)\n  logR &lt;- logpost_prop - logpost_cur\n  if(logR &gt; -rexp(1)){# accept move\n    cur &lt;- prop\n    logpost_cur &lt;- logpost_v[i] &lt;- logpost_prop\n    naccept &lt;- naccept + 1L\n  }\n  logpost_v[i] &lt;- logpost_cur \n  chain[i,] &lt;- cur\n}"
+  },
+  {
+    "objectID": "slides/bayesmod-slides5.html#implementation-details-metropolishastings",
+    "href": "slides/bayesmod-slides5.html#implementation-details-metropolishastings",
+    "title": "Bayesian modelling",
+    "section": "Implementation details: Metropolis–Hastings",
+    "text": "Implementation details: Metropolis–Hastings\nUse seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.\n\nset.seed(80601)\nnaccept &lt;- 0L\nfor(i in seq_len(niter)){\n  # Multivariate normal proposal - symmetric random walk\n  prop &lt;- c(rnorm(n = 2) %*% chol + cur)\n  logpost_prop &lt;- logpost(prop)\n  logR &lt;- logpost_prop - logpost_cur\n  if(logR &gt; -rexp(1)){# accept move\n    cur &lt;- prop\n    logpost_cur &lt;- logpost_v[i] &lt;- logpost_prop\n    naccept &lt;- naccept + 1L\n  }\n  logpost_v[i] &lt;- logpost_cur \n  chain[i,] &lt;- cur\n}"
   }
 ]

@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -17,9 +17,6 @@
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
   <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -32,9 +29,8 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -45,7 +41,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -118,7 +114,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-0889ea6b10ab650f3a364291bfeaa97a.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-da069d641d4916e8549bf8dc2b95f825.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -217,7 +213,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Markov chain Monte Carlo: Gibbs sampling</p>
+  <p class="subtitle">Markov chain Monte Carlo</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -227,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Wednesday Sep 16, 2026</p>
+  <p class="date">Last compiled Monday Sep 21, 2026</p>
 </section>
 <section id="markov-chain-monte-carlo" class="slide level2">
 <h2>Markov chain Monte Carlo</h2>
@@ -293,7 +289,7 @@ Y_{i} &amp;\sim \mathsf{Poisson}(n_i\lambda_i), \qquad (i=1,2)\\
 <h2>Implementation details: data and containers</h2>
 <p>In regression models, scale inputs if possible.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># Load data</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># Load data</span></span>
 <span id="cb1-2"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
 <span id="cb1-3"><a></a><span class="co"># Compute sufficient statistics</span></span>
 <span id="cb1-4"><a></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
@@ -303,33 +299,35 @@ Y_{i} &amp;\sim \mathsf{Poisson}(n_i\lambda_i), \qquad (i=1,2)\\
 <span id="cb1-8"><a></a><span class="co"># Create containers for MCMC</span></span>
 <span id="cb1-9"><a></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
 <span id="cb1-10"><a></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> <span class="dv">2</span>L)</span>
-<span id="cb1-11"><a></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-11"><a></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span>
+<span id="cb1-12"><a></a>logpost_v <span class="ot">&lt;-</span> <span class="fu">numeric</span>(niter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-log-posterior-function" class="slide level2">
 <h2>Implementation details: log posterior function</h2>
 <p>Perform all calculations on the log scale to avoid numerical overflow!</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
 <span id="cb2-2"><a></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
-<span id="cb2-3"><a></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
-<span id="cb2-4"><a></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-5"><a></a>}</span>
-<span id="cb2-6"><a></a><span class="co"># Note common signature of function</span></span>
-<span id="cb2-7"><a></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb2-8"><a></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb2-9"><a></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-10"><a></a>}</span>
-<span id="cb2-11"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb2-12"><a></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
-<span id="cb2-13"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), </span>
+<span id="cb2-4"><a></a>                  par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
+<span id="cb2-5"><a></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb2-6"><a></a>}</span>
+<span id="cb2-7"><a></a><span class="co"># Note common signature of function</span></span>
+<span id="cb2-8"><a></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb2-9"><a></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb2-10"><a></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-11"><a></a>}</span>
+<span id="cb2-12"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb2-13"><a></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
+<span id="cb2-14"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-proposals" class="slide level2">
 <h2>Implementation details: proposals</h2>
 <p>Use good starting values for your Markov chains, such as maximum a posteriori.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
 <span id="cb3-2"><a></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
 <span id="cb3-3"><a></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
 <span id="cb3-4"><a></a>  <span class="at">fn =</span> logpost,</span>
@@ -339,38 +337,39 @@ Y_{i} &amp;\sim \mathsf{Poisson}(n_i\lambda_i), \qquad (i=1,2)\\
 <span id="cb3-8"><a></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-9"><a></a><span class="co"># Use MAP as starting value</span></span>
 <span id="cb3-10"><a></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
-<span id="cb3-11"><a></a><span class="co"># Compute logpost_cur - we can keep track of this to reduce calculations</span></span>
+<span id="cb3-11"><a></a><span class="co"># Keep track of log posterior to reduce calculations</span></span>
 <span id="cb3-12"><a></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
 <span id="cb3-13"><a></a><span class="co"># Proposal covariance</span></span>
 <span id="cb3-14"><a></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
-<span id="cb3-15"><a></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-15"><a></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="implementation-details-metropolishastings-algorithm" class="slide level2">
-<h2>Implementation details: Metropolis–Hastings algorithm</h2>
+<section id="implementation-details-metropolishastings" class="slide level2">
+<h2>Implementation details: Metropolis–Hastings</h2>
 <p>Use seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
 <span id="cb4-2"><a></a>naccept <span class="ot">&lt;-</span> <span class="dv">0</span>L</span>
 <span id="cb4-3"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
 <span id="cb4-4"><a></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
 <span id="cb4-5"><a></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
 <span id="cb4-6"><a></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
 <span id="cb4-7"><a></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
-<span id="cb4-8"><a></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
+<span id="cb4-8"><a></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){<span class="co"># accept move</span></span>
 <span id="cb4-9"><a></a>    cur <span class="ot">&lt;-</span> prop</span>
-<span id="cb4-10"><a></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
+<span id="cb4-10"><a></a>    logpost_cur <span class="ot">&lt;-</span> logpost_v[i] <span class="ot">&lt;-</span> logpost_prop</span>
 <span id="cb4-11"><a></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> <span class="dv">1</span>L</span>
 <span id="cb4-12"><a></a>  }</span>
-<span id="cb4-13"><a></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
-<span id="cb4-14"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-13"><a></a>  logpost_v[i] <span class="ot">&lt;-</span> logpost_cur </span>
+<span id="cb4-14"><a></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
+<span id="cb4-15"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="implementation-details-analysis-of-output" class="slide level2">
 <h2>Implementation details: analysis of output</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># Posterior summaries</span></span>
-<span id="cb5-2"><a></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># Posterior summaries</span></span>
+<span id="cb5-2"><a></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>1. Empirical mean and standard deviation for each variable,
    plus standard error of the mean:
@@ -385,8 +384,8 @@ kappa  0.07075 0.002033 2.033e-05      9.741e-05
 beta  -4.51591 -4.51385 -4.51273 -4.51154 -4.50929
 kappa  0.06673  0.06933  0.07077  0.07212  0.07463</code></pre>
 </section>
-<section id="reminder-metropolishastings-algorithm" class="slide level2">
-<h2>Reminder: Metropolis–Hastings algorithm</h2>
+<section id="metropolishastings-algorithm-1" class="slide level2">
+<h2>Metropolis–Hastings algorithm</h2>
 <p>Starting from an initial value <span class="math inline">\(\boldsymbol{\theta}_0\)</span>:</p>
 <ol type="1">
 <li>draw a proposal value <span class="math inline">\(\boldsymbol{\theta}_t^{\star} \sim q(\boldsymbol{\theta} \mid \boldsymbol{\theta}_{t-1})\)</span>.</li>
@@ -406,8 +405,44 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 <section id="what-proposal" class="slide level2">
 <h2>What proposal?</h2>
 <p>The <em>independence</em> Metropolis–Hastings uses a global proposal <span class="math inline">\(q\)</span> which does not depend on the current state (typically centered at the MAP)</p>
-<p>This may be problematic with multimodal targets.</p>
+<ul>
+<li>This may be problematic with multimodal targets.</li>
+</ul>
 <p>The Gaussian random walk takes <span class="math inline">\(\boldsymbol{\theta}_t^{\star} =\boldsymbol{\theta}_{t-1}+ \sigma_\text{p}Z\)</span>, where <span class="math inline">\(Z \sim \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(\sigma_\text{p}\)</span> is the proposal standard deviation. <em>Random walks</em> allow us to explore the space.</p>
+</section>
+<section id="assessing-convergence" class="slide level2">
+<h2>Assessing convergence</h2>
+<p>How do we assess convergence of a MCMC algorithm?</p>
+<ul>
+<li>the algorithm implementation must be correct,</li>
+<li>the chain must have converged to the target posterior.</li>
+<li>the effective sample size must be sufficiently large for inference.</li>
+</ul>
+</section>
+<section id="multiple-chains" class="slide level2">
+<h2>Multiple chains</h2>
+</section>
+<section id="tracking-the-log-posterior" class="slide level2">
+<h2>Tracking the log posterior</h2>
+<p>One can store (separately) at each iteration the values of the</p>
+<ul>
+<li>log likelihood</li>
+<li>log prior</li>
+</ul>
+<p>These can be used for prior or likelihood sensitivity <span class="citation" data-cites="Kallioinen:2023">(<a href="#/references" role="doc-biblioref" onclick="">Kallioinen et al., 2023</a>)</span></p>
+</section>
+<section id="typical-set" class="slide level2">
+<h2>Typical set</h2>
+<p>We call the <strong>typical set</strong> the values that are taken mostly by the log posterior The unnormalized</p>
+</section>
+<section id="blank-run" class="slide level2">
+<h2>Blank run</h2>
+<p>To check that the algorithm is correctly implemented:</p>
+<ul>
+<li>remove the log likelihood component</li>
+<li>run the algorithm with just the prior</li>
+</ul>
+<p>The resulting draws should be drawn from the prior if the latter is proper <span class="citation" data-cites="Green:2001">(<a href="#/references" role="doc-biblioref" onclick="">Green, 2001, p. 55</a>)</span>.</p>
 </section>
 <section id="burn-in" class="slide level2">
 <h2>Burn in</h2>
@@ -507,18 +542,18 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <section id="mala-data-set-up" class="slide level2">
 <h2>MALA: data set-up</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
 <span id="cb7-2"><a></a><span class="co"># Select data for a single question</span></span>
 <span id="cb7-3"><a></a>qdata <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
 <span id="cb7-4"><a></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(question <span class="sc">==</span> <span class="st">"yes"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb7-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">y =</span> clicks<span class="sc">/</span>impressions,</span>
-<span id="cb7-6"><a></a>                <span class="at">no =</span> impressions)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-6"><a></a>                <span class="at">no =</span> impressions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-define-functions" class="slide level2">
 <h2>MALA: define functions</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Create functions with the same signature (...) for the algorithm</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="co"># Create functions with the same signature (...) for the algorithm</span></span>
 <span id="cb8-2"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data, ...){</span>
 <span id="cb8-3"><a></a>  mu <span class="ot">&lt;-</span> par[<span class="dv">1</span>]; sigma <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
 <span id="cb8-4"><a></a>  no <span class="ot">&lt;-</span> data<span class="sc">$</span>no</span>
@@ -529,26 +564,26 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb8-9"><a></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> mu, <span class="at">mean =</span> <span class="fl">0.01</span>, <span class="at">sd =</span> <span class="fl">0.1</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
 <span id="cb8-10"><a></a>  <span class="fu">dexp</span>(sigma, <span class="at">rate =</span> <span class="fl">0.7</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
 <span id="cb8-11"><a></a>  <span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> y, <span class="at">mean =</span> mu, <span class="at">sd =</span> sigma<span class="sc">/</span><span class="fu">sqrt</span>(no), <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb8-12"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-12"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-compute-gradient-of-log-posterior" class="slide level2">
 <h2>MALA: compute gradient of log posterior</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>logpost_grad <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data, ...){</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>logpost_grad <span class="ot">&lt;-</span> <span class="cf">function</span>(par, data, ...){</span>
 <span id="cb9-2"><a></a>   no <span class="ot">&lt;-</span> data<span class="sc">$</span>no</span>
 <span id="cb9-3"><a></a>  y <span class="ot">&lt;-</span> data<span class="sc">$</span>y</span>
 <span id="cb9-4"><a></a>  mu <span class="ot">&lt;-</span> par[<span class="dv">1</span>]; sigma <span class="ot">&lt;-</span> par[<span class="dv">2</span>]</span>
 <span id="cb9-5"><a></a>  <span class="fu">c</span>(<span class="fu">sum</span>(no<span class="sc">*</span>(y<span class="sc">-</span>mu))<span class="sc">/</span>sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span>(mu <span class="sc">-</span> <span class="fl">0.01</span>)<span class="sc">/</span><span class="fl">0.01</span>,</span>
 <span id="cb9-6"><a></a>    <span class="sc">-</span><span class="fu">length</span>(y)<span class="sc">/</span>sigma <span class="sc">+</span> <span class="fu">sum</span>(no<span class="sc">*</span>(y<span class="sc">-</span>mu)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>sigma<span class="sc">^</span><span class="dv">3</span> <span class="sc">-</span><span class="fl">0.7</span></span>
 <span id="cb9-7"><a></a>  )</span>
-<span id="cb9-8"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-8"><a></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-compute-maximum-a-posteriori" class="slide level2">
 <h2>MALA: compute maximum a posteriori</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Starting values - MAP</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># Starting values - MAP</span></span>
 <span id="cb10-2"><a></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
 <span id="cb10-3"><a></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="fu">mean</span>(qdata<span class="sc">$</span>y), <span class="fl">0.5</span>),</span>
 <span id="cb10-4"><a></a>  <span class="at">fn =</span> <span class="cf">function</span>(x){<span class="sc">-</span><span class="fu">logpost</span>(x, <span class="at">data =</span> qdata)},</span>
@@ -556,24 +591,24 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb10-6"><a></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb10-7"><a></a>  <span class="at">method =</span> <span class="st">"BFGS"</span>)</span>
 <span id="cb10-8"><a></a><span class="co"># Check convergence </span></span>
-<span id="cb10-9"><a></a><span class="fu">logpost_grad</span>(map<span class="sc">$</span>par, <span class="at">data =</span> qdata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-9"><a></a><span class="fu">logpost_grad</span>(map<span class="sc">$</span>par, <span class="at">data =</span> qdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-starting-values-and-mass-matrix" class="slide level2">
 <h2>MALA: starting values and mass matrix</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># Set initial parameter values</span></span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a><span class="co"># Set initial parameter values</span></span>
 <span id="cb11-2"><a></a>curr <span class="ot">&lt;-</span> map<span class="sc">$</span>par </span>
 <span id="cb11-3"><a></a><span class="co"># Compute a mass matrix</span></span>
 <span id="cb11-4"><a></a>Amat <span class="ot">&lt;-</span> <span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
 <span id="cb11-5"><a></a><span class="co"># Cholesky root - for random number generation</span></span>
-<span id="cb11-6"><a></a>cholA <span class="ot">&lt;-</span> <span class="fu">chol</span>(Amat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-6"><a></a>cholA <span class="ot">&lt;-</span> <span class="fu">chol</span>(Amat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-containers-and-setup" class="slide level2">
 <h2>MALA: containers and setup</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="co"># Create containers for MCMC</span></span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="co"># Create containers for MCMC</span></span>
 <span id="cb12-2"><a></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L <span class="co"># number of iterations</span></span>
 <span id="cb12-3"><a></a>warmup <span class="ot">&lt;-</span> <span class="fl">1e3</span>L <span class="co"># adaptation period</span></span>
 <span id="cb12-4"><a></a>npar <span class="ot">&lt;-</span> <span class="dv">2</span>L</span>
@@ -583,13 +618,13 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb12-8"><a></a>acceptance <span class="ot">&lt;-</span> attempts <span class="ot">&lt;-</span> <span class="dv">0</span> </span>
 <span id="cb12-9"><a></a><span class="fu">colnames</span>(chains) <span class="ot">&lt;-</span> <span class="fu">names</span>(curr) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"mu"</span>,<span class="st">"sigma"</span>)</span>
 <span id="cb12-10"><a></a><span class="co"># Proposal variance proportional to inverse hessian at MAP</span></span>
-<span id="cb12-11"><a></a>prop_var <span class="ot">&lt;-</span> <span class="fu">diag</span>(prop_sd) <span class="sc">%*%</span> Amat <span class="sc">%*%</span> <span class="fu">diag</span>(prop_sd)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-11"><a></a>prop_var <span class="ot">&lt;-</span> <span class="fu">diag</span>(prop_sd) <span class="sc">%*%</span> Amat <span class="sc">%*%</span> <span class="fu">diag</span>(prop_sd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-sample-proposal-with-newton-step" class="slide level2">
 <h2>MALA: sample proposal with Newton step</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(B <span class="sc">+</span> warmup)){</span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(B <span class="sc">+</span> warmup)){</span>
 <span id="cb13-2"><a></a>  ind <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">1</span>, i <span class="sc">-</span> warmup)</span>
 <span id="cb13-3"><a></a>  <span class="co"># Compute the proposal mean for the Newton step</span></span>
 <span id="cb13-4"><a></a>  prop_mean <span class="ot">&lt;-</span> <span class="fu">c</span>(curr <span class="sc">+</span> damping <span class="sc">*</span> </span>
@@ -599,13 +634,13 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb13-8"><a></a>    <span class="at">n =</span> <span class="dv">1</span>,</span>
 <span id="cb13-9"><a></a>    <span class="at">mean =</span> prop_mean, </span>
 <span id="cb13-10"><a></a>    <span class="at">sigma =</span> prop_var))</span>
-<span id="cb13-11"><a></a><span class="co">#  [...]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-11"><a></a><span class="co">#  [...]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-reverse-step" class="slide level2">
 <h2>MALA: reverse step</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>  <span class="co"># Compute the reverse step</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>  <span class="co"># Compute the reverse step</span></span>
 <span id="cb14-2"><a></a>  curr_mean <span class="ot">&lt;-</span> <span class="fu">c</span>(prop <span class="sc">+</span> damping <span class="sc">*</span> </span>
 <span id="cb14-3"><a></a>     Amat <span class="sc">%*%</span> <span class="fu">logpost_grad</span>(prop, <span class="at">data =</span> qdata))</span>
 <span id="cb14-4"><a></a>  <span class="co"># log of ratio of bivariate Gaussian densities</span></span>
@@ -619,25 +654,25 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb14-12"><a></a>      <span class="at">sigma =</span> prop_var, </span>
 <span id="cb14-13"><a></a>      <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
 <span id="cb14-14"><a></a>  <span class="fu">logpost</span>(prop, <span class="at">data =</span> qdata) <span class="sc">-</span> </span>
-<span id="cb14-15"><a></a>    <span class="fu">logpost</span>(curr, <span class="at">data =</span> qdata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-15"><a></a>    <span class="fu">logpost</span>(curr, <span class="at">data =</span> qdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-metropolishastings-ratio" class="slide level2">
 <h2>MALA: Metropolis–Hastings ratio</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>  <span class="cf">if</span>(logmh <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>))){</span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>  <span class="cf">if</span>(logmh <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>))){</span>
 <span id="cb15-2"><a></a>    curr <span class="ot">&lt;-</span> prop</span>
 <span id="cb15-3"><a></a>    acceptance <span class="ot">&lt;-</span> acceptance <span class="sc">+</span> <span class="dv">1</span>L</span>
 <span id="cb15-4"><a></a>  }</span>
 <span id="cb15-5"><a></a>  attempts <span class="ot">&lt;-</span> attempts <span class="sc">+</span> <span class="dv">1</span>L</span>
 <span id="cb15-6"><a></a>  <span class="co"># Save current value</span></span>
-<span id="cb15-7"><a></a>  chains[ind,] <span class="ot">&lt;-</span> curr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-7"><a></a>  chains[ind,] <span class="ot">&lt;-</span> curr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mala-adaptation" class="slide level2">
 <h2>MALA: adaptation</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a>  <span class="cf">if</span>(i <span class="sc">%%</span> <span class="dv">100</span> <span class="sc">&amp;</span> i <span class="sc">&lt;</span> warmup){</span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a>  <span class="cf">if</span>(i <span class="sc">%%</span> <span class="dv">100</span> <span class="sc">&amp;</span> i <span class="sc">&lt;</span> warmup){</span>
 <span id="cb16-2"><a></a>    <span class="co"># Check acceptance rate and increase/decrease variance</span></span>
 <span id="cb16-3"><a></a>    out <span class="ot">&lt;-</span> hecbayes<span class="sc">::</span><span class="fu">adaptive</span>(</span>
 <span id="cb16-4"><a></a>      <span class="at">attempts =</span> attempts, <span class="co"># counter for number of attempts</span></span>
@@ -649,188 +684,28 @@ Y_i &amp;\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 <span id="cb16-10"><a></a>    attempts <span class="ot">&lt;-</span> out<span class="sc">$</span>att <span class="co"># idem, otherwise unchanged</span></span>
 <span id="cb16-11"><a></a>    prop_var <span class="ot">&lt;-</span> <span class="fu">diag</span>(prop_sd) <span class="sc">%*%</span> Amat <span class="sc">%*%</span> <span class="fu">diag</span>(prop_sd)</span>
 <span id="cb16-12"><a></a>  }</span>
-<span id="cb16-13"><a></a><span class="er">}</span> <span class="co"># End of MCMC for loop</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-13"><a></a><span class="er">}</span> <span class="co"># End of MCMC for loop</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="gibbs-sampling" class="slide level2">
-<h2>Gibbs sampling</h2>
-<p>The Gibbs sampling algorithm builds a Markov chain by iterating through a sequence of conditional distributions.</p>
-
-<img data-src="bayesmod-slides5_files/figure-revealjs/fig-Gibbs-steps-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-Gibbs-steps"><p class="caption">
-Figure&nbsp;3: Sampling trajectory for a bivariate target using Gibbs sampling.
-</p></section>
-<section id="gibbs-sampler" class="slide level2">
-<h2>Gibbs sampler</h2>
-<p>Split the parameter vector <span class="math inline">\(\boldsymbol{\theta} \in \boldsymbol{\Theta} \subseteq \mathbb{R}^p\)</span> into <span class="math inline">\(m \leq p\)</span> blocks, <span class="math display">\[\boldsymbol{\theta}^{[j]}\quad j=1, \ldots, m\]</span> such that, conditional on the remaining components of the parameter vector <span class="math inline">\(\boldsymbol{\theta}^{-[j]}\)</span>, the conditional posterior <span class="math display">\[p(\boldsymbol{\theta}^{[j]} \mid \boldsymbol{\theta}^{-[j]}, \boldsymbol{y})\]</span> is from a known distribution from which we can easily simulate.</p>
-</section>
-<section id="gibbs-sampling-update" class="slide level2">
-<h2>Gibbs sampling update</h2>
-<p>At iteration <span class="math inline">\(t\)</span>, we can update each block in turn: note that the <span class="math inline">\(k\)</span>th block uses the partially updated state <span class="math display">\[\begin{align*}
-\boldsymbol{\theta}^{-[k]\star} = (\boldsymbol{\theta}_{t}^{[1]}, \ldots, \boldsymbol{\theta}_{t}^{[k-1]},\boldsymbol{\theta}_{t-1}^{[k+1]}, \boldsymbol{\theta}_{t-1}^{[m]})
-\end{align*}\]</span> which corresponds to the current value of the parameter vector after the updates.</p>
-</section>
-<section id="notes-on-gibbs-sampling" class="slide level2">
-<h2>Notes on Gibbs sampling</h2>
-<ul>
-<li>Special case of Metropolis–Hastings with conditional density as proposal <span class="math inline">\(q\)</span>.</li>
-<li>The benefit is that all proposals get accepted, <span class="math inline">\(R=1\)</span>!</li>
-<li>No tuning parameter, but parametrization matters.</li>
-<li>Automatic acceptance does not equal efficiency.</li>
-</ul>
-<p>To check the validity of the Gibbs sampler, see the methods proposed in <span class="citation" data-cites="Geweke:2004">Geweke (<a href="#/references" role="doc-biblioref" onclick="">2004</a>)</span>.</p>
-</section>
-<section id="efficiency-of-gibbs-sampling" class="slide level2">
-<h2>Efficiency of Gibbs sampling</h2>
-<p>As the dimension of the parameter space increases, and as the correlation between components becomes larger, the efficiency of the Gibbs sampler degrades</p>
-
-<img data-src="bayesmod-slides5_files/figure-revealjs/fig-gibbs-normal-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-gibbs-normal"><p class="caption">
-Figure&nbsp;4: Trace plots (top) and correlograms (bottom) for the first component of a Gibbs sampler with <span class="math inline">\(d=20\)</span> equicorrelated Gaussian variates with correlation <span class="math inline">\(\rho=0.9\)</span> (left) and <span class="math inline">\(d=3\)</span> with equicorrelation <span class="math inline">\(\rho=0.5\)</span> (right).
-</p></section>
-<section id="gibbs-sampling-requires-work" class="slide level2">
-<h2>Gibbs sampling requires work!</h2>
-<ul>
-<li>You need to determine all of the relevant conditional distributions, which often relies on setting conditionally conjugate priors.</li>
-<li>In large models with multiple layers, full conditionals may only depend on a handful of parameters (via directed acyclic graph and moral graph of the model; not covered).</li>
-</ul>
-</section>
-<section id="example-of-gibbs-sampling" class="slide level2">
-<h2>Example of Gibbs sampling</h2>
-<p>Consider independent and identically distributed observations, with <span class="math display">\[\begin{align*}
-Y_i &amp;\sim \mathsf{Gauss}(\mu, \tau), \qquad i=1, \ldots, n)
-\\\mu &amp;\sim \mathsf{Gauss}(\nu, \omega)\\
-\tau &amp;\sim \mathsf{inv. gamma}(\alpha, \beta)
-\end{align*}\]</span></p>
-<p>The joint posterior is not available in closed form, but the independent priors for the mean and variance of the observations are conditionally conjugate.</p>
-</section>
-<section id="joint-posterior-for-gibbs-sample" class="slide level2">
-<h2>Joint posterior for Gibbs sample</h2>
-<p>Write the posterior density as usual, <span class="math display">\[\begin{align*}
-&amp;p(\mu, \tau \mid \boldsymbol{y}) \propto \tau^{-\alpha-1}\exp(-\beta/\tau)\\ &amp;\quad \times \tau^{-n/2}\exp\left\{-\frac{1}{2\tau}\left(\sum_{i=1}^n y_i^2 - 2\mu \sum_{i=1}^n y_i+n\mu^2 \right)\right\}\\&amp;\quad \times \exp\left\{-\frac{(\mu-\nu)^2}{2\omega}\right\}
-\end{align*}\]</span></p>
-</section>
-<section id="recognizing-distributions-from-posterior" class="slide level2">
-<h2>Recognizing distributions from posterior</h2>
-<p>Consider the conditional densities of each parameter in turn (up to proportionality): <span class="math display">\[\begin{align*}
-p(\mu \mid \tau, \boldsymbol{y}) &amp;\propto \exp\left\{-\frac{1}{2} \left( \frac{\mu^2-2\mu\overline{y}}{\tau/n} + \frac{\mu^2-2\nu \mu}{\omega}\right)\right\}\\
-p(\tau \mid \mu, \boldsymbol{y}) &amp; \propto \tau^{-n/2-\alpha-1}\exp\left[-\frac{\left\{\frac{\sum_{i=1}^n (y_i-\mu)^2}{2} + \beta \right\}}{\tau}\right]
-\end{align*}\]</span></p>
-</section>
-<section id="gibs-sample" class="slide level2">
-<h2>Gibs sample</h2>
-<p>We can simulate in turn <span class="math display">\[\begin{align*}
-\mu_t \mid \tau_{t-1}, \boldsymbol{y} &amp;\sim \mathsf{Gauss}\left(\frac{n\overline{y}\omega+\tau \nu}{\tau + n\omega}, \frac{\omega \tau}{\tau + n\omega}\right)\\
-\tau_t \mid \mu_t, \boldsymbol{y} &amp;\sim \mathsf{inv. gamma}\left\{\frac{n}{2}+\alpha, \frac{\sum_{i=1}^n (y_i-\mu)^2}{2} + \beta\right\}.
-\end{align*}\]</span></p>
-</section>
-<section id="data-augmentation-and-auxiliary-variables" class="slide level2">
-<h2>Data augmentation and auxiliary variables</h2>
-<p>When the likelihood <span class="math inline">\(p(\boldsymbol{y}; \boldsymbol{\theta})\)</span> is intractable or costly to evaluate (e.g., mixtures, missing data, censoring), auxiliary variables are introduced to simplify calculations.</p>
-<p>Consider auxiliary variables <span class="math inline">\(\boldsymbol{U} \in \mathbb{R}^k\)</span> such that <span class="math display">\[\int_{\mathbb{R}^k} p(\boldsymbol{U}, \boldsymbol{\theta}\mid \boldsymbol{y}) \mathrm{d} \boldsymbol{U} = p(\boldsymbol{\theta}\mid \boldsymbol{y}),\]</span> i.e., the marginal distribution is that of interest, but evaluation of <span class="math inline">\(p(\boldsymbol{U}, \boldsymbol{\theta}; \boldsymbol{y})\)</span> is cheaper.</p>
-</section>
-<section id="bayesian-augmentation" class="slide level2">
-<h2>Bayesian augmentation</h2>
-<p>The data augmentation algorithm <span class="citation" data-cites="Tanner.Wong:1987">(<a href="#/references" role="doc-biblioref" onclick="">Tanner &amp; Wong, 1987</a>)</span> consists in running a Markov chain on the augmented state space <span class="math inline">\((\Theta, \mathbb{R}^k)\)</span>, simulating in turn from the conditionals</p>
-<ul>
-<li><span class="math inline">\(p(\boldsymbol{U}\mid \boldsymbol{\theta}, \boldsymbol{y})\)</span> and</li>
-<li><span class="math inline">\(p(\boldsymbol{\theta}\mid \boldsymbol{U}, \boldsymbol{y})\)</span></li>
-</ul>
-<p>For more details and examples, see <span class="citation" data-cites="vanDyk.Meng:2001">Dyk &amp; Meng (<a href="#/references" role="doc-biblioref" onclick="">2001</a>)</span> and <span class="citation" data-cites="Hobert:2011">Hobert (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span>.</p>
-</section>
-<section id="data-augmentation-probit-example" class="slide level2">
-<h2>Data augmentation: probit example</h2>
-<p>Consider independent binary responses <span class="math inline">\(\boldsymbol{Y}_i\)</span>, with <span class="math display">\[\begin{align*}
-p_i = \Pr(Y_i=1) = \Phi(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip}),
-\end{align*}\]</span> where <span class="math inline">\(\Phi\)</span> is the distribution function of the standard Gaussian distribution. The likelihood of the probit model is <span class="math display">\[L(\boldsymbol{\beta}; \boldsymbol{y}) = \prod_{i=1}^n p_i^{y_i}(1-p_i)^{1-y_i},\]</span> and this prevents easy simulation.</p>
-</section>
-<section id="probit-augmentation" class="slide level2">
-<h2>Probit augmentation</h2>
-<p>We can consider a data augmentation scheme where <span class="math inline">\(Y_i = \mathrm{I}(Z_i &gt; 0)\)</span>, where <span class="math inline">\(Z_i \sim \mathsf{Gauss}(\mathbf{x}_i\boldsymbol{\beta}, 1)\)</span>, where <span class="math inline">\(\mathbf{x}_i\)</span> is the <span class="math inline">\(i\)</span>th row of the design matrix.</p>
-<p>The augmented data likelihood is <span class="math display">\[\begin{align*}
-p(\boldsymbol{z}, \boldsymbol{y} \mid \boldsymbol{\beta}) &amp;\propto \exp\left\{-\frac{1}{2}(\boldsymbol{z} - \mathbf{X}\boldsymbol{\beta})^\top(\boldsymbol{z} - \mathbf{X}\boldsymbol{\beta})\right\} \\&amp;\quad \times \prod_{i=1}^n \mathrm{I}(z_i &gt; 0)^{y_i}\mathrm{I}(z_i \le 0)^{1-y_i}
-\end{align*}\]</span></p>
-</section>
-<section id="conditional-distributions-for-probit-regression" class="slide level2">
-<h2>Conditional distributions for probit regression</h2>
-<p><span class="math display">\[\begin{align*}
-\boldsymbol{\beta} \mid \boldsymbol{z}, \boldsymbol{y} &amp;\sim \mathsf{Gauss}\left\{\widehat{\boldsymbol{\beta}}, (\mathbf{X}^\top\mathbf{X})^{-1}\right\}\\
-Z_i \mid y_i, \boldsymbol{\beta} &amp;\sim \begin{cases}
-\mathsf{trunc. Gauss}(\mathbf{x}_i\boldsymbol{\beta}, -\infty, 0) &amp; y_i =0 \\
-\mathsf{trunc. Gauss}(\mathbf{x}_i\boldsymbol{\beta}, 0, \infty) &amp; y_i =1.
-\end{cases}
-\end{align*}\]</span> with <span class="math inline">\(\widehat{\boldsymbol{\beta}}=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{z}\)</span> the ordinary least square estimator.</p>
-</section>
-<section id="data-augmentation-with-scale-mixture-of-gaussian" class="slide level2">
-<h2>Data augmentation with scale mixture of Gaussian</h2>
-<p>The Laplace distribution with mean <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma\)</span> has density <span class="math display">\[\begin{align*}
-f(x; \mu, \sigma) = \frac{1}{2\sigma}\exp\left(-\frac{|x-\mu|}{\sigma}\right),
-\end{align*}\]</span> and can be expressed as a scale mixture of Gaussians, where <span class="math inline">\(Y \mid \tau \sim \mathsf{Laplace}(\mu, \tau)\)</span> is equivalent to <span class="math inline">\(Z \mid \tau \sim \mathsf{Gauss}(\mu, \tau)\)</span> and <span class="math inline">\(\tau \sim \mathsf{expo}\{(2\sigma)^{-1}\}\)</span>.</p>
-</section>
-<section id="joint-posterior-for-laplace-model" class="slide level2">
-<h2>Joint posterior for Laplace model</h2>
-<p>With <span class="math inline">\(p(\mu, \sigma) \propto \sigma^{-1}\)</span>, the joint posterior for the i.i.d. sample is <span class="math display">\[\begin{align*}
-p(\boldsymbol{\tau}, \mu, \sigma \mid \boldsymbol{y}) &amp;\propto \left(\prod_{i=1}^n \tau_i\right)^{-1/2}\exp\left\{-\frac{1}{2}\sum_{i=1}^n \frac{(y_i-\mu)^2}{\tau_i}\right\} \\&amp;\quad \times \frac{1}{\sigma^{n+1}}\exp\left(-\frac{1}{2\sigma}\sum_{i=1}^n \tau_i\right)
-\end{align*}\]</span></p>
-</section>
-<section id="conditional-distributions" class="slide level2">
-<h2>Conditional distributions</h2>
-<p>The conditionals for <span class="math inline">\(\mu \mid \cdots\)</span> and <span class="math inline">\(\sigma \mid \cdots\)</span> are, as usual, Gaussian and inverse gamma, respectively. The variances, <span class="math inline">\(\tau_j\)</span>, are conditionally independent of one another, with <span class="math display">\[\begin{align*}
-p(\tau_j \mid \mu, \sigma, y_j) &amp;\propto \tau_j^{-1/2}\exp\left\{-\frac{1}{2}\frac{(y_j-\mu)^2}{\tau_j} -\frac{1}{2} \frac{\tau_j}{\sigma}\right\}
-\end{align*}\]</span></p>
-</section>
-<section id="inverse-transformation" class="slide level2">
-<h2>Inverse transformation</h2>
-<p>With the change of variable <span class="math inline">\(\xi_j=1/\tau_j\)</span>, we have <span class="math display">\[\begin{align*}
-p(\xi_j \mid \mu, \sigma, y_j) &amp;\propto \xi_j^{-3/2}\exp\left\{-\frac{1}{2\sigma}\frac{\xi_j(y_j-\mu)^2}{\sigma} -\frac{1}{2} \frac{1}{\xi_j}\right\}\\
-\end{align*}\]</span> and we recognize the Wald (or inverse Gaussian) density, where <span class="math inline">\(\xi_i \sim \mathsf{Wald}(\nu_i, \lambda)\)</span> with <span class="math inline">\(\nu_i=\{\sigma/(y_i-\mu)^2\}^{1/2}\)</span> and <span class="math inline">\(\lambda=\sigma^{-1}\)</span>.</p>
-</section>
-<section id="bayesian-lasso" class="slide level2">
-<h2>Bayesian LASSO</h2>
-<p><span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span> use this hierarchical construction to defined the Bayesian LASSO. With a model matrix <span class="math inline">\(\mathbf{X}\)</span> whose columns are standardized to have mean zero and unit standard deviation, we may write <span class="math display">\[\begin{align*}
-\boldsymbol{Y} \mid \mu, \boldsymbol{\beta}, \sigma^2 &amp;\sim  \mathsf{Gauss}_n(\mu \boldsymbol{1}_n + \mathbf{X}\boldsymbol{\beta}, \sigma \mathbf{I}_n)\\
-\beta_j \mid \sigma, \tau &amp;\sim \mathsf{Gauss}(0, \sigma\tau)\\
-\tau &amp;\sim \mathsf{expo}(\lambda/2)
-\end{align*}\]</span></p>
-</section>
-<section id="comment-about-bayesian-lasso" class="slide level2">
-<h2>Comment about Bayesian LASSO</h2>
-<ul>
-<li>If we set an improper prior <span class="math inline">\(p(\mu, \sigma) \propto \sigma^{-1}\)</span>, the resulting conditional distributions are all available and thus the model is amenable to Gibbs sampling.</li>
-<li>The Bayesian LASSO places a Laplace penalty on the regression coefficients, with lower values of <span class="math inline">\(\lambda\)</span> yielding more shrinkage.</li>
-<li>Contrary to the frequentist setting, none of the posterior draws of <span class="math inline">\(\boldsymbol{\beta}\)</span> are exactly zero.</li>
-</ul>
 </section>
 <section id="summary" class="slide level2">
 <h2>Summary</h2>
-<ul>
-<li>Gibbs sampling is a special case of Metropolis–Hastings algorithm that leads to acceptance</li>
-<li>We need to get the conditional distribution</li>
-</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-vanDyk.Meng:2001" class="csl-entry" role="listitem">
-Dyk, D. A. van, &amp; Meng, X.-L. (2001). The art of data augmentation. <em>Journal of Computational and Graphical Statistics</em>, <em>10</em>(1), 1–50. <a href="https://doi.org/10.1198/10618600152418584">https://doi.org/10.1198/10618600152418584</a>
+<div id="ref-Green:2001" class="csl-entry" role="listitem">
+Green, P. J. (2001). A primer on <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo. <em>Monographs on Statistics and Applied Probability</em>, <em>87</em>, 1–62.
 </div>
-<div id="ref-Geweke:2004" class="csl-entry" role="listitem">
-Geweke, J. (2004). Getting it right: Joint distribution tests of posterior simulators. <em>Journal of the American Statistical Association</em>, <em>99</em>(467), 799–804. <a href="https://doi.org/10.1198/016214504000001132">https://doi.org/10.1198/016214504000001132</a>
-</div>
-<div id="ref-Hobert:2011" class="csl-entry" role="listitem">
-Hobert, J. (2011). The data augmentation algorithm: Theory and methodology. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 253–293). CRC Press. <a href="https://doi.org/10.1201/b10905-11">https://doi.org/10.1201/b10905-11</a>
-</div>
-<div id="ref-Park.Casella:2008" class="csl-entry" role="listitem">
-Park, T., &amp; Casella, G. (2008). The <span>B</span>ayesian <span>L</span>asso. <em>Journal of the American Statistical Association</em>, <em>103</em>(482), 681–686. <a href="https://doi.org/10.1198/016214508000000337">https://doi.org/10.1198/016214508000000337</a>
+<div id="ref-Kallioinen:2023" class="csl-entry" role="listitem">
+Kallioinen, N., Paananen, T., Bürkner, P.-C., &amp; Vehtari, A. (2023). Detecting and diagnosing prior and likelihood sensitivity with power-scaling. <em>Statistics and Computing</em>, <em>34</em>(1), 57. <a href="https://doi.org/10.1007/s11222-023-10366-5">https://doi.org/10.1007/s11222-023-10366-5</a>
 </div>
 <div id="ref-Rue.Held:2005" class="csl-entry" role="listitem">
 Rue, H., &amp; Held, L. (2005). <em><span>G</span>aussian <span>M</span>arkov random fields: Theory and applications</em> (p. 280). CRC Press.
 </div>
 <div id="ref-Sherlock:2013" class="csl-entry" role="listitem">
 Sherlock, C. (2013). Optimal scaling of the random walk <span>M</span>etropolis: General criteria for the 0.234 acceptance rule. <em>Journal of Applied Probability</em>, <em>50</em>(1), 1–15. <a href="https://doi.org/10.1239/jap/1363784420">https://doi.org/10.1239/jap/1363784420</a>
-</div>
-<div id="ref-Tanner.Wong:1987" class="csl-entry" role="listitem">
-Tanner, M. A., &amp; Wong, W. H. (1987). The calculation of posterior distributions by data augmentation. <em>Journal of the American Statistical Association</em>, <em>82</em>(398), 528–540. <a href="https://doi.org/10.1080/01621459.1987.10478458">https://doi.org/10.1080/01621459.1987.10478458</a>
 </div>
 </div>
 </section>
@@ -1089,173 +964,190 @@ Tanner, M. A., &amp; Wong, W. H. (1987). The calculation of posterior distributi
     </script>
 
     <script id="quarto-html-after-body" type="application/javascript">
-      window.document.addEventListener("DOMContentLoaded", function (event) {
-        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-        tabsets.forEach(function(tabset) {
-          const tabby = new Tabby('#' + tabset.id);
-        });
-        const isCodeAnnotation = (el) => {
-          for (const clz of el.classList) {
-            if (clz.startsWith('code-annotation-')) {                     
-              return true;
-            }
-          }
-          return false;
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
         }
-        const onCopySuccess = function(e) {
-          // button target
-          const button = e.trigger;
-          // don't keep focus
-          button.blur();
-          // flash "checked"
-          button.classList.add('code-copy-button-checked');
-          var currentTitle = button.getAttribute("title");
-          button.setAttribute("title", "Copied!");
-          let tooltip;
-          if (window.bootstrap) {
-            button.setAttribute("data-bs-toggle", "tooltip");
-            button.setAttribute("data-bs-placement", "left");
-            button.setAttribute("data-bs-title", "Copied!");
-            tooltip = new bootstrap.Tooltip(button, 
-              { trigger: "manual", 
-                customClass: "code-copy-button-tooltip",
-                offset: [0, -8]});
-            tooltip.show();    
-          }
-          setTimeout(function() {
-            if (tooltip) {
-              tooltip.hide();
-              button.removeAttribute("data-bs-title");
-              button.removeAttribute("data-bs-toggle");
-              button.removeAttribute("data-bs-placement");
-            }
-            button.setAttribute("title", currentTitle);
-            button.classList.remove('code-copy-button-checked');
-          }, 1000);
-          // clear code selection
-          e.clearSelection();
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
         }
-        const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-        }
-        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-          text: getTextToCopy
-        });
-        clipboard.on('success', onCopySuccess);
-        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-            text: getTextToCopy,
-            container: window.document.getElementById('quarto-embedded-source-code-modal')
-          });
-          clipboardModal.on('success', onCopySuccess);
-        }
-          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var mailtoRegex = new RegExp(/^mailto:/);
-            var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
-          var isInternal = (href) => {
-              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-          }
-          // Inspect non-navigation links and adorn them if external
-         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-          for (var i=0; i<links.length; i++) {
-            const link = links[i];
-            if (!isInternal(link.href)) {
-              // undo the damage that might have been done by quarto-nav.js in the case of
-              // links that we want to consider external
-              if (link.dataset.originalHref !== undefined) {
-                link.href = link.dataset.originalHref;
-              }
-            }
-          }
-        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-          const config = {
-            allowHTML: true,
-            maxWidth: 500,
-            delay: 100,
-            arrow: false,
-            appendTo: function(el) {
-                return el.closest('section.slide') || el.parentElement;
-            },
-            interactive: true,
-            interactiveBorder: 10,
-            theme: 'light-border',
-            placement: 'bottom-start',
-          };
-          if (contentFn) {
-            config.content = contentFn;
-          }
-          if (onTriggerFn) {
-            config.onTrigger = onTriggerFn;
-          }
-          if (onUntriggerFn) {
-            config.onUntrigger = onUntriggerFn;
-          }
-            config['offset'] = [0,0];
-            config['maxWidth'] = 700;
-          window.tippy(el, config); 
-        }
-        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-        for (var i=0; i<noterefs.length; i++) {
-          const ref = noterefs[i];
-          tippyHover(ref, function() {
-            // use id or data attribute instead here
-            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-            try { href = new URL(href).hash; } catch {}
-            const id = href.replace(/^#\/?/, "");
-            const note = window.document.getElementById(id);
-            if (note) {
-              return note.innerHTML;
-            } else {
-              return "";
-            }
-          });
-        }
-        const findCites = (el) => {
-          const parentEl = el.parentElement;
-          if (parentEl) {
-            const cites = parentEl.dataset.cites;
-            if (cites) {
-              return {
-                el,
-                cites: cites.split(' ')
-              };
-            } else {
-              return findCites(el.parentElement)
-            }
-          } else {
-            return undefined;
-          }
-        };
-        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-        for (var i=0; i<bibliorefs.length; i++) {
-          const ref = bibliorefs[i];
-          const citeInfo = findCites(ref);
-          if (citeInfo) {
-            tippyHover(citeInfo.el, function() {
-              var popup = window.document.createElement('div');
-              citeInfo.cites.forEach(function(cite) {
-                var citeDiv = window.document.createElement('div');
-                citeDiv.classList.add('hanging-indent');
-                citeDiv.classList.add('csl-entry');
-                var biblioDiv = window.document.getElementById('ref-' + cite);
-                if (biblioDiv) {
-                  citeDiv.innerHTML = biblioDiv.innerHTML;
-                }
-                popup.appendChild(citeDiv);
-              });
-              return popup.innerHTML;
-            });
-          }
-        }
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      </script>
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
     
 
 </body></html>
