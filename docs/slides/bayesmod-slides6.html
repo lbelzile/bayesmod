@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2bb0ec5e928ee8c40b12725cb7836c35.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.1">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -17,9 +17,6 @@
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
   <style>
-    /* Default styles provided by pandoc.
-    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -31,72 +28,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -118,7 +49,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-0889ea6b10ab650f3a364291bfeaa97a.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-da069d641d4916e8549bf8dc2b95f825.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -217,7 +148,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Computational strategies and diagnostics</p>
+  <p class="subtitle">Gibbs sampling and Bayesian workflow</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -227,222 +158,163 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Wednesday Sep 16, 2026</p>
+  <p class="date">Last compiled Tuesday Sep 22, 2026</p>
 </section>
-<section id="outline" class="slide level2">
-<h2>Outline</h2>
-<p>How do we assess convergence of a MCMC algorithm?</p>
-<ul>
-<li>the algorithm implementation must be correct,</li>
-<li>the chain must have converged to the target posterior.</li>
-<li>the effective sample size must be sufficiently large for inference.</li>
-</ul>
-</section>
-<section id="strategies" class="slide level2">
-<h2>Strategies</h2>
-<p>Many diagnostics require running multiple chains</p>
-<ul>
-<li>check within vs between variance,</li>
-<li>determine whether they converge to the same target.</li>
-</ul>
-</section>
-<section id="correct-implementation" class="slide level2">
-<h2>Correct implementation</h2>
-<p>We can generate artificial data to check the procedure.</p>
-<p>Simulation-based calibration <span class="citation" data-cites="Talts:2020">(<a href="#/references" role="doc-biblioref" onclick="">Talts et al., 2020</a>)</span> proceeds with, in order</p>
-<ol type="1">
-<li><span class="math inline">\(\boldsymbol{\theta}_0 \sim p(\boldsymbol{\theta}),\)</span></li>
-<li><span class="math inline">\(\boldsymbol{y}_0 \sim p(\boldsymbol{y} \mid \boldsymbol{\theta}_0),\)</span></li>
-<li><span class="math inline">\(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_B \sim p(\boldsymbol{\theta} \mid \boldsymbol{y}_0 ).\)</span></li>
-</ol>
-</section>
-<section id="simulation-based-calibration" class="slide level2">
-<h2>Simulation-based calibration</h2>
-<ul>
-<li>Conditional on the simulated <span class="math inline">\(\boldsymbol{y}\)</span>, the distribution of <span class="math inline">\(\boldsymbol{\theta}_0\)</span> is the same as that of <span class="math inline">\(\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_B.\)</span></li>
-<li>We do a dimension reduction step taking the test function <span class="math inline">\(t(\cdot)\)</span> to get the rank of the prior draw among the posterior ones, breaking ties at random if any.</li>
-<li>These steps are repeated <span class="math inline">\(K\)</span> times, yielding <span class="math inline">\(K\)</span> test functions <span class="math inline">\(T_1, \ldots, T_K.\)</span> We then test for uniformity using results from <span class="citation" data-cites="Sailynoja:2022">Säilynoja et al. (<a href="#/references" role="doc-biblioref" onclick="">2022</a>)</span>.</li>
-</ul>
-</section>
-<section id="breaking-down-the-markov-chain" class="slide level2">
-<h2>Breaking down the Markov chain</h2>
-<p>We distinguish between three phases</p>
-<ul>
-<li><strong>burn in</strong> period: initial draws allowing the algorithm to converge to it’s stationary distribution (discarded)</li>
-<li><strong>warmup</strong> adaptation period: tuning period for the proposal std. deviation, etc. (discarded)</li>
-<li>sampling period: draws post burn in and warmup that are kept for inference</li>
-</ul>
-<p>We can optionally <strong>thin</strong> by keeping one every <span class="math inline">\(k\)</span> iterations from the sampling period to reduce the storage.</p>
-</section>
-<section id="visual-diagnostic-trace-plots" class="slide level2">
-<h2>Visual diagnostic: trace plots</h2>
-<p>Display the Markov chain sample path as a function of the number of iterations.</p>
-<ul>
-<li>Ideally, run multiple chains to see if they converge to the same mode (for multimodal behaviour).</li>
-<li>Markov chains should look like a fat hairy caterpillar!</li>
-<li>Check the <code>bayesplot</code> and <code>coda</code> <strong>R</strong> packages (trace plot, trace rank, correlograms, marginal densities, etc.)</li>
-</ul>
-</section>
-<section id="checking-convergence-with-multiple-chains" class="slide level2">
-<h2>Checking convergence with multiple chains</h2>
+<section id="gibbs-sampling" class="slide level2">
+<h2>Gibbs sampling</h2>
+<p>The Gibbs sampling algorithm builds a Markov chain by iterating through a sequence of conditional distributions.</p>
 
-<img data-src="fig/catterpillar_traceplots.png" class="r-stretch quarto-figure-center"><p class="caption">Four healthy parallel chains for parameters.</p></section>
-<section id="trace-rank-plot" class="slide level2">
-<h2>Trace rank plot</h2>
-<p>A <strong>trace rank</strong> plot compares the rank of the values of the different chain at a given iteration.</p>
-<ul>
-<li>With good mixing, the ranks should switch frequently and be distributed uniformly across integers.</li>
-</ul>
-</section>
-<section id="effective-sample-size" class="slide level2">
-<h2>Effective sample size</h2>
-<p>Are my chains long enough to compute reliable summaries?</p>
-<p>Compute the sample size we would have with independent draws by taking <span class="math display">\[
-\mathsf{ESS} = \frac{B}{\left\{1+2\sum_{t=1}^\infty \rho_t\right\}}
-\]</span> where <span class="math inline">\(\rho_t\)</span> is the lag <span class="math inline">\(t\)</span> autocorrelation.</p>
-<p>The relative effective sample size is simply <span class="math inline">\(\mathsf{ESS}/B\)</span>: small values indicate pathological or inefficient samplers.</p>
-</section>
-<section id="how-many-samples" class="slide level2">
-<h2>How many samples?</h2>
-<p>We want our average estimate to be reliable!</p>
-<ul>
-<li><p>We probably need <span class="math inline">\(\mathsf{ESS}\)</span> to be several hundred</p></li>
-<li><p>We can estimate the variance of the target to know the precision</p></li>
-<li><p>(related question: how many significant digits to report?)</p></li>
-</ul>
-</section>
-<section id="estimating-the-variance-block-method" class="slide level2">
-<h2>Estimating the variance (block method)</h2>
-<ol type="1">
-<li>Break the chain of length <span class="math inline">\(B\)</span> (after burn in) in <span class="math inline">\(K\)</span> blocks of size <span class="math inline">\(\approx K/B\)</span>.</li>
-<li>Compute the sample mean of each segment. These values form a Markov chain and should be approximately uncorrelated.</li>
-<li>Compute the standard deviation of the segments mean. Rescale by <span class="math inline">\(K^{-1/2}\)</span> to get standard error of the global mean.</li>
-</ol>
-<p>More efficient methods using overlapping blocks exists.</p>
-</section>
-<section id="block-means-in-pictures" class="slide level2">
-<h2>Block means in pictures</h2>
-
-<img data-src="bayesmod-slides6_files/figure-revealjs/fig-mcmc-batchmean-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-mcmc-batchmean"><p class="caption">
-Figure&nbsp;1: Calculation of the standard error of the posterior mean using the batch method.
+<img data-src="bayesmod-slides6_files/figure-revealjs/fig-Gibbs-steps-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-Gibbs-steps"><p class="caption">
+Figure&nbsp;1: Sampling trajectory for a bivariate target using Gibbs sampling.
 </p></section>
-<section id="cautionary-warning-about-stationarity" class="slide level2">
-<h2>Cautionary warning about stationarity</h2>
-<p>Batch means only works if the chain is sampling from the stationary distribution!</p>
-<p>The previous result (and any estimate) will be unreliable and biased if the chain is not (yet) sampling from the posterior.</p>
+<section id="gibbs-sampler" class="slide level2">
+<h2>Gibbs sampler</h2>
+<p>Split the parameter vector <span class="math inline">\(\boldsymbol{\theta} \in \boldsymbol{\Theta} \subseteq \mathbb{R}^p\)</span> into <span class="math inline">\(m \leq p\)</span> blocks, <span class="math display">\[\boldsymbol{\theta}^{[j]}\quad j=1, \ldots, m\]</span> such that, conditional on the remaining components of the parameter vector <span class="math inline">\(\boldsymbol{\theta}^{-[j]}\)</span>, the conditional posterior <span class="math display">\[p(\boldsymbol{\theta}^{[j]} \mid \boldsymbol{\theta}^{-[j]}, \boldsymbol{y})\]</span> is from a known distribution from which we can easily simulate.</p>
 </section>
-<section id="lack-of-stationarity" class="slide level2">
-<h2>Lack of stationarity</h2>
+<section id="gibbs-sampling-update" class="slide level2">
+<h2>Gibbs sampling update</h2>
+<p>At iteration <span class="math inline">\(t\)</span>, we can update each block in turn: note that the <span class="math inline">\(k\)</span>th block uses the partially updated state <span class="math display">\[\begin{align*}
+\boldsymbol{\theta}^{-[k]\star} = (\boldsymbol{\theta}_{t}^{[1]}, \ldots, \boldsymbol{\theta}_{t}^{[k-1]},\boldsymbol{\theta}_{t-1}^{[k+1]}, \boldsymbol{\theta}_{t-1}^{[m]})
+\end{align*}\]</span> which corresponds to the current value of the parameter vector after the updates.</p>
+</section>
+<section id="notes-on-gibbs-sampling" class="slide level2">
+<h2>Notes on Gibbs sampling</h2>
+<ul>
+<li>Special case of Metropolis–Hastings with conditional density as proposal <span class="math inline">\(q\)</span>.</li>
+<li>The benefit is that all proposals get accepted, <span class="math inline">\(R=1\)</span>!</li>
+<li>No tuning parameter, but parametrization matters.</li>
+<li>Automatic acceptance does not equal efficiency.</li>
+</ul>
+<p>To check the validity of the Gibbs sampler, see the methods proposed in <span class="citation" data-cites="Geweke:2004">Geweke (<a href="#/references" role="doc-biblioref" onclick="">2004</a>)</span>.</p>
+</section>
+<section id="efficiency-of-gibbs-sampling" class="slide level2">
+<h2>Efficiency of Gibbs sampling</h2>
+<p>As the dimension of the parameter space increases, and as the correlation between components becomes larger, the efficiency of the Gibbs sampler degrades</p>
 
-<img data-src="bayesmod-slides6_files/figure-revealjs/fig-badstart-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-badstart"><p class="caption">
-Figure&nbsp;2: Traceplots of three Markov chains for the same target with different initial values for the first 500 iterations (left) and trace rank plot after discarding these (right). The latter is indicative of the speed of mixing.
+<img data-src="bayesmod-slides6_files/figure-revealjs/fig-gibbs-normal-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-gibbs-normal"><p class="caption">
+Figure&nbsp;2: Trace plots (top) and correlograms (bottom) for the first component of a Gibbs sampler with <span class="math inline">\(d=20\)</span> equicorrelated Gaussian variates with correlation <span class="math inline">\(\rho=0.9\)</span> (left) and <span class="math inline">\(d=3\)</span> with equicorrelation <span class="math inline">\(\rho=0.5\)</span> (right).
 </p></section>
-<section id="gelmanrubin-diagnostic" class="slide level2">
-<h2>Gelman–Rubin diagnostic</h2>
-<p>Suppose we run <span class="math inline">\(M\)</span> chains for <span class="math inline">\(B\)</span> iterations, post burn in.</p>
-<p>Denote by <span class="math inline">\(\theta_{bm}\)</span> the <span class="math inline">\(b\)</span>th draw of the <span class="math inline">\(m\)</span>th chain, we compute the global average <span class="math display">\[\overline{\theta} = \frac{1}{BM}\sum_{b=1}^B \sum_{m=1}^m \theta_{bm}\]</span> and similarly the chain-specific sample average and variances, respectively <span class="math inline">\(\overline{\theta}_m\)</span> and <span class="math inline">\(\widehat{\sigma}^2_m\)</span> (<span class="math inline">\(m=1, \ldots, M\)</span>).</p>
+<section id="gibbs-sampling-requires-work" class="slide level2">
+<h2>Gibbs sampling requires work!</h2>
+<ul>
+<li>You need to determine all of the relevant conditional distributions, which often relies on setting conditionally conjugate priors.</li>
+<li>In large models with multiple layers, full conditionals may only depend on a handful of parameters (via directed acyclic graph and moral graph of the model; not covered).</li>
+</ul>
 </section>
-<section id="sum-of-square-decomposition" class="slide level2">
-<h2>Sum of square decomposition</h2>
-<p>The between-chain variance and within-chain variance estimator are <span class="math display">\[\begin{align*}
-\mathsf{Va}_{\text{between}} &amp;= \frac{B}{M-1}\sum_{m=1}^M (\overline{\theta}_m - \overline{\theta})^2\\
-\mathsf{Va}_{\text{within}} &amp;= \frac{1}{M}\sum_{m=1}^m \widehat{\sigma}^2_m
+<section id="example-of-gibbs-sampling" class="slide level2">
+<h2>Example of Gibbs sampling</h2>
+<p>Consider independent and identically distributed observations, with <span class="math display">\[\begin{align*}
+Y_i &amp;\sim \mathsf{Gauss}(\mu, \tau), \qquad i=1, \ldots, n)
+\\\mu &amp;\sim \mathsf{Gauss}(\nu, \omega)\\
+\tau &amp;\sim \mathsf{inv. gamma}(\alpha, \beta)
+\end{align*}\]</span></p>
+<p>The joint posterior is not available in closed form, but the independent priors for the mean and variance of the observations are conditionally conjugate.</p>
+</section>
+<section id="joint-posterior-for-gibbs-sample" class="slide level2">
+<h2>Joint posterior for Gibbs sample</h2>
+<p>Write the posterior density as usual, <span class="math display">\[\begin{align*}
+&amp;p(\mu, \tau \mid \boldsymbol{y}) \propto \tau^{-\alpha-1}\exp(-\beta/\tau)\\ &amp;\quad \times \tau^{-n/2}\exp\left\{-\frac{1}{2\tau}\left(\sum_{i=1}^n y_i^2 - 2\mu \sum_{i=1}^n y_i+n\mu^2 \right)\right\}\\&amp;\quad \times \exp\left\{-\frac{(\mu-\nu)^2}{2\omega}\right\}
 \end{align*}\]</span></p>
 </section>
-<section id="potential-scale-reduction-statistic" class="slide level2">
-<h2>Potential scale reduction statistic</h2>
-<p>The Gelman–Rubin diagnostic, denoted <span class="math inline">\(\widehat{R}\)</span>, is obtained by running multiple chains and considering the difference between within-chain and between-chains variances,</p>
+<section id="recognizing-distributions-from-posterior" class="slide level2">
+<h2>Recognizing distributions from posterior</h2>
+<p>Consider the conditional densities of each parameter in turn (up to proportionality): <span class="math display">\[\begin{align*}
+p(\mu \mid \tau, \boldsymbol{y}) &amp;\propto \exp\left\{-\frac{1}{2} \left( \frac{\mu^2-2\mu\overline{y}}{\tau/n} + \frac{\mu^2-2\nu \mu}{\omega}\right)\right\}\\
+p(\tau \mid \mu, \boldsymbol{y}) &amp; \propto \tau^{-n/2-\alpha-1}\exp\left[-\frac{\left\{\frac{\sum_{i=1}^n (y_i-\mu)^2}{2} + \beta \right\}}{\tau}\right]
+\end{align*}\]</span></p>
+</section>
+<section id="gibs-sample" class="slide level2">
+<h2>Gibs sample</h2>
+<p>We can simulate in turn <span class="math display">\[\begin{align*}
+\mu_t \mid \tau_{t-1}, \boldsymbol{y} &amp;\sim \mathsf{Gauss}\left(\frac{n\overline{y}\omega+\tau \nu}{\tau + n\omega}, \frac{\omega \tau}{\tau + n\omega}\right)\\
+\tau_t \mid \mu_t, \boldsymbol{y} &amp;\sim \mathsf{inv. gamma}\left\{\frac{n}{2}+\alpha, \frac{\sum_{i=1}^n (y_i-\mu)^2}{2} + \beta\right\}.
+\end{align*}\]</span></p>
+</section>
+<section id="data-augmentation-and-auxiliary-variables" class="slide level2">
+<h2>Data augmentation and auxiliary variables</h2>
+<p>When the likelihood <span class="math inline">\(p(\boldsymbol{y}; \boldsymbol{\theta})\)</span> is intractable or costly to evaluate (e.g., mixtures, missing data, censoring), auxiliary variables are introduced to simplify calculations.</p>
+<p>Consider auxiliary variables <span class="math inline">\(\boldsymbol{U} \in \mathbb{R}^k\)</span> such that <span class="math display">\[\int_{\mathbb{R}^k} p(\boldsymbol{U}, \boldsymbol{\theta}\mid \boldsymbol{y}) \mathrm{d} \boldsymbol{U} = p(\boldsymbol{\theta}\mid \boldsymbol{y}),\]</span> i.e., the marginal distribution is that of interest, but evaluation of <span class="math inline">\(p(\boldsymbol{U}, \boldsymbol{\theta}; \boldsymbol{y})\)</span> is cheaper.</p>
+</section>
+<section id="bayesian-augmentation" class="slide level2">
+<h2>Bayesian augmentation</h2>
+<p>The data augmentation algorithm <span class="citation" data-cites="Tanner.Wong:1987">(<a href="#/references" role="doc-biblioref" onclick="">Tanner &amp; Wong, 1987</a>)</span> consists in running a Markov chain on the augmented state space <span class="math inline">\((\Theta, \mathbb{R}^k)\)</span>, simulating in turn from the conditionals</p>
+<ul>
+<li><span class="math inline">\(p(\boldsymbol{U}\mid \boldsymbol{\theta}, \boldsymbol{y})\)</span> and</li>
+<li><span class="math inline">\(p(\boldsymbol{\theta}\mid \boldsymbol{U}, \boldsymbol{y})\)</span></li>
+</ul>
+<p>For more details and examples, see <span class="citation" data-cites="vanDyk.Meng:2001">Dyk &amp; Meng (<a href="#/references" role="doc-biblioref" onclick="">2001</a>)</span> and <span class="citation" data-cites="Hobert:2011">Hobert (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span>.</p>
+</section>
+<section id="data-augmentation-probit-example" class="slide level2">
+<h2>Data augmentation: probit example</h2>
+<p>Consider independent binary responses <span class="math inline">\(\boldsymbol{Y}_i\)</span>, with <span class="math display">\[\begin{align*}
+p_i = \Pr(Y_i=1) = \Phi(\beta_0 + \beta_1 \mathrm{X}_{i1} + \cdots + \beta_p\mathrm{X}_{ip}),
+\end{align*}\]</span> where <span class="math inline">\(\Phi\)</span> is the distribution function of the standard Gaussian distribution. The likelihood of the probit model is <span class="math display">\[L(\boldsymbol{\beta}; \boldsymbol{y}) = \prod_{i=1}^n p_i^{y_i}(1-p_i)^{1-y_i},\]</span> and this prevents easy simulation.</p>
+</section>
+<section id="probit-augmentation" class="slide level2">
+<h2>Probit augmentation</h2>
+<p>We can consider a data augmentation scheme where <span class="math inline">\(Y_i = \mathrm{I}(Z_i &gt; 0)\)</span>, where <span class="math inline">\(Z_i \sim \mathsf{Gauss}(\mathbf{x}_i\boldsymbol{\beta}, 1)\)</span>, where <span class="math inline">\(\mathbf{x}_i\)</span> is the <span class="math inline">\(i\)</span>th row of the design matrix.</p>
+<p>The augmented data likelihood is <span class="math display">\[\begin{align*}
+p(\boldsymbol{z}, \boldsymbol{y} \mid \boldsymbol{\beta}) &amp;\propto \exp\left\{-\frac{1}{2}(\boldsymbol{z} - \mathbf{X}\boldsymbol{\beta})^\top(\boldsymbol{z} - \mathbf{X}\boldsymbol{\beta})\right\} \\&amp;\quad \times \prod_{i=1}^n \mathrm{I}(z_i &gt; 0)^{y_i}\mathrm{I}(z_i \le 0)^{1-y_i}
+\end{align*}\]</span></p>
+</section>
+<section id="conditional-distributions-for-probit-regression" class="slide level2">
+<h2>Conditional distributions for probit regression</h2>
 <p><span class="math display">\[\begin{align*}
-\widehat{R} = \left(\frac{\mathsf{Va}_{\text{within}}(B-1) + \mathsf{Va}_{\text{between}}}{B\mathsf{Va}_{\text{within}}}\right)^{1/2}
-\end{align*}\]</span></p>
-<p>Any value of <span class="math inline">\(\widehat{R}\)</span> larger 1 is indicative of problems of convergence.</p>
+\boldsymbol{\beta} \mid \boldsymbol{z}, \boldsymbol{y} &amp;\sim \mathsf{Gauss}\left\{\widehat{\boldsymbol{\beta}}, (\mathbf{X}^\top\mathbf{X})^{-1}\right\}\\
+Z_i \mid y_i, \boldsymbol{\beta} &amp;\sim \begin{cases}
+\mathsf{trunc. Gauss}(\mathbf{x}_i\boldsymbol{\beta}, -\infty, 0) &amp; y_i =0 \\
+\mathsf{trunc. Gauss}(\mathbf{x}_i\boldsymbol{\beta}, 0, \infty) &amp; y_i =1.
+\end{cases}
+\end{align*}\]</span> with <span class="math inline">\(\widehat{\boldsymbol{\beta}}=(\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\boldsymbol{z}\)</span> the ordinary least square estimator.</p>
 </section>
-<section id="bad-chains" class="slide level2">
-<h2>Bad chains</h2>
-
-<img data-src="bayesmod-slides6_files/figure-revealjs/fig-rhat-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-rhat"><p class="caption">
-Figure&nbsp;3: Two pairs of Markov chains: the top ones seem stationary, but with different modes and <span class="math inline">\(\widehat{R} \approx 3.4\)</span>. The chains on the right hover around zero, but do not appear stable, with <span class="math inline">\(\widehat{R} \approx 1.6\)</span>.
-</p></section>
-<section id="one-chain-or-multiple-chains" class="slide level2">
-<h2>One chain or multiple chains?</h2>
-<p>Generally, it is preferable to run a single chain for a longer period than run multiple chains sequentially</p>
+<section id="data-augmentation-with-scale-mixture-of-gaussian" class="slide level2">
+<h2>Data augmentation with scale mixture of Gaussian</h2>
+<p>The Laplace distribution with mean <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma\)</span> has density <span class="math display">\[\begin{align*}
+f(x; \mu, \sigma) = \frac{1}{2\sigma}\exp\left(-\frac{|x-\mu|}{\sigma}\right),
+\end{align*}\]</span> and can be expressed as a scale mixture of Gaussians, where <span class="math inline">\(Y \sim \mathsf{Laplace}(\mu, \tau)\)</span> is equivalent to <span class="math inline">\(Y \mid \tau \sim \mathsf{Gauss}(\mu, \tau)\)</span> and <span class="math inline">\(\tau \sim \mathsf{expo}\{(2\sigma)^{-1}\}\)</span>.</p>
+</section>
+<section id="joint-posterior-for-laplace-model" class="slide level2">
+<h2>Joint posterior for Laplace model</h2>
+<p>With <span class="math inline">\(p(\mu, \sigma) \propto \sigma^{-1}\)</span>, the joint posterior for the i.i.d. sample is <span class="math display">\[\begin{align*}
+p(\boldsymbol{\tau}, \mu, \sigma \mid \boldsymbol{y}) &amp;\propto \left(\prod_{i=1}^n \tau_i\right)^{-1/2}\exp\left\{-\frac{1}{2}\sum_{i=1}^n \frac{(y_i-\mu)^2}{\tau_i}\right\} \\&amp;\quad \times \frac{1}{\sigma^{n+1}}\exp\left(-\frac{1}{2\sigma}\sum_{i=1}^n \tau_i\right)
+\end{align*}\]</span></p>
+</section>
+<section id="conditional-distributions" class="slide level2">
+<h2>Conditional distributions</h2>
+<p>The conditionals for <span class="math inline">\(\mu \mid \cdots\)</span> and <span class="math inline">\(\sigma \mid \cdots\)</span> are, as usual, Gaussian and inverse gamma, respectively. The variances, <span class="math inline">\(\tau_j\)</span>, are conditionally independent of one another, with <span class="math display">\[\begin{align*}
+p(\tau_j \mid \mu, \sigma, y_j) &amp;\propto \tau_j^{-1/2}\exp\left\{-\frac{1}{2}\frac{(y_j-\mu)^2}{\tau_j} -\frac{1}{2} \frac{\tau_j}{\sigma}\right\}
+\end{align*}\]</span></p>
+</section>
+<section id="inverse-transformation" class="slide level2">
+<h2>Inverse transformation</h2>
+<p>With the change of variable <span class="math inline">\(\xi_j=1/\tau_j\)</span>, we have <span class="math display">\[\begin{align*}
+p(\xi_j \mid \mu, \sigma, y_j) &amp;\propto \xi_j^{-3/2}\exp\left\{-\frac{1}{2\sigma}\frac{\xi_j(y_j-\mu)^2}{\sigma} -\frac{1}{2} \frac{1}{\xi_j}\right\}\\
+\end{align*}\]</span> and we recognize the Wald (or inverse Gaussian) density, where <span class="math inline">\(\xi_i \sim \mathsf{Wald}(\nu_i, \lambda)\)</span> with <span class="math inline">\(\nu_i=\{\sigma/(y_i-\mu)^2\}^{1/2}\)</span> and <span class="math inline">\(\lambda=\sigma^{-1}\)</span>.</p>
+</section>
+<section id="bayesian-lasso" class="slide level2">
+<h2>Bayesian LASSO</h2>
+<p><span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span> use this hierarchical construction to defined the Bayesian LASSO. With a model matrix <span class="math inline">\(\mathbf{X}\)</span> whose columns are standardized to have mean zero and unit standard deviation, we may write <span class="math display">\[\begin{align*}
+\boldsymbol{Y} \mid \mu, \boldsymbol{\beta}, \sigma^2 &amp;\sim  \mathsf{Gauss}_n(\mu \boldsymbol{1}_n + \mathbf{X}\boldsymbol{\beta}, \sigma \mathbf{I}_n)\\
+\beta_j \mid \sigma, \tau &amp;\sim \mathsf{Gauss}(0, \sigma\tau)\\
+\tau &amp;\sim \mathsf{expo}(\lambda/2)
+\end{align*}\]</span></p>
+</section>
+<section id="comment-about-bayesian-lasso" class="slide level2">
+<h2>Comment about Bayesian LASSO</h2>
 <ul>
-<li>there is a cost to initializing multiple times with different starting values since we must discard initial draws.</li>
-<li>but with parallel computations, multiple chains are more frequent nowadays.</li>
-<li>multiple diagnostics require running several chains.</li>
+<li>If we set an improper prior <span class="math inline">\(p(\mu, \sigma) \propto \sigma^{-1}\)</span>, the resulting conditional distributions are all available and thus the model is amenable to Gibbs sampling.</li>
+<li>The Bayesian LASSO places a Laplace penalty on the regression coefficients, with lower values of <span class="math inline">\(\lambda\)</span> yielding more shrinkage.</li>
+<li>Contrary to the frequentist setting, none of the posterior draws of <span class="math inline">\(\boldsymbol{\beta}\)</span> are exactly zero.</li>
 </ul>
-</section>
-<section id="posterior-predictive-checks" class="slide level2">
-<h2>Posterior predictive checks</h2>
-<ol type="1">
-<li>For each of the <span class="math inline">\(B\)</span> draws from the posterior, simulate <span class="math inline">\(n\)</span> observations from the posterior predictive <span class="math inline">\(p(\widetilde{\boldsymbol{y}} \mid \boldsymbol{y})\)</span></li>
-<li>For each replicate, compute a summary statistics (median, quantiles, std. dev., etc.)</li>
-<li>Compare it with the same summary computed for the sample <span class="math inline">\(\boldsymbol{y}\)</span>.</li>
-</ol>
-</section>
-<section id="posterior-predictive-checks-1" class="slide level2">
-<h2>Posterior predictive checks</h2>
+<!--
 
-<img data-src="fig/fig-posterior-pred-check.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-pred-check"><p class="caption">
-Figure&nbsp;4: Posterior predictive checks for the standard deviation (top) and density of posterior draws (bottom) for hierarchical Poisson model with individual effects (left) and simpler model with only conditions (right).
-</p></section>
-<section id="log-pointwise-predictive-density" class="slide level2">
-<h2>Log pointwise predictive density</h2>
-<p>Consider the expected value of the observation-wise log density with respect to the posterior distribution <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, <span class="math display">\[\begin{align*}
-\mathsf{LPPD}_i = \mathsf{E}_{\boldsymbol{\theta} \mid \boldsymbol{y}} \left\{ \log p(y_i \mid \boldsymbol{\theta})\right\},
-\end{align*}\]</span></p>
-<p>The higher the value of <span class="math inline">\(\mathsf{LPPD}_i\)</span>, the better the fit for that observation.</p>
-</section>
-<section id="widely-available-information-criterion" class="slide level2">
-<h2>Widely available information criterion</h2>
-<p>To build an information criterion, we add a penalization factor that approximates the effective number of parameters in the model, with <span class="math display">\[\begin{align*}
-n\mathsf{WAIC} = -\sum_{i=1}^n \mathsf{LPPD}_i + \sum_{i=1}^n \mathsf{Va}_{\boldsymbol{\theta} \mid \boldsymbol{y}}\{\log p(y_i \mid \boldsymbol{\theta})\}
-\end{align*}\]</span> where we use again the empirical variance to compute the rightmost term.</p>
-<p>Smaller values of <span class="math inline">\(\mathsf{WAIC}\)</span> are better.</p>
-</section>
-<section id="pseudo-code-for-waic" class="slide level2">
-<h2>Pseudo-code for WAIC</h2>
-<p>Evaluate the log likelihood for each posterior draw and each observation.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co">#' WAIC</span></span>
-<span id="cb1-2"><a></a><span class="co">#' @param loglik_pt B by n matrix of pointwise log likelihood</span></span>
-<span id="cb1-3"><a></a>WAIC <span class="ot">&lt;-</span> <span class="cf">function</span>(loglik_pt){</span>
-<span id="cb1-4"><a></a>  <span class="sc">-</span><span class="fu">mean</span>(<span class="fu">apply</span>(loglik_pt, <span class="dv">2</span>, mean)) <span class="sc">+</span>  <span class="fu">mean</span>(<span class="fu">apply</span>(loglik_pt, <span class="dv">2</span>, var))</span>
-<span id="cb1-5"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="bayesian-leave-one-out-cross-validation" class="slide level2">
-<h2>Bayesian leave-one-out cross validation</h2>
-<p>In Bayesian setting, we can use the leave-one-out predictive density <span class="math display">\[p(y_i \mid \boldsymbol{y}_{-i})\]</span> as a measure of predictive accuracy.</p>
-<p>We can use importance sampling to approximate the latter.</p>
-<p>Requirement: need to keep track of the log likelihood of each observation for each posterior draw (<span class="math inline">\(B \times n\)</span> values).</p>
-</section>
-<section id="loo-cv-diagnostics" class="slide level2">
-<h2>LOO-CV diagnostics</h2>
-<p>We can draw <span class="math inline">\(B\)</span> samples from <span class="math inline">\(p(\widetilde{y} \mid \boldsymbol{y}_{-i})\)</span> and compute the rank of <span class="math inline">\(y_i\)</span>.</p>
-<p>Under perfect calibration, ranks should be uniform.</p>
-</section>
-<section id="leave-one-out-with-quantile-quantile-plots" class="slide level2">
-<h2>Leave-one-out with quantile-quantile plots</h2>
+## Cautionary warning about stationarity
 
-<img data-src="fig/fig-loocv-qqplots.png" width="672" class="r-stretch quarto-figure-center" id="fig-posterior-loocv"><p class="caption">
-Figure&nbsp;5: Quantile-quantile plots based on leave-one-out cross validation for model for the hierarchical Poisson model fitted to the Upworthy data with the individual random effects (left) and without (right).
-</p></section>
-<section id="deviance-information-criterion" class="slide level2">
-<h2>Deviance information criterion</h2>
-<p>The <strong>deviance</strong> information criterion of <span class="citation" data-cites="Spiegelhalter:2002">Spiegelhalter et al. (<a href="#/references" role="doc-biblioref" onclick="">2002</a>)</span> is <span class="math display">\[\begin{align*}
-\mathsf{DIC} = -2 \ell(\widetilde{\boldsymbol{\theta}}) + 2 p_D
-\end{align*}\]</span> where <span class="math inline">\(p_D\)</span> is the posterior expectation of the deviance relative to the point estimator of the parameter <span class="math inline">\(\widetilde{\boldsymbol{\theta}}\)</span> (e.g., the maximum a posteriori or the posterior mean) <span class="math display">\[\begin{align*}
-p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \boldsymbol{y}\}= \int 2 \{ \ell(\widetilde{\boldsymbol{\theta}}) - \ell(\boldsymbol{\theta})\} p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}
-\end{align*}\]</span></p>
-</section>
-<section id="criticism-of-dic" class="slide level2">
-<h2>Criticism of DIC</h2>
-<ul>
-<li>The DIC can be easily evaluated by keeping track of the log likelihood evaluated at each posterior draw from a Markov chain Monte Carlo algorithm.</li>
-<li>The penalty term <span class="math inline">\(p_D\)</span> is however not invariant to reparametrizations.</li>
-<li>A Gaussian approximation to the MLE under suitable regularity conditions shows that the <span class="math inline">\(\mathsf{DIC}\)</span> is equivalent in large samples to <span class="math inline">\(\mathsf{AIC}.\)</span></li>
-</ul>
+Batch means only works if the chain is sampling from the stationary distribution! 
+
+The previous result (and any estimate) will be unreliable and biased if the chain is not (yet) sampling from the posterior.
+
+-->
 </section>
 <section>
 <section id="computational-strategies" class="title-slide slide level1 center">
@@ -563,7 +435,7 @@ p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \
 <h2>Prior draws</h2>
 
 <img data-src="bayesmod-slides6_files/figure-revealjs/fig-CRW2-prior-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-CRW2-prior"><p class="caption">
-Figure&nbsp;6: Five realizations from the cyclical random walk Gaussian prior of order 2.
+Figure&nbsp;3: Five realizations from the cyclical random walk Gaussian prior of order 2.
 </p></section>
 <section id="gibbs-sampling-for-tokyo-data" class="slide level2">
 <h2>Gibbs sampling for Tokyo data</h2>
@@ -649,6 +521,15 @@ p(\boldsymbol{\beta}, \tau) &amp;\propto \tau^{(T-1)/2}\exp \left( - \frac{\tau}
 <div id="ref-Andrieu.Thoms:2008" class="csl-entry" role="listitem">
 Andrieu, C., &amp; Thoms, J. (2008). A tutorial on adaptive <span>MCMC</span>. <em>Statistics and Computing</em>, <em>18</em>(4), 343–373. <a href="https://doi.org/10.1007/s11222-008-9110-y">https://doi.org/10.1007/s11222-008-9110-y</a>
 </div>
+<div id="ref-vanDyk.Meng:2001" class="csl-entry" role="listitem">
+Dyk, D. A. van, &amp; Meng, X.-L. (2001). The art of data augmentation. <em>Journal of Computational and Graphical Statistics</em>, <em>10</em>(1), 1–50. <a href="https://doi.org/10.1198/10618600152418584">https://doi.org/10.1198/10618600152418584</a>
+</div>
+<div id="ref-Geweke:2004" class="csl-entry" role="listitem">
+Geweke, J. (2004). Getting it right: Joint distribution tests of posterior simulators. <em>Journal of the American Statistical Association</em>, <em>99</em>(467), 799–804. <a href="https://doi.org/10.1198/016214504000001132">https://doi.org/10.1198/016214504000001132</a>
+</div>
+<div id="ref-Hobert:2011" class="csl-entry" role="listitem">
+Hobert, J. (2011). The data augmentation algorithm: Theory and methodology. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 253–293). CRC Press. <a href="https://doi.org/10.1201/b10905-11">https://doi.org/10.1201/b10905-11</a>
+</div>
 <div id="ref-Kitagawa:1987" class="csl-entry" role="listitem">
 Kitagawa, G. (1987). Non-<span>G</span>aussian state–space modeling of nonstationary time series. <em>Journal of the American Statistical Association</em>, <em>82</em>(400), 1032–1041. <a href="https://doi.org/10.1080/01621459.1987.10478534">https://doi.org/10.1080/01621459.1987.10478534</a>
 </div>
@@ -658,20 +539,17 @@ Liu, C., Rubin, D. B., &amp; Wu, Y. N. (1998). Parameter expansion to accelerate
 <div id="ref-Nychka:2015" class="csl-entry" role="listitem">
 Nychka, D., Bandyopadhyay, S., Hammerling, D., Lindgren, F., &amp; Sain, S. (2015). A multiresolution <span>G</span>aussian process model for the analysis of large spatial datasets. <em>Journal of Computational and Graphical Statistics</em>, <em>24</em>(2), 579–599.
 </div>
+<div id="ref-Park.Casella:2008" class="csl-entry" role="listitem">
+Park, T., &amp; Casella, G. (2008). The <span>B</span>ayesian <span>L</span>asso. <em>Journal of the American Statistical Association</em>, <em>103</em>(482), 681–686. <a href="https://doi.org/10.1198/016214508000000337">https://doi.org/10.1198/016214508000000337</a>
+</div>
 <div id="ref-Rosenthal:2011" class="csl-entry" role="listitem">
 Rosenthal, J. (2011). Optimal proposal distributions and adaptive <span>MCMC</span>. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 93–112). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
 </div>
 <div id="ref-Rue.Held:2005" class="csl-entry" role="listitem">
 Rue, H., &amp; Held, L. (2005). <em><span>G</span>aussian <span>M</span>arkov random fields: Theory and applications</em> (p. 280). CRC Press.
 </div>
-<div id="ref-Sailynoja:2022" class="csl-entry" role="listitem">
-Säilynoja, T., Bürkner, P.-C., &amp; Vehtari, A. (2022). Graphical test for discrete uniformity and its applications in goodness-of-fit evaluation and multiple sample comparison. <em>Statistics and Computing</em>, <em>32</em>(2), 32. <a href="https://doi.org/10.1007/s11222-022-10090-6">https://doi.org/10.1007/s11222-022-10090-6</a>
-</div>
-<div id="ref-Spiegelhalter:2002" class="csl-entry" role="listitem">
-Spiegelhalter, D. J., Best, N. G., Carlin, B. P., &amp; Van Der Linde, A. (2002). Bayesian measures of model complexity and fit. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>64</em>(4), 583–639. <a href="https://doi.org/10.1111/1467-9868.00353">https://doi.org/10.1111/1467-9868.00353</a>
-</div>
-<div id="ref-Talts:2020" class="csl-entry" role="listitem">
-Talts, S., Betancourt, M., Simpson, D., Vehtari, A., &amp; Gelman, A. (2020). <em>Validating <span>B</span>ayesian inference algorithms with simulation-based calibration</em>. <a href="https://doi.org/10.48550/arXiv.1804.06788">https://doi.org/10.48550/arXiv.1804.06788</a>
+<div id="ref-Tanner.Wong:1987" class="csl-entry" role="listitem">
+Tanner, M. A., &amp; Wong, W. H. (1987). The calculation of posterior distributions by data augmentation. <em>Journal of the American Statistical Association</em>, <em>82</em>(398), 528–540. <a href="https://doi.org/10.1080/01621459.1987.10478458">https://doi.org/10.1080/01621459.1987.10478458</a>
 </div>
 </div>
 </section></section>
@@ -930,173 +808,190 @@ Talts, S., Betancourt, M., Simpson, D., Vehtari, A., &amp; Gelman, A. (2020). <e
     </script>
 
     <script id="quarto-html-after-body" type="application/javascript">
-      window.document.addEventListener("DOMContentLoaded", function (event) {
-        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-        tabsets.forEach(function(tabset) {
-          const tabby = new Tabby('#' + tabset.id);
-        });
-        const isCodeAnnotation = (el) => {
-          for (const clz of el.classList) {
-            if (clz.startsWith('code-annotation-')) {                     
-              return true;
-            }
-          }
-          return false;
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
         }
-        const onCopySuccess = function(e) {
-          // button target
-          const button = e.trigger;
-          // don't keep focus
-          button.blur();
-          // flash "checked"
-          button.classList.add('code-copy-button-checked');
-          var currentTitle = button.getAttribute("title");
-          button.setAttribute("title", "Copied!");
-          let tooltip;
-          if (window.bootstrap) {
-            button.setAttribute("data-bs-toggle", "tooltip");
-            button.setAttribute("data-bs-placement", "left");
-            button.setAttribute("data-bs-title", "Copied!");
-            tooltip = new bootstrap.Tooltip(button, 
-              { trigger: "manual", 
-                customClass: "code-copy-button-tooltip",
-                offset: [0, -8]});
-            tooltip.show();    
-          }
-          setTimeout(function() {
-            if (tooltip) {
-              tooltip.hide();
-              button.removeAttribute("data-bs-title");
-              button.removeAttribute("data-bs-toggle");
-              button.removeAttribute("data-bs-placement");
-            }
-            button.setAttribute("title", currentTitle);
-            button.classList.remove('code-copy-button-checked');
-          }, 1000);
-          // clear code selection
-          e.clearSelection();
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
         }
-        const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-        }
-        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-          text: getTextToCopy
-        });
-        clipboard.on('success', onCopySuccess);
-        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-            text: getTextToCopy,
-            container: window.document.getElementById('quarto-embedded-source-code-modal')
-          });
-          clipboardModal.on('success', onCopySuccess);
-        }
-          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var mailtoRegex = new RegExp(/^mailto:/);
-            var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
-          var isInternal = (href) => {
-              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-          }
-          // Inspect non-navigation links and adorn them if external
-         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-          for (var i=0; i<links.length; i++) {
-            const link = links[i];
-            if (!isInternal(link.href)) {
-              // undo the damage that might have been done by quarto-nav.js in the case of
-              // links that we want to consider external
-              if (link.dataset.originalHref !== undefined) {
-                link.href = link.dataset.originalHref;
-              }
-            }
-          }
-        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-          const config = {
-            allowHTML: true,
-            maxWidth: 500,
-            delay: 100,
-            arrow: false,
-            appendTo: function(el) {
-                return el.closest('section.slide') || el.parentElement;
-            },
-            interactive: true,
-            interactiveBorder: 10,
-            theme: 'light-border',
-            placement: 'bottom-start',
-          };
-          if (contentFn) {
-            config.content = contentFn;
-          }
-          if (onTriggerFn) {
-            config.onTrigger = onTriggerFn;
-          }
-          if (onUntriggerFn) {
-            config.onUntrigger = onUntriggerFn;
-          }
-            config['offset'] = [0,0];
-            config['maxWidth'] = 700;
-          window.tippy(el, config); 
-        }
-        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-        for (var i=0; i<noterefs.length; i++) {
-          const ref = noterefs[i];
-          tippyHover(ref, function() {
-            // use id or data attribute instead here
-            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-            try { href = new URL(href).hash; } catch {}
-            const id = href.replace(/^#\/?/, "");
-            const note = window.document.getElementById(id);
-            if (note) {
-              return note.innerHTML;
-            } else {
-              return "";
-            }
-          });
-        }
-        const findCites = (el) => {
-          const parentEl = el.parentElement;
-          if (parentEl) {
-            const cites = parentEl.dataset.cites;
-            if (cites) {
-              return {
-                el,
-                cites: cites.split(' ')
-              };
-            } else {
-              return findCites(el.parentElement)
-            }
-          } else {
-            return undefined;
-          }
-        };
-        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-        for (var i=0; i<bibliorefs.length; i++) {
-          const ref = bibliorefs[i];
-          const citeInfo = findCites(ref);
-          if (citeInfo) {
-            tippyHover(citeInfo.el, function() {
-              var popup = window.document.createElement('div');
-              citeInfo.cites.forEach(function(cite) {
-                var citeDiv = window.document.createElement('div');
-                citeDiv.classList.add('hanging-indent');
-                citeDiv.classList.add('csl-entry');
-                var biblioDiv = window.document.getElementById('ref-' + cite);
-                if (biblioDiv) {
-                  citeDiv.innerHTML = biblioDiv.innerHTML;
-                }
-                popup.appendChild(citeDiv);
-              });
-              return popup.innerHTML;
-            });
-          }
-        }
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      </script>
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp("https:\/\/lbelzile\.github\.io\/bayesmod");
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
     
 
 </body></html>

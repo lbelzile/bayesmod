@@ -223,7 +223,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Sep 21, 2026</p>
+  <p class="date">Last compiled Tuesday Sep 22, 2026</p>
 </section>
 <section id="markov-chain-monte-carlo" class="slide level2">
 <h2>Markov chain Monte Carlo</h2>
@@ -419,9 +419,6 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 <li>the effective sample size must be sufficiently large for inference.</li>
 </ul>
 </section>
-<section id="multiple-chains" class="slide level2">
-<h2>Multiple chains</h2>
-</section>
 <section id="tracking-the-log-posterior" class="slide level2">
 <h2>Tracking the log posterior</h2>
 <p>One can store (separately) at each iteration the values of the</p>
@@ -430,10 +427,6 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 <li>log prior</li>
 </ul>
 <p>These can be used for prior or likelihood sensitivity <span class="citation" data-cites="Kallioinen:2023">(<a href="#/references" role="doc-biblioref" onclick="">Kallioinen et al., 2023</a>)</span></p>
-</section>
-<section id="typical-set" class="slide level2">
-<h2>Typical set</h2>
-<p>We call the <strong>typical set</strong> the values that are taken mostly by the log posterior The unnormalized</p>
 </section>
 <section id="blank-run" class="slide level2">
 <h2>Blank run</h2>
@@ -446,7 +439,7 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 </section>
 <section id="burn-in" class="slide level2">
 <h2>Burn in</h2>
-<p>We are guaranteed to reach stationarity with Metropolis–Hastings, but it may take a large number of iterations…</p>
+<p>We are guaranteed to reach stationarity with Metropolis–Hastings eventually, but it may take a large number of iterations…</p>
 <p>One should discard initial draws during a <strong>burn in</strong> or warmup period if the chain has not reached stationarity. Ideally, use good starting value to reduce waste.</p>
 <p>We can also use the warmup period to adapt the variance of the proposal.</p>
 </section>
@@ -873,17 +866,32 @@ p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \
 <li>A Gaussian approximation to the MLE under suitable regularity conditions shows that the <span class="math inline">\(\mathsf{DIC}\)</span> is equivalent in large samples to <span class="math inline">\(\mathsf{AIC}.\)</span></li>
 </ul>
 </section>
-<section id="summary" class="slide level2">
-<h2>Summary</h2>
+<section id="summary-14" class="slide level2">
+<h2>Summary (1/4)</h2>
 <ul>
 <li>Metropolis–Hastings generalizes rejection sampling by building a Markov chain and providing a mechanism for sampling.</li>
 <li>Small proposal variance leads to high acceptance rate, but small step sizes. Large variance proposals leads to many rejections, in which case the previous value is carried forward. Both extreme scenarios lead to large autocorrelation.</li>
 <li>The proposal density can be anything, but must ideally account for the support and allow for exploration of the state.</li>
+</ul>
+</section>
+<section id="summary-24" class="slide level2">
+<h2>Summary (2/4)</h2>
+<ul>
 <li>Good initial starting values can be obtained by computing maximum a posteriori estimates.</li>
 <li>Initializing multiple chains at different starting values can be used to check convergence to the stationary distribution.</li>
 <li>Mixing will improve if strongly correlated parameters are sampled together.</li>
-<li>The optimal acceptance rate depends on the dimension, but guidelines for random walk Metropolis are to have 0.44 for a single parameter model and 0.234 for multivariate targets; see <span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> for a heuristic derivation.</li>
+</ul>
+</section>
+<section id="summary-34" class="slide level2">
+<h2>Summary (3/4)</h2>
+<ul>
+<li>The optimal acceptance rate depends on the dimension, but guidelines for random walk Metropolis with Gaussian targets are to have 0.44 for a single parameter model and 0.234 for multivariate targets; see <span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> for a heuristic derivation.</li>
 <li>To obtain the target acceptance rate, users must tune the variance of the proposal kernel. This is typically achieved by running the chain for some period, computing the empirical acceptance rate and increasing (respectively decreasing) the variance if the acceptance rate is too high (too low).</li>
+</ul>
+</section>
+<section id="summary-44" class="slide level2">
+<h2>Summary (4/4)</h2>
+<ul>
 <li>Metropolis-adjusted Langevin algorithm (MALA) uses the gradient information to inform the proposal; it is akin to a Newton step.</li>
 <li>The detailed balance requires a function <span class="math inline">\(g\)</span> such that <span class="math inline">\(g(r) = rg(1/r).\)</span> Taking <span class="math inline">\(g(r) = \min(1,r)\)</span> as in Metropolis–Hasting rule leads to the lowest asymptotic variance <span class="citation" data-cites="Peskun:1973">(<a href="#/references" role="doc-biblioref" onclick="">Peskun, 1973</a>)</span>.</li>
 </ul>
