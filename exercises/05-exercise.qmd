@@ -3,6 +3,7 @@ title: "Exercises 5"
 ---
 
 
+
 ## Exercise 5.1
 
 The Pareto distribution with shape $\alpha>0$ and scale $\tau>0$ has density
@@ -16,8 +17,52 @@ It can be used to model power laws in insurance and finance, or in demography. T
 3. Implement Gibbs sampling for this problem for the `uscitypopn` data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates.
 
 
-
 ## Exercise 5.2
+
+Consider the following code which implements a Metropolis--Hastings algorithm to simulate observations from a $\mathsf{beta}(0.5, 0.5)$ density.
+
+```{r}
+#| echo: true
+#| eval: false
+log_f <- function(par){
+  dbeta(x = par, shape1 = 0.5, shape2 = 0.5, log = TRUE)
+}
+metropo <- function(B, sd_prop = 0.2){
+  chain <- rep(0, B)
+  # Draw initial value
+  cur <- runif(1)
+  for(b in seq_len(B)){
+    repeat {
+        # Simulate proposal from Gaussian random walk proposal
+        prop <- cur + rnorm(1, sd = sd_prop)
+        # check admissibility for probability of success
+        if (prop >= 0 & prop <= 1)
+          break
+    }
+    # Compute (log) acceptance ratio
+    logR <- log_f(prop) - log_f(cur) 
+    # Accept the move if R > u
+    if(isTRUE(logR > log(runif(1)))){
+     cur <- prop 
+    }
+    chain[b] <- cur
+  }
+  return(chain)
+}
+# Run MCMC for 10K iterations
+mc <- metropo(1e4L)
+```
+
+To see if the algorithm works:
+
+a. Plot the density of the Markov chain draws along with the beta density curve. 
+b. Check that empirical moments match the theoretical ones
+
+If the algorithm is incorrect, provide a fix and explain the reason for the problem.
+
+
+
+## Exercise 5.3
 
 Implement the Bayesian LASSO for the `diabetes` cancer surgery from package `lars`.  Check @Park.Casella:2008 for the details of the Gibbs sampling (p. 682, right column).
 
