@@ -299,7 +299,6 @@ window.Quarto = {
    
   <ul>
   <li><a href="#exercise-4.1" id="toc-exercise-4.1" class="nav-link active" data-scroll-target="#exercise-4.1">Exercise 4.1</a></li>
-  <li><a href="#exercise-4.2" id="toc-exercise-4.2" class="nav-link" data-scroll-target="#exercise-4.2">Exercise 4.2</a></li>
   </ul>
 </nav>
     </div>
@@ -397,7 +396,7 @@ F(x) = \begin{cases}
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo estimator of the acceptance rate</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ntrials<span class="sc">/</span><span class="fu">length</span>(samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.27528</code></pre>
+<pre><code>[1] 1.261368</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot density</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -414,103 +413,8 @@ F(x) = \begin{cases}
 </div>
 </div>
 <ol start="4" type="1">
-<li>The Monte Carlo acceptance rate is 1.28, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits.</li>
+<li>The Monte Carlo acceptance rate is 1.26, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits.</li>
 </ol>
-</div>
-</section>
-<section id="exercise-4.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-4.2">Exercise 4.2</h2>
-<p>We revisit <a href="../exercises/02-exercise.html#exercice-2.3">Exercise 2.3</a>, which used a half-Cauchy prior for the exponential waiting time of buses.</p>
-<p>The ratio-of-uniform method, implemented in the <a href="https://paulnorthrop.github.io/rust/index.html"><code>rust</code> <strong>R</strong> package</a>, can be used to simulate independent draws from the posterior of the rate <span class="math inline">\(\lambda\)</span>. The following code produces</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="dv">10</span>L <span class="co"># number of observations</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>ybar <span class="ot">&lt;-</span> <span class="dv">8</span>   <span class="co"># average waiting time</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L  <span class="co"># number of draws</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Un-normalized log posterior: scaled log likelihood + log prior</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>upost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dgamma</span>(<span class="at">x =</span> x, <span class="at">shape =</span> nobs <span class="sc">+</span> <span class="dv">1</span>L, <span class="at">rate =</span> nobs<span class="sc">*</span>ybar, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(<span class="dv">2</span>) <span class="sc">+</span> <span class="fu">dt</span>(<span class="at">x =</span> x, <span class="at">df =</span> <span class="dv">1</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)}</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>post_samp <span class="ot">&lt;-</span> rust<span class="sc">::</span><span class="fu">ru</span>(<span class="at">logf =</span> upost, </span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n =</span> B, </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">d =</span> <span class="dv">1</span>,  <span class="co"># dimension of parameter (scalar)</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">init =</span> nobs<span class="sc">/</span>ybar)<span class="sc">$</span>sim_vals <span class="co"># initial value of mode</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Estimate using the independent Monte Carlo samples:</p>
-<ol type="1">
-<li>the probability that the average waiting time <span class="math inline">\(1/\lambda\)</span> is between 3 and 15 minutes</li>
-<li>the average waiting time</li>
-<li>the standard deviation of the average waiting time.</li>
-</ol>
-<p>Next, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.</p>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo for waiting time</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Lambda is the reciprocal mean (1/minute)</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>times_mc <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>post_samp</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean of binary variables + std. error</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">mean</span>(times_mc <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times_mc <span class="sc">&lt;</span> <span class="dv">15</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">est =</span> p, <span class="at">se =</span> <span class="fu">sqrt</span>(p<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">/</span>B))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>        est          se 
-0.981400000 0.001351075 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior mean with standard error</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">est =</span> <span class="fu">mean</span>(times_mc), <span class="at">se =</span> <span class="fu">sd</span>(times_mc)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(post_samp)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       est         se 
-7.99081905 0.02612151 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Metropolis-Hastings algorithm</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>curr <span class="ot">&lt;-</span> <span class="dv">8</span><span class="sc">/</span><span class="dv">10</span> <span class="co"># prior mean</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>chains <span class="ot">&lt;-</span> <span class="fu">numeric</span>(B) <span class="co"># container</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>sd_prop <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co"># proposal standard deviation</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  prop <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">mean =</span> curr, <span class="at">sd =</span> sd_prop)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">upost</span>(prop) <span class="sc">-</span> <span class="fu">upost</span>(curr) <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    curr <span class="ot">&lt;-</span> prop</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  chains[b] <span class="ot">&lt;-</span> curr</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Discard burn-in</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>chains[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)]</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate quantities using Monte Carlo</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9793939</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 8.069608</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.707214</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of MCMC</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mcmc <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">mcmc</span>(times)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mcmc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Iterations = 1:9900
-Thinning interval = 1 
-Number of chains = 1 
-Sample size per chain = 9900 
-
-1. Empirical mean and standard deviation for each variable,
-   plus standard error of the mean:
-
-          Mean             SD       Naive SE Time-series SE 
-       8.06961        2.70721        0.02721        0.05760 
-
-2. Quantiles for each variable:
-
-  2.5%    25%    50%    75%  97.5% 
- 4.388  6.169  7.576  9.330 14.695 </code></pre>
-</div>
-</div>
-<p>We can see that the standard error for the mean is roughly twice as big. We would thus need to inflate the sample size by a factor four to get the same precision.</p>
 </div>
 
 

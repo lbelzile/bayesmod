@@ -54,27 +54,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -348,110 +328,130 @@ window.Quarto = {
 
 <section id="exercise-5.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-5.1">Exercise 5.1</h2>
-<p>The Pareto distribution with shape <span class="math inline">\(\alpha&gt;0\)</span> and scale <span class="math inline">\(\tau&gt;0\)</span> has density <span class="math display">\[
-f(x; \alpha, \tau) = \alpha x^{-\alpha-1}\tau^\alpha \mathrm{I}(x &gt; \tau).
-\]</span> It can be used to model power laws in insurance and finance, or in demography. The <code>uscitypopn</code> data set in the <code>hecbayes</code> package contains the population size of cities above 200K inhabitants in the United States, from the 2020 census.</p>
-<ol type="1">
-<li>Using improper priors <span class="math inline">\(p(\alpha, \tau) \propto 1,\)</span> write the joint posterior for a simple random sample of size <span class="math inline">\(n\)</span> and derive the conditional distributions <span class="math inline">\(p(\alpha \mid \boldsymbol{y}, \tau)\)</span> and <span class="math inline">\(p(\tau \mid \alpha, \boldsymbol{y})\)</span>.</li>
-<li>The mononomial distribution <span class="math inline">\(\mathsf{Mono}(a,b)\)</span> has density <span class="math inline">\(p(x) \propto x^{a-1}\mathrm{I}(0 \leq x \leq b)\)</span>. Find the normalizing constant for the distribution and obtain the quantile function to derive a sampler.</li>
-<li>Implement Gibbs sampling for this problem for the <code>uscitypopn</code> data. Draw enough observations to obtain an effective sample size of at least 1000 observations. Calculate the accuracy of your estimates?</li>
-</ol>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>With improper prior, the joint posterior is the product of the likelihood contributions so <span class="math display">\[
-p(\alpha, \tau \mid \boldsymbol{y}) \propto \alpha^n \left(\prod_{i=1}^n y_i\right)^{-\alpha-1} \tau^{n\alpha} \mathrm{I}(\min_i y_i &gt; \tau).
-\]</span> Using the hint, write the conditional density for <span class="math inline">\(\alpha\)</span> given the rest as <span class="math display">\[\begin{align*}
-p(\alpha \mid \boldsymbol{y}, \tau) \propto \alpha^n \left( \frac{\prod_{i=1}^n y_i}{\tau^n}\right)^{-\alpha} = \alpha^{(n+1)-1} \exp\left\{-\alpha \left(\sum_{i=1}^n\log y_i - n\log \tau\right) \right\}
-\end{align*}\]</span> which is <span class="math inline">\(\mathsf{Gamma}\big(n+1, \sum_{i=1}^n \log y_i - n \log \tau \big)\)</span>. For the second, we have <span class="math display">\[\begin{align*}
-p(\tau \mid \alpha, \boldsymbol{y}) \propto \tau^{n\alpha} \mathrm{I}(\min_{i} y_i &gt; \tau),
-\end{align*}\]</span> a mononomial distribution with parameters <span class="math inline">\(a=n\alpha+1\)</span> and <span class="math inline">\(b = \min_{i} y_i\)</span>.</p>
-<p>To find the normalizing constant of the mononomial distribution, we simply integrate the unnormalized density to obtain the reciprocal constant: if <span class="math inline">\(c = \int g(x) \mathrm{d} x\)</span> for <span class="math inline">\(c &lt; \infty\)</span> and <span class="math inline">\(g(x) \geq 0\)</span> for all <span class="math inline">\(x\)</span>, then <span class="math inline">\(g(x)/c\)</span> integrates to one and is a valid density. Thus, we find <span class="math display">\[c= \int_0^b x^{a-1}\mathrm{d} x = \left[\frac{x^{a}}{a}\right]_{0}^b= \frac{b^{a}}{a}.\]</span> The distribution function is <span class="math inline">\(G(x) = (x/b)^{a}\)</span> for <span class="math inline">\(x \in [0,b]\)</span> and the quantile function <span class="math inline">\(G^{-1}(u) = u^{1/a}b\)</span>.</p>
+<p>We revisit <a href="../exercises/02-exercise.html#exercice-2.3">Exercise 2.3</a>, which used a half-Cauchy prior for the exponential waiting time of buses.</p>
+<p>The ratio-of-uniform method, implemented in the <a href="https://paulnorthrop.github.io/rust/index.html"><code>rust</code> <strong>R</strong> package</a>, can be used to simulate independent draws from the posterior of the rate <span class="math inline">\(\lambda\)</span>. The following code produces</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>qmono <span class="ot">&lt;-</span> <span class="cf">function</span>(u, a, b, <span class="at">log =</span> <span class="cn">FALSE</span>){</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">isTRUE</span>(<span class="fu">all</span>(a <span class="sc">&gt;</span> <span class="dv">0</span>, b <span class="sc">&gt;</span> <span class="dv">0</span>, u <span class="sc">&gt;=</span> <span class="dv">0</span>, u <span class="sc">&lt;=</span> <span class="dv">1</span>)))</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a> logq <span class="ot">&lt;-</span>   <span class="fu">log</span>(u)<span class="sc">/</span>(a<span class="sc">+</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fu">log</span>(b)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> <span class="cf">if</span>(log){ <span class="fu">return</span>(logq)} <span class="cf">else</span> { <span class="fu">return</span>(<span class="fu">exp</span>(logq)) }</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"uscitypopn"</span>, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> uscitypopn<span class="sc">$</span>population</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics appearing in the posterior distribution</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>sumlogy <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">log</span>(y))</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>miny <span class="ot">&lt;-</span> <span class="fu">min</span>(y)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># MCMC via Gibbs sampling</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>chains <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> B, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(chains) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"alpha"</span>, <span class="st">"tau"</span>)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>curr <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="fl">2e5</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  chains[b,<span class="dv">1</span>] <span class="ot">&lt;-</span> curr[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">shape =</span> n<span class="sc">+</span><span class="dv">1</span>, <span class="at">rate =</span> sumlogy <span class="sc">-</span> n<span class="sc">*</span><span class="fu">log</span>(curr[<span class="dv">2</span>]))</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  chains[b,<span class="dv">2</span>] <span class="ot">&lt;-</span> curr[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">qmono</span>(<span class="fu">runif</span>(<span class="dv">1</span>), <span class="at">a =</span> n<span class="sc">*</span>curr[<span class="dv">1</span>]<span class="sc">+</span><span class="dv">1</span>, <span class="at">b =</span> miny)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>chains <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chains)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute effective sample size</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>coda<span class="sc">::</span><span class="fu">effectiveSize</span>(chains)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>alpha   tau 
-10000 10000 </code></pre>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="dv">10</span>L <span class="co"># number of observations</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ybar <span class="ot">&lt;-</span> <span class="dv">8</span>   <span class="co"># average waiting time</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L  <span class="co"># number of draws</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Un-normalized log posterior: scaled log likelihood + log prior</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>upost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dgamma</span>(<span class="at">x =</span> x, <span class="at">shape =</span> nobs <span class="sc">+</span> <span class="dv">1</span>L, <span class="at">rate =</span> nobs<span class="sc">*</span>ybar, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(<span class="dv">2</span>) <span class="sc">+</span> <span class="fu">dt</span>(<span class="at">x =</span> x, <span class="at">df =</span> <span class="dv">1</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)}</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>post_samp <span class="ot">&lt;-</span> rust<span class="sc">::</span><span class="fu">ru</span>(<span class="at">logf =</span> upost, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n =</span> B, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">d =</span> <span class="dv">1</span>,  <span class="co"># dimension of parameter (scalar)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">init =</span> nobs<span class="sc">/</span>ybar)<span class="sc">$</span>sim_vals <span class="co"># initial value of mode</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(chains)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Estimate using the independent Monte Carlo samples:</p>
+<ol type="1">
+<li>the probability that the average waiting time <span class="math inline">\(1/\lambda\)</span> is between 3 and 15 minutes</li>
+<li>the average waiting time</li>
+<li>the standard deviation of the average waiting time.</li>
+</ol>
+<p>Next, implement a random walk Metropolis–Hastings algorithm to sample draws from the posterior and re-estimate the quantities. Compare the values.</p>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo for waiting time</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Lambda is the reciprocal mean (1/minute)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>times_mc <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>post_samp</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean of binary variables + std. error</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">mean</span>(times_mc <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times_mc <span class="sc">&lt;</span> <span class="dv">15</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">est =</span> p, <span class="at">se =</span> <span class="fu">sqrt</span>(p<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p)<span class="sc">/</span>B))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        est          se 
+0.978300000 0.001457021 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior mean with standard error</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">est =</span> <span class="fu">mean</span>(times_mc), <span class="at">se =</span> <span class="fu">sd</span>(times_mc)<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">length</span>(post_samp)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     est       se 
+8.024717 0.026882 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Metropolis-Hastings algorithm</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>curr <span class="ot">&lt;-</span> <span class="dv">8</span><span class="sc">/</span><span class="dv">10</span> <span class="co"># prior mean</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>chains <span class="ot">&lt;-</span> <span class="fu">numeric</span>(B) <span class="co"># container</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>sd_prop <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="co"># proposal standard deviation</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  prop <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1</span>, <span class="at">mean =</span> curr, <span class="at">sd =</span> sd_prop)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">upost</span>(prop) <span class="sc">-</span> <span class="fu">upost</span>(curr) <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    curr <span class="ot">&lt;-</span> prop</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  chains[b] <span class="ot">&lt;-</span> curr</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Discard burn-in</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>chains[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>)]</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate quantities using Monte Carlo</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times <span class="sc">&gt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> times <span class="sc">&lt;</span> <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9768687</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.052801</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.661428</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary of MCMC</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mcmc <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">mcmc</span>(times)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mcmc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
-Iterations = 1:10000
+Iterations = 1:9900
 Thinning interval = 1 
 Number of chains = 1 
-Sample size per chain = 10000 
+Sample size per chain = 9900 
 
 1. Empirical mean and standard deviation for each variable,
    plus standard error of the mean:
 
-           Mean        SD  Naive SE Time-series SE
-alpha 1.391e+00    0.1311  0.001311       0.001311
-tau   1.991e+05 1279.2902 12.792902      12.792902
+          Mean             SD       Naive SE Time-series SE 
+       8.05280        2.66143        0.02675        0.05712 
 
 2. Quantiles for each variable:
 
-           2.5%      25%       50%       75%     97.5%
-alpha 1.143e+00      1.3 1.388e+00 1.478e+00 1.656e+00
-tau   1.957e+05 198682.2 1.995e+05 2.000e+05 2.004e+05</code></pre>
+  2.5%    25%    50%    75%  97.5% 
+ 4.289  6.185  7.513  9.394 14.735 </code></pre>
 </div>
 </div>
-<p>We can see that the autocorrelation is minimal, so the sampler is quite efficient.</p>
+<p>We can see that the standard error for the mean is roughly twice as big. We would thus need to inflate the sample size by a factor four to get the same precision.</p>
 </div>
 </section>
 <section id="solution-5.2" class="level2">
 <h2 class="anchored" data-anchor-id="solution-5.2">Solution 5.2</h2>
 <p>Consider the following code which implements a Metropolis–Hastings algorithm to simulate observations from a <span class="math inline">\(\mathsf{beta}(0.5, 0.5)\)</span> density.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>metropo <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) </span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="fu">metropo</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>metropo <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) </span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>mc <span class="ot">&lt;-</span> <span class="fu">metropo</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To see if the algorithm works:</p>
 <ol type="a">
@@ -463,35 +463,35 @@ tau   1.957e+05 198682.2 1.995e+05 2.000e+05 2.004e+05</code></pre>
 <p><span class="proof-title"><em>Solution</em>. </span>The sampler is incorrect because it tacitly draws from Gaussian variables that are restricted to <span class="math inline">\([0,1]\)</span> via the accept-reject step. This means in particular that the acceptance ratio involves constants for the probability given a Gaussian centered at the current value or proposal truncated on the unit interval <span class="math display">\[\frac{q(x^{\text{cur}\hphantom{c}} \mid x^{\text{prop}})}{q(x^{\text{prop}} \mid x^{\text{cur}\hphantom{c}})} = \frac{\Phi\{(1-x^{\text{cur}})/\sigma^{\text{prop}}\} - \Phi(-x^{\text{cur}}/\sigma^{\text{prop}})}{\Phi\{(1-x^{\text{prop}})/\sigma^{\text{prop}}\} - \Phi(-x^{\text{prop}}/\sigma^{\text{prop}})}.\]</span></p>
 <p>This exercise was inspired by <a href="https://darrenjw.wordpress.com/2012/06/04/metropolis-hastings-mcmc-when-the-proposal-and-target-have-differing-support/">this blog post</a> by Darren Wilkinson.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>metropo_fixed <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) <span class="sc">+</span> </span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(<span class="fu">pnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> cur, <span class="at">sd =</span> sd_prop) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean =</span> cur, <span class="at">sd =</span> sd_prop)) <span class="sc">-</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(<span class="fu">pnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> prop, <span class="at">sd =</span> sd_prop) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean =</span> prop, <span class="at">sd =</span> sd_prop))</span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>mc2 <span class="ot">&lt;-</span> <span class="fu">metropo_fixed</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>log_f <span class="ot">&lt;-</span> <span class="cf">function</span>(par){</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dbeta</span>(<span class="at">x =</span> par, <span class="at">shape1 =</span> <span class="fl">0.5</span>, <span class="at">shape2 =</span> <span class="fl">0.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>metropo_fixed <span class="ot">&lt;-</span> <span class="cf">function</span>(B, <span class="at">sd_prop =</span> <span class="fl">0.2</span>){</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  chain <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, B)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Draw initial value</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  cur <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B)){</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span> {</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate proposal from Gaussian random walk proposal</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> cur <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">sd =</span> sd_prop)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check admissibility for probability of success</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (prop <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> prop <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>          <span class="cf">break</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute (log) acceptance ratio</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> <span class="fu">log_f</span>(prop) <span class="sc">-</span> <span class="fu">log_f</span>(cur) <span class="sc">+</span> </span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(<span class="fu">pnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> cur, <span class="at">sd =</span> sd_prop) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean =</span> cur, <span class="at">sd =</span> sd_prop)) <span class="sc">-</span></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(<span class="fu">pnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> prop, <span class="at">sd =</span> sd_prop) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">0</span>, <span class="at">mean =</span> prop, <span class="at">sd =</span> sd_prop))</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Accept the move if R &gt; u</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(logR <span class="sc">&gt;</span> <span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">1</span>)))){</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>     cur <span class="ot">&lt;-</span> prop </span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    chain[b] <span class="ot">&lt;-</span> cur</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(chain)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MCMC for 10K iterations</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>mc2 <span class="ot">&lt;-</span> <span class="fu">metropo_fixed</span>(<span class="fl">1e4</span>L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -508,140 +508,123 @@ Figure&nbsp;1: Comparison of histogram for 10K draws from the incorrect sampler 
 </div>
 </div>
 </div>
-<!--
-## Exercise 4.3
-
-Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates $\lambda_i$ $(i=1,2)$, with the same priors. Use a Metropolis--Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.
-
-1. Tune the variance to reach an approximate acceptance rate of 0.44.
-2. Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See [`bayesplot`](http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html) or `coda`. Comment on  the convergence and mixing of your Markov chain Monte Carlo.
-3. Report summary statistics of the chains.
-
-:::{ .solution}
-
-The only thing we need to do is change the parametrization, and add tuning of the variance.
-
-::: {.cell}
-
-```{.r .cell-code}
-data(upworthy_question, package = "hecbayes")
-# Compute sufficient statistics
-data <- upworthy_question |>
-  dplyr::group_by(question) |>
-  dplyr::summarize(ntot = sum(impressions),
-                   y = sum(clicks))
-# Code log posterior as sum of log likelihood and log prior
-loglik <- function(par, counts = data$y, offset = data$ntot, ...){
-  lambda <- exp(c(par[1] + log(offset[1]), par[2] + log(offset[2])))
- sum(dpois(x = counts, lambda = lambda, log = TRUE))
-}
-logprior <- function(par, ...){
-  sum(dnorm(x = par, mean = log(0.01), sd = 1.5, log = TRUE))
-}
-logpost <- function(par, ...){
-  loglik(par, ...) + logprior(par, ...)
-}
-# Compute maximum a posteriori (MAP)
-map <- optim(
-  par = rep(-4, 2),
-  fn = logpost,
-  control = list(fnscale = -1),
-  offset = data$ntot,
-  counts = data$y,
-  hessian = TRUE)
-# Use MAP as starting value
-cur <- map$par
-# Compute logpost_cur - we can keep track of this to reduce calculations
-logpost_cur <- logpost(cur)
-# Proposal covariance
-cov_map <- -2*solve(map$hessian)
-chol <- chol(cov_map)
-
-set.seed(80601)
-niter <- 1e4L
-nchains <- 4L
-npar <- 2L
-chain <- array(0, dim = c(niter, nchains, npar))
-naccept <- 0L
-for(j in 1:nchains){
-  for(i in seq_len(niter)){
-    # Multivariate normal proposal - symmetric random walk
-    prop <- chol %*% rnorm(n = 2)/1.05 + cur
-    logpost_prop <- logpost(prop)
-    # Compute acceptance ratio (no q because the ratio is 1)
-    logR <- logpost_prop - logpost_cur
-    if(logR > -rexp(1)){
-      cur <- prop
-      logpost_cur <- logpost_prop
-      naccept <- naccept + 1L
-    }
-    chain[i,j,] <- cur
-  }
-}
-# Acceptance rate
-naccept/(nchains * niter)
-```
-
-::: {.cell-output .cell-output-stdout}
-
-```
-[1] 0.44355
-```
-
-
-:::
-
-```{.r .cell-code}
-# Create some summary graphs
-library(bayesplot)
-# Name chains so that the graphs can be labelled
-dimnames(chain)[[3]] <- c("lambda[1]","lambda[2]")
-
-# Trace plots, correlograms, density plots and bivariate scatterplot
-bayesplot::mcmc_trace(chain)
-```
-
-::: {.cell-output-display}
-![](05-solution_files/figure-html/unnamed-chunk-4-1.png){width=672}
-:::
-
-```{.r .cell-code}
-bayesplot::mcmc_acf_bar(chain)
-```
-
-::: {.cell-output-display}
-![](05-solution_files/figure-html/unnamed-chunk-4-2.png){width=672}
-:::
-
-```{.r .cell-code}
-bayesplot::mcmc_dens(chain)
-```
-
-::: {.cell-output-display}
-![](05-solution_files/figure-html/unnamed-chunk-4-3.png){width=672}
-:::
-
-```{.r .cell-code}
-bayesplot::mcmc_scatter(chain)
-```
-
-::: {.cell-output-display}
-![](05-solution_files/figure-html/unnamed-chunk-4-4.png){width=672}
-:::
-
-```{.r .cell-code}
-# Posterior summaries with coda
-# Need to create a list of mcmc objects...
-mcmc_list <- coda::as.mcmc.list(
-    lapply(seq_len(nchains),
-           function(ch) coda::as.mcmc(chain[, ch, ])))
-summary(mcmc_list)
-```
-
-::: {.cell-output .cell-output-stdout}
-
-```
-
+</section>
+<section id="exercise-5.3" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-5.3">Exercise 5.3</h2>
+<p>Repeat the simulations in Example 3.6, this time with a parametrization in terms of log rates <span class="math inline">\(\lambda_i\)</span> <span class="math inline">\((i=1,2)\)</span>, with the same priors. Use a Metropolis–Hastings algorithm with a Gaussian random walk proposal, updating parameters one at a time. Run four chains in parallel.</p>
+<ol type="1">
+<li>Tune the variance to reach an approximate acceptance rate of 0.44.</li>
+<li>Produce diagnostic plots (scatterplots of observations, marginal density plots, trace plots and correlograms). See <a href="http://mc-stan.org/bayesplot/articles/plotting-mcmc-draws.html"><code>bayesplot</code></a> or <code>coda</code>. Comment on the convergence and mixing of your Markov chain Monte Carlo.</li>
+<li>Report summary statistics of the chains.</li>
+</ol>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span>The only thing we need to do is change the parametrization, and add tuning of the variance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute sufficient statistics</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(<span class="fu">dnorm</span>(<span class="at">x =</span> par, <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">par =</span> <span class="fu">rep</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">2</span>),</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">fn =</span> logpost,</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Use MAP as starting value</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute logpost_cur - we can keep track of this to reduce calculations</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Proposal covariance</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>nchains <span class="ot">&lt;-</span> <span class="dv">4</span>L</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>npar <span class="ot">&lt;-</span> <span class="dv">2</span>L</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>chain <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="at">dim =</span> <span class="fu">c</span>(niter, nchains, npar))</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>naccept <span class="ot">&lt;-</span> <span class="dv">0</span>L</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nchains){</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>    prop <span class="ot">&lt;-</span> chol <span class="sc">%*%</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>)<span class="sc">/</span><span class="fl">1.05</span> <span class="sc">+</span> cur</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>    logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute acceptance ratio (no q because the ratio is 1)</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>      cur <span class="ot">&lt;-</span> prop</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>      logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>      naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> <span class="dv">1</span>L</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    chain[i,j,] <span class="ot">&lt;-</span> cur</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Acceptance rate</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>naccept<span class="sc">/</span>(nchains <span class="sc">*</span> niter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.44355</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create some summary graphs</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Name chains so that the graphs can be labelled</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(chain)[[<span class="dv">3</span>]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lambda[1]"</span>,<span class="st">"lambda[2]"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Trace plots, correlograms, density plots and bivariate scatterplot</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_trace</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-solution_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_acf_bar</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-solution_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_dens</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-solution_files/figure-html/unnamed-chunk-5-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_scatter</span>(chain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-solution_files/figure-html/unnamed-chunk-5-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Posterior summaries with coda</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Need to create a list of mcmc objects...</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>mcmc_list <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">as.mcmc.list</span>(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lapply</span>(<span class="fu">seq_len</span>(nchains),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>           <span class="cf">function</span>(ch) coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain[, ch, ])))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mcmc_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
 Iterations = 1:10000
 Thinning interval = 1 
 Number of chains = 4 
@@ -658,415 +641,15 @@ lambda[2] -4.442 0.001192 5.962e-06      1.670e-05
 
             2.5%    25%    50%    75%  97.5%
 lambda[1] -4.516 -4.514 -4.513 -4.511 -4.509
-lambda[2] -4.444 -4.443 -4.442 -4.441 -4.440
-```
-
-
-:::
-:::
-
-
-:::
-
-
--->
-</section>
-<section id="exercise-5.3" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-5.3">Exercise 5.3</h2>
-<p>Implement the Bayesian LASSO for the <code>diabetes</code> cancer surgery from package <code>lars</code>. Check <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> for the details of the Gibbs sampling (p.&nbsp;682, right column).</p>
-<ol type="1">
-<li>Fit the model for a range of values of <span class="math inline">\(\lambda\)</span> and produce parameter estimate paths to replicate Figure 2 of the paper.</li>
-<li>Check the effective sample size and comment on the mixing. Is it impacted by the tuning parameter?</li>
-<li>Implement the method of section 3.1 from <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> by adding <span class="math inline">\(\lambda\)</span> as a parameter.</li>
-<li>For three models with different values of <span class="math inline">\(\lambda\)</span>, compute the widely applicable information criterion (WAIC) and use it to assess predictive performance.</li>
-</ol>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>We first setup a Gibbs sampler for a given value of <span class="math inline">\(\lambda\)</span>, or using the empirical Bayes estimator provided in section 3.1. The effective sampling size for fixed <span class="math inline">\(\lambda\)</span> is good. If we let the parameter varies, the performance degrades and we obtain an effective size shy of 1000 for 10K iterations for <span class="math inline">\(\lambda\)</span>, and comfortably above 5000 for others.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(diabetes, <span class="at">package =</span> <span class="st">"lars"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>bayeslasso <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">lambda =</span> <span class="cn">NULL</span>, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">B =</span> <span class="fl">1e4</span>L,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">x =</span> diabetes<span class="sc">$</span>x, </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> diabetes<span class="sc">$</span>y){</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.matrix</span>(x), <span class="fu">is.vector</span>(y))</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Scale inputs in case</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">scale</span>(x, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> y <span class="sc">-</span> <span class="fu">mean</span>(y)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check method</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">is.null</span>(lambda)){</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    method <span class="ot">&lt;-</span> <span class="st">"empbayes"</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    method <span class="ot">&lt;-</span> <span class="st">"fixed"</span> </span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  burnin <span class="ot">&lt;-</span> <span class="dv">250</span>L</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Precompute quantities and dimensions</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  xtx <span class="ot">&lt;-</span> <span class="fu">crossprod</span>(x)</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ncol</span>(x)</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(x)</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Obtain initial estimates</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  linmod <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  betaols <span class="ot">&lt;-</span> <span class="fu">coef</span>(linmod)</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  beta.curr <span class="ot">&lt;-</span> betaols</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  sigmasq.curr <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">residuals</span>(linmod)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  tausqinv.curr <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, p)</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Value reported in the text for the optimal parameter: lambda = 0.237</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  beta.ind <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>p</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  sigmasq.ind <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="dv">1</span>L</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  tausq.ind <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> p <span class="sc">+</span> <span class="dv">2</span>L, <span class="at">length.out =</span> p, <span class="at">by =</span> <span class="dv">1</span>L)</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  chains <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> B, <span class="at">ncol =</span> p <span class="sc">+</span> <span class="dv">1</span> <span class="sc">+</span> p <span class="sc">+</span> </span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">ifelse</span>(method <span class="sc">==</span> <span class="st">"fixed"</span>, <span class="dv">0</span>,<span class="dv">1</span>))</span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(method <span class="sc">==</span> <span class="st">"fixed"</span>){</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(chains) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"beta"</span>, <span class="dv">1</span><span class="sc">:</span>p), <span class="st">"sigmasq"</span>,</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">paste0</span>(<span class="st">"tausq"</span>, <span class="dv">1</span><span class="sc">:</span>p))</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    lambdasq.curr <span class="ot">&lt;-</span> lambda[<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span>{</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(chains) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"beta"</span>, <span class="dv">1</span><span class="sc">:</span>p), <span class="st">"sigmasq"</span>, </span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">paste0</span>(<span class="st">"tausq"</span>, <span class="dv">1</span><span class="sc">:</span>p), <span class="st">"lambda"</span>)</span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    lambdasq.curr <span class="ot">&lt;-</span> p<span class="sc">*</span><span class="fu">sqrt</span>(sigmasq.curr)<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">abs</span>(betaols))</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    lambdasq.ind <span class="ot">&lt;-</span> <span class="fu">ncol</span>(chains)</span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co"># MCMC loop</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(b <span class="cf">in</span> <span class="fu">seq_len</span>(B <span class="sc">+</span> burnin)){</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  ind <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">1</span>, b<span class="sc">-</span>burnin)</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  Ainv <span class="ot">&lt;-</span> <span class="fu">solve</span>(xtx <span class="sc">+</span> <span class="fu">diag</span>(tausqinv.curr))</span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  beta.curr <span class="ot">&lt;-</span> chains[ind,beta.ind] <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(</span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    mvtnorm<span class="sc">::</span><span class="fu">rmvnorm</span>(</span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> <span class="dv">1</span>, </span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="fu">as.numeric</span>(Ainv <span class="sc">%*%</span> <span class="fu">t</span>(x) <span class="sc">%*%</span> y), </span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>      <span class="at">sigma =</span> sigmasq.curr<span class="sc">*</span>Ainv))</span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  sigmasq.curr <span class="ot">&lt;-</span> chains[ind, sigmasq.ind] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">rgamma</span>(</span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="dv">1</span>, </span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> (n<span class="dv">-1</span><span class="sc">+</span>p)<span class="sc">/</span><span class="dv">2</span>,</span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">rate =</span> <span class="fu">sum</span>((y<span class="sc">-</span>x <span class="sc">%*%</span> beta.curr)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span> <span class="sc">+</span> </span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">sum</span>(beta.curr<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>tausqinv.curr)<span class="sc">/</span><span class="dv">2</span>)</span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compute marginal posterior mean for lambda, using section 3.1</span></span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>  sumexpect <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>p){</span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    tausqinv.curr[j] <span class="ot">&lt;-</span> actuar<span class="sc">::</span><span class="fu">rinvgauss</span>(</span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> <span class="dv">1</span>, </span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="fu">sqrt</span>(lambdasq.curr<span class="sc">*</span>sigmasq.curr)<span class="sc">/</span><span class="fu">abs</span>(beta.curr[j]),</span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">dispersion =</span> <span class="dv">1</span><span class="sc">/</span>lambdasq.curr)</span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(method <span class="sc">!=</span> <span class="st">"fixed"</span>){</span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>    sumexpect <span class="ot">&lt;-</span> sumexpect <span class="sc">+</span> <span class="fu">mean</span>(<span class="dv">1</span><span class="sc">/</span>actuar<span class="sc">::</span><span class="fu">rinvgauss</span>(</span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> <span class="dv">1000</span>, </span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="fu">sqrt</span>(lambdasq.curr<span class="sc">*</span>sigmasq.curr)<span class="sc">/</span><span class="fu">abs</span>(beta.curr[j]),</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>      <span class="at">dispersion =</span> <span class="dv">1</span><span class="sc">/</span>lambdasq.curr))</span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>  chains[ind, tausq.ind] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>tausqinv.curr</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(method <span class="sc">!=</span> <span class="st">"fixed"</span>){</span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    lambdasq.curr <span class="ot">&lt;-</span> chains[ind, lambdasq.ind] <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">*</span>p<span class="sc">/</span>sumexpect</span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(method <span class="sc">!=</span> <span class="st">"fixed"</span>){</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>  chains[, lambdasq.ind] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(chains[, lambdasq.ind])</span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Cast Markov chains to mcmc class object.</span></span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>chains.mcmc <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chains)</span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Effective sample size</span></span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>ess <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">round</span>(coda<span class="sc">::</span><span class="fu">effectiveSize</span>(chains.mcmc), <span class="dv">0</span>))</span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute WAIC from log pointwise density</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>lppd <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>penalty <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(n)){</span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>  lppd_i <span class="ot">&lt;-</span> <span class="fu">dnorm</span>(</span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> y[i], </span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean =</span> <span class="fu">as.numeric</span>(chains[,beta.ind] <span class="sc">%*%</span> <span class="fu">c</span>(x[i,])), </span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> <span class="fu">sqrt</span>(chains[,sigmasq.ind]), </span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>  lppd <span class="ot">&lt;-</span> lppd <span class="sc">+</span> <span class="fu">mean</span>(lppd_i)</span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>  penalty <span class="ot">&lt;-</span> penalty <span class="sc">+</span> <span class="fu">var</span>(lppd_i)</span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>waic <span class="ot">&lt;-</span> (<span class="sc">-</span>lppd <span class="sc">+</span> penalty)<span class="sc">/</span>n</span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>l1norm <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rowSums</span>(<span class="fu">abs</span>(chains[,beta.ind])))</span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameter estimates and 95% equitailed credible intervals</span></span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>quant <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(chains, <span class="dv">2</span>, </span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>                quantile, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>)))</span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>regpar <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(quant,</span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>                <span class="fu">colMeans</span>(chains),</span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>                coda<span class="sc">::</span><span class="fu">batchSE</span>(chains.mcmc),</span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>                ess))</span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>regpar<span class="sc">$</span>pars <span class="ot">&lt;-</span> <span class="fu">rownames</span>(quant)</span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(regpar) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(regpar) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"lower"</span>, <span class="st">"median"</span>, <span class="st">"upper"</span>, </span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"mean"</span>, <span class="st">"se"</span>, <span class="st">"ess"</span>, <span class="st">"par"</span>)</span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>regpar <span class="ot">&lt;-</span> regpar[,<span class="fu">c</span>(<span class="dv">7</span>,<span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">6</span>)]</span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(regpar, <span class="st">"waic"</span>) <span class="ot">&lt;-</span> waic</span>
-<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a><span class="fu">attr</span>(regpar, <span class="st">"l1norm"</span>) <span class="ot">&lt;-</span> l1norm</span>
-<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a> <span class="fu">return</span>(regpar)</span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a><span class="co"># Call the MCMC sampler</span></span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>)</span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>lasso_empbayes <span class="ot">&lt;-</span> <span class="fu">bayeslasso</span>(<span class="at">lambda =</span> <span class="cn">NULL</span>)</span>
-<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the value of WAIC</span></span>
-<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>waic <span class="ot">&lt;-</span> <span class="fu">attr</span>(lasso_empbayes, <span class="st">"waic"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-parkcasellaf2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-parkcasellaf2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="05-solution_files/figure-html/fig-parkcasellaf2-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-parkcasellaf2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Standardized median posterior estimates of the coefficients for the Bayesian LASSO with 95 percent equitailed credible intervals, with <span class="math inline">\(\lambda\)</span> estimated using empirical Bayes. Ordinary least square estimates are denoted by crosses.
-</figcaption>
-</figure>
+lambda[2] -4.444 -4.443 -4.442 -4.441 -4.440</code></pre>
 </div>
 </div>
 </div>
-<p>The plot corresponds to Figure 2 of <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#ref-Park.Casella:2008" role="doc-biblioref">2008</a>)</span> and the posterior summaries, reported in <a href="#tbl-coefs" class="quarto-xref">Table&nbsp;1</a>, are also in line with those of the paper.</p>
-<div class="cell">
-<div id="tbl-coefs" class="cell quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Estimates posterior summaries from the Bayesian LASSO, based on 10K draws. Posterior means and adjusted standard errors, posterior median and equitailed 95 percent credible intervals, effective sample.
-</figcaption>
-<div aria-describedby="tbl-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output-display">
-<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th style="text-align: left;">par</th>
-<th style="text-align: right;">mean</th>
-<th style="text-align: right;">se</th>
-<th style="text-align: right;">lower</th>
-<th style="text-align: right;">median</th>
-<th style="text-align: right;">upper</th>
-<th style="text-align: right;">ess</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">beta1</td>
-<td style="text-align: right;">-3.14</td>
-<td style="text-align: right;">0.58</td>
-<td style="text-align: right;">-112.92</td>
-<td style="text-align: right;">-2.34</td>
-<td style="text-align: right;">105.68</td>
-<td style="text-align: right;">10000</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">beta2</td>
-<td style="text-align: right;">-214.04</td>
-<td style="text-align: right;">0.58</td>
-<td style="text-align: right;">-331.89</td>
-<td style="text-align: right;">-213.49</td>
-<td style="text-align: right;">-97.58</td>
-<td style="text-align: right;">9012</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">beta3</td>
-<td style="text-align: right;">523.41</td>
-<td style="text-align: right;">0.76</td>
-<td style="text-align: right;">393.47</td>
-<td style="text-align: right;">523.87</td>
-<td style="text-align: right;">656.33</td>
-<td style="text-align: right;">9062</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">beta4</td>
-<td style="text-align: right;">307.64</td>
-<td style="text-align: right;">0.72</td>
-<td style="text-align: right;">177.38</td>
-<td style="text-align: right;">307.69</td>
-<td style="text-align: right;">439.33</td>
-<td style="text-align: right;">8957</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">beta5</td>
-<td style="text-align: right;">-187.12</td>
-<td style="text-align: right;">2.60</td>
-<td style="text-align: right;">-587.60</td>
-<td style="text-align: right;">-170.71</td>
-<td style="text-align: right;">125.58</td>
-<td style="text-align: right;">5089</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">beta6</td>
-<td style="text-align: right;">7.79</td>
-<td style="text-align: right;">1.92</td>
-<td style="text-align: right;">-272.14</td>
-<td style="text-align: right;">-1.62</td>
-<td style="text-align: right;">344.59</td>
-<td style="text-align: right;">6056</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">beta7</td>
-<td style="text-align: right;">-154.43</td>
-<td style="text-align: right;">1.62</td>
-<td style="text-align: right;">-385.12</td>
-<td style="text-align: right;">-153.23</td>
-<td style="text-align: right;">72.40</td>
-<td style="text-align: right;">5259</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">beta8</td>
-<td style="text-align: right;">96.44</td>
-<td style="text-align: right;">1.60</td>
-<td style="text-align: right;">-131.62</td>
-<td style="text-align: right;">87.10</td>
-<td style="text-align: right;">353.40</td>
-<td style="text-align: right;">6460</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">beta9</td>
-<td style="text-align: right;">524.09</td>
-<td style="text-align: right;">1.26</td>
-<td style="text-align: right;">331.93</td>
-<td style="text-align: right;">520.90</td>
-<td style="text-align: right;">727.05</td>
-<td style="text-align: right;">6630</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">beta10</td>
-<td style="text-align: right;">64.21</td>
-<td style="text-align: right;">0.69</td>
-<td style="text-align: right;">-49.05</td>
-<td style="text-align: right;">61.87</td>
-<td style="text-align: right;">188.78</td>
-<td style="text-align: right;">8897</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">sigmasq</td>
-<td style="text-align: right;">2952.78</td>
-<td style="text-align: right;">2.00</td>
-<td style="text-align: right;">2585.93</td>
-<td style="text-align: right;">2945.02</td>
-<td style="text-align: right;">3370.20</td>
-<td style="text-align: right;">9511</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">tausq1</td>
-<td style="text-align: right;">20.55</td>
-<td style="text-align: right;">0.26</td>
-<td style="text-align: right;">0.24</td>
-<td style="text-align: right;">11.13</td>
-<td style="text-align: right;">93.70</td>
-<td style="text-align: right;">10000</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">tausq2</td>
-<td style="text-align: right;">34.75</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">3.42</td>
-<td style="text-align: right;">25.19</td>
-<td style="text-align: right;">122.06</td>
-<td style="text-align: right;">8868</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">tausq3</td>
-<td style="text-align: right;">58.44</td>
-<td style="text-align: right;">0.36</td>
-<td style="text-align: right;">13.42</td>
-<td style="text-align: right;">49.09</td>
-<td style="text-align: right;">155.41</td>
-<td style="text-align: right;">9375</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">tausq4</td>
-<td style="text-align: right;">41.99</td>
-<td style="text-align: right;">0.39</td>
-<td style="text-align: right;">6.09</td>
-<td style="text-align: right;">32.35</td>
-<td style="text-align: right;">133.19</td>
-<td style="text-align: right;">8972</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">tausq5</td>
-<td style="text-align: right;">34.17</td>
-<td style="text-align: right;">0.45</td>
-<td style="text-align: right;">1.03</td>
-<td style="text-align: right;">24.45</td>
-<td style="text-align: right;">122.56</td>
-<td style="text-align: right;">5159</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">tausq6</td>
-<td style="text-align: right;">26.82</td>
-<td style="text-align: right;">0.38</td>
-<td style="text-align: right;">0.57</td>
-<td style="text-align: right;">17.18</td>
-<td style="text-align: right;">105.39</td>
-<td style="text-align: right;">7441</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">tausq7</td>
-<td style="text-align: right;">31.06</td>
-<td style="text-align: right;">0.35</td>
-<td style="text-align: right;">1.04</td>
-<td style="text-align: right;">21.46</td>
-<td style="text-align: right;">118.21</td>
-<td style="text-align: right;">8954</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">tausq8</td>
-<td style="text-align: right;">27.47</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">0.56</td>
-<td style="text-align: right;">17.94</td>
-<td style="text-align: right;">107.05</td>
-<td style="text-align: right;">8551</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">tausq9</td>
-<td style="text-align: right;">59.02</td>
-<td style="text-align: right;">0.47</td>
-<td style="text-align: right;">12.95</td>
-<td style="text-align: right;">49.73</td>
-<td style="text-align: right;">160.42</td>
-<td style="text-align: right;">7805</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">tausq10</td>
-<td style="text-align: right;">23.35</td>
-<td style="text-align: right;">0.30</td>
-<td style="text-align: right;">0.40</td>
-<td style="text-align: right;">13.66</td>
-<td style="text-align: right;">102.21</td>
-<td style="text-align: right;">9703</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">lambda</td>
-<td style="text-align: right;">0.24</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.21</td>
-<td style="text-align: right;">0.24</td>
-<td style="text-align: right;">0.26</td>
-<td style="text-align: right;">1038</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</figure>
-</div>
-</div>
-<p>For the last part, we can simply run the MCMC and find the value of <span class="math inline">\(\lambda\)</span> that yields the lowest value of WAIC.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>blasso1 <span class="ot">&lt;-</span> <span class="fu">bayeslasso</span>(<span class="at">lambda =</span> <span class="fl">0.1</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>blasso2 <span class="ot">&lt;-</span> <span class="fu">bayeslasso</span>(<span class="at">lambda =</span> <span class="fl">0.2</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>blasso3 <span class="ot">&lt;-</span> <span class="fu">bayeslasso</span>(<span class="at">lambda =</span> <span class="dv">1</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">*</span><span class="fu">length</span>(diabetes<span class="sc">$</span>y)<span class="sc">*</span><span class="fu">c</span>(<span class="fu">attr</span>(blasso1, <span class="st">"waic"</span>), <span class="fu">attr</span>(blasso2, <span class="st">"waic"</span>), <span class="fu">attr</span>(blasso3, <span class="st">"waic"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4802.449 4801.923 4804.496</code></pre>
-</div>
-</div>
-</div>
-
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Park.Casella:2008" class="csl-entry" role="listitem">
-Park, T., &amp; Casella, G. (2008). The <span>B</span>ayesian <span>L</span>asso. <em>Journal of the American Statistical Association</em>, <em>103</em>(482), 681–686. <a href="https://doi.org/10.1198/016214508000000337">https://doi.org/10.1198/016214508000000337</a>
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -1,4 +1,4 @@
-// generated with brms 2.22.0
+// generated with brms 2.23.0
 functions {
 }
 data {
@@ -40,7 +40,8 @@ parameters {
 transformed parameters {
   vector[N_1] r_1_1;  // actual group-level effects
   vector[N_2] r_2_1;  // actual group-level effects
-  real lprior = 0;  // prior contributions to the log posterior
+  // prior contributions to the log posterior
+  real lprior = 0;
   r_1_1 = (sd_1[1] * (z_1[1]));
   r_2_1 = (sd_2[1] * (z_2[1]));
   lprior += normal_lpdf(b[1] | 0, 10);
