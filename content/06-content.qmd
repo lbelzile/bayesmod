@@ -1,12 +1,13 @@
 ---
-title: "Bayesian workflow and model diagnostics"
+title: "MCMC and Gibbs sampling"
 ---
 
 
 ## Content
 
-- Computational tricks (blocking, reparametrization, marginalization, etc.)
-- Bayesian workflow
+- Metropolis-adjusted Langevin algorithm (MALA)
+- Gibbs sampling
+- Data augmentation
 - Graphical diagnostics of convergence
 - Goodness-of-fit measures (WAIC, LOO-CV, etc.)
 
@@ -14,10 +15,12 @@ title: "Bayesian workflow and model diagnostics"
 
 At the end of the chapter, students should be able to
 
+- implement Gibbs sampling
+- derive the conditional distributions of a model for Gibbs sampling
 - choose suitable test statistics to evaluate model adequacy
 - assess convergence using graphical tools and effective sample size
 - perform model comparisons using Bayes factor or predictive measures
-- diagnose performance of MCMC algorithms and implement potential remedies
+
 
 
 
@@ -29,9 +32,7 @@ These readings should be completed before class, to ensure timely understanding 
 
 :::
 
-- [Chapter 7](https://lbelzile.github.io/MATH80601A/workflow.html) of the course notes
-- @Gelman:2020 
-
+- [Chapter 6](https://lbelzile.github.io/MATH80601A/gibbs.html) 
 
 
 ## Complementary readings
@@ -42,6 +43,7 @@ Complementary readings are additional sources of information that are not requir
 
 
 - @Gelman:2013, chapters 6 and 7
+- @Albert:2009, chapters 6 and 10 (several examples)
 - @McElreath:2020, chapter 9.5 
 
 
@@ -57,5 +59,10 @@ Complementary readings are additional sources of information that are not requir
 
 ## Code
 
+
+- [Code demonstration](06-lecture.qmd)
 - [**R** script](/files/code/06-mixture.R) for two-component mixture model
+
+<!--
 - [**R** script](/files/code/06-Tokyo_rainfall.R) for the Tokyo rainfall
+-->

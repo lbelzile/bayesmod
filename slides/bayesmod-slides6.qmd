@@ -1,7 +1,7 @@
 ---
 title: "Bayesian modelling"
 author: "Léo Belzile"
-subtitle: "Gibbs sampling"
+subtitle: "More MCMC and Gibbs sampling"
 date: today
 date-format: "[Last compiled] dddd MMM D, YYYY"
 eval: true
@@ -45,6 +45,19 @@ library(patchwork)
 knitr::opts_chunk$set(fig.retina = 3, collapse = TRUE)
 options(digits = 3, width = 75)
 ```
+
+
+
+
+## Reminder: Metropolis--Hastings algorithm 
+
+Starting from an initial value $\boldsymbol{\theta}_0$:
+
+1.  draw a proposal value $\boldsymbol{\theta}_t^{\star} \sim q(\boldsymbol{\theta} \mid \boldsymbol{\theta}_{t-1})$.
+2.  Compute the acceptance ratio $$
+    R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
+    $$
+3.  With probability $\min\{R, 1\}$, accept the proposal and set $\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}$, otherwise set the value to the previous state, $\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}$.
 
 
 ## Efficient proposals: MALA {.smaller}
@@ -251,7 +264,7 @@ for(i in seq_len(B + warmup)){
 } # End of MCMC for loop
 ```
 
-
+<!--
 ## Tracking the log posterior
 
 One can store (separately) at each iteration the values of the 
@@ -262,17 +275,18 @@ One can store (separately) at each iteration the values of the
 These can be used for prior or likelihood sensitivity [@Kallioinen:2023]
 
 
+-->
+## Is my answer right?
 
-## Strategies
+For us to get the correct answer, we need:
 
-Many diagnostics require running multiple chains
-
-- check within vs between variance,
-- determine whether they converge to the same target.
-
+- The algorithm implementation must be correct.
+- The chain must have converged to the target posterior.
+- The effective sample size of the sample must be sufficiently large for inference.
 
 
-## Blank run
+
+## Correctness of implementation: blank run
 
 To check that the algorithm is correctly implemented:
 
@@ -281,7 +295,7 @@ To check that the algorithm is correctly implemented:
 
 The resulting draws should be drawn from the prior if the latter is proper [@Green:2001, p.55].
 
-## Correct implementation
+## Correctness of implementation: fake data
 
 We can generate artificial data to check the procedure.
 
@@ -299,6 +313,12 @@ Simulation-based calibration  [@Talts:2020] proceeds with, in order
 - We do a dimension reduction step taking the test function $t(\cdot)$ to get the rank of the prior draw among the posterior ones, breaking ties at random if any.
 - These steps are repeated $K$ times, yielding $K$ test functions $T_1, \ldots, T_K.$ We then test for uniformity using results from @Sailynoja:2022.
 
+## Convergence diagnostics
+
+Many diagnostics require running multiple chains
+
+- check within vs between variance,
+- determine whether they converge to the same target.
 
 ## Gelman--Rubin diagnostic
 
@@ -656,7 +676,7 @@ g4 <- ggacf(chains2[,1]) + theme_classic()
 
 Consider independent and identically distributed observations, with
 \begin{align*}
-Y_i &\sim \mathsf{Gauss}(\mu, \tau), \qquad i=1, \ldots, n) 
+Y_i &\sim \mathsf{Gauss}(\mu, \tau), \qquad i=1, \ldots, n
 \\\mu &\sim \mathsf{Gauss}(\nu, \omega)\\
 \tau &\sim \mathsf{inv. gamma}(\alpha, \beta)
 \end{align*}
