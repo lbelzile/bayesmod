@@ -263,34 +263,23 @@ The *independence* Metropolis--Hastings uses a global proposal $q$ which does no
 The Gaussian random walk takes $\boldsymbol{\theta}_t^{\star} =\boldsymbol{\theta}_{t-1}+ \sigma_\text{p}Z$, where $Z \sim \mathsf{Gauss}(0,1)$ and $\sigma_\text{p}$ is the proposal standard deviation. *Random walks* allow us to explore the space.
 
 
-## Assessing convergence
+## Breaking down the Markov chain
 
-How do we assess convergence of a MCMC algorithm?
+We distinguish between three phases
 
-- the algorithm implementation must be correct,
-- the chain must have converged to the target posterior.
-- the effective sample size must be sufficiently large for inference.
+- **burn in** period: initial draws allowing the algorithm to converge to it's stationary distribution (discarded)
+- **warmup** adaptation period: tuning period for the proposal std. deviation, etc. (discarded)
+- sampling period: draws post burn in and warmup that are kept for inference
 
+We can optionally **thin** by keeping one every $k$ iterations from the sampling period to reduce the storage.
 
-## Tracking the log posterior
+## Is my answer right?
 
-One can store (separately) at each iteration the values of the 
+For us to get the correct answer, we need:
 
-- log likelihood
-- log prior
-
-These can be used for prior or likelihood sensitivity [@Kallioinen:2023]
-
-
-## Blank run
-
-To check that the algorithm is correctly implemented:
-
-- remove the log likelihood component
-- run the algorithm with just the prior
-
-The resulting draws should be drawn from the prior if the latter is proper [@Green:2001, p.55].
-
+- The algorithm implementation must be correct.
+- The chain must have converged to the target posterior.
+- The effective sample size of the sample must be sufficiently large for inference.
 
 
 ## Burn in
@@ -337,7 +326,7 @@ bayesplot::mcmc_trace(x = coda::as.mcmc(chains_goldi),
 
 ```
 
-## Correlograms for Goldilock 
+## Correlograms of MCMC output 
 
 
 ```{r}
@@ -393,247 +382,6 @@ Parameters may be bounded, e.g. $\theta_i \in [a,b]$.
 - Another alternative is to use truncated proposals (useful with more complex algorithms like MALA)
 
 
-## Efficient proposals: MALA {.smaller}
-
-The Metropolis-adjusted Langevin algorithm (MALA) uses a Gaussian random walk proposal $$\boldsymbol{\theta}^{\star}_t \sim \mathsf{Gauss}\{\mu(\boldsymbol{\theta}_{t-1}), \tau^2\mathbf{A}\},$$ with mean $$\mu(\boldsymbol{\theta}_{t-1})=\boldsymbol{\theta}_{t-1} + \mathbf{A}\eta \nabla \log p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y}),$$ and variance $\tau^2\mathbf{A}$, for some mass matrix $\mathbf{A}$, tuning parameter $\tau>0$. 
-
-The parameter $\eta < 1$ is a learning rate. This is akin to a Newton algorithm, so beware if you are far from the mode (where the gradient is typically large)!
-
-
-## Higher order proposals
-
-For a single parameter update $\theta$, a Taylor series expansion of the log posterior around the current value suggests using as proposal density a Gaussian approximation with [@Rue.Held:2005]
-
-- mean $\mu_{t-1} = \theta_{t-1} - f'(\theta_{t-1})/f''(\theta_{t-1})$ and 
-- precision $\tau^{-2} = -f''(\theta_{t-1})$
-
-We need $f''(\theta_{t-1})$ to be negative!
-
-This gives **local adaption** relative to MALA (global variance).
-
-## Higher order and moves
-
-For MALA and cie., we need to compute the density of the proposal also for the reverse move for the expansion starting from the proposal $\mu(\boldsymbol{\theta}_{t}^\star)$.
-
-These methods are more efficient than random walk Metropolis--Hastings, but they require the gradient and the hessian (can be obtained analytically using autodiff, or numerically).
-
-## Modelling individual headlines of **Upworthy** example
-
-The number of conversions `nclick` is binomial with sample size $n_i=$`nimpression`.
-
-Since $n_i$ is large, the sample average `nclick`/`nimpression` is approximately Gaussian, so write
-
-\begin{align*}
-Y_i &\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
-\mu &\sim \mathsf{trunc. Gauss}(0.01, 0.1^2, 0, 1) \\
-\sigma &\sim \mathsf{expo}(0.7)
-\end{align*}
-
-## MALA: data set-up
-
-```{r}
-#| eval: false
-#| echo: true
-data(upworthy_question, package = "hecbayes")
-# Select data for a single question
-qdata <- upworthy_question |>
-  dplyr::filter(question == "yes") |>
-  dplyr::mutate(y = clicks/impressions,
-                no = impressions)
-```
-
-## MALA: define functions
-```{r}
-#| eval: false
-#| echo: true
-# Create functions with the same signature (...) for the algorithm
-logpost <- function(par, data, ...){
-  mu <- par[1]; sigma <- par[2]
-  no <- data$no
-  y <- data$y
-  if(isTRUE(any(sigma <= 0, mu < 0, mu > 1))){
-    return(-Inf)
-  }
-  dnorm(x = mu, mean = 0.01, sd = 0.1, log = TRUE) +
-  dexp(sigma, rate = 0.7, log = TRUE) + 
-  sum(dnorm(x = y, mean = mu, sd = sigma/sqrt(no), log = TRUE))
-}
-```
-
-## MALA: compute gradient of log posterior
-
-```{r}
-#| eval: false
-#| echo: true
-logpost_grad <- function(par, data, ...){
-   no <- data$no
-  y <- data$y
-  mu <- par[1]; sigma <- par[2]
-  c(sum(no*(y-mu))/sigma^2 -(mu - 0.01)/0.01,
-    -length(y)/sigma + sum(no*(y-mu)^2)/sigma^3 -0.7
-  )
-}
-```
-
-
-## MALA: compute maximum a posteriori
-
-```{r}
-#| eval: false
-#| echo: true
-# Starting values - MAP
-map <- optim(
-  par = c(mean(qdata$y), 0.5),
-  fn = function(x){-logpost(x, data = qdata)},
-  gr = function(x){-logpost_grad(x, data = qdata)},  
-  hessian = TRUE,
-  method = "BFGS")
-# Check convergence 
-logpost_grad(map$par, data = qdata)
-```
-
-## MALA: starting values and mass matrix
-
-```{r}
-#| eval: false
-#| echo: true
-# Set initial parameter values
-curr <- map$par 
-# Compute a mass matrix
-Amat <- solve(map$hessian)
-# Cholesky root - for random number generation
-cholA <- chol(Amat)
-```
-
-## MALA: containers and setup
-
-```{r}
-#| eval: false
-#| echo: true
-# Create containers for MCMC
-B <- 1e4L # number of iterations
-warmup <- 1e3L # adaptation period
-npar <- 2L
-prop_sd <- rep(1, npar) # tuning parameter
-chains <- matrix(nrow = B, ncol = npar)
-damping <- 0.8
-acceptance <- attempts <- 0 
-colnames(chains) <- names(curr) <- c("mu","sigma")
-# Proposal variance proportional to inverse hessian at MAP
-prop_var <- diag(prop_sd) %*% Amat %*% diag(prop_sd)
-```
-
-## MALA: sample proposal with Newton step
-
-```{r}
-#| eval: false
-#| echo: true
-for(i in seq_len(B + warmup)){
-  ind <- pmax(1, i - warmup)
-  # Compute the proposal mean for the Newton step
-  prop_mean <- c(curr + damping * 
-     Amat %*% logpost_grad(curr, data = qdata))
-  # prop <- prop_sd * c(rnorm(npar) %*% cholA) + prop_mean
-  prop <- c(mvtnorm::rmvnorm(
-    n = 1,
-    mean = prop_mean, 
-    sigma = prop_var))
-#  [...]
-```
-
-## MALA: reverse step
-
-```{r}
-#| eval: false
-#| echo: true
-  # Compute the reverse step
-  curr_mean <- c(prop + damping * 
-     Amat %*% logpost_grad(prop, data = qdata))
-  # log of ratio of bivariate Gaussian densities
-  logmh <- mvtnorm::dmvnorm(
-    x = curr, mean = prop_mean, 
-    sigma = prop_var, 
-    log = TRUE) - 
-    mvtnorm::dmvnorm(
-      x = prop, 
-      mean = curr_mean, 
-      sigma = prop_var, 
-      log = TRUE) + 
-  logpost(prop, data = qdata) - 
-    logpost(curr, data = qdata)
-```
-
-## MALA: Metropolis--Hastings ratio
-
-```{r}
-#| eval: false
-#| echo: true
-  if(logmh > log(runif(1))){
-    curr <- prop
-    acceptance <- acceptance + 1L
-  }
-  attempts <- attempts + 1L
-  # Save current value
-  chains[ind,] <- curr
-```
-
-## MALA: adaptation
-
-```{r}
-#| eval: false
-#| echo: true
-  if(i %% 100 & i < warmup){
-    # Check acceptance rate and increase/decrease variance
-    out <- hecbayes::adaptive(
-      attempts = attempts, # counter for number of attempts
-      acceptance = acceptance, 
-      sd.p = prop_sd, #current proposal standard deviation
-      target = 0.574) # target acceptance rate
-    prop_sd <- out$sd # overwrite current std.dev
-    acceptance <- out$acc # if we change std. dev, this is set to zero
-    attempts <- out$att # idem, otherwise unchanged
-    prop_var <- diag(prop_sd) %*% Amat %*% diag(prop_sd)
-  }
-} # End of MCMC for loop
-```
-
-
-
-## Strategies
-
-Many diagnostics require running multiple chains
-
-- check within vs between variance,
-- determine whether they converge to the same target.
-
-## Correct implementation
-
-We can generate artificial data to check the procedure.
-
-
-Simulation-based calibration  [@Talts:2020] proceeds with, in order
-
-1. $\boldsymbol{\theta}_0 \sim p(\boldsymbol{\theta}),$
-2. $\boldsymbol{y}_0 \sim p(\boldsymbol{y} \mid \boldsymbol{\theta}_0),$
-3. $\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_B \sim p(\boldsymbol{\theta} \mid \boldsymbol{y}_0 ).$
-
-
-## Simulation-based calibration
-
-- Conditional on the simulated $\boldsymbol{y}$, the distribution of $\boldsymbol{\theta}_0$ is the same as that of $\boldsymbol{\theta}_1, \ldots, \boldsymbol{\theta}_B.$
-- We do a dimension reduction step taking the test function $t(\cdot)$ to get the rank of the prior draw among the posterior ones, breaking ties at random if any.
-- These steps are repeated $K$ times, yielding $K$ test functions $T_1, \ldots, T_K.$ We then test for uniformity using results from @Sailynoja:2022.
-
-## Breaking down the Markov chain
-
-We distinguish between three phases
-
-- **burn in** period: initial draws allowing the algorithm to converge to it's stationary distribution (discarded)
-- **warmup** adaptation period: tuning period for the proposal std. deviation, etc. (discarded)
-- sampling period: draws post burn in and warmup that are kept for inference
-
-We can optionally **thin** by keeping one every $k$ iterations from the sampling period to reduce the storage.
-
 ## Visual diagnostic: trace plots
 
 Display the Markov chain sample path as a function of the number of iterations.
@@ -656,7 +404,7 @@ A **trace rank** plot compares the rank of the values of the different chain at 
 
 - With good mixing, the ranks should switch frequently and be distributed uniformly across integers.
 
-
+<!--
 
 ## Effective sample size
 
@@ -679,6 +427,7 @@ We want our average estimate to be reliable!
 
 - (related question: how many significant digits to report?)
 
+-->
 
 ## Lack of stationarity
 
@@ -728,216 +477,23 @@ g1 + g2
 ```
 
 
-## Gelman--Rubin diagnostic
-
-Suppose we run $M$ chains for $B$ iterations, post burn in. 
-
-Denote by $\theta_{bm}$ the $b$th draw of the $m$th chain, we compute the global average 
-$$\overline{\theta} = \frac{1}{BM}\sum_{b=1}^B \sum_{m=1}^m \theta_{bm}$$ and similarly the chain-specific sample average and variances, respectively $\overline{\theta}_m$ and $\widehat{\sigma}^2_m$ ($m=1, \ldots, M$). 
-
-## Sum of square decomposition
-
-The between-chain variance and within-chain variance estimator are
-\begin{align*}
-\mathsf{Va}_{\text{between}} &= \frac{B}{M-1}\sum_{m=1}^M (\overline{\theta}_m - \overline{\theta})^2\\
-\mathsf{Va}_{\text{within}} &= \frac{1}{M}\sum_{m=1}^m \widehat{\sigma}^2_m
-\end{align*}
-
-## Potential scale reduction statistic 
-
-The Gelman--Rubin diagnostic, denoted $\widehat{R}$, is obtained by running multiple chains and considering the difference between within-chain and between-chains variances,
-
-\begin{align*}
-\widehat{R} = \left(\frac{\mathsf{Va}_{\text{within}}(B-1) + \mathsf{Va}_{\text{between}}}{B\mathsf{Va}_{\text{within}}}\right)^{1/2}
-\end{align*}
-
-
-Any value of $\widehat{R}$ larger 1 is indicative of problems of convergence.
-
-## Bad chains
-
-
-```{r}
-#| eval: true
-#| echo: false
-#| label: fig-rhat
-#| fig-cap: "Two pairs of Markov chains: the top ones seem stationary, but with different modes and  $\\widehat{R} \\approx 3.4$. The chains on the right hover around zero, but do not appear stable, with $\\widehat{R} \\approx 1.6$."
-B <- 1000
-set.seed(1234)
-c1 <- arima.sim(model = list(ar = c(0.6,0.2)), 
-                           rand.gen = rexp,
-                           n = B) + -2
-c2 <- arima.sim(model = list(ar = c(0.5,0.2)),
-                           n = B) - 1
-chains <- coda::mcmc.list(
-  list(theta = coda::mcmc(c1),
-       theta = coda::mcmc(c2)))
-rhat1 <- coda::gelman.diag(chains)
-# bayesplot::mcmc_trace(chains)
-
-g1 <- ggplot(data = data.frame(
-    time = rep(seq_len(B), length.out = 2*B),
-    chain = c(c1, c2),
-    group = factor(rep(c(1,2), each = B))),
-  mapping = aes(x = time, y = chain, col = group)) +
-  geom_line() +
-  scale_color_manual(values = MetBrewer::met.brewer("Renoir", 3)[c(2:3)]) + 
-  labs(x = "iteration number", y = "") + 
-  theme_classic() +
-  theme(legend.position = "none")
-
-set.seed(1234)
-c1b <- arima.sim(model = list(ar = c(0.6,0.2)), 
-                rand.gen = rnorm,
-                n = B) + seq(-2, 2, length.out = B)
-c2b <- arima.sim(model = list(ar = c(0.5,0.2)),
-                n = B) +  seq(2, -2, length.out = B)
-chains <- coda::mcmc.list(
-  list(theta = coda::mcmc(c1b),
-       theta = coda::mcmc(c2b)))
-rhat2 <- coda::gelman.diag(chains)
-# bayesplot::mcmc_trace(chains)
-
-g2 <- ggplot(data = data.frame(
-  time = rep(seq_len(B), length.out = 2*B),
-  chain = c(c1b, c2b),
-  group = factor(rep(c(1,2), each = B))),
-  mapping = aes(x = time, y = chain, col = group)) +
-  geom_line() +
-  scale_color_manual(values = MetBrewer::met.brewer("Renoir", 3)[c(2:3)]) + 
-  labs(x = "iteration number", y = "") + 
-  theme_classic() +
-  theme(legend.position = "none")
-
-g1 + g2
-```
-
-## One chain or multiple chains?
-
-Generally, it is preferable to run a single chain for a longer period than run multiple chains sequentially
-
-- there is a cost to initializing multiple times with different starting values since we must discard initial draws.
-- but with parallel computations, multiple chains are more frequent nowadays.
-- multiple diagnostics require running several chains.
-
-
-## Posterior predictive checks
-
-1. For each of the $B$ draws from the posterior, simulate $n$ observations from the posterior predictive $p(\widetilde{\boldsymbol{y}} \mid \boldsymbol{y})$
-2. For each replicate, compute a summary statistics (median, quantiles, std. dev., etc.) 
-3. Compare it with the same summary computed for the sample $\boldsymbol{y}$.
-
-## Posterior predictive checks
-
-```{r}
-#| eval: true
-#| echo: false
-#| label: fig-posterior-pred-check
-#| fig-cap: "Posterior predictive checks for the standard deviation (top) and density of posterior draws (bottom) for hierarchical Poisson model with individual effects (left) and simpler model with only conditions (right)."
-knitr::include_graphics("fig/fig-posterior-pred-check.png")
-```
-
-## Log pointwise predictive density
-
-Consider the expected value of the observation-wise log density with respect to the posterior distribution $p(\boldsymbol{\theta} \mid \boldsymbol{y})$,
-\begin{align*}
-\mathsf{LPPD}_i = \mathsf{E}_{\boldsymbol{\theta} \mid \boldsymbol{y}} \left\{ \log p(y_i \mid \boldsymbol{\theta})\right\},
-\end{align*}
- 
-The higher the value of $\mathsf{LPPD}_i$, the better the fit for that observation.
-
-## Widely available information criterion 
-
-To build an information criterion, we add a penalization factor that approximates the effective number of parameters in the model, with
-\begin{align*}
-n\mathsf{WAIC} = -\sum_{i=1}^n \mathsf{LPPD}_i + \sum_{i=1}^n \mathsf{Va}_{\boldsymbol{\theta} \mid \boldsymbol{y}}\{\log p(y_i \mid \boldsymbol{\theta})\}
-\end{align*} 
-where we use again the empirical variance to compute the rightmost term.
-
-Smaller values of $\mathsf{WAIC}$ are better.
-
-## Pseudo-code for WAIC
-
-Evaluate the log likelihood for each posterior draw and each observation.
-```{r}
-#| eval: false
-#| echo: true
-#| label: fn-waic
-#' WAIC
-#' @param loglik_pt B by n matrix of pointwise log likelihood
-WAIC <- function(loglik_pt){
-  -mean(apply(loglik_pt, 2, mean)) +  mean(apply(loglik_pt, 2, var))
-}
-```
-
-## Bayesian leave-one-out cross validation
-
-In Bayesian setting, we can use the leave-one-out predictive density
-$$p(y_i \mid \boldsymbol{y}_{-i})$$ as a measure of predictive accuracy.
-
-We can use importance sampling to approximate the latter.
-
-Requirement: need to keep track of the log likelihood of each observation for each posterior draw ($B \times n$ values).
-
-## LOO-CV diagnostics
-
-We can draw $B$ samples from  $p(\widetilde{y} \mid \boldsymbol{y}_{-i})$ and compute the rank of $y_i$.
-
-Under perfect calibration, ranks should be uniform.
-
-## Leave-one-out with quantile-quantile plots
-
-```{r}
-#| eval: true
-#| echo: false
-#| label: fig-posterior-loocv
-#| fig-cap: "Quantile-quantile plots based on leave-one-out cross validation for model for the hierarchical Poisson model fitted to the Upworthy data with the individual random effects (left) and without (right)."
-knitr::include_graphics("fig/fig-loocv-qqplots.png")
-```
-
-
-## Deviance information criterion
-
-
-The **deviance** information criterion of @Spiegelhalter:2002 is
-\begin{align*}
-\mathsf{DIC} = -2 \ell(\widetilde{\boldsymbol{\theta}}) + 2 p_D
-\end{align*}
-where $p_D$ is the posterior expectation of the deviance relative to the point estimator of the parameter $\widetilde{\boldsymbol{\theta}}$ (e.g., the maximum a posteriori or the posterior mean)
-\begin{align*}
-p_D = \mathsf{E}\{D(\boldsymbol{\theta}, \widetilde{\boldsymbol{\theta}}) \mid \boldsymbol{y}\}= \int 2 \{ \ell(\widetilde{\boldsymbol{\theta}}) - \ell(\boldsymbol{\theta})\} p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}
-\end{align*}
-
-
-## Criticism of DIC
-
-- The DIC can be easily evaluated by keeping track of the log likelihood evaluated at each posterior draw from a Markov chain Monte Carlo algorithm.
-- The penalty term $p_D$ is however not invariant to reparametrizations.
-- A Gaussian approximation to the MLE under suitable regularity conditions shows that the $\mathsf{DIC}$ is equivalent in large samples to $\mathsf{AIC}.$
-
-
-## Summary (1/4)
+## Summary (1/3)
 
 
 * Metropolis--Hastings generalizes rejection sampling by building a Markov chain and providing a mechanism for sampling.
 * Small proposal variance leads to high acceptance rate, but small step sizes. Large variance proposals leads to many rejections, in which case the previous value is carried forward. Both extreme scenarios lead to large autocorrelation.
 * The proposal density can be anything, but must ideally account for the support and allow for exploration of the state.
 
-## Summary (2/4)
+## Summary (2/3)
 
 * Good initial starting values can be obtained by computing maximum a posteriori estimates.
 * Initializing multiple chains at different starting values can be used to check convergence to the stationary distribution.
 * Mixing will improve if strongly correlated parameters are sampled together.
 
-## Summary (3/4)
+## Summary (3/3)
 
 * The optimal acceptance rate depends on the dimension, but guidelines for random walk Metropolis with Gaussian targets are to have 0.44 for a single parameter model and 0.234 for multivariate targets; see @Neal:2011 for a heuristic derivation.
 * To obtain the target acceptance rate, users must tune the variance of the proposal kernel. This is typically achieved by running the chain for some period, computing the empirical acceptance rate and increasing (respectively decreasing) the variance if the acceptance rate is too high (too low).
-
-## Summary (4/4)
-
-* Metropolis-adjusted Langevin algorithm (MALA) uses the gradient information to inform the proposal; it is akin to a Newton step.
-* The detailed balance requires a function $g$ such that $g(r) = rg(1/r).$ Taking $g(r) = \min(1,r)$ as in Metropolis--Hasting rule leads to the lowest asymptotic variance [@Peskun:1973].
 
 
 ## References
