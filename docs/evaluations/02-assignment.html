@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Evaluations – Bayesian modelling</title>
+<title>Assignment 2 – Bayesian modelling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -68,6 +88,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -119,7 +168,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../evaluations/index.html">Evaluations</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../evaluations/01-assignment.html">Assignments</a></li><li class="breadcrumb-item"><a href="../evaluations/02-assignment.html">Assignment 2</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -133,7 +182,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../evaluations/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Evaluations</span></a>
   </div>
 </li>
@@ -154,7 +203,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../evaluations/02-assignment.html" class="sidebar-item-text sidebar-link">
+  <a href="../evaluations/02-assignment.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Assignment 2</span></a>
   </div>
 </li>
@@ -170,20 +219,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#evaluations" id="toc-evaluations" class="nav-link active" data-scroll-target="#evaluations">Evaluations</a>
-  <ul class="collapse">
-  <li><a href="#midterm" id="toc-midterm" class="nav-link" data-scroll-target="#midterm">Midterm</a></li>
-  <li><a href="#final" id="toc-final" class="nav-link" data-scroll-target="#final">Final</a></li>
-  </ul></li>
+  <li><a href="#problem-2" id="toc-problem-2" class="nav-link active" data-scroll-target="#problem-2">Problem 2</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../evaluations/01-assignment.html">Assignments</a></li><li class="breadcrumb-item"><a href="../evaluations/02-assignment.html">Assignment 2</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Evaluations</h1>
+<h1 class="title">Assignment 2</h1>
 </div>
 
 
@@ -200,25 +245,75 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The main goals of this class are to help you understand the steps require to design and analyse the results of an experiment.</p>
-<section id="evaluations" class="level1">
-<h1>Evaluations</h1>
-<p>Your final grade will be based on assignments and check-ins, a midterm and a final examination. All evaluations are individual work.</p>
-<p>The midterm and final are closed book exams. Students are forbidden to use generative artificial intelligence (AI) tools. Any reference should be adequately cited.</p>
-<p>There will be weekly exercises pertaining to the class material, one of which must be handed in for credit. We will discuss the other exercises at the beginning of the next class. The assignment problem will be released weekly, but will have to be handed in bundles.</p>
-<section id="midterm" class="level2">
-<h2 class="anchored" data-anchor-id="midterm">Midterm</h2>
-<p>The midterm will take place on Monday, October 26th from 12:00–15:00 for LGR (Luc-Poirier, 1st floor, green). <a href="../files/exam/MATH80601A_practice_midterm.pdf">Practice midterm</a> and <a href="../files/exam/MATH80601A_practice_midterm_solutions.pdf">solutions</a>.</p>
-</section>
-<section id="final" class="level2">
-<h2 class="anchored" data-anchor-id="final">Final</h2>
-<p>The final is cumulative and will take place on Monday, December 14th from 18:30–21:30. <a href="../files/exam/MATH80601A_practice_final.pdf">Practice final</a> and <a href="../files/exam/MATH80601A_practice_final_solutions.pdf">solutions</a></p>
+<p>To be handed for credit by November 11th at 23:59 the latest.</p>
+<section id="problem-2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2">Problem 2</h2>
+<p>Let <span class="math inline">\(Y_{ij1}\)</span> (<span class="math inline">\(Y_{ij2}\)</span>) denote the score of the home (respectively visitor) team for a soccer match opposing teams <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. <span class="citation" data-cites="Maher:1982">Maher (<a href="#ref-Maher:1982" role="doc-biblioref">1982</a>)</span> suggested modelling the scores as <span class="math display">\[\begin{align*}
+Y_{ij1} \mid \delta, \alpha_i, \beta_j &amp;\sim \mathsf{Poisson}\{\exp(\delta + \alpha_i +\beta_j)\},
+\\ Y_{ij2} \mid \alpha_j, \beta_i &amp;\sim \mathsf{Poisson}\{\exp(\alpha_j+\beta_i)\},
+\end{align*}\]</span> where</p>
+<ul>
+<li><span class="math inline">\(\alpha_i\)</span> represent the offensive strength of the team,</li>
+<li><span class="math inline">\(\beta_j\)</span> the defensive strength of team <span class="math inline">\(j\)</span> and</li>
+<li><span class="math inline">\(\delta\)</span> is the common home advantage.</li>
+</ul>
+<p>The scores in a match and between matches are assumed to be conditionally independent of one another given <span class="math inline">\(\boldsymbol{\alpha}, \boldsymbol{\beta}, \delta\)</span>. To complete the specification of this model, we set <span class="math inline">\(\alpha_i \sim \mathsf{Gauss}(0, \sigma^2_\alpha)\)</span> and <span class="math inline">\(\beta_i \sim\mathsf{Gauss}(0, \sigma^2_\beta)\)</span> for <span class="math inline">\(i=1, \ldots, n\)</span> and <span class="math inline">\(\delta \sim \mathsf{Gauss}(0, 2)\)</span>.</p>
+<p>The data set <a href="../files/data/efl.csv"><code>efl</code></a> contains the results of football (soccer) matches for the 2015 season of the English Premier Ligue (EPL) and contains the following variables</p>
+<ul>
+<li><code>score</code>: number of goals of <code>team</code> during a match</li>
+<li><code>team</code>: categorical variable giving the name of the team which scored the goals</li>
+<li><code>opponent</code>: categorical variable giving the name of the adversary</li>
+<li><code>home</code>: binary variable, 1 if <code>team</code> is playing at home, 0 otherwise.</li>
+</ul>
+<ol type="1">
+<li>Specify penalized complexity priors <span class="citation" data-cites="Simpson:2017">(<a href="#ref-Simpson:2017" role="doc-biblioref">Simpson et al., 2017</a>)</span> for the scales <span class="math inline">\(\sigma_\alpha\)</span> and <span class="math inline">\(\sigma^2_\beta\)</span> such that they have a probability of 10% of exceeding 1.</li>
+<li><span class="citation" data-cites="DAngelo.Canale:2023">D’Angelo &amp; Canale (<a href="#ref-DAngelo.Canale:2023" role="doc-biblioref">2023</a>)</span> consider efficient proposals for Metropolis-Hastings step for Poisson regression models with Gaussian priors on the coefficients, building on a data augmentation scheme of <span class="citation" data-cites="Polson.Scott.Windle:2013">Polson et al. (<a href="#ref-Polson.Scott.Windle:2013" role="doc-biblioref">2013</a>)</span>. Implement their MCMC algorithm [section 2] with their proposed tuning parameter scheme and check the correctness of your sampler.</li>
+<li>Simulate posterior draws for this model applied to the EFL data. Run four Markov chains for 10K iterations.</li>
+<li>Plot the chains (including the burn in period) for a handful of parameters. How many iterations does it take for the chains to stabilize, if at all?</li>
+<li>Using the output of your Markov chains, estimate
+<ul>
+<li>the posterior mean and adjusted Monte Carlo standard errors for the latter</li>
+<li>the posterior quartiles (25%, 50% and 75%)</li>
+<li>the <span class="math inline">\(\widehat{R}\)</span> factors</li>
+<li>the effective sample size for each parameter.</li>
+</ul></li>
+<li>Answer the following questions:
+<ul>
+<li>Using the posterior distribution, give the expected number of goals for a match between Manchester United (at home) against Liverpool.</li>
+<li>Report and interpret the estimated posterior mean home advantage <span class="math inline">\(\widehat{\delta}\)</span>.</li>
+<li>Calculate the probability that the home advantage <span class="math inline">\(\delta\)</span> is positive?</li>
+</ul></li>
+<li>One measure of adequacy for the model is obtained from cross-validation predictive density. Denote the vector of parameters by <span class="math inline">\(\boldsymbol{\theta} = (\boldsymbol{\alpha},\boldsymbol{\beta}, \delta, \sigma_\alpha, \sigma_\beta)\)</span> and <span class="math inline">\(\boldsymbol{y}_{-r}\)</span> the vector obtained by removing the <span class="math inline">\(i\)</span>th observation from the likelihood. Let <span class="math inline">\(f(y_i; \boldsymbol{\theta})\)</span> denote the marginal density/mass function of sample <span class="math inline">\(y_i\)</span>. We consider the partial predictive density<br>
+<span class="math display">\[\begin{align*}
+f(y_i \mid \boldsymbol{y}_{-i})=\int_{\boldsymbol{\Theta}} f(y_i \mid \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span> Integrals with respect to the partial posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i})\)</span> can be approximated by taking instead draws from the full posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> with importance weight <span class="math inline">\(w_i = 1/f(y_i; \boldsymbol{\theta})\)</span> <span class="citation" data-cites="Gelfand.Dey:1994">(<a href="#ref-Gelfand.Dey:1994" role="doc-biblioref">Gelfand &amp; Dey, 1994</a>)</span>. Implement manually this importance sampling estimator for your model, taking out the result of a match (rather than a single score). Next compute the average log pointwise predictive density as a measure of goodness of fit.</li>
+<li>Maher also suggested more complex models, including one in which the offensive and defensive strength of each team changed depending on whether they were at home or visiting another team, i.e. <span class="math display">\[\begin{align}
+Y_{ij1} \sim \mathsf{Poisson}\{\exp(\alpha_i +\beta_j + \delta)\},
+Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
+\end{align}\]</span> Fit the model with <span class="math inline">\(\gamma_i \sim \mathsf{Gauss}(0, \sigma^2_\gamma)\)</span> and <span class="math inline">\(\omega_i \sim \mathsf{Gauss}(0, \sigma^2_\omega)\)</span> using similar shrinkage priors for <span class="math inline">\(\sigma^2_\gamma\)</span> and <span class="math inline">\(\sigma^2_\omega\)</span>. Does the second model fit significantly better than than the first? Compare the models using WAIC and the average log pointwise predictive density estimates.</li>
+</ol>
 
 
-</section>
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-DAngelo.Canale:2023" class="csl-entry" role="listitem">
+D’Angelo, L., &amp; Canale, A. (2023). Efficient posterior sampling for <span>B</span>ayesian <span>P</span>oisson regression. <em>Journal of Computational and Graphical Statistics</em>, <em>32</em>(3), 917–926. <a href="https://doi.org/10.1080/10618600.2022.2123337">https://doi.org/10.1080/10618600.2022.2123337</a>
+</div>
+<div id="ref-Gelfand.Dey:1994" class="csl-entry" role="listitem">
+Gelfand, A. E., &amp; Dey, D. K. (1994). Bayesian model choice: Asymptotics and exact calculations. <em>Journal of the Royal Statistical Society: Series B (Methodological)</em>, <em>56</em>(3), 501–514. <a href="https://doi.org/10.1111/j.2517-6161.1994.tb01996.x">https://doi.org/10.1111/j.2517-6161.1994.tb01996.x</a>
+</div>
+<div id="ref-Maher:1982" class="csl-entry" role="listitem">
+Maher, M. J. (1982). Modelling association football scores. <em>Statistica Neerlandica</em>, <em>36</em>(3), 109–118. <a href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">https://doi.org/10.1111/j.1467-9574.1982.tb00782.x</a>
+</div>
+<div id="ref-Polson.Scott.Windle:2013" class="csl-entry" role="listitem">
+Polson, N. G., Scott, J. G., &amp; Windle, J. (2013). Bayesian inference for logistic models using pólya–gamma latent variables. <em>Journal of the American Statistical Association</em>, <em>108</em>(504), 1339–1349. <a href="https://doi.org/10.1080/01621459.2013.829001">https://doi.org/10.1080/01621459.2013.829001</a>
+</div>
+<div id="ref-Simpson:2017" class="csl-entry" role="listitem">
+Simpson, D., Rue, H., Riebler, A., Martins, T. G., &amp; Sørbye, S. H. (2017). Penalising model component complexity: A principled, practical approach to constructing priors. <em>Statistical Science</em>, <em>32</em>(1), 1–28. <a href="https://doi.org/10.1214/16-sts576">https://doi.org/10.1214/16-sts576</a>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -208,7 +208,6 @@ window.Quarto = {
    
   <ul>
   <li><a href="#exercise-7.1" id="toc-exercise-7.1" class="nav-link active" data-scroll-target="#exercise-7.1">Exercise 7.1</a></li>
-  <li><a href="#exercise-7.2" id="toc-exercise-7.2" class="nav-link" data-scroll-target="#exercise-7.2">Exercise 7.2</a></li>
   </ul>
 </nav>
     </div>
@@ -271,39 +270,6 @@ Y_{i} &amp;\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
 </ol>
 <p>as well as pairs plot of <span class="math inline">\(\alpha_i, \log \sigma_{\alpha}\)</span>. The latter should display a very strong funnel.</p>
 <p>See this <a href="https://xuwd11.github.io/am207/wiki/gelmanschools.html">post</a> for display of the pathological behaviour that can be captured by divergence in Hamiltonian Monte Carlo.</p>
-</section>
-<section id="exercise-7.2" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-7.2">Exercise 7.2</h2>
-<p>Let <span class="math inline">\(Y_{ij1}\)</span> (<span class="math inline">\(Y_{ij2}\)</span>) denote the score of the home (respectively visitor) team for a soccer match opposing teams <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. <span class="citation" data-cites="Maher:1982">Maher (<a href="#ref-Maher:1982" role="doc-biblioref">1982</a>)</span> suggested modelling the scores as <span class="math display">\[\begin{align*}
-Y_{ij1} \mid \delta, \alpha_i, \beta_j &amp;\sim \mathsf{Poisson}\{\exp(\delta + \alpha_i +\beta_j)\},
-\\ Y_{ij2} \mid \delta, \alpha_j, \beta_i &amp;\sim \mathsf{Poisson}\{\exp(\alpha_j+\beta_i)\},
-\end{align*}\]</span> where</p>
-<ul>
-<li><span class="math inline">\(\alpha_i\)</span> represent the offensive strength of the team,</li>
-<li><span class="math inline">\(\beta_j\)</span> the defensive strength of team <span class="math inline">\(j\)</span> and</li>
-<li><span class="math inline">\(\delta\)</span> is the common home advantage.</li>
-</ul>
-<p>The scores in a match and between matches are assumed to be conditionally independent of one another given <span class="math inline">\(\boldsymbol{\alpha}, \boldsymbol{\beta}, \delta\)</span>. The data set <a href="../files/data/efl.csv"><code>efl</code></a> contains the results of football (soccer) matches for the 2015 season of the English Premier Ligue (EPL) and contains the following variables</p>
-<ul>
-<li><code>score</code>: number of goals of <code>team</code> during a match</li>
-<li><code>team</code>: categorical variable giving the name of the team which scored the goals</li>
-<li><code>opponent</code>: categorical variable giving the name of the adversary</li>
-<li><code>home</code>: binary variable, 1 if <code>team</code> is playing at home, 0 otherwise.</li>
-</ul>
-<ol type="1">
-<li>Specify penalized complexity priors for the regression parameters scale <span class="math inline">\(\sigma\)</span> that shrink <span class="math inline">\(\alpha_i \sim \mathsf{Gauss}(0, \sigma^2)\)</span> and <span class="math inline">\(\beta_j \sim \mathsf{Gauss}(0, \sigma^2)\)</span> to zero, with a probability of 1% of exceeding 1.</li>
-<li>Fit the model and answer the following questions:
-<ul>
-<li>Using the posterior distribution, give the expected number of goals for a match between Manchester United (at home) against Liverpool.</li>
-<li>Report and interpret the estimated posterior mean home advantage <span class="math inline">\(\widehat{\delta}\)</span>.</li>
-<li>Calculate the probability that the home advantage <span class="math inline">\(\delta\)</span> is positive?</li>
-</ul></li>
-<li>Comment on the adequacy of the fit by using a suitable statistic for the model fit (e.g.&nbsp;the deviance statistic</li>
-<li>Maher also suggested more complex models, including one in which the offensive and defensive strength of each team changed depending on whether they were at home or visiting another team, i.e. <span class="math display">\[\begin{align}
-Y_{ij1} \sim \mathsf{Poisson}\{\exp(\alpha_i +\beta_j + \delta)\},
-Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
-\end{align}\]</span> Does the second model fit significantly better than than the first? Compare the models using WAIC and Bayes factors.</li>
-</ol>
 
 
 
@@ -315,9 +281,6 @@ Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin
 </div>
 <div id="ref-Gelman.vanDyk:2008" class="csl-entry" role="listitem">
 Gelman, A., Dyk, D. A. van, Huang, Z., &amp; Boscardin, J. W. (2008). Using redundant parameterizations to fit hierarchical models. <em>Journal of Computational and Graphical Statistics</em>, <em>17</em>(1), 95–122. <a href="https://doi.org/10.1198/106186008x287337">https://doi.org/10.1198/106186008x287337</a>
-</div>
-<div id="ref-Maher:1982" class="csl-entry" role="listitem">
-Maher, M. J. (1982). Modelling association football scores. <em>Statistica Neerlandica</em>, <em>36</em>(3), 109–118. <a href="https://doi.org/10.1111/j.1467-9574.1982.tb00782.x">https://doi.org/10.1111/j.1467-9574.1982.tb00782.x</a>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
