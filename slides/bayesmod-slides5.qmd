@@ -472,9 +472,8 @@ g1 + g2
 
 ## Summary (1/3)
 
-
 * Metropolis--Hastings generalizes rejection sampling by building a Markov chain and providing a mechanism for sampling.
-* Small proposal variance leads to high acceptance rate, but small step sizes. Large variance proposals leads to many rejections, in which case the previous value is carried forward. Both extreme scenarios lead to large autocorrelation.
+* Small proposal variance leads to high acceptance rate, but small step sizes. Large variance proposals leads to many rejections, in which case the previous value is carried forward. Both lead to large autocorrelation.
 * The proposal density can be anything, but must ideally account for the support and allow for exploration of the state.
 
 ## Summary (2/3)

@@ -7,27 +7,25 @@ title: "Probabilistic programming"
 
 
 - Computational tricks (blocking, reparametrization, marginalization, etc.)
-- Bayesian workflow
-- Hamiltonian Monte Carlo
-- Probabilistic programming
-- Stan
+
 
 ## Learning objectives
 
 At the end of the chapter, students should be able to
 
 - diagnose performance of MCMC algorithms and implement potential remedies
-- code models using Stan
+
 
 
 
 ## Readings
 
 - @Gelman:2020 
+<!--
 - @Betancourt:2017
 - @Neal:2011
 - [Chi Feng's MCMC gallery](http://chi-feng.github.io/mcmc-demo/)
-
+-->
 
 ## Complementary readings
 
@@ -47,5 +45,10 @@ At the end of the chapter, students should be able to
 
 ## Code
 
-- Stochastic volatility model: Stan code [1](/files/code/stochvol1.stan) and [2](/files/code/stochvol2.stan) and [`cmdstanr` **R** script](/files/code/07-stochvol_stan.R)
-- [Smartwatch example](/files/code/poisson_smartwatch.stan)  and [`cmdstanr` **R** script](/files/code/07-poisson_smartwatch.R)
+
+- [**R** script](/files/code/Tokyo_rainfall.R) for the Tokyo rainfall example
+- [**R** script](/files/code/eight-schools.R) for the eight school example
+- Stochastic volatility model: 
+    - Stan code [1](/files/code/stochvol1.stan) and [2](/files/code/stochvol2.stan) and [`cmdstanr` **R** script](/files/code/stochvol_stan.R)
+    - [Nimble code](/files/code/stochvol_nimble.R)
+- [Smartwatch example](/files/code/poisson_smartwatch.stan)  and [`cmdstanr` **R** script](/files/code/poisson_smartwatch.R)

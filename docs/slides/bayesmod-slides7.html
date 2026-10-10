@@ -148,7 +148,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Hamiltonian Monte Carlo and probabilistic programming</p>
+  <p class="subtitle">Computational strategies and probabilistic programming</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -158,176 +158,294 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Friday Oct 9, 2026</p>
+  <p class="date">Last compiled Tuesday Oct 13, 2026</p>
 </section>
-<section id="curse-of-dimensionality" class="slide level2">
-<h2>Curse of dimensionality</h2>
-<p>This material is drawn from</p>
-<ul>
-<li><span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span>,</li>
-<li><span class="citation" data-cites="Betancourt:2017">Betancourt (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span></li>
-</ul>
-<p>Check out these <a href="https://chi-feng.github.io/mcmc-demo/">animations</a> by Chi Feng</p>
+<section id="measuring-model-adequacy" class="slide level2">
+<h2>Measuring model adequacy</h2>
+<p>Consider estimation of the leave-one predictive density under the hypothesis that the likelihood factorizes as <span class="math display">\[L(\boldsymbol{\theta}; \boldsymbol{y}) = \prod_{i=1}^n f_i(y_i; \boldsymbol{\theta});\]</span> where <span class="math inline">\(f_i\)</span> is the density or mass function of the <span class="math inline">\(i\)</span>th observation.</p>
+<p>Observations are then exchangeable.</p>
 </section>
-<section id="motivation" class="slide level2">
-<h2>Motivation</h2>
-<p>We are interested in calculating expectations of some function <span class="math inline">\(g\)</span> against the posterior. <span class="math display">\[\begin{align*}
-\int_{\mathbb{R}^d} g(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
-\end{align*}\]</span></p>
-<p>The integral is determined by the product of the ``volume’’ of <span class="math inline">\(g(\cdot)\)</span> and the density.</p>
+<section id="leave-one-out-cross-validation" class="slide level2">
+<h2>Leave-one-out cross validation</h2>
+<p>We can measure the predictive performance using the leave-one-out predictive distribution for observation <span class="math inline">\(i\)</span> given all the rest of the observations <span class="math inline">\(\boldsymbol{y}_{-i}\)</span>, <span class="math display">\[p(y_i \mid \boldsymbol{y}_{-i}) = \int f(y_i \mid \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}.\]</span></p>
+<p>Naively, this requires running <span class="math inline">\(n\)</span> Markov chains with <span class="math inline">\(n-1\)</span> observations each.</p>
 </section>
-<section id="curse-of-dimensionality-1" class="slide level2">
-<h2>Curse of dimensionality</h2>
-<p>As the dimension of the posterior, <span class="math inline">\(d\)</span>, grows, the mass concentrates in a small region, the so-called <strong>typical set</strong>. The number of regions/directions to consider increases exponentially in <span class="math inline">\(d\)</span>.</p>
-<p>If we start at the stationary distribution, most proposals from a random walk Metropolis will fall outside of the typical set and get rejected.</p>
-<p>This phenomenon also explains the decrease in performance of numerical integration schemes (quadrature).</p>
-</section>
-<section id="better-informed-proposals" class="slide level2">
-<h2>Better informed proposals</h2>
-<p>For differentiable targets, we saw that we can do better than random walk Metropolis–Hastings.</p>
-<ul>
-<li>Idea: use the gradient to make an informed proposal (e.g., in MALA)</li>
-<li>There are two remaining challenges.
-<ul>
-<li>it makes a single step from the current position. But why stop at one?</li>
-<li>the gradient needs not be aligned with the typical set (Betancourt analogy with satellite in orbit).</li>
-</ul></li>
-</ul>
-</section>
-<section id="hamiltonian-monte-carlo" class="slide level2">
-<h2>Hamiltonian Monte Carlo</h2>
-<p>Hamitonian Monte Carlo borrows ideas from Hamiltonian dynamics.</p>
-<p>Consider the evolution over time of a particle characterized by a</p>
-<ul>
-<li>position <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^d\)</span> along with potential energy <span class="math inline">\(U(\boldsymbol{\theta})=- \log p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span></li>
-<li>an added auxiliary vector <span class="math inline">\(\boldsymbol{s} \in \mathbb{R}^d\)</span> of <strong>momentum</strong> (describing mass and velocity) with accompaying kinetic energy <span class="math inline">\(K(\boldsymbol{s})= -\log p(\boldsymbol{s})\)</span>.</li>
-</ul>
-</section>
-<section id="hamiltonian" class="slide level2">
-<h2>Hamiltonian</h2>
-<p>Write the negative of the log of the joint density as <span class="math display">\[H(\boldsymbol{\theta}, \boldsymbol{s}) = -\log p(\boldsymbol{s}) - \log p(\boldsymbol{\theta}) = U(\boldsymbol{\theta}) + K(\boldsymbol{s}).\]</span></p>
-<p>The partial derivatives of the Hamiltonian give the evolution over time of the system: <span class="math display">\[\begin{align*}
-\frac{\mathrm{d} \theta_j}{\mathrm{d} t} = \frac{\partial H}{\partial s_j} &amp;= \frac{\partial K}{\partial s_j}\\
-\frac{\mathrm{d} s_j}{\mathrm{d} t}= - \frac{\partial H}{\partial \theta_j} &amp;= - \frac{\partial U}{\partial \theta_j}, \quad j =1, \ldots, d.
-\end{align*}\]</span></p>
-<p>There is no explicit solution to these differential equations in most settings.</p>
-</section>
-<section id="kinetic-energy" class="slide level2">
-<h2>Kinetic energy</h2>
-<p>The most popular choice of kinetic energy is the Gaussian, <span class="math display">\[\begin{align*}
-K(\boldsymbol{s}) = \frac{1}{2} \boldsymbol{s}^\top \mathbf{M}^{-1}\boldsymbol{s}
-\end{align*}\]</span> the negative of a mean zero log Gaussian density with positive-definite covariance matrix <span class="math inline">\(\mathbf{M}.\)</span></p>
-<p>Typically, we take <span class="math inline">\(\mathbf{M}=\mathrm{diag}\{m_1, \ldots, m_d\}\)</span> diagonal, or else proportional <span class="math inline">\(\mathbf{M} = m \mathbf{I}_d\)</span>.</p>
-</section>
-<section id="properties-of-hamiltonian-dynamics" class="slide level2">
-<h2>Properties of Hamiltonian dynamics</h2>
-<p>The mapping <span class="math inline">\(T_s\)</span> from time <span class="math inline">\(t\)</span> at <span class="math inline">\((\boldsymbol{\theta}(t), \boldsymbol{s}(t))\)</span> to time <span class="math inline">\(t + \varepsilon\)</span>, <span class="math inline">\((\boldsymbol{\theta}(t + \varepsilon), \boldsymbol{s}(t + \varepsilon))\)</span> satisfies the following properties:</p>
-<ul>
-<li>Reversible: MCMC will thus preserve the invariant target distribution</li>
-<li>Conservation of energy: proposals from Hamiltonian dynamics would lead to acceptance probability of 1.</li>
-<li>Symplecticness/volume preserving: the Jacobian of <span class="math inline">\(T_s\)</span> is one — no need to calculate it.</li>
-</ul>
-</section>
-<section id="a-necessary-discretization-step" class="slide level2">
-<h2>A necessary discretization step</h2>
-<p>There is no explicit solution to the Hamiltonian differential equation. We must move away from continuous time…</p>
-<ul>
-<li>For solving the differential equation numerically, Euler’s method doesn’t work because it does not preserve volume, and this leads to divergences.</li>
-</ul>
-</section>
-<section id="leapfrog-integrator" class="slide level2">
-<h2>Leapfrog integrator</h2>
-<p>The leapfrog integrator performs a half step for momentum, then does a full step for the position using the updated components, etc.</p>
-<p><span class="math display">\[\begin{align*}
-s_j(t+\varepsilon/2) &amp;= s_j(t) - \frac{\varepsilon}{2}  \left.\frac{\partial U(\boldsymbol{\theta})}{\partial \theta_j}\right|_{\boldsymbol{\theta}(t)}
-\\
-\theta_j(t+\varepsilon) &amp;= \theta_j(t)  + \varepsilon \frac{s_j(t+\varepsilon/2)}{m_j} \\
-s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\frac{\partial U(\boldsymbol{\theta})}{\partial \theta_j}\right|_{\boldsymbol{\theta}(t + \varepsilon)}
+<section id="leave-one-out-cross-validation-loo-cv" class="slide level2">
+<h2>Leave-one-out cross-validation (LOO-CV)</h2>
+<p>With weights <span class="math inline">\(w_i(\boldsymbol{\theta}) = {p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i})}/{p(\boldsymbol{\theta} \mid \boldsymbol{y})} \stackrel{\boldsymbol{\theta}}{\propto}1/f_i(y_i; \boldsymbol{\theta})\)</span> we can write the leave-one-out posterior predictive as <span class="math display">\[\begin{align*}
+p(y_i \mid \boldsymbol{y}_{-i}) &amp;= \int_{\boldsymbol{\Theta}} f_i(y_i; \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}
+\\&amp; = \int_{\boldsymbol{\Theta}} f(y_i; \boldsymbol{\theta}) w_i(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}\]</span></p>
 </section>
-<section id="hamiltonian-monte-carlo-algorithm" class="slide level2">
-<h2>Hamiltonian Monte Carlo algorithm</h2>
-<p>Consider the joint distribution with positions <span class="math inline">\(\boldsymbol{\theta}\)</span> and momentum variables <span class="math inline">\(\boldsymbol{s}\)</span>, <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{s}) \propto \exp \{- H(\boldsymbol{\theta}, \boldsymbol{s})\}.\)</span></p>
-<p>We start with a position vector <span class="math inline">\(\boldsymbol{\theta}_{t-1}\)</span> at step <span class="math inline">\(t-1\)</span>:</p>
-<ol type="1">
-<li>Sample a new momentum vector <span class="math inline">\(\boldsymbol{s}_{t-1} \sim \mathsf{Gauss}(\boldsymbol{0}_d, \mathbf{M}).\)</span></li>
-<li>Use Verlet’s (leapfrog) integrator to evolve the state vector for <span class="math inline">\(L=\lfloor\tau/\varepsilon\rfloor\)</span> steps of size <span class="math inline">\(\varepsilon\)</span> to get a proposal tuple <span class="math inline">\((\boldsymbol{\theta}_t^{\star}, \boldsymbol{s}_t^{\star})\)</span></li>
-</ol>
+<section id="importance-sampling-for-loo-cv" class="slide level2 smaller">
+<h2>Importance sampling for LOO-CV</h2>
+<p>This formula suggests the importance sampling estimator (eq. 25 of Section 7 of <span class="citation" data-cites="Gelfand.Dey:1994">Gelfand &amp; Dey (<a href="#/references" role="doc-biblioref" onclick="">1994</a>)</span>) <span class="math display">\[\begin{align*}
+\widehat{p}(y_i \mid \boldsymbol{y}_{-i}) &amp;= \frac{\sum_{b=1}^B f_i(y_i; \boldsymbol{\theta}_b) w_i(\boldsymbol{\theta}_b)}{\sum_{b=1}^Bw_i(\boldsymbol{\theta}_b)}  
+\\&amp;= B \left\{\sum_{b=1}^B \frac{1}{f_i (y_i; \boldsymbol{\theta}_b)}\right\}^{-1}.
+\end{align*}\]</span></p>
+<div style="font-size: 0.9em;">
+<p>This estimator takes the form of an harmonic mean, which can have very large variance due to some weights dominating the fit. <span class="citation" data-cites="Vehtari.Gelman.Gabry:2017">(<a href="#/references" role="doc-biblioref" onclick=""><strong>Vehtari.Gelman.Gabry:2017?</strong></a>)</span> proposed using Pareto smoothed importance sampling <span class="citation" data-cites="Vehtari.Simpson.Gelman.Yao.Gabry:2025">(<a href="#/references" role="doc-biblioref" onclick=""><strong>Vehtari.Simpson.Gelman.Yao.Gabry:2025?</strong></a>)</span> to avoid overly large weights; this method is implemented in the <code>loo</code> <strong>R</strong> package.</p>
+</div>
 </section>
-<section id="hamiltonian-monte-carlo-algorithm-1" class="slide level2">
-<h2>Hamiltonian Monte Carlo algorithm</h2>
-<ol start="3" type="1">
-<li>Flip the momentum variable, <span class="math inline">\(\boldsymbol{s} \mapsto - \boldsymbol{s}.\)</span></li>
-<li>Metropolis step: if <span class="math inline">\(U \sim \mathsf{unif}(0,1) &lt;R\)</span>, where <span class="math display">\[\log R = -H(\boldsymbol{\theta}^{\star}, \boldsymbol{s}^{\star}_{t}) + H(\boldsymbol{\theta}_{t-1}, \boldsymbol{s}_{t-1}),\]</span> set <span class="math inline">\(\boldsymbol{\theta}_t = \boldsymbol{\theta}_t^{\star}\)</span>, else keep the previous value and set <span class="math inline">\(\boldsymbol{\theta}_t = \boldsymbol{\theta}_{t-1}\)</span>.</li>
-<li>Discard the momentum vector</li>
-</ol>
-</section>
-<section id="tuning" class="slide level2">
-<h2>Tuning</h2>
-<p>Hamiltonian Monte Carlo (HMC) has numerous tuning parameters</p>
-<ol type="1">
-<li>size of the leapfrog step <span class="math inline">\(\varepsilon\)</span>.</li>
-<li>length of the integration time <span class="math inline">\(\tau\)</span> (or equivalently the number of steps <span class="math inline">\(L=\lfloor \tau / \varepsilon \rfloor\)</span>).
+<section id="marginal-predictive-check" class="slide level2">
+<h2>Marginal predictive check</h2>
+<p>For each posterior draw and each observation, we</p>
 <ul>
-<li>too small leads HMC to bear close resemblance to random walk,</li>
-<li>too large leads to wasteful calculations.</li>
-</ul></li>
-<li>choice of the mass matrix <span class="math inline">\(\mathbf{M}\)</span> (pre-conditioner obtained during warmup period).</li>
-</ol>
-</section>
-<section id="leapfrog-and-error" class="slide level2">
-<h2>Leapfrog and error</h2>
-<p>The Störmer–Verlet (leapfrog) integrator is a second order method, so for step size <span class="math inline">\(\varepsilon\)</span>:</p>
-<ul>
-<li>local error <span class="math inline">\(\mathrm{O}(\varepsilon^3)\)</span> and</li>
-<li>global error of size <span class="math inline">\(\mathrm{O}(\varepsilon^2)\)</span> (accumulated error over <span class="math inline">\(L\)</span> steps).</li>
+<li>generate a sample from the posterior predictive, resulting in an <span class="math inline">\(n \times B\)</span> matrix.</li>
+<li>Each observation <span class="math inline">\(y_i\)</span> is compared with the simulated samples <span class="math inline">\(y_{i,b}^{\mathrm{rep}}\)</span> for posterior <span class="math inline">\(\boldsymbol{\theta}_b.\)</span></li>
+<li>We compute <span class="math inline">\(\Pr(y_i \geq y_{i}^{\mathrm{rep}})\)</span> by Monte Carlo, by looking at the sample proportion that are more extreme.</li>
 </ul>
-<p>Leapfrog updates one variable at a time, a shear transformation.</p>
-<p>Leapfrog step should be <span class="math inline">\(\mathrm{O}(d^{-1/4})\)</span> <span class="citation" data-cites="Beskos:2013">(<a href="#/references" role="doc-biblioref" onclick="">Beskos et al., 2013</a>)</span></p>
+<p>Values close to zero or one may indicate outliers.</p>
 </section>
-<section id="optimal-acceptance-rate" class="slide level2">
-<h2>Optimal acceptance rate</h2>
-<p>In practice, we use a Metropolis step to adjust for the discretization of the system.</p>
-<ul>
-<li>This leads to acceptance rates less than the theoretical value of 1.</li>
-<li>with optimal acceptance rate of <span class="math inline">\(0.651\)</span> <span class="citation" data-cites="Beskos:2013">(<a href="#/references" role="doc-biblioref" onclick="">Beskos et al., 2013</a>)</span>; see <span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> for heuristics.</li>
-<li>software like Stan tunes to around 0.8, but can be adjusted in settings.</li>
-</ul>
+<section id="marginal-predictive-check-with-loo-cv" class="slide level2">
+<h2>Marginal predictive check with LOO-CV</h2>
+<p>Suppose we have an <span class="math inline">\(n \times B\)</span> matrix with the posterior predictive draws <span class="math inline">\(y_{i,b}^{\mathrm{rep}}\)</span> associated with each posterior vector <span class="math inline">\(\boldsymbol{\theta}_b\)</span> and the weights <span class="math inline">\(w_{i,b} = 1/f_i (y_i \mid \boldsymbol{\theta}_b).\)</span></p>
+<p>We can then compute the probability integral transform with importance sampling for <span class="math inline">\(i =1,\ldots, n\)</span>: <span class="math display">\[\begin{align*}
+\widehat{p}_i^{\mathrm{loo}} = \Pr(y_i^{\mathrm{rep}} \leq y_i \mid \boldsymbol{y}_{-i}) \approx \frac{\sum_{b=1}^B \mathrm{I}(y_i^{\mathrm{rep}} \leq y_i)w_{i,b}}{\sum_{b=1}^B w_{i,b}}
+\end{align*}\]</span></p>
 </section>
-<section id="its-nuts" class="slide level2">
-<h2>It’s nuts!</h2>
-<ul>
-<li><span class="citation" data-cites="Homan.Gelman:2014">Homan &amp; Gelman (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> propose the no <span class="math inline">\(U\)</span>-turn sampler (NUTS), which continues the trajectory until the sampler turns back, to determine the number of steps <span class="math inline">\(L\)</span>, along with tuning of <span class="math inline">\(\varepsilon.\)</span></li>
-<li>Stan uses an adaptation of NUTS due to <span class="citation" data-cites="Betancourt:2016">Betancourt (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span></li>
-</ul>
-</section>
-<section id="hmc-and-divergences" class="slide level2">
-<h2>HMC and divergences</h2>
-<p>In theory, the energy of the Hamiltonian should stay constant, but the numerical scheme leads to small perturbations (hence the rejection step).</p>
-<ul>
-<li>If the value of the Hamiltonian changes too much, this is identified as a <strong>divergence</strong>. These occur when the geometry of the posterior is heavily constrained (funnel shaped).</li>
-<li>Reparametrization of the model can help improve this: see the <a href="https://mc-stan.org/docs/stan-users-guide/efficiency-tuning.html#reparameterization.section">Stan manual</a>.</li>
-</ul>
-</section>
-<section id="neals-funnel" class="slide level2">
-<h2>Neal’s funnel</h2>
+<section id="probability-probability-plots" class="slide level2 smaller">
+<h2>Probability-probability plots</h2>
+<p>The values <span class="math inline">\(\widehat{p}_i^{\mathrm{loo}}\)</span> should be approximately uniform if the model was perfectly calibrated. We build a P-P plot (ordered values against uniform plotting position) to check this.</p>
 
-<img data-src="fig/fig-Neal-funnel.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
-<section id="achieving-independence" class="slide level2">
-<h2>Achieving independence</h2>
-<p>We have seen that for differentiable posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, using the gradient information can improve convergence by informing about the direction of the mode.</p>
+<img data-src="fig/fig-loocv-qqplots.png" class="quarto-figure quarto-figure-center r-stretch" style="width:60.0%"></section>
+<section id="sources-of-poor-mixing" class="slide level2">
+<h2>Sources of poor mixing</h2>
+<p>Slow mixing can be due to the following:</p>
 <ul>
-<li><span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> discusses how informally, random walk Metropolis requires <span class="math inline">\(\mathrm{O}(d^2)\)</span> steps to get an independent draw, compared to <span class="math inline">\(\mathrm{O}(d^{4/3})\)</span> for MALA.</li>
-<li>HMC scales like <span class="math inline">\(\mathrm{O}(d^{5/4})\)</span>, a notable improvement in performance.</li>
-<li>It however comes at the cost of repeated gradient evaluations (<span class="math inline">\(L\)</span> by update).</li>
+<li>poor proposals</li>
+<li>strong correlation between posterior parameters</li>
+<li>overparametrization and lack of identifiability</li>
 </ul>
 </section>
-<section id="take-home" class="slide level2">
-<h2>Take-home</h2>
+<section id="computational-strategies" class="slide level2">
+<h2>Computational strategies</h2>
+<p>These problems can be addressed using one of the following:</p>
 <ul>
-<li>HMC is more efficient than what we have seen, but not a silver bullet: it works very well for not overly complicated models and moderate sample sizes.</li>
-<li>HMC works better than many MCMC, but requires special tuning best left to specialized implementations already available in software.</li>
-<li>Most implementations don’t cover the case of discrete random variables <span class="citation" data-cites="Nishimura:2020">(<a href="#/references" role="doc-biblioref" onclick="">Nishimura et al., 2020</a>)</span>.</li>
+<li>marginalization</li>
+<li>removing redundant parameters or using informative priors</li>
+<li>reparametrization</li>
+<li>clever proposals (adaptive MCMC), see <span class="citation" data-cites="Andrieu.Thoms:2008">Andrieu &amp; Thoms (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span> and <span class="citation" data-cites="Rosenthal:2011">Rosenthal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span>.</li>
+<li>blocking</li>
+</ul>
+</section>
+<section id="gaussian-model-with-random-effects" class="slide level2">
+<h2>Gaussian model with random effects</h2>
+<p>Consider a hierarchical Gaussian model of the form <span class="math display">\[\begin{align*}
+\boldsymbol{Y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B} + \boldsymbol{\varepsilon}
+\end{align*}\]</span> where</p>
+<ul>
+<li><span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times p\)</span> design matrix with centered inputs,</li>
+<li><span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}(\boldsymbol{0}_p, \sigma^2\mathbf{I}_p),\)</span></li>
+<li><span class="math inline">\(\boldsymbol{B}\sim \mathsf{Gauss}_q(\boldsymbol{0}_q, \boldsymbol{\Omega})\)</span> are random effects and</li>
+<li><span class="math inline">\(\boldsymbol{\varepsilon} \sim \mathsf{Gauss}_n(\boldsymbol{0}_n, \kappa^2\mathbf{I}_n)\)</span> are independent white noise.</li>
+</ul>
+</section>
+<section id="one-way-anova" class="slide level2">
+<h2>One-way ANOVA</h2>
+<p>Consider a one-way ANOVA with <span class="math inline">\(n\)</span> observations from <span class="math inline">\(K\)</span> categories, with observation <span class="math inline">\(i=1, \ldots, n_k\)</span> from group <span class="math inline">\(k\)</span> having contribution <span class="math display">\[\begin{align*}
+Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \alpha_k, \sigma^2_y) \\
+\alpha_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\alpha).
+\end{align*}\]</span> We set an improper prior for the mean <span class="math inline">\(p(\mu) \propto 1.\)</span></p>
+<p>If there are <span class="math inline">\(K\)</span> groups, then the group-specific mean is <span class="math inline">\(\mu+\alpha_k\)</span>, and there is a redundant parameter. This leads to poor mixing if priors are not informative.</p>
+</section>
+<section id="removing-redundant-parameters" class="slide level2">
+<h2>Removing redundant parameters</h2>
+<p>We can enforce a sum-to-zero constraint for <span class="math inline">\(\sum_{k=1}^K \alpha_k=0\)</span> and sample <span class="math inline">\(K-1\)</span> parameters for the difference to the global mean.</p>
+<p>This yields a degenerate multivariate Gaussian distribution for the vector <span class="math inline">\(\boldsymbol{\alpha} \sim \mathsf{Gauss}_K(\boldsymbol{0}_K, \boldsymbol{\Omega})\)</span> where <span class="math display">\[\boldsymbol{\Omega} =\sigma^2_\alpha \left(\mathbf{I}_K - \boldsymbol{1}_K\boldsymbol{1}_K^\top / K\right).\]</span></p>
+</section>
+<section id="marginalization" class="slide level2">
+<h2>Marginalization</h2>
+<p>Given a model <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{Z})\)</span>, reduce the dependance by sampling from the marginal</p>
+<p><span class="math display">\[
+p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \boldsymbol{z}.
+\]</span></p>
+<p>This happens for data augmentation, etc., and reduces dependency between parameters, but typically the likelihood becomes more expensive to compute</p>
+</section>
+<section id="marginalization-1" class="slide level2">
+<h2>Marginalization</h2>
+<p>We can marginalize over the <span class="math inline">\(K\)</span> vector of <span class="math inline">\(\boldsymbol{\alpha}\)</span> to perform updates of <span class="math inline">\(\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}.\)</span></p>
+<p>We find if <span class="math inline">\(\boldsymbol{\varSigma}_{\sigma^2_y, \sigma^2_\alpha}\)</span> is the marginal covariance matrix of <span class="math display">\[\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right).\]</span></p>
+<p>Straightforward calculations yield</p>
+<p><span class="math display">\[\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y} \sim \mathsf{Gauss}\left(\frac{\boldsymbol{y}^\top \boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n}{\boldsymbol{1}_n^\top\boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n}, \left\{\boldsymbol{1}_n^\top\boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n\right\}^{-1}\right).
+\]</span></p>
+</section>
+<section id="marginalization-of-gaussian-models" class="slide level2">
+<h2>Marginalization of Gaussian models</h2>
+<p>We can write <span class="math display">\[\begin{align*}
+\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \sigma^2 &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B},  \sigma^2\mathbf{I}_p)\\
+\boldsymbol{Y} \mid \boldsymbol{\beta} &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
+\end{align*}\]</span> where the second line corresponds to marginalizing out the random effects <span class="math inline">\(\boldsymbol{B}.\)</span></p>
+</section>
+<section id="efficient-calculations-for-gaussian-models" class="slide level2">
+<h2>Efficient calculations for Gaussian models</h2>
+<p>If, as is often the case, <span class="math inline">\(\boldsymbol{\Omega}^{-1}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> are sparse matrices, the full precision matrix can be efficiently computed using Shermann–Morisson–Woodbury identity as <span class="math display">\[\begin{align*}
+\mathbf{Q}^{-1} &amp;=   \mathbf{Z}\boldsymbol{\Omega}^{-1}\mathbf{Z}^\top + \kappa^2 \mathbf{I}_n,\\
+\kappa^2\mathbf{Q} &amp; = \mathbf{I}_n - \mathbf{Z} \boldsymbol{G}^{-1} \mathbf{Z}^\top,\\
+\boldsymbol{G} &amp;= \mathbf{Z}^\top\mathbf{Z} + \kappa^2 \boldsymbol{\Omega}^{-1}
+\end{align*}\]</span> Section 3.1 of <span class="citation" data-cites="Nychka:2015">Nychka et al. (<a href="#/references" role="doc-biblioref" onclick="">2015</a>)</span> details efficient ways of calculating the quadratic form involving <span class="math inline">\(\mathbf{Q}\)</span> and it’s determinant.</p>
+</section>
+<section id="parameter-expansion" class="slide level2">
+<h2>Parameter expansion</h2>
+<p>Add redundant parameter to improve mixing by decorrelating <span class="citation" data-cites="Liu.Rubin.Wu:1998">(<a href="#/references" role="doc-biblioref" onclick="">Liu et al., 1998</a>)</span></p>
+<p><span class="math display">\[\begin{align*}
+Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \xi\eta_k, \sigma^2_y) \\
+\eta_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\eta)
+\end{align*}\]</span> so that <span class="math inline">\(\sigma_\alpha = |\xi|\sigma_\eta.\)</span></p>
+</section>
+<section id="eight-school-example" class="slide level2">
+<h2>Eight school example</h2>
+<p>Consider the eight school data from Educational Testing Service (ETS) <span class="citation" data-cites="Gelman:2013">(<a href="#/references" role="doc-biblioref" onclick="">Gelman et al., 2013</a>)</span>. The goal of the experiment was to estimate the effect of coaching on SAT-V scores.</p>
+<p>The data consist of estimated treatment mean difference <span class="math inline">\(y_1, \ldots, y_8\)</span> and their standard errors <span class="math inline">\(s_1, \ldots, s_8\)</span> from eight different schools.</p>
+<p>Simple sample sizes are large, the average treatment effect (ATE) can be considered approximately Gaussian. We treat the school-specific standard errors <span class="math inline">\(s_j\)</span> as a known quantity.</p>
+</section>
+<section id="gibbs-sampler-for-eight-school-problem" class="slide level2 smaller">
+<h2>Gibbs sampler for eight school problem</h2>
+<p>The naive Gibbs sampler, which iterates between conditionals of <span class="math inline">\(p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \mu, \sigma^2_{\alpha})\)</span> and <span class="math inline">\(p(\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha})\)</span> leads to strong autocorrelation.</p>
+<p>A better strategy is to marginalize over the global mean <span class="math inline">\(\mu\)</span> and simulate from <span class="math inline">\(p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \sigma^2_{\alpha})\)</span> instead. We get then the conditionals <span class="math display">\[\begin{align*}
+\alpha_i \mid y_i, s_i^2, \sigma^2_{\alpha} &amp;\sim \mathsf{Gauss}\left\{ \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\frac{y_i}{s^2_j}, \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\right\}\\
+\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha} &amp; \sim \mathsf{Gauss}\left( s^2_{\mu} \sum_{j=1}^8 \frac{y_i-\alpha_i}{s^2_j}, s^2_{\mu}\right)\\
+\sigma^2_{\alpha} \mid \boldsymbol{\alpha} &amp;\sim \mathsf{inv. gamma}\left( \frac{n-1}{2}, \frac{\sum_{j=1}^8 \alpha_j^2}{2}\right)
+\end{align*}\]</span> where <span class="math inline">\(s^{-2}_{\mu} =\sum_{j=1}^8 s_j^{-2}.\)</span></p>
+</section>
+<section id="parameter-expansion-for-the-eight-school-problem" class="slide level2 smaller">
+<h2>Parameter expansion for the eight school problem</h2>
+<p>The parameter expansion sampler proceeds in exactly the same way with the same conditionals for <span class="math inline">\(\sigma_{\xi}^2\)</span> and <span class="math inline">\(\boldsymbol{\xi}\)</span> as above; the only additional step is <span class="math display">\[\begin{align*}
+\nu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\xi} &amp; \sim \mathsf{Gauss}\left\{ \left( \sum_{j=1}^8 \xi_j^2/s_j^2\right)^{-1} \sum_{j=1}^8 \xi_j(y_j-\mu)/s^2_j, \left( \sum_{j=1}^8 \xi_j^2/s_j^2\right)^{-1}\right\}.
+\end{align*}\]</span></p>
+<p>After each update, we then save <span class="math inline">\(\alpha_j = \nu \xi_j\)</span> and <span class="math inline">\(\sigma_\alpha = |\nu|\sigma_\xi,\)</span> as the other parameters are not identifiable.</p>
+</section>
+<section id="funnel-geometry" class="slide level2">
+<h2>Funnel geometry</h2>
+
+<img data-src="fig/fig-funnel.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
+<section id="blocking" class="slide level2">
+<h2>Blocking</h2>
+<p>Identify groups of strongly correlated parameters and propose a joint update for these.</p>
+<ul>
+<li>The more parameters we propose at the same time, the lower the chance of acceptance</li>
+<li>Often ways to sample these efficiently</li>
+</ul>
+</section>
+<section id="tokyo-rainfall" class="slide level2">
+<h2>Tokyo rainfall</h2>
+<p>We consider data from <span class="citation" data-cites="Kitagawa:1987">Kitagawa (<a href="#/references" role="doc-biblioref" onclick="">1987</a>)</span> that provide a binomial time series giving the number of days in years 1983 and 1984 (a leap year) in which there was more than 1mm of rain in Tokyo; see section 4.3.4 of <span class="citation" data-cites="Rue.Held:2005">Rue &amp; Held (<a href="#/references" role="doc-biblioref" onclick="">2005</a>)</span>.</p>
+<p>We have</p>
+<ul>
+<li><span class="math inline">\(T=366\)</span> days and</li>
+<li><span class="math inline">\(n_t \in \{1,2\}\)</span> <span class="math inline">\((t=1, \ldots, T)\)</span>observations in day <span class="math inline">\(t\)</span> and</li>
+<li><span class="math inline">\(y_t=\{0,\ldots, n_t\}\)</span> the number of days with rain.</li>
+</ul>
+</section>
+<section id="smoothing-probabilities" class="slide level2">
+<h2>Smoothing probabilities</h2>
+<p>The objective is to obtain a smoothed probability of rain. The underlying probit model considered takes <span class="math display">\[Y_t \mid n_t, p_t \sim \mathsf{binom}(n_t, p_t), \qquad p_t = \Phi(\beta_t).\]</span></p>
+<p>We specify the random effects <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_{T}(\boldsymbol{0}, \tau^{-1}\mathbf{Q}^{-1}),\)</span> where <span class="math inline">\(\mathbf{Q}\)</span> is a <span class="math inline">\(T \times T\)</span> precision matrix that encodes the local dependence.</p>
+</section>
+<section id="random-walk-prior" class="slide level2">
+<h2>Random walk prior</h2>
+<div style="font-size: 0.8em;">
+<p>A circular random walk structure of order 2 is used to model the smooth curves by smoothing over neighbors, and enforces small second derivative. This is a suitable prior because it enforces no constraint on the mean structure.</p>
+<p>This amounts to specifying the process with for <span class="math inline">\(t \in \mathbb{N} \mod 366 + 1\)</span></p>
+</div>
+<p><span class="math display">\[\begin{align*}
+\Delta^2\beta_t &amp;= (\beta_{t+1} - \beta_t) - (\beta_t - \beta_{t-1})
+\\&amp;=-\beta_{t-1} +2 \beta_t - \beta_{t+1} \sim \mathsf{Gauss}(0, \tau^{-1}).
+\end{align*}\]</span></p>
+</section>
+<section id="circulant-precision-matrix" class="slide level2 smaller">
+<h2>Circulant precision matrix</h2>
+<p>This yields an intrinsic Gaussian Markov random field with a circulant precision matrix <span class="math inline">\(\tau\mathbf{Q}\)</span> of rank <span class="math inline">\(T-1,\)</span> where <span class="math display">\[\begin{align*}
+\mathbf{Q} &amp;=
+\begin{pmatrix}
+6 &amp; -4 &amp; 1 &amp; 0 &amp; \cdots &amp; 1 &amp; -4\\
+-4 &amp; 6 &amp; -4 &amp; 1 &amp; \ddots &amp; 0 &amp; 1 \\
+1 &amp; -4 &amp; 6 &amp; -4 &amp; \ddots &amp; 0 &amp; 0 \\
+\vdots &amp; \ddots &amp; \ddots  &amp; \ddots  &amp; \ddots  &amp; \ddots &amp; \vdots \\
+-4 &amp; 1 &amp; 0 &amp; 0 &amp; \cdots &amp; -4 &amp; 6
+\end{pmatrix}.
+\end{align*}\]</span> Because of the linear dependency, the determinant of <span class="math inline">\(\mathbf{Q}\)</span> is zero.</p>
+</section>
+<section id="prior-draws" class="slide level2">
+<h2>Prior draws</h2>
+
+<img data-src="bayesmod-slides7_files/figure-revealjs/fig-CRW2-prior-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-CRW2-prior"><p class="caption">
+Figure&nbsp;1: Five realizations from the cyclical random walk Gaussian prior of order 2.
+</p></section>
+<section id="gibbs-sampling-for-tokyo-data" class="slide level2">
+<h2>Gibbs sampling for Tokyo data</h2>
+<p>We can perform data augmentation by imputing Gaussian variables, say <span class="math inline">\(\{z_{t,i}\}\)</span> from truncated Gaussian, where <span class="math inline">\(z_{t,i} = \beta_t + \varepsilon_{t,i}\)</span> and <span class="math inline">\(\varepsilon_{t,i} \sim \mathsf{Gauss}(0,1)\)</span> are independent standard Gaussian and <span class="math display">\[\begin{align*}
+z_{t,i} \mid  y_{t,i}, \beta_t \sim
+\begin{cases}
+\mathsf{trunc. Gauss}(\beta_t, 1, -\infty, 0) &amp; y_{t,i} = 0 \\
+\mathsf{trunc. Gauss}(\beta_t, 1,  0, \infty) &amp; y_{t,i} =1
+\end{cases}
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-for-tokyo-data" class="slide level2">
+<h2>Posterior for Tokyo data</h2>
+<p>The posterior is proportional to <span class="math display">\[\begin{align*}
+p(\boldsymbol{\beta} \mid \tau)p(\tau)\prod_{t=1}^{T}\prod_{i=1}^{n_t}p(y_{t,i} \mid z_{t,i}) p(z_{t,i} \mid \beta_t)
+\end{align*}\]</span></p>
+</section>
+<section id="data-augmentation-for-tokyo-data" class="slide level2">
+<h2>Data augmentation for Tokyo data</h2>
+<p>Once we have imputed the Gaussian latent vectors, we can work directly with the values of <span class="math inline">\(z_t = \sum_{i=1}^{n_t} z_{i,t}\)</span> <span class="math display">\[\begin{align*}
+p(\boldsymbol{\beta}, \tau) &amp;\propto \tau^{(T-1)/2}\exp \left( - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta}\right)
+\\&amp; \times \exp\left\{ - \frac{1}{2} (\boldsymbol{z}/\boldsymbol{n} - \boldsymbol{\beta})^\top \mathrm{diag}(\boldsymbol{n})(\boldsymbol{z}/\boldsymbol{n} - \boldsymbol{\beta})\right\}
+\\&amp; \times \tau^{a-1}\exp(-\tau b)
+\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{z} = (z_1, \ldots, z_T),\)</span> as <span class="math inline">\(n_t^{-1} z_t \sim \mathsf{Gauss}(\beta_t, n_t^{-1}).\)</span></p>
+</section>
+<section id="gibbs-for-tokyo-data---conditionals" class="slide level2">
+<h2>Gibbs for Tokyo data - conditionals</h2>
+<p>Completing the quadratic form shows that <span class="math display">\[\begin{align*}
+\boldsymbol{\beta} \mid \boldsymbol{z}, \tau &amp;\sim \mathsf{Gauss}_T\left(\mathbf{Q}^{\star -1} \boldsymbol{z}, \mathbf{Q}^{\star -1}\right)\\
+\tau \mid \boldsymbol{\beta} &amp; \sim \mathsf{gamma}\left( \frac{T-1}{2} + a, \frac{\boldsymbol{\beta}^\top \mathbf{Q}\boldsymbol{\beta}}{2} + b \right),\\
+\mathbf{Q}^{\star} &amp;= \left\{\tau \mathbf{Q} + \mathrm{diag}(\boldsymbol{n})\right\}
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-prediction-for-probability-of-rainfall" class="slide level2">
+<h2>Posterior prediction for probability of rainfall</h2>
+
+<img data-src="fig/fig-rainfall-1.png" class="r-stretch quarto-figure-center"><p class="caption">Posterior prediction for probability of rainfall</p></section>
+<section id="blocking-vs-joint-update" class="slide level2">
+<h2>Blocking vs joint update</h2>
+<p>Compare the following two stategies</p>
+<ul>
+<li>joint update: given <span class="math inline">\(\boldsymbol{z}\)</span> and <span class="math inline">\(\tau\)</span>, simulate <span class="math inline">\(\boldsymbol{\beta}\)</span> jointly</li>
+<li>one-parameter at a time: starting from <span class="math inline">\(i \sim \mathsf{unif}(\{1, \ldots, 366\}),\)</span> get index <span class="math inline">\(t= i \mod 366 + 1\)</span> and simulate <span class="math inline">\(\beta_i \mid \boldsymbol{\beta}_{-i}, \boldsymbol{z}, \tau\)</span> one at a time.</li>
+</ul>
+</section>
+<section id="blocking-strategy" class="slide level2">
+<h2>Blocking strategy</h2>
+
+<img data-src="fig/fig-tokyo-post1-1.png" class="r-stretch quarto-figure-center"><p class="caption">Trace plots for Tokyo with blocking of random effects</p></section>
+<section id="individual-update-strategy" class="slide level2">
+<h2>Individual update strategy</h2>
+
+<img data-src="fig/fig-tokyo-post2-1.png" class="r-stretch quarto-figure-center"><p class="caption">Trace plots for Tokyo with random scan Gibbs for random effects</p></section>
+<section id="lessons-from-the-tokyo-example" class="slide level2">
+<h2>Lessons from the Tokyo example</h2>
+<p>What happened?</p>
+<ul>
+<li>there is lower autocorrelation with the joint update (also faster here!) for the <span class="math inline">\(\boldsymbol{\beta}\)</span></li>
+<li>in both cases, <span class="math inline">\(\tau \mid \cdot\)</span> mixes poorly because the values of <span class="math inline">\(\boldsymbol{\beta}\)</span> were sampled conditional on the previous value.</li>
+</ul>
+<p>A better avenue would be to use a Metropolis random walk for <span class="math inline">\(\tau^{\star}\)</span>, simulate <span class="math inline">\(\boldsymbol{\beta} \mid \tau^{\star}\)</span> and propose the joint vector <span class="math inline">\((\tau^{\star}, \boldsymbol{\beta}^{\star})\)</span> simultaneously.</p>
+</section>
+<section id="one-step-further" class="slide level2">
+<h2>One step further</h2>
+<p>We could also remove the data augmentation step and propose from a Gaussian approximation of the log likelihood, using a Taylor series expansion of the log likelihood about <span class="math inline">\(\boldsymbol{\beta}_{t-1}\)</span> <span class="math display">\[\begin{align*}
+\log p(\boldsymbol{\beta} \mid \boldsymbol{y}) \stackrel{\boldsymbol{\beta}}{\propto} - \frac{\tau}{2} \boldsymbol{\beta}^\top \mathbf{Q} \boldsymbol{\beta} + \sum_{t=1}^T \log f(y_t \mid \beta_t)
+\end{align*}\]</span> and the <span class="math inline">\(y_t\)</span> are conditionally independent in the likelihood. Refer to Section 4.4.1 of <span class="citation" data-cites="Rue.Held:2005">Rue &amp; Held (<a href="#/references" role="doc-biblioref" onclick="">2005</a>)</span> for more details.</p>
+</section>
+<section id="technical-aside-in-sparsity-we-trust" class="slide level2">
+<h2>Technical aside: in sparsity we trust!</h2>
+<p>It is crucial to exploit the sparsity structure of <span class="math inline">\(\mathbf{Q}\)</span> for efficient calculations of the likelihood</p>
+<ul>
+<li>typically requires re-ordering elements to get a banded precision matrix</li>
+<li>precompute the sparse Cholesky</li>
+<li>compute inverse by solving systems of linear equations; there are dedicated algorithms</li>
 </ul>
 </section>
 <section id="probabilistic-programming" class="slide level2">
@@ -336,9 +454,8 @@ s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\f
 <p>Historically, <a href="https://www.mrc-bsu.cam.ac.uk/software/bugs-project">Bugs</a> paved the way to practitioners.</p>
 <p>It relies on Gibbs sampling (updating one parameter at the time), but is not actively developed. Still the source of many exercises and inspiration for the syntax of other implementations (e.g., Nimble, JAGS).</p>
 </section>
-<section>
-<section id="stan" class="title-slide slide level1 center">
-<h1>Stan</h1>
+<section id="stan" class="slide level2">
+<h2>Stan</h2>
 <p>The programming language <a href="https://mc-stan.org/">Stan</a> is written in C++ and offers cross-platform interfaces.</p>
 
 <img data-src="fig/Stan.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
@@ -359,31 +476,47 @@ h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
 \end{align*}\]</span> where <span class="math inline">\(U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).\)</span></p>
 <p>It is possible to introduce leverage by adding <span class="math inline">\(\mathsf{Cor}(Z_t, U_t) = \rho.\)</span></p>
 </section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
+<p>In high dimensions, the typical set over which the posterior concentrate can have weird geometry.</p>
+<p>Different strategies can improve sampling</p>
+<ul>
+<li>data augmentation can simplify the likelihood, but lead to slow mixing</li>
+<li>parameter expansion adds redundancy (but the parameters are not identifiable)</li>
+<li>marginalization reduces correlation, but the computational cost is higher.e</li>
+</ul>
+</section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Beskos:2013" class="csl-entry" role="listitem">
-Beskos, A., Pillai, N., Roberts, G., Sanz-Serna, J.-M., &amp; Stuart, A. (2013). Optimal tuning of the hybrid <span>M</span>onte <span>C</span>arlo algorithm. <em>Bernoulli</em>, <em>19</em>(5a), 1501–1534. <a href="https://doi.org/10.3150/12-bej414">https://doi.org/10.3150/12-bej414</a>
+<div id="ref-Andrieu.Thoms:2008" class="csl-entry" role="listitem">
+Andrieu, C., &amp; Thoms, J. (2008). A tutorial on adaptive <span>MCMC</span>. <em>Statistics and Computing</em>, <em>18</em>(4), 343–373. <a href="https://doi.org/10.1007/s11222-008-9110-y">https://doi.org/10.1007/s11222-008-9110-y</a>
 </div>
-<div id="ref-Betancourt:2016" class="csl-entry" role="listitem">
-Betancourt, M. (2016). Identifying the optimal integration time in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>arXiv</em>. <a href="https://doi.org/10.48550/arXiv.1601.00225">https://doi.org/10.48550/arXiv.1601.00225</a>
+<div id="ref-Gelfand.Dey:1994" class="csl-entry" role="listitem">
+Gelfand, A. E., &amp; Dey, D. K. (1994). Bayesian model choice: Asymptotics and exact calculations. <em>Journal of the Royal Statistical Society: Series B (Methodological)</em>, <em>56</em>(3), 501–514. <a href="https://doi.org/10.1111/j.2517-6161.1994.tb01996.x">https://doi.org/10.1111/j.2517-6161.1994.tb01996.x</a>
 </div>
-<div id="ref-Betancourt:2017" class="csl-entry" role="listitem">
-Betancourt, M. (2017). A conceptual introduction to <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>arXiv Preprint</em>. <a href="https://doi.org/10.48550/arXiv.1701.02434">https://doi.org/10.48550/arXiv.1701.02434</a>
+<div id="ref-Gelman:2013" class="csl-entry" role="listitem">
+Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2013). <em>Bayesian data analysis</em> (3rd ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/b16018">https://doi.org/10.1201/b16018</a>
 </div>
-<div id="ref-Homan.Gelman:2014" class="csl-entry" role="listitem">
-Homan, M. D., &amp; Gelman, A. (2014). The no-<span>U</span>-turn sampler: Adaptively setting path lengths in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>Journal of Machine Learning Research</em>, <em>15</em>(1), 1593–1623.
+<div id="ref-Kitagawa:1987" class="csl-entry" role="listitem">
+Kitagawa, G. (1987). Non-<span>G</span>aussian state–space modeling of nonstationary time series. <em>Journal of the American Statistical Association</em>, <em>82</em>(400), 1032–1041. <a href="https://doi.org/10.1080/01621459.1987.10478534">https://doi.org/10.1080/01621459.1987.10478534</a>
 </div>
-<div id="ref-Neal:2011" class="csl-entry" role="listitem">
-Neal, R. M. (2011). <span>MCMC</span> using <span>H</span>amiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 113–162). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
+<div id="ref-Liu.Rubin.Wu:1998" class="csl-entry" role="listitem">
+Liu, C., Rubin, D. B., &amp; Wu, Y. N. (1998). Parameter expansion to accelerate <span>EM</span>: The <span>PX-EM</span> algorithm. <em>Biometrika</em>, <em>85</em>(4), 755–770. <a href="https://doi.org/10.1093/biomet/85.4.755">https://doi.org/10.1093/biomet/85.4.755</a>
 </div>
-<div id="ref-Nishimura:2020" class="csl-entry" role="listitem">
-Nishimura, A., Dunson, D. B., &amp; Lu, J. (2020). Discontinuous <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo for discrete parameters and discontinuous likelihoods. <em>Biometrika</em>, <em>107</em>(2), 365–380. <a href="https://doi.org/10.1093/biomet/asz083">https://doi.org/10.1093/biomet/asz083</a>
+<div id="ref-Nychka:2015" class="csl-entry" role="listitem">
+Nychka, D., Bandyopadhyay, S., Hammerling, D., Lindgren, F., &amp; Sain, S. (2015). A multiresolution <span>G</span>aussian process model for the analysis of large spatial datasets. <em>Journal of Computational and Graphical Statistics</em>, <em>24</em>(2), 579–599.
+</div>
+<div id="ref-Rosenthal:2011" class="csl-entry" role="listitem">
+Rosenthal, J. (2011). Optimal proposal distributions and adaptive <span>MCMC</span>. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 93–112). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
+</div>
+<div id="ref-Rue.Held:2005" class="csl-entry" role="listitem">
+Rue, H., &amp; Held, L. (2005). <em><span>G</span>aussian <span>M</span>arkov random fields: Theory and applications</em> (p. 280). CRC Press.
 </div>
 </div>
-</section></section>
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo"></p>

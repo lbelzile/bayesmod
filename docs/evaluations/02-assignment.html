@@ -283,10 +283,10 @@ Y_{ij1} \mid \delta, \alpha_i, \beta_j &amp;\sim \mathsf{Poisson}\{\exp(\delta +
 <li>Report and interpret the estimated posterior mean home advantage <span class="math inline">\(\widehat{\delta}\)</span>.</li>
 <li>Calculate the probability that the home advantage <span class="math inline">\(\delta\)</span> is positive?</li>
 </ul></li>
-<li>One measure of adequacy for the model is obtained from cross-validation predictive density. Denote the vector of parameters by <span class="math inline">\(\boldsymbol{\theta} = (\boldsymbol{\alpha},\boldsymbol{\beta}, \delta, \sigma_\alpha, \sigma_\beta)\)</span> and <span class="math inline">\(\boldsymbol{y}_{-r}\)</span> the vector obtained by removing the <span class="math inline">\(i\)</span>th observation from the likelihood. Let <span class="math inline">\(f(y_i; \boldsymbol{\theta})\)</span> denote the marginal density/mass function of sample <span class="math inline">\(y_i\)</span>. We consider the partial predictive density<br>
+<li>One measure of adequacy for the model is obtained from leave-one-out cross-validation predictive density. Denote the vector of parameters by <span class="math inline">\(\boldsymbol{\theta} = (\boldsymbol{\alpha},\boldsymbol{\beta}, \delta, \sigma_\alpha, \sigma_\beta)\)</span> and <span class="math inline">\(\boldsymbol{y}_{-i}\)</span> the vector obtained by removing the <span class="math inline">\(i\)</span>th observation <span class="math inline">\(y_i\)</span> from the likelihood. Let <span class="math inline">\(f(y_i; \boldsymbol{\theta})\)</span> denote the marginal density/mass function of sample <span class="math inline">\(y_i\)</span>. We consider the partial predictive density<br>
 <span class="math display">\[\begin{align*}
 f(y_i \mid \boldsymbol{y}_{-i})=\int_{\boldsymbol{\Theta}} f(y_i \mid \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}
-\end{align*}\]</span> Integrals with respect to the partial posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i})\)</span> can be approximated by taking instead draws from the full posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> with importance weight <span class="math inline">\(w_i = 1/f(y_i; \boldsymbol{\theta})\)</span> <span class="citation" data-cites="Gelfand.Dey:1994">(<a href="#ref-Gelfand.Dey:1994" role="doc-biblioref">Gelfand &amp; Dey, 1994</a>)</span>. Implement manually this importance sampling estimator for your model, taking out the result of a match (rather than a single score). Next compute the average log pointwise predictive density as a measure of goodness of fit.</li>
+\end{align*}\]</span> Integrals with respect to the partial posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i})\)</span> can be approximated by taking instead draws from the full posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> with importance weight <span class="math inline">\(w_i = 1/f(y_i; \boldsymbol{\theta})\)</span> <span class="citation" data-cites="Gelfand.Dey:1994">(<a href="#ref-Gelfand.Dey:1994" role="doc-biblioref">Gelfand &amp; Dey, 1994</a>)</span>. Implement manually this importance sampling estimator for your model.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Next compute the average log pointwise predictive density as a measure of goodness of fit.</li>
 <li>Maher also suggested more complex models, including one in which the offensive and defensive strength of each team changed depending on whether they were at home or visiting another team, i.e. <span class="math display">\[\begin{align}
 Y_{ij1} \sim \mathsf{Poisson}\{\exp(\alpha_i +\beta_j + \delta)\},
 Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
@@ -296,6 +296,7 @@ Y_{ij2} \sim \mathsf{Poisson}\{\exp(\gamma_j+\omega_i)\},
 
 
 </section>
+
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-DAngelo.Canale:2023" class="csl-entry" role="listitem">
@@ -313,7 +314,12 @@ Polson, N. G., Scott, J. G., &amp; Windle, J. (2013). Bayesian inference for log
 <div id="ref-Simpson:2017" class="csl-entry" role="listitem">
 Simpson, D., Rue, H., Riebler, A., Martins, T. G., &amp; Sørbye, S. H. (2017). Penalising model component complexity: A principled, practical approach to constructing priors. <em>Statistical Science</em>, <em>32</em>(1), 1–28. <a href="https://doi.org/10.1214/16-sts576">https://doi.org/10.1214/16-sts576</a>
 </div>
-</div></section></div></main> <!-- /main -->
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You should remove the results of a match <span class="math inline">\(i\)</span> rather than a single score.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
