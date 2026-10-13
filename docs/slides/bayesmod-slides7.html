@@ -184,7 +184,7 @@ p(y_i \mid \boldsymbol{y}_{-i}) &amp;= \int_{\boldsymbol{\Theta}} f_i(y_i; \bold
 \\&amp;= B \left\{\sum_{b=1}^B \frac{1}{f_i (y_i; \boldsymbol{\theta}_b)}\right\}^{-1}.
 \end{align*}\]</span></p>
 <div style="font-size: 0.9em;">
-<p>This estimator takes the form of an harmonic mean, which can have very large variance due to some weights dominating the fit. <span class="citation" data-cites="Vehtari.Gelman.Gabry:2017">(<a href="#/references" role="doc-biblioref" onclick=""><strong>Vehtari.Gelman.Gabry:2017?</strong></a>)</span> proposed using Pareto smoothed importance sampling <span class="citation" data-cites="Vehtari.Simpson.Gelman.Yao.Gabry:2025">(<a href="#/references" role="doc-biblioref" onclick=""><strong>Vehtari.Simpson.Gelman.Yao.Gabry:2025?</strong></a>)</span> to avoid overly large weights; this method is implemented in the <code>loo</code> <strong>R</strong> package.</p>
+<p>This estimator takes the form of an harmonic mean, which can have very large variance due to some weights dominating the fit. <span class="citation" data-cites="Vehtari.Gelman.Gabry:2017">Vehtari et al. (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> proposed using Pareto smoothed importance sampling <span class="citation" data-cites="Vehtari.Simpson.Gelman.Yao.Gabry:2025">(<a href="#/references" role="doc-biblioref" onclick="">Vehtari et al., 2024</a>)</span> to avoid overly large weights; this method is implemented in the <code>loo</code> <strong>R</strong> package.</p>
 </div>
 </section>
 <section id="marginal-predictive-check" class="slide level2">
@@ -483,7 +483,7 @@ h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
 <ul>
 <li>data augmentation can simplify the likelihood, but lead to slow mixing</li>
 <li>parameter expansion adds redundancy (but the parameters are not identifiable)</li>
-<li>marginalization reduces correlation, but the computational cost is higher.e</li>
+<li>marginalization reduces correlation, but the computational cost is higher.</li>
 </ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
@@ -514,6 +514,12 @@ Rosenthal, J. (2011). Optimal proposal distributions and adaptive <span>MCMC</sp
 </div>
 <div id="ref-Rue.Held:2005" class="csl-entry" role="listitem">
 Rue, H., &amp; Held, L. (2005). <em><span>G</span>aussian <span>M</span>arkov random fields: Theory and applications</em> (p. 280). CRC Press.
+</div>
+<div id="ref-Vehtari.Gelman.Gabry:2017" class="csl-entry" role="listitem">
+Vehtari, A., Gelman, A., &amp; Gabry, J. (2017). Practical <span>B</span>ayesian model evaluation using leave-one-out cross-validation and <span>WAIC</span>. <em>Statistics and Computing</em>, <em>27</em>(5), 1413–1432. <a href="https://doi.org/10.1007/s11222-016-9696-4">https://doi.org/10.1007/s11222-016-9696-4</a>
+</div>
+<div id="ref-Vehtari.Simpson.Gelman.Yao.Gabry:2025" class="csl-entry" role="listitem">
+Vehtari, A., Simpson, D., Gelman, A., Yao, Y., &amp; Gabry, J. (2024). Pareto smoothed importance sampling. <em>Journal of Machine Learning Research</em>, <em>25</em>(1), 3491–3548.
 </div>
 </div>
 </section>
