@@ -136,7 +136,7 @@ These problems can be addressed using one of the following:
 - marginalization
 - removing redundant parameters or using informative priors
 - reparametrization
-- clever proposals (adaptive MCMC), see @Andrieu.Thoms:2008 and @Rosenthal:2011.
+- clever proposals (adaptive MCMC) see @Andrieu.Thoms:2008 and @Rosenthal:2011
 - blocking
 
 ## Gaussian model with random effects
@@ -158,7 +158,7 @@ where
 
 Consider a one-way ANOVA with $n$ observations from $K$ categories, with observation $i=1, \ldots, n_k$ from group $k$ having contribution
 \begin{align*}
-Y_{i,k} &\sim \mathsf{Gauss}(\mu + \alpha_k, \sigma^2_y) \\
+Y_{i,k} &\sim \mathsf{Gauss}(\mu + \alpha_k, \sigma^2_y), \\
 \alpha_k &\sim \mathsf{Gauss}(0, \sigma^2_\alpha).
 \end{align*}
 We set an improper prior for the mean $p(\mu) \propto 1.$
@@ -181,13 +181,13 @@ $$
 p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \boldsymbol{z}.
 $$
 
-This happens for data augmentation, etc., and reduces dependency between parameters, but typically the likelihood becomes more expensive to compute
+This reduces dependency between parameters, but typically the likelihood becomes more expensive to compute
 
 ## Marginalization
 
 We can marginalize over the $K$ vector of $\boldsymbol{\alpha}$ to perform updates of $\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}.$
 
-We find if $\boldsymbol{\varSigma}_{\sigma^2_y, \sigma^2_\alpha}$ is the marginal covariance matrix of $$\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right).$$ 
+We find if $\boldsymbol{\varSigma} = g(\sigma^2_y, \sigma^2_\alpha)$ is the marginal covariance matrix of $$\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right).$$ 
 
 Straightforward calculations yield
 
@@ -198,7 +198,7 @@ $$
 
 We can write
 \begin{align*}
-\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \sigma^2 &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B},  \sigma^2\mathbf{I}_p)\\
+\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \sigma^2 &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B}, \kappa^2\mathbf{I}_p)\\
 \boldsymbol{Y} \mid \boldsymbol{\beta} &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
 \end{align*}
 where the second line corresponds to marginalizing out the random effects $\boldsymbol{B}.$
@@ -216,7 +216,7 @@ Section 3.1 of @Nychka:2015 details efficient ways of calculating the quadratic 
 
 ## Parameter expansion
 
-Add redundant parameter to improve mixing by decorrelating [@Liu.Rubin.Wu:1998]
+Add redundant parameter to improve mixing by decorrelating [@Liu.Rubin.Wu:1998],
 
 \begin{align*}
 Y_{i,k} &\sim \mathsf{Gauss}(\mu + \xi\eta_k, \sigma^2_y) \\
@@ -250,7 +250,7 @@ where $s^{-2}_{\mu} =\sum_{j=1}^8 s_j^{-2}.$
 
 The parameter expansion sampler proceeds in exactly the same way with the same conditionals for $\sigma_{\xi}^2$ and $\boldsymbol{\xi}$ as above; the only additional step is 
 \begin{align*}
-\nu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\xi} & \sim \mathsf{Gauss}\left\{ \left( \sum_{j=1}^8 \xi_j^2/s_j^2\right)^{-1} \sum_{j=1}^8 \xi_j(y_j-\mu)/s^2_j, \left( \sum_{j=1}^8 \xi_j^2/s_j^2\right)^{-1}\right\}.
+\nu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\xi} & \sim \mathsf{Gauss}\left\{ \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1} \sum_{j=1}^8 \frac{\xi_j(y_j-\mu)}{s^2_j}, \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1}\right\}.
 \end{align*}
 
 After each update, we then save  $\alpha_j = \nu \xi_j$ and $\sigma_\alpha = |\nu|\sigma_\xi,$ as the other parameters are not identifiable. 
@@ -270,8 +270,8 @@ knitr::include_graphics("fig/fig-funnel.png")
 
 Identify groups of strongly correlated parameters and propose a joint update for these.
 
-- The more parameters we propose at the same time, the lower the chance of acceptance
-- Often ways to sample these efficiently
+- The more parameters we propose at the same time, the lower the chance of acceptance,
+- Often ways to sample these efficiently.
 
 
 ## Tokyo rainfall

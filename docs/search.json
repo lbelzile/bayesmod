@@ -487,7 +487,7 @@
     "href": "slides/bayesmod-slides7.html#computational-strategies",
     "title": "Bayesian modelling",
     "section": "Computational strategies",
-    "text": "Computational strategies\nThese problems can be addressed using one of the following:\n\nmarginalization\nremoving redundant parameters or using informative priors\nreparametrization\nclever proposals (adaptive MCMC), see Andrieu & Thoms (2008) and Rosenthal (2011).\nblocking"
+    "text": "Computational strategies\nThese problems can be addressed using one of the following:\n\nmarginalization\nremoving redundant parameters or using informative priors\nreparametrization\nclever proposals (adaptive MCMC) see Andrieu & Thoms (2008) and Rosenthal (2011)\nblocking"
   },
   {
     "objectID": "slides/bayesmod-slides7.html#gaussian-model-with-random-effects",
@@ -501,7 +501,7 @@
     "href": "slides/bayesmod-slides7.html#one-way-anova",
     "title": "Bayesian modelling",
     "section": "One-way ANOVA",
-    "text": "One-way ANOVA\nConsider a one-way ANOVA with \\(n\\) observations from \\(K\\) categories, with observation \\(i=1, \\ldots, n_k\\) from group \\(k\\) having contribution \\[\\begin{align*}\nY_{i,k} &\\sim \\mathsf{Gauss}(\\mu + \\alpha_k, \\sigma^2_y) \\\\\n\\alpha_k &\\sim \\mathsf{Gauss}(0, \\sigma^2_\\alpha).\n\\end{align*}\\] We set an improper prior for the mean \\(p(\\mu) \\propto 1.\\)\nIf there are \\(K\\) groups, then the group-specific mean is \\(\\mu+\\alpha_k\\), and there is a redundant parameter. This leads to poor mixing if priors are not informative."
+    "text": "One-way ANOVA\nConsider a one-way ANOVA with \\(n\\) observations from \\(K\\) categories, with observation \\(i=1, \\ldots, n_k\\) from group \\(k\\) having contribution \\[\\begin{align*}\nY_{i,k} &\\sim \\mathsf{Gauss}(\\mu + \\alpha_k, \\sigma^2_y), \\\\\n\\alpha_k &\\sim \\mathsf{Gauss}(0, \\sigma^2_\\alpha).\n\\end{align*}\\] We set an improper prior for the mean \\(p(\\mu) \\propto 1.\\)\nIf there are \\(K\\) groups, then the group-specific mean is \\(\\mu+\\alpha_k\\), and there is a redundant parameter. This leads to poor mixing if priors are not informative."
   },
   {
     "objectID": "slides/bayesmod-slides7.html#removing-redundant-parameters",
@@ -515,21 +515,21 @@
     "href": "slides/bayesmod-slides7.html#marginalization",
     "title": "Bayesian modelling",
     "section": "Marginalization",
-    "text": "Marginalization\nGiven a model \\(p(\\boldsymbol{\\theta}, \\boldsymbol{Z})\\), reduce the dependance by sampling from the marginal\n\\[\np(\\boldsymbol{\\theta})= \\int p(\\boldsymbol{\\theta}, \\boldsymbol{z}) \\mathrm{d} \\boldsymbol{z}.\n\\]\nThis happens for data augmentation, etc., and reduces dependency between parameters, but typically the likelihood becomes more expensive to compute"
+    "text": "Marginalization\nGiven a model \\(p(\\boldsymbol{\\theta}, \\boldsymbol{Z})\\), reduce the dependance by sampling from the marginal\n\\[\np(\\boldsymbol{\\theta})= \\int p(\\boldsymbol{\\theta}, \\boldsymbol{z}) \\mathrm{d} \\boldsymbol{z}.\n\\]\nThis reduces dependency between parameters, but typically the likelihood becomes more expensive to compute"
   },
   {
     "objectID": "slides/bayesmod-slides7.html#marginalization-1",
     "href": "slides/bayesmod-slides7.html#marginalization-1",
     "title": "Bayesian modelling",
     "section": "Marginalization",
-    "text": "Marginalization\nWe can marginalize over the \\(K\\) vector of \\(\\boldsymbol{\\alpha}\\) to perform updates of \\(\\mu \\mid \\sigma^2_y, \\sigma^2_\\alpha, \\boldsymbol{y}.\\)\nWe find if \\(\\boldsymbol{\\varSigma}_{\\sigma^2_y, \\sigma^2_\\alpha}\\) is the marginal covariance matrix of \\[\\boldsymbol{Y} \\mid \\mu, \\sigma^2_y, \\sigma^2_\\alpha \\sim \\mathsf{Gauss}_n\\left(\\mu\\boldsymbol{1}_n, \\boldsymbol{\\varSigma}\\right).\\]\nStraightforward calculations yield\n\\[\\mu \\mid \\sigma^2_y, \\sigma^2_\\alpha, \\boldsymbol{y} \\sim \\mathsf{Gauss}\\left(\\frac{\\boldsymbol{y}^\\top \\boldsymbol{\\varSigma}^{-1}\\boldsymbol{1}_n}{\\boldsymbol{1}_n^\\top\\boldsymbol{\\varSigma}^{-1}\\boldsymbol{1}_n}, \\left\\{\\boldsymbol{1}_n^\\top\\boldsymbol{\\varSigma}^{-1}\\boldsymbol{1}_n\\right\\}^{-1}\\right).\n\\]"
+    "text": "Marginalization\nWe can marginalize over the \\(K\\) vector of \\(\\boldsymbol{\\alpha}\\) to perform updates of \\(\\mu \\mid \\sigma^2_y, \\sigma^2_\\alpha, \\boldsymbol{y}.\\)\nWe find if \\(\\boldsymbol{\\varSigma} = g(\\sigma^2_y, \\sigma^2_\\alpha)\\) is the marginal covariance matrix of \\[\\boldsymbol{Y} \\mid \\mu, \\sigma^2_y, \\sigma^2_\\alpha \\sim \\mathsf{Gauss}_n\\left(\\mu\\boldsymbol{1}_n, \\boldsymbol{\\varSigma}\\right).\\]\nStraightforward calculations yield\n\\[\\mu \\mid \\sigma^2_y, \\sigma^2_\\alpha, \\boldsymbol{y} \\sim \\mathsf{Gauss}\\left(\\frac{\\boldsymbol{y}^\\top \\boldsymbol{\\varSigma}^{-1}\\boldsymbol{1}_n}{\\boldsymbol{1}_n^\\top\\boldsymbol{\\varSigma}^{-1}\\boldsymbol{1}_n}, \\left\\{\\boldsymbol{1}_n^\\top\\boldsymbol{\\varSigma}^{-1}\\boldsymbol{1}_n\\right\\}^{-1}\\right).\n\\]"
   },
   {
     "objectID": "slides/bayesmod-slides7.html#marginalization-of-gaussian-models",
     "href": "slides/bayesmod-slides7.html#marginalization-of-gaussian-models",
     "title": "Bayesian modelling",
     "section": "Marginalization of Gaussian models",
-    "text": "Marginalization of Gaussian models\nWe can write \\[\\begin{align*}\n\\boldsymbol{Y} \\mid \\boldsymbol{\\beta}, \\boldsymbol{B}, \\sigma^2 &\\sim \\mathsf{Gauss}_n(\\mathbf{X}\\boldsymbol{\\beta} + \\mathbf{Z}\\boldsymbol{B},  \\sigma^2\\mathbf{I}_p)\\\\\n\\boldsymbol{Y} \\mid \\boldsymbol{\\beta} &\\sim \\mathsf{Gauss}_n(\\mathbf{X}\\boldsymbol{\\beta}, \\mathbf{Q}^{-1}),\n\\end{align*}\\] where the second line corresponds to marginalizing out the random effects \\(\\boldsymbol{B}.\\)"
+    "text": "Marginalization of Gaussian models\nWe can write \\[\\begin{align*}\n\\boldsymbol{Y} \\mid \\boldsymbol{\\beta}, \\boldsymbol{B}, \\sigma^2 &\\sim \\mathsf{Gauss}_n(\\mathbf{X}\\boldsymbol{\\beta} + \\mathbf{Z}\\boldsymbol{B}, \\kappa^2\\mathbf{I}_p)\\\\\n\\boldsymbol{Y} \\mid \\boldsymbol{\\beta} &\\sim \\mathsf{Gauss}_n(\\mathbf{X}\\boldsymbol{\\beta}, \\mathbf{Q}^{-1}),\n\\end{align*}\\] where the second line corresponds to marginalizing out the random effects \\(\\boldsymbol{B}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides7.html#efficient-calculations-for-gaussian-models",
@@ -543,7 +543,7 @@
     "href": "slides/bayesmod-slides7.html#parameter-expansion",
     "title": "Bayesian modelling",
     "section": "Parameter expansion",
-    "text": "Parameter expansion\nAdd redundant parameter to improve mixing by decorrelating (Liu et al., 1998)\n\\[\\begin{align*}\nY_{i,k} &\\sim \\mathsf{Gauss}(\\mu + \\xi\\eta_k, \\sigma^2_y) \\\\\n\\eta_k &\\sim \\mathsf{Gauss}(0, \\sigma^2_\\eta)\n\\end{align*}\\] so that \\(\\sigma_\\alpha = |\\xi|\\sigma_\\eta.\\)"
+    "text": "Parameter expansion\nAdd redundant parameter to improve mixing by decorrelating (Liu et al., 1998),\n\\[\\begin{align*}\nY_{i,k} &\\sim \\mathsf{Gauss}(\\mu + \\xi\\eta_k, \\sigma^2_y) \\\\\n\\eta_k &\\sim \\mathsf{Gauss}(0, \\sigma^2_\\eta)\n\\end{align*}\\] so that \\(\\sigma_\\alpha = |\\xi|\\sigma_\\eta.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides7.html#eight-school-example",
@@ -564,7 +564,7 @@
     "href": "slides/bayesmod-slides7.html#parameter-expansion-for-the-eight-school-problem",
     "title": "Bayesian modelling",
     "section": "Parameter expansion for the eight school problem",
-    "text": "Parameter expansion for the eight school problem\nThe parameter expansion sampler proceeds in exactly the same way with the same conditionals for \\(\\sigma_{\\xi}^2\\) and \\(\\boldsymbol{\\xi}\\) as above; the only additional step is \\[\\begin{align*}\n\\nu \\mid \\boldsymbol{y}, \\boldsymbol{s}^2, \\boldsymbol{\\xi} & \\sim \\mathsf{Gauss}\\left\\{ \\left( \\sum_{j=1}^8 \\xi_j^2/s_j^2\\right)^{-1} \\sum_{j=1}^8 \\xi_j(y_j-\\mu)/s^2_j, \\left( \\sum_{j=1}^8 \\xi_j^2/s_j^2\\right)^{-1}\\right\\}.\n\\end{align*}\\]\nAfter each update, we then save \\(\\alpha_j = \\nu \\xi_j\\) and \\(\\sigma_\\alpha = |\\nu|\\sigma_\\xi,\\) as the other parameters are not identifiable."
+    "text": "Parameter expansion for the eight school problem\nThe parameter expansion sampler proceeds in exactly the same way with the same conditionals for \\(\\sigma_{\\xi}^2\\) and \\(\\boldsymbol{\\xi}\\) as above; the only additional step is \\[\\begin{align*}\n\\nu \\mid \\boldsymbol{y}, \\boldsymbol{s}^2, \\boldsymbol{\\xi} & \\sim \\mathsf{Gauss}\\left\\{ \\left( \\sum_{j=1}^8 \\frac{\\xi_j^2}{s_j^2}\\right)^{-1} \\sum_{j=1}^8 \\frac{\\xi_j(y_j-\\mu)}{s^2_j}, \\left( \\sum_{j=1}^8 \\frac{\\xi_j^2}{s_j^2}\\right)^{-1}\\right\\}.\n\\end{align*}\\]\nAfter each update, we then save \\(\\alpha_j = \\nu \\xi_j\\) and \\(\\sigma_\\alpha = |\\nu|\\sigma_\\xi,\\) as the other parameters are not identifiable."
   },
   {
     "objectID": "slides/bayesmod-slides7.html#funnel-geometry",
@@ -578,7 +578,7 @@
     "href": "slides/bayesmod-slides7.html#blocking",
     "title": "Bayesian modelling",
     "section": "Blocking",
-    "text": "Blocking\nIdentify groups of strongly correlated parameters and propose a joint update for these.\n\nThe more parameters we propose at the same time, the lower the chance of acceptance\nOften ways to sample these efficiently"
+    "text": "Blocking\nIdentify groups of strongly correlated parameters and propose a joint update for these.\n\nThe more parameters we propose at the same time, the lower the chance of acceptance,\nOften ways to sample these efficiently."
   },
   {
     "objectID": "slides/bayesmod-slides7.html#tokyo-rainfall",
