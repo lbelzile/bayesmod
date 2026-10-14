@@ -2277,7 +2277,7 @@
     "href": "content/07-content.html#readings",
     "title": "Probabilistic programming",
     "section": "Readings",
-    "text": "Readings\n\nGelman et al. (2020)",
+    "text": "Readings\n\nGelman et al. (2008)",
     "crumbs": [
       "Content",
       "Course content",
@@ -2313,7 +2313,7 @@
     "href": "content/07-content.html#code",
     "title": "Probabilistic programming",
     "section": "Code",
-    "text": "Code\n\nR script for the Tokyo rainfall example\nR script for the eight school example\nStochastic volatility model:\n\nStan code 1 and 2 and cmdstanr R script\nNimble code\n\nSmartwatch example and cmdstanr R script",
+    "text": "Code\n\nR script with Gibbs sampler and Nimble for one-way ANOVA, vs Stan code\nR script for the Tokyo rainfall example\nR script for the eight school example\nStochastic volatility model:\n\nStan code 1 and 2 and cmdstanr R script\nNimble code\n\nSmartwatch example and cmdstanr R script",
     "crumbs": [
       "Content",
       "Course content",
@@ -2981,7 +2981,7 @@
     "href": "evaluations/01-assignment.html#problem-1.2",
     "title": "Assignment 1",
     "section": "Problem 1.2",
-    "text": "Problem 1.2\nThe waiting dataset contains waiting times (in seconds) from 17:59 until the departure of the next metro at the Universite de Montreal station during week-days over three consecutive months.\nAssume first that the waiting time are independent and identically distributed as exponential.\n\nUse a conjugate gamma prior such that the average waiting time \\(1/\\lambda\\) has mean 30 seconds and std. deviation 30 seconds.1\n\nGive the values of the corresponding shape and rate parameters of the prior.\nPlot an histogram of \\(1000\\) prior predictive draws.\n\nDerive the posterior distribution and report its parameter values.\nCalculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.\nPerform a prior sensitivity analysis.\n\nThe post_waiting_weibull contains 10K random samples from the posterior of a Weibull model \\(\\mathsf{Weibull}(\\lambda, \\alpha)\\) with a penalized-complexity prior for the shape parameter \\(\\alpha \\sim \\mathsf{PC}(\\theta=0.5)\\) (Niekerk et al., 2021) and \\(\\lambda \\sim \\mathsf{inv. gamma}(\\gamma, \\omega)\\) with scale \\(\\gamma=90\\) and shape \\(\\omega=4\\).\n\nDraw \\(B=1000\\) posterior predictive samples of size \\(n=62\\) from the Weibull and exponential models. For each posterior draw, generate a sample of size \\(n=62\\).\nFor each, compute the sample mean, ( the sample std. deviation and the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original waiting sample. Hence comment on the adequacy (or lack thereof) of the two models.",
+    "text": "Problem 1.2\nThe waiting dataset contains waiting times (in seconds) from 17:59 until the departure of the next metro at the Universite de Montreal station during week-days over three consecutive months.\nAssume first that the waiting time are independent and identically distributed as exponential.\n\nUse a conjugate gamma prior such that the average waiting time \\(1/\\lambda\\) has mean 30 seconds and std. deviation 30 seconds.1\n\nGive the values of the corresponding shape and rate parameters of the prior.\nPlot an histogram of \\(1000\\) prior predictive draws.\n\nDerive the posterior distribution and report its parameter values.\nCalculate the posterior probability of waiting more than 30 seconds analytically and verify the result via Monte Carlo integration.\nPerform a prior sensitivity analysis.\n\nThe post_waiting_weibull contains 10K random samples from the posterior of a Weibull model \\(\\mathsf{Weibull}(\\lambda, \\alpha)\\) with a penalized-complexity prior for the shape parameter \\(\\alpha \\sim \\mathsf{PC}(\\theta=0.5)\\) (Niekerk et al., 2021) and \\(\\lambda \\sim \\mathsf{inv. gamma}(\\gamma, \\omega)\\) with scale \\(\\gamma=90\\) and shape \\(\\omega=4\\).\n\nDraw \\(B=1000\\) posterior predictive samples of size \\(n=62\\) from the Weibull and exponential models. For each posterior draw, generate a sample of size \\(n=62\\).\nFor each, compute the sample mean, the sample std. deviation and the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original waiting sample. Hence comment on the adequacy (or lack thereof) of the two models.",
     "crumbs": [
       "Evaluations",
       "Assignments",
