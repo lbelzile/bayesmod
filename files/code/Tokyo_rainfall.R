@@ -11,8 +11,6 @@ tokyo <- tokyorain |>
 nt <- 366L
 # Circulant random walk of order two precision matrix
 Q <- hecbayes::crw_Q(d = nt, type = "rw1", sparse = TRUE)
-# Sparse Cholesky root
-cholQ <- Matrix::chol(Q)
 N <- Matrix::Diagonal(n = nt, x = tokyo$n)
 # Create containers
 B <- 1e4L # number of draws
@@ -99,7 +97,7 @@ for (b in seq_len(B)) {
   tau <- tau_s[b] <- rgamma(
     n = 1,
     shape = (nt - 1) / 2 + tau_a,
-    rate = 0.5 * as.numeric(crossprod(cholQ %*% beta)) + tau_b
+    rate = 0.5 * as.numeric(t(beta) %*% Q %*% beta) + tau_b
   )
 }
 post_tokyo2 <- data.frame(cbind(tau_s, beta_s))
@@ -112,7 +110,7 @@ logpost <- function(beta, tau) {
       (tokyo$n - tokyo$y) * pnorm(q = beta, lower.tail = TRUE, log.p = TRUE)
   ) +
     365 * log(tau) -
-    0.5 * tau * as.numeric(crossprod(cholQ %*% beta)) +
+    0.5 * tau * as.numeric(t(beta) %*% Q %*% beta) +
     (tau_a - 1) * log(tau) -
     tau_b * tau
 }
