@@ -50,24 +50,38 @@ ggplot(es, aes(x = school, y = y)) +
 
 Consider a one-way ANOVA with a single observation per group, where for $i=1, \ldots, n,$ we have
 \begin{align*}
-Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha_i, \sigma^2_i) \\
+Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha_i, s^2_i) \\
 \alpha_i &\sim \mathsf{Gauss}(0, \sigma^2_\alpha)
 \end{align*}
 and an improper prior for the mean $p(\mu) \propto 1.$
-If there are $K$ groups, then the group-specific mean is $\mu+\alpha_k$, and there is a redundant parameter. In the Bayesian setting, the parameters are weakly identifiable because of the prior on $\boldsymbol{\alpha}$, but the geometry is such that $\alpha_k \to 0$ as $\sigma^2_{\alpha} \to 0.$ See [Section 5.5](https://users.aalto.fi/~ave/BDA3.pdf) on p. 119 of @Gelman:2013 for more details.
+If there are $K$ groups, then the group-specific mean is $\mu+\alpha_k$, and there is a redundant parameter. In the Bayesian setting, the parameters are weakly identifiable because of the prior on $\boldsymbol{\alpha}$, but the geometry is such that $\alpha_k \to 0$ as $\sigma^2_{\alpha} \to 0.$ See [Section 5.5](https://users.aalto.fi/~ave/BDA3.pdf) on p.119 of @Gelman:2013 for more details.
 
 We fit the model by adding redundant parameter to improve mixing [@Gelman.vanDyk:2008]
 \begin{align*}
-Y_{i} &\sim \mathsf{Gauss}(\mu + \alpha\xi_i, \sigma^2_i) \\
+Y_{i} &\sim \mathsf{Gauss}(\mu + \nu\xi_i, \sigma^2_i) \\
 \xi_i &\sim \mathsf{Gauss}(0, \sigma^2_\xi)
 \end{align*}
-so that $\sigma_\alpha = |\alpha|\sigma_\xi.$
+so that $\alpha_i=\nu\xi_i$ and $\sigma_\alpha = |\nu|\sigma_\xi.$
 
 
 See this [post](https://xuwd11.github.io/am207/wiki/gelmanschools.html) for display of the pathological behaviour that can be captured by divergence in Hamiltonian Monte Carlo.
 
 
 :::{.solution}
+
+
+If we use the matrix formulation and  write $\boldsymbol{S}^2 = \mathrm{diag}\{s_1^2, \ldots, s_n^2\}$ for the diagonal matrix of (fixed) sample variance, then the log of the joint density of $p(\mu, \boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}, \sigma_\alpha)$ is proportional to 
+\begin{align*}
+\log p(\mu, \boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}, \sigma_\alpha) &\propto -\frac{1}{2} (\boldsymbol{y} - \boldsymbol{\alpha} - \mathbf{1}_8\mu)^\top \boldsymbol{S}^{-2}(\boldsymbol{y} - \boldsymbol{\alpha} - \mathbf{1}_8\mu) - \frac{1}{2} \sum_{j=1}^8 \frac{\alpha_j^2}{\sigma_{\alpha}^2}\\
+& \propto -\frac{1}{2}\left(\mu \mathbf{1}_8^{\top}\boldsymbol{S}^{-2}\mathbf{1}_8\mu + 2
+(\boldsymbol{y} - \boldsymbol{\alpha})^\top \boldsymbol{S}^{-2}\mathbf{1}_8\mu + \sum{j=1}^8 \frac{(y_i-\alpha_i)^2}{s_j^2} + \frac{\alpha_j^2}{\sigma_{\alpha}^2}\right)
+\end{align*}
+where $s_\mu^{-2} = \sum_{j=1}^8 s_j^2 = \mathbf{1}_8^\top\boldsymbol{S}^{-2}\mathbf{1}_8.$ This gives 
+\begin{align*}
+\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha} & \sim \mathsf{Gauss}\left( s^2_{\mu} \sum_{j=1}^8 \frac{y_j-\alpha_j}{s^2_j}, s^2_{\mu}\right)\\
+\alpha_i \mid y_i, s_i^2, \sigma^2_{\alpha} &\sim \mathsf{Gauss}\left\{\frac{y_is^{-2}_j}{s^{-2}_i + \sigma^{-2}_{\alpha}}, \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\right\}
+\end{align*}
+The other steps are detailed in @Gelman.vanDyk:2008.
 
 ```{r}
 #| eval: true
@@ -86,6 +100,8 @@ mu <- mean(es$y)
 sigma_al <- sqrt(var(es$y) - mean(es$se))
 pars1 <- matrix(NA, nrow = B, ncol = n + 2)
 var_mu <- 1/sum(1/es$se^2)
+# Sampler 1 - Gibbs with full conditionals
+set.seed(80601)
 for(b in seq_len(B)){
   var_al <- 1/(1/es$se^2 + 1/sigma_al^2)
   pars1[b, 1:n] <- alpha <- rnorm(n = n, mean = var_al * (es$y - mu)/es$se^2, sd = sqrt(var_al))
@@ -127,19 +143,68 @@ for(b in seq_len(B)){
 }
 ```
 
-We can write the joint density of $\mu$ and $\boldsymbol{\alpha}$ and integrate out $\mu$. The precision for $\alpha_j$ is $Q_{\alpha_j} = 1/\sigma^2_j + 1/\sigma_{\alpha}^2$, and the unconditional mean of $p(\alpha_j \mid \sigma_{\alpha})$ is $Q^{-1}_{\alpha_j}y_j/\sigma^2_j$. The conditional distribution $p(\mu, \mid \boldsymbol{\alpha}, \sigma_{\alpha})$ is Gaussian with precision $Q_{\mu} = \sum_{j=1}^{8} \sigma^{-2}_j$ and mean $Q_{\mu}^{-1}\sum_{j=1}^8 \sigma^{-2}_j(y_j-\alpha_j).$ The other steps are detailed in @Gelman.vanDyk:2008.
+<!--
+We can write the joint density of $\mu$ and $\boldsymbol{\alpha}$ and integrate out $\mu$. The precision for $\alpha_j$ is $Q_{\alpha_j} = 1/s^2_j + 1/\sigma_{\alpha}^2$, and the unconditional mean of $p(\alpha_j \mid \sigma_{\alpha})$ is $Q^{-1}_{\alpha_j}y_j/\sigma^2_j$. The conditional distribution $p(\mu, \mid \boldsymbol{\alpha}, \sigma_{\alpha})$ is Gaussian with precision $Q_{\mu} = \sum_{j=1}^{8} \sigma^{-2}_j$ and mean $Q_{\mu}^{-1}\sum_{j=1}^8 \sigma^{-2}_j(y_j-\alpha_j).$ 
+-->
+
 
 ```{r}
 #| eval: true
 #| echo: false
+#| label: fig-plots1
+#| fig-align: 'center'
+#| out-width: '100%'
+#| fig-cap: "Traceplots for $\\mu+\\alpha_2$ (top left), $\\mu$ (top right), $\\alpha_2$ (bottom left) and $\\sigma_{\\alpha}$ (bottom right) for sampler 1. The lack of identifiability leads to strong autocorrelation between pairs."
 # Compare trace plots for mu + alpha
-plot(pars1[, 2] + pars1[, n+1])
-plot(pars1[, 2])
+par(mar = c(4,4,1,1), bty = "l", mfrow = c(2,2))
+plot(pars1[, 2] + pars1[, n+1], ylab = expression(mu + alpha[2]), xlab = "iteration", type = "l")
+plot(pars1[, n + 1], ylab = expression(mu), xlab = "iteration", type = "l")
+plot(pars1[, 2], ylab = expression(alpha[2]), xlab = "iteration", type = "l")
+plot(log(pars1[, n+2]), ylab = expression("log"~sigma[alpha]), xlab = "iteration", type = "l")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-plots2
+#| out-width: '100%'
+#| fig-align: 'center'
+#| fig-cap: "Traceplots for $\\mu+\\alpha_2$ (top left), $\\mu$ (top right), $\\alpha_2$ (bottom left) and $\\sigma_{\\alpha}$ (bottom right) for sampler 2 that makes joint Gibbs step for $\\boldsymbol{\\alpha}$ and $\\mu$. Mixing is much improved for the mean parameters."
+# Compare trace plots for mu + alpha
+par(mar = c(4,4,1,1), bty = "l", mfrow = c(2,2))
+plot(pars2[, 2] + pars2[, n+1], ylab = expression(mu + alpha[2]), xlab = "iteration", type = "l")
+plot(pars2[, n + 1],ylab = expression(mu), xlab = "iteration", type = "l")
+plot(pars2[, 2], ylab = expression(alpha[2]), xlab = "iteration", type = "l")
+plot(log(pars2[, n+2]), ylab = expression("log"~sigma[alpha]), xlab = "iteration", type = "l")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-plots3
+#| out-width: '100%'
+#| fig-align: 'center'
+#| fig-cap: "Traceplots for $\\mu+\\alpha_2$ (top left), $\\mu$ (top right), $\\alpha_2$ (bottom left) and $\\sigma_{\\alpha}$ (bottom right) for sampler 3 with joint updates and parameter expansion. "
+# Compare trace plots for mu + alpha
+par(mar = c(4,4,1,1), bty = "l", mfrow = c(2,2))
+plot(pars3[, 2] + pars3[, n+1], ylab = expression(mu + alpha[2]), xlab = "iteration", type = "l")
+plot(pars3[, n + 1],ylab = expression(mu), xlab = "iteration", type = "l")
+plot(pars3[, 2], ylab = expression(alpha[2]), xlab = "iteration", type = "l")
+plot(log(pars3[, n+2]), ylab = expression("log"~sigma[alpha]), xlab = "iteration", type = "l")
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| out-width: '100%'
+#| label: fig-funnel
+#| fig-align: 'center'
+#| fig-cap: "Funnel pattern for variance versus random effect. The first sampler fails to explore part of the parameter space."
 # Funnel behaviour
 g1 <- ggplot(
   data = data.frame(
-   beta2 = c(pars1[,2]), 
-   sigma = c(pars1[,n+2])),
+   beta2 = c(pars2[,2]), 
+   sigma = c(pars2[,n+2])),
   mapping = aes(x = beta2, y = log(sigma))) +
   geom_point() +
   scale_color_grey() +

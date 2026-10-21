@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -222,7 +225,7 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile 
+Léo Belzile
 </div>
 </div>
 </div>
@@ -294,87 +297,87 @@ Y_{i} &amp;\sim \mathsf{Poisson}(n_i\lambda_i), \qquad (i=1,2)\\
 <h2>Implementation details: data and containers</h2>
 <p>In regression models, scale inputs if possible.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co"># Load data</span></span>
-<span id="cb1-2"><a></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb1-3"><a></a><span class="co"># Compute sufficient statistics</span></span>
-<span id="cb1-4"><a></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
-<span id="cb1-5"><a></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
-<span id="cb1-6"><a></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
-<span id="cb1-7"><a></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
-<span id="cb1-8"><a></a><span class="co"># Create containers for MCMC</span></span>
-<span id="cb1-9"><a></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
-<span id="cb1-10"><a></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> <span class="dv">2</span>L)</span>
-<span id="cb1-11"><a></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span>
-<span id="cb1-12"><a></a>logpost_v <span class="ot">&lt;-</span> <span class="fu">numeric</span>(niter)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="co"># Load data</span></span>
+<span id="cb1-2"><a aria-label="2"></a><span class="fu">data</span>(upworthy_question, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb1-3"><a aria-label="3"></a><span class="co"># Compute sufficient statistics</span></span>
+<span id="cb1-4"><a aria-label="4"></a>data <span class="ot">&lt;-</span> upworthy_question <span class="sc">|&gt;</span></span>
+<span id="cb1-5"><a aria-label="5"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(question) <span class="sc">|&gt;</span></span>
+<span id="cb1-6"><a aria-label="6"></a>  dplyr<span class="sc">::</span><span class="fu">summarize</span>(<span class="at">ntot =</span> <span class="fu">sum</span>(impressions),</span>
+<span id="cb1-7"><a aria-label="7"></a>                   <span class="at">y =</span> <span class="fu">sum</span>(clicks))</span>
+<span id="cb1-8"><a aria-label="8"></a><span class="co"># Create containers for MCMC</span></span>
+<span id="cb1-9"><a aria-label="9"></a>niter <span class="ot">&lt;-</span> <span class="fl">1e4</span>L</span>
+<span id="cb1-10"><a aria-label="10"></a>chain <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> niter, <span class="at">ncol =</span> <span class="dv">2</span>L)</span>
+<span id="cb1-11"><a aria-label="11"></a><span class="fu">colnames</span>(chain) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"beta"</span>,<span class="st">"kappa"</span>)</span>
+<span id="cb1-12"><a aria-label="12"></a>logpost_v <span class="ot">&lt;-</span> <span class="fu">numeric</span>(niter)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="implementation-details-log-posterior-function" class="slide level2">
 <h2>Implementation details: log posterior function</h2>
 <p>Perform all calculations on the log scale to avoid numerical overflow!</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
-<span id="cb2-2"><a></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
-<span id="cb2-3"><a></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), </span>
-<span id="cb2-4"><a></a>                  par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
-<span id="cb2-5"><a></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-6"><a></a>}</span>
-<span id="cb2-7"><a></a><span class="co"># Note common signature of function</span></span>
-<span id="cb2-8"><a></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb2-9"><a></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb2-10"><a></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-11"><a></a>}</span>
-<span id="cb2-12"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
-<span id="cb2-13"><a></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
-<span id="cb2-14"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a aria-label="1"></a><span class="co"># Code log posterior as sum of log likelihood and log prior</span></span>
+<span id="cb2-2"><a aria-label="2"></a>loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(par, <span class="at">counts =</span> data<span class="sc">$</span>y, <span class="at">offset =</span> data<span class="sc">$</span>ntot, ...){</span>
+<span id="cb2-3"><a aria-label="3"></a>  lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(par[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">1</span>]), </span>
+<span id="cb2-4"><a aria-label="4"></a>                  par[<span class="dv">1</span>] <span class="sc">+</span> par[<span class="dv">2</span>] <span class="sc">+</span> <span class="fu">log</span>(offset[<span class="dv">2</span>])))</span>
+<span id="cb2-5"><a aria-label="5"></a> <span class="fu">sum</span>(<span class="fu">dpois</span>(<span class="at">x =</span> counts, <span class="at">lambda =</span> lambda, <span class="at">log =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb2-6"><a aria-label="6"></a>}</span>
+<span id="cb2-7"><a aria-label="7"></a><span class="co"># Note common signature of function</span></span>
+<span id="cb2-8"><a aria-label="8"></a>logprior <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb2-9"><a aria-label="9"></a>  <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">1</span>], <span class="at">mean =</span> <span class="fu">log</span>(<span class="fl">0.01</span>), <span class="at">sd =</span> <span class="fl">1.5</span>, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb2-10"><a aria-label="10"></a>    <span class="fu">dnorm</span>(<span class="at">x =</span> par[<span class="dv">2</span>], <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-11"><a aria-label="11"></a>}</span>
+<span id="cb2-12"><a aria-label="12"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(par, ...){</span>
+<span id="cb2-13"><a aria-label="13"></a>  <span class="fu">loglik</span>(par, ...) <span class="sc">+</span> <span class="fu">logprior</span>(par, ...)</span>
+<span id="cb2-14"><a aria-label="14"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="implementation-details-proposals" class="slide level2">
 <h2>Implementation details: proposals</h2>
 <p>Use good starting values for your Markov chains, such as maximum a posteriori.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
-<span id="cb3-2"><a></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
-<span id="cb3-3"><a></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
-<span id="cb3-4"><a></a>  <span class="at">fn =</span> logpost,</span>
-<span id="cb3-5"><a></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
-<span id="cb3-6"><a></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
-<span id="cb3-7"><a></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
-<span id="cb3-8"><a></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-9"><a></a><span class="co"># Use MAP as starting value</span></span>
-<span id="cb3-10"><a></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
-<span id="cb3-11"><a></a><span class="co"># Keep track of log posterior to reduce calculations</span></span>
-<span id="cb3-12"><a></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
-<span id="cb3-13"><a></a><span class="co"># Proposal covariance</span></span>
-<span id="cb3-14"><a></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
-<span id="cb3-15"><a></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a><span class="co"># Compute maximum a posteriori (MAP)</span></span>
+<span id="cb3-2"><a aria-label="2"></a>map <span class="ot">&lt;-</span> <span class="fu">optim</span>(</span>
+<span id="cb3-3"><a aria-label="3"></a>  <span class="at">par =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="fl">0.07</span>),</span>
+<span id="cb3-4"><a aria-label="4"></a>  <span class="at">fn =</span> logpost,</span>
+<span id="cb3-5"><a aria-label="5"></a>  <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb3-6"><a aria-label="6"></a>  <span class="at">offset =</span> data<span class="sc">$</span>ntot,</span>
+<span id="cb3-7"><a aria-label="7"></a>  <span class="at">counts =</span> data<span class="sc">$</span>y,</span>
+<span id="cb3-8"><a aria-label="8"></a>  <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-9"><a aria-label="9"></a><span class="co"># Use MAP as starting value</span></span>
+<span id="cb3-10"><a aria-label="10"></a>cur <span class="ot">&lt;-</span> map<span class="sc">$</span>par</span>
+<span id="cb3-11"><a aria-label="11"></a><span class="co"># Keep track of log posterior to reduce calculations</span></span>
+<span id="cb3-12"><a aria-label="12"></a>logpost_cur <span class="ot">&lt;-</span> <span class="fu">logpost</span>(cur)</span>
+<span id="cb3-13"><a aria-label="13"></a><span class="co"># Proposal covariance</span></span>
+<span id="cb3-14"><a aria-label="14"></a>cov_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span><span class="fu">solve</span>(map<span class="sc">$</span>hessian)</span>
+<span id="cb3-15"><a aria-label="15"></a>chol <span class="ot">&lt;-</span> <span class="fu">chol</span>(cov_map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="implementation-details-metropolishastings" class="slide level2">
 <h2>Implementation details: Metropolis–Hastings</h2>
 <p>Use seed for reproducibility, do not compute posterior twice, compute log of acceptance ratio.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
-<span id="cb4-2"><a></a>naccept <span class="ot">&lt;-</span> <span class="dv">0</span>L</span>
-<span id="cb4-3"><a></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
-<span id="cb4-4"><a></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
-<span id="cb4-5"><a></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
-<span id="cb4-6"><a></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
-<span id="cb4-7"><a></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
-<span id="cb4-8"><a></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){<span class="co"># accept move</span></span>
-<span id="cb4-9"><a></a>    cur <span class="ot">&lt;-</span> prop</span>
-<span id="cb4-10"><a></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
-<span id="cb4-11"><a></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> <span class="dv">1</span>L</span>
-<span id="cb4-12"><a></a>  }</span>
-<span id="cb4-13"><a></a>  logpost_v[i] <span class="ot">&lt;-</span> logpost_cur </span>
-<span id="cb4-14"><a></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
-<span id="cb4-15"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a><span class="fu">set.seed</span>(<span class="dv">80601</span>)</span>
+<span id="cb4-2"><a aria-label="2"></a>naccept <span class="ot">&lt;-</span> <span class="dv">0</span>L</span>
+<span id="cb4-3"><a aria-label="3"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_len</span>(niter)){</span>
+<span id="cb4-4"><a aria-label="4"></a>  <span class="co"># Multivariate normal proposal - symmetric random walk</span></span>
+<span id="cb4-5"><a aria-label="5"></a>  prop <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%*%</span> chol <span class="sc">+</span> cur)</span>
+<span id="cb4-6"><a aria-label="6"></a>  logpost_prop <span class="ot">&lt;-</span> <span class="fu">logpost</span>(prop)</span>
+<span id="cb4-7"><a aria-label="7"></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
+<span id="cb4-8"><a aria-label="8"></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){<span class="co"># accept move</span></span>
+<span id="cb4-9"><a aria-label="9"></a>    cur <span class="ot">&lt;-</span> prop</span>
+<span id="cb4-10"><a aria-label="10"></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
+<span id="cb4-11"><a aria-label="11"></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> <span class="dv">1</span>L</span>
+<span id="cb4-12"><a aria-label="12"></a>  }</span>
+<span id="cb4-13"><a aria-label="13"></a>  logpost_v[i] <span class="ot">&lt;-</span> logpost_cur </span>
+<span id="cb4-14"><a aria-label="14"></a>  chain[i,] <span class="ot">&lt;-</span> cur</span>
+<span id="cb4-15"><a aria-label="15"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="implementation-details-analysis-of-output" class="slide level2">
 <h2>Implementation details: analysis of output</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="co"># Posterior summaries</span></span>
-<span id="cb5-2"><a></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a><span class="co"># Posterior summaries</span></span>
+<span id="cb5-2"><a aria-label="2"></a><span class="fu">summary</span>(coda<span class="sc">::</span><span class="fu">as.mcmc</span>(chain))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <pre><code>1. Empirical mean and standard deviation for each variable,
    plus standard error of the mean:
@@ -766,7 +769,7 @@ Sherlock, C. (2013). Optimal scaling of the random walk <span>M</span>etropolis:
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],

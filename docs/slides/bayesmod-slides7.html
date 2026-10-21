@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -151,17 +154,17 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Computational strategies and probabilistic programming</p>
+  <p class="subtitle">Computational strategies</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile 
+Léo Belzile
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Oct 13, 2026</p>
+  <p class="date">Last compiled Wednesday Oct 21, 2026</p>
 </section>
 <section id="measuring-model-adequacy" class="slide level2">
 <h2>Measuring model adequacy</h2>
@@ -170,14 +173,14 @@ Léo Belzile
 </section>
 <section id="leave-one-out-cross-validation" class="slide level2">
 <h2>Leave-one-out cross validation</h2>
-<p>We can measure the predictive performance using the leave-one-out predictive distribution for observation <span class="math inline">\(i\)</span> given all the rest of the observations <span class="math inline">\(\boldsymbol{y}_{-i}\)</span>, <span class="math display">\[p(y_i \mid \boldsymbol{y}_{-i}) = \int f(y_i \mid \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}.\]</span></p>
+<p>We can measure the predictive performance using the leave-one-out predictive distribution for observation <span class="math inline">\(i\)</span> given all the rest of the observations <span class="math inline">\(\boldsymbol{y}_{-i}\)</span>, <span class="math display">\[p(y_i \mid \boldsymbol{y}_{-i}) = \int f_i(y_i \mid \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}.\]</span></p>
 <p>Naively, this requires running <span class="math inline">\(n\)</span> Markov chains with <span class="math inline">\(n-1\)</span> observations each.</p>
 </section>
 <section id="leave-one-out-cross-validation-loo-cv" class="slide level2">
 <h2>Leave-one-out cross-validation (LOO-CV)</h2>
 <p>With weights <span class="math inline">\(w_i(\boldsymbol{\theta}) = {p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i})}/{p(\boldsymbol{\theta} \mid \boldsymbol{y})} \stackrel{\boldsymbol{\theta}}{\propto}1/f_i(y_i; \boldsymbol{\theta})\)</span> we can write the leave-one-out posterior predictive as <span class="math display">\[\begin{align*}
 p(y_i \mid \boldsymbol{y}_{-i}) &amp;= \int_{\boldsymbol{\Theta}} f_i(y_i; \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}
-\\&amp; = \int_{\boldsymbol{\Theta}} f(y_i; \boldsymbol{\theta}) w_i(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
+\\&amp; = \int_{\boldsymbol{\Theta}} f_i(y_i; \boldsymbol{\theta}) w_i(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}\]</span></p>
 </section>
 <section id="importance-sampling-for-loo-cv" class="slide level2 smaller">
@@ -232,18 +235,6 @@ p(y_i \mid \boldsymbol{y}_{-i}) &amp;= \int_{\boldsymbol{\Theta}} f_i(y_i; \bold
 <li>blocking</li>
 </ul>
 </section>
-<section id="gaussian-model-with-random-effects" class="slide level2">
-<h2>Gaussian model with random effects</h2>
-<p>Consider a hierarchical Gaussian model of the form <span class="math display">\[\begin{align*}
-\boldsymbol{Y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B} + \boldsymbol{\varepsilon}
-\end{align*}\]</span> where</p>
-<ul>
-<li><span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times p\)</span> design matrix with centered inputs,</li>
-<li><span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}(\boldsymbol{0}_p, \sigma^2\mathbf{I}_p),\)</span></li>
-<li><span class="math inline">\(\boldsymbol{B}\sim \mathsf{Gauss}_q(\boldsymbol{0}_q, \boldsymbol{\Omega})\)</span> are random effects and</li>
-<li><span class="math inline">\(\boldsymbol{\varepsilon} \sim \mathsf{Gauss}_n(\boldsymbol{0}_n, \kappa^2\mathbf{I}_n)\)</span> are independent white noise.</li>
-</ul>
-</section>
 <section id="one-way-anova" class="slide level2">
 <h2>One-way ANOVA</h2>
 <p>Consider a one-way ANOVA with <span class="math inline">\(n\)</span> observations from <span class="math inline">\(K\)</span> categories, with observation <span class="math inline">\(i=1, \ldots, n_k\)</span> from group <span class="math inline">\(k\)</span> having contribution <span class="math display">\[\begin{align*}
@@ -265,20 +256,35 @@ p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \
 \]</span></p>
 <p>This reduces dependency between parameters, but typically the likelihood becomes more expensive to compute</p>
 </section>
-<section id="marginalization-1" class="slide level2">
-<h2>Marginalization</h2>
-<p>We can marginalize over the <span class="math inline">\(K\)</span> vector of <span class="math inline">\(\boldsymbol{\alpha}\)</span> to perform updates of <span class="math inline">\(\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}.\)</span></p>
-<p>We find if <span class="math inline">\(\boldsymbol{\varSigma} = g(\sigma^2_y, \sigma^2_\alpha)\)</span> is the marginal covariance matrix of <span class="math display">\[\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right).\]</span></p>
-<p>Straightforward calculations yield</p>
+<section id="marginalization-in-one-way-anova" class="slide level2">
+<h2>Marginalization in one-way ANOVA</h2>
+<!-- We can marginalize over the $K$ vector of $\boldsymbol{\alpha}$ to perform updates of the global mean $\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}:$  this yields $$\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right),$$  -->
+<p>where <span class="math inline">\(\boldsymbol{\varSigma} = g(\sigma^2_y, \sigma^2_\alpha)\)</span> is the marginal covariance matrix.</p>
+</section>
+<section id="marginalization-for-one-way-anova" class="slide level2">
+<h2>Marginalization for one-way ANOVA</h2>
+<p>Straightforward calculations then yield</p>
 <p><span class="math display">\[\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y} \sim \mathsf{Gauss}\left(\frac{\boldsymbol{y}^\top \boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n}{\boldsymbol{1}_n^\top\boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n}, \left\{\boldsymbol{1}_n^\top\boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n\right\}^{-1}\right).
 \]</span></p>
+</section>
+<section id="gaussian-model-with-random-effects" class="slide level2">
+<h2>Gaussian model with random effects</h2>
+<p>Consider a hierarchical Gaussian model of the form <span class="math display">\[\begin{align*}
+\boldsymbol{Y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B} + \boldsymbol{\varepsilon}
+\end{align*}\]</span> where</p>
+<ul>
+<li><span class="math inline">\(\mathbf{X}\)</span> is an <span class="math inline">\(n \times p\)</span> design matrix with centered inputs,</li>
+<li><span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}(\boldsymbol{0}_p, \sigma^2\mathbf{I}_p),\)</span></li>
+<li><span class="math inline">\(\boldsymbol{B}\sim \mathsf{Gauss}_q(\boldsymbol{0}_q, \boldsymbol{\Omega})\)</span> are random effects and</li>
+<li><span class="math inline">\(\boldsymbol{\varepsilon} \sim \mathsf{Gauss}_n(\boldsymbol{0}_n, \kappa^2\mathbf{I}_n)\)</span> are independent white noise.</li>
+</ul>
 </section>
 <section id="marginalization-of-gaussian-models" class="slide level2">
 <h2>Marginalization of Gaussian models</h2>
 <p>We can write <span class="math display">\[\begin{align*}
-\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \sigma^2 &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B}, \kappa^2\mathbf{I}_p)\\
+\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \kappa^2 &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B}, \kappa^2\mathbf{I}_n)\\
 \boldsymbol{Y} \mid \boldsymbol{\beta} &amp;\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
-\end{align*}\]</span> where the second line corresponds to marginalizing out the random effects <span class="math inline">\(\boldsymbol{B}.\)</span></p>
+\end{align*}\]</span> where the second line is obtained by marginalizing out the random effects <span class="math inline">\(\boldsymbol{B}.\)</span></p>
 </section>
 <section id="efficient-calculations-for-gaussian-models" class="slide level2">
 <h2>Efficient calculations for Gaussian models</h2>
@@ -290,11 +296,12 @@ p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \
 </section>
 <section id="parameter-expansion" class="slide level2">
 <h2>Parameter expansion</h2>
-<p>Add redundant parameter to improve mixing by decorrelating <span class="citation" data-cites="Liu.Rubin.Wu:1998">(<a href="#/references" role="doc-biblioref" onclick="">Liu et al., 1998</a>)</span>,</p>
-<p><span class="math display">\[\begin{align*}
-Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \xi\eta_k, \sigma^2_y) \\
-\eta_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\eta)
-\end{align*}\]</span> so that <span class="math inline">\(\sigma_\alpha = |\xi|\sigma_\eta.\)</span></p>
+<p>An alternative to data augmentation, parameter expansion adds redundant parameter to improve mixing <span class="citation" data-cites="Liu.Rubin.Wu:1998">Gelman et al. (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span></p>
+<p>Consider the one-way ANOVA model where we write <span class="math inline">\(\alpha_k = \nu\xi_k\)</span> and <span class="math inline">\(\sigma_\alpha = |\nu|\sigma_\xi\)</span>, with <span class="math display">\[\begin{align*}
+Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \nu\xi_k, \sigma^2_y) \\
+\xi_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\xi) \\
+p(\nu) &amp;\propto 1.
+\end{align*}\]</span></p>
 </section>
 <section id="eight-school-example" class="slide level2">
 <h2>Eight school example</h2>
@@ -306,8 +313,8 @@ Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \xi\eta_k, \sigma^2_y) \\
 <h2>Gibbs sampler for eight school problem</h2>
 <p>The naive Gibbs sampler, which iterates between conditionals of <span class="math inline">\(p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \mu, \sigma^2_{\alpha})\)</span> and <span class="math inline">\(p(\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha})\)</span> leads to strong autocorrelation.</p>
 <p>A better strategy is to marginalize over the global mean <span class="math inline">\(\mu\)</span> and simulate from <span class="math inline">\(p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \sigma^2_{\alpha})\)</span> instead. We get then the conditionals <span class="math display">\[\begin{align*}
-\alpha_i \mid y_i, s_i^2, \sigma^2_{\alpha} &amp;\sim \mathsf{Gauss}\left\{ \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\frac{y_i}{s^2_j}, \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\right\}\\
-\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha} &amp; \sim \mathsf{Gauss}\left( s^2_{\mu} \sum_{j=1}^8 \frac{y_i-\alpha_i}{s^2_j}, s^2_{\mu}\right)\\
+\alpha_i \mid y_i, s_i^2, \sigma^2_{\alpha} &amp;\sim \mathsf{Gauss}\left\{\frac{y_is^{-2}_i}{s^{-2}_i + \sigma^{-2}_{\alpha}}, \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\right\}\\
+\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha} &amp; \sim \mathsf{Gauss}\left( s^2_{\mu} \sum_{j=1}^8 \frac{y_j-\alpha_j}{s^2_j}, s^2_{\mu}\right)\\
 \sigma^2_{\alpha} \mid \boldsymbol{\alpha} &amp;\sim \mathsf{inv. gamma}\left( \frac{n-1}{2}, \frac{\sum_{j=1}^8 \alpha_j^2}{2}\right)
 \end{align*}\]</span> where <span class="math inline">\(s^{-2}_{\mu} =\sum_{j=1}^8 s_j^{-2}.\)</span></p>
 </section>
@@ -502,6 +509,9 @@ Gelfand, A. E., &amp; Dey, D. K. (1994). Bayesian model choice: Asymptotics and 
 </div>
 <div id="ref-Gelman:2013" class="csl-entry" role="listitem">
 Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2013). <em>Bayesian data analysis</em> (3rd ed.). Chapman; Hall/CRC. <a href="https://doi.org/10.1201/b16018">https://doi.org/10.1201/b16018</a>
+</div>
+<div id="ref-Gelman.vanDyk:2008" class="csl-entry" role="listitem">
+Gelman, A., Dyk, D. A. van, Huang, Z., &amp; Boscardin, J. W. (2008). Using redundant parameterizations to fit hierarchical models. <em>Journal of Computational and Graphical Statistics</em>, <em>17</em>(1), 95–122. <a href="https://doi.org/10.1198/106186008x287337">https://doi.org/10.1198/106186008x287337</a>
 </div>
 <div id="ref-Kitagawa:1987" class="csl-entry" role="listitem">
 Kitagawa, G. (1987). Non-<span>G</span>aussian state–space modeling of nonstationary time series. <em>Journal of the American Statistical Association</em>, <em>82</em>(400), 1032–1041. <a href="https://doi.org/10.1080/01621459.1987.10478534">https://doi.org/10.1080/01621459.1987.10478534</a>
@@ -716,7 +726,7 @@ Vehtari, A., Simpson, D., Gelman, A., Yao, Y., &amp; Gabry, J. (2024). Pareto sm
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],

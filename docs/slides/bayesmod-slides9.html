@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -222,12 +225,12 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile 
+Léo Belzile
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Oct 13, 2026</p>
+  <p class="date">Last compiled Wednesday Oct 21, 2026</p>
 </section>
 <section id="rationale-for-deterministic-approximations" class="slide level2">
 <h2>Rationale for deterministic approximations</h2>
@@ -304,18 +307,18 @@ p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}
 <section id="numerical-approximation-to-marginal-likelihood" class="slide level2">
 <h2>Numerical approximation to marginal likelihood</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">data</span>(waiting, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb1-2"><a></a>a <span class="ot">&lt;-</span> <span class="fl">0.01</span>; b <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
-<span id="cb1-3"><a></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(waiting); s <span class="ot">&lt;-</span> <span class="fu">sum</span>(waiting)</span>
-<span id="cb1-4"><a></a>map <span class="ot">&lt;-</span> (n <span class="sc">+</span> a <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>(s <span class="sc">+</span> b) <span class="co">#posterior mode</span></span>
-<span id="cb1-5"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb1-6"><a></a>  <span class="fu">sum</span>(<span class="fu">dexp</span>(waiting, <span class="at">rate =</span> x, <span class="at">log =</span> <span class="cn">TRUE</span>)) <span class="sc">+</span></span>
-<span id="cb1-7"><a></a>    <span class="fu">dgamma</span>(x, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-8"><a></a>}</span>
-<span id="cb1-9"><a></a><span class="co"># Hessian evaluated at MAP</span></span>
-<span id="cb1-10"><a></a>H <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">c</span>(numDeriv<span class="sc">::</span><span class="fu">hessian</span>(logpost, <span class="at">x =</span> map))</span>
-<span id="cb1-11"><a></a><span class="co"># Laplace approximation</span></span>
-<span id="cb1-12"><a></a>marg_lik_laplace <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">-</span> <span class="fu">log</span>(H) <span class="sc">+</span> <span class="fu">logpost</span>(map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="fu">data</span>(waiting, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb1-2"><a aria-label="2"></a>a <span class="ot">&lt;-</span> <span class="fl">0.01</span>; b <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
+<span id="cb1-3"><a aria-label="3"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(waiting); s <span class="ot">&lt;-</span> <span class="fu">sum</span>(waiting)</span>
+<span id="cb1-4"><a aria-label="4"></a>map <span class="ot">&lt;-</span> (n <span class="sc">+</span> a <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>(s <span class="sc">+</span> b) <span class="co">#posterior mode</span></span>
+<span id="cb1-5"><a aria-label="5"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1-6"><a aria-label="6"></a>  <span class="fu">sum</span>(<span class="fu">dexp</span>(waiting, <span class="at">rate =</span> x, <span class="at">log =</span> <span class="cn">TRUE</span>)) <span class="sc">+</span></span>
+<span id="cb1-7"><a aria-label="7"></a>    <span class="fu">dgamma</span>(x, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-8"><a aria-label="8"></a>}</span>
+<span id="cb1-9"><a aria-label="9"></a><span class="co"># Hessian evaluated at MAP</span></span>
+<span id="cb1-10"><a aria-label="10"></a>H <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">c</span>(numDeriv<span class="sc">::</span><span class="fu">hessian</span>(logpost, <span class="at">x =</span> map))</span>
+<span id="cb1-11"><a aria-label="11"></a><span class="co"># Laplace approximation</span></span>
+<span id="cb1-12"><a aria-label="12"></a>marg_lik_laplace <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">-</span> <span class="fu">log</span>(H) <span class="sc">+</span> <span class="fu">logpost</span>(map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The Laplace approximation gives <span class="math inline">\(-281.9.\)</span></p>
 </section>
@@ -385,19 +388,19 @@ p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}
 <h2>Bayesian model averaging via BIC</h2>
 <p>We consider the <code>diabetes</code> model from <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span> and models with 10 predictors plus intercept.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">library</span>(leaps)</span>
-<span id="cb2-2"><a></a><span class="fu">data</span>(diabetes, <span class="at">package =</span> <span class="st">"lars"</span>)</span>
-<span id="cb2-3"><a></a>search <span class="ot">&lt;-</span> leaps<span class="sc">::</span><span class="fu">regsubsets</span>(</span>
-<span id="cb2-4"><a></a>  <span class="at">x =</span> diabetes<span class="sc">$</span>x,</span>
-<span id="cb2-5"><a></a>  <span class="at">y =</span> diabetes<span class="sc">$</span>y,</span>
-<span id="cb2-6"><a></a>  <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb2-7"><a></a>  <span class="at">method =</span> <span class="st">"exhaustive"</span>, </span>
-<span id="cb2-8"><a></a>  <span class="at">nvmax =</span> <span class="dv">10</span>, <span class="at">nbest =</span> <span class="dv">99</span>, <span class="at">really.big =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-9"><a></a>models_bic <span class="ot">&lt;-</span> <span class="fu">summary</span>(search)<span class="sc">$</span>bic</span>
-<span id="cb2-10"><a></a><span class="co"># Renormalize BIC and keep only models with some weight</span></span>
-<span id="cb2-11"><a></a>bic <span class="ot">&lt;-</span> models_bic <span class="sc">-</span> <span class="fu">min</span>(models_bic)</span>
-<span id="cb2-12"><a></a>models <span class="ot">&lt;-</span> <span class="fu">which</span>(bic <span class="sc">&lt;</span> <span class="dv">7</span>)</span>
-<span id="cb2-13"><a></a>bma_weights <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a aria-label="1"></a><span class="fu">library</span>(leaps)</span>
+<span id="cb2-2"><a aria-label="2"></a><span class="fu">data</span>(diabetes, <span class="at">package =</span> <span class="st">"lars"</span>)</span>
+<span id="cb2-3"><a aria-label="3"></a>search <span class="ot">&lt;-</span> leaps<span class="sc">::</span><span class="fu">regsubsets</span>(</span>
+<span id="cb2-4"><a aria-label="4"></a>  <span class="at">x =</span> diabetes<span class="sc">$</span>x,</span>
+<span id="cb2-5"><a aria-label="5"></a>  <span class="at">y =</span> diabetes<span class="sc">$</span>y,</span>
+<span id="cb2-6"><a aria-label="6"></a>  <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-7"><a aria-label="7"></a>  <span class="at">method =</span> <span class="st">"exhaustive"</span>, </span>
+<span id="cb2-8"><a aria-label="8"></a>  <span class="at">nvmax =</span> <span class="dv">10</span>, <span class="at">nbest =</span> <span class="dv">99</span>, <span class="at">really.big =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-9"><a aria-label="9"></a>models_bic <span class="ot">&lt;-</span> <span class="fu">summary</span>(search)<span class="sc">$</span>bic</span>
+<span id="cb2-10"><a aria-label="10"></a><span class="co"># Renormalize BIC and keep only models with some weight</span></span>
+<span id="cb2-11"><a aria-label="11"></a>bic <span class="ot">&lt;-</span> models_bic <span class="sc">-</span> <span class="fu">min</span>(models_bic)</span>
+<span id="cb2-12"><a aria-label="12"></a>models <span class="ot">&lt;-</span> <span class="fu">which</span>(bic <span class="sc">&lt;</span> <span class="dv">7</span>)</span>
+<span id="cb2-13"><a aria-label="13"></a>bma_weights <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="weights-and-model-components" class="slide level2">
@@ -553,20 +556,20 @@ h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
 <section id="stochastic-volality-code" class="slide level2">
 <h2>Stochastic volality code</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(INLA)</span>
-<span id="cb3-2"><a></a><span class="fu">data</span>(exchangerate, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb3-3"><a></a><span class="co"># Compute response from raw spot exchange rates at noon</span></span>
-<span id="cb3-4"><a></a>y <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">diff</span>(<span class="fu">log</span>(exchangerate<span class="sc">$</span>dexrate))</span>
-<span id="cb3-5"><a></a>time <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(y)</span>
-<span id="cb3-6"><a></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">time =</span> time)</span>
-<span id="cb3-7"><a></a>f_stochvol <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"ar1"</span>,</span>
-<span id="cb3-8"><a></a>                            <span class="at">param =</span> <span class="fu">list</span>(<span class="at">prec =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.001</span>)))</span>
-<span id="cb3-9"><a></a>mod_stochvol <span class="ot">&lt;-</span> <span class="fu">inla</span>(f_stochvol, <span class="at">family =</span> <span class="st">"stochvol"</span>, <span class="at">data =</span> data)</span>
-<span id="cb3-10"><a></a><span class="co"># Obtain summary</span></span>
-<span id="cb3-11"><a></a>summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod_stochvol)</span>
-<span id="cb3-12"><a></a><span class="co"># plot(mod_stochvol)</span></span>
-<span id="cb3-13"><a></a>marg_prec <span class="ot">&lt;-</span> mod_stochvol<span class="sc">$</span>marginals.hyperpar[[<span class="dv">1</span>]]</span>
-<span id="cb3-14"><a></a>marg_phi <span class="ot">&lt;-</span> mod_stochvol<span class="sc">$</span>marginals.hyperpar[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb3-2"><a aria-label="2"></a><span class="fu">data</span>(exchangerate, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb3-3"><a aria-label="3"></a><span class="co"># Compute response from raw spot exchange rates at noon</span></span>
+<span id="cb3-4"><a aria-label="4"></a>y <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">diff</span>(<span class="fu">log</span>(exchangerate<span class="sc">$</span>dexrate))</span>
+<span id="cb3-5"><a aria-label="5"></a>time <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(y)</span>
+<span id="cb3-6"><a aria-label="6"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">time =</span> time)</span>
+<span id="cb3-7"><a aria-label="7"></a>f_stochvol <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"ar1"</span>,</span>
+<span id="cb3-8"><a aria-label="8"></a>                            <span class="at">param =</span> <span class="fu">list</span>(<span class="at">prec =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.001</span>)))</span>
+<span id="cb3-9"><a aria-label="9"></a>mod_stochvol <span class="ot">&lt;-</span> <span class="fu">inla</span>(f_stochvol, <span class="at">family =</span> <span class="st">"stochvol"</span>, <span class="at">data =</span> data)</span>
+<span id="cb3-10"><a aria-label="10"></a><span class="co"># Obtain summary</span></span>
+<span id="cb3-11"><a aria-label="11"></a>summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod_stochvol)</span>
+<span id="cb3-12"><a aria-label="12"></a><span class="co"># plot(mod_stochvol)</span></span>
+<span id="cb3-13"><a aria-label="13"></a>marg_prec <span class="ot">&lt;-</span> mod_stochvol<span class="sc">$</span>marginals.hyperpar[[<span class="dv">1</span>]]</span>
+<span id="cb3-14"><a aria-label="14"></a>marg_phi <span class="ot">&lt;-</span> mod_stochvol<span class="sc">$</span>marginals.hyperpar[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="marginal-posterior-approximations" class="slide level2">
@@ -588,23 +591,23 @@ Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters fr
 <section id="marginal-summaries" class="slide level2">
 <h2>Marginal summaries</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Compute density, quantiles, etc. via inla.*marginal</span></span>
-<span id="cb4-2"><a></a><span class="co"># Change of variable to get variance from precision</span></span>
-<span id="cb4-3"><a></a>marg_var <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.tmarginal</span>(</span>
-<span id="cb4-4"><a></a>  <span class="at">fun =</span> <span class="cf">function</span>(x) { <span class="dv">1</span> <span class="sc">/</span> x }, </span>
-<span id="cb4-5"><a></a>  <span class="at">marginal =</span> marg_prec)</span>
-<span id="cb4-6"><a></a>INLA<span class="sc">::</span><span class="fu">inla.qmarginal</span>(marg_var, <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>,  <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a><span class="co"># Compute density, quantiles, etc. via inla.*marginal</span></span>
+<span id="cb4-2"><a aria-label="2"></a><span class="co"># Change of variable to get variance from precision</span></span>
+<span id="cb4-3"><a aria-label="3"></a>marg_var <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.tmarginal</span>(</span>
+<span id="cb4-4"><a aria-label="4"></a>  <span class="at">fun =</span> <span class="cf">function</span>(x) { <span class="dv">1</span> <span class="sc">/</span> x }, </span>
+<span id="cb4-5"><a aria-label="5"></a>  <span class="at">marginal =</span> marg_prec)</span>
+<span id="cb4-6"><a aria-label="6"></a>INLA<span class="sc">::</span><span class="fu">inla.qmarginal</span>(marg_var, <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>,  <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.2864911 0.4543033 0.7396786</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Posterior marginal mean and variance of phi</span></span>
-<span id="cb6-2"><a></a>mom1 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
-<span id="cb6-3"><a></a>    <span class="at">fun =</span> <span class="cf">function</span>(x){x}, </span>
-<span id="cb6-4"><a></a>    <span class="at">marginal =</span> marg_phi)</span>
-<span id="cb6-5"><a></a>mom2 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
-<span id="cb6-6"><a></a>    <span class="at">fun =</span> <span class="cf">function</span>(x){x<span class="sc">^</span><span class="dv">2</span>}, </span>
-<span id="cb6-7"><a></a>    <span class="at">marginal =</span> marg_phi)</span>
-<span id="cb6-8"><a></a><span class="fu">c</span>(<span class="at">mean =</span> mom1, <span class="at">sd =</span> <span class="fu">sqrt</span>(mom2 <span class="sc">-</span> mom1<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a aria-label="1"></a><span class="co"># Posterior marginal mean and variance of phi</span></span>
+<span id="cb6-2"><a aria-label="2"></a>mom1 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
+<span id="cb6-3"><a aria-label="3"></a>    <span class="at">fun =</span> <span class="cf">function</span>(x){x}, </span>
+<span id="cb6-4"><a aria-label="4"></a>    <span class="at">marginal =</span> marg_phi)</span>
+<span id="cb6-5"><a aria-label="5"></a>mom2 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
+<span id="cb6-6"><a aria-label="6"></a>    <span class="at">fun =</span> <span class="cf">function</span>(x){x<span class="sc">^</span><span class="dv">2</span>}, </span>
+<span id="cb6-7"><a aria-label="7"></a>    <span class="at">marginal =</span> marg_phi)</span>
+<span id="cb6-8"><a aria-label="8"></a><span class="fu">c</span>(<span class="at">mean =</span> mom1, <span class="at">sd =</span> <span class="fu">sqrt</span>(mom2 <span class="sc">-</span> mom1<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       mean          sd 
 0.984052715 0.005762476 </code></pre>
@@ -621,14 +624,14 @@ Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters fr
 <section id="code-syntax" class="slide level2">
 <h2>Code syntax</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="fu">data</span>(Tokyo, <span class="at">package =</span> <span class="st">"INLA"</span>)</span>
-<span id="cb8-2"><a></a><span class="co"># Formula (removing intercept)</span></span>
-<span id="cb8-3"><a></a>formula <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"rw2"</span>, <span class="at">cyclic =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb8-4"><a></a>mod <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla</span>(</span>
-<span id="cb8-5"><a></a>   <span class="at">formula =</span> formula, </span>
-<span id="cb8-6"><a></a>   <span class="at">family =</span> <span class="st">"binomial"</span>,</span>
-<span id="cb8-7"><a></a>   <span class="at">Ntrials =</span> n, </span>
-<span id="cb8-8"><a></a>   <span class="at">data =</span> Tokyo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a aria-label="1"></a><span class="fu">data</span>(Tokyo, <span class="at">package =</span> <span class="st">"INLA"</span>)</span>
+<span id="cb8-2"><a aria-label="2"></a><span class="co"># Formula (removing intercept)</span></span>
+<span id="cb8-3"><a aria-label="3"></a>formula <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"rw2"</span>, <span class="at">cyclic =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb8-4"><a aria-label="4"></a>mod <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla</span>(</span>
+<span id="cb8-5"><a aria-label="5"></a>   <span class="at">formula =</span> formula, </span>
+<span id="cb8-6"><a aria-label="6"></a>   <span class="at">family =</span> <span class="st">"binomial"</span>,</span>
+<span id="cb8-7"><a aria-label="7"></a>   <span class="at">Ntrials =</span> n, </span>
+<span id="cb8-8"><a aria-label="8"></a>   <span class="at">data =</span> Tokyo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The marginal posterior with pointwise 95% credible intervals on the next slide show nearly identical results to marginals from the probit model.</p>
 </section>
@@ -853,7 +856,7 @@ Wood, S. N. (2019). Simplified integrated nested <span>L</span>aplace approximat
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],

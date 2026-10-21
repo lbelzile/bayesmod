@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -222,12 +225,12 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile 
+Léo Belzile
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Oct 13, 2026</p>
+  <p class="date">Last compiled Wednesday Oct 21, 2026</p>
 </section>
 <section id="revisiting-kullbackleibler-divergence" class="slide level2">
 <h2>Revisiting Kullback–Leibler divergence</h2>
@@ -470,16 +473,16 @@ h_i(z) \propto \mathrm{expit}(y_iz) \exp\left\{-\frac{(z-u)^2}{2v}\right\}.
 <li>Compute the normalizing constant, the mean <span class="math inline">\(\mathsf{E}_{h_i}(Z)\)</span> and the variance <span class="math inline">\(\mathsf{Va}_{h_i}(Z)\)</span> by numerical integration.</li>
 </ol>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="co">#' @param mu_lc mean of the linear combination</span></span>
-<span id="cb1-2"><a></a><span class="co">#' @param sd_lc std. dev of the linear combination</span></span>
-<span id="cb1-3"><a></a>ep_update <span class="ot">&lt;-</span> <span class="cf">function</span>(y, mu_lc, sd_lc){</span>
-<span id="cb1-4"><a></a>  <span class="co"># Calculate outside of the loop the cavity</span></span>
-<span id="cb1-5"><a></a>  fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ <span class="fu">dnorm</span>(x, <span class="at">mean =</span> mu_lc, <span class="at">sd =</span> sd_lc)<span class="sc">*</span><span class="fu">plogis</span>(y<span class="sc">*</span>x)}</span>
-<span id="cb1-6"><a></a>  <span class="co"># Compute normalizing constant</span></span>
-<span id="cb1-7"><a></a>  cst <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> fn, <span class="at">lower =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">upper =</span> <span class="cn">Inf</span>)<span class="sc">$</span>value</span>
-<span id="cb1-8"><a></a>  mu <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> <span class="cf">function</span>(x){<span class="fu">fn</span>(x)<span class="sc">*</span>x}, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>)<span class="sc">$</span>value<span class="sc">/</span>cst</span>
-<span id="cb1-9"><a></a>  va <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> <span class="cf">function</span>(x){<span class="fu">fn</span>(x)<span class="sc">*</span>(x<span class="sc">-</span>mu)<span class="sc">^</span><span class="dv">2</span>}, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>)<span class="sc">$</span>value<span class="sc">/</span>cst</span>
-<span id="cb1-10"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="co">#' @param mu_lc mean of the linear combination</span></span>
+<span id="cb1-2"><a aria-label="2"></a><span class="co">#' @param sd_lc std. dev of the linear combination</span></span>
+<span id="cb1-3"><a aria-label="3"></a>ep_update <span class="ot">&lt;-</span> <span class="cf">function</span>(y, mu_lc, sd_lc){</span>
+<span id="cb1-4"><a aria-label="4"></a>  <span class="co"># Calculate outside of the loop the cavity</span></span>
+<span id="cb1-5"><a aria-label="5"></a>  fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ <span class="fu">dnorm</span>(x, <span class="at">mean =</span> mu_lc, <span class="at">sd =</span> sd_lc)<span class="sc">*</span><span class="fu">plogis</span>(y<span class="sc">*</span>x)}</span>
+<span id="cb1-6"><a aria-label="6"></a>  <span class="co"># Compute normalizing constant</span></span>
+<span id="cb1-7"><a aria-label="7"></a>  cst <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> fn, <span class="at">lower =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">upper =</span> <span class="cn">Inf</span>)<span class="sc">$</span>value</span>
+<span id="cb1-8"><a aria-label="8"></a>  mu <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> <span class="cf">function</span>(x){<span class="fu">fn</span>(x)<span class="sc">*</span>x}, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>)<span class="sc">$</span>value<span class="sc">/</span>cst</span>
+<span id="cb1-9"><a aria-label="9"></a>  va <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> <span class="cf">function</span>(x){<span class="fu">fn</span>(x)<span class="sc">*</span>(x<span class="sc">-</span>mu)<span class="sc">^</span><span class="dv">2</span>}, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>)<span class="sc">$</span>value<span class="sc">/</span>cst</span>
+<span id="cb1-10"><a aria-label="10"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="steps-for-logistic-regression-3" class="slide level2">
@@ -707,7 +710,7 @@ Minka, T. P. (2001). <em>A family of algorithms for approximate <span>B</span>ay
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],

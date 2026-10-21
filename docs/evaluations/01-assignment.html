@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.36">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -58,10 +61,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-2cb17c8bb9a51688442ec2991039dc21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-f85ba92f94e3b63026c259a480ab99bc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -93,7 +96,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -262,10 +265,10 @@ f(y; p) = p(1-p)^{y}, \qquad y = 0, 1, 2, \ldots.
 <li>Using the tower property, compute the unconditional mean and variance of <span class="math inline">\(Y\)</span>. <strong>Hint</strong>: the formula will depend on the reciprocal moments of a beta distribution, <span class="math inline">\(\mathsf{E}_P(P^{-1})\)</span> and <span class="math inline">\(\mathsf{E}_P(P^{-2})\)</span>. Complete the kernel to obtain these using the property <span class="math inline">\(\Gamma(\alpha+1) = \alpha \Gamma(\alpha)\)</span>.</li>
 <li>Generate 10K samples from the marginal distribution of <span class="math inline">\(Y\)</span> if <span class="math inline">\(\alpha_1=4.5\)</span> and <span class="math inline">\(\alpha_2=1.5\)</span>. Plot the resulting marginal distribution using a bar plot and use the samples to verify the formulas for the expected value and variance derived previously using Monte Carlo integration.</li>
 </ol>
-<p><strong>Forward sampling</strong>: generate data from the marginal of <span class="math inline">\(Y\)</span> as follows:</p>
+<p><strong>Forward sampling</strong>: generate data from the marginal of <span class="math inline">\(Y\)</span> as follows for <span class="math inline">\(i=1, \ldots, 10 000\)</span>:</p>
 <ul>
 <li>Simulating first from <span class="math inline">\(P_i\sim \mathsf{beta}(4.5, 1.5)\)</span>,</li>
-<li>Next, generate <span class="math inline">\(Y_i \mid P_i\)</span> for <span class="math inline">\(i=1, \ldots, 10 000\)</span>.</li>
+<li>Next, generate <span class="math inline">\(Y_i \mid P_i\)</span>.</li>
 <li>Discard the values of <span class="math inline">\(P_i\)</span> and keep only those for <span class="math inline">\(Y_i\)</span>’s.</li>
 </ul>
 </section>
@@ -286,7 +289,7 @@ f(y; p) = p(1-p)^{y}, \qquad y = 0, 1, 2, \ldots.
 <p>The <a href="../files/data/post_waiting_weibull.csv"><code>post_waiting_weibull</code></a> contains 10K random samples from the posterior of a Weibull model <span class="math inline">\(\mathsf{Weibull}(\lambda, \alpha)\)</span> with a penalized-complexity prior for the shape parameter <span class="math inline">\(\alpha \sim \mathsf{PC}(\theta=0.5)\)</span> <span class="citation" data-cites="vanNiekerk:2021">(<a href="#ref-vanNiekerk:2021" role="doc-biblioref">Niekerk et al., 2021</a>)</span> and <span class="math inline">\(\lambda \sim \mathsf{inv. gamma}(\gamma, \omega)\)</span> with scale <span class="math inline">\(\gamma=90\)</span> and shape <span class="math inline">\(\omega=4\)</span>.</p>
 <ol start="6" type="a">
 <li>Draw <span class="math inline">\(B=1000\)</span> posterior predictive samples of size <span class="math inline">\(n=62\)</span> from the Weibull and exponential models. <em>For each posterior draw, generate a sample of size <span class="math inline">\(n=62\)</span>.</em></li>
-<li>For each, compute the sample mean, the sample std. deviation and the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original <code>waiting</code> sample. Hence comment on the adequacy (or lack thereof) of the two models.</li>
+<li>For each posterior predictive sample, compute the sample mean, the sample std. deviation and the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original <code>waiting</code> sample. Hence comment on the adequacy (or lack thereof) of the two models.</li>
 </ol>
 
 

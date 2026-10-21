@@ -57,39 +57,45 @@ Starting from an initial value $\boldsymbol{\theta}_0$:
 2.  Compute the acceptance ratio $$
     R = \frac{p(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{y})}{p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
     $$
-3.  With probability $\min\{R, 1\}$, accept the proposal and set $\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}$, otherwise set the value to the previous state, $\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}$.
+3.  With probability $\min\{R, 1\}$, accept the proposal and set $\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}$, otherwise set the value to the previous state, $\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}.$
 
 
 ## Efficient proposals: MALA {.smaller}
 
-The Metropolis-adjusted Langevin algorithm (MALA) uses a Gaussian random walk proposal $$\boldsymbol{\theta}^{\star}_t \sim \mathsf{Gauss}\{\mu(\boldsymbol{\theta}_{t-1}), \tau^2\mathbf{A}\},$$ with mean $$\mu(\boldsymbol{\theta}_{t-1})=\boldsymbol{\theta}_{t-1} + \mathbf{A}\eta \nabla \log p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y}),$$ and variance $\tau^2\mathbf{A}$, for some mass matrix $\mathbf{A}$, tuning parameter $\tau>0$. 
+The Metropolis-adjusted Langevin algorithm (MALA) uses a Gaussian random walk proposal $$\boldsymbol{\theta}^{\star}_t \sim \mathsf{Gauss}\{\mu(\boldsymbol{\theta}_{t-1}), \tau^2\mathbf{A}^{-1}\},$$ with mean $$\mu(\boldsymbol{\theta}_{t-1})=\boldsymbol{\theta}_{t-1} + \mathbf{A}\eta \nabla \log p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y}),$$ for some mass matrix $\mathbf{A}$ and tuning parameter $\tau>0$. 
 
 The parameter $\eta < 1$ is a learning rate. This is akin to a Newton algorithm, so beware if you are far from the mode (where the gradient is typically large)!
 
 
-## Higher order proposals
+## Second-order proposal for univariate target
 
-For a single parameter update $\theta$, a Taylor series expansion of the log posterior around the current value suggests using as proposal density a Gaussian approximation with [@Rue.Held:2005]
+For a scalar parameter $\theta$, a Taylor series expansion of the log posterior around the current value suggests using as proposal density a Gaussian approximation with [@Rue.Held:2005]
 
-- mean $\mu_{t-1} = \theta_{t-1} - f'(\theta_{t-1})/f''(\theta_{t-1})$ and 
-- precision $\tau^{-2} = -f''(\theta_{t-1})$
+- mean $\mu_{t-1} = \theta_{t-1} - p'(\theta_{t-1} \mid \boldsymbol{y})/p''(\theta_{t-1} \mid \boldsymbol{y})$ and 
+- precision $\tau^{-2} = -p''(\theta_{t-1} \mid \boldsymbol{y})$
 
-We need $f''(\theta_{t-1})$ to be negative!
+We need the Hessian $p''(\theta_{t-1} \mid \boldsymbol{y})$ to be negative! 
 
-This gives **local adaption** relative to MALA (global variance).
+## Second-order proposal for multivariate target
 
-## Higher order and moves
+For multiparameter models, use 
+
+- joint block updates $p(\boldsymbol{\theta} \mid \boldsymbol{y})$ (need negative definite Hessian) or 
+- update parameters in turn via $p(\theta_{[k]} \mid \boldsymbol{y}, \boldsymbol{\theta}_{[-k]})$ where $\theta_{[k]}$ denotes the $k$th component of the vector.
+
+This gives **local adaption** relative to MALA (which uses a global variance).
+
+## Gradient-based proposals and cie.
 
 For MALA and cie., we need to compute the density of the proposal also for the reverse move for the expansion starting from the proposal $\mu(\boldsymbol{\theta}_{t}^\star)$.
 
-These methods are more efficient than random walk Metropolis--Hastings, but they require the gradient and the hessian (can be obtained analytically using autodiff, or numerically).
+These methods are more efficient than random walk Metropolis--Hastings, but they require the gradient and the hessian (can be obtained analytically using autodiff, or numerical derivatives via finite differences).
 
 ## Modelling individual headlines of **Upworthy** example
 
 The number of conversions `nclick` is binomial with sample size $n_i=$`nimpression`.
 
-Since $n_i$ is large, the sample average `nclick`/`nimpression` is approximately Gaussian, so write
-
+Since $n_i$ is large, the sample average `nclick`/`nimpression` is approximately Gaussian by the central limit theorem. We thus take
 \begin{align*}
 Y_i &\sim \mathsf{Gauss}(\mu, \sigma^2/n_i)\\
 \mu &\sim \mathsf{trunc. Gauss}(0.01, 0.1^2, 0, 1) \\
@@ -121,7 +127,9 @@ logpost <- function(par, data, ...){
   if(isTRUE(any(sigma <= 0, mu < 0, mu > 1))){
     return(-Inf)
   }
-  dnorm(x = mu, mean = 0.01, sd = 0.1, log = TRUE) +
+  dnorm(x = mu, mean = 0.01, sd = 0.1, log = TRUE)  - 
+    # truncated normal normalizing cst. not needed
+    #log(pnorm(1, 0.01, sd = 0.1) - pnorm(0, 0.01, sd = 0.1)) +
   dexp(sigma, rate = 0.7, log = TRUE) + 
   sum(dnorm(x = y, mean = mu, sd = sigma/sqrt(no), log = TRUE))
 }
@@ -340,7 +348,7 @@ The between-chain variance and within-chain variance estimator are
 The Gelman--Rubin diagnostic, denoted $\widehat{R}$, is obtained by running multiple chains and considering the difference between within-chain and between-chains variances,
 
 \begin{align*}
-\widehat{R} = \left(\frac{\mathsf{Va}_{\text{within}}(B-1) + \mathsf{Va}_{\text{between}}}{B\mathsf{Va}_{\text{within}}}\right)^{1/2}
+\widehat{R} = \left\{(B-1)\frac{\mathsf{Va}_{\text{within}} + \mathsf{Va}_{\text{between}}}{B\mathsf{Va}_{\text{within}}}\right\}^{1/2}
 \end{align*}
 
 
@@ -464,10 +472,10 @@ WAIC <- function(loglik_pt){
 
 ## Bayesian leave-one-out cross validation
 
-In Bayesian setting, we can use the leave-one-out predictive density
-$$p(y_i \mid \boldsymbol{y}_{-i})$$ as a measure of predictive accuracy.
+Suppose observation $i$ has density $f_i(y_i; \boldsymbol{\theta})$ and the likelihood is $\mathcal{L}(\boldsymbol{\theta}) = \prod_{i=1}^n f_i(y_i; \boldsymbol{\theta}).$
 
-We can use importance sampling to approximate the latter.
+In the Bayesian paradigm, we can use the leave-one-out predictive density
+$$p(y_i \mid \boldsymbol{y}_{-i}) = \int f_i(y_i;\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}$$ as a measure of predictive accuracy. The latter can be approximated without re-running $n$ Markov chains via importance sampling.
 
 Requirement: need to keep track of the log likelihood of each observation for each posterior draw ($B \times n$ values).
 

@@ -1,7 +1,7 @@
 ---
 title: "Bayesian modelling"
 author: "Léo Belzile"
-subtitle: "Computational strategies and probabilistic programming"
+subtitle: "Computational strategies"
 date: today
 date-format: "[Last compiled] dddd MMM D, YYYY"
 eval: true
@@ -57,7 +57,7 @@ Observations are then exchangeable.
 
 ## Leave-one-out cross validation
 
-We can measure the predictive performance using the leave-one-out predictive distribution for observation $i$ given all the rest of the observations $\boldsymbol{y}_{-i}$, $$p(y_i \mid \boldsymbol{y}_{-i}) = \int f(y_i \mid \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}.$$
+We can measure the predictive performance using the leave-one-out predictive distribution for observation $i$ given all the rest of the observations $\boldsymbol{y}_{-i}$, $$p(y_i \mid \boldsymbol{y}_{-i}) = \int f_i(y_i \mid \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}.$$
 
 Naively, this requires running $n$ Markov chains with $n-1$ observations each.
 
@@ -69,7 +69,7 @@ $w_i(\boldsymbol{\theta}) = {p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i})}/{p
 we can write the leave-one-out posterior predictive as
 \begin{align*}
 p(y_i \mid \boldsymbol{y}_{-i}) &= \int_{\boldsymbol{\Theta}} f_i(y_i; \boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}_{-i}) \mathrm{d} \boldsymbol{\theta}
-\\& = \int_{\boldsymbol{\Theta}} f(y_i; \boldsymbol{\theta}) w_i(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
+\\& = \int_{\boldsymbol{\Theta}} f_i(y_i; \boldsymbol{\theta}) w_i(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}
 
 ## Importance sampling for LOO-CV {.smaller}
@@ -139,21 +139,6 @@ These problems can be addressed using one of the following:
 - clever proposals (adaptive MCMC) see @Andrieu.Thoms:2008 and @Rosenthal:2011
 - blocking
 
-## Gaussian model with random effects
-
-
-Consider a hierarchical Gaussian model of the form
-\begin{align*}
-\boldsymbol{Y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B} + \boldsymbol{\varepsilon}
-\end{align*}
-where
-
-- $\mathbf{X}$ is an $n \times p$ design matrix with centered inputs,
-- $\boldsymbol{\beta} \sim \mathsf{Gauss}(\boldsymbol{0}_p, \sigma^2\mathbf{I}_p),$
-- $\boldsymbol{B}\sim \mathsf{Gauss}_q(\boldsymbol{0}_q, \boldsymbol{\Omega})$ are random effects and
-- $\boldsymbol{\varepsilon} \sim \mathsf{Gauss}_n(\boldsymbol{0}_n, \kappa^2\mathbf{I}_n)$ are independent white noise.
-
-
 ## One-way ANOVA
 
 Consider a one-way ANOVA with $n$ observations from $K$ categories, with observation $i=1, \ldots, n_k$ from group $k$ having contribution
@@ -183,25 +168,41 @@ $$
 
 This reduces dependency between parameters, but typically the likelihood becomes more expensive to compute
 
-## Marginalization
+## Marginalization in one-way ANOVA
 
-We can marginalize over the $K$ vector of $\boldsymbol{\alpha}$ to perform updates of $\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}.$
+<!-- We can marginalize over the $K$ vector of $\boldsymbol{\alpha}$ to perform updates of the global mean $\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}:$  this yields $$\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right),$$  -->
+where $\boldsymbol{\varSigma} = g(\sigma^2_y, \sigma^2_\alpha)$ is the marginal covariance matrix.
 
-We find if $\boldsymbol{\varSigma} = g(\sigma^2_y, \sigma^2_\alpha)$ is the marginal covariance matrix of $$\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right).$$ 
+## Marginalization for one-way ANOVA
 
-Straightforward calculations yield
+Straightforward calculations then yield
 
 $$\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y} \sim \mathsf{Gauss}\left(\frac{\boldsymbol{y}^\top \boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n}{\boldsymbol{1}_n^\top\boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n}, \left\{\boldsymbol{1}_n^\top\boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n\right\}^{-1}\right).
 $$
+
+## Gaussian model with random effects
+
+
+Consider a hierarchical Gaussian model of the form
+\begin{align*}
+\boldsymbol{Y} = \mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B} + \boldsymbol{\varepsilon}
+\end{align*}
+where
+
+- $\mathbf{X}$ is an $n \times p$ design matrix with centered inputs,
+- $\boldsymbol{\beta} \sim \mathsf{Gauss}(\boldsymbol{0}_p, \sigma^2\mathbf{I}_p),$
+- $\boldsymbol{B}\sim \mathsf{Gauss}_q(\boldsymbol{0}_q, \boldsymbol{\Omega})$ are random effects and
+- $\boldsymbol{\varepsilon} \sim \mathsf{Gauss}_n(\boldsymbol{0}_n, \kappa^2\mathbf{I}_n)$ are independent white noise.
+
 
 ## Marginalization of Gaussian models
 
 We can write
 \begin{align*}
-\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \sigma^2 &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B}, \kappa^2\mathbf{I}_p)\\
+\boldsymbol{Y} \mid \boldsymbol{\beta}, \boldsymbol{B}, \kappa^2 &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta} + \mathbf{Z}\boldsymbol{B}, \kappa^2\mathbf{I}_n)\\
 \boldsymbol{Y} \mid \boldsymbol{\beta} &\sim \mathsf{Gauss}_n(\mathbf{X}\boldsymbol{\beta}, \mathbf{Q}^{-1}),
 \end{align*}
-where the second line corresponds to marginalizing out the random effects $\boldsymbol{B}.$
+where the second line is obtained by marginalizing out the random effects $\boldsymbol{B}.$
 
 ## Efficient calculations for Gaussian models
 
@@ -216,13 +217,14 @@ Section 3.1 of @Nychka:2015 details efficient ways of calculating the quadratic 
 
 ## Parameter expansion
 
-Add redundant parameter to improve mixing by decorrelating [@Liu.Rubin.Wu:1998],
+An alternative to data augmentation, parameter expansion adds redundant parameter to improve mixing  [@Liu.Rubin.Wu:1998,@Gelman.vanDyk:2008]
 
+Consider the one-way ANOVA model where we write $\alpha_k = \nu\xi_k$ and $\sigma_\alpha = |\nu|\sigma_\xi$, with
 \begin{align*}
-Y_{i,k} &\sim \mathsf{Gauss}(\mu + \xi\eta_k, \sigma^2_y) \\
-\eta_k &\sim \mathsf{Gauss}(0, \sigma^2_\eta)
+Y_{i,k} &\sim \mathsf{Gauss}(\mu + \nu\xi_k, \sigma^2_y) \\
+\xi_k &\sim \mathsf{Gauss}(0, \sigma^2_\xi) \\
+p(\nu) &\propto 1.
 \end{align*}
-so that $\sigma_\alpha = |\xi|\sigma_\eta.$
 
 ## Eight school example
 
@@ -240,8 +242,8 @@ The naive Gibbs sampler, which iterates between conditionals of $p(\boldsymbol{\
 
 A better strategy is to marginalize over the global mean $\mu$ and simulate from $p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \sigma^2_{\alpha})$ instead. We get then the conditionals
 \begin{align*}
-\alpha_i \mid y_i, s_i^2, \sigma^2_{\alpha} &\sim \mathsf{Gauss}\left\{ \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\frac{y_i}{s^2_j}, \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\right\}\\
-\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha} & \sim \mathsf{Gauss}\left( s^2_{\mu} \sum_{j=1}^8 \frac{y_i-\alpha_i}{s^2_j}, s^2_{\mu}\right)\\
+\alpha_i \mid y_i, s_i^2, \sigma^2_{\alpha} &\sim \mathsf{Gauss}\left\{\frac{y_is^{-2}_i}{s^{-2}_i + \sigma^{-2}_{\alpha}}, \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\right\}\\
+\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha} & \sim \mathsf{Gauss}\left( s^2_{\mu} \sum_{j=1}^8 \frac{y_j-\alpha_j}{s^2_j}, s^2_{\mu}\right)\\
 \sigma^2_{\alpha} \mid \boldsymbol{\alpha} &\sim \mathsf{inv. gamma}\left( \frac{n-1}{2}, \frac{\sum_{j=1}^8 \alpha_j^2}{2}\right)
 \end{align*}
 where $s^{-2}_{\mu} =\sum_{j=1}^8 s_j^{-2}.$
