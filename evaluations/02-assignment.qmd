@@ -35,9 +35,10 @@ The data set [`efl`](/files/data/efl.csv) contains the results of football (socc
 3. Simulate posterior draws for this model applied to the EFL data. Run four Markov chains for 10K iterations.
 4. Plot the chains  (including the burn in period) for a handful of parameters. How many iterations does it take for the chains to stabilize, if at all?
 5. Using the output of your Markov chains, estimate 
-    - the posterior mean and adjusted Monte Carlo standard errors for the latter
-    - the posterior quartiles (25%, 50% and 75%)
-    - the $\widehat{R}$ factors
+    - the posterior mean
+    - adjusted Monte Carlo standard errors for the posterior means,
+    - the posterior quartiles (25%, 50% and 75%),
+    - the $\widehat{R}$ factors,
     - the effective sample size for each parameter.
 6. Answer the following questions: 
      - Using the posterior distribution, give the expected number of goals for a match between Manchester United (at home) against Liverpool.

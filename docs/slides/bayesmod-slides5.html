@@ -227,25 +227,26 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Oct 13, 2026</p>
+  <p class="date">Last compiled Wednesday Oct 21, 2026</p>
 </section>
 <section id="markov-chain-monte-carlo" class="slide level2">
 <h2>Markov chain Monte Carlo</h2>
-<p>We consider simulating from a distribution with associated density function proportional to <span class="math inline">\(p(\cdot)\)</span></p>
+<p>We consider simulating from a distribution with associated density function proportional to <span class="math inline">\(p(\cdot)\)</span>.</p>
 <ul>
 <li>using an algorithm that generates a Markov chain ,</li>
 <li>without requiring knowledge of the normalizing factor.</li>
 </ul>
 <p>We use a conditional density <span class="math inline">\(q(\boldsymbol{\theta} \mid \boldsymbol{\theta}^{\text{cur}})\)</span> to generate proposals from the current value <span class="math inline">\(\boldsymbol{\theta}^{\text{cur}}.\)</span></p>
+<div style="font-size: 0.6em;">
+<p>Our target is often the unnormalized posterior <span class="math inline">\(p(\cdot) \equiv p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, but the algorithm works for general targets (also frequentist)!</p>
+</div>
 </section>
 <section id="metropolishastings-algorithm" class="slide level2">
 <h2>Metropolis–Hastings algorithm</h2>
 <p>Starting from an initial value <span class="math inline">\(\boldsymbol{\theta}_0\)</span>: for <span class="math inline">\(t=1, \ldots, T\)</span></p>
 <ol type="1">
 <li>draw a proposal value <span class="math inline">\(\boldsymbol{\theta}_t^{\star} \sim q(\boldsymbol{\theta} \mid \boldsymbol{\theta}_{t-1})\)</span>.</li>
-<li>Compute the acceptance ratio <span class="math display">\[
-R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
-\]</span></li>
+<li>Compute the acceptance ratio <span class="math display">\[R = \frac{p(\boldsymbol{\theta}_{t}^{\star} \mid \boldsymbol{y})}{p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}\]</span></li>
 <li>With probability <span class="math inline">\(\alpha=\min\{R, 1\}\)</span>, accept the proposal and set <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}\)</span>, otherwise set the value to the previous state, <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}\)</span>.</li>
 </ol>
 </section>
@@ -260,7 +261,7 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 <section id="interpretation" class="slide level2">
 <h2>Interpretation</h2>
 <ul>
-<li>If <span class="math inline">\(R&gt;1\)</span>, the proposal has higher density and we always accept the move.</li>
+<li>If <span class="math inline">\(R&gt;1\)</span>, the proposal has higher posterior density and we always accept the move.</li>
 <li>If we reject the move, the Markov chain stays at the current value, which induces autocorrelation.</li>
 <li>Since the acceptance probability depends only on the density through ratios, normalizing factors of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> cancel out.</li>
 </ul>
@@ -275,7 +276,7 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 <ul>
 <li><p>If we pick instead a global proposal, we must ensure that <span class="math inline">\(q\)</span> samples in far regions (recall rejection sampling), otherwise …</p></li>
 <li><p>Good proposals include heavy tailed distribution such as Student-<span class="math inline">\(t\)</span> with small degrees of freedom,</p></li>
-<li><p>centered at the maximum a posteriori <span class="math inline">\(\widehat{\boldsymbol{\theta}}\)</span> and</p></li>
+<li><p>centered at the maximum a posteriori <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{map}}\)</span> and</p></li>
 <li><p>with scale matrix proportional to <span class="math inline">\(-\mathbf{H}^{-1}(\boldsymbol{\theta}_t^{\star})\)</span>, where <span class="math inline">\(\mathbf{H}(\cdot)\)</span> is the Hessian of the (unnormalized) log posterior.</p></li>
 </ul>
 </section>
@@ -361,7 +362,7 @@ Y_{i} &amp;\sim \mathsf{Poisson}(n_i\lambda_i), \qquad (i=1,2)\\
 <span id="cb4-7"><a></a>  logR <span class="ot">&lt;-</span> logpost_prop <span class="sc">-</span> logpost_cur</span>
 <span id="cb4-8"><a></a>  <span class="cf">if</span>(logR <span class="sc">&gt;</span> <span class="sc">-</span><span class="fu">rexp</span>(<span class="dv">1</span>)){<span class="co"># accept move</span></span>
 <span id="cb4-9"><a></a>    cur <span class="ot">&lt;-</span> prop</span>
-<span id="cb4-10"><a></a>    logpost_cur <span class="ot">&lt;-</span> logpost_v[i] <span class="ot">&lt;-</span> logpost_prop</span>
+<span id="cb4-10"><a></a>    logpost_cur <span class="ot">&lt;-</span> logpost_prop</span>
 <span id="cb4-11"><a></a>    naccept <span class="ot">&lt;-</span> naccept <span class="sc">+</span> <span class="dv">1</span>L</span>
 <span id="cb4-12"><a></a>  }</span>
 <span id="cb4-13"><a></a>  logpost_v[i] <span class="ot">&lt;-</span> logpost_cur </span>
@@ -394,7 +395,7 @@ kappa  0.06673  0.06933  0.07077  0.07212  0.07463</code></pre>
 <ol type="1">
 <li>draw a proposal value <span class="math inline">\(\boldsymbol{\theta}_t^{\star} \sim q(\boldsymbol{\theta} \mid \boldsymbol{\theta}_{t-1})\)</span>.</li>
 <li>Compute the acceptance ratio <span class="math display">\[
-R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
+R = \frac{p(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{y})}{p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
 \]</span></li>
 <li>With probability <span class="math inline">\(\min\{R, 1\}\)</span>, accept the proposal and set <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_t^{\star}\)</span>, otherwise set the value to the previous state, <span class="math inline">\(\boldsymbol{\theta}_t \gets \boldsymbol{\theta}_{t-1}\)</span>.</li>
 </ol>
@@ -402,7 +403,7 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 <section id="calculations" class="slide level2">
 <h2>Calculations</h2>
 <p>We compute the log of the acceptance ratio, <span class="math inline">\(\ln R\)</span>, to avoid numerical overflow, with the log posterior difference <span class="math display">\[
-\ln \left\{\frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\right\} = \ell(\boldsymbol{\theta}_t^{\star}) + \ln p(\boldsymbol{\theta}_t^{\star}) - \ell(\boldsymbol{\theta}_{t-1}) - \ln p(\boldsymbol{\theta}_{t-1})
+\ln \left\{\frac{p(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{y})}{p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y})}\right\} = \ell(\boldsymbol{\theta}_t^{\star}; \boldsymbol{y}) + \ln p(\boldsymbol{\theta}_t^{\star}) - \ell(\boldsymbol{\theta}_{t-1}; \boldsymbol{y}) - \ln p(\boldsymbol{\theta}_{t-1})
 \]</span></p>
 <p>Compare the value of <span class="math inline">\(\ln R\)</span> (if less than zero) to <span class="math inline">\(\log(U)\)</span>, where <span class="math inline">\(U \sim \mathsf{unif}(0,1)\)</span>.</p>
 </section>
@@ -420,15 +421,14 @@ R = \frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q
 <ul>
 <li><strong>burn in</strong> period: initial draws allowing the algorithm to converge to it’s stationary distribution (discarded)</li>
 <li><strong>warmup</strong> adaptation period: tuning period for the proposal std. deviation, etc. (discarded)</li>
-<li>sampling period: draws post burn in and warmup that are kept for inference</li>
+<li><strong>sampling</strong>: draws post burn in and warmup that are kept for inference</li>
 </ul>
-<p>We can optionally <strong>thin</strong> by keeping one every <span class="math inline">\(k\)</span> iterations from the sampling period to reduce the storage.</p>
 </section>
-<section id="burn-in" class="slide level2">
-<h2>Burn in</h2>
-<p>We are guaranteed to reach stationarity with Metropolis–Hastings eventually, but it may take a large number of iterations…</p>
-<p>One should discard initial draws during a <strong>burn in</strong> or warmup period if the chain has not reached stationarity. Ideally, use good starting value to reduce waste.</p>
-<p>We can also use the warmup period to adapt the variance of the proposal.</p>
+<section id="burn-in-and-warmup" class="slide level2">
+<h2>Burn in and warmup</h2>
+<p>We are guaranteed to reach stationarity with Metropolis–Hastings eventually, but it may take a large number of iterations… Using good starting values help minimize this cost.</p>
+<p>Visual inspection of chains can help determining the adequate number of <em>burn in</em> or warmup iterations (typically 1000).</p>
+<p>When tuning the algorithm parameters, this number is fixed in advance.</p>
 </section>
 <section id="goldilock-principle-and-proposal-variance" class="slide level2">
 <h2>Goldilock principle and proposal variance</h2>
@@ -450,6 +450,7 @@ Figure&nbsp;2: Correlogram for the three Markov chains.
 <li>We can adapt the variance during warmup by increasing/decreasing proposal variance (if acceptance rate is too large/small).</li>
 <li>We can check this via the acceptance rate (how many proposals are accepted).</li>
 </ul>
+<p>We can optionally <strong>thin</strong> the Markov chain by keeping one every <span class="math inline">\(k\)</span> iterations from the sampling period to reduce the storage cost.</p>
 </section>
 <section id="optimal-acceptance-rates" class="slide level2">
 <h2>Optimal acceptance rates</h2>
@@ -457,36 +458,36 @@ Figure&nbsp;2: Correlogram for the three Markov chains.
 <ul>
 <li>In 1D, rule of thumb is an acceptance rate of <span class="math inline">\(0.44\)</span> is optimal, and this ratio decreases to <span class="math inline">\(0.234\)</span> when <span class="math inline">\(D \geq 2\)</span> <span class="citation" data-cites="Sherlock:2013">(<a href="#/references" role="doc-biblioref" onclick="">Sherlock, 2013</a>)</span> for random walk Metropolis–Hastings.</li>
 <li>Proposals for <span class="math inline">\(D\)</span>-variate update should have proposal variance of roughly <span class="math inline">\((2.38^2/d)\times \boldsymbol{\Sigma}\)</span>, where <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is the posterior variance.</li>
-<li>For MALA (see later), we get <span class="math inline">\(0.574\)</span> rather than <span class="math inline">\(0.234\)</span></li>
+<li>For MALA (see later), we get <span class="math inline">\(0.574\)</span> rather than <span class="math inline">\(0.234\)</span>.</li>
 </ul>
 </section>
 <section id="block-update-or-one-parameter-at-a-time" class="slide level2">
 <h2>Block update or one parameter at a time?</h2>
 <p>As with any accept-reject, proposals become inefficient when the dimension <span class="math inline">\(D\)</span> increase.</p>
 <p>This is the <strong>curse of dimensionality</strong>.</p>
-<p>Updating parameters in turn</p>
+<p>Updating parameters in turn:</p>
 <ul>
 <li>increases acceptance rate (with clever proposals),</li>
-<li>but also leads to more autocorrelation between parameters</li>
+<li>but also leads to more autocorrelation between parameters.</li>
 </ul>
 </section>
 <section id="solutions-for-strongly-correlated-coefficients" class="slide level2">
 <h2>Solutions for strongly correlated coefficients</h2>
 <ul>
 <li>Reparametrize the model to decorrelate variables (orthogonal parametrization).</li>
-<li>Block updates: draw correlated parameters together
+<li>Block updates: draw correlated parameters together using a multivariate proposal
 <ul>
-<li>using the chain history to learn the correlation, if necessary</li>
+<li>using the chain history to learn the correlation, if necessary.</li>
 </ul></li>
 </ul>
 </section>
 <section id="parameter-transformation" class="slide level2">
 <h2>Parameter transformation</h2>
-<p>Parameters may be bounded, e.g.&nbsp;<span class="math inline">\(\theta_i \in [a,b]\)</span>.</p>
+<p>Parameters may be bounded, say <span class="math inline">\(\theta_i \in [a,b]\)</span>.</p>
 <ul>
-<li>We can ignore this and simply discard proposals outside of the range, by setting the log posterior at <span class="math inline">\(-\infty\)</span> outside <span class="math inline">\([a,b]\)</span></li>
+<li>We can ignore this and simply discard proposals outside of the range, by setting the log posterior at <span class="math inline">\(-\infty\)</span> outside <span class="math inline">\([a,b].\)</span></li>
 <li>We can do a transformation, e.g., <span class="math inline">\(\log \theta_i\)</span> if <span class="math inline">\(\theta_i &gt; 0\)</span> and perform a random walk on the unconstrained space: don’t forget Jacobians for <span class="math inline">\(q(\cdot)\)</span>!</li>
-<li>Another alternative is to use truncated proposals (useful with more complex algorithms like MALA)</li>
+<li>Another alternative is to use truncated distributions as proposals (useful with more complex algorithms like MALA).</li>
 </ul>
 </section>
 <section id="visual-diagnostic-trace-plots" class="slide level2">
@@ -533,11 +534,11 @@ We want our average estimate to be reliable!
 
 -->
 </section>
-<section id="lack-of-stationarity" class="slide level2">
-<h2>Lack of stationarity</h2>
+<section id="burn-in-and-trace-rank-plot" class="slide level2">
+<h2>Burn-in and trace rank plot</h2>
 
 <img data-src="bayesmod-slides5_files/figure-revealjs/fig-badstart-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-badstart"><p class="caption">
-Figure&nbsp;3: Traceplots of three Markov chains for the same target with different initial values for the first 500 iterations (left) and trace rank plot after discarding these (right). The latter is indicative of the speed of mixing.
+Figure&nbsp;3: Traceplots of three Markov chains for the same target with different initial values for the first 500 iterations showing a burn in period (left) and trace rank plot after discarding these (right).
 </p></section>
 <section id="summary-13" class="slide level2">
 <h2>Summary (1/3)</h2>

@@ -58,7 +58,7 @@ for (i in seq_len(niter)) {
   if (logR > -rexp(1)) {
     # accept move
     cur <- prop
-    logpost_cur <- logpost_v[i] <- logpost_prop
+    logpost_cur <- logpost_prop
     naccept <- naccept + 1L
   }
   logpost_v[i] <- logpost_cur

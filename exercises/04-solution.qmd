@@ -84,7 +84,7 @@ ggplot(data = data.frame(x = samp),
   geom_density() +
   theme_classic()
 ```
-4. The Monte Carlo acceptance rate is `r round(ntrials/length(samp), 2)`, compared with the analytical bound found via numerical optimization of `r round(C, 2)`, to two significant digits.
+4. The Monte Carlo acceptance rate is `r round(length(samp)/ntrials, 2)`, compared with the analytical bound found via numerical optimization of $1/C=`r 1/round(C, 2)`$, to two significant digits.
 
 :::
 

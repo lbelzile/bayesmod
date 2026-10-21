@@ -18,12 +18,11 @@ b. Obtain the marginal distribution of $Y$ and show that it is a special case of
 c. Using the tower property, compute the unconditional mean and variance of $Y$. **Hint**: the formula will depend on the reciprocal moments of a beta distribution,  $\mathsf{E}_P(P^{-1})$ and $\mathsf{E}_P(P^{-2})$. Complete the kernel to obtain these using the property $\Gamma(\alpha+1) = \alpha \Gamma(\alpha)$.
 d.  Generate 10K samples from the marginal distribution of $Y$ if $\alpha_1=4.5$ and $\alpha_2=1.5$. Plot the resulting marginal distribution using a bar plot and use the samples to verify the formulas for the expected value and variance derived previously using Monte Carlo integration.
 
-**Forward sampling**: generate data from the marginal of $Y$ as follows:
+**Forward sampling**: generate data from the marginal of $Y$ as follows for $i=1, \ldots, 10 000$:
 
 - Simulating first from $P_i\sim \mathsf{beta}(4.5, 1.5)$, 
-- Next, generate $Y_i \mid P_i$ for $i=1, \ldots, 10 000$. 
+- Next, generate $Y_i \mid P_i$. 
 - Discard the values of $P_i$ and keep only those for $Y_i$'s. 
-
 
 
 ## Problem 1.2
@@ -43,4 +42,4 @@ The [`post_waiting_weibull`](/files/data/post_waiting_weibull.csv) contains 10K 
 
 
 f. Draw $B=1000$ posterior predictive samples of size $n=62$ from the Weibull and exponential models. *For each posterior draw, generate a sample of size $n=62$.*
-g. For each, compute the sample mean, the sample std. deviation and  the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original `waiting` sample. Hence comment on the adequacy (or lack thereof) of the two models.
+g. For each posterior predictive sample, compute the sample mean, the sample std. deviation and  the empirical proportion of samples exceeding 30 seconds. Plot an histogram for each of the three summary and each model (Weibull and exponential). Superimpose a vertical line indicating the corresponding function for the original `waiting` sample. Hence comment on the adequacy (or lack thereof) of the two models.

@@ -185,15 +185,15 @@ We can get the theoretical effective sample size (ESS) from the formula for the 
 ```{r}
 ess_factor_ar1 <- 1 / (-1 + 2 / (1 - phi))
 uncond_var_ar1 <- sigma^2 / (1 - phi^2)
-# Compare with var(x)
-se_mean_ar1 <- sqrt(uncond_var_ar1 / B / ess_factor_ar1)
+# Compare uncond_var_ar1 with var(x)
+se_mean_ar1 <- sqrt(uncond_var_ar1 / (B * ess_factor_ar1))
 ```
  
 Below, we consider calculations of the standard error of the sample mean, See the [following simulation for a numerical comparison](https://avehtari.github.io/rhat_ess/ess_comparison.html).
 
 The first method uses the overlapping batch means, which is not recommended. Here, we build groups of size 40, which is sufficient since the autocorrelation tails of quickly.
 ```{r}
-sqrt(c(mcmc::olbm(x, batch.length = niter / 40)))
+sqrt(c(mcmc::olbm(x, batch.length = length(x) / 40)))
 ```
 Overlapping batch means are **not** recommended. Rather, Geyer (1992) recommends using the initial sequence method on the batch means output.
 ```{r}

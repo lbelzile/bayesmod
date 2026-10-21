@@ -247,7 +247,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/06-exercise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6. Bayesian workflow</span></a>
+ <span class="menu-text">6. Gibbs sampling</span></a>
   </div>
 </li>
       </ul>
@@ -294,7 +294,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../exercises/06-solution.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">6. Bayesian workflow</span></a>
+ <span class="menu-text">6. Gibbs sampling</span></a>
   </div>
 </li>
       </ul>
@@ -407,7 +407,7 @@ F(x) = \begin{cases}
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Monte Carlo estimator of the acceptance rate</span></span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ntrials<span class="sc">/</span><span class="fu">length</span>(samp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.261368</code></pre>
+<pre><code>[1] 1.274109</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot density</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
@@ -424,7 +424,7 @@ F(x) = \begin{cases}
 </div>
 </div>
 <ol start="4" type="1">
-<li>The Monte Carlo acceptance rate is 1.26, compared with the analytical bound found via numerical optimization of 1.26, to two significant digits.</li>
+<li>The Monte Carlo acceptance rate is 0.78, compared with the analytical bound found via numerical optimization of <span class="math inline">\(1/C=0.7936508\)</span>, to two significant digits.</li>
 </ol>
 </div>
 
