@@ -144,11 +144,19 @@ These problems can be addressed using one of the following:
 Consider a one-way ANOVA with $n$ observations from $K$ categories, with observation $i=1, \ldots, n_k$ from group $k$ having contribution
 \begin{align*}
 Y_{i,k} &\sim \mathsf{Gauss}(\mu + \alpha_k, \sigma^2_y), \\
-\alpha_k &\sim \mathsf{Gauss}(0, \sigma^2_\alpha).
+\alpha_k &\sim \mathsf{Gauss}(0, \sigma^2_\alpha)\\
+p(\sigma^2_{y}) &\sim \mathsf{inv. gamma}(a_{y}, b_{y})\\
+p(\sigma^2_{\alpha}) &\sim \mathsf{inv. gamma}(a_{\alpha}, b_{\alpha})
 \end{align*}
-We set an improper prior for the mean $p(\mu) \propto 1.$
+All priors are conditionally conjugate with $p(\mu) \propto 1$.
 
-If there are $K$ groups, then the group-specific mean is $\mu+\alpha_k$, and there is a redundant parameter. This leads to poor mixing if priors are not informative.
+## Identifiability
+
+The group-specific mean is $$\mu+\alpha_k$$ and there is a redundant parameter: 
+
+- $K+1$ parameters for $K$ group means.
+
+This leads to poor mixing, even if priors are relatively informative.
 
 
 ## Removing redundant parameters
@@ -168,12 +176,10 @@ $$
 
 This reduces dependency between parameters, but typically the likelihood becomes more expensive to compute
 
-## Marginalization in one-way ANOVA
+## Marginalization in one-way ANOVA {.smaller}
 
-<!-- We can marginalize over the $K$ vector of $\boldsymbol{\alpha}$ to perform updates of the global mean $\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}:$  this yields $$\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right),$$  -->
+ We can marginalize over the $K$ vector of $\boldsymbol{\alpha}$ to perform updates of the global mean $\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}:$  this yields $$\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right),$$
 where $\boldsymbol{\varSigma} = g(\sigma^2_y, \sigma^2_\alpha)$ is the marginal covariance matrix.
-
-## Marginalization for one-way ANOVA
 
 Straightforward calculations then yield
 
@@ -215,14 +221,16 @@ If, as is often the case, $\boldsymbol{\Omega}^{-1}$ and $\mathbf{Z}$ are sparse
 Section 3.1 of @Nychka:2015 details efficient ways of calculating the quadratic form involving $\mathbf{Q}$ and it's determinant.
 
 
-## Parameter expansion
+## Parameter expansion {.smaller}
 
-An alternative to data augmentation, parameter expansion adds redundant parameter to improve mixing  [@Liu.Rubin.Wu:1998,@Gelman.vanDyk:2008]
+An alternative to data augmentation, parameter expansion adds redundant parameter to improve mixing  [@Liu.Rubin.Wu:1998;@Gelman.vanDyk:2008]
 
 Consider the one-way ANOVA model where we write $\alpha_k = \nu\xi_k$ and $\sigma_\alpha = |\nu|\sigma_\xi$, with
 \begin{align*}
 Y_{i,k} &\sim \mathsf{Gauss}(\mu + \nu\xi_k, \sigma^2_y) \\
 \xi_k &\sim \mathsf{Gauss}(0, \sigma^2_\xi) \\
+p(\sigma^2_{y}) &\sim \mathsf{inv. gamma}(a_{y}, b_{y})\\
+p(\sigma^2_{\xi}) &\sim \mathsf{inv. gamma}(a_{\xi}, b_{\xi})\\
 p(\nu) &\propto 1.
 \end{align*}
 
@@ -240,19 +248,20 @@ Simple sample sizes are large, the average treatment effect (ATE) can be conside
 
 The naive Gibbs sampler, which iterates between conditionals of $p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \mu, \sigma^2_{\alpha})$ and $p(\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha})$ leads to strong autocorrelation. 
 
-A better strategy is to marginalize over the global mean $\mu$ and simulate from $p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \sigma^2_{\alpha})$ instead. We get then the conditionals
+A better strategy is to marginalize over the global mean $\mu$ and simulate from $p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \sigma^2_{\alpha})$ instead, a joint Gibbs update of $(\boldsymbol{\mu}, \alpha)$. We get then the conditionals
 \begin{align*}
 \alpha_i \mid y_i, s_i^2, \sigma^2_{\alpha} &\sim \mathsf{Gauss}\left\{\frac{y_is^{-2}_i}{s^{-2}_i + \sigma^{-2}_{\alpha}}, \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\right\}\\
 \mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha} & \sim \mathsf{Gauss}\left( s^2_{\mu} \sum_{j=1}^8 \frac{y_j-\alpha_j}{s^2_j}, s^2_{\mu}\right)\\
-\sigma^2_{\alpha} \mid \boldsymbol{\alpha} &\sim \mathsf{inv. gamma}\left( \frac{n-1}{2}, \frac{\sum_{j=1}^8 \alpha_j^2}{2}\right)
+\sigma^2_{\alpha} \mid \boldsymbol{\alpha} &\sim \mathsf{inv. gamma}\left( \frac{n}{2}+a_{\alpha}, \frac{\sum_{j=1}^8 \alpha_j^2}{2}+b_{\alpha}\right)
 \end{align*}
 where $s^{-2}_{\mu} =\sum_{j=1}^8 s_j^{-2}.$
 
 ## Parameter expansion for the eight school problem {.smaller}
 
-The parameter expansion sampler proceeds in exactly the same way with the same conditionals for $\sigma_{\xi}^2$ and $\boldsymbol{\xi}$ as above; the only additional step is 
+The parameter expansion sampler proceeds in exactly the same way: the only additional step is, with $Q_{\xi_i} =  s^{-2}_i + (\nu\sigma_{\xi})^{-2}$
 \begin{align*}
-\nu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\xi} & \sim \mathsf{Gauss}\left\{ \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1} \sum_{j=1}^8 \frac{\xi_j(y_j-\mu)}{s^2_j}, \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1}\right\}.
+\xi_i \mid y_i, s_i^2, \sigma^2_{\xi} &\sim \mathsf{Gauss}\left(\frac{y_i}{\nu Q_{\xi_i}s^{2}_i}, Q_{\xi_i}^{-1}\right)\\
+\nu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\xi}, \mu & \sim \mathsf{Gauss}\left\{ \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1} \sum_{j=1}^8 \frac{\xi_j(y_j-\mu)}{s^2_j}, \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1}\right\}.
 \end{align*}
 
 After each update, we then save  $\alpha_j = \nu \xi_j$ and $\sigma_\alpha = |\nu|\sigma_\xi,$ as the other parameters are not identifiable. 

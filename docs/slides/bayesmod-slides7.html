@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.10.19">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,13 +20,10 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
+    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: 1.5em;}
-    div.column{flex: auto;}
-    @media screen {
-    div.columns{gap: min(4vw, 1.5em);}
-    div.column{overflow-x: auto;}
-    }
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -159,12 +156,12 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile
+Léo Belzile 
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Wednesday Oct 21, 2026</p>
+  <p class="date">Last compiled Thursday Oct 22, 2026</p>
 </section>
 <section id="measuring-model-adequacy" class="slide level2">
 <h2>Measuring model adequacy</h2>
@@ -239,9 +236,18 @@ p(y_i \mid \boldsymbol{y}_{-i}) &amp;= \int_{\boldsymbol{\Theta}} f_i(y_i; \bold
 <h2>One-way ANOVA</h2>
 <p>Consider a one-way ANOVA with <span class="math inline">\(n\)</span> observations from <span class="math inline">\(K\)</span> categories, with observation <span class="math inline">\(i=1, \ldots, n_k\)</span> from group <span class="math inline">\(k\)</span> having contribution <span class="math display">\[\begin{align*}
 Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \alpha_k, \sigma^2_y), \\
-\alpha_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\alpha).
-\end{align*}\]</span> We set an improper prior for the mean <span class="math inline">\(p(\mu) \propto 1.\)</span></p>
-<p>If there are <span class="math inline">\(K\)</span> groups, then the group-specific mean is <span class="math inline">\(\mu+\alpha_k\)</span>, and there is a redundant parameter. This leads to poor mixing if priors are not informative.</p>
+\alpha_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\alpha)\\
+p(\sigma^2_{y}) &amp;\sim \mathsf{inv. gamma}(a_{y}, b_{y})\\
+p(\sigma^2_{\alpha}) &amp;\sim \mathsf{inv. gamma}(a_{\alpha}, b_{\alpha})
+\end{align*}\]</span> All priors are conditionally conjugate with <span class="math inline">\(p(\mu) \propto 1\)</span>.</p>
+</section>
+<section id="identifiability" class="slide level2">
+<h2>Identifiability</h2>
+<p>The group-specific mean is <span class="math display">\[\mu+\alpha_k\]</span> and there is a redundant parameter:</p>
+<ul>
+<li><span class="math inline">\(K+1\)</span> parameters for <span class="math inline">\(K\)</span> group means.</li>
+</ul>
+<p>This leads to poor mixing, even if priors are relatively informative.</p>
 </section>
 <section id="removing-redundant-parameters" class="slide level2">
 <h2>Removing redundant parameters</h2>
@@ -256,13 +262,9 @@ p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \
 \]</span></p>
 <p>This reduces dependency between parameters, but typically the likelihood becomes more expensive to compute</p>
 </section>
-<section id="marginalization-in-one-way-anova" class="slide level2">
+<section id="marginalization-in-one-way-anova" class="slide level2 smaller">
 <h2>Marginalization in one-way ANOVA</h2>
-<!-- We can marginalize over the $K$ vector of $\boldsymbol{\alpha}$ to perform updates of the global mean $\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}:$  this yields $$\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right),$$  -->
-<p>where <span class="math inline">\(\boldsymbol{\varSigma} = g(\sigma^2_y, \sigma^2_\alpha)\)</span> is the marginal covariance matrix.</p>
-</section>
-<section id="marginalization-for-one-way-anova" class="slide level2">
-<h2>Marginalization for one-way ANOVA</h2>
+<p>We can marginalize over the <span class="math inline">\(K\)</span> vector of <span class="math inline">\(\boldsymbol{\alpha}\)</span> to perform updates of the global mean <span class="math inline">\(\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y}:\)</span> this yields <span class="math display">\[\boldsymbol{Y} \mid \mu, \sigma^2_y, \sigma^2_\alpha \sim \mathsf{Gauss}_n\left(\mu\boldsymbol{1}_n, \boldsymbol{\varSigma}\right),\]</span> where <span class="math inline">\(\boldsymbol{\varSigma} = g(\sigma^2_y, \sigma^2_\alpha)\)</span> is the marginal covariance matrix.</p>
 <p>Straightforward calculations then yield</p>
 <p><span class="math display">\[\mu \mid \sigma^2_y, \sigma^2_\alpha, \boldsymbol{y} \sim \mathsf{Gauss}\left(\frac{\boldsymbol{y}^\top \boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n}{\boldsymbol{1}_n^\top\boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n}, \left\{\boldsymbol{1}_n^\top\boldsymbol{\varSigma}^{-1}\boldsymbol{1}_n\right\}^{-1}\right).
 \]</span></p>
@@ -294,12 +296,14 @@ p(\boldsymbol{\theta})= \int p(\boldsymbol{\theta}, \boldsymbol{z}) \mathrm{d} \
 \boldsymbol{G} &amp;= \mathbf{Z}^\top\mathbf{Z} + \kappa^2 \boldsymbol{\Omega}^{-1}
 \end{align*}\]</span> Section 3.1 of <span class="citation" data-cites="Nychka:2015">Nychka et al. (<a href="#/references" role="doc-biblioref" onclick="">2015</a>)</span> details efficient ways of calculating the quadratic form involving <span class="math inline">\(\mathbf{Q}\)</span> and it’s determinant.</p>
 </section>
-<section id="parameter-expansion" class="slide level2">
+<section id="parameter-expansion" class="slide level2 smaller">
 <h2>Parameter expansion</h2>
-<p>An alternative to data augmentation, parameter expansion adds redundant parameter to improve mixing <span class="citation" data-cites="Liu.Rubin.Wu:1998">Gelman et al. (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span></p>
+<p>An alternative to data augmentation, parameter expansion adds redundant parameter to improve mixing <span class="citation" data-cites="Liu.Rubin.Wu:1998 Gelman.vanDyk:2008">(<a href="#/references" role="doc-biblioref" onclick="">Gelman et al., 2008</a>; <a href="#/references" role="doc-biblioref" onclick="">Liu et al., 1998</a>)</span></p>
 <p>Consider the one-way ANOVA model where we write <span class="math inline">\(\alpha_k = \nu\xi_k\)</span> and <span class="math inline">\(\sigma_\alpha = |\nu|\sigma_\xi\)</span>, with <span class="math display">\[\begin{align*}
 Y_{i,k} &amp;\sim \mathsf{Gauss}(\mu + \nu\xi_k, \sigma^2_y) \\
 \xi_k &amp;\sim \mathsf{Gauss}(0, \sigma^2_\xi) \\
+p(\sigma^2_{y}) &amp;\sim \mathsf{inv. gamma}(a_{y}, b_{y})\\
+p(\sigma^2_{\xi}) &amp;\sim \mathsf{inv. gamma}(a_{\xi}, b_{\xi})\\
 p(\nu) &amp;\propto 1.
 \end{align*}\]</span></p>
 </section>
@@ -312,16 +316,17 @@ p(\nu) &amp;\propto 1.
 <section id="gibbs-sampler-for-eight-school-problem" class="slide level2 smaller">
 <h2>Gibbs sampler for eight school problem</h2>
 <p>The naive Gibbs sampler, which iterates between conditionals of <span class="math inline">\(p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \mu, \sigma^2_{\alpha})\)</span> and <span class="math inline">\(p(\mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha})\)</span> leads to strong autocorrelation.</p>
-<p>A better strategy is to marginalize over the global mean <span class="math inline">\(\mu\)</span> and simulate from <span class="math inline">\(p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \sigma^2_{\alpha})\)</span> instead. We get then the conditionals <span class="math display">\[\begin{align*}
+<p>A better strategy is to marginalize over the global mean <span class="math inline">\(\mu\)</span> and simulate from <span class="math inline">\(p(\boldsymbol{\alpha} \mid \boldsymbol{y}, \boldsymbol{s}^2, \sigma^2_{\alpha})\)</span> instead, a joint Gibbs update of <span class="math inline">\((\boldsymbol{\mu}, \alpha)\)</span>. We get then the conditionals <span class="math display">\[\begin{align*}
 \alpha_i \mid y_i, s_i^2, \sigma^2_{\alpha} &amp;\sim \mathsf{Gauss}\left\{\frac{y_is^{-2}_i}{s^{-2}_i + \sigma^{-2}_{\alpha}}, \left(s^{-2}_i + \sigma^{-2}_{\alpha}\right)^{-1}\right\}\\
 \mu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\alpha} &amp; \sim \mathsf{Gauss}\left( s^2_{\mu} \sum_{j=1}^8 \frac{y_j-\alpha_j}{s^2_j}, s^2_{\mu}\right)\\
-\sigma^2_{\alpha} \mid \boldsymbol{\alpha} &amp;\sim \mathsf{inv. gamma}\left( \frac{n-1}{2}, \frac{\sum_{j=1}^8 \alpha_j^2}{2}\right)
+\sigma^2_{\alpha} \mid \boldsymbol{\alpha} &amp;\sim \mathsf{inv. gamma}\left( \frac{n}{2}+a_{\alpha}, \frac{\sum_{j=1}^8 \alpha_j^2}{2}+b_{\alpha}\right)
 \end{align*}\]</span> where <span class="math inline">\(s^{-2}_{\mu} =\sum_{j=1}^8 s_j^{-2}.\)</span></p>
 </section>
 <section id="parameter-expansion-for-the-eight-school-problem" class="slide level2 smaller">
 <h2>Parameter expansion for the eight school problem</h2>
-<p>The parameter expansion sampler proceeds in exactly the same way with the same conditionals for <span class="math inline">\(\sigma_{\xi}^2\)</span> and <span class="math inline">\(\boldsymbol{\xi}\)</span> as above; the only additional step is <span class="math display">\[\begin{align*}
-\nu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\xi} &amp; \sim \mathsf{Gauss}\left\{ \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1} \sum_{j=1}^8 \frac{\xi_j(y_j-\mu)}{s^2_j}, \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1}\right\}.
+<p>The parameter expansion sampler proceeds in exactly the same way: the only additional step is, with <span class="math inline">\(Q_{\xi_i} =  s^{-2}_i + (\nu\sigma_{\xi})^{-2}\)</span> <span class="math display">\[\begin{align*}
+\xi_i \mid y_i, s_i^2, \sigma^2_{\xi} &amp;\sim \mathsf{Gauss}\left(\frac{y_i}{\nu Q_{\xi_i}s^{2}_i}, Q_{\xi_i}^{-1}\right)\\
+\nu \mid \boldsymbol{y}, \boldsymbol{s}^2, \boldsymbol{\xi}, \mu &amp; \sim \mathsf{Gauss}\left\{ \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1} \sum_{j=1}^8 \frac{\xi_j(y_j-\mu)}{s^2_j}, \left( \sum_{j=1}^8 \frac{\xi_j^2}{s_j^2}\right)^{-1}\right\}.
 \end{align*}\]</span></p>
 <p>After each update, we then save <span class="math inline">\(\alpha_j = \nu \xi_j\)</span> and <span class="math inline">\(\sigma_\alpha = |\nu|\sigma_\xi,\)</span> as the other parameters are not identifiable.</p>
 </section>
@@ -726,7 +731,7 @@ Vehtari, A., Simpson, D., Gelman, A., Yao, Y., &amp; Gabry, J. (2024). Pareto sm
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
