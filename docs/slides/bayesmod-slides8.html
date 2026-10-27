@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.10.19">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,13 +20,10 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
+    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: 1.5em;}
-    div.column{flex: auto;}
-    @media screen {
-    div.columns{gap: min(4vw, 1.5em);}
-    div.column{overflow-x: auto;}
-    }
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -159,12 +156,12 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile
+Léo Belzile 
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Wednesday Oct 21, 2026</p>
+  <p class="date">Last compiled Tuesday Oct 27, 2026</p>
 </section>
 <section id="bayesian-regression" class="slide level2">
 <h2>Bayesian regression</h2>
@@ -219,14 +216,16 @@ Léo Belzile
 \boldsymbol{\beta} \mid  \boldsymbol{y} &amp;\sim \mathsf{Student}_p(\boldsymbol{\mu}_n,  \tau_n/(\nu_0+n) \times \mathbf{\Omega}_n^{-1}, \nu_0 + n)
 \end{align*}\]</span></p>
 </section>
-<section id="posterior-parameters" class="slide level2">
+<section id="posterior-parameters" class="slide level2 smaller">
 <h2>Posterior parameters</h2>
-<p>The precision is the sum of the precision of OLS estimator and prior precision.</p>
-<p>The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision. <span class="math display">\[\begin{align*}
+<ul>
+<li>The precision is the sum of the precision of OLS estimator and prior precision. - The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision <span class="math display">\[\begin{align*}
 \boldsymbol{\Omega}_n &amp;= \mathbf{X}^\top\mathbf{X} + \boldsymbol{\Omega}_0\\
 \boldsymbol{\mu}_n &amp;= \boldsymbol{\Omega}_n^{-1}(\mathbf{X}^\top\mathbf{X}\widehat{\boldsymbol{\beta}} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0) = \boldsymbol{\Omega}_n^{-1}(\mathbf{X}^\top\boldsymbol{y} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0)\\
-\tau_n &amp;= \tau_0 + (\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})^\top(\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}}) + (\boldsymbol{\mu}_n - \widehat{\boldsymbol{\beta}})^\top \mathbf{X}^\top\mathbf{X}(\boldsymbol{\mu}_n - \widehat{\boldsymbol{\beta}}) \\&amp; \quad + (\boldsymbol{\mu}_n-\boldsymbol{\mu}_0)^\top\boldsymbol{\Omega}_0(\boldsymbol{\mu}_n-\boldsymbol{\mu}_0)
-\end{align*}\]</span></p>
+\tau_n &amp;= \tau_0 + (\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})^\top(\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})
+\\&amp;+ (\boldsymbol{\mu}_n - \widehat{\boldsymbol{\beta}})^\top \mathbf{X}^\top\mathbf{X}(\boldsymbol{\mu}_n - \widehat{\boldsymbol{\beta}}) \\&amp; \quad + (\boldsymbol{\mu}_n-\boldsymbol{\mu}_0)^\top\boldsymbol{\Omega}_0(\boldsymbol{\mu}_n-\boldsymbol{\mu}_0)
+\end{align*}\]</span></li>
+</ul>
 </section>
 <section id="scale-mixture-of-gaussians" class="slide level2">
 <h2>Scale mixture of Gaussians</h2>
@@ -310,29 +309,25 @@ f(\boldsymbol{Q}) \stackrel{\boldsymbol{Q}}{\propto} |\boldsymbol{Q}|^{(\nu-p-1)
 </section>
 <section id="prior-elicitation-for-wishart" class="slide level2">
 <h2>Prior elicitation for Wishart</h2>
-<p>For prior elicitation, the mean of the Wishart is <span class="math inline">\(\nu \mathbf{S}\)</span></p>
+<p>For prior elicitation, the mean of the Wishart is <span class="math inline">\(\nu \mathbf{S}:\)</span></p>
 <ul>
-<li><span class="math inline">\(\nu\)</span> is thus a prior sample size</li>
+<li><span class="math inline">\(\nu\)</span> is thus a prior sample size, and</li>
 <li><span class="math inline">\(\mathbf{S}\)</span> is a scale matrix, often the identity matrix.</li>
 </ul>
 </section>
 <section id="inverse-wishart" class="slide level2">
 <h2>Inverse Wishart</h2>
 <p>Consider a prior for the covariance matrix <span class="math inline">\(\boldsymbol{\Sigma} = \boldsymbol{Q}^{-1}\)</span>. Applying the change of variable formula, we get Jacobian <span class="math inline">\(|\boldsymbol{\Sigma}|^{p+1}\)</span>, and so <span class="math inline">\(\boldsymbol{\Sigma} \sim \mathsf{inv. Wishart}(\nu, \mathbf{S}^{-1}),\)</span> with density <span class="math display">\[\begin{align*}
-p(\boldsymbol{\Sigma}) \propto |\boldsymbol{\Sigma}|^{-(\nu+p+1)/2} \exp\left\{-\frac{1}{2} \mathrm{tr}\left(\boldsymbol{S}^{-1}\boldsymbol{\Sigma}^{-1}\right)\right\}
+p(\boldsymbol{\Sigma}) \propto |\boldsymbol{\Sigma}|^{-(\nu+p+1)/2} \exp\left\{-\frac{1}{2} \mathrm{tr}\left(\mathbf{S}^{-1}\boldsymbol{\Sigma}^{-1}\right)\right\}
 \end{align*}\]</span> with expectation <span class="math inline">\(\mathbf{S}^{-1}(\nu-p-1)\)</span> for <span class="math inline">\(\nu &gt; p+1.\)</span></p>
 </section>
-<section id="wishart-as-conjugate-prior-in-gaussian-model" class="slide level2">
+<section id="wishart-as-conjugate-prior-in-gaussian-model" class="slide level2 smaller">
 <h2>Wishart as conjugate prior in Gaussian model</h2>
 <p>Consider <span class="math inline">\(\boldsymbol{\mu} \sim \mathsf{Gauss}_p(\boldsymbol{\mu}_0, \boldsymbol{Q}^{-1})\)</span> and <span class="math inline">\(\boldsymbol{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})\)</span> for <span class="math inline">\(\nu \geq p\)</span>. Then, <span class="math display">\[\begin{align*}
-p(\boldsymbol{Q} \mid \boldsymbol{\mu}, \boldsymbol{\mu}_0) \propto &amp;  |\boldsymbol{Q}|^{(\nu-p-1)/2}\exp\{-\mathrm{tr}(\mathbf{S}^{-1}\boldsymbol{Q})/2\} \\ &amp;\times |\boldsymbol{Q}|^{1/2} \exp \left\{ -\frac{1}{2} (\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0)\right\}
-\end{align*}\]</span> and thus <span class="math display">\[ \boldsymbol{Q} \mid \boldsymbol{\mu}, \boldsymbol{\mu}_0 \sim \mathsf{Wishart}_p\{\nu + 1/2, \boldsymbol{S} + (\boldsymbol{\mu}-\boldsymbol{\mu}_0)(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\}.\]</span></p>
-</section>
-<section id="conjugacy" class="slide level2">
-<h2>Conjugacy</h2>
-<p>Note that a <span class="math inline">\(1 \times 1\)</span> matrix is equal to it’s trace, and the trace operator is invariant to cyclic of it’s argument, meaning that <span class="math display">\[\begin{align*}
-(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0) = \mathrm{tr}\left\{ \boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0)(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\right\}.
-\end{align*}\]</span></p>
+p(\boldsymbol{Q} \mid \boldsymbol{\mu}, \boldsymbol{\mu}_0) \propto &amp;  |\boldsymbol{Q}|^{(\nu-p-1)/2}\exp\{-\mathrm{tr}(\mathbf{S}^{-1}\boldsymbol{Q})/2\} \\ &amp;\times |\boldsymbol{Q}|^{1/2} \exp \left\{ -\frac{1}{2} (\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0)\right\}.
+\end{align*}\]</span> Note that a <span class="math inline">\(1 \times 1\)</span> matrix is equal to it’s trace, and the trace operator is invariant to cyclic of it’s argument, so <span class="math display">\[\begin{align*}
+(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0) = \mathrm{tr}\left\{ (\boldsymbol{\mu}-\boldsymbol{\mu}_0)(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}\right\}.
+\end{align*}\]</span> Therefore, we find <span class="math display">\[ \boldsymbol{Q} \mid \boldsymbol{\mu}, \boldsymbol{\mu}_0 \sim \mathsf{Wishart}_p\left[\nu + 1, \left\{\mathbf{S}^{-1} + (\boldsymbol{\mu}-\boldsymbol{\mu}_0)(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\right\}^{-1}\right].\]</span></p>
 </section>
 <section id="properties-of-wishart" class="slide level2">
 <h2>Properties of Wishart</h2>
@@ -460,7 +455,7 @@ Figure&nbsp;5: Density estimates for regression coefficients with Gaussian (ridg
 <ul>
 <li>Ridge has the widest intervals of all methods, providing some shrinkage only for large values of <span class="math inline">\(\beta\)</span>.</li>
 <li>The horseshoe has typically narrower intervals, with more mass in a neighborhood of zero for smaller coefficients, and asymmetric intervals.</li>
-<li>The effective sample size fraction relative to the number of samples ranges from 11% to 85%, compared to 54% to 100% for the Bayesian LASSO and near-independent draws with the conjugate ridge.</li>
+<li>The effective sample size fraction relative to the number of samples ranges from 14% to 84%, compared to 56% to 100% for the Bayesian LASSO and near-independent draws with the conjugate ridge.</li>
 </ul>
 </section>
 <section id="bayesian-model-averaging" class="slide level2">
@@ -519,15 +514,15 @@ p(\boldsymbol{M} \mid \boldsymbol{Y}, \boldsymbol{\theta}) \propto p(M) |\boldsy
 <ul>
 <li>birth: adding an unused covariate chosen at random from the remaining ones</li>
 <li>death: removing one covariate at random from the current matrix</li>
-<li>swap an active covariate for an unused one.</li>
+<li>swap: changing an active covariate for an unused one.</li>
 </ul>
 <p>Only the last type of move preserves the dimension.</p>
 </section>
 <section id="jacobians-for-reversible-jump" class="slide level2">
 <h2>Jacobians for reversible jump</h2>
-<p>For most moves <span class="math inline">\(J=1\)</span> in this case, except in four cases where the dimension <span class="math inline">\(|M| \in\{1, 2, k_{\max}-1, k_{\max}\}\)</span> and</p>
+<p>For most moves, the Jacobian is unity <span class="math inline">\((J=1),\)</span> except in four cases where the dimension <span class="math inline">\(|M| \in\{1, 2, k_{\max}-1, k_{\max}\}\)</span> and</p>
 <ul>
-<li><span class="math inline">\(J=2/3\)</span> if <span class="math inline">\(|M|=1\)</span> and we try to add a covariate, or if <span class="math inline">\(|M|=k_{\max}\)</span> and we try to remove a covariate</li>
+<li><span class="math inline">\(J=2/3\)</span> if <span class="math inline">\(|M|=1\)</span> and we try to add a covariate, or if <span class="math inline">\(|M|=k_{\max}\)</span> and we try to remove a covariate.</li>
 <li><span class="math inline">\(J=3/2\)</span> if <span class="math inline">\(|M|=2\)</span> and we try to remove a covariate, or if <span class="math inline">\(|M|=k_{\max}-1\)</span> and we try to add the last covariate.</li>
 </ul>
 </section>
@@ -763,7 +758,7 @@ Piironen, J., &amp; Vehtari, A. (2017). Sparsity information and regularization 
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],

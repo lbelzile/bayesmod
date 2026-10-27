@@ -109,7 +109,7 @@
     "href": "slides/bayesmod-slides8.html#posterior-parameters",
     "title": "Bayesian modelling",
     "section": "Posterior parameters",
-    "text": "Posterior parameters\nThe precision is the sum of the precision of OLS estimator and prior precision.\nThe posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision. \\[\\begin{align*}\n\\boldsymbol{\\Omega}_n &= \\mathbf{X}^\\top\\mathbf{X} + \\boldsymbol{\\Omega}_0\\\\\n\\boldsymbol{\\mu}_n &= \\boldsymbol{\\Omega}_n^{-1}(\\mathbf{X}^\\top\\mathbf{X}\\widehat{\\boldsymbol{\\beta}} + \\boldsymbol{\\Omega}_0\\boldsymbol{\\mu}_0) = \\boldsymbol{\\Omega}_n^{-1}(\\mathbf{X}^\\top\\boldsymbol{y} + \\boldsymbol{\\Omega}_0\\boldsymbol{\\mu}_0)\\\\\n\\tau_n &= \\tau_0 + (\\boldsymbol{y} - \\mathbf{X}\\widehat{\\boldsymbol{\\beta}})^\\top(\\boldsymbol{y} - \\mathbf{X}\\widehat{\\boldsymbol{\\beta}}) + (\\boldsymbol{\\mu}_n - \\widehat{\\boldsymbol{\\beta}})^\\top \\mathbf{X}^\\top\\mathbf{X}(\\boldsymbol{\\mu}_n - \\widehat{\\boldsymbol{\\beta}}) \\\\& \\quad + (\\boldsymbol{\\mu}_n-\\boldsymbol{\\mu}_0)^\\top\\boldsymbol{\\Omega}_0(\\boldsymbol{\\mu}_n-\\boldsymbol{\\mu}_0)\n\\end{align*}\\]"
+    "text": "Posterior parameters\n\nThe precision is the sum of the precision of OLS estimator and prior precision. - The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision \\[\\begin{align*}\n\\boldsymbol{\\Omega}_n &= \\mathbf{X}^\\top\\mathbf{X} + \\boldsymbol{\\Omega}_0\\\\\n\\boldsymbol{\\mu}_n &= \\boldsymbol{\\Omega}_n^{-1}(\\mathbf{X}^\\top\\mathbf{X}\\widehat{\\boldsymbol{\\beta}} + \\boldsymbol{\\Omega}_0\\boldsymbol{\\mu}_0) = \\boldsymbol{\\Omega}_n^{-1}(\\mathbf{X}^\\top\\boldsymbol{y} + \\boldsymbol{\\Omega}_0\\boldsymbol{\\mu}_0)\\\\\n\\tau_n &= \\tau_0 + (\\boldsymbol{y} - \\mathbf{X}\\widehat{\\boldsymbol{\\beta}})^\\top(\\boldsymbol{y} - \\mathbf{X}\\widehat{\\boldsymbol{\\beta}})\n\\\\&+ (\\boldsymbol{\\mu}_n - \\widehat{\\boldsymbol{\\beta}})^\\top \\mathbf{X}^\\top\\mathbf{X}(\\boldsymbol{\\mu}_n - \\widehat{\\boldsymbol{\\beta}}) \\\\& \\quad + (\\boldsymbol{\\mu}_n-\\boldsymbol{\\mu}_0)^\\top\\boldsymbol{\\Omega}_0(\\boldsymbol{\\mu}_n-\\boldsymbol{\\mu}_0)\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides8.html#scale-mixture-of-gaussians",
@@ -193,21 +193,21 @@
     "href": "slides/bayesmod-slides8.html#prior-elicitation-for-wishart",
     "title": "Bayesian modelling",
     "section": "Prior elicitation for Wishart",
-    "text": "Prior elicitation for Wishart\nFor prior elicitation, the mean of the Wishart is \\(\\nu \\mathbf{S}\\)\n\n\\(\\nu\\) is thus a prior sample size\n\\(\\mathbf{S}\\) is a scale matrix, often the identity matrix."
+    "text": "Prior elicitation for Wishart\nFor prior elicitation, the mean of the Wishart is \\(\\nu \\mathbf{S}:\\)\n\n\\(\\nu\\) is thus a prior sample size, and\n\\(\\mathbf{S}\\) is a scale matrix, often the identity matrix."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#inverse-wishart",
     "href": "slides/bayesmod-slides8.html#inverse-wishart",
     "title": "Bayesian modelling",
     "section": "Inverse Wishart",
-    "text": "Inverse Wishart\nConsider a prior for the covariance matrix \\(\\boldsymbol{\\Sigma} = \\boldsymbol{Q}^{-1}\\). Applying the change of variable formula, we get Jacobian \\(|\\boldsymbol{\\Sigma}|^{p+1}\\), and so \\(\\boldsymbol{\\Sigma} \\sim \\mathsf{inv. Wishart}(\\nu, \\mathbf{S}^{-1}),\\) with density \\[\\begin{align*}\np(\\boldsymbol{\\Sigma}) \\propto |\\boldsymbol{\\Sigma}|^{-(\\nu+p+1)/2} \\exp\\left\\{-\\frac{1}{2} \\mathrm{tr}\\left(\\boldsymbol{S}^{-1}\\boldsymbol{\\Sigma}^{-1}\\right)\\right\\}\n\\end{align*}\\] with expectation \\(\\mathbf{S}^{-1}(\\nu-p-1)\\) for \\(\\nu &gt; p+1.\\)"
+    "text": "Inverse Wishart\nConsider a prior for the covariance matrix \\(\\boldsymbol{\\Sigma} = \\boldsymbol{Q}^{-1}\\). Applying the change of variable formula, we get Jacobian \\(|\\boldsymbol{\\Sigma}|^{p+1}\\), and so \\(\\boldsymbol{\\Sigma} \\sim \\mathsf{inv. Wishart}(\\nu, \\mathbf{S}^{-1}),\\) with density \\[\\begin{align*}\np(\\boldsymbol{\\Sigma}) \\propto |\\boldsymbol{\\Sigma}|^{-(\\nu+p+1)/2} \\exp\\left\\{-\\frac{1}{2} \\mathrm{tr}\\left(\\mathbf{S}^{-1}\\boldsymbol{\\Sigma}^{-1}\\right)\\right\\}\n\\end{align*}\\] with expectation \\(\\mathbf{S}^{-1}(\\nu-p-1)\\) for \\(\\nu &gt; p+1.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides8.html#wishart-as-conjugate-prior-in-gaussian-model",
     "href": "slides/bayesmod-slides8.html#wishart-as-conjugate-prior-in-gaussian-model",
     "title": "Bayesian modelling",
     "section": "Wishart as conjugate prior in Gaussian model",
-    "text": "Wishart as conjugate prior in Gaussian model\nConsider \\(\\boldsymbol{\\mu} \\sim \\mathsf{Gauss}_p(\\boldsymbol{\\mu}_0, \\boldsymbol{Q}^{-1})\\) and \\(\\boldsymbol{Q} \\sim \\mathsf{Wishart}_p(\\nu, \\mathbf{S})\\) for \\(\\nu \\geq p\\). Then, \\[\\begin{align*}\np(\\boldsymbol{Q} \\mid \\boldsymbol{\\mu}, \\boldsymbol{\\mu}_0) \\propto &  |\\boldsymbol{Q}|^{(\\nu-p-1)/2}\\exp\\{-\\mathrm{tr}(\\mathbf{S}^{-1}\\boldsymbol{Q})/2\\} \\\\ &\\times |\\boldsymbol{Q}|^{1/2} \\exp \\left\\{ -\\frac{1}{2} (\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)^\\top\\boldsymbol{Q}(\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)\\right\\}\n\\end{align*}\\] and thus \\[ \\boldsymbol{Q} \\mid \\boldsymbol{\\mu}, \\boldsymbol{\\mu}_0 \\sim \\mathsf{Wishart}_p\\{\\nu + 1/2, \\boldsymbol{S} + (\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)(\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)^\\top\\}.\\]"
+    "text": "Wishart as conjugate prior in Gaussian model\nConsider \\(\\boldsymbol{\\mu} \\sim \\mathsf{Gauss}_p(\\boldsymbol{\\mu}_0, \\boldsymbol{Q}^{-1})\\) and \\(\\boldsymbol{Q} \\sim \\mathsf{Wishart}_p(\\nu, \\mathbf{S})\\) for \\(\\nu \\geq p\\). Then, \\[\\begin{align*}\np(\\boldsymbol{Q} \\mid \\boldsymbol{\\mu}, \\boldsymbol{\\mu}_0) \\propto &  |\\boldsymbol{Q}|^{(\\nu-p-1)/2}\\exp\\{-\\mathrm{tr}(\\mathbf{S}^{-1}\\boldsymbol{Q})/2\\} \\\\ &\\times |\\boldsymbol{Q}|^{1/2} \\exp \\left\\{ -\\frac{1}{2} (\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)^\\top\\boldsymbol{Q}(\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)\\right\\}.\n\\end{align*}\\] Note that a \\(1 \\times 1\\) matrix is equal to it’s trace, and the trace operator is invariant to cyclic of it’s argument, so \\[\\begin{align*}\n(\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)^\\top\\boldsymbol{Q}(\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0) = \\mathrm{tr}\\left\\{ (\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)(\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)^\\top\\boldsymbol{Q}\\right\\}.\n\\end{align*}\\] Therefore, we find \\[ \\boldsymbol{Q} \\mid \\boldsymbol{\\mu}, \\boldsymbol{\\mu}_0 \\sim \\mathsf{Wishart}_p\\left[\\nu + 1, \\left\\{\\mathbf{S}^{-1} + (\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)(\\boldsymbol{\\mu}-\\boldsymbol{\\mu}_0)^\\top\\right\\}^{-1}\\right].\\]"
   },
   {
     "objectID": "slides/bayesmod-slides8.html#conjugacy",
@@ -340,7 +340,7 @@
     "href": "slides/bayesmod-slides8.html#comments-on-penalization",
     "title": "Bayesian modelling",
     "section": "Comments on penalization",
-    "text": "Comments on penalization\n\nRidge has the widest intervals of all methods, providing some shrinkage only for large values of \\(\\beta\\).\nThe horseshoe has typically narrower intervals, with more mass in a neighborhood of zero for smaller coefficients, and asymmetric intervals.\nThe effective sample size fraction relative to the number of samples ranges from 11% to 85%, compared to 54% to 100% for the Bayesian LASSO and near-independent draws with the conjugate ridge."
+    "text": "Comments on penalization\n\nRidge has the widest intervals of all methods, providing some shrinkage only for large values of \\(\\beta\\).\nThe horseshoe has typically narrower intervals, with more mass in a neighborhood of zero for smaller coefficients, and asymmetric intervals.\nThe effective sample size fraction relative to the number of samples ranges from 14% to 84%, compared to 56% to 100% for the Bayesian LASSO and near-independent draws with the conjugate ridge."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#bayesian-model-averaging",
@@ -403,14 +403,14 @@
     "href": "slides/bayesmod-slides8.html#moves-for-variable-selection",
     "title": "Bayesian modelling",
     "section": "Moves for variable selection",
-    "text": "Moves for variable selection\nWe consider different types of move for the \\(k_{\\max}\\) potential covariates (including interactions, etc.) (Holmes et al., 2002)\n\nbirth: adding an unused covariate chosen at random from the remaining ones\ndeath: removing one covariate at random from the current matrix\nswap an active covariate for an unused one.\n\nOnly the last type of move preserves the dimension."
+    "text": "Moves for variable selection\nWe consider different types of move for the \\(k_{\\max}\\) potential covariates (including interactions, etc.) (Holmes et al., 2002)\n\nbirth: adding an unused covariate chosen at random from the remaining ones\ndeath: removing one covariate at random from the current matrix\nswap: changing an active covariate for an unused one.\n\nOnly the last type of move preserves the dimension."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#jacobians-for-reversible-jump",
     "href": "slides/bayesmod-slides8.html#jacobians-for-reversible-jump",
     "title": "Bayesian modelling",
     "section": "Jacobians for reversible jump",
-    "text": "Jacobians for reversible jump\nFor most moves \\(J=1\\) in this case, except in four cases where the dimension \\(|M| \\in\\{1, 2, k_{\\max}-1, k_{\\max}\\}\\) and\n\n\\(J=2/3\\) if \\(|M|=1\\) and we try to add a covariate, or if \\(|M|=k_{\\max}\\) and we try to remove a covariate\n\\(J=3/2\\) if \\(|M|=2\\) and we try to remove a covariate, or if \\(|M|=k_{\\max}-1\\) and we try to add the last covariate."
+    "text": "Jacobians for reversible jump\nFor most moves, the Jacobian is unity \\((J=1),\\) except in four cases where the dimension \\(|M| \\in\\{1, 2, k_{\\max}-1, k_{\\max}\\}\\) and\n\n\\(J=2/3\\) if \\(|M|=1\\) and we try to add a covariate, or if \\(|M|=k_{\\max}\\) and we try to remove a covariate.\n\\(J=3/2\\) if \\(|M|=2\\) and we try to remove a covariate, or if \\(|M|=k_{\\max}-1\\) and we try to add the last covariate."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#posterior-weights",

@@ -108,16 +108,14 @@ If we integrate over the precision, we get instead
 \boldsymbol{\beta} \mid  \boldsymbol{y} &\sim \mathsf{Student}_p(\boldsymbol{\mu}_n,  \tau_n/(\nu_0+n) \times \mathbf{\Omega}_n^{-1}, \nu_0 + n)
 \end{align*}
 
-## Posterior parameters
+## Posterior parameters {.smaller}
 
-
-The precision is the sum of the precision of OLS estimator and prior precision.
-
-The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision.
+- The precision is the sum of the precision of OLS estimator and prior precision. - The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision
 \begin{align*}
 \boldsymbol{\Omega}_n &= \mathbf{X}^\top\mathbf{X} + \boldsymbol{\Omega}_0\\
 \boldsymbol{\mu}_n &= \boldsymbol{\Omega}_n^{-1}(\mathbf{X}^\top\mathbf{X}\widehat{\boldsymbol{\beta}} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0) = \boldsymbol{\Omega}_n^{-1}(\mathbf{X}^\top\boldsymbol{y} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0)\\
-\tau_n &= \tau_0 + (\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})^\top(\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}}) + (\boldsymbol{\mu}_n - \widehat{\boldsymbol{\beta}})^\top \mathbf{X}^\top\mathbf{X}(\boldsymbol{\mu}_n - \widehat{\boldsymbol{\beta}}) \\& \quad + (\boldsymbol{\mu}_n-\boldsymbol{\mu}_0)^\top\boldsymbol{\Omega}_0(\boldsymbol{\mu}_n-\boldsymbol{\mu}_0)
+\tau_n &= \tau_0 + (\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})^\top(\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}}) 
+\\&+ (\boldsymbol{\mu}_n - \widehat{\boldsymbol{\beta}})^\top \mathbf{X}^\top\mathbf{X}(\boldsymbol{\mu}_n - \widehat{\boldsymbol{\beta}}) \\& \quad + (\boldsymbol{\mu}_n-\boldsymbol{\mu}_0)^\top\boldsymbol{\Omega}_0(\boldsymbol{\mu}_n-\boldsymbol{\mu}_0)
 \end{align*}
 
 
@@ -167,6 +165,71 @@ Study 4 of @Lin.Kim.Uduehi.Keinan:2024 is a 3 by 2 by 2 three-way between-subjec
 #| echo: false
 #| label: fig-contrasts
 #| fig-cap: "Difference in appropriation rating for black vs non-black Chef Dax, average accross different levels of brand action."
+data(LKUK24_S4, package = "hecedsm")
+# Sum-to-zero constraint on factors
+options(contrasts = c("contr.sum", "contr.poly"))
+# Fit linear regression model
+model <- lm(appropriation ~ politideo * chefdax * brandaction, data = LKUK24_S4)
+# Extract model matrix, response and dimensions
+y <- LKUK24_S4$appropriation
+X <- model.matrix(model)
+n <- nrow(X)
+p <- ncol(X)
+# Priors
+# We set zero for contrasts and a small value
+# for the global mean (since response is on [1,7] Likert scale)
+# with lower values indicating more cultural appropriation)
+mu_0 <- c(2.5, rep(0, p - 1))
+Omega_0 <- diag(p)
+# Prior precision of 0.25 (variance of 4)
+nu_0 <- 0.25
+tau_0 <- 1
+# Use formulas to obtain posterior precision and mean
+Omega_n_inv <- solve(crossprod(X) + Omega_0)
+mu_n <- Omega_n_inv %*% (crossprod(X, y) + crossprod(Omega_0, mu_0))
+tau_n <- tau_0 +
+  sum(resid(model)^2) +
+  c(crossprod(X %*% (mu_n - coef(model)))) +
+  sum((mu_n - mu_0)^2)
+# Posterior draws from the model
+omega <- rgamma(n = 1e3L, shape = (nu_0 + n) / 2, tau_n^2 / 2)
+# Use forward sampling to obtain the betas
+# First simulate multivariate Gaussians
+beta <- matrix(rnorm(n = 1e3L * p), ncol = p) %*%
+  chol(Omega_n_inv)
+# Divide by gamma scale (scale mixture)
+beta <- sweep(beta, 1, sqrt(omega), "/")
+# add location parameter
+beta <- sweep(beta, 2, mu_n, "+")
+# Posterior quartiles for beta
+beta_qu <- t(apply(beta, 2, quantile, probs = c(0.25, 0.5, 0.75)))
+# Standard dev. for beta (from Student-t distribution properties)
+beta_se <- sqrt(
+  (nu_0 + n) / (nu_0 + n - 2) * diag(tau_n / (nu_0 + n) * Omega_n_inv)
+)
+# Alternatively, we could also directly generate from multivariate Student-t
+beta <- TruncatedNormal::rtmvt(
+  n = 1e3L,
+  mu = mu_n,
+  sigma = tau_n / (nu_0 + n) * Omega_n_inv,
+  df = nu_0 + n
+)
+## Application to data set: marginal effects
+# Create a grid for each of 12 combinations of factors
+dfg <- expand.grid(
+  politideo = c("conservative", "liberal"),
+  chefdax = c("not black", "black"),
+  brandaction = c("peeking", "permission", "control")
+)
+mm <- model.matrix(~ politideo * chefdax * brandaction, data = dfg)
+# Subgroup means for each of the 12 categories
+mu <- tcrossprod(beta, mm)
+# Contrast weights, averaging over brandaction
+w1 <- rep(c(1, 0, -1, 0), length.out = nrow(dfg)) / 3
+w2 <- rep(c(0, 1, 0, -1), length.out = nrow(dfg)) / 3
+# Posterior distribution of contrasts
+tc <- mu %*% cbind(w1, w2)
+
 ggplot(data = 
          data.frame(x = c(tc),
                     f = factor(rep(c("liberal","conservative"), 
@@ -283,34 +346,31 @@ The Wishart arises from considering $n \geq p$ independent and identically distr
 
 ## Prior elicitation for Wishart
 
-For prior elicitation, the mean of the Wishart is $\nu \mathbf{S}$
+For prior elicitation, the mean of the Wishart is $\nu \mathbf{S}:$
 
-- $\nu$ is thus a prior sample size
+- $\nu$ is thus a prior sample size, and
 - $\mathbf{S}$ is a scale matrix, often the identity matrix.
 
 ## Inverse Wishart
 
 Consider a prior for the covariance matrix $\boldsymbol{\Sigma} = \boldsymbol{Q}^{-1}$. Applying the change of variable formula, we get Jacobian $|\boldsymbol{\Sigma}|^{p+1}$, and so $\boldsymbol{\Sigma} \sim \mathsf{inv. Wishart}(\nu, \mathbf{S}^{-1}),$ with density \begin{align*}
- p(\boldsymbol{\Sigma}) \propto |\boldsymbol{\Sigma}|^{-(\nu+p+1)/2} \exp\left\{-\frac{1}{2} \mathrm{tr}\left(\boldsymbol{S}^{-1}\boldsymbol{\Sigma}^{-1}\right)\right\}
+ p(\boldsymbol{\Sigma}) \propto |\boldsymbol{\Sigma}|^{-(\nu+p+1)/2} \exp\left\{-\frac{1}{2} \mathrm{tr}\left(\mathbf{S}^{-1}\boldsymbol{\Sigma}^{-1}\right)\right\}
 \end{align*}
 with expectation $\mathbf{S}^{-1}(\nu-p-1)$ for $\nu > p+1.$
 
 
-## Wishart as conjugate prior in Gaussian model
+## Wishart as conjugate prior in Gaussian model {.smaller}
 
 Consider $\boldsymbol{\mu} \sim \mathsf{Gauss}_p(\boldsymbol{\mu}_0, \boldsymbol{Q}^{-1})$ and $\boldsymbol{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})$ for $\nu \geq p$. Then,
 \begin{align*}
- p(\boldsymbol{Q} \mid \boldsymbol{\mu}, \boldsymbol{\mu}_0) \propto &  |\boldsymbol{Q}|^{(\nu-p-1)/2}\exp\{-\mathrm{tr}(\mathbf{S}^{-1}\boldsymbol{Q})/2\} \\ &\times |\boldsymbol{Q}|^{1/2} \exp \left\{ -\frac{1}{2} (\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0)\right\} 
+ p(\boldsymbol{Q} \mid \boldsymbol{\mu}, \boldsymbol{\mu}_0) \propto &  |\boldsymbol{Q}|^{(\nu-p-1)/2}\exp\{-\mathrm{tr}(\mathbf{S}^{-1}\boldsymbol{Q})/2\} \\ &\times |\boldsymbol{Q}|^{1/2} \exp \left\{ -\frac{1}{2} (\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0)\right\}.
 \end{align*}
-and thus 
-$$ \boldsymbol{Q} \mid \boldsymbol{\mu}, \boldsymbol{\mu}_0 \sim \mathsf{Wishart}_p\{\nu + 1/2, \boldsymbol{S} + (\boldsymbol{\mu}-\boldsymbol{\mu}_0)(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\}.$$ 
-
-## Conjugacy
-
-Note that a $1 \times 1$ matrix is equal to it's trace, and the trace operator is invariant to cyclic of it's argument, meaning that
+Note that a $1 \times 1$ matrix is equal to it's trace, and the trace operator is invariant to cyclic of it's argument, so
 \begin{align*}
- (\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0) = \mathrm{tr}\left\{ \boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0)(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\right\}.
+ (\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}(\boldsymbol{\mu}-\boldsymbol{\mu}_0) = \mathrm{tr}\left\{ (\boldsymbol{\mu}-\boldsymbol{\mu}_0)(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\boldsymbol{Q}\right\}.
 \end{align*}
+Therefore, we find
+$$ \boldsymbol{Q} \mid \boldsymbol{\mu}, \boldsymbol{\mu}_0 \sim \mathsf{Wishart}_p\left[\nu + 1, \left\{\mathbf{S}^{-1} + (\boldsymbol{\mu}-\boldsymbol{\mu}_0)(\boldsymbol{\mu}-\boldsymbol{\mu}_0)^\top\right\}^{-1}\right].$$ 
 
 ## Properties of Wishart
 
@@ -695,15 +755,15 @@ We consider different types of move for the $k_{\max}$ potential covariates (inc
 
 - birth: adding an unused covariate chosen at random from the remaining ones
 - death: removing one covariate at random from the current matrix
-- swap an active covariate for an unused one.
+- swap: changing an active covariate for an unused one.
 
 Only the last type of move preserves the dimension.
 
 ## Jacobians for reversible jump
 
-For most moves $J=1$ in this case, except in four cases where the dimension $|M| \in\{1, 2, k_{\max}-1, k_{\max}\}$ and
+For most moves, the Jacobian is unity $(J=1),$ except in four cases where the dimension $|M| \in\{1, 2, k_{\max}-1, k_{\max}\}$ and
 
-- $J=2/3$ if $|M|=1$ and we try to add a covariate, or if $|M|=k_{\max}$ and we try to remove a covariate
+- $J=2/3$ if $|M|=1$ and we try to add a covariate, or if $|M|=k_{\max}$ and we try to remove a covariate.
 - $J=3/2$ if $|M|=2$ and we try to remove a covariate, or if $|M|=k_{\max}-1$ and we try to add the last covariate.
 
 ## Posterior weights

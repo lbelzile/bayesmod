@@ -1,22 +1,33 @@
-BMA_linreg <- function(y, X, intercept = TRUE, B = 1e4L) {
+BMA_linreg <- function(
+  y,
+  X,
+  intercept = TRUE,
+  B = 1e4L
+) {
   n <- nrow(X)
-  p <- ncol(X)
   # standardize inputs
   X <- apply(X, 2, scale)
-  if (intercept) {
-    stopifnot(isTRUE(all.equal(as.numeric(X[, 1]), rep(0, n))))
+  # Force the model to include an intercept
+  if (isTRUE(intercept)) {
+    stopifnot(isTRUE(
+      all.equal(as.numeric(X[, 1]), rep(0, n))
+    ))
     X[, 1] <- rep(1, n)
   } else {
     X <- cbind(1, X)
   }
+  p <- ncol(X)
+  colnames(X)[1] <- "intercept"
   # Hyperpriors (vague)
   mu_0 <- rep(0, p)
+  # We add a different prior value for the intercept
+  # precision (near improper)
   Omega_0 <- diag(c(0.0001, rep(1, p - 1)))
   nu_0 <- 0.01
   tau_0 <- 0.01
   # Compute update parameters
   post_beta <- function(Xm, y, Omega0, mu0, tau0) {
-    model <- lm(y ~ -1 + Xm)
+    model <- lm(y ~ -1 + Xm) # Model already includes intercept
     Omega_n <- crossprod(Xm) + Omega0
     Omega_n_inv <- solve(Omega_n)
     mu_n <- c(Omega_n_inv %*% (crossprod(Xm, y) + crossprod(Omega0, mu0)))
@@ -24,7 +35,12 @@ BMA_linreg <- function(y, X, intercept = TRUE, B = 1e4L) {
       sum(resid(model)^2) +
       c(crossprod(Xm %*% (mu_n - coef(model)))) +
       sum((mu_n - mu0)^2)
-    list(prec = Omega_n, vcov = Omega_n_inv, mean = mu_n, tau = tau_n)
+    list(
+      prec = Omega_n,
+      vcov = Omega_n_inv,
+      mean = mu_n,
+      tau = tau_n
+    )
   }
   # Score for model averaging
   score_M <- function(pars) {
@@ -101,11 +117,10 @@ BMA_linreg <- function(y, X, intercept = TRUE, B = 1e4L) {
 data(diabetes, package = "lars")
 bma <- BMA_linreg(
   y = diabetes$y,
-  X = diabetes$x2,
+  X = diabetes$x,
   intercept = FALSE,
   B = 1e4L
 )
 # Warning: relatively slow...
 burn <- 1000
-pinclusion <- colMeans(bma$beta[-seq_len(burn), ] == 0)
-
+pinclusion <- 1 - colMeans(bma$beta[-seq_len(burn), ] == 0)
