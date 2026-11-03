@@ -1,0 +1,19 @@
+---
+title: Exercises 8
+---
+
+
+## Exercise 8.1
+
+Zellner's $g$ prior for linear regression takes the form 
+\begin{align*}
+\boldsymbol{\beta} \mid \omega, \mathbf{X} &\sim \mathsf{Gauss}_p\left(\boldsymbol{\beta}_0, \frac{n}{\kappa_0}\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\right)\\
+p(\sigma^2) &\propto \frac{1}{\sigma^2}
+\end{align*}
+which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is $$\widehat{\boldsymbol{\beta}} \sim \mathsf{Gauss}_p\{\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\}.$$
+Note that the prior is conditional on the covariates, which are assumed to be exogeneous.
+
+
+a) Show that Zellner's $g$ prior gives rise to a conjugate prior and derive the posterior mean and covariance.
+b) What is the benefit of this relative to an isotropic prior covariance $\sigma^2\mathsf{I}_p$ for $\beta \mid \sigma^2$?
+c) Give an interpretation to $\kappa_0$: what happens when $\kappa_0=1$? or $\kappa_0=n$?

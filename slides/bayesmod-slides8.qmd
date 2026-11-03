@@ -69,8 +69,16 @@ In the ordinary linear regression model, observations are independent and homosc
 \boldsymbol{Y} \mid \mathbf{X}, \boldsymbol{\beta}, \omega \sim \mathsf{Gauss}_n(\beta_0\mathbf{1}_n + \mathbf{X}\boldsymbol{\beta}, \omega^{-1}\mathbf{I}_n).
 \end{align*}
 
-The intercept $\beta_0$ receives special treatment, is always included. It is typically assigned an improper prior $p(\beta_0) \propto 1.$
+::: {style="font-size: 80%;"}
 
+The intercept $\beta_0$ receives special treatment. 
+
+- Priors can be specified on standardized residuals
+- Mean-centered regressors are orthogonal to the column of ones.
+- $\beta_0$ is typically assigned an improper prior $p(\beta_0) \propto 1.$
+
+
+:::
 
 
 
@@ -83,17 +91,21 @@ For quadratic forms (in $\boldsymbol{x}$) with
 \end{align*}
 where $\mathbf{C} = \mathbf{A} + \mathbf{B}$ and $\boldsymbol{c}= \mathbf{C}^{-1}(\mathbf{A}\boldsymbol{a} + \mathbf{B}\boldsymbol{b})$.
 
-This is useful to complete the square in Gaussian-Gaussian models.
+::: {style="font-size: 80%;"}
+
+*Useful for Gaussian regression models with Gaussian priors on regression coefficients.*
+
+:::
 
 ## Bayesian Gaussian linear model
 
 Consider Gaussian-gamma **conjugate** priors for the mean and precision parameters $\boldsymbol{\beta}$ and $\omega$, 
 \begin{align*}
-\boldsymbol{\beta} \mid \omega &\sim \mathsf{Gauss}\left\{\boldsymbol{\mu}_0, (
+\boldsymbol{\beta} \mid \omega &\sim \mathsf{Gauss}_p\left\{\boldsymbol{\mu}_0, (
 \omega\boldsymbol{\Omega}_0)^{-1}\right\} \\
 \omega &\sim \mathsf{gamma}(\nu_0/2,\tau_0/2).
 \end{align*}
-Recall the sampling distribution of the ordinary least squares estimator is $$\widehat{\boldsymbol{\beta}} \sim \mathsf{Gauss}_p\{\boldsymbol{\beta}, (\omega\mathbf{X}^\top\mathbf{X})^{-1}\}.$$
+
 
 ## Conditional distributions
 
@@ -110,7 +122,8 @@ If we integrate over the precision, we get instead
 
 ## Posterior parameters {.smaller}
 
-- The precision is the sum of the precision of OLS estimator and prior precision. - The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision
+- The precision is the sum of the precision of OLS estimator and prior precision. 
+- The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision
 \begin{align*}
 \boldsymbol{\Omega}_n &= \mathbf{X}^\top\mathbf{X} + \boldsymbol{\Omega}_0\\
 \boldsymbol{\mu}_n &= \boldsymbol{\Omega}_n^{-1}(\mathbf{X}^\top\mathbf{X}\widehat{\boldsymbol{\beta}} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0) = \boldsymbol{\Omega}_n^{-1}(\mathbf{X}^\top\boldsymbol{y} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0)\\
@@ -119,19 +132,11 @@ If we integrate over the precision, we get instead
 \end{align*}
 
 
-## Scale mixture of Gaussians
-
-If $X \mid \sigma^2 \sim \mathsf{Gauss}(0, \sigma^2)$ and we assign a prior $p(\sigma^2)$
-
-- if $\sigma^2 \sim \mathsf{inv. gamma}(\nu/2, \nu/2)$, then $X \sim \mathsf{Student}(0,1, \nu)$
-- if $\sigma^2 \sim \mathsf{exp}(1/\lambda^2),$ then
-$X \sim \mathsf{Laplace}(0, \lambda).$
-
 ## Sketch of proof 
 
 1. write down the joint posterior as
 \begin{align*}
- p(\boldsymbol{\beta}, \omega \mid \boldsymbol{y}) &\propto p(\boldsymbol{y} \mid \boldsymbol{\beta}, \omega) p(\omega)
+ p(\boldsymbol{\beta}, \omega \mid \boldsymbol{y}) &\propto p(\boldsymbol{y} \mid \boldsymbol{\beta}, \omega) p(\boldsymbol{\beta} \mid \omega) p(\omega)
 \end{align*}
 2. rewrite the first quadratic form in $\boldsymbol{y}-\mathbf{X}\boldsymbol{\beta}$ using the orthogonal decomposition
 \begin{align*}
@@ -144,9 +149,20 @@ $X \sim \mathsf{Laplace}(0, \lambda).$
 4. use decomposition of quadratic forms with $\boldsymbol{a} = \widehat{\boldsymbol{\beta}}$, $\mathbf{A}=\mathbf{X}^\top\mathbf{X}$, $\boldsymbol{b} = \boldsymbol{\mu}_0$ and $\mathbf{B}=\boldsymbol{\Omega}_0$
 5. the marginal of $\boldsymbol{\beta}$ is obtained by regrouping all terms that depend on $\omega$ and integrating over the latter, recognizing the integral as an unnormalized gamma density
 
+## Scale mixture of Gaussians
+
+If $X \mid \sigma^2 \sim \mathsf{Gauss}(0, \sigma^2)$ and we assign a prior $p(\sigma^2)$
+
+- if $\sigma^2 \sim \mathsf{inv. gamma}(\nu/2, \nu/2)$, then $X \sim \mathsf{Student}(0,1, \nu)$
+- if $\sigma^2 \sim \mathsf{exp}(1/\lambda^2),$ then
+$X \sim \mathsf{Laplace}(0, \lambda).$
+
 ## Cultural appropriation
 
-Study 4 of @Lin.Kim.Uduehi.Keinan:2024 is a 3 by 2 by 2 three-way between-subject ANOVA focusing on cultural appropriation using a fictional scenario on publication of a soul food recipe cookbook from Chef Dax.
+We consider Study 4 of @Lin.Kim.Uduehi.Keinan:2024 on cultural appropriation using a fictional scenario on publication of a soul food recipe cookbook from Chef Dax.
+
+
+The model is $3 \times 2 \times 2$ three-way between-subject ANOVA.
 
 ## Experimental variables
 
@@ -331,7 +347,7 @@ Wishart allows for conjugacy, but has unintuitive properties.
 
 ## Wishart distribution
 
-We say $\mathbf{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})$ for $\nu>0$ degrees of freedom and scale $\mathbf{S}$ if it's density is proportional to
+We say $\mathbf{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})$ for $\nu>0$ degrees of freedom and scale $\mathbf{S}$ if its density is proportional to
 \begin{align*}
  f(\boldsymbol{Q}) \stackrel{\boldsymbol{Q}}{\propto} |\boldsymbol{Q}|^{(\nu-p-1)/2}\exp\left\{-\frac{\mathrm{tr}(\mathbf{S}^{-1}\boldsymbol{Q})}{2}\right\}, \quad \nu > p-1.
 \end{align*}
@@ -398,7 +414,8 @@ cor_b <- apply(prec, 3, function(x){cov2cor(solve(x))[1,2]})
 var_b <- apply(prec, 3, function(x){solve(x)[1,1]})
 draws <- data.frame(cor = c(cor_a, cor_b),
            logvar = log(c(var_a, var_b)),
-           df = factor(paste0("df = ",rep(c(3, 20), each = 1000))))
+           df = factor(paste0("df = ", rep(c(3, 20), each = 1000)))) |>
+  dplyr::mutate(df = relevel(df, ref = "df = 3"))
 ggplot(data = draws,
        mapping = aes(x = cor, y = logvar)) +
   geom_point() +
@@ -458,7 +475,9 @@ Set independent and identically distributed conjugate prior for $\gamma_j \sim \
 p(\boldsymbol{\gamma} \mid \omega) = \prod_{j=1}^n \omega^{\gamma_j} (1-\omega)^{1-\gamma_j}
 \end{align*}
 
-Apriori, we set $\omega \in (0,1)$ as the proportion of the $p$ coefficients $\boldsymbol{\beta}$ that are zero (so $p(1-\omega)$ nonzero coefficients).
+Apriori, we set $\omega \in (0,1)$ as the proportion of the $p$ coefficients $\boldsymbol{\beta}$ that are zero 
+
+ -$p(1-\omega)$ nonzero coefficients.
 
 
 
@@ -468,7 +487,7 @@ Apriori, we set $\omega \in (0,1)$ as the proportion of the $p$ coefficients $\b
 \begin{align*}
  \beta_j \mid \gamma_j, \sigma_j^2,\phi^2_j \sim  \gamma_j \mathsf{Gauss}(0, \sigma_j^2\phi^2) + (1-\gamma_j) \mathsf{Gauss}(0, \sigma^2_j)
 \end{align*}
-where $\phi^2_j$ is very nearly zero, typically $\phi_j^2=0.001$. 
+where constant $\phi^2_j$ is nearly zero, typically $\phi_j^2=0.001$. 
 
 The construction allows for variable augmentation with mixture indicators and Gibbs sampling, although mixing tends to be poor.
 
@@ -622,21 +641,34 @@ Markov chain Monte Carlo simulations are hampered by these parameters whose post
 @Piironen.Vehtari:2017 proposed instead
 \begin{align*}
 \beta_j \mid \lambda, \tau_j, c^2 &\sim \mathsf{Gauss}\left(0, \lambda\frac{c^2\tau_j^2}{c^2 + \tau^2_j\lambda^2}\right), \\
-\tau_j &\sim \mathsf{Student}_{+}(0, 1, 1)\\
-c^2 \mid s^2, \nu &\sim \mathsf{inv. gamma}(\nu/2, \nu s^2/2).
+c^2 \mid s^2, \nu &\sim \mathsf{inv. gamma}(\nu/2, \nu s^2/2)\\
+\tau_j &\sim \mathsf{Student}_{+}(0, 1, 1)
 \end{align*}
 
 
-## Shrinkage for Finnish horsshoe
+::: {style="font-size: 65%;"}
 
-When $\tau^2\lambda^2_j$ is much greater than $c^2$, this amounts to having a Student slab with $\nu$ degrees of freedom for large coefficients.
+- When $\tau^2\lambda^2_j \gg c^2$, this amounts to having a Student slab with $\nu$ degrees of freedom for large coefficients.
+- Taking a small value of $\nu$ allows for large, but not extreme components, and the authors use $s^2=2, \nu=4.$ 
 
-Taking a small value of $\nu$ allows for large, but not extreme components, and the authors use $s^2=2, \nu=4.$ 
+:::
 
 ## Hyperprior for Finnish horseshoe
 
-The above specification does not specify the prior for the global scale $\lambda$, for which @Piironen.Vehtari:2017 recommend $$\lambda \sim \mathsf{Student}_{+}\left\{0, \frac{p_0}{(p-p_0)}\frac{\sigma}{n^{1/2}}, 1\right\},$$ where $p_0$ is a prior guess for the number of non-zero components out of $p,$ $n$ is the sample size and $\sigma$ is some level of the noise.
+::: {style="font-size: 90%;"}
 
+The above specification does not specify the prior for the global scale $\lambda$, for which @Piironen.Vehtari:2017 recommend $$\lambda \sim \mathsf{Student}_{+}\left\{0, \frac{p_0}{(p-p_0)}\frac{\sigma}{n^{1/2}}, 1\right\},$$ where 
+
+
+:::
+
+::: {style="font-size: 65%;"}
+
+- $p_0$ is a prior guess for the number of non-zero components out of $p,$ 
+- $n$ is the sample size and 
+- $\sigma$ is some level of the noise.
+
+:::
 
 ## Comparison of shrinkage priors
 
@@ -683,15 +715,14 @@ theme(legend.position = "bottom")
 
 - Ridge has the widest intervals of all methods, providing some shrinkage only for large values of $\beta$. 
 - The horseshoe has typically narrower intervals, with more mass in a neighborhood of zero for smaller coefficients, and asymmetric intervals.
-- The effective sample size fraction relative to the number of samples ranges from `r round(min(100*horseshoe$ess.frac), 0)`% to `r round(100*max(horseshoe$ess.frac), 0)`%, compared to `r round(100*min(blasso$ess.frac), 0)`% to `r round(100*max(blasso$ess.frac), 0)`% for the Bayesian LASSO and near-independent draws with the conjugate ridge.
+- The ratio $\mathsf{ESS}/B$ ranges from `r round(min(100*horseshoe$ess.frac), 0)`% to `r round(100*max(horseshoe$ess.frac), 0)`% (horseshoe), compared to `r round(100*min(blasso$ess.frac), 0)`% to `r round(100*max(blasso$ess.frac), 0)`% for the Bayesian LASSO and near-independent draws with the conjugate ridge.
 
 ## Bayesian model averaging
 
-BMA refers to situation where we specify a mixture of models $M_1, \ldots,$, and we wish to recover the posterior weights of these.
+Bayesian model averaging (BMA) refers to situation where we specify a mixture of models $M_1, \ldots,$, and we wish to recover the posterior weights of each model.
 
 This is useful for predictions (ensemble) methods to account for uncertainty in variable selection.
 
-We consider design of MCMC for moving between models.
 
 ## Reversible jump MCMC
 
@@ -706,39 +737,39 @@ Reversible jump requires **dimension-balancing**  and defining different types o
 
 Dimensions changes are integrated in the Metropolis--Hastings step through a Jacobian term $J$: the probability of rejection $R$ for Metropolis becomes
 \begin{align*}
-    R = J\frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
+    R = J\frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star}  \mid \boldsymbol{y})}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
 \end{align*}
 
 In regression models, we will consider moves that adds or removes one parameter/regressor at a time.
 
 ## Setup
 
-We consider models $M_1, \ldots, M_m$ with for simplicity $p(M_i)=1$ for all models that include an intercept.
+We consider models $M_1, \ldots, M_m$; for simplicity $p(M_i)=1$ and all models include an intercept.
 
 We write $|M|$ for the cardinality of the set of non-zero coefficients $\boldsymbol{\beta}$ in model $M.$
 
-Define $\mathbf{X}^{(m)}$ and $\boldsymbol{\beta}^{(m)}$ as the model matrix and the associated vector of non-zero coefficients associated with model $M_m$
+Define $\mathbf{X}^{(m)}$ and $\boldsymbol{\beta}^{(m)}$ as the model matrix and the associated vector of non-zero coefficients associated with model $M_m.$
 
 ## Setup for regression 
 \begin{align*}
 \boldsymbol{Y} \mid M_m, \boldsymbol{\beta}, \sim \mathsf{Gauss}(\mathbf{X}^{(m)}\boldsymbol{\beta}^{(m)}, \sigma^2 \mathbf{I}_n).
 \end{align*}
 
-We assign a Gaussian prior on $\boldsymbol{\beta}^{(m)} \mid M_m,$ is assigned a Gaussian prior, etc.
+We assign a priors as usual, e.g. a Gaussian prior on $\boldsymbol{\beta}^{(m)} \mid M_m.$
 
 ## Conditional Bayes factor
 
 
-Write $\boldsymbol{\theta}$ for all parameters other than the response, model and vector of coefficients.
+Write $\boldsymbol{\theta}$ for all parameters other than the response $\boldsymbol{Y}$, model $M_i$ and vector of coefficients $\boldsymbol{\beta}$.
 
-We can consider a joint update of the regression parameters $\boldsymbol{\beta}, M$ by sampling from their joint distribution via $$p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) p(M \mid \boldsymbol{\theta}).$$ The update for $p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta})$ is as usual.
+We can consider a joint update of the regression parameters $(\boldsymbol{\beta}, M)$ by sampling from their joint distribution via $$p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) p(M \mid \boldsymbol{\theta}).$$ The update for $p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta})$ is as usual.
 
 ## Update for model
 
 The conditional Bayes factor
 \begin{align*}
  p(M \mid \boldsymbol{Y}, \boldsymbol{\theta}) &\stackrel{M}{\propto} p(M) p(\boldsymbol{Y} \mid M, \boldsymbol{\theta})
- \\&= p(M) \int_{\mathbb{R}^{\mathbb{|M|}}}p(\boldsymbol{Y} \mid M, \boldsymbol{\beta},\boldsymbol{\theta}) p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) d \boldsymbol{\beta}
+ \\&= p(M) \int_{\mathbb{R}^{\mathbb{|M|}}}p(\boldsymbol{Y} \mid M, \boldsymbol{\beta},\boldsymbol{\theta}) p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\beta}.
 \end{align*}
 
 ## Marginalization
@@ -747,7 +778,7 @@ We can  thus marginalize over $\boldsymbol{\beta}$ to get
 \begin{align*}
 p(\boldsymbol{M} \mid \boldsymbol{Y}, \boldsymbol{\theta}) \propto p(M) |\boldsymbol{Q}_{\boldsymbol{\beta}}|^{-1/2}\exp\left( \frac{1}{2} \boldsymbol{\mu}_{\boldsymbol{\beta}}^\top\boldsymbol{Q}_{\boldsymbol{\beta}} \boldsymbol{\mu}_{\boldsymbol{\beta}}\right)
 \end{align*}
-where $\boldsymbol{\mu}_{\boldsymbol{\beta}}$ and $\boldsymbol{Q}_{\boldsymbol{\beta}}$ are the mean and precision of $p(\boldsymbol{\beta} \mid \boldsymbol{Y}, M, \boldsymbol{\theta}).$
+where $\boldsymbol{\mu}_{\boldsymbol{\beta}}$ and $\boldsymbol{Q}_{\boldsymbol{\beta}}$ are the mean and precision of $$p(\boldsymbol{\beta} \mid \boldsymbol{Y}, M, \boldsymbol{\theta}).$$
 
 ## Moves for variable selection
 
@@ -761,16 +792,70 @@ Only the last type of move preserves the dimension.
 
 ## Jacobians for reversible jump
 
-For most moves, the Jacobian is unity $(J=1),$ except in four cases where the dimension $|M| \in\{1, 2, k_{\max}-1, k_{\max}\}$ and
 
-- $J=2/3$ if $|M|=1$ and we try to add a covariate, or if $|M|=k_{\max}$ and we try to remove a covariate.
-- $J=3/2$ if $|M|=2$ and we try to remove a covariate, or if $|M|=k_{\max}-1$ and we try to add the last covariate.
+
+For most moves, the Jacobian $J=1$, except in four cases where the dimension $|M| \in\{1, 2, k_{\max}-1, k_{\max}\}$ and
+
+::: {style="font-size: 90%;"}
+
+- $J=2/3$ if $|M|=1$ and we try to add a covariate,
+- $J=2/3$ if $|M|=k_{\max}$ and we try to remove a covariate,
+- $J=3/2$ if $|M|=2$ and we try to remove a covariate,
+- $J=3/2$ if $|M|=k_{\max}-1$ and we try to add the last covariate.
+
+:::
 
 ## Posterior weights
 
 We can keep track of which variables are active at each iteration of the MCMC and obtain the marginal posterior probability of inclusion through sample proportions.
 
-This methods that explores neighbouring models (Grey code) only works with a limited number of covariates $p < 25.$
+This methods
+
+- explores neighbouring models (Grey code) 
+- works only  with a limited number of covariates, say $p < 25.$
+
+## Learning objectives
+
+Students should be able to
+
+- implement the Bayesian linear model
+- distinguish between global and local shrinkage priors
+- use methods for variable selection via dedicated software implementations
+
+## Summary (1/3)
+
+::: {style="font-size: 80%;"}
+
+- Most software implementations will work with scaled regressors 
+    - Gaussian models are closed under linear transformations
+- Conjugate priors allow for Gibbs sampling (extension of the Gaussian-inverse gamma model)
+- In more complex hierarchical models, we may need to specificy covariance structures
+    - conjugate Wishart priors are not recommended
+    - non-conjugate priors can be easily dealt with in modern applications
+    - better to provide separate priors for individual scales and correlation
+
+:::
+
+## Summary (2/3)
+
+Variable selection in Bayesian models is different from frequentist
+
+Many classical methods provide global shrinkage:
+
+- Ridge regression arises naturally from conjugate priors (but scaling is fixed or assigned a prior)
+- The Bayesian LASSO model only shrinks coefficients towards zero)
+
+Other models provide local shrinkage
+
+- Examples include the horseshoe prior
+
+## Summary (3/3)
+
+Variable selection comes from prior probabilities of covariates not being included:
+
+- assign probabilities to specific models with only subset of covariates (Bayesian model averaging)
+- use priors with point masses at zero, which allows for posterior probability at zero (spike-and-slab)
+     - these have a discrete component, so are harder to fit.
 
 ## References
 

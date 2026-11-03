@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -156,12 +159,12 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile 
+Léo Belzile
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Oct 27, 2026</p>
+  <p class="date">Last compiled Tuesday Nov 3, 2026</p>
 </section>
 <section id="bayesian-regression" class="slide level2">
 <h2>Bayesian regression</h2>
@@ -188,7 +191,14 @@ Léo Belzile
 <p>In the ordinary linear regression model, observations are independent and homoscedastic and <span class="math display">\[\begin{align*}
 \boldsymbol{Y} \mid \mathbf{X}, \boldsymbol{\beta}, \omega \sim \mathsf{Gauss}_n(\beta_0\mathbf{1}_n + \mathbf{X}\boldsymbol{\beta}, \omega^{-1}\mathbf{I}_n).
 \end{align*}\]</span></p>
-<p>The intercept <span class="math inline">\(\beta_0\)</span> receives special treatment, is always included. It is typically assigned an improper prior <span class="math inline">\(p(\beta_0) \propto 1.\)</span></p>
+<div style="font-size: 80%;">
+<p>The intercept <span class="math inline">\(\beta_0\)</span> receives special treatment.</p>
+<ul>
+<li>Priors can be specified on standardized residuals</li>
+<li>Mean-centered regressors are orthogonal to the column of ones.</li>
+<li><span class="math inline">\(\beta_0\)</span> is typically assigned an improper prior <span class="math inline">\(p(\beta_0) \propto 1.\)</span></li>
+</ul>
+</div>
 </section>
 <section id="decomposition-of-quadratic-forms" class="slide level2">
 <h2>Decomposition of quadratic forms</h2>
@@ -196,15 +206,17 @@ Léo Belzile
 &amp; (\boldsymbol{x} - \boldsymbol{a})^\top \mathbf{A}(\boldsymbol{x} - \boldsymbol{a}) + (\boldsymbol{x} - \boldsymbol{b})^\top \mathbf{B}(\boldsymbol{x} - \boldsymbol{b}) \\
 &amp;\stackrel{\boldsymbol{x}}{\propto} (\boldsymbol{x} - \boldsymbol{c})^\top \mathbf{C}(\boldsymbol{x} - \boldsymbol{c})
 \end{align*}\]</span> where <span class="math inline">\(\mathbf{C} = \mathbf{A} + \mathbf{B}\)</span> and <span class="math inline">\(\boldsymbol{c}= \mathbf{C}^{-1}(\mathbf{A}\boldsymbol{a} + \mathbf{B}\boldsymbol{b})\)</span>.</p>
-<p>This is useful to complete the square in Gaussian-Gaussian models.</p>
+<div style="font-size: 80%;">
+<p><em>Useful for Gaussian regression models with Gaussian priors on regression coefficients.</em></p>
+</div>
 </section>
 <section id="bayesian-gaussian-linear-model" class="slide level2">
 <h2>Bayesian Gaussian linear model</h2>
 <p>Consider Gaussian-gamma <strong>conjugate</strong> priors for the mean and precision parameters <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\omega\)</span>, <span class="math display">\[\begin{align*}
-\boldsymbol{\beta} \mid \omega &amp;\sim \mathsf{Gauss}\left\{\boldsymbol{\mu}_0, (
+\boldsymbol{\beta} \mid \omega &amp;\sim \mathsf{Gauss}_p\left\{\boldsymbol{\mu}_0, (
 \omega\boldsymbol{\Omega}_0)^{-1}\right\} \\
 \omega &amp;\sim \mathsf{gamma}(\nu_0/2,\tau_0/2).
-\end{align*}\]</span> Recall the sampling distribution of the ordinary least squares estimator is <span class="math display">\[\widehat{\boldsymbol{\beta}} \sim \mathsf{Gauss}_p\{\boldsymbol{\beta}, (\omega\mathbf{X}^\top\mathbf{X})^{-1}\}.\]</span></p>
+\end{align*}\]</span></p>
 </section>
 <section id="conditional-distributions" class="slide level2">
 <h2>Conditional distributions</h2>
@@ -219,7 +231,8 @@ Léo Belzile
 <section id="posterior-parameters" class="slide level2 smaller">
 <h2>Posterior parameters</h2>
 <ul>
-<li>The precision is the sum of the precision of OLS estimator and prior precision. - The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision <span class="math display">\[\begin{align*}
+<li>The precision is the sum of the precision of OLS estimator and prior precision.</li>
+<li>The posterior mean is a weighted combination of the prior and OLS means, weighted by the scaled precision <span class="math display">\[\begin{align*}
 \boldsymbol{\Omega}_n &amp;= \mathbf{X}^\top\mathbf{X} + \boldsymbol{\Omega}_0\\
 \boldsymbol{\mu}_n &amp;= \boldsymbol{\Omega}_n^{-1}(\mathbf{X}^\top\mathbf{X}\widehat{\boldsymbol{\beta}} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0) = \boldsymbol{\Omega}_n^{-1}(\mathbf{X}^\top\boldsymbol{y} + \boldsymbol{\Omega}_0\boldsymbol{\mu}_0)\\
 \tau_n &amp;= \tau_0 + (\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})^\top(\boldsymbol{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})
@@ -227,19 +240,11 @@ Léo Belzile
 \end{align*}\]</span></li>
 </ul>
 </section>
-<section id="scale-mixture-of-gaussians" class="slide level2">
-<h2>Scale mixture of Gaussians</h2>
-<p>If <span class="math inline">\(X \mid \sigma^2 \sim \mathsf{Gauss}(0, \sigma^2)\)</span> and we assign a prior <span class="math inline">\(p(\sigma^2)\)</span></p>
-<ul>
-<li>if <span class="math inline">\(\sigma^2 \sim \mathsf{inv. gamma}(\nu/2, \nu/2)\)</span>, then <span class="math inline">\(X \sim \mathsf{Student}(0,1, \nu)\)</span></li>
-<li>if <span class="math inline">\(\sigma^2 \sim \mathsf{exp}(1/\lambda^2),\)</span> then <span class="math inline">\(X \sim \mathsf{Laplace}(0, \lambda).\)</span></li>
-</ul>
-</section>
 <section id="sketch-of-proof" class="slide level2">
 <h2>Sketch of proof</h2>
 <ol type="1">
 <li>write down the joint posterior as <span class="math display">\[\begin{align*}
-p(\boldsymbol{\beta}, \omega \mid \boldsymbol{y}) &amp;\propto p(\boldsymbol{y} \mid \boldsymbol{\beta}, \omega) p(\omega)
+p(\boldsymbol{\beta}, \omega \mid \boldsymbol{y}) &amp;\propto p(\boldsymbol{y} \mid \boldsymbol{\beta}, \omega) p(\boldsymbol{\beta} \mid \omega) p(\omega)
 \end{align*}\]</span></li>
 <li>rewrite the first quadratic form in <span class="math inline">\(\boldsymbol{y}-\mathbf{X}\boldsymbol{\beta}\)</span> using the orthogonal decomposition <span class="math display">\[\begin{align*}
 (\boldsymbol{y}-\mathbf{X}\widehat{\boldsymbol{\beta}}) + (\mathbf{X}\widehat{\boldsymbol{\beta}} - \mathbf{X}\boldsymbol{\beta})
@@ -254,9 +259,18 @@ p(\boldsymbol{\beta}, \omega \mid \boldsymbol{y}) &amp;\propto p(\boldsymbol{y} 
 <li>the marginal of <span class="math inline">\(\boldsymbol{\beta}\)</span> is obtained by regrouping all terms that depend on <span class="math inline">\(\omega\)</span> and integrating over the latter, recognizing the integral as an unnormalized gamma density</li>
 </ol>
 </section>
+<section id="scale-mixture-of-gaussians" class="slide level2">
+<h2>Scale mixture of Gaussians</h2>
+<p>If <span class="math inline">\(X \mid \sigma^2 \sim \mathsf{Gauss}(0, \sigma^2)\)</span> and we assign a prior <span class="math inline">\(p(\sigma^2)\)</span></p>
+<ul>
+<li>if <span class="math inline">\(\sigma^2 \sim \mathsf{inv. gamma}(\nu/2, \nu/2)\)</span>, then <span class="math inline">\(X \sim \mathsf{Student}(0,1, \nu)\)</span></li>
+<li>if <span class="math inline">\(\sigma^2 \sim \mathsf{exp}(1/\lambda^2),\)</span> then <span class="math inline">\(X \sim \mathsf{Laplace}(0, \lambda).\)</span></li>
+</ul>
+</section>
 <section id="cultural-appropriation" class="slide level2">
 <h2>Cultural appropriation</h2>
-<p>Study 4 of <span class="citation" data-cites="Lin.Kim.Uduehi.Keinan:2024">Lin et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span> is a 3 by 2 by 2 three-way between-subject ANOVA focusing on cultural appropriation using a fictional scenario on publication of a soul food recipe cookbook from Chef Dax.</p>
+<p>We consider Study 4 of <span class="citation" data-cites="Lin.Kim.Uduehi.Keinan:2024">Lin et al. (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span> on cultural appropriation using a fictional scenario on publication of a soul food recipe cookbook from Chef Dax.</p>
+<p>The model is <span class="math inline">\(3 \times 2 \times 2\)</span> three-way between-subject ANOVA.</p>
 </section>
 <section id="experimental-variables" class="slide level2">
 <h2>Experimental variables</h2>
@@ -297,7 +311,7 @@ Figure&nbsp;1: Difference in appropriation rating for black vs non-black Chef Da
 </section>
 <section id="wishart-distribution" class="slide level2">
 <h2>Wishart distribution</h2>
-<p>We say <span class="math inline">\(\mathbf{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})\)</span> for <span class="math inline">\(\nu&gt;0\)</span> degrees of freedom and scale <span class="math inline">\(\mathbf{S}\)</span> if it’s density is proportional to <span class="math display">\[\begin{align*}
+<p>We say <span class="math inline">\(\mathbf{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})\)</span> for <span class="math inline">\(\nu&gt;0\)</span> degrees of freedom and scale <span class="math inline">\(\mathbf{S}\)</span> if its density is proportional to <span class="math display">\[\begin{align*}
 f(\boldsymbol{Q}) \stackrel{\boldsymbol{Q}}{\propto} |\boldsymbol{Q}|^{(\nu-p-1)/2}\exp\left\{-\frac{\mathrm{tr}(\mathbf{S}^{-1}\boldsymbol{Q})}{2}\right\}, \quad \nu &gt; p-1.
 \end{align*}\]</span> where <span class="math inline">\(|\cdot|\)</span> denotes the determinant of the matrix and <span class="math inline">\(\mathrm{tr}(\cdot)\)</span> the trace operator.</p>
 </section>
@@ -379,13 +393,14 @@ Figure&nbsp;2: Prior draws from a bivariate inverse Wishart with identity scale 
 <p>Set independent and identically distributed conjugate prior for <span class="math inline">\(\gamma_j \sim \mathsf{binom}(1, \omega),\)</span> whence <span class="math display">\[\begin{align*}
 p(\boldsymbol{\gamma} \mid \omega) = \prod_{j=1}^n \omega^{\gamma_j} (1-\omega)^{1-\gamma_j}
 \end{align*}\]</span></p>
-<p>Apriori, we set <span class="math inline">\(\omega \in (0,1)\)</span> as the proportion of the <span class="math inline">\(p\)</span> coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span> that are zero (so <span class="math inline">\(p(1-\omega)\)</span> nonzero coefficients).</p>
+<p>Apriori, we set <span class="math inline">\(\omega \in (0,1)\)</span> as the proportion of the <span class="math inline">\(p\)</span> coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span> that are zero</p>
+<p>-<span class="math inline">\(p(1-\omega)\)</span> nonzero coefficients.</p>
 </section>
 <section id="continuous-spike-and-slab-prior" class="slide level2">
 <h2>Continuous spike-and-slab prior</h2>
 <p><span class="citation" data-cites="George.McCulloch:1993">George &amp; McCulloch (<a href="#/references" role="doc-biblioref" onclick="">1993</a>)</span> replaced the spike by a Gaussian with near infinite precision around zero, with <span class="math display">\[\begin{align*}
 \beta_j \mid \gamma_j, \sigma_j^2,\phi^2_j \sim  \gamma_j \mathsf{Gauss}(0, \sigma_j^2\phi^2) + (1-\gamma_j) \mathsf{Gauss}(0, \sigma^2_j)
-\end{align*}\]</span> where <span class="math inline">\(\phi^2_j\)</span> is very nearly zero, typically <span class="math inline">\(\phi_j^2=0.001\)</span>.</p>
+\end{align*}\]</span> where constant <span class="math inline">\(\phi^2_j\)</span> is nearly zero, typically <span class="math inline">\(\phi_j^2=0.001\)</span>.</p>
 <p>The construction allows for variable augmentation with mixture indicators and Gibbs sampling, although mixing tends to be poor.</p>
 </section>
 <section id="horseshoe-prior" class="slide level2">
@@ -421,18 +436,28 @@ Figure&nbsp;4: Marginal density for a regression coefficient <span class="math i
 <h2>Finnish horseshoe (aka regularized horseshoe)</h2>
 <p><span class="citation" data-cites="Piironen.Vehtari:2017">Piironen &amp; Vehtari (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> proposed instead <span class="math display">\[\begin{align*}
 \beta_j \mid \lambda, \tau_j, c^2 &amp;\sim \mathsf{Gauss}\left(0, \lambda\frac{c^2\tau_j^2}{c^2 + \tau^2_j\lambda^2}\right), \\
-\tau_j &amp;\sim \mathsf{Student}_{+}(0, 1, 1)\\
-c^2 \mid s^2, \nu &amp;\sim \mathsf{inv. gamma}(\nu/2, \nu s^2/2).
+c^2 \mid s^2, \nu &amp;\sim \mathsf{inv. gamma}(\nu/2, \nu s^2/2)\\
+\tau_j &amp;\sim \mathsf{Student}_{+}(0, 1, 1)
 \end{align*}\]</span></p>
-</section>
-<section id="shrinkage-for-finnish-horsshoe" class="slide level2">
-<h2>Shrinkage for Finnish horsshoe</h2>
-<p>When <span class="math inline">\(\tau^2\lambda^2_j\)</span> is much greater than <span class="math inline">\(c^2\)</span>, this amounts to having a Student slab with <span class="math inline">\(\nu\)</span> degrees of freedom for large coefficients.</p>
-<p>Taking a small value of <span class="math inline">\(\nu\)</span> allows for large, but not extreme components, and the authors use <span class="math inline">\(s^2=2, \nu=4.\)</span></p>
+<div style="font-size: 65%;">
+<ul>
+<li>When <span class="math inline">\(\tau^2\lambda^2_j \gg c^2\)</span>, this amounts to having a Student slab with <span class="math inline">\(\nu\)</span> degrees of freedom for large coefficients.</li>
+<li>Taking a small value of <span class="math inline">\(\nu\)</span> allows for large, but not extreme components, and the authors use <span class="math inline">\(s^2=2, \nu=4.\)</span></li>
+</ul>
+</div>
 </section>
 <section id="hyperprior-for-finnish-horseshoe" class="slide level2">
 <h2>Hyperprior for Finnish horseshoe</h2>
-<p>The above specification does not specify the prior for the global scale <span class="math inline">\(\lambda\)</span>, for which <span class="citation" data-cites="Piironen.Vehtari:2017">Piironen &amp; Vehtari (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> recommend <span class="math display">\[\lambda \sim \mathsf{Student}_{+}\left\{0, \frac{p_0}{(p-p_0)}\frac{\sigma}{n^{1/2}}, 1\right\},\]</span> where <span class="math inline">\(p_0\)</span> is a prior guess for the number of non-zero components out of <span class="math inline">\(p,\)</span> <span class="math inline">\(n\)</span> is the sample size and <span class="math inline">\(\sigma\)</span> is some level of the noise.</p>
+<div style="font-size: 90%;">
+<p>The above specification does not specify the prior for the global scale <span class="math inline">\(\lambda\)</span>, for which <span class="citation" data-cites="Piironen.Vehtari:2017">Piironen &amp; Vehtari (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> recommend <span class="math display">\[\lambda \sim \mathsf{Student}_{+}\left\{0, \frac{p_0}{(p-p_0)}\frac{\sigma}{n^{1/2}}, 1\right\},\]</span> where</p>
+</div>
+<div style="font-size: 65%;">
+<ul>
+<li><span class="math inline">\(p_0\)</span> is a prior guess for the number of non-zero components out of <span class="math inline">\(p,\)</span></li>
+<li><span class="math inline">\(n\)</span> is the sample size and</li>
+<li><span class="math inline">\(\sigma\)</span> is some level of the noise.</li>
+</ul>
+</div>
 </section>
 <section id="comparison-of-shrinkage-priors-1" class="slide level2">
 <h2>Comparison of shrinkage priors</h2>
@@ -455,14 +480,13 @@ Figure&nbsp;5: Density estimates for regression coefficients with Gaussian (ridg
 <ul>
 <li>Ridge has the widest intervals of all methods, providing some shrinkage only for large values of <span class="math inline">\(\beta\)</span>.</li>
 <li>The horseshoe has typically narrower intervals, with more mass in a neighborhood of zero for smaller coefficients, and asymmetric intervals.</li>
-<li>The effective sample size fraction relative to the number of samples ranges from 14% to 84%, compared to 56% to 100% for the Bayesian LASSO and near-independent draws with the conjugate ridge.</li>
+<li>The ratio <span class="math inline">\(\mathsf{ESS}/B\)</span> ranges from 16% to 97% (horseshoe), compared to 47% to 99% for the Bayesian LASSO and near-independent draws with the conjugate ridge.</li>
 </ul>
 </section>
 <section id="bayesian-model-averaging" class="slide level2">
 <h2>Bayesian model averaging</h2>
-<p>BMA refers to situation where we specify a mixture of models <span class="math inline">\(M_1, \ldots,\)</span>, and we wish to recover the posterior weights of these.</p>
+<p>Bayesian model averaging (BMA) refers to situation where we specify a mixture of models <span class="math inline">\(M_1, \ldots,\)</span>, and we wish to recover the posterior weights of each model.</p>
 <p>This is useful for predictions (ensemble) methods to account for uncertainty in variable selection.</p>
-<p>We consider design of MCMC for moving between models.</p>
 </section>
 <section id="reversible-jump-mcmc" class="slide level2">
 <h2>Reversible jump MCMC</h2>
@@ -473,40 +497,40 @@ Figure&nbsp;5: Density estimates for regression coefficients with Gaussian (ridg
 <section id="dimension-changes-and-jacobians" class="slide level2">
 <h2>Dimension changes and jacobians</h2>
 <p>Dimensions changes are integrated in the Metropolis–Hastings step through a Jacobian term <span class="math inline">\(J\)</span>: the probability of rejection <span class="math inline">\(R\)</span> for Metropolis becomes <span class="math display">\[\begin{align*}
-    R = J\frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star} )}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
+    R = J\frac{p(\boldsymbol{\theta}_t^{\star})}{p(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{y})}\frac{q(\boldsymbol{\theta}_{t-1} \mid \boldsymbol{\theta}_t^{\star}  \mid \boldsymbol{y})}{q(\boldsymbol{\theta}_t^{\star} \mid \boldsymbol{\theta}_{t-1})}
 \end{align*}\]</span></p>
 <p>In regression models, we will consider moves that adds or removes one parameter/regressor at a time.</p>
 </section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
-<p>We consider models <span class="math inline">\(M_1, \ldots, M_m\)</span> with for simplicity <span class="math inline">\(p(M_i)=1\)</span> for all models that include an intercept.</p>
+<p>We consider models <span class="math inline">\(M_1, \ldots, M_m\)</span>; for simplicity <span class="math inline">\(p(M_i)=1\)</span> and all models include an intercept.</p>
 <p>We write <span class="math inline">\(|M|\)</span> for the cardinality of the set of non-zero coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span> in model <span class="math inline">\(M.\)</span></p>
-<p>Define <span class="math inline">\(\mathbf{X}^{(m)}\)</span> and <span class="math inline">\(\boldsymbol{\beta}^{(m)}\)</span> as the model matrix and the associated vector of non-zero coefficients associated with model <span class="math inline">\(M_m\)</span></p>
+<p>Define <span class="math inline">\(\mathbf{X}^{(m)}\)</span> and <span class="math inline">\(\boldsymbol{\beta}^{(m)}\)</span> as the model matrix and the associated vector of non-zero coefficients associated with model <span class="math inline">\(M_m.\)</span></p>
 </section>
 <section id="setup-for-regression" class="slide level2">
 <h2>Setup for regression</h2>
 <p><span class="math display">\[\begin{align*}
 \boldsymbol{Y} \mid M_m, \boldsymbol{\beta}, \sim \mathsf{Gauss}(\mathbf{X}^{(m)}\boldsymbol{\beta}^{(m)}, \sigma^2 \mathbf{I}_n).
 \end{align*}\]</span></p>
-<p>We assign a Gaussian prior on <span class="math inline">\(\boldsymbol{\beta}^{(m)} \mid M_m,\)</span> is assigned a Gaussian prior, etc.</p>
+<p>We assign a priors as usual, e.g.&nbsp;a Gaussian prior on <span class="math inline">\(\boldsymbol{\beta}^{(m)} \mid M_m.\)</span></p>
 </section>
 <section id="conditional-bayes-factor" class="slide level2">
 <h2>Conditional Bayes factor</h2>
-<p>Write <span class="math inline">\(\boldsymbol{\theta}\)</span> for all parameters other than the response, model and vector of coefficients.</p>
-<p>We can consider a joint update of the regression parameters <span class="math inline">\(\boldsymbol{\beta}, M\)</span> by sampling from their joint distribution via <span class="math display">\[p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) p(M \mid \boldsymbol{\theta}).\]</span> The update for <span class="math inline">\(p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta})\)</span> is as usual.</p>
+<p>Write <span class="math inline">\(\boldsymbol{\theta}\)</span> for all parameters other than the response <span class="math inline">\(\boldsymbol{Y}\)</span>, model <span class="math inline">\(M_i\)</span> and vector of coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
+<p>We can consider a joint update of the regression parameters <span class="math inline">\((\boldsymbol{\beta}, M)\)</span> by sampling from their joint distribution via <span class="math display">\[p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) p(M \mid \boldsymbol{\theta}).\]</span> The update for <span class="math inline">\(p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta})\)</span> is as usual.</p>
 </section>
 <section id="update-for-model" class="slide level2">
 <h2>Update for model</h2>
 <p>The conditional Bayes factor <span class="math display">\[\begin{align*}
 p(M \mid \boldsymbol{Y}, \boldsymbol{\theta}) &amp;\stackrel{M}{\propto} p(M) p(\boldsymbol{Y} \mid M, \boldsymbol{\theta})
-\\&amp;= p(M) \int_{\mathbb{R}^{\mathbb{|M|}}}p(\boldsymbol{Y} \mid M, \boldsymbol{\beta},\boldsymbol{\theta}) p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) d \boldsymbol{\beta}
+\\&amp;= p(M) \int_{\mathbb{R}^{\mathbb{|M|}}}p(\boldsymbol{Y} \mid M, \boldsymbol{\beta},\boldsymbol{\theta}) p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\beta}.
 \end{align*}\]</span></p>
 </section>
 <section id="marginalization" class="slide level2">
 <h2>Marginalization</h2>
 <p>We can thus marginalize over <span class="math inline">\(\boldsymbol{\beta}\)</span> to get <span class="math display">\[\begin{align*}
 p(\boldsymbol{M} \mid \boldsymbol{Y}, \boldsymbol{\theta}) \propto p(M) |\boldsymbol{Q}_{\boldsymbol{\beta}}|^{-1/2}\exp\left( \frac{1}{2} \boldsymbol{\mu}_{\boldsymbol{\beta}}^\top\boldsymbol{Q}_{\boldsymbol{\beta}} \boldsymbol{\mu}_{\boldsymbol{\beta}}\right)
-\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{\mu}_{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\boldsymbol{Q}_{\boldsymbol{\beta}}\)</span> are the mean and precision of <span class="math inline">\(p(\boldsymbol{\beta} \mid \boldsymbol{Y}, M, \boldsymbol{\theta}).\)</span></p>
+\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{\mu}_{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\boldsymbol{Q}_{\boldsymbol{\beta}}\)</span> are the mean and precision of <span class="math display">\[p(\boldsymbol{\beta} \mid \boldsymbol{Y}, M, \boldsymbol{\theta}).\]</span></p>
 </section>
 <section id="moves-for-variable-selection" class="slide level2">
 <h2>Moves for variable selection</h2>
@@ -520,16 +544,75 @@ p(\boldsymbol{M} \mid \boldsymbol{Y}, \boldsymbol{\theta}) \propto p(M) |\boldsy
 </section>
 <section id="jacobians-for-reversible-jump" class="slide level2">
 <h2>Jacobians for reversible jump</h2>
-<p>For most moves, the Jacobian is unity <span class="math inline">\((J=1),\)</span> except in four cases where the dimension <span class="math inline">\(|M| \in\{1, 2, k_{\max}-1, k_{\max}\}\)</span> and</p>
+<p>For most moves, the Jacobian <span class="math inline">\(J=1\)</span>, except in four cases where the dimension <span class="math inline">\(|M| \in\{1, 2, k_{\max}-1, k_{\max}\}\)</span> and</p>
+<div style="font-size: 90%;">
 <ul>
-<li><span class="math inline">\(J=2/3\)</span> if <span class="math inline">\(|M|=1\)</span> and we try to add a covariate, or if <span class="math inline">\(|M|=k_{\max}\)</span> and we try to remove a covariate.</li>
-<li><span class="math inline">\(J=3/2\)</span> if <span class="math inline">\(|M|=2\)</span> and we try to remove a covariate, or if <span class="math inline">\(|M|=k_{\max}-1\)</span> and we try to add the last covariate.</li>
+<li><span class="math inline">\(J=2/3\)</span> if <span class="math inline">\(|M|=1\)</span> and we try to add a covariate,</li>
+<li><span class="math inline">\(J=2/3\)</span> if <span class="math inline">\(|M|=k_{\max}\)</span> and we try to remove a covariate,</li>
+<li><span class="math inline">\(J=3/2\)</span> if <span class="math inline">\(|M|=2\)</span> and we try to remove a covariate,</li>
+<li><span class="math inline">\(J=3/2\)</span> if <span class="math inline">\(|M|=k_{\max}-1\)</span> and we try to add the last covariate.</li>
 </ul>
+</div>
 </section>
 <section id="posterior-weights" class="slide level2">
 <h2>Posterior weights</h2>
 <p>We can keep track of which variables are active at each iteration of the MCMC and obtain the marginal posterior probability of inclusion through sample proportions.</p>
-<p>This methods that explores neighbouring models (Grey code) only works with a limited number of covariates <span class="math inline">\(p &lt; 25.\)</span></p>
+<p>This methods</p>
+<ul>
+<li>explores neighbouring models (Grey code)</li>
+<li>works only with a limited number of covariates, say <span class="math inline">\(p &lt; 25.\)</span></li>
+</ul>
+</section>
+<section id="learning-objectives" class="slide level2">
+<h2>Learning objectives</h2>
+<p>Students should be able to</p>
+<ul>
+<li>implement the Bayesian linear model</li>
+<li>distinguish between global and local shrinkage priors</li>
+<li>use methods for variable selection via dedicated software implementations</li>
+</ul>
+</section>
+<section id="summary-13" class="slide level2">
+<h2>Summary (1/3)</h2>
+<div style="font-size: 80%;">
+<ul>
+<li>Most software implementations will work with scaled regressors
+<ul>
+<li>Gaussian models are closed under linear transformations</li>
+</ul></li>
+<li>Conjugate priors allow for Gibbs sampling (extension of the Gaussian-inverse gamma model)</li>
+<li>In more complex hierarchical models, we may need to specificy covariance structures
+<ul>
+<li>conjugate Wishart priors are not recommended</li>
+<li>non-conjugate priors can be easily dealt with in modern applications</li>
+<li>better to provide separate priors for individual scales and correlation</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="summary-23" class="slide level2">
+<h2>Summary (2/3)</h2>
+<p>Variable selection in Bayesian models is different from frequentist</p>
+<p>Many classical methods provide global shrinkage:</p>
+<ul>
+<li>Ridge regression arises naturally from conjugate priors (but scaling is fixed or assigned a prior)</li>
+<li>The Bayesian LASSO model only shrinks coefficients towards zero)</li>
+</ul>
+<p>Other models provide local shrinkage</p>
+<ul>
+<li>Examples include the horseshoe prior</li>
+</ul>
+</section>
+<section id="summary-33" class="slide level2">
+<h2>Summary (3/3)</h2>
+<p>Variable selection comes from prior probabilities of covariates not being included:</p>
+<ul>
+<li>assign probabilities to specific models with only subset of covariates (Bayesian model averaging)</li>
+<li>use priors with point masses at zero, which allows for posterior probability at zero (spike-and-slab)
+<ul>
+<li>these have a discrete component, so are harder to fit.</li>
+</ul></li>
+</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
@@ -758,7 +841,7 @@ Piironen, J., &amp; Vehtari, A. (2017). Sparsity information and regularization 
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
