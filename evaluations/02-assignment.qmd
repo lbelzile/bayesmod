@@ -30,8 +30,37 @@ The data set [`efl`](/files/data/efl.csv) contains the results of football (socc
 
 
 
-1. Specify penalized complexity priors [@Simpson:2017] for the scales $\sigma_\alpha$ and $\sigma^2_\beta$ such that they have a probability of 10% of exceeding 1.
+1. Specify penalized complexity priors [@Simpson:2017] for the scales $\sigma_\alpha$ and $\sigma_\beta$ such that they have a probability of 10% of exceeding 1.
 2. @DAngelo.Canale:2023 consider efficient proposals for Metropolis-Hastings step for Poisson regression models with Gaussian priors on the coefficients, building on a data augmentation scheme of @Polson.Scott.Windle:2013. Implement their MCMC algorithm [section 2] with their proposed tuning parameter scheme and check the correctness of your sampler.
+
+*This section describes the corrected algorithm of @DAngelo.Canale:2023, whose original version is riddled with typos (some also remain after correction).*
+
+The paper proposes a Gaussian proposal distribution when the likelihood
+\begin{align*}
+Y_i \mid \boldsymbol{\beta} &\stackrel{\text{ind}}{\sim} \mathsf{Poisson}\{\exp(\mathbf{X}_i\boldsymbol{\beta})\}\\
+\boldsymbol{\beta} &\sim \mathsf{Gauss}_p(\mathbf{b}, \mathbf{B}).
+\end{align*}
+In the problem set, $\mathbf{B}$ is a diagonal matrix and $\mathbf{b}=\mathbf{0}_p.$
+
+
+The transition kernel proposal density $q$ for $\boldsymbol{\beta}$ is a Gaussian. Let $\lambda_i(\boldsymbol{\beta}) = \exp(\mathbf{x}^\top_i\boldsymbol{\beta})$ denote the Poisson mean with predictor row vector $\mathbf{x}_i$. The proposals below are a function of tuning parameters $r_i$ $(i=1, \ldots, n)$ which are themselves deterministic functions of a single scalar tuning parameter $d$. The transition kernel is not symmetric in it's arguments, so must be evaluated at both the proposal vector $\boldsymbol{\beta}^{\star}$ and current value $\boldsymbol{\beta}^{(t-1)}$:
+
+Step 1: For given $d$ and $\lambda_i =\exp(\mathbf{x}^\top_i\boldsymbol{\beta})$, estimate the tuning parameters $\boldsymbol{r}$ as
+$$
+r_i = \frac{\lambda_i\{\lambda_i + \log(d+1)\}}{\lambda_i + \log(d+1) + \lambda_i \mathrm{W}_0\left[\frac{-(d+1)^{-1/\lambda_i}}{e^1\lambda_i}\{\lambda_i + \log(d+1)\}\right]}.
+$$
+Step 2: Compute 
+$$\omega_i=\frac{r_i+y_i}{2\{\log(\lambda_i) - \log(r_i)\}} \frac{\lambda_i - r_i}{\lambda_i+r_i}$$
+Step 3: Compute the transition kernel variance $\boldsymbol{\Sigma}_e = \left( \mathbf{X}^\top \mathrm{diag}(\boldsymbol{\omega})\mathbf{X} + \mathbf{B}^{-1}\right)^{-1}.$
+
+Step 4: Compute the proposal mean $\boldsymbol{\mu}_e$
+\begin{align*}
+\boldsymbol{\mu}_e & = \boldsymbol{\Sigma}_e \left(\mathbf{X}^\top\boldsymbol{\kappa} + \mathbf{B}^{-1}\mathbf{b}\right)\\
+\end{align*}
+where $\boldsymbol{\kappa} = (\kappa_1, \ldots, \kappa_n)^\top$ is an $n$-vector with $i$th element $\kappa_i = \omega_i \log(r_i) + (y_i-r_i)/2.$
+
+*To check the correctness, I encourage you to simulate fake data from a Poisson hierarchical model with fixed $\mathbf{b}$ and $\mathbf{B}$ and run the MCMC sampler on these.*
+
 3. Simulate posterior draws for this model applied to the EFL data. Run four Markov chains for 10K iterations.
 4. Plot the chains  (including the burn in period) for a handful of parameters. How many iterations does it take for the chains to stabilize, if at all?
 5. Using the output of your Markov chains, estimate 
