@@ -5301,7 +5301,7 @@
     "href": "slides/bayesmod-slides9.html#multivariate-taylor-series-expansion",
     "title": "Bayesian modelling",
     "section": "Multivariate Taylor series expansion",
-    "text": "Multivariate Taylor series expansion\nSimilarly, for \\(h(\\boldsymbol{x})\\) a smooth vector valued function with mode at \\(\\boldsymbol{x}_0 \\in \\mathbb{R}^p\\), we can write \\[\\begin{align*}\nh(\\boldsymbol{x}) &= h(\\boldsymbol{x}_0) + (\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h'(\\boldsymbol{x}_0) \\\\&+ \\frac{1}{2}(\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h''(\\boldsymbol{x}_0)(\\boldsymbol{x}- \\boldsymbol{x}_0) + R.\n\\end{align*}\\] Under regularity conditions, the mode \\(\\boldsymbol{x}_0\\) is such that \\(h'(\\boldsymbol{x}_0)=\\boldsymbol{0}_p.\\)"
+    "text": "Multivariate Taylor series expansion\nSimilarly, for \\(h(\\boldsymbol{x})\\) a smooth vector valued function with mode at \\(\\boldsymbol{x}_0 \\in \\mathbb{R}^p\\), we can write ::: {style=“font-size: 0.8em;”} \\[\\begin{align*}\nh(\\boldsymbol{x}) &= h(\\boldsymbol{x}_0) + (\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h'(\\boldsymbol{x}_0) \\\\&+ \\frac{1}{2}(\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h''(\\boldsymbol{x}_0)(\\boldsymbol{x}- \\boldsymbol{x}_0) + R.\n\\end{align*}\\] ::: Under regularity conditions, the mode \\(\\boldsymbol{x}_0\\) is such that \\(h'(\\boldsymbol{x}_0)=\\boldsymbol{0}_p.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides9.html#laplace-approximation",
@@ -5350,7 +5350,7 @@
     "href": "slides/bayesmod-slides9.html#marginal-likelihood-approximation-for-exponential-likelihood",
     "title": "Bayesian modelling",
     "section": "Marginal likelihood approximation for exponential likelihood",
-    "text": "Marginal likelihood approximation for exponential likelihood\nWe can also obtain an estimate of the marginal likelihood, which is equal for the conjugate model \\[\\begin{align*}\np(\\boldsymbol{y}) = \\frac{\\Gamma(n+a)}{\\Gamma(a)}\\frac{b^a}{\\left(b + \\sum_{i=1}^n y_i \\right)^{n+a}}.\n\\end{align*}\\]\nFor the sample of size \\(62,\\) the exponential model marginal likelihood is \\(-276.5.\\)"
+    "text": "Marginal likelihood approximation for exponential likelihood\nThe marginal likelihood for the conjugate model is \\[\\begin{align*}\np(\\boldsymbol{y}) = \\frac{\\Gamma(n+a)}{\\Gamma(a)}\\frac{b^a}{\\left(b + \\sum_{i=1}^n y_i \\right)^{n+a}}.\n\\end{align*}\\]\nFor the sample of size \\(62,\\) the exponential model marginal likelihood is \\(-276.5.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides9.html#numerical-approximation-to-marginal-likelihood",
@@ -5532,14 +5532,14 @@
     "href": "slides/bayesmod-slides9.html#note-on-approximation",
     "title": "Bayesian modelling",
     "section": "Note on approximation",
-    "text": "Note on approximation\nThe Laplace approximation \\(p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})\\) has kernel \\[p_{G}(\\boldsymbol{\\beta} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}) \\propto |\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})|^{1/2}\\exp\\{-(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})^\\top \\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})/2\\};\\] since it is evaluated at \\(\\widehat{\\boldsymbol{\\beta}},\\) we retrieve only the determinant of the negative Hessian of \\(p(\\boldsymbol{\\beta} \\mid \\boldsymbol{\\theta}, \\boldsymbol{y}),\\) namely \\(\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}}).\\) Note that the latter varies with \\(\\boldsymbol{\\theta}.\\)"
+    "text": "Note on approximation\n\nThe Laplace approximation \\(p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})\\) has kernel \\[p_{G}(\\boldsymbol{\\beta} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}) \\propto |\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})|^{1/2}\\exp\\{-(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})^\\top \\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})/2\\};\\] since it is evaluated at \\(\\widehat{\\boldsymbol{\\beta}},\\) we retrieve only the determinant of the negative Hessian of \\(p(\\boldsymbol{\\beta} \\mid \\boldsymbol{\\theta}, \\boldsymbol{y}),\\) namely \\(\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}}).\\) Note that the latter varies with \\(\\boldsymbol{\\theta}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides9.html#numerical-integration",
     "href": "slides/bayesmod-slides9.html#numerical-integration",
     "title": "Bayesian modelling",
     "section": "Numerical integration",
-    "text": "Numerical integration\nTo obtain \\(p(\\theta_i \\mid \\boldsymbol{y})\\), we then proceed with\n\nfinding the mode of \\(\\widetilde{p}(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) using a Newton’s method, approximating the gradient and Hessian via finite differences.\nCompute the negative Hessian at the mode to get an approximation to the covariance of \\(\\boldsymbol{\\theta}.\\) Use an eigendecomposition to get the principal directions \\(\\boldsymbol{z}\\)."
+    "text": "Numerical integration\nTo obtain \\(p(\\theta_i \\mid \\boldsymbol{y})\\):\n\nFind the mode of \\(\\widetilde{p}(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) using a Newton’s method, approximating the gradient and Hessian via finite differences.\nCompute the negative Hessian at the mode to get an approximation to the covariance of \\(\\boldsymbol{\\theta}.\\) Use an eigendecomposition to get the principal directions \\(\\boldsymbol{z}\\)."
   },
   {
     "objectID": "slides/bayesmod-slides9.html#numerical-integration-2",
@@ -5630,7 +5630,7 @@
     "href": "slides/bayesmod-slides9.html#marginal-summaries",
     "title": "Bayesian modelling",
     "section": "Marginal summaries",
-    "text": "Marginal summaries\n\n# Compute density, quantiles, etc. via inla.*marginal\n# Change of variable to get variance from precision\nmarg_var &lt;- INLA::inla.tmarginal(\n  fun = function(x) { 1 / x }, \n  marginal = marg_prec)\nINLA::inla.qmarginal(marg_var, p = c(0.025, 0.5,  0.975))\n\n[1] 0.2864911 0.4543033 0.7396786\n\n# Posterior marginal mean and variance of phi\nmom1 &lt;- INLA::inla.emarginal(\n    fun = function(x){x}, \n    marginal = marg_phi)\nmom2 &lt;- INLA::inla.emarginal(\n    fun = function(x){x^2}, \n    marginal = marg_phi)\nc(mean = mom1, sd = sqrt(mom2 - mom1^2))\n\n       mean          sd \n0.984052715 0.005762476"
+    "text": "Marginal summaries\n\n# Compute density, quantiles, etc. via inla.*marginal\n# Change of variable to get variance from precision\nmarg_var &lt;- INLA::inla.tmarginal(\n  fun = function(x) { 1 / x }, \n  marginal = marg_prec)\nINLA::inla.qmarginal(marg_var, p = c(0.025, 0.5,  0.975))\n\n[1] 0.2875418 0.4523687 0.7324296\n\n# Posterior marginal mean and variance of phi\nmom1 &lt;- INLA::inla.emarginal(\n    fun = function(x){x}, \n    marginal = marg_phi)\nmom2 &lt;- INLA::inla.emarginal(\n    fun = function(x){x^2}, \n    marginal = marg_phi)\nc(mean = mom1, sd = sqrt(mom2 - mom1^2))\n\n       mean          sd \n0.984094392 0.005665661"
   },
   {
     "objectID": "slides/bayesmod-slides9.html#tokyo-binomial-time-series",

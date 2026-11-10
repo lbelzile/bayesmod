@@ -71,10 +71,13 @@ where the remainder $R=\mathrm{O}\{(x-x_0)^3\}.$
 
 ## Multivariate Taylor series expansion
 
+
 Similarly, for $h(\boldsymbol{x})$ a smooth vector valued function with mode at $\boldsymbol{x}_0 \in \mathbb{R}^p$, we can write
+::: {style="font-size: 0.8em;"}
 \begin{align*}
  h(\boldsymbol{x}) &= h(\boldsymbol{x}_0) + (\boldsymbol{x}- \boldsymbol{x}_0)^\top h'(\boldsymbol{x}_0) \\&+ \frac{1}{2}(\boldsymbol{x}- \boldsymbol{x}_0)^\top h''(\boldsymbol{x}_0)(\boldsymbol{x}- \boldsymbol{x}_0) + R.
 \end{align*}
+:::
 Under regularity conditions, the mode $\boldsymbol{x}_0$ is such that $h'(\boldsymbol{x}_0)=\boldsymbol{0}_p.$
 
 ## Laplace approximation
@@ -129,7 +132,7 @@ Consider an exponential likelihood $Y_i \mid \lambda \sim \mathsf{expo}(\lambda)
 
 ## Marginal likelihood approximation for exponential likelihood
 
-We can also obtain an estimate of the marginal likelihood, which is equal for the conjugate model
+The marginal likelihood for the conjugate model is
 \begin{align*}
 p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}^n y_i \right)^{n+a}}.
 \end{align*}
@@ -426,16 +429,18 @@ This yields
 \end{align*}
 
 ## Note on approximation
-
+::: {style="font-size: 0.8em;"}
 The Laplace approximation $p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})$ has kernel $$p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}\exp\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})/2\};$$
 since it is evaluated at $\widehat{\boldsymbol{\beta}},$ we retrieve only the determinant of the negative Hessian of 
 $p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),$ namely $\mathbf{H}(\widehat{\boldsymbol{\beta}}).$ Note that the latter varies with $\boldsymbol{\theta}.$
 
+:::
+
 ## Numerical integration
 
-To obtain $p(\theta_i \mid \boldsymbol{y})$, we then proceed with
+To obtain $p(\theta_i \mid \boldsymbol{y})$:
 
-1. finding the mode of $\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y})$ using a Newton's method, approximating the gradient and Hessian via finite differences.
+1. Find the mode of $\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y})$ using a Newton's method, approximating the gradient and Hessian via finite differences.
 2. Compute the negative Hessian at the mode to get an approximation to the covariance of $\boldsymbol{\theta}.$ Use an eigendecomposition to get the principal directions $\boldsymbol{z}$.
 
 ## Numerical integration (2)
