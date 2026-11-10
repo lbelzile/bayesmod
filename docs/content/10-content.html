@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Variational inference – Bayesian modelling</title>
+<title>Deterministic approximations – Bayesian modelling</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -166,7 +166,7 @@ div.csl-indent {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><h1 class="title display-7">Variational inference</h1></header>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><h1 class="title display-7">Deterministic approximations</h1></header>
 
 <header id="title-block-header">
 
@@ -177,52 +177,49 @@ div.csl-indent {
 <section id="content" class="level2">
 <h2 class="anchored" data-anchor-id="content">Content</h2>
 <ul>
-<li>Kullback–Leibler divergence and evidence lower bound (ELBO)</li>
-<li>Estimation methods: coordinate ascent, black-box, automatic differentiation variational inference schemes</li>
+<li>Bernstein–von Mises theorem</li>
+<li>Laplace approximations</li>
+<li>integrated nested Laplace approximation (INLA)</li>
 </ul>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning objectives</h2>
 <p>At the end of the chapter, students should be able to</p>
 <ul>
-<li>explain the link between ELBO and reverse Kullback–Leibler divergence and it use for approximations</li>
-<li>derive the CAVI recursions for a given factorization</li>
-<li>use variational inference for Bayesian inference</li>
+<li>derive the Laplace approximation for simple models to compute marginal likelihood, posterior expectation or approximation to density.</li>
+<li>describe the difference between deterministic and stochastic approximations.</li>
 </ul>
 </section>
 <section id="readings" class="level2">
 <h2 class="anchored" data-anchor-id="readings">Readings</h2>
 <ul>
-<li>Chapter 10 of <span class="citation" data-cites="Bishop:2006">Bishop (<a href="#ref-Bishop:2006" role="doc-biblioref">2006</a>)</span></li>
-<li><span class="citation" data-cites="Kucukelbir:2017">Kucukelbir et al. (<a href="#ref-Kucukelbir:2017" role="doc-biblioref">2017</a>)</span></li>
-<li><a href="https://lbelzile.github.io/MATH80601A/variational.html">Chapter 10</a> of the course notes</li>
+<li><a href="https://lbelzile.github.io/MATH80601A/laplace.html">Chapter 9</a> of the course notes</li>
 </ul>
 </section>
 <section id="complementary-readings" class="level2">
 <h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
 <ul>
-<li><span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#ref-Ranganath.Gerrish.Blei:2014" role="doc-biblioref">2014</a>)</span></li>
-<li><span class="citation" data-cites="Blei:2017"><span class="nocase">Blei et al.</span> (<a href="#ref-Blei:2017" role="doc-biblioref">2017</a>)</span></li>
-<li><span class="citation" data-cites="Ormerod.Wand:2010">Ormerod &amp; Wand (<a href="#ref-Ormerod.Wand:2010" role="doc-biblioref">2010</a>)</span></li>
-<li><span class="citation" data-cites="Hoffman:2013">Hoffman et al. (<a href="#ref-Hoffman:2013" role="doc-biblioref">2013</a>)</span></li>
+<li>Laplace approximation use in statistics: <span class="citation" data-cites="Tierney.Kadane:1986">Tierney &amp; Kadane (<a href="#ref-Tierney.Kadane:1986" role="doc-biblioref">1986</a>)</span></li>
+<li>skewed Bernstein–von Mises: <span class="citation" data-cites="Durante:2024">Durante et al. (<a href="#ref-Durante:2024" role="doc-biblioref">2024</a>)</span></li>
+<li>Laplace approximation for Bayes factor: <span class="citation" data-cites="Raftery:1995">Raftery (<a href="#ref-Raftery:1995" role="doc-biblioref">1995</a>)</span></li>
+<li>integrated nested Laplace approximation: <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#ref-Rue.Martino.Chopin:2009" role="doc-biblioref">2009</a>)</span>, <span class="citation" data-cites="Wood:2019">Wood (<a href="#ref-Wood:2019" role="doc-biblioref">2019</a>)</span></li>
 </ul>
 </section>
 <section id="slides" class="level2">
 <h2 class="anchored" data-anchor-id="slides">Slides</h2>
 <p class="text-center">
-<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides10.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides10.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
+<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides9.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides9.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
 </p>
 <div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides10.html">
+<iframe class="slide-deck" src="../slides/bayesmod-slides9.html">
 </iframe>
 </div>
 </section>
 <section id="code" class="level2">
 <h2 class="anchored" data-anchor-id="code">Code</h2>
 <ul>
-<li><a href="../files/code/10-CAVI.R"><strong>R</strong> script</a> of CAVI with Gaussian model, probit regression, K-components univariate Gaussian mixture model and linear mixed models from <span class="citation" data-cites="Ormerod.Wand:2010">Ormerod &amp; Wand (<a href="#ref-Ormerod.Wand:2010" role="doc-biblioref">2010</a>)</span></li>
-<li><a href="../files/code/10-ADVI_manual.R"><strong>R</strong> script</a> of ADVI for logistic regression model</li>
-<li><a href="../files/code/10-stochvol_ADVI.R"><strong>R</strong> script</a> of ADVI for stochastic volatility model (with Stan)</li>
+<li>Laplace approximations for exponential-gamma model <a href="../files/code/09-laplace.R"><strong>R</strong> script</a></li>
+<li><code>INLA</code> package <a href="../files/code/09-INLA.R"><strong>R</strong> script</a></li>
 </ul>
 
 
@@ -230,23 +227,20 @@ div.csl-indent {
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Bishop:2006" class="csl-entry" role="listitem">
-Bishop, C. M. (2006). <em>Pattern recognition and machine learning</em>. Springer. <a href="https://www.microsoft.com/en-us/research/publication/pattern-recognition-machine-learning/">https://www.microsoft.com/en-us/research/publication/pattern-recognition-machine-learning/</a>
+<div id="ref-Durante:2024" class="csl-entry" role="listitem">
+Durante, D., Pozza, F., &amp; Szabo, B. (2024). Skewed <span>B</span>ernstein–von <span>M</span>ises theorem and skew-modal approximations. <em>The Annals of Statistics</em>, <em>52</em>(6), 2714–2737. <a href="https://doi.org/10.1214/24-aos2429">https://doi.org/10.1214/24-aos2429</a>
 </div>
-<div id="ref-Blei:2017" class="csl-entry" role="listitem">
-<span class="nocase">Blei, D. M., Kucukelbir, A., &amp; and, J. D. M.</span> (2017). Variational inference: A review for statisticians. <em>Journal of the American Statistical Association</em>, <em>112</em>(518), 859–877. <a href="https://doi.org/10.1080/01621459.2017.1285773">https://doi.org/10.1080/01621459.2017.1285773</a>
+<div id="ref-Raftery:1995" class="csl-entry" role="listitem">
+Raftery, A. E. (1995). Bayesian model selection in social research. <em>Sociological Methodology</em>, <em>25</em>, 111–163. <a href="https://doi.org/10.2307/271063">https://doi.org/10.2307/271063</a>
 </div>
-<div id="ref-Hoffman:2013" class="csl-entry" role="listitem">
-Hoffman, M. D., Blei, D. M., Wang, C., &amp; Paisley, J. (2013). Stochastic variational inference. <em>Journal of Machine Learning Research</em>, <em>14</em>(40), 1303–1347. <a href="http://jmlr.org/papers/v14/hoffman13a.html">http://jmlr.org/papers/v14/hoffman13a.html</a>
+<div id="ref-Rue.Martino.Chopin:2009" class="csl-entry" role="listitem">
+Rue, H., Martino, S., &amp; Chopin, N. (2009). Approximate bayesian inference for latent <span>G</span>aussian models by using integrated nested <span>L</span>aplace approximations. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>71</em>(2), 319–392. <a href="https://doi.org/10.1111/j.1467-9868.2008.00700.x">https://doi.org/10.1111/j.1467-9868.2008.00700.x</a>
 </div>
-<div id="ref-Kucukelbir:2017" class="csl-entry" role="listitem">
-Kucukelbir, A., Tran, D., Ranganath, R., Gelman, A., &amp; Blei, D. M. (2017). Automatic differentiation variational inference. <em>Journal of Machine Learning Research</em>, <em>18</em>(14), 1–45. <a href="http://jmlr.org/papers/v18/16-107.html">http://jmlr.org/papers/v18/16-107.html</a>
+<div id="ref-Tierney.Kadane:1986" class="csl-entry" role="listitem">
+Tierney, L., &amp; Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. <em>Journal of the American Statistical Association</em>, <em>81</em>(393), 82–86. <a href="https://doi.org/10.1080/01621459.1986.10478240">https://doi.org/10.1080/01621459.1986.10478240</a>
 </div>
-<div id="ref-Ormerod.Wand:2010" class="csl-entry" role="listitem">
-Ormerod, J. T., &amp; Wand, M. P. (2010). Explaining variational approximations. <em>The American Statistician</em>, <em>64</em>(2), 140–153. <a href="https://doi.org/10.1198/tast.2010.09058">https://doi.org/10.1198/tast.2010.09058</a>
-</div>
-<div id="ref-Ranganath.Gerrish.Blei:2014" class="csl-entry" role="listitem">
-Ranganath, R., Gerrish, S., &amp; Blei, D. (2014). Black box variational inference. In S. Kaski &amp; J. Corander (Eds.), <em>Proceedings of the seventeenth international conference on artificial intelligence and statistics</em> (Vol. 33, pp. 814–822). Pmlr. <a href="https://proceedings.mlr.press/v33/ranganath14.html">https://proceedings.mlr.press/v33/ranganath14.html</a>
+<div id="ref-Wood:2019" class="csl-entry" role="listitem">
+Wood, S. N. (2019). Simplified integrated nested <span>L</span>aplace approximation. <em>Biometrika</em>, <em>107</em>(1), 223–230. <a href="https://doi.org/10.1093/biomet/asz044">https://doi.org/10.1093/biomet/asz044</a>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

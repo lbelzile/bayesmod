@@ -34,6 +34,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -154,7 +220,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Variational inference</p>
+  <p class="subtitle">Deterministic approximations</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -164,452 +230,437 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Nov 3, 2026</p>
+  <p class="date">Last compiled Tuesday Nov 10, 2026</p>
 </section>
-<section id="variational-inference" class="slide level2">
-<h2>Variational inference</h2>
-<p>Laplace approximation provides a heuristic for large-sample approximations, but it fails to characterize well <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>.</p>
-<p>We consider rather a setting where we approximate <span class="math inline">\(p\)</span> by another distribution <span class="math inline">\(g\)</span> which we wish to be close.</p>
-<p>The terminology <strong>variational</strong> is synonym for optimization in this context.</p>
+<section id="rationale-for-deterministic-approximations" class="slide level2">
+<h2>Rationale for deterministic approximations</h2>
+<p>Markov chain Monte Carlo methods require tuning and can be markedly slow when the dimension of the parameter space grows.</p>
+<p>The curse of dimensionality affects the performance of MCMC.</p>
+<p>We consider simple approximations to the marginal likelihood, posterior moments, or posterior density that only require <strong>numerical optimization</strong>.</p>
 </section>
-<section id="kullbackleibler-divergence" class="slide level2">
-<h2>Kullback–Leibler divergence</h2>
-<p>The Kullback–Leibler divergence between densities <span class="math inline">\(f_t(\cdot)\)</span> and <span class="math inline">\(g(\cdot; \boldsymbol{\psi}),\)</span> is <span class="math display">\[\begin{align*}
-\mathsf{KL}(f_t \parallel g) &amp;=\int \log \left(\frac{f_t(\boldsymbol{x})}{g(\boldsymbol{x}; \boldsymbol{\psi})}\right) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x}\\
-&amp;= \int \log f_t(\boldsymbol{x}) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x} - \int \log g(\boldsymbol{x}; \boldsymbol{\psi}) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x}
-\\ &amp;= {\color{#c38f16}{\mathsf{E}_{f_t}\{\log f_t(\boldsymbol{X})\}}} - \mathsf{E}_{f_t}\{\log g(\boldsymbol{X}; \boldsymbol{\psi})\}
-\end{align*}\]</span> The <span class="math inline">\({\color{#c38f16}{\text{negative entropy}}}\)</span> does not depend on <span class="math inline">\(g(\cdot).\)</span></p>
-</section>
-<section id="model-misspecification" class="slide level2">
-<h2>Model misspecification</h2>
+<section id="landau-notation" class="slide level2">
+<h2>Landau notation</h2>
+<p>We need notation to characterize the growth rate of functions: when <span class="math inline">\(n \to \infty\)</span></p>
 <ul>
-<li>The divergence is strictly positive unless <span class="math inline">\(g(\cdot; \boldsymbol{\psi}) \equiv f_t(\cdot).\)</span></li>
-<li>The divergence is not symmetric.</li>
-</ul>
-<p>The Kullback–Leibler divergence notion is central to study of model misspecification.</p>
-<ul>
-<li>if we fit <span class="math inline">\(g(\cdot)\)</span> when data arise from <span class="math inline">\(f_t,\)</span> the maximum likelihood estimator of the parameters <span class="math inline">\(\widehat{\boldsymbol{\psi}}\)</span> will be the value of the parameter that minimizes the Kullback–Leibler divergence <span class="math inline">\(\mathsf{KL}(f_t \parallel g)\)</span>.</li>
+<li>big-O: <span class="math inline">\(x = \mathrm{O}(n)\)</span> means that <span class="math inline">\(x/n \to c \in \mathbb{R}\)</span> as <span class="math inline">\(n\to \infty\)</span></li>
+<li>little-o: <span class="math inline">\(x =\mathrm{o}(n)\)</span> implies <span class="math inline">\(x/n \to 0\)</span> as <span class="math inline">\(n\to \infty.\)</span></li>
 </ul>
 </section>
-<section id="marginal-likelihood" class="slide level2">
-<h2>Marginal likelihood</h2>
-<p>Consider now the problem of approximating the marginal likelihood, sometimes called the evidence, <span class="math display">\[\begin{align*}
-p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(\boldsymbol{y}, \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}.
-\end{align*}\]</span> where we only have the joint <span class="math inline">\(p(\boldsymbol{y}, \boldsymbol{\theta})\)</span> is the product of the likelihood times the prior.</p>
+<section id="taylor-series-expansion" class="slide level2">
+<h2>Taylor series expansion</h2>
+<p>Consider a concave function <span class="math inline">\(h(x)\)</span> assumed twice continuously differentiable with mode at <span class="math inline">\(x_0\)</span>. Then, a Taylor series expansion around <span class="math inline">\(x_0\)</span> gives <span class="math display">\[\begin{align*}
+h(x) = h(x_0) + h'(x_0)(x-x_0) + h''(x_0)(x-x_0)^2/2 + R
+\end{align*}\]</span> where the remainder <span class="math inline">\(R=\mathrm{O}\{(x-x_0)^3\}.\)</span></p>
 </section>
-<section id="approximating-the-marginal-likelihood" class="slide level2">
-<h2>Approximating the marginal likelihood</h2>
-<p>Consider <span class="math inline">\(g(\boldsymbol{\theta};\boldsymbol{\psi})\)</span> with <span class="math inline">\(\boldsymbol{\psi} \in \mathbb{R}^J\)</span> an approximating density function</p>
+<section id="multivariate-taylor-series-expansion" class="slide level2">
+<h2>Multivariate Taylor series expansion</h2>
+<p>Similarly, for <span class="math inline">\(h(\boldsymbol{x})\)</span> a smooth vector valued function with mode at <span class="math inline">\(\boldsymbol{x}_0 \in \mathbb{R}^p\)</span>, we can write ::: {style=“font-size: 0.8em;”} <span class="math display">\[\begin{align*}
+h(\boldsymbol{x}) &amp;= h(\boldsymbol{x}_0) + (\boldsymbol{x}- \boldsymbol{x}_0)^\top h'(\boldsymbol{x}_0) \\&amp;+ \frac{1}{2}(\boldsymbol{x}- \boldsymbol{x}_0)^\top h''(\boldsymbol{x}_0)(\boldsymbol{x}- \boldsymbol{x}_0) + R.
+\end{align*}\]</span> ::: Under regularity conditions, the mode <span class="math inline">\(\boldsymbol{x}_0\)</span> is such that <span class="math inline">\(h'(\boldsymbol{x}_0)=\boldsymbol{0}_p.\)</span></p>
+</section>
+<section id="laplace-approximation" class="slide level2">
+<h2>Laplace approximation</h2>
+<p>The <strong>Laplace approximation</strong> is used to approximate integrals of non-negative functions <span class="math inline">\(g(\boldsymbol{x})\)</span> that are <span class="math inline">\(\mathrm{O}(n)\)</span> of the form <span class="math display">\[\begin{align*}
+I_n = \int_{\mathbb{R}_p} g(\boldsymbol{x}) \mathrm{d} \boldsymbol{x} = \int \exp\{h(\boldsymbol{x})\}\mathrm{d} \boldsymbol{x}.
+\end{align*}\]</span></p>
+<p>The idea is that we can, ignoring terms above third order and assuming <span class="math inline">\(\boldsymbol{x}_0\)</span> satisfies <span class="math inline">\(h'(\boldsymbol{x}_0)=\boldsymbol{0}_p,\)</span> approximate <span class="math inline">\(g(\cdot)\)</span> by a multivariate Gaussian density.</p>
+</section>
+<section id="laplace-approximation-to-integrals" class="slide level2">
+<h2>Laplace approximation to integrals</h2>
+<p>If we perform a Taylor series expansion of the log of the integrand, then <span class="math display">\[\begin{align*}
+I_n \approx (2\pi)^{p/2} | \mathbf{H}(\boldsymbol{x}_0)|^{-1/2}\exp\{h(\boldsymbol{x}_0)\} + \mathrm{O}(n^{-1})
+\end{align*}\]</span> where <span class="math inline">\(|\mathbf{H}(\boldsymbol{x}_0)|\)</span> is the determinant of the Hessian matrix of <span class="math inline">\(-h(\boldsymbol{x})\)</span> evaluated at the mode <span class="math inline">\(\boldsymbol{x}_0.\)</span></p>
+</section>
+<section id="laplace-approximation-1" class="slide level2">
+<h2>Laplace approximation</h2>
 <ul>
-<li>whose integral is one over <span class="math inline">\(\boldsymbol{\Theta} \subseteq \mathbb{R}^p\)</span> (normalized density)</li>
-<li>whose support is part of that of <span class="math inline">\(\mathrm{supp} (g) \subseteq \mathrm{supp}(p) = \boldsymbol{\Theta}\)</span> (so KL divergence is not infinite)</li>
-</ul>
-<p>Objective: minimize the Kullback–Leibler divergence <span class="math display">\[\mathsf{KL}\left\{p(\boldsymbol{\theta} \mid \boldsymbol{y}) \parallel g(\boldsymbol{\theta};\boldsymbol{\psi})\right\}.\]</span></p>
-</section>
-<section id="problems-ahead" class="slide level2">
-<h2>Problems ahead</h2>
-<p>Minimizing the Kullback–Leibler divergence is not feasible to evaluate the posterior.</p>
-<p>Taking <span class="math inline">\(f_t = p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is not feasible: we need the marginal likelihood to compute the expectation!</p>
-</section>
-<section id="alternative-expression-for-the-marginal-likelihood" class="slide level2">
-<h2>Alternative expression for the marginal likelihood</h2>
-<p>We consider a different objective to bound the marginal likelihood. Write</p>
-<p><span class="math display">\[\begin{align*}
-p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}}  \frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})} g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
-\end{align*}\]</span></p>
-</section>
-<section id="bounding-the-marginal-likelihood" class="slide level2">
-<h2>Bounding the marginal likelihood</h2>
-<p>For <span class="math inline">\(h(x)\)</span> a convex function, <strong>Jensen’s inequality</strong> implies that <span class="math display">\[h\{\mathsf{E}(X)\} \leq \mathsf{E}\{h(X)\},\]</span> and applying this with <span class="math inline">\(h(x)=-\log(x),\)</span> we get <span class="math display">\[\begin{align*}
--\log p(\boldsymbol{y}) \leq -\int_{\boldsymbol{\Theta}} \log  \left(\frac{p(\boldsymbol{y}, \boldsymbol{\theta})}{g(\boldsymbol{\theta};\boldsymbol{\psi})}\right) g(\boldsymbol{\theta};\boldsymbol{\psi}) \mathrm{d} \boldsymbol{\theta}.
-\end{align*}\]</span></p>
-</section>
-<section id="evidence-lower-bound" class="slide level2">
-<h2>Evidence lower bound</h2>
-<p>We can thus consider the model that minimizes the <strong>reverse Kullback–Leibler divergence</strong> <span class="math display">\[\begin{align*}
-g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}) = \mathrm{argmin}_{\boldsymbol{\psi}} \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\}.
-\end{align*}\]</span></p>
-<p>Since <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\theta} \mid \boldsymbol{y}) p(\boldsymbol{y})\)</span>, <span class="math display">\[\begin{align*}
-\mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\} &amp;= \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\} - \mathsf{E}_g\{\log p( \boldsymbol{\theta}, \boldsymbol{y})\} \\&amp;\quad+ \log p(\boldsymbol{y}).
-\end{align*}\]</span></p>
-</section>
-<section id="evidence-lower-bound-1" class="slide level2">
-<h2>Evidence lower bound</h2>
-<p>Instead of minimizing the Kullback–Leibler divergence, we can equivalently maximize the so-called <strong>evidence lower bound</strong> (ELBO) <span class="math display">\[\begin{align*}
-\mathsf{ELBO}(g) = \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} - \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\}
-\end{align*}\]</span></p>
-<p>The ELBO is a lower bound for the marginal likelihood because a Kullback–Leibler divergence is non-negative and <span class="math display">\[\begin{align*}
-\log p(\boldsymbol{y}) = \mathsf{ELBO}(g) +  \mathsf{KL}\{g(\boldsymbol{\theta};\boldsymbol{\psi}) \parallel p(\boldsymbol{\theta} \mid \boldsymbol{y})\}.
-\end{align*}\]</span></p>
-</section>
-<section id="use-of-elbo" class="slide level2">
-<h2>Use of ELBO</h2>
-<p>The idea is that we will approximate the density <span class="math display">\[p(\boldsymbol{\theta} \mid \boldsymbol{y}) \approx g(\boldsymbol{\theta}; \widehat{\boldsymbol{\psi}}).\]</span></p>
-<ul>
-<li>the ELBO can be used for model comparison (but we compare bounds…)</li>
-<li>we can sample from <span class="math inline">\(q\)</span> as before.</li>
+<li>The idea behind the Laplace approximation is to approximate the log of the density (since the latter must be non-negative).</li>
+<li>Compared to sampling-based methods, the Laplace approximation requires <strong>optimization</strong>.</li>
+<li>The Laplace approximation is not invariant to reparametrization: in practice, it is best to perform it on a scale where the likelihood is as close to quadratic as possible in <span class="math inline">\(g(\boldsymbol{\theta})\)</span> and back-transform using a change of variable.</li>
 </ul>
 </section>
-<section id="heuristics-of-elbo" class="slide level2">
-<h2>Heuristics of ELBO</h2>
-<p>Maximize the evidence, subject to a regularization term: <span class="math display">\[\begin{align*}
-\mathsf{ELBO}(g) = \mathsf{E}_g\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\} - \mathsf{E}_{g}\{\log g(\boldsymbol{\theta})\}
+<section id="laplace-approximation-to-the-marginal-likelihood" class="slide level2">
+<h2>Laplace approximation to the marginal likelihood</h2>
+<p>Consider a simple random sample of size <span class="math inline">\(n\)</span> from a distribution with parameter vector <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^p.\)</span></p>
+<p>Write <span class="citation" data-cites="Raftery:1995">(<a href="#/references" role="doc-biblioref" onclick="">Raftery, 1995</a>)</span> <span class="math display">\[\begin{align*}
+p(\boldsymbol{y}) = \int_{\mathbb{R}^p} p(\boldsymbol{y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span> and take <span class="math display">\[\begin{align*}h(\boldsymbol{\theta}) = \log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta}).
 \end{align*}\]</span></p>
-<p>The ELBO is an objective function comprising:</p>
+</section>
+<section id="laplace-approximation-to-the-marginal-likelihood-1" class="slide level2">
+<h2>Laplace approximation to the marginal likelihood</h2>
+<p>Evaluating at the maximum a posteriori <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}\)</span> and letting <span class="math inline">\(\mathbf{H} = - \log p(\boldsymbol{y}, \boldsymbol{\theta}) / \partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top\)</span> denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get <span class="citation" data-cites="Tierney.Kadane:1986">(<a href="#/references" role="doc-biblioref" onclick="">Tierney &amp; Kadane, 1986</a>)</span> <span class="math display">\[\begin{align*}
+\log p(\boldsymbol{y}) &amp;= \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) + \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) \\&amp;\quad + \frac{p}{2} \log (2\pi) - \frac{1}{2}\log |\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})| + \mathrm{O}(n^{-1})
+\end{align*}\]</span></p>
+</section>
+<section id="example-with-exponential-likelihood" class="slide level2">
+<h2>Example with exponential likelihood</h2>
+<p>Consider an exponential likelihood <span class="math inline">\(Y_i \mid \lambda \sim \mathsf{expo}(\lambda)\)</span> with conjugate gamma prior <span class="math inline">\(\lambda \sim \mathsf{gamma}(a,b)\)</span>. The exponential model has information <span class="math inline">\(i(\lambda)=n/\lambda^2\)</span> and the mode of the posterior is <span class="math display">\[\widehat{\lambda}_{\mathrm{MAP}}=\frac{n+a-1}{\sum_{i=1}^n y_i + b}.\]</span></p>
+</section>
+<section id="marginal-likelihood-approximation-for-exponential-likelihood" class="slide level2">
+<h2>Marginal likelihood approximation for exponential likelihood</h2>
+<p>The marginal likelihood for the conjugate model is <span class="math display">\[\begin{align*}
+p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}^n y_i \right)^{n+a}}.
+\end{align*}\]</span></p>
+<p>For the sample of size <span class="math inline">\(62,\)</span> the exponential model marginal likelihood is <span class="math inline">\(-276.5.\)</span></p>
+</section>
+<section id="numerical-approximation-to-marginal-likelihood" class="slide level2">
+<h2>Numerical approximation to marginal likelihood</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="fu">data</span>(waiting, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb1-2"><a aria-label="2"></a>a <span class="ot">&lt;-</span> <span class="fl">0.01</span>; b <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
+<span id="cb1-3"><a aria-label="3"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(waiting); s <span class="ot">&lt;-</span> <span class="fu">sum</span>(waiting)</span>
+<span id="cb1-4"><a aria-label="4"></a>map <span class="ot">&lt;-</span> (n <span class="sc">+</span> a <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>(s <span class="sc">+</span> b) <span class="co">#posterior mode</span></span>
+<span id="cb1-5"><a aria-label="5"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb1-6"><a aria-label="6"></a>  <span class="fu">sum</span>(<span class="fu">dexp</span>(waiting, <span class="at">rate =</span> x, <span class="at">log =</span> <span class="cn">TRUE</span>)) <span class="sc">+</span></span>
+<span id="cb1-7"><a aria-label="7"></a>    <span class="fu">dgamma</span>(x, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-8"><a aria-label="8"></a>}</span>
+<span id="cb1-9"><a aria-label="9"></a><span class="co"># Hessian evaluated at MAP</span></span>
+<span id="cb1-10"><a aria-label="10"></a>H <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">c</span>(numDeriv<span class="sc">::</span><span class="fu">hessian</span>(logpost, <span class="at">x =</span> map))</span>
+<span id="cb1-11"><a aria-label="11"></a><span class="co"># Laplace approximation</span></span>
+<span id="cb1-12"><a aria-label="12"></a>marg_lik_laplace <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">-</span> <span class="fu">log</span>(H) <span class="sc">+</span> <span class="fu">logpost</span>(map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The Laplace approximation gives <span class="math inline">\(-281.9.\)</span></p>
+</section>
+<section id="posterior-expectation-using-laplace-method" class="slide level2">
+<h2>Posterior expectation using Laplace method</h2>
+<p>If we are interested in computing the posterior expectation of a positive real-valued functional <span class="math inline">\(g(\boldsymbol{\theta}): \mathbb{R}^p \to \mathbb{R}_{+},\)</span> we may write <span class="math display">\[\begin{align*}
+\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} &amp;=  \frac{\int g(\boldsymbol{\theta}) p(\boldsymbol{y} \mid \boldsymbol{\theta}) p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}{\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-expectation-via-laplace" class="slide level2">
+<h2>Posterior expectation via Laplace</h2>
+<p>We can apply Laplace’s method to both numerator and denominator. Let <span class="math inline">\(\widehat{\boldsymbol{\theta}}_g\)</span> and <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}\)</span> of the integrand of the numerator and denominator, respectively, and the negative of the Hessian matrix of the log integrands <span class="math display">\[\begin{align*}
+\jmath_g&amp;=  -\frac{\partial^2}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} \left\{ \log g(\boldsymbol{\theta}) + \log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta})\right\}, \\
+\jmath &amp;=  -\frac{\partial^2}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} \left\{\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta})\right\}.
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-expectation-approximation" class="slide level2">
+<h2>Posterior expectation approximation</h2>
+<p>Putting these together <span class="math display">\[\begin{align*}
+\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} \approx \frac{|\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})|^{1/2}}{|\jmath_g(\widehat{\boldsymbol{\theta}}_g)|^{1/2}} \frac{g(\widehat{\boldsymbol{\theta}}_g) p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_g) p( \widehat{\boldsymbol{\theta}}_g)}{p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})}.
+\end{align*}\]</span> While the Laplace method has an error <span class="math inline">\(\mathrm{O}(n^{-1}),\)</span> the leading order term of the expansion cancels out from the ratio and the above has error of <span class="math inline">\(\mathrm{O}(n^{-2}).\)</span></p>
+</section>
+<section id="example-of-posterior-mean-for-exponential-likelihood" class="slide level2">
+<h2>Example of posterior mean for exponential likelihood</h2>
+<p>Consider the posterior mean <span class="math inline">\(\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\lambda)\)</span> and let <span class="math inline">\(s=\sum_{i=1}^n y_i\)</span>. Then, <span class="math display">\[\begin{align*}
+\widehat{\lambda}_g &amp;= \frac{(n+a)}{s + b} \\
+|\jmath_g(\widehat{\lambda}_g)|^{1/2} &amp;= \left(\frac{n+a}{\widehat{\lambda}_g^2}\right)^{1/2} =  \frac{s + b}{(n+a)^{1/2}}
+\end{align*}\]</span></p>
+</section>
+<section id="posterior-mean" class="slide level2">
+<h2>Posterior mean</h2>
+<p>Simplification gives the approximation <span class="math display">\[\begin{align*}
+\frac{\exp(-1)}{s + b} \frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}
+\end{align*}\]</span> which gives <span class="math inline">\(0.035,\)</span> whereas the true posterior mean is <span class="math inline">\((n+a)/(s+b) = 0.035.\)</span></p>
+</section>
+<section id="aside-on-prior-and-likelihood-relative-contribution" class="slide level2">
+<h2>Aside on prior and likelihood relative contribution</h2>
+<p>Usually,</p>
 <ul>
-<li>the first term will be maximized by taking a distribution placing mass near the MAP of <span class="math inline">\(p(\boldsymbol{y}, \boldsymbol{\theta}),\)</span></li>
-<li>the second term can be viewed as a penalty that favours high entropy of the approximating family (higher for distributions which are diffuse).</li>
+<li><span class="math inline">\(p(\boldsymbol{\theta}) = \mathrm{O}(1)\)</span> and</li>
+<li><span class="math inline">\(p(\boldsymbol{y} \mid \boldsymbol{\theta}) = \mathrm{O}(n)\)</span></li>
+</ul>
+<p>Thus, provided the prior does not impose unnecessary support constraints, we could alternatively</p>
+<ul>
+<li>replace the MAP by the MLE, and</li>
+<li>the Hessian <span class="math inline">\(-\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\)</span> by the Fisher information <span class="math inline">\(n\boldsymbol{\imath}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}).\)</span></li>
 </ul>
 </section>
-<section id="laplace-vs-variational-approximation" class="slide level2">
-<h2>Laplace vs variational approximation</h2>
+<section id="frequentist-approximations" class="slide level2">
+<h2>Frequentist approximations</h2>
+<p>If we use these approximations instead, we get <span class="math display">\[\begin{align*}
+\log p(\boldsymbol{y}) &amp;= \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}) -\frac{p}{2} \log n + \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\\&amp; \quad   - \frac{1}{2} \log |\boldsymbol{\imath}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})| + \frac{p}{2} \log(2\pi)  + \mathrm{O}(n^{-1/2})
+\end{align*}\]</span> where the error is now <span class="math inline">\(\mathrm{O}(n^{-1/2})\)</span> due to replacing the true information by it’s sample counterpart.</p>
+</section>
+<section id="reducing-the-approximation-rate" class="slide level2">
+<h2>Reducing the approximation rate</h2>
+<p>Ignoring all but the two first terms leads to <span class="math inline">\(\mathrm{O}(1)\)</span> approximation error, unless we consider the setting where we take a prior centered at the MLE with unit Fisher information precision (equivalent to <span class="math inline">\(n=1\)</span> phantom observation). Then, due to cancellation of terms in the expansion, <span class="math display">\[\boldsymbol{\theta} \sim \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}, \boldsymbol{\imath}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\},\]</span> with approximation error of <span class="math inline">\(\mathrm{O}(n^{-1/2}).\)</span></p>
+</section>
+<section id="frequentist-approximation-to-the-marginal-likelihood" class="slide level2">
+<h2>Frequentist approximation to the marginal likelihood</h2>
+<p>This gives the approximation, whose quality improves with increasing sample size <span class="math inline">\(n\)</span>: <span class="math display">\[\begin{align*}
+-2\log p(\boldsymbol{y}) \approx \mathsf{BIC} = -2\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + p\log n
+\end{align*}\]</span></p>
+<p>The unnormalized weight <span class="math inline">\(\exp(-\mathsf{BIC}/2)\)</span> is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor.</p>
+</section>
+<section id="bayesian-model-averaging-via-bic" class="slide level2">
+<h2>Bayesian model averaging via BIC</h2>
+<p>We consider the <code>diabetes</code> model from <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span> and models with 10 predictors plus intercept.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a aria-label="1"></a><span class="fu">library</span>(leaps)</span>
+<span id="cb2-2"><a aria-label="2"></a><span class="fu">data</span>(diabetes, <span class="at">package =</span> <span class="st">"lars"</span>)</span>
+<span id="cb2-3"><a aria-label="3"></a>search <span class="ot">&lt;-</span> leaps<span class="sc">::</span><span class="fu">regsubsets</span>(</span>
+<span id="cb2-4"><a aria-label="4"></a>  <span class="at">x =</span> diabetes<span class="sc">$</span>x,</span>
+<span id="cb2-5"><a aria-label="5"></a>  <span class="at">y =</span> diabetes<span class="sc">$</span>y,</span>
+<span id="cb2-6"><a aria-label="6"></a>  <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-7"><a aria-label="7"></a>  <span class="at">method =</span> <span class="st">"exhaustive"</span>, </span>
+<span id="cb2-8"><a aria-label="8"></a>  <span class="at">nvmax =</span> <span class="dv">10</span>, <span class="at">nbest =</span> <span class="dv">99</span>, <span class="at">really.big =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-9"><a aria-label="9"></a>models_bic <span class="ot">&lt;-</span> <span class="fu">summary</span>(search)<span class="sc">$</span>bic</span>
+<span id="cb2-10"><a aria-label="10"></a><span class="co"># Renormalize BIC and keep only models with some weight</span></span>
+<span id="cb2-11"><a aria-label="11"></a>bic <span class="ot">&lt;-</span> models_bic <span class="sc">-</span> <span class="fu">min</span>(models_bic)</span>
+<span id="cb2-12"><a aria-label="12"></a>models <span class="ot">&lt;-</span> <span class="fu">which</span>(bic <span class="sc">&lt;</span> <span class="dv">7</span>)</span>
+<span id="cb2-13"><a aria-label="13"></a>bma_weights <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="weights-and-model-components" class="slide level2">
+<h2>Weights and model components</h2>
 
-<img data-src="bayesmod-slides10_files/figure-revealjs/fig-skewed-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-skewed"><p class="caption">
-Figure&nbsp;1: Skewed density with the Laplace approximation (dashed orange) and variational Gaussian approximation (dotted blue).
+<img data-src="bayesmod-slides10_files/figure-revealjs/fig-bmaweights-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-bmaweights"><p class="caption">
+Figure&nbsp;1: BIC as a function of the linear model covariates (left) and Bayesian model averaging approximate weights (in percentage) for the 10 models with the highest posterior weights according to the BIC approximation.
 </p></section>
-<section id="choice-of-approximating-density" class="slide level2">
-<h2>Choice of approximating density</h2>
-<p>In practice, the quality of the approximation depends on the choice of <span class="math inline">\(g(\cdot; \boldsymbol{\psi}).\)</span></p>
-<ul>
-<li>We typically want matching support.</li>
-<li>The approximation will be affected by the correlation between posterior components <span class="math inline">\(\boldsymbol{\theta} \mid \boldsymbol{y}.\)</span></li>
-<li>Derivations can also be done for <span class="math inline">\((\boldsymbol{U}, \boldsymbol{\theta})\)</span>, where <span class="math inline">\(\boldsymbol{U}\)</span> are latent variables from a data augmentation scheme.</li>
-</ul>
+<section id="gaussian-approximation-to-the-posterior" class="slide level2">
+<h2>Gaussian approximation to the posterior</h2>
+<p>We can also use similar ideas to approximate the posterior. Suppose that we can Taylor expand the log prior and log density around their respective mode, say <span class="math inline">\(\widehat{\boldsymbol{\theta}}_0\)</span> and <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},\)</span> with <span class="math inline">\(\jmath_0(\widehat{\boldsymbol{\theta}}_0)\)</span> and <span class="math inline">\(\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\)</span> denoting negative of the corresponding Hessian matrices.</p>
 </section>
-<section id="factorization" class="slide level2">
-<h2>Factorization</h2>
-<p>We can consider densities <span class="math inline">\(g(;\boldsymbol{\psi})\)</span> that factorize into blocks with parameters <span class="math inline">\(\boldsymbol{\psi}_1, \ldots, \boldsymbol{\psi}_M,\)</span> where <span class="math display">\[\begin{align*}
-g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \prod_{j=1}^M g_j(\boldsymbol{\theta}_j; \boldsymbol{\psi}_j)
-\end{align*}\]</span> If we assume that each of the <span class="math inline">\(J\)</span> parameters <span class="math inline">\(\theta_1, \ldots, \theta_J\)</span> are independent, then we obtain a <strong>mean-field</strong> approximation.</p>
-</section>
-<section id="maximizing-the-elbo-one-step-at-a-time" class="slide level2">
-<h2>Maximizing the ELBO one step at a time</h2>
-<p><span class="math display">\[\begin{align*}
-\mathsf{ELBO}(g) &amp;= \int \log p(\boldsymbol{y}, \boldsymbol{\theta}) \prod_{j=1}^M g_j(\boldsymbol{\theta}_j)\mathrm{d} \boldsymbol{\theta} \\&amp;\quad- \sum_{j=1}^M \int \log \{ g_j(\boldsymbol{\theta}_j) \} g_j(\boldsymbol{\theta}_j) \mathrm{d}  \boldsymbol{\theta}_j
-\\&amp; \stackrel{\boldsymbol{\theta}_i}{\propto} \mathsf{E}_{i}\left[\mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\} \right] - \mathsf{E}_i\left[\log \{ g_i(\boldsymbol{\theta}_i) \}\right]
-\end{align*}\]</span> which is the negative of a Kullback–Leibler divergence.</p>
-</section>
-<section id="optimal-choice-of-approximating-density" class="slide level2">
-<h2>Optimal choice of approximating density</h2>
-<p>The maximum possible value of zero for the KL is attained when <span class="math display">\[\log \{ g_i(\boldsymbol{\theta}_i) \} = \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\}.\]</span> The choice of marginal <span class="math inline">\(g_i\)</span> that maximizes the ELBO is <span class="math display">\[\begin{align*}
-g^{\star}_i(\boldsymbol{\theta}_i) \propto \exp \left[ \mathsf{E}_{-i}\left\{\log p(\boldsymbol{y}, \boldsymbol{\theta})\right\}\right].
-\end{align*}\]</span> Often, we look at the kernel of <span class="math inline">\(g^{\star}_j\)</span> to deduce the normalizing constant.</p>
-</section>
-<section id="coordinate-ascent-variational-inference-cavi" class="slide level2">
-<h2>Coordinate-ascent variational inference (CAVI)</h2>
-<ul>
-<li>We can maximize <span class="math inline">\(g^{\star}_j\)</span> in turn for each <span class="math inline">\(j=1, \ldots, M\)</span> treating the other parameters as fixed.</li>
-<li>This scheme is guaranteed to monotonically increase the ELBO until convergence to a local maximum.</li>
-<li>Convergence: monitor ELBO and stop when the change is lower then some present numerical tolerance.</li>
-<li>The approximation may have multiple local optima: perform random initializations and keep the best one.</li>
-</ul>
-</section>
-<section id="example-of-cavi-mean-field-for-gaussian-target" class="slide level2">
-<h2>Example of CAVI mean-field for Gaussian target</h2>
-<p>We consider the example from Section 2.2.2 of <span class="citation" data-cites="Ormerod.Wand:2010">Ormerod &amp; Wand (<a href="#/references" role="doc-biblioref" onclick="">2010</a>)</span> for approximation of a Gaussian distribution, with <span class="math display">\[\begin{align*}
-Y_i &amp;\sim \mathsf{Gauss}(\mu, \tau^{-1}), \qquad i =1, \ldots, n;\\
-\mu &amp;\sim \mathsf{Gauss}\{\mu_0, (\tau\tau_0)^{-1}\} \\
-\tau &amp;\sim \mathsf{gamma}(a_0, b_0).
-\end{align*}\]</span> This is an example where the full posterior is available in closed-form, so we can compare our approximation with the truth.</p>
-</section>
-<section id="variational-approximation-to-gaussian-mean" class="slide level2">
-<h2>Variational approximation to Gaussian — mean</h2>
-<p>We assume a factorization of the variational approximation <span class="math inline">\(g_\mu(\mu)g_\tau(\tau);\)</span> the factor for <span class="math inline">\(g_\mu\)</span> is proportional to <span class="math display">\[\begin{align*}
-\log g^{\star}_{\mu}(\mu) \propto -\frac{\mathsf{E}_{\tau}(\tau)}{2} \left\{ \sum_{i=1}^n (y_i-\mu)^2-\frac{\tau_0}{2}(\mu-\mu_0)^2\right\},
-\end{align*}\]</span> which is quadratic in <span class="math inline">\(\mu\)</span> and thus must be Gaussian with precision <span class="math inline">\(\tau_n = \mathsf{E}_{\tau}(\tau)(\tau_0 + n)\)</span> and mean <span class="math inline">\(\tau_0\mu_0 +n\overline{y}.\)</span></p>
-</section>
-<section id="variational-approximation-to-gaussian-precision" class="slide level2">
-<h2>Variational approximation to Gaussian — precision</h2>
-<p>The optimal precision factor satisfies <span class="math display">\[\begin{align*}
-\ln g^{\star}_{\tau}(\tau) &amp;\propto \log \tau\left(\frac{n+1}{2} + a_0-1\right)   - \tau b_n\\
-b_n &amp; = b_0  + \frac{\mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\} + \tau_0\mathsf{E}{\mu}\left\{(\mu-\mu_0)^2\right\}}{2}
-\end{align*}\]</span> Thus a gamma with shape <span class="math inline">\(a_n =a_0 + (n+1)/2\)</span> and rate <span class="math inline">\(b_n\)</span>.</p>
-</section>
-<section id="rate-of-the-gamma-for-g_tau" class="slide level2">
-<h2>Rate of the gamma for <span class="math inline">\(g_\tau\)</span></h2>
-<p>It is helpful to rewrite the expected value as <span class="math display">\[\begin{align*}
-\mathsf{E}_{\mu}\left\{\sum_{i=1}^n (y_i-\mu)^2\right\} = \sum_{i=1}^n \{y_i - \mathsf{E}_{\mu}(\mu)\}^2 + n \mathsf{Var}_{\mu}(\mu),
-\end{align*}\]</span> so that it depends on the parameters of the distribution of <span class="math inline">\(\mu\)</span> directly.</p>
-</section>
-<section id="cavi-for-gaussian" class="slide level2">
-<h2>CAVI for Gaussian</h2>
-<p>The algorithm cycles through the following updates until convergence:</p>
-<ul>
-<li><span class="math inline">\(\mathsf{Va}_{\mu}(\mu) = \{\mathsf{E}_{\tau}(\tau)(\tau_0 + n )\}^{-1},\)</span></li>
-<li><span class="math inline">\(\mathsf{E}_{\mu}(\mu) = \mathsf{Va}_{\mu}(\mu)\{\tau_0\mu_0 + n \overline{y}\},\)</span></li>
-<li><span class="math inline">\(\mathsf{E}_{\tau}(\tau) = a_n/b_n\)</span> where <span class="math inline">\(b_n\)</span> is a function of both <span class="math inline">\(\mathsf{E}_{\mu}(\mu)\)</span> and <span class="math inline">\(\mathsf{Var}_{\mu}(\mu).\)</span></li>
-</ul>
-<p>We only compute the ELBO at the end of each cycle.</p>
-</section>
-<section id="maximization" class="slide level2">
-<h2>Maximization?</h2>
-<p>Recall that alternating these steps is <strong>equivalent</strong> to maximization of the ELBO.</p>
-<ul>
-<li>each iteration performs conditional optimization implicitly (as we minimize the reverse KL divergence).</li>
-</ul>
-</section>
-<section id="monitoring-convergence" class="slide level2">
-<h2>Monitoring convergence</h2>
-<p>The derivation of the ELBO is straightforward but tedious; <span class="math display">\[\begin{align*}
-\mathsf{ELBO}(g) &amp; = a_0\log(b_0) -a_n\log b_n + \log \{\Gamma(a_n)/\Gamma(a_0)\}
-\\&amp; \quad - \frac{n}{2}\log(2\pi)+ \frac{1 + \log (\tau_0/\tau_n)}{2}.
+<section id="approximation-to-posterior" class="slide level2">
+<h2>Approximation to posterior</h2>
+<p>Together, these yield <span class="math display">\[\begin{align*}
+\log p(\boldsymbol{\theta}) &amp;\approx \log p(\widehat{\boldsymbol{\theta}}_0) - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_0)^\top\jmath_0(\widehat{\boldsymbol{\theta}}_0)(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_0)\\
+\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) &amp;\approx \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\\&amp; \quad  - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})^\top\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})
 \end{align*}\]</span></p>
-<p>We can also consider relative changes in parameter values as tolerance criterion.</p>
 </section>
-<section id="bivariate-posterior-density" class="slide level2">
-<h2>Bivariate posterior density</h2>
-
-<img data-src="bayesmod-slides10_files/figure-revealjs/fig-approx-cavi-gauss-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-approx-cavi-gauss"><p class="caption">
-Figure&nbsp;2: Bivariate density posterior for the conjugate Gaussian-gamma model (left) and CAVI approximation (right).
-</p></section>
-<section id="marginal-posterior-densities" class="slide level2">
-<h2>Marginal posterior densities</h2>
-
-<img data-src="bayesmod-slides10_files/figure-revealjs/fig-gauss-cavi-margdens-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-gauss-cavi-margdens"><p class="caption">
-Figure&nbsp;3: Marginal posterior density of the mean and precision of the Gaussian (full line), with CAVI approximation (dashed).
-</p></section>
-<section id="cavi-for-probit-regression" class="slide level2">
-<h2>CAVI for probit regression</h2>
-<p>A probit regression is a generalized linear model with probability of success <span class="math inline">\(\Phi(\mathbf{x}_i\boldsymbol{\beta}),\)</span> where <span class="math inline">\(\Phi(\cdot)\)</span> is the cumulative distribution function of a standard Gaussian variable.</p>
-<p>We can write the model as <span class="math display">\[\begin{align*}
-p(\boldsymbol{y} \mid \boldsymbol{\beta}) = \Phi(\mathbf{X}\boldsymbol{\beta})^{\boldsymbol{y}}\Phi(-\mathbf{X}\boldsymbol{\beta})^{\boldsymbol{1}_n -\boldsymbol{y}}
-\end{align*}\]</span> since <span class="math inline">\(1-\Phi(x) = \Phi(-x).\)</span></p>
-</section>
-<section id="data-augmentation-and-cavi" class="slide level2">
-<h2>Data augmentation and CAVI</h2>
-<p>Consider data augmentation with auxiliary variables <span class="math inline">\(Z_i \mid \boldsymbol{\beta}\sim \mathsf{Gauss}(\mathbf{x}_i\boldsymbol{\beta}, 1).\)</span></p>
-<p>With <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{\mu}_0, \mathbf{Q}_0^{-1}),\)</span> the model admits conditionals <span class="math display">\[\begin{align*}
-\boldsymbol{\beta} \mid \boldsymbol{Z} &amp;\sim \mathsf{Gauss}_p\left\{\mathbf{Q}_{\boldsymbol{\beta}}^{-1}(\mathbf{X}\boldsymbol{Z} + \mathbf{Q}_0\boldsymbol{\mu}_0),  \mathbf{Q}_{\boldsymbol{\beta}}^{-1} \right\}
+<section id="gaussian-approximation-to-posterior" class="slide level2">
+<h2>Gaussian approximation to posterior</h2>
+<p>The approximate posterior must be Gaussian with precision <span class="math inline">\(\jmath_n^{-1}\)</span> and mean <span class="math inline">\(\mu_n,\)</span> where <span class="math display">\[\begin{align*}
+\jmath_n &amp;= \jmath_0(\widehat{\boldsymbol{\theta}}_{0}) + \jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})
 \\
-Z_i \mid y_i, \boldsymbol{\beta} &amp;\sim \mathsf{trunc. Gauss}(\mathbf{x}_i\boldsymbol{\beta}, 1, l_i, u_i)
-\end{align*}\]</span> where <span class="math inline">\(\mathbf{Q}_{\boldsymbol{\beta}}= \mathbf{X}^\top\mathbf{X} + \mathbf{Q_0},\)</span> and <span class="math inline">\([l_i, u_i]\)</span> is <span class="math inline">\((-\infty,0)\)</span> if <span class="math inline">\(y_i=0\)</span> and <span class="math inline">\((0, \infty)\)</span> if <span class="math inline">\(y_i=1.\)</span></p>
+\widehat{\boldsymbol{\theta}}_n &amp;= \jmath_n^{-1}\left\{ \jmath_0(\widehat{\boldsymbol{\theta}}_{0})\widehat{\boldsymbol{\theta}}_{0} + \jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}\right\}
+\end{align*}\]</span> and note that <span class="math inline">\(\jmath_0(\widehat{\boldsymbol{\theta}}_{0}) = \mathrm{O}(1),\)</span> whereas <span class="math inline">\(\jmath_n\)</span> is <span class="math inline">\(\mathrm{O}(n).\)</span></p>
 </section>
-<section id="cavi-factorization-for-probit-model" class="slide level2">
-<h2>CAVI factorization for probit model</h2>
-<p>We consider a factorization of the form <span class="math display">\[g_{\boldsymbol{Z}}(\boldsymbol{z})g_{\boldsymbol{\beta}}(\boldsymbol{\beta}).\]</span></p>
-<p>Then, the optimal form of the density further factorizes as <span class="math display">\[g_{\boldsymbol{Z}}(\boldsymbol{z}) = \prod_{i=1}^n g_{Z_i}(z_i).\]</span></p>
-</section>
-<section id="gibbs-em-and-cavi" class="slide level2">
-<h2>Gibbs, EM and CAVI</h2>
-<ul>
-<li>We exploit the conditionals in the same way as for Gibbs sampling</li>
-<li>The only difference is that we substitute unknown parameter functionals by their expectations.</li>
-<li>Also deep links with the expectation-maximization (EM) algorithm, which optimizes at each step parameters after replacing the log posterior of augmented data by their expectation.</li>
-<li>CAVI however fixes the parameter values (less uncertainty in the posterior because of that).</li>
-</ul>
-</section>
-<section id="updates-for-cavi---probit-regression" class="slide level2">
-<h2>Updates for CAVI - probit regression</h2>
-<p>The model depends on</p>
-<ul>
-<li><span class="math inline">\(\mu_{\boldsymbol{Z}}\)</span>, the mean parameter of <span class="math inline">\(\boldsymbol{Z}\)</span></li>
-<li><span class="math inline">\(\mu_{\boldsymbol{\beta}},\)</span> the mean of <span class="math inline">\(\boldsymbol{\beta}.\)</span></li>
-</ul>
-<p>Consider the terms in the posterior proportional to <span class="math inline">\(Z_i\)</span>, where <span class="math display">\[\begin{align*}
-p(z_i \mid \boldsymbol{\beta}, y_i) \propto -\frac{z_i^2 - 2z_i \mathbf{x}_i\boldsymbol{\beta}}{2} \times \mathrm{I}(z_i &gt;0)^{y_i}\mathrm{I}(z_i &lt;0)^{1-y_i}
-\end{align*}\]</span> which is linear in <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
-</section>
-<section id="truncated-gaussian" class="slide level2">
-<h2>Truncated Gaussian</h2>
-<p>The expectation of a univariate truncated Gaussian <span class="math inline">\(Z \sim \mathsf{trunc. Gauss}(\mu,\sigma^2, l, u)\)</span> is <span class="math display">\[\begin{align*}
-\mathsf{E}(Z) = \mu - \sigma\frac{\phi\{(u-\mu/\sigma)\} - \phi\{(l-\mu/\sigma)\}}{\Phi\{(u-\mu/\sigma)\} - \Phi\{(l-\mu/\sigma)\}}.
+<section id="gaussian-large-sample-approximation-to-mle" class="slide level2">
+<h2>Gaussian large-sample approximation to MLE</h2>
+<p>Suppose that the prior is continuous and positive in a neighborhood of the maximum.</p>
+<p>Assume further that the regularity conditions for maximum likelihood estimator holds. Then, in the limit as <span class="math inline">\(n \to \infty\)</span> <span class="math display">\[\begin{align*}
+\boldsymbol{\theta} \mid \boldsymbol{y} \stackrel{\cdot}{\sim} \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},  \jmath^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\}
 \end{align*}\]</span></p>
 </section>
-<section id="update-for-cavi" class="slide level2">
-<h2>Update for CAVI</h2>
-<p>If we replace <span class="math inline">\(\mu=\mathbf{x}_i\mu_{\boldsymbol{\beta}}\)</span>, we get the update <span class="math display">\[\begin{align*}
-\mu_{Z_i}(z_i) = \begin{cases}
-\mathbf{x}_i\mu_{\boldsymbol{\beta}} - \frac{ \phi(\mathbf{x}_i\mu_{\boldsymbol{\beta}})}{1-\Phi(\mathbf{x}_i\mu_{\boldsymbol{\beta}})} &amp; y_i = 0;\\
-\mathbf{x}_i\mu_{\boldsymbol{\beta}} + \frac{ \phi(\mathbf{x}_i\mu_{\boldsymbol{\beta}})}{\Phi(\mathbf{x}_i\mu_{\boldsymbol{\beta}})} &amp; y_i = 1,
-\end{cases}
-\end{align*}\]</span> since <span class="math inline">\(\phi(x)=\phi(-x).\)</span></p>
+<section id="corollary" class="slide level2">
+<h2>Corollary</h2>
+<p>In large samples, the inference obtained from using likelihood-based inference and Bayesian methods will be equivalent</p>
+<ul>
+<li>credible intervals will also have guaranteed frequentist coverage.</li>
+</ul>
+<p>Misspecified model: Bayesian will return the model from the family that minimizes the Kullback–Leibler divergence with the true data generating process.</p>
 </section>
-<section id="update-for-regression-parameters" class="slide level2">
-<h2>Update for regression parameters</h2>
-<p>The optimal form for <span class="math inline">\(\boldsymbol{\beta}\)</span> is Gaussian and proceeding similarly, <span class="math display">\[\begin{align*}
-\boldsymbol{\mu}_{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X} + \mathbf{Q_0})^{-1}(\mathbf{X}\boldsymbol{\mu}_{\boldsymbol{Z}} + \mathbf{Q}_0\boldsymbol{\mu}_0)
-\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{\mu}_{\boldsymbol{Z}} = \mathsf{E}_{\boldsymbol{Z}}(\boldsymbol{Z}).\)</span></p>
-<p>Other parameters of the distribution are known functions of covariates, etc.</p>
-<!--
-The ELBO is
-\begin{align*}
-\mathsf{ELBO} = -\frac{1}{2}(\boldsymbol{z} - \mathbf{X}\boldsymbol{\beta})^\top(\boldsymbol{z} - \mathbf{X}\boldsymbol{\beta})\right\} \times \prod_{i=1}^n \mathrm{I}(z_i > 0)^{y_i}\mathrm{I}(z_i \le 0)^{1-y_i}
-\end{align*}
-where use the fact $\mathsf{E}_{Z_i}\{\mathrm{I}(z_i \le 0)\}=$that the entropy of a $p$-dimensional multivariate Gaussian random vector with precision $\mathbf{Q}$ is $p/2\{1+\log(2\pi)\} - \log |\mathbf{Q}|/2.$
--->
+<section id="regularity-conditions" class="slide level2">
+<h2>Regularity conditions</h2>
+<ul>
+<li>The maximizer must be uniquely identified from the data and must not be on boundary, so that we can perform a two-sided Taylor series expansion around <span class="math inline">\(\boldsymbol{\theta}_0.\)</span></li>
+<li>We need to be able to apply the law of large numbers to get the variance (reciprocal Fisher information) and apply a central limit theorem to the score.</li>
+<li>The third-order derivative of the likelihood is bounded: we can get away with weaker, but this is easiest to check (and ensures that the higher order terms of the Taylor series expansion vanishes asymptotically).</li>
+</ul>
 </section>
-<section id="example" class="slide level2">
-<h2>Example</h2>
-<p>We consider for illustration purposes data from Experiment 2 of <span class="citation" data-cites="Duke.Amir:2023">Duke &amp; Amir (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span> on the effect of sequential decisions and purchasing formats.</p>
-<p>We fit a model with - <code>age</code> of the participant (scaled) and - <code>format,</code> the binary variable which indicate the experimental condition (sequential vs integrated).</p>
-</section>
-<section id="elbo-and-marginal-density-approximation" class="slide level2">
-<h2>ELBO and marginal density approximation</h2>
+<section id="gaussian-approximation-to-gamma-posterior" class="slide level2">
+<h2>Gaussian approximation to gamma posterior</h2>
 
-<img data-src="bayesmod-slides10_files/figure-revealjs/fig-elbo-CAVI-probit-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-elbo-CAVI-probit"><p class="caption">
-Figure&nbsp;4: ELBO (left) and marginal density approximation with true density (full) versus variational approximation (dashed).
+<img data-src="bayesmod-slides10_files/figure-revealjs/fig-post-gamma-laplace-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-post-gamma-laplace"><p class="caption">
+Figure&nbsp;2: Gaussian approximation (dashed) to the posterior density (full line) of the exponential rate <span class="math inline">\(\lambda\)</span> for the <code>waiting</code> dataset with an exponential likelihood and a gamma prior with <span class="math inline">\(a=0.01\)</span> and <span class="math inline">\(b=0.01.\)</span> The plots are based on the first <span class="math inline">\(10\)</span> observations (left) and the whole sample of size <span class="math inline">\(n=62\)</span> (right).
 </p></section>
-<section id="comments" class="slide level2">
-<h2>Comments</h2>
-<ul>
-<li><p>With vague priors, the coefficients for the mean <span class="math inline">\(\boldsymbol{\mu}_{\boldsymbol{\beta}}=(\beta_0, \beta_1, \beta_2)^\top\)</span> matches the frequentist point estimates of the probit regression to four significant digits.</p></li>
-<li><p>Convergence is very fast, as shown by the ELBO plot.</p></li>
-<li><p>The marginal density approximations are underdispersed.</p></li>
-</ul>
+<section id="structured-models" class="slide level2">
+<h2>Structured models</h2>
+<p>Models in genomics data or spatio-temporal applications including random effects (e.g., spline smoothers) are predominant.</p>
+<p>They often contain several thousands or millions of latent parameters.</p>
+<p>Inference becomes <strong>unfeasible</strong> in reasonable time using methods we covered so far.</p>
 </section>
-<section id="stochastic-optimization" class="slide level2">
-<h2>Stochastic optimization</h2>
-<p>We consider alternative numeric schemes which rely on stochastic optimization <span class="citation" data-cites="Hoffman:2013">(<a href="#/references" role="doc-biblioref" onclick="">Hoffman et al., 2013</a>)</span>.</p>
-<p>The key idea behind these methods is that</p>
-<ul>
-<li>we can use gradient-based algorithms,</li>
-<li>and approximate the expectations with respect to <span class="math inline">\(g\)</span> by drawing samples from it</li>
-</ul>
-<p>Also allows for minibatch (random subset) selection to reduce computational costs in large samples</p>
+<section id="integrated-nested-laplace-approximation" class="slide level2">
+<h2>Integrated nested Laplace approximation</h2>
+<p>Consider a model with response <span class="math inline">\(\boldsymbol{y}\)</span> which depends on covariates <span class="math inline">\(\mathbf{x}\)</span> through a latent Gaussian process <span class="math inline">\(\boldsymbol{\beta}.\)</span></p>
+<p>Typically, the prior of coefficients <span class="math inline">\(\boldsymbol{\beta} \in \mathbb{R}^p.\)</span> The dimension <span class="math inline">\(p\)</span> can be substantial (several thousands) with a comparably low-dimensional hyperparameter vector <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^m.\)</span></p>
+<p>Consider data that are conditionally independent given <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{Q}^{-1})\)</span> for simplicity.</p>
 </section>
-<section id="stochastic-gradient-descent" class="slide level2">
-<h2>Stochastic gradient descent</h2>
-<p>Consider <span class="math inline">\(f(\boldsymbol{\theta})\)</span> a differentiable function with gradient <span class="math inline">\(\nabla f(\boldsymbol{\theta})\)</span> and <span class="math inline">\(\rho_t\)</span> a Robbins–Munro sequence.</p>
-<p>To maximize <span class="math inline">\(f(\boldsymbol{\theta})\)</span>, we construct a series of first-order approximations starting from <span class="math inline">\(\boldsymbol{\theta}^{(0)}\)</span> with <span class="math display">\[\begin{align*}
-\boldsymbol{\theta}^{(t)} = \boldsymbol{\theta}^{(t-1)} +\rho_t  \mathsf{E}\left\{\nabla f(\boldsymbol{\theta}^{(t-1)})\right\}.
-\end{align*}\]</span> where the expected value is evaluated via Monte Carlo, until changes in <span class="math inline">\(\|\boldsymbol{\theta}_{t} - \boldsymbol{\theta}_{t-1}\|\)</span> is less than some tolerance value.</p>
+<section id="gaussian-approximations-considered" class="slide level2">
+<h2>Gaussian approximations considered</h2>
+<p>Then, <span class="math display">\[\begin{align*}
+p(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto \exp\left\{-\frac{1}{2} \boldsymbol{\beta}^\top\mathbf{Q}\boldsymbol{\beta} + \sum_{i=1}^n \log p(y_i \mid \beta_i, \boldsymbol{\theta})\right\}
+\end{align*}\]</span> If <span class="math inline">\(\boldsymbol{\beta}\)</span> is a Gaussian Markov random field, it’s precision matrix <span class="math inline">\(\mathbf{Q}\)</span> will be sparse. A Gaussian approximation to this model would have precision matrix <span class="math inline">\(\mathbf{Q} + \mathrm{diag}(\boldsymbol{c})\)</span> for some vector <span class="math inline">\(\boldsymbol{c}\)</span> obtained from the second-order expansion of the likelihood.</p>
+<p>This allows one to use dedicated algorithms for sparse matrices.</p>
 </section>
-<section id="robbinsmunro-sequence" class="slide level2">
-<h2>Robbins–Munro sequence</h2>
-<p>The step sizes must satisfy <span class="math display">\[\sum_{t=1}^\infty \rho_t = \infty, \qquad\sum_{t=1}^\infty \rho^2_t&lt; \infty.\]</span></p>
-<p>Parameter-specific scaling helps with updates of parameters on very different scales.</p>
+<section id="inla-targets-of-inference" class="slide level2">
+<h2>INLA: targets of inference</h2>
+<p>Interest typically then lies in marginal parameters <span class="math display">\[\begin{align*}
+p(\beta_i \mid \boldsymbol{y}) &amp;= \int p(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}\\
+p(\theta_i \mid \boldsymbol{y}) &amp;= \int p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}_{-i}
+\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{\theta}_{-i}\)</span> denotes the vector of hyperparameters excluding the <span class="math inline">\(i\)</span>th element <span class="math inline">\(\theta_i.\)</span></p>
 </section>
-<section id="black-box-variational-inference" class="slide level2">
-<h2>Black-box variational inference</h2>
-<p><span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> shows that the gradient of the ELBO reduces to <span class="math display">\[\begin{align*}
-\frac{\partial}{\partial \boldsymbol{\psi}} \mathsf{ELBO}(g) &amp;=\mathsf{E}_{g}\left\{\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} \times \log \left( \frac{p(\boldsymbol{\theta}, \boldsymbol{y})}{g(\boldsymbol{\theta}; \boldsymbol{\psi})}\right)\right\}
-\end{align*}\]</span> using the change rule, differentiation under the integral sign (dominated convergence theorem) and the identity <span class="math display">\[\begin{align*}
-\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \frac{\partial g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}}
+<section id="philosophy-of-inla" class="slide level2">
+<h2>Philosophy of INLA</h2>
+<p>The INLA method builds Laplace approximations to the integrands <span class="math inline">\(p(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y})\)</span> and <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y}),\)</span> and evaluates the integral using quadrature rules over a coarse grid of values of <span class="math inline">\(\boldsymbol{\theta}.\)</span></p>
+<p>The marginal posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is approximated by writing <span class="math display">\[p(\boldsymbol{\beta}, \boldsymbol{\theta} \mid \boldsymbol{y}) \propto p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}) p(\boldsymbol{\theta} \mid \boldsymbol{y})\]</span> and performing a Laplace approximation for fixed value of <span class="math inline">\(\boldsymbol{\theta}\)</span> for the term <span class="math inline">\(p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),\)</span> whose mode we denote by <span class="math inline">\(\widehat{\boldsymbol{\beta}}.\)</span></p>
+</section>
+<section id="inla-approximation-step-1" class="slide level2">
+<h2>INLA approximation (step 1)</h2>
+<p>This yields <span class="math display">\[\begin{align*}
+\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}}
 \end{align*}\]</span></p>
 </section>
-<section id="black-box-variational-inference-in-practice" class="slide level2">
-<h2>Black-box variational inference in practice</h2>
-<ul>
-<li>Note that the gradient simplifies for <span class="math inline">\(g_i\)</span> in exponential families.</li>
-<li>The gradient estimator is particularly noisy, so <span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> provide two methods to reduce the variance of this expression using control variates and Rao–Blackwellization.</li>
-</ul>
+<section id="note-on-approximation" class="slide level2">
+<h2>Note on approximation</h2>
+<div style="font-size: 0.8em;">
+<p>The Laplace approximation <span class="math inline">\(p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})\)</span> has kernel <span class="math display">\[p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}\exp\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})/2\};\]</span> since it is evaluated at <span class="math inline">\(\widehat{\boldsymbol{\beta}},\)</span> we retrieve only the determinant of the negative Hessian of <span class="math inline">\(p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),\)</span> namely <span class="math inline">\(\mathbf{H}(\widehat{\boldsymbol{\beta}}).\)</span> Note that the latter varies with <span class="math inline">\(\boldsymbol{\theta}.\)</span></p>
+</div>
 </section>
-<section id="automatic-differentiation-variational-inference" class="slide level2">
-<h2>Automatic differentiation variational inference</h2>
-<p><span class="citation" data-cites="Kucukelbir:2017">Kucukelbir et al. (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> proposes a stochastic gradient algorithm, but with two main innovations.</p>
-<ul>
-<li>The first is the general use of Gaussian approximating densities for factorized density, with parameter transformations to map from the support of <span class="math inline">\(T: \boldsymbol{\Theta} \mapsto \mathbb{R}^p\)</span> via <span class="math inline">\(T(\boldsymbol{\theta})=\boldsymbol{\zeta}.\)</span></li>
-<li>The second is to use the resulting <strong>location-scale</strong> family to obtain an alternative form of the gradient.</li>
-</ul>
+<section id="numerical-integration" class="slide level2">
+<h2>Numerical integration</h2>
+<p>To obtain <span class="math inline">\(p(\theta_i \mid \boldsymbol{y})\)</span>:</p>
+<ol type="1">
+<li>Find the mode of <span class="math inline">\(\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> using a Newton’s method, approximating the gradient and Hessian via finite differences.</li>
+<li>Compute the negative Hessian at the mode to get an approximation to the covariance of <span class="math inline">\(\boldsymbol{\theta}.\)</span> Use an eigendecomposition to get the principal directions <span class="math inline">\(\boldsymbol{z}\)</span>.</li>
+</ol>
 </section>
-<section id="gaussian-full-rank-approximation" class="slide level2">
-<h2>Gaussian full-rank approximation</h2>
-<p>Consider an approximation <span class="math inline">\(g(\boldsymbol{\theta}; \boldsymbol{\psi})\)</span> where <span class="math inline">\(\boldsymbol{\psi}\)</span> consists of</p>
-<ul>
-<li>mean parameters <span class="math inline">\(\boldsymbol{\mu}\)</span> and</li>
-<li>covariance <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, parametrized through a Cholesky decomposition</li>
-</ul>
-<p>The full approximation is of course more flexible, but is more expensive to compute than the mean-field approximation.</p>
+<section id="numerical-integration-2" class="slide level2">
+<h2>Numerical integration (2)</h2>
+<ol start="3" type="1">
+<li>In each direction of <span class="math inline">\(\boldsymbol{z}\)</span>, consider drops in <span class="math inline">\(\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> as we move away from the mode and define a coarse grid based on these, keeping points where the difference in <span class="math inline">\(\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> relative to the mode is less than some small <span class="math inline">\(\delta.\)</span></li>
+<li>Retrieve the marginal by numerical integration using the central composition design outline above. We can also use directly avoid the integration and use the approximation at the posterior mode of <span class="math inline">\(\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}).\)</span></li>
+</ol>
 </section>
-<section id="gaussian-entropy" class="slide level2">
-<h2>Gaussian entropy</h2>
-<p>The entropy of the multivariate Gaussian with mean <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance <span class="math inline">\(\boldsymbol{\Sigma} = \mathbf{LL}^\top\)</span>, where <span class="math inline">\(\mathbf{L}\)</span> is a lower triangular matrix, is <span class="math display">\[\begin{align*}
-\mathcal{E}(\mathbf{L}) = - \mathsf{E}_g(\log g) &amp;= \frac{D+D\log(2\pi) + \log |\mathbf{LL}^\top|}{2},
-\end{align*}\]</span> and only depends on <span class="math inline">\(\boldsymbol{\Sigma}\)</span>.</p>
+<section id="approximation-of-marginal-of-gaussian-latent-effect" class="slide level2">
+<h2>Approximation of marginal of Gaussian latent effect</h2>
+<p>For the marginal <span class="math inline">\(p(\beta_i \mid \boldsymbol{y})\)</span> term, <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> proceed instead with the marginal for <span class="math inline">\(\beta_i\)</span> by building an approximation of it based on maximizing <span class="math inline">\(\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}\)</span> to yield <span class="math inline">\(\widehat{\boldsymbol{\beta}}_{(i)}\)</span> whose <span class="math inline">\(i\)</span>th element is <span class="math inline">\(\beta_i,\)</span> yielding <span class="math display">\[\begin{align*}
+\widetilde{p}(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}_{(i)}, \boldsymbol{\theta} \mid \boldsymbol{y})}{\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i),-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y})},
+\end{align*}\]</span> with a suitable renormalization of <span class="math inline">\(\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i),-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}).\)</span></p>
 </section>
-<section id="eigendecomposition" class="slide level2">
-<h2>Eigendecomposition</h2>
-<p>We work with the matrix-log of the covariance matrix, defined through it’s eigendecomposition (or singular value decomposition) <span class="math display">\[\boldsymbol{\Sigma}=\mathbf{V}\mathrm{diag}(\boldsymbol{\lambda})\mathbf{V}^{\top},\]</span> where <span class="math inline">\(\mathbf{V}\)</span> is a <span class="math inline">\(p\times p\)</span> orthogonal matrix of eigenvectors, whose inverse is equal to it’s transpose.</p>
+<section id="remark-on-approximation" class="slide level2">
+<h2>Remark on approximation</h2>
+<p>While we could use the Laplace approximation <span class="math inline">\(p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})\)</span> and marginalize the latter directly, this leads to evaluation of the Laplace approximation to the density far from the mode, which is often inaccurate.</p>
 </section>
-<section id="matrix-log" class="slide level2">
-<h2>Matrix-log</h2>
-<p>Most operations on the matrix only affect the eigenvalues <span class="math inline">\(\lambda_1, \ldots, \lambda_p\)</span>: the matrix-log <span class="math inline">\(\boldsymbol{\Sigma} = \exp(2\mathbf{M})\)</span> is <span class="math display">\[\begin{align*}
-\mathbf{M} =\mathbf{V}\mathrm{diag}\left\{ \frac{1}{2}\log(\boldsymbol{\lambda})\right\}\mathbf{V}^\top.
-\end{align*}\]</span></p>
+<section id="numerical-challenges-to-laplace-approximation" class="slide level2">
+<h2>Numerical challenges to Laplace approximation</h2>
+<p>One challenge is that <span class="math inline">\(p\)</span> is <strong>very large</strong>, so calculation of the Hessian <span class="math inline">\(\mathbf{H}\)</span> is costly to evaluate.</p>
+<p>Having to evaluate it repeatedly for each marginal <span class="math inline">\(\beta_i\)</span> for <span class="math inline">\(i=1, \ldots, p\)</span> is prohibitive since it involves factorizations of <span class="math inline">\(p \times p\)</span> matrices.</p>
 </section>
-<section id="operations-on-matrices" class="slide level2">
-<h2>Operations on matrices</h2>
-<p>Other operations on matrices are defined analogously:</p>
-<ul>
-<li><span class="math inline">\(\exp(\boldsymbol{\Sigma}) = \mathbf{V}\mathrm{diag}\{ \exp(\boldsymbol{\lambda})\}\mathbf{V}^\top\)</span></li>
-<li><span class="math inline">\(\log(\boldsymbol{\Sigma}) = \mathbf{V}\mathrm{diag}\{ \log(\boldsymbol{\lambda})\}\mathbf{V}^\top\)</span></li>
-<li>The symmetrization operator is <span class="math inline">\(\mathsf{symm}(\mathbf{X}) = (\mathbf{X} + \mathbf{X}^\top)/2.\)</span></li>
-</ul>
+<section id="further-approximations" class="slide level2">
+<h2>Further approximations</h2>
+<p>To reduce the computational costs, <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> propose to use the approximate mean to avoid optimizing and use the conditional of the Gaussian approximation with mean <span class="math inline">\(\widehat{\boldsymbol{\beta}}\)</span> and covariance <span class="math inline">\(\boldsymbol{\Sigma} = \mathbf{H}^{-1}(\widehat{\boldsymbol{\beta}}),\)</span> <span class="math display">\[\begin{align*}
+\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y} &amp;\approx \mathsf{Gauss}_{p-1}\left(\widetilde{\boldsymbol{\beta}}_{(i)}, \mathbf{M}^{-1}_{-i,-i}\right);
+\\
+\widetilde{\boldsymbol{\beta}}_{(i)} &amp;= \widehat{\boldsymbol{\beta}}_{-i} + \boldsymbol{\Sigma}_{i,i}^{-1}\boldsymbol{\Sigma}_{i,-i}(\beta_i - \widehat{\beta}_i),
+\end{align*}\]</span> This only requires a rank-one update.</p>
 </section>
-<section id="gaussian-scale" class="slide level2">
-<h2>Gaussian scale</h2>
-<p>Since the Gaussian is a location-scale family, we can write <span class="math inline">\(\boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z},\)</span> in terms of a standardized Gaussian, <span class="math display">\[\begin{align*}
-\mathsf{ELBO} = \mathsf{E}_{\boldsymbol{Z}}\left\{ p\{\boldsymbol{y}, \boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\right\} + c
-\\\approx \frac{1}{B}\sum_{b=1}^B p\{\boldsymbol{y}, \boldsymbol{\theta} = \boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}_i\} + c
-\end{align*}\]</span> for <span class="math inline">\(\boldsymbol{Z}_1, \ldots, \boldsymbol{Z}_b \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{I}_p),\)</span> with <span class="math inline">\(c=p\{\log(2\pi)+1\}/2 + \mathrm{trace}(\mathbf{M})\)</span>.</p>
+<section id="further-approximations-1" class="slide level2">
+<h2>Further approximations</h2>
+<p><span class="citation" data-cites="Wood:2019">Wood (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span> suggest to use a Newton step to correct <span class="math inline">\(\widetilde{\boldsymbol{\beta}}_{(i)},\)</span> starting from the conditional mean.</p>
+<p>The second step is to exploit the local dependence on <span class="math inline">\(\boldsymbol{\beta}\)</span> using the Markov structure to build an improvement to the Hessian. Various strategies are proposed in <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> and <span class="citation" data-cites="Wood:2019">Wood (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span>.</p>
+<p>Nowadays, the INLA software uses a low-rank variational correction to Laplace method, proposed in <span class="citation" data-cites="vanNiekerk.Rue:2024"><span class="nocase">van Niekerk &amp; Rue</span> (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>.</p>
 </section>
-<section id="gradients-of-the-elbo" class="slide level2">
-<h2>Gradients of the ELBO</h2>
-<p>Write the gradient of the joint log posterior density as <span class="math display">\[\nabla p(\boldsymbol{y}, \boldsymbol{\theta}) = {\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}/{\partial \boldsymbol{\theta}}.\]</span> Then, the gradients of the ELBO are <span class="math display">\[\begin{align*}
-\frac{\partial \mathsf{ELBO}(g)}{\partial \boldsymbol{\mu}} &amp;= \mathsf{E}_{\boldsymbol{Z}}\left\{\nabla p(\boldsymbol{y}, \boldsymbol{\theta})\right\} \\
-\frac{\partial \mathsf{ELBO}(g)}{\partial \mathbf{M}} &amp;= \mathsf{symm}\left[\mathsf{E}_{\boldsymbol{Z}}\left\{\nabla p(\boldsymbol{y}, \boldsymbol{\theta})\boldsymbol{Z}^\top\exp(\mathbf{M})\right\}\right] + \mathbf{I}_p.
-\end{align*}\]</span></p>
+<section id="the-inla-software" class="slide level2">
+<h2>The INLA software</h2>
+<p>The <code>INLA</code> <a href="https://www.r-inla.org/"><strong>R</strong> package</a> provides an interface to fit models with Gaussian latent random effects. While the software is particularly popular for spatio-temporal applications using the SPDE approach, we revisit two examples in the sequel where we can exploit the Markov structure.</p>
 </section>
-<section id="gradients-of-elbo-for-location-scale-families" class="slide level2">
-<h2>Gradients of ELBO for location-scale families</h2>
-<p>We can rewrite the expression for the gradient with respect to the matrix-log <span class="math inline">\(\mathbf{M}\)</span> using integration by part <span class="math display">\[\begin{align*}
-  &amp;\mathsf{E}_{\boldsymbol{Z}}\left[\frac{\partial \log p\{\boldsymbol{y}, \boldsymbol{\theta}=\boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\}}{\partial \boldsymbol{\theta}}\boldsymbol{Z}^\top\exp(\mathbf{M})\right]
-\\&amp; =\mathsf{E}_{\boldsymbol{Z}}\left[\frac{\partial \log p\{\boldsymbol{y}, \boldsymbol{\theta}=\boldsymbol{\mu} + \exp(\mathbf{M})\boldsymbol{Z}\}}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top}\exp(2\mathbf{M})\right].
-\end{align*}\]</span> The first expression typically leads to a more noisy gradient estimator, but the second requires derivation of the Hessian.</p>
+<section id="stochastic-volatility-model-with-inla" class="slide level2">
+<h2>Stochastic volatility model with INLA</h2>
+<p>Financial returns <span class="math inline">\(Y_t\)</span> typically exhibit time-varying variability. The <strong>stochastic volatility</strong> model is a parameter-driven model that specifies <span class="math display">\[\begin{align*}
+Y_t &amp;= \exp(h_t/2) Z_t \\
+h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
+\end{align*}\]</span> where <span class="math inline">\(U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).\)</span> The <a href="https://inla.r-inla-download.org/r-inla.org/doc/likelihood/stochvolgaussian.pdf"><code>INLA</code> documentation</a> provides information about which default prior and hyperparameters are specified. We use a <span class="math inline">\(\mathsf{gamma}(1, 0.001)\)</span> prior for the precision.</p>
 </section>
-<section id="change-of-variable" class="slide level2">
-<h2>Change of variable</h2>
-<p>The change of variable introduces a Jacobian term <span class="math inline">\(\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\)</span> for the approximation to the density <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{y})\)</span>, where</p>
-<p><span class="math display">\[\begin{align*}
-p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|
-\end{align*}\]</span> and we replace the gradient by <span class="math display">\[\begin{align*}
-\nabla p(\boldsymbol{y}, \boldsymbol{\theta}) = \frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}} \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}  + \frac{\partial \log \left|\mathbf{J}_{T^{-1}}(\boldsymbol{\zeta})\right|}{\partial \boldsymbol{\zeta}}.
-\end{align*}\]</span></p>
+<section id="stochastic-volality-code" class="slide level2">
+<h2>Stochastic volality code</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a aria-label="1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb3-2"><a aria-label="2"></a><span class="fu">data</span>(exchangerate, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
+<span id="cb3-3"><a aria-label="3"></a><span class="co"># Compute response from raw spot exchange rates at noon</span></span>
+<span id="cb3-4"><a aria-label="4"></a>y <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">diff</span>(<span class="fu">log</span>(exchangerate<span class="sc">$</span>dexrate))</span>
+<span id="cb3-5"><a aria-label="5"></a>time <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(y)</span>
+<span id="cb3-6"><a aria-label="6"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">time =</span> time)</span>
+<span id="cb3-7"><a aria-label="7"></a>f_stochvol <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"ar1"</span>,</span>
+<span id="cb3-8"><a aria-label="8"></a>                            <span class="at">param =</span> <span class="fu">list</span>(<span class="at">prec =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.001</span>)))</span>
+<span id="cb3-9"><a aria-label="9"></a>mod_stochvol <span class="ot">&lt;-</span> <span class="fu">inla</span>(f_stochvol, <span class="at">family =</span> <span class="st">"stochvol"</span>, <span class="at">data =</span> data)</span>
+<span id="cb3-10"><a aria-label="10"></a><span class="co"># Obtain summary</span></span>
+<span id="cb3-11"><a aria-label="11"></a>summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod_stochvol)</span>
+<span id="cb3-12"><a aria-label="12"></a><span class="co"># plot(mod_stochvol)</span></span>
+<span id="cb3-13"><a aria-label="13"></a>marg_prec <span class="ot">&lt;-</span> mod_stochvol<span class="sc">$</span>marginals.hyperpar[[<span class="dv">1</span>]]</span>
+<span id="cb3-14"><a aria-label="14"></a>marg_phi <span class="ot">&lt;-</span> mod_stochvol<span class="sc">$</span>marginals.hyperpar[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
-<section id="chain-rule" class="slide level2">
-<h2>Chain rule</h2>
-<p>If <span class="math inline">\(\boldsymbol{\theta} = T^{-1}(\boldsymbol{\zeta})\)</span> and <span class="math inline">\(\boldsymbol{\zeta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{z},\)</span> we have for <span class="math inline">\(\boldsymbol{\psi}\)</span> equal to either <span class="math inline">\(\boldsymbol{\mu}\)</span> or <span class="math inline">\(\mathbf{L}\)</span>, using the chain rule, <span class="math display">\[\begin{align*}
-&amp; \frac{\partial}{\partial \boldsymbol{\psi}}\log p(\boldsymbol{y}, \boldsymbol{\theta})
-\\&amp;\quad  = \frac{\partial \log p(\boldsymbol{y}, \boldsymbol{\theta})}{\partial \boldsymbol{\theta}}
-   \times \frac{\partial T^{-1}(\boldsymbol{\zeta})}{\partial \boldsymbol{\zeta}}
-\times \frac{\partial (\boldsymbol{\mu} + \mathbf{L}\boldsymbol{z})}{\partial \boldsymbol{\psi}}
-\end{align*}\]</span></p>
-</section>
-<section id="quality-of-approximation" class="slide level2">
-<h2>Quality of approximation</h2>
-<p>Consider the stochastic volatility model.</p>
+<section id="marginal-posterior-approximations" class="slide level2">
+<h2>Marginal posterior approximations</h2>
 
-<img data-src="fig/stochvol-volatility.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"><p>Fitting HMC-NUTS to the exchange rate data takes 156 seconds for 10K iterations, vs 2 seconds for the mean-field approximation.</p>
+<img data-src="bayesmod-slides10_files/figure-revealjs/fig-stochvol-inla-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-stochvol-inla"><p class="caption">
+Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters from the Gaussian stochastic volatility model.
+</p></section>
+<section id="comment-on-stochastic-volatility" class="slide level2">
+<h2>Comment on stochastic volatility</h2>
+<p><a href="#/fig-stochvol-inla" class="quarto-xref">Figure&nbsp;3</a> shows that the correlation <span class="math inline">\(\phi\)</span> is nearly one, leading to random walk behaviour and high persistence over time.</p>
+<p>This strong serial dependence in the variance is in part responsible for the difficulty in fitting this model using MCMC.</p>
 </section>
-<section id="performance-of-stochastic-gradient-descent" class="slide level2">
-<h2>Performance of stochastic gradient descent</h2>
-<p>The speed of convergence of the stochastic gradient descent depends on multiple factors:</p>
+<section id="marginal-approximations" class="slide level2">
+<h2>Marginal approximations</h2>
+<p>We can use the marginal density approximations to obtain quantiles for summary of interest, marginal posterior moments, etc.</p>
+<p>The software also includes utilities to transform the parameters using the change of variable formula.</p>
+</section>
+<section id="marginal-summaries" class="slide level2">
+<h2>Marginal summaries</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a aria-label="1"></a><span class="co"># Compute density, quantiles, etc. via inla.*marginal</span></span>
+<span id="cb4-2"><a aria-label="2"></a><span class="co"># Change of variable to get variance from precision</span></span>
+<span id="cb4-3"><a aria-label="3"></a>marg_var <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.tmarginal</span>(</span>
+<span id="cb4-4"><a aria-label="4"></a>  <span class="at">fun =</span> <span class="cf">function</span>(x) { <span class="dv">1</span> <span class="sc">/</span> x }, </span>
+<span id="cb4-5"><a aria-label="5"></a>  <span class="at">marginal =</span> marg_prec)</span>
+<span id="cb4-6"><a aria-label="6"></a>INLA<span class="sc">::</span><span class="fu">inla.qmarginal</span>(marg_var, <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>,  <span class="fl">0.975</span>))</span>
+<span id="cb4-7"><a aria-label="7"></a><span class="do">## [1] 0.288 0.452 0.732</span></span>
+<span id="cb4-8"><a aria-label="8"></a><span class="co"># Posterior marginal mean and variance of phi</span></span>
+<span id="cb4-9"><a aria-label="9"></a>mom1 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
+<span id="cb4-10"><a aria-label="10"></a>    <span class="at">fun =</span> <span class="cf">function</span>(x){x}, </span>
+<span id="cb4-11"><a aria-label="11"></a>    <span class="at">marginal =</span> marg_phi)</span>
+<span id="cb4-12"><a aria-label="12"></a>mom2 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
+<span id="cb4-13"><a aria-label="13"></a>    <span class="at">fun =</span> <span class="cf">function</span>(x){x<span class="sc">^</span><span class="dv">2</span>}, </span>
+<span id="cb4-14"><a aria-label="14"></a>    <span class="at">marginal =</span> marg_phi)</span>
+<span id="cb4-15"><a aria-label="15"></a><span class="fu">c</span>(<span class="at">mean =</span> mom1, <span class="at">sd =</span> <span class="fu">sqrt</span>(mom2 <span class="sc">-</span> mom1<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb4-16"><a aria-label="16"></a><span class="do">##    mean      sd </span></span>
+<span id="cb4-17"><a aria-label="17"></a><span class="do">## 0.98409 0.00567</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="tokyo-binomial-time-series" class="slide level2">
+<h2>Tokyo binomial time series</h2>
+<p>We revisit the Tokyo rainfall example, but this time fit the model with <code>INLA</code> rather than MCMC.</p>
 <ul>
-<li>the properties of the function. Good performance is obtained for log concave distributions.</li>
-<li>the level of noise of the gradient estimator. Less noisy gradient estimators are preferable.</li>
-<li>good starting values, as the algorithm converges to a local maximum.</li>
-<li>the Robbins–Munro sequence used for the step size, as overly large steps may lead to divergences.</li>
+<li>Logistic regression, with a second-order cyclic random walk prior for the coefficients, and the default gamma prior for the precision.</li>
 </ul>
 </section>
+<section id="code-syntax" class="slide level2">
+<h2>Code syntax</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a aria-label="1"></a><span class="fu">data</span>(Tokyo, <span class="at">package =</span> <span class="st">"INLA"</span>)</span>
+<span id="cb5-2"><a aria-label="2"></a><span class="co"># Formula (removing intercept)</span></span>
+<span id="cb5-3"><a aria-label="3"></a>formula <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"rw2"</span>, <span class="at">cyclic =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb5-4"><a aria-label="4"></a>mod <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla</span>(</span>
+<span id="cb5-5"><a aria-label="5"></a>   <span class="at">formula =</span> formula, </span>
+<span id="cb5-6"><a aria-label="6"></a>   <span class="at">family =</span> <span class="st">"binomial"</span>,</span>
+<span id="cb5-7"><a aria-label="7"></a>   <span class="at">Ntrials =</span> n, </span>
+<span id="cb5-8"><a aria-label="8"></a>   <span class="at">data =</span> Tokyo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The marginal posterior with pointwise 95% credible intervals on the next slide show nearly identical results to marginals from the probit model.</p>
+</section>
+<section id="posterior-of-random-effect-prior" class="slide level2">
+<h2>Posterior of random effect prior</h2>
+
+<img data-src="bayesmod-slides10_files/figure-revealjs/fig-rainfall-inla-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-rainfall-inla"><p class="caption">
+Figure&nbsp;4: Posterior probability per day of the year with posterior median and 95% credible interval for the Tokyo rainfall binomial time series.
+</p></section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Duke.Amir:2023" class="csl-entry" role="listitem">
-Duke, K. E., &amp; Amir, O. (2023). The importance of selling formats: When integrating purchase and quantity decisions increases sales. <em>Marketing Science</em>, <em>42</em>(1), 87–109. <a href="https://doi.org/10.1287/mksc.2022.1364">https://doi.org/10.1287/mksc.2022.1364</a>
+<div id="ref-Park.Casella:2008" class="csl-entry" role="listitem">
+Park, T., &amp; Casella, G. (2008). The <span>B</span>ayesian <span>L</span>asso. <em>Journal of the American Statistical Association</em>, <em>103</em>(482), 681–686. <a href="https://doi.org/10.1198/016214508000000337">https://doi.org/10.1198/016214508000000337</a>
 </div>
-<div id="ref-Hoffman:2013" class="csl-entry" role="listitem">
-Hoffman, M. D., Blei, D. M., Wang, C., &amp; Paisley, J. (2013). Stochastic variational inference. <em>Journal of Machine Learning Research</em>, <em>14</em>(40), 1303–1347. <a href="http://jmlr.org/papers/v14/hoffman13a.html">http://jmlr.org/papers/v14/hoffman13a.html</a>
+<div id="ref-Raftery:1995" class="csl-entry" role="listitem">
+Raftery, A. E. (1995). Bayesian model selection in social research. <em>Sociological Methodology</em>, <em>25</em>, 111–163. <a href="https://doi.org/10.2307/271063">https://doi.org/10.2307/271063</a>
 </div>
-<div id="ref-Kucukelbir:2017" class="csl-entry" role="listitem">
-Kucukelbir, A., Tran, D., Ranganath, R., Gelman, A., &amp; Blei, D. M. (2017). Automatic differentiation variational inference. <em>Journal of Machine Learning Research</em>, <em>18</em>(14), 1–45. <a href="http://jmlr.org/papers/v18/16-107.html">http://jmlr.org/papers/v18/16-107.html</a>
+<div id="ref-Rue.Martino.Chopin:2009" class="csl-entry" role="listitem">
+Rue, H., Martino, S., &amp; Chopin, N. (2009). Approximate bayesian inference for latent <span>G</span>aussian models by using integrated nested <span>L</span>aplace approximations. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>71</em>(2), 319–392. <a href="https://doi.org/10.1111/j.1467-9868.2008.00700.x">https://doi.org/10.1111/j.1467-9868.2008.00700.x</a>
 </div>
-<div id="ref-Ormerod.Wand:2010" class="csl-entry" role="listitem">
-Ormerod, J. T., &amp; Wand, M. P. (2010). Explaining variational approximations. <em>The American Statistician</em>, <em>64</em>(2), 140–153. <a href="https://doi.org/10.1198/tast.2010.09058">https://doi.org/10.1198/tast.2010.09058</a>
+<div id="ref-Tierney.Kadane:1986" class="csl-entry" role="listitem">
+Tierney, L., &amp; Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. <em>Journal of the American Statistical Association</em>, <em>81</em>(393), 82–86. <a href="https://doi.org/10.1080/01621459.1986.10478240">https://doi.org/10.1080/01621459.1986.10478240</a>
 </div>
-<div id="ref-Ranganath.Gerrish.Blei:2014" class="csl-entry" role="listitem">
-Ranganath, R., Gerrish, S., &amp; Blei, D. (2014). Black box variational inference. In S. Kaski &amp; J. Corander (Eds.), <em>Proceedings of the seventeenth international conference on artificial intelligence and statistics</em> (Vol. 33, pp. 814–822). Pmlr. <a href="https://proceedings.mlr.press/v33/ranganath14.html">https://proceedings.mlr.press/v33/ranganath14.html</a>
+<div id="ref-vanNiekerk.Rue:2024" class="csl-entry" role="listitem">
+<span class="nocase">van Niekerk, J., &amp; Rue, H.</span> (2024). Low-rank variational <span>B</span>ayes correction to the <span>L</span>aplace method. <em>Journal of Machine Learning Research</em>, <em>25</em>(62), 1–25. <a href="http://jmlr.org/papers/v25/21-1405.html">http://jmlr.org/papers/v25/21-1405.html</a>
+</div>
+<div id="ref-Wood:2019" class="csl-entry" role="listitem">
+Wood, S. N. (2019). Simplified integrated nested <span>L</span>aplace approximation. <em>Biometrika</em>, <em>107</em>(1), 223–230. <a href="https://doi.org/10.1093/biomet/asz044">https://doi.org/10.1093/biomet/asz044</a>
 </div>
 </div>
 </section>

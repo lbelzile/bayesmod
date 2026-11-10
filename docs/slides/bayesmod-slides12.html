@@ -34,7 +34,93 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-  </style>
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-0889ea6b10ab650f3a364291bfeaa97a.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -134,7 +220,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Final review</p>
+  <p class="subtitle">Expectation propagation</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -144,133 +230,295 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Nov 3, 2026</p>
+  <p class="date">Last compiled Tuesday Nov 10, 2026</p>
 </section>
-<section id="fundamentals" class="slide level2">
-<h2>Fundamentals</h2>
-<ul>
-<li>Bayesian inference uses likelihood based inference.</li>
-<li>It complements the likelihood <span class="math inline">\(p(\boldsymbol{y} \mid \boldsymbol{\theta})\)</span> with a prior <span class="math inline">\(p(\boldsymbol{\theta})\)</span>.</li>
-<li>Provided that <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{y})\)</span> is integrable, we get <span class="math display">\[\begin{align*}
-p(\boldsymbol{\theta} \mid \boldsymbol{y}) \stackrel{\boldsymbol{\theta}}{\propto} p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta}).
-\end{align*}\]</span></li>
-</ul>
-</section>
-<section id="marginal-likelihood" class="slide level2">
-<h2>Marginal likelihood</h2>
-<p>The normalizing constant <span class="math display">\[\begin{align*}
-p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(\boldsymbol{y} \mid \boldsymbol{\theta})p(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
-\end{align*}\]</span> to make the posterior a valid density is termed <strong>marginal likelihood</strong>.</p>
-</section>
-<section id="marginal-likelihood-1" class="slide level2">
-<h2>Marginal likelihood</h2>
-<p>Moments of the posterior depend on <span class="math inline">\(p(\boldsymbol{y})\)</span>.</p>
-<p>It is hard to compute because <span class="math inline">\(\boldsymbol{\Theta} \subseteq \mathbb{R}^p\)</span>, and the integral is often high-dimensional.</p>
-<ul>
-<li>Monte Carlo integration (does not typically work because prior need not align with likelihood)</li>
-<li>Numerical integration performance degrades with <span class="math inline">\(p\)</span>, numerical overflow.</li>
-</ul>
-</section>
-<section id="bayes-factors" class="slide level2">
-<h2>Bayes factors</h2>
-<p>The <span class="math inline">\(\color{#6e948c}{\text{Bayes factor}}\)</span> is the ratio of marginal likelihoods, as <span class="math display">\[\begin{align*}
-p(\boldsymbol{y} \mid \mathcal{M}_i) = \int p(y \mid \boldsymbol{\theta}^{(i)}, \mathcal{M}_i) p( \boldsymbol{\theta}^{(i)} \mid \mathcal{M}_i) \mathrm{d}  \boldsymbol{\theta}^{(i)}.
-\end{align*}\]</span> Values of <span class="math inline">\(\mathsf{BF}_{ij}&gt;1\)</span> correspond to model <span class="math inline">\(\mathcal{M}_i\)</span> being more likely than <span class="math inline">\(\mathcal{M}_j\)</span>.</p>
-<ul>
-<li>Strong dependence on the prior <span class="math inline">\(p(\boldsymbol{\theta}^{(i)} \mid \mathcal{M}_i)\)</span>.</li>
-<li>Must use proper priors.</li>
-</ul>
-</section>
-<section id="predictive-distributions" class="slide level2">
-<h2>Predictive distributions</h2>
-<p>Define the <span class="math inline">\(\color{#D55E00}{\text{posterior predictive}}\)</span>, <span class="math display">\[\begin{align*}
-p(y_{\text{new}}\mid \boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(y_{\text{new}} \mid \boldsymbol{\theta}) \color{#D55E00}{p(\boldsymbol{\theta} \mid \boldsymbol{y})} \mathrm{d} \boldsymbol{\theta}
+<section id="revisiting-kullbackleibler-divergence" class="slide level2">
+<h2>Revisiting Kullback–Leibler divergence</h2>
+<p>The Kullback–Leibler divergence between densities <span class="math inline">\(f_t(\cdot)\)</span> and <span class="math inline">\(g(\cdot; \boldsymbol{\psi}),\)</span> is <span class="math display">\[\begin{align*}
+\mathsf{KL}(f_t \parallel g) &amp;=\int \log \left(\frac{f_t(\boldsymbol{x})}{g(\boldsymbol{x}; \boldsymbol{\psi})}\right) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x}\\
+\\ &amp;= \mathsf{E}_{f_t}\{\log f_t(\boldsymbol{X})\} - \mathsf{E}_{f_t}\{\log g(\boldsymbol{X}; \boldsymbol{\psi})\}
 \end{align*}\]</span></p>
 </section>
-<section id="bayesian-inference" class="slide level2">
-<h2>Bayesian inference</h2>
-<p>If we have samples from <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> or an approximation of the joint/marginals, then we can</p>
+<section id="forward-kullbackleibler-divergence" class="slide level2">
+<h2>Forward Kullback–Leibler divergence</h2>
+<p>If <span class="math inline">\(g(\cdot; \boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> is Gaussian approximating density, then we minimize the KL divergence by matching moments: <span class="math display">\[\begin{align*}
+\boldsymbol{\mu}^* &amp;= \mathsf{E}_{f_t}(\boldsymbol{X})\\
+\boldsymbol{\Sigma}^* &amp;= \mathsf{E}_{f_t}\left\{(\boldsymbol{X}-\boldsymbol{\mu}^*)(\boldsymbol{X}-\boldsymbol{\mu}^*)^\top\right\}
+\end{align*}\]</span> See Exercise 10.1 for a derivation.</p>
+</section>
+<section id="variational-inference" class="slide level2">
+<h2>Variational inference</h2>
+<p>We don’t know the posterior mean and variance! (they depend on unknown normalizing constant).</p>
+<p>Variational inference finds rather the approximation that minimizes the <strong>reverse Kullback–Leibler divergence</strong> <span class="math inline">\(\mathsf{KL}(g \parallel f_t).\)</span></p>
+<p>Qualitatively, this yields a very different approximation.</p>
+</section>
+<section id="comparing-approximations" class="slide level2">
+<h2>Comparing approximations</h2>
+
+<img data-src="bayesmod-slides12_files/figure-revealjs/fig-klvsrev-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-klvsrev"><p class="caption">
+Figure&nbsp;1: Approximation of a correlated bivariate Gaussian density by independent Gaussians.
+</p></section>
+<section id="gaussian-as-exponential-family" class="slide level2">
+<h2>Gaussian as exponential family</h2>
+<p>Write the Gaussian distribution in terms of canonical parameters <span class="math display">\[\begin{align*}
+q(\boldsymbol{\theta}) \propto \exp \left( - \frac{1}{2} \boldsymbol{\theta}^\top \mathbf{Q}\boldsymbol{\theta} + \boldsymbol{\theta}^\top \boldsymbol{r}\right)
+\end{align*}\]</span> where <span class="math inline">\(\mathbf{Q}\)</span> is the precision matrix and <span class="math inline">\(\boldsymbol{r}=\mathbf{Q}\boldsymbol{\mu},\)</span> the linear shift.</p>
+</section>
+<section id="notation" class="slide level2">
+<h2>Notation</h2>
+<p>Let <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})=\exp\{-\psi(\boldsymbol{\theta})\}\)</span> denote the posterior density.</p>
+<p>Since logarithm is a monotonic transform, we can equivalent minimize <span class="math inline">\(\psi(\boldsymbol{\theta})\)</span> to find the posterior mode.</p>
+<p>Denote</p>
 <ul>
-<li>use the <strong>posterior</strong> distribution to answer any question that is a function of <span class="math inline">\(\boldsymbol{\theta}\)</span> alone.</li>
-<li>use the <strong>posterior predictive</strong> <span class="math inline">\(p(y_{\text{new}}\mid \boldsymbol{y})\)</span> for prediction or forecasting, and checks of model adequacy.</li>
+<li>the gradient <span class="math inline">\(\nabla_{\boldsymbol{\theta}} \psi(\boldsymbol{\theta}) = \partial \psi/\partial \boldsymbol{\theta}\)</span></li>
+<li>the Hessian matrix <span class="math inline">\(\mathbf{H}(\boldsymbol{\theta}) = \partial^2 \psi/(\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top).\)</span></li>
 </ul>
 </section>
-<section id="point-estimators-and-credible-regions" class="slide level2">
-<h2>Point estimators and credible regions</h2>
-<p>Interpretation is different from frequentist, but methods are similar:</p>
+<section id="newton-algorithm" class="slide level2">
+<h2>Newton algorithm</h2>
+<p>Starting from an initial value <span class="math inline">\(\boldsymbol{\theta}_{(0)},\)</span> we consider at step <span class="math inline">\(i\)</span>, a second order Taylor series expansion of <span class="math inline">\(\psi(\boldsymbol{\theta})\)</span> around <span class="math inline">\(\boldsymbol{\theta}_{(i)},\)</span> which gives <span class="math display">\[\begin{align*}
+\psi(\boldsymbol{\theta}) &amp;\approx \psi(\boldsymbol{\theta}_{(i)}) + \nabla_{\boldsymbol{\theta}} \psi(\boldsymbol{\theta}_{(i)})(\boldsymbol{\theta} - \boldsymbol{\theta}_{(i)}) \\&amp; \quad + (\boldsymbol{\theta} - \boldsymbol{\theta}_{(i)})^\top\mathbf{H}(\boldsymbol{\theta}_{(i)})(\boldsymbol{\theta} - \boldsymbol{\theta}_{(i)})
+\end{align*}\]</span></p>
+</section>
+<section id="gaussian-smoothing" class="slide level2">
+<h2>Gaussian smoothing</h2>
+<p>The term <span class="math inline">\(\psi(\boldsymbol{\theta}_{(i)})\)</span> is constant, so if we plug-in this inside the exponential, we obtain <span class="math display">\[\begin{align*}
+q_{(i+1)}(\boldsymbol{\theta}) &amp;\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top\mathbf{H}(\boldsymbol{\theta}_{(i)}) \boldsymbol{\theta} + \boldsymbol{\theta}^\top\mathbf{H}(\boldsymbol{\theta}_{(i)})\boldsymbol{\theta}_{(i+1)}\right\}
+\end{align*}\]</span> where the mean of the approximation is <span class="math display">\[\begin{align*}
+\boldsymbol{\theta}_{(i+1)} = \boldsymbol{\theta}_{(i)} - \mathbf{H}^{-1}(\boldsymbol{\theta}_{(i)}) \nabla_{\boldsymbol{\theta}} \psi(\boldsymbol{\theta}_{(i)}).
+\end{align*}\]</span></p>
+</section>
+<section id="side-remarks" class="slide level2">
+<h2>Side remarks</h2>
+<p>The new mean vector <span class="math inline">\(\boldsymbol{\theta}_{(i+1)}\)</span> corresponds to a Newton update, and at the same time we have defined a sequence of Gaussian updating approximations.</p>
+<p>This scheme works provided that <span class="math inline">\(\mathbf{H}(\boldsymbol{\theta}_{(i)})\)</span> is positive definite and invertible. Without convexity, we get a divergent sequence.</p>
+<p>The fixed point to which the algorithm converges is the Laplace approximation.</p>
+</section>
+<section id="location-scale-transformation-gradients" class="slide level2">
+<h2>Location-scale transformation gradients</h2>
+<p>For location-scale family, with a Gaussian approximation on the target <span class="math inline">\(\boldsymbol{\theta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{Z}\)</span> with <span class="math inline">\(\mathbf{LL}^\top=\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{Z} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{I}_p)\)</span> that the gradient satisfies <span class="math display">\[\begin{align*}
+\nabla_{\boldsymbol{\mu}}\mathsf{ELBO}(q)&amp;= -\mathsf{E}_{\boldsymbol{Z}}\{\nabla_{\boldsymbol{\theta}}\psi(\boldsymbol{\theta})\} \\
+\nabla_{\mathbf{L}}\mathsf{ELBO}(q)&amp;= -\mathsf{E}_{\boldsymbol{Z}}\{\nabla_{\boldsymbol{\theta}}\psi(\boldsymbol{\theta})\boldsymbol{Z}^\top\} + \mathbf{L}^{-\top}
+\end{align*}\]</span></p>
+</section>
+<section id="steins-lemma" class="slide level2">
+<h2>Stein’s lemma</h2>
+<p>Consider <span class="math inline">\(h: \mathbb{R}^d \to \mathbb{R}\)</span> a differentiable function and integration with respect to <span class="math inline">\(\boldsymbol{X} \sim \mathsf{Gauss}_d(\boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> such that the gradient is absolutely integrable, <span class="math inline">\(\mathsf{E}_{\boldsymbol{X}}\{|\nabla_i h(\boldsymbol{X})|\} &lt; \infty\)</span> for <span class="math inline">\(i=1, \ldots, d.\)</span> Then <span class="citation" data-cites="Liu:1994">(<a href="#/references" role="doc-biblioref" onclick="">Liu, 1994</a>)</span>, <span class="math display">\[\begin{align*}
+\mathsf{E}_{\boldsymbol{X}}\left\{h(\boldsymbol{X})(\boldsymbol{X}-\boldsymbol{\mu})\right\} = \boldsymbol{\Sigma}\mathsf{E}_{\boldsymbol{X}}\left\{\nabla h(\boldsymbol{X})\right\}
+\end{align*}\]</span></p>
+</section>
+<section id="alternative-expression-for-the-scale" class="slide level2">
+<h2>Alternative expression for the scale</h2>
+<p>If we apply Stein’s lemma, <span class="math display">\[\begin{align*}
+  \nabla_{\mathbf{L}}\mathsf{ELBO}(q)&amp;= -\mathsf{E}_{\boldsymbol{Z}}\left\{ \frac{\partial^2 \psi(\boldsymbol{\theta})}{\partial \boldsymbol{\theta} \partial \boldsymbol{\theta}^\top}\right\}\mathbf{L} + \mathbf{L}^{-\top}.
+\end{align*}\]</span></p>
+</section>
+<section id="variational-inference-1" class="slide level2">
+<h2>Variational inference</h2>
+<p>At a critical point, both of these derivatives must be zero, whence <span class="math display">\[\begin{align*}
+\mathsf{E}_{\boldsymbol{Z}}\{\nabla_{\boldsymbol{\theta}}\psi(\boldsymbol{\theta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{Z})\} &amp;= \boldsymbol{0}_p. \\
+\mathsf{E}_{\boldsymbol{Z}}\left\{ \frac{\partial^2 \psi(\boldsymbol{\theta} = \boldsymbol{\mu} + \mathbf{L}\boldsymbol{Z})}{\partial \boldsymbol{\theta} \partial \boldsymbol{\theta}^\top}\right\} &amp;= \boldsymbol{\Sigma}^{-1}.
+\end{align*}\]</span></p>
+</section>
+<section id="variational-inference-vs-laplace" class="slide level2">
+<h2>Variational inference vs Laplace</h2>
+<p>Compared to the Laplace approximation, the variational Gaussian approximation returns</p>
 <ul>
-<li>point estimators (MAP, posterior mean and median, etc.) derive from consideration of <strong>loss functions</strong> that return a summary of the posterior.</li>
-<li>credible interval or regions (interval for which the true parameter lies with a certain probability).</li>
+<li>a vector <span class="math inline">\(\boldsymbol{\mu}\)</span> around which the <strong>expected value of the gradient</strong> is zero</li>
+<li>and similarly <span class="math inline">\(\boldsymbol{\Sigma}\)</span> which matches the expected value of the Hessian.</li>
+</ul>
+<p>The averaging step is what distinguishes the Laplace and variational approximations.</p>
+</section>
+<section id="expectation-propagation" class="slide level2">
+<h2>Expectation propagation</h2>
+<p>Expectation propagation is an approximation algorithm proposed by <span class="citation" data-cites="Minka:2001">Minka (<a href="#/references" role="doc-biblioref" onclick="">2001</a>)</span>.</p>
+<p>It is more accurate, but generally slower than variational Bayes.</p>
+<p>However, the algorithm can be parallelized, which makes it fast.</p>
+</section>
+<section id="decomposition" class="slide level2">
+<h2>Decomposition</h2>
+<p>EP builds on a decomposition of the posterior as a product of terms; with likelihood contributions <span class="math inline">\(L_i(\boldsymbol{\theta})\)</span> <span class="math display">\[\begin{align*}
+p(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto p(\boldsymbol{\theta}) \prod_{i=1}^n L_i(\boldsymbol{\theta}) = \prod_{i=0}^n L_i(\boldsymbol{\theta})
+\end{align*}\]</span> We call <span class="math inline">\(L_i\)</span> the “factors” or “sites”, and <span class="math inline">\(L_0(\boldsymbol{\theta})\)</span> is the prior density.</p>
+</section>
+<section id="comment-on-factorization" class="slide level2">
+<h2>Comment on factorization</h2>
+<p>Such factorization is also feasible in graphical models (e.g., autoregressive processes, Markov fields), but needs not be unique.</p>
+<ul>
+<li>Note that it is not equivalent to the factorization of the posterior (mean-field approximation) for variational Bayes, as every term in the EP approximation is a function of the whole vector <span class="math inline">\(\boldsymbol{\theta}.\)</span></li>
 </ul>
 </section>
-<section id="stochastic-approximations" class="slide level2">
-<h2>Stochastic approximations</h2>
-<p>Stochastic approximations rely on sampling methods (rejection sampling, MCMC)</p>
+<section id="expectation-propagation-approximating-density" class="slide level2">
+<h2>Expectation propagation approximating density</h2>
+<p>Considers a factor structure approximation in which each <span class="math inline">\(q_i\)</span> is Gaussian with precision <span class="math inline">\(\mathbf{Q}_i\)</span> and linear shift <span class="math inline">\(\boldsymbol{r}_i\)</span>, <span class="math display">\[\begin{align*}
+q(\boldsymbol{\theta}) &amp;\propto \prod_{i=0}^n q_i(\boldsymbol{\theta})
+\\&amp; \propto \prod_{i=0}^n \exp \left(-\frac{1}{2} \boldsymbol{\theta}^\top\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top\boldsymbol{r}_i\right)
+\\ &amp;= \exp \left( - \frac{1}{2} \boldsymbol{\theta}^\top \sum_{i=0}^n\mathbf{Q}_i\boldsymbol{\theta} + \boldsymbol{\theta}^\top \sum_{i=0}^n\boldsymbol{r}_i\right).
+\end{align*}\]</span></p>
+</section>
+<section id="step-1-of-expectation-propagation" class="slide level2 smaller">
+<h2>Step 1 of expectation propagation</h2>
+<p>Form the <strong>cavity</strong> by removing one factor <span class="math inline">\(q_j\)</span>, so that <span class="math display">\[\begin{align*}
+q_{-j}(\boldsymbol{\theta}) &amp;= \prod_{\substack{i=0 \\ i \neq j}}^n q_i(\boldsymbol{\theta}) =q(\boldsymbol{\theta})/q_j(\boldsymbol{\theta})\\
+&amp;\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top \left(\sum_{i=0}^n\mathbf{Q}_i - \mathbf{Q}_j\right)\boldsymbol{\theta} \right.\\&amp;+ \left.\boldsymbol{\theta}^\top \left(\sum_{i=0}^n\boldsymbol{r}_i - \boldsymbol{r}_j\right)\right\}.
+\end{align*}\]</span></p>
+</section>
+<section id="step-2-of-expectation-propagation" class="slide level2">
+<h2>Step 2 of expectation propagation</h2>
+<p>Construct an hybrid or tilted distribution <span class="math display">\[\begin{align*}
+h_j(\boldsymbol{\theta}) \propto q_{-j}(\boldsymbol{\theta})L_j(\boldsymbol{\theta}).
+\end{align*}\]</span> The resulting density is unnormalized.</p>
+</section>
+<section id="global-approximation" class="slide level2">
+<h2>Global approximation</h2>
+<p>The overall approximation is Gaussian with precision <span class="math inline">\(\mathbf{Q} = \sum_{i=0}^n\mathbf{Q}_i\)</span> and linear shift <span class="math inline">\(\boldsymbol{r}=\sum_{i=0}^n\boldsymbol{r}_i\)</span></p>
+<p>These parameters are obtained by optimizing each hybrid distribution with a Gaussian.</p>
+<p>That is, we minimize the <span class="math inline">\(\mathsf{KL}(h_j \parallel q_j)\)</span> at each step conditional on the other parameters.</p>
+</section>
+<section id="step-3-of-expectation-propagation" class="slide level2">
+<h2>Step 3 of expectation propagation</h2>
+<p>Compute normalizing constant and moments</p>
+<p><span class="math display">\[\begin{align*}
+c_j &amp;= \int h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta} \\
+\boldsymbol{\mu}_j &amp;= c_{j}^{-1} \int \boldsymbol{\theta} h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+\\ \boldsymbol{\Sigma}_j &amp;= c_j^{-1} \int(\boldsymbol{\theta} - \boldsymbol{\mu}_j)(\boldsymbol{\theta} - \boldsymbol{\mu}_j)^\top h_j(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
+\end{align*}\]</span></p>
+</section>
+<section id="comment-on-step-3" class="slide level2">
+<h2>Comment on step 3</h2>
+<p>The normalizing constant, mean and variance in the above are written in terms of <span class="math inline">\(p\)</span>-dimensional integrals.</p>
+<p>For exponential family of distributions, we can perform dimension reduction.</p>
+<p>For example, with generalized linear models, the update for hybrid <span class="math inline">\(j\)</span> depends only on the summary statistic <span class="math inline">\(\mathbf{x}_j\boldsymbol{\theta}\)</span>, where <span class="math inline">\(\mathbf{x}\)</span> is the <span class="math inline">\(j\)</span>th row of the model matrix. Then, the integral is one-dimensional.</p>
+</section>
+<section id="projection-of-gaussians" class="slide level2">
+<h2>Projection of Gaussians</h2>
+<p>Linear combinations of Gaussian vectors are also Gaussian.</p>
+<p>If <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{\mu}, \boldsymbol{\Sigma}),\)</span> then <span class="math display">\[\mathbf{x}\boldsymbol{\beta} \sim \mathsf{Gauss}(\mathbf{x}\boldsymbol{\mu}, \mathbf{x}\boldsymbol{\Sigma}\mathbf{x}^\top)\]</span></p>
+</section>
+<section id="step-4-of-expectation-propagation" class="slide level2 smaller">
+<h2>Step 4 of expectation propagation</h2>
+<p>Convert moments <span class="math inline">\(\boldsymbol{\mu}_j^{*}\)</span> and <span class="math inline">\(\boldsymbol{\Sigma}^{*}_j\)</span> to canonical parameters <span class="math inline">\(\mathbf{Q}_j^{*}\)</span> and <span class="math inline">\(\boldsymbol{r}_j^{*}.\)</span></p>
+<p>Update the global approximation with <span class="math display">\[\begin{align*}
+q(\boldsymbol{\theta}) &amp;\propto \exp \left\{ - \frac{1}{2} \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\mathbf{Q}_i + \mathbf{Q}^{*}_j\right)\boldsymbol{\theta}  + \boldsymbol{\theta}^\top \left(\sum_{\substack{i=0 \\ i \neq j}}^n\boldsymbol{r}_i + \boldsymbol{r}^{*}_j\right)\right\}.
+\end{align*}\]</span></p>
+</section>
+<section id="recap-of-expectation-propagation" class="slide level2">
+<h2>Recap of expectation propagation</h2>
+<p>The EP algorithm iterates the steps until convergence:</p>
+<ol type="1">
+<li>Initialize the site-specific parameters</li>
+<li>Loop over each observation of the likelihood factorization:
+<ol type="1">
+<li>form the cavity and the hybrid distribution</li>
+<li>compute the moments of the hybrid <span class="math inline">\(\boldsymbol{\mu}\)</span> and <span class="math inline">\(\boldsymbol{\Sigma}\)</span></li>
+<li>transform back to canonical parameters <span class="math inline">\(\mathbf{Q}\)</span> and <span class="math inline">\(\boldsymbol{r}\)</span></li>
+<li>update the global approximation</li>
+</ol></li>
+<li>Declare convergence when change in parameters is less than tolerance.</li>
+</ol>
+</section>
+<section id="improving-convergence" class="slide level2">
+<h2>Improving convergence</h2>
+<p>There is no guarantee that the fixed-point algorithm will converge…</p>
+<p>The algorithm behaves like a smoothed Newton method <span class="citation" data-cites="Dehaene.Barthelme:2018">(<a href="#/references" role="doc-biblioref" onclick="">Dehaene &amp; Barthelmé, 2018</a>)</span>, so we can borrow tricks from numerical optimization to improve convergence.</p>
 <ul>
-<li>returns (correlated) posterior samples.</li>
-<li>Metropolis–Hastings acceptance ratio bypasses marginal likelihood calculation.</li>
-<li>Marginalization is straightforward.</li>
+<li>linearly interpolate between updates, with weight <span class="math inline">\(0&lt; w\le 1\)</span> to the current update where at step <span class="math inline">\(t\)</span>.</li>
 </ul>
 </section>
-<section id="markov-chains" class="slide level2">
-<h2>Markov chains</h2>
-<ul>
-<li>Need to assess convergence to the stationary distribution (traceplots)</li>
-<li>Autocorrelation reduces precision of Monte Carlo estimates (<strong>effective sample size</strong>)</li>
-</ul>
+<section id="comments-on-updates" class="slide level2">
+<h2>Comments on updates</h2>
+<p>The algorithm can be run in parallel.</p>
+<p>Some individual factor updates may yield non-positive definite precision for individual terms <span class="math inline">\(\mathbf{Q}_j\)</span>, which is okay as long as the global approximation <span class="math inline">\(\mathbf{Q}\)</span> remains positive.</p>
+<p>Variants (power EP) leads to more smoothing, but change fixed points.</p>
 </section>
-<section id="markov-chain-monte-carlo-algorithms" class="slide level2">
-<h2>Markov chain Monte Carlo algorithms</h2>
-<p>We covered in class the following (in decreasing order of efficiency).</p>
-<ul>
-<li>random walk Metropolis</li>
-<li>Metropolis-adjusted Langevin algorithm (MALA)</li>
-<li>Hamiltonian Monte Carlo</li>
-</ul>
-<p>Better sampling performance, but the latter two require gradient and are more expensive to compute.</p>
+<section id="example-ep-for-logistic-regression" class="slide level2">
+<h2>Example: EP for logistic regression</h2>
+<p>Consider a binary response <span class="math inline">\(Y \in \{-1, 1\}\)</span> with logistic model <span class="math display">\[\begin{align*}
+\Pr(Y=1 \mid \mathbf{x}, \boldsymbol{\beta}) = \left\{1+\exp(-\mathbf{x}\boldsymbol{\beta})\right\}^{-1} = \mathrm{expit}(\mathbf{x}\boldsymbol{\beta}).
+\end{align*}\]</span> We assume for simplicity that <span class="math inline">\(p(\boldsymbol{\beta})\propto 1;\)</span> a Gaussian prior could also be used.</p>
 </section>
-<section id="model-selection" class="slide level2">
-<h2>Model selection</h2>
-<ul>
-<li>Bernstein-von Mises ensures convergence in total variation of the posterior under weak conditions.</li>
-<li>Distinguish between
-<ul>
-<li><span class="math inline">\(\mathcal{M}\)</span>-closed: true parameter is part of set considered or</li>
-<li><span class="math inline">\(\mathcal{M}\)</span>-open: only misspecified models are considered.</li>
-</ul></li>
-<li>The model that gets selected minimizes the Kullback–Leibler divergence with the truth.</li>
-<li>In discrete parameter settings, we recover the truth with probability 1.</li>
-</ul>
+<section id="ep-for-logistic-regression" class="slide level2">
+<h2>EP for logistic regression</h2>
+<p>The likelihood contribution of observation <span class="math inline">\(i\)</span> with factors <span class="math display">\[L_i(\boldsymbol{\beta}) = \mathrm{expit}(y_i \mathbf{x}_i\boldsymbol{\beta}).\]</span></p>
+<p>The approximation of the factor will have parameters <span class="math inline">\((a\mathbf{x}_i^\top, b\mathbf{x}_i^\top\mathbf{x}_i)\)</span>, which only depend on two scalars <span class="math inline">\(a\)</span> and <span class="math inline">\(b.\)</span></p>
 </section>
-<section id="priors" class="slide level2">
-<h2>Priors</h2>
-<ul>
-<li>Priors don’t matter in large sample on the data layer, as likelihood is <span class="math inline">\(\mathrm{O}(n)\)</span> vs <span class="math inline">\(\mathrm{O}(1)\)</span> for the prior.</li>
-<li>Support constraints have an impact</li>
-<li>Their impact depends largely on how far they are from the data.</li>
-<li>Prior sensitivity check: compare posterior vs prior density</li>
-</ul>
+<section id="ep-iterations" class="slide level2">
+<h2>EP iterations</h2>
+<p>The dynamics of the expectation propagation given vectors of individual contributions <span class="math inline">\(\boldsymbol{a}^{(t)}\)</span> and <span class="math inline">\(\boldsymbol{b}^{(t)}\)</span> at iteration <span class="math inline">\(t\)</span> and the canonical parameters <span class="math display">\[\begin{align*}
+\boldsymbol{r}^{(t)} = \sum_{i=1}^n a_i^{(t)}\mathbf{x}_i^\top, \qquad \mathbf{Q}^{(t)} = \sum_{i=1}^n b_i\mathbf{x}_i^\top\mathbf{x}_i,
+\end{align*}\]</span> initialized to <span class="math inline">\(t=0\)</span>, are as follows for step <span class="math inline">\(t\)</span>:</p>
 </section>
-<section id="type-of-priors" class="slide level2">
-<h2>Type of priors</h2>
-<ul>
-<li>Different roles (expert opinion, simplification of calculations, regularization).</li>
-<li>Conditional conjugacy mostly useful for Gibbs sampling, etc.</li>
-<li>Careful with improper priors (unless they are known to yield valid posterior).</li>
-<li>Prefer weak priors to near improper priors.</li>
-</ul>
+<section id="steps-for-logistic-regression" class="slide level2">
+<h2>Steps for logistic regression</h2>
+<ol type="1">
+<li>Compute the natural parameters of the cavity distribution <span class="math display">\[\begin{align*}
+\boldsymbol{r}_{-i} &amp;= \boldsymbol{r} - a_i^{(t-1)}\mathbf{x}_i^\top
+\\\mathbf{Q}_{-i} &amp;= \mathbf{Q} - b_i^{(t-1)}\mathbf{x}_i^\top\mathbf{x}_i.
+\end{align*}\]</span></li>
+<li>Transform the canonical parameters to moments, with <span class="math inline">\(\boldsymbol{\Sigma}_{-i} = \mathbf{Q}_{-i}^{-1}\)</span> and <span class="math inline">\(\boldsymbol{\mu}_{-i} = \mathbf{Q}_{-i}^{-1}\boldsymbol{r}_{-i}\)</span>.</li>
+</ol>
 </section>
-<section id="prior-selection" class="slide level2">
-<h2>Prior selection</h2>
-<ul>
-<li>Moment matching</li>
-<li>Prior predictive distribution: draw new observations from likelihood and plot</li>
-</ul>
+<section id="steps-for-logistic-regression-1" class="slide level2">
+<h2>Steps for logistic regression</h2>
+<ol start="3" type="1">
+<li>Obtain the mean and variance of the conditional distribution with variance <span class="math inline">\(v_i = \mathbf{x}_i\boldsymbol{\Sigma}_{-i}\mathbf{x}_i^\top\)</span> and mean <span class="math inline">\(u_i=\mathbf{x}_i\boldsymbol{\mu}.\)</span></li>
+<li>Define the marginal hybrid as <span class="math display">\[\begin{align*}
+h_i(z) \propto \mathrm{expit}(y_iz) \exp\left\{-\frac{(z-u)^2}{2v}\right\}.
+\end{align*}\]</span></li>
+</ol>
 </section>
-<section id="section" class="slide level2">
-<h2></h2>
+<section id="steps-for-logistic-regression-2" class="slide level2">
+<h2>Steps for logistic regression</h2>
+<ol start="5" type="1">
+<li>Compute the normalizing constant, the mean <span class="math inline">\(\mathsf{E}_{h_i}(Z)\)</span> and the variance <span class="math inline">\(\mathsf{Va}_{h_i}(Z)\)</span> by numerical integration.</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a aria-label="1"></a><span class="co">#' @param mu_lc mean of the linear combination</span></span>
+<span id="cb1-2"><a aria-label="2"></a><span class="co">#' @param sd_lc std. dev of the linear combination</span></span>
+<span id="cb1-3"><a aria-label="3"></a>ep_update <span class="ot">&lt;-</span> <span class="cf">function</span>(y, mu_lc, sd_lc){</span>
+<span id="cb1-4"><a aria-label="4"></a>  <span class="co"># Calculate outside of the loop the cavity</span></span>
+<span id="cb1-5"><a aria-label="5"></a>  fn <span class="ot">&lt;-</span> <span class="cf">function</span>(x){ <span class="fu">dnorm</span>(x, <span class="at">mean =</span> mu_lc, <span class="at">sd =</span> sd_lc)<span class="sc">*</span><span class="fu">plogis</span>(y<span class="sc">*</span>x)}</span>
+<span id="cb1-6"><a aria-label="6"></a>  <span class="co"># Compute normalizing constant</span></span>
+<span id="cb1-7"><a aria-label="7"></a>  cst <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> fn, <span class="at">lower =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">upper =</span> <span class="cn">Inf</span>)<span class="sc">$</span>value</span>
+<span id="cb1-8"><a aria-label="8"></a>  mu <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> <span class="cf">function</span>(x){<span class="fu">fn</span>(x)<span class="sc">*</span>x}, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>)<span class="sc">$</span>value<span class="sc">/</span>cst</span>
+<span id="cb1-9"><a aria-label="9"></a>  va <span class="ot">&lt;-</span> <span class="fu">integrate</span>(<span class="at">f =</span> <span class="cf">function</span>(x){<span class="fu">fn</span>(x)<span class="sc">*</span>(x<span class="sc">-</span>mu)<span class="sc">^</span><span class="dv">2</span>}, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>)<span class="sc">$</span>value<span class="sc">/</span>cst</span>
+<span id="cb1-10"><a aria-label="10"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="steps-for-logistic-regression-3" class="slide level2">
+<h2>Steps for logistic regression</h2>
+<ol start="6" type="1">
+<li>Back-transform the parameters to get the parameters for <span class="math display">\[\begin{align*}a_i^{(t)} &amp;= \mathsf{E}_{h_i}(Z)/\mathsf{Va}_{h_i}(Z) - u/v
+\\ b_i^{(t)} &amp;= 1/\mathsf{Va}_{h_i}(Z).
+\end{align*}\]</span></li>
+<li>Update the parameters <span class="math display">\[\begin{align*}
+\boldsymbol{r} &amp;\gets \boldsymbol{r}_{-i} + a_i^{(t)}\mathbf{x}_i^\top \\\mathbf{Q} &amp;\gets \mathbf{Q}_{-i} + b_i^{(t)}\mathbf{x}_i^\top\mathbf{x}_i.
+\end{align*}\]</span></li>
+</ol>
+</section>
+<section id="comments-on-ep-for-exponential-families" class="slide level2">
+<h2>Comments on EP for exponential families</h2>
+<p>There are explicit formulas for the upgrade of probit regression.</p>
+<p>The updates to the parameters for more general exponential families are found in page 23 of <span class="citation" data-cites="Cseke.Heskes:2011">Cseke &amp; Heskes (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span>.</p>
+</section>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Cseke.Heskes:2011" class="csl-entry" role="listitem">
+Cseke, B., &amp; Heskes, T. (2011). Approximate marginals in latent <span>G</span>aussian models. <em>Journal of Machine Learning Research</em>, <em>12</em>(13), 417–454. <a href="http://jmlr.org/papers/v12/cseke11a.html">http://jmlr.org/papers/v12/cseke11a.html</a>
+</div>
+<div id="ref-Dehaene.Barthelme:2018" class="csl-entry" role="listitem">
+Dehaene, G., &amp; Barthelmé, S. (2018). Expectation propagation in the large data limit. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>80</em>(1), 199–217. <a href="https://doi.org/10.1111/rssb.12241">https://doi.org/10.1111/rssb.12241</a>
+</div>
+<div id="ref-Liu:1994" class="csl-entry" role="listitem">
+Liu, J. S. (1994). <span>S</span>iegel’s formula via <span>S</span>tein’s identities. <em>Statistics &amp; Probability Letters</em>, <em>21</em>(3), 247–251. <a href="https://doi.org/10.1016/0167-7152(94)90121-X">https://doi.org/10.1016/0167-7152(94)90121-X</a>
+</div>
+<div id="ref-Minka:2001" class="csl-entry" role="listitem">
+Minka, T. P. (2001). <em>A family of algorithms for approximate <span>B</span>ayesian inference</em> [PhD thesis, Massachusetts Institute of Technology]. <a href="http://hdl.handle.net/1721.1/86583">http://hdl.handle.net/1721.1/86583</a>
+</div>
+</div>
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">

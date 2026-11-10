@@ -1,44 +1,54 @@
 ---
-title: "Expectation propagation"
+title: "Variational inference"
 ---
 
 
 ## Content
 
-- Newton method and sequences of Gaussian approximations
-- Expectation propagation (EP)
+- Kullback--Leibler divergence and evidence lower bound (ELBO)
+- Estimation methods: coordinate ascent, black-box, automatic differentiation variational inference schemes
 
 ## Learning objectives
 
 At the end of the chapter, students should be able to
 
-- implement expectation propagation in simple problems
-- explain the differences between EP, Laplace and variational inference
-- understand under which circumstances EP is unstable
+- explain the link between ELBO and reverse Kullback--Leibler divergence and it use for approximations
+- derive the CAVI recursions for a given factorization
+- use variational inference for Bayesian inference
 
 ## Readings
 
-- @Dehaene.Barthelme:2018, section 1--2
-- Section 10.7 of @Bishop:2006
-- @Cseke.Heskes:2011
+
+- Chapter 10 of @Bishop:2006
+- @Kucukelbir:2017
+- [Chapter 10](https://lbelzile.github.io/MATH80601A/variational.html) of the course notes
 
 ## Complementary readings
 
-- @Minka:2001
+- @Ranganath.Gerrish.Blei:2014
+- @Blei:2017
+- @Ormerod.Wand:2010
+- @Hoffman:2013
+
+
+
 
 
 ## Slides
 
 
-<p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides11.html">{{< fa arrow-up-right-from-square >}} &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides11.pdf" role="button">{{< fa file-pdf >}} &ensp;Download PDF of all slides</a></p>
+<p class="text-center"><a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides10.html">{{< fa arrow-up-right-from-square >}} &ensp;View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides10.pdf" role="button">{{< fa file-pdf >}} &ensp;Download PDF of all slides</a></p>
 
 
 <div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides11.html"></iframe>
+<iframe class="slide-deck" src="../slides/bayesmod-slides10.html"></iframe>
 </div>
 
 
 
 ## Code
 
-- [**R** script](/files/code/11-expectationpropagation.R) of expectation propagation for logistic regression
+- [**R** script](/files/code/10-CAVI.R) of CAVI with Gaussian model, probit regression, K-components univariate Gaussian mixture model and linear mixed models from @Ormerod.Wand:2010
+- [**R** script](/files/code/10-ADVI_manual.R) of ADVI for logistic regression model
+- [**R** script](/files/code/10-stochvol_ADVI.R) of ADVI for stochastic volatility model (with Stan)
+

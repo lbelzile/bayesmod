@@ -1,35 +1,22 @@
 ---
-title: "Deterministic approximations"
+title: "Probabilistic programming"
 ---
 
 
 ## Content
 
-- Bernstein--von Mises theorem
-- Laplace approximations
-- integrated nested Laplace approximation (INLA)
-
-## Learning objectives
-
-At the end of the chapter, students should be able to
-
-- derive the Laplace approximation for simple models to compute marginal likelihood, posterior expectation or approximation to density.
-- describe the difference between deterministic and stochastic approximations.
-
-
-
-## Readings
-
-- [Chapter 9](https://lbelzile.github.io/MATH80601A/laplace.html) of the course notes
+- Regression models (continued)
+- Hamiltonian Monte Carlo
+- Probabilistic programming
 
 
 ## Complementary readings
 
-- Laplace approximation use in statistics: @Tierney.Kadane:1986
-- skewed Bernstein--von Mises: @Durante:2024
-- Laplace approximation for Bayes factor: @Raftery:1995
-- integrated nested Laplace approximation: @Rue.Martino.Chopin:2009, @Wood:2019
-
+- @Neal:2011
+- @Betancourt:2017
+- @Mukherjee.Vats:2026
+- [Stan manual](https://mc-stan.org/docs/reference-manual/mcmc.html#hmc.chapter)
+- [Animations](https://chi-feng.github.io/mcmc-demo/) by Chi Feng
 
 ## Slides
 
@@ -45,5 +32,7 @@ At the end of the chapter, students should be able to
 
 ## Code
 
-- Laplace approximations for exponential-gamma model [**R** script](/files/code/09-laplace.R)
-- `INLA` package [**R** script](/files/code/09-INLA.R)
+
+- One-way ANOVA: [**R** script](/files/code/onewayanova_nimble.R) with Nimble and [Stan code](/files/code/onewayanova.stan)
+- Stochastic volatility model: [Nimble code](/files/code/stochvol_nimble.R), Stan code [1](/files/code/stochvol1.stan) and [2](/files/code/stochvol2.stan) and [`cmdstanr` **R** script](/files/code/stochvol_stan.R)
+- Smartwatch: [Stan code](/files/code/poisson_smartwatch.stan)  and [`cmdstanr` **R** script](/files/code/poisson_smartwatch.R)

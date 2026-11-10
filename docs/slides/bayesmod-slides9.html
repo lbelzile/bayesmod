@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -31,72 +34,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -217,454 +154,242 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Deterministic approximations</p>
+  <p class="subtitle">Hamiltonian Monte Carlo and probabilistic programming</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile 
+Léo Belzile
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Nov 9, 2026</p>
+  <p class="date">Last compiled Tuesday Nov 10, 2026</p>
 </section>
-<section id="rationale-for-deterministic-approximations" class="slide level2">
-<h2>Rationale for deterministic approximations</h2>
-<p>Markov chain Monte Carlo methods require tuning and can be markedly slow when the dimension of the parameter space grows.</p>
-<p>The curse of dimensionality affects the performance of MCMC.</p>
-<p>We consider simple approximations to the marginal likelihood, posterior moments, or posterior density that only require <strong>numerical optimization</strong>.</p>
+<section id="motivation" class="slide level2">
+<h2>Motivation</h2>
+<p>We are interested in calculating expectations of some function <span class="math inline">\(g\)</span> against the posterior. <span class="math display">\[\begin{align*}
+\int_{\mathbb{R}^d} g(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
+\end{align*}\]</span></p>
+<p>The integral is determined by the product of the “volume” of <span class="math inline">\(g(\cdot)\)</span> and the posterior density <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>.</p>
 </section>
-<section id="landau-notation" class="slide level2">
-<h2>Landau notation</h2>
-<p>We need notation to characterize the growth rate of functions: when <span class="math inline">\(n \to \infty\)</span></p>
+<section id="curse-of-dimensionality" class="slide level2">
+<h2>Curse of dimensionality</h2>
+<p>As the dimension of the posterior, <span class="math inline">\(d\)</span>, grows, the mass concentrates in a small region, the so-called <strong>typical set</strong>. The number of regions/directions to consider increases exponentially in <span class="math inline">\(d\)</span>.</p>
+<p>If we start at the stationary distribution, most proposals from a random walk Metropolis will fall outside of the typical set and get rejected.</p>
+<p>This phenomenon also explains the decrease in performance of numerical integration schemes (quadrature).</p>
+</section>
+<section id="better-informed-proposals" class="slide level2">
+<h2>Better informed proposals</h2>
+<p>For differentiable targets, we saw that we can do better than random walk Metropolis–Hastings.</p>
 <ul>
-<li>big-O: <span class="math inline">\(x = \mathrm{O}(n)\)</span> means that <span class="math inline">\(x/n \to c \in \mathbb{R}\)</span> as <span class="math inline">\(n\to \infty\)</span></li>
-<li>little-o: <span class="math inline">\(x =\mathrm{o}(n)\)</span> implies <span class="math inline">\(x/n \to 0\)</span> as <span class="math inline">\(n\to \infty.\)</span></li>
+<li>Idea: use the gradient to make an informed proposal (e.g., in MALA)</li>
+<li>There are two remaining challenges.
+<ul>
+<li>it makes a single step from the current position. But why stop at one?</li>
+<li>the gradient needs not be aligned with the typical set (Betancourt analogy with satellite in orbit).</li>
+</ul></li>
 </ul>
 </section>
-<section id="taylor-series-expansion" class="slide level2">
-<h2>Taylor series expansion</h2>
-<p>Consider a concave function <span class="math inline">\(h(x)\)</span> assumed twice continuously differentiable with mode at <span class="math inline">\(x_0\)</span>. Then, a Taylor series expansion around <span class="math inline">\(x_0\)</span> gives <span class="math display">\[\begin{align*}
-h(x) = h(x_0) + h'(x_0)(x-x_0) + h''(x_0)(x-x_0)^2/2 + R
-\end{align*}\]</span> where the remainder <span class="math inline">\(R=\mathrm{O}\{(x-x_0)^3\}.\)</span></p>
-</section>
-<section id="multivariate-taylor-series-expansion" class="slide level2">
-<h2>Multivariate Taylor series expansion</h2>
-<p>Similarly, for <span class="math inline">\(h(\boldsymbol{x})\)</span> a smooth vector valued function with mode at <span class="math inline">\(\boldsymbol{x}_0 \in \mathbb{R}^p\)</span>, we can write ::: {style=“font-size: 0.8em;”} <span class="math display">\[\begin{align*}
-h(\boldsymbol{x}) &amp;= h(\boldsymbol{x}_0) + (\boldsymbol{x}- \boldsymbol{x}_0)^\top h'(\boldsymbol{x}_0) \\&amp;+ \frac{1}{2}(\boldsymbol{x}- \boldsymbol{x}_0)^\top h''(\boldsymbol{x}_0)(\boldsymbol{x}- \boldsymbol{x}_0) + R.
-\end{align*}\]</span> ::: Under regularity conditions, the mode <span class="math inline">\(\boldsymbol{x}_0\)</span> is such that <span class="math inline">\(h'(\boldsymbol{x}_0)=\boldsymbol{0}_p.\)</span></p>
-</section>
-<section id="laplace-approximation" class="slide level2">
-<h2>Laplace approximation</h2>
-<p>The <strong>Laplace approximation</strong> is used to approximate integrals of non-negative functions <span class="math inline">\(g(\boldsymbol{x})\)</span> that are <span class="math inline">\(\mathrm{O}(n)\)</span> of the form <span class="math display">\[\begin{align*}
-I_n = \int_{\mathbb{R}_p} g(\boldsymbol{x}) \mathrm{d} \boldsymbol{x} = \int \exp\{h(\boldsymbol{x})\}\mathrm{d} \boldsymbol{x}.
-\end{align*}\]</span></p>
-<p>The idea is that we can, ignoring terms above third order and assuming <span class="math inline">\(\boldsymbol{x}_0\)</span> satisfies <span class="math inline">\(h'(\boldsymbol{x}_0)=\boldsymbol{0}_p,\)</span> approximate <span class="math inline">\(g(\cdot)\)</span> by a multivariate Gaussian density.</p>
-</section>
-<section id="laplace-approximation-to-integrals" class="slide level2">
-<h2>Laplace approximation to integrals</h2>
-<p>If we perform a Taylor series expansion of the log of the integrand, then <span class="math display">\[\begin{align*}
-I_n \approx (2\pi)^{p/2} | \mathbf{H}(\boldsymbol{x}_0)|^{-1/2}\exp\{h(\boldsymbol{x}_0)\} + \mathrm{O}(n^{-1})
-\end{align*}\]</span> where <span class="math inline">\(|\mathbf{H}(\boldsymbol{x}_0)|\)</span> is the determinant of the Hessian matrix of <span class="math inline">\(-h(\boldsymbol{x})\)</span> evaluated at the mode <span class="math inline">\(\boldsymbol{x}_0.\)</span></p>
-</section>
-<section id="laplace-approximation-1" class="slide level2">
-<h2>Laplace approximation</h2>
-<ul>
-<li>The idea behind the Laplace approximation is to approximate the log of the density (since the latter must be non-negative).</li>
-<li>Compared to sampling-based methods, the Laplace approximation requires <strong>optimization</strong>.</li>
-<li>The Laplace approximation is not invariant to reparametrization: in practice, it is best to perform it on a scale where the likelihood is as close to quadratic as possible in <span class="math inline">\(g(\boldsymbol{\theta})\)</span> and back-transform using a change of variable.</li>
-</ul>
-</section>
-<section id="laplace-approximation-to-the-marginal-likelihood" class="slide level2">
-<h2>Laplace approximation to the marginal likelihood</h2>
-<p>Consider a simple random sample of size <span class="math inline">\(n\)</span> from a distribution with parameter vector <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^p.\)</span></p>
-<p>Write <span class="citation" data-cites="Raftery:1995">(<a href="#/references" role="doc-biblioref" onclick="">Raftery, 1995</a>)</span> <span class="math display">\[\begin{align*}
-p(\boldsymbol{y}) = \int_{\mathbb{R}^p} p(\boldsymbol{y} \mid \boldsymbol{\theta}) p(\boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}
-\end{align*}\]</span> and take <span class="math display">\[\begin{align*}h(\boldsymbol{\theta}) = \log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta}).
-\end{align*}\]</span></p>
-</section>
-<section id="laplace-approximation-to-the-marginal-likelihood-1" class="slide level2">
-<h2>Laplace approximation to the marginal likelihood</h2>
-<p>Evaluating at the maximum a posteriori <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}\)</span> and letting <span class="math inline">\(\mathbf{H} = - \log p(\boldsymbol{y}, \boldsymbol{\theta}) / \partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top\)</span> denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get <span class="citation" data-cites="Tierney.Kadane:1986">(<a href="#/references" role="doc-biblioref" onclick="">Tierney &amp; Kadane, 1986</a>)</span> <span class="math display">\[\begin{align*}
-\log p(\boldsymbol{y}) &amp;= \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) + \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) \\&amp;\quad + \frac{p}{2} \log (2\pi) - \frac{1}{2}\log |\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})| + \mathrm{O}(n^{-1})
-\end{align*}\]</span></p>
-</section>
-<section id="example-with-exponential-likelihood" class="slide level2">
-<h2>Example with exponential likelihood</h2>
-<p>Consider an exponential likelihood <span class="math inline">\(Y_i \mid \lambda \sim \mathsf{expo}(\lambda)\)</span> with conjugate gamma prior <span class="math inline">\(\lambda \sim \mathsf{gamma}(a,b)\)</span>. The exponential model has information <span class="math inline">\(i(\lambda)=n/\lambda^2\)</span> and the mode of the posterior is <span class="math display">\[\widehat{\lambda}_{\mathrm{MAP}}=\frac{n+a-1}{\sum_{i=1}^n y_i + b}.\]</span></p>
-</section>
-<section id="marginal-likelihood-approximation-for-exponential-likelihood" class="slide level2">
-<h2>Marginal likelihood approximation for exponential likelihood</h2>
-<p>The marginal likelihood for the conjugate model is <span class="math display">\[\begin{align*}
-p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}^n y_i \right)^{n+a}}.
-\end{align*}\]</span></p>
-<p>For the sample of size <span class="math inline">\(62,\)</span> the exponential model marginal likelihood is <span class="math inline">\(-276.5.\)</span></p>
-</section>
-<section id="numerical-approximation-to-marginal-likelihood" class="slide level2">
-<h2>Numerical approximation to marginal likelihood</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">data</span>(waiting, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb1-2"><a></a>a <span class="ot">&lt;-</span> <span class="fl">0.01</span>; b <span class="ot">&lt;-</span> <span class="fl">0.01</span></span>
-<span id="cb1-3"><a></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(waiting); s <span class="ot">&lt;-</span> <span class="fu">sum</span>(waiting)</span>
-<span id="cb1-4"><a></a>map <span class="ot">&lt;-</span> (n <span class="sc">+</span> a <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>(s <span class="sc">+</span> b) <span class="co">#posterior mode</span></span>
-<span id="cb1-5"><a></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb1-6"><a></a>  <span class="fu">sum</span>(<span class="fu">dexp</span>(waiting, <span class="at">rate =</span> x, <span class="at">log =</span> <span class="cn">TRUE</span>)) <span class="sc">+</span></span>
-<span id="cb1-7"><a></a>    <span class="fu">dgamma</span>(x, a, b, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-8"><a></a>}</span>
-<span id="cb1-9"><a></a><span class="co"># Hessian evaluated at MAP</span></span>
-<span id="cb1-10"><a></a>H <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">c</span>(numDeriv<span class="sc">::</span><span class="fu">hessian</span>(logpost, <span class="at">x =</span> map))</span>
-<span id="cb1-11"><a></a><span class="co"># Laplace approximation</span></span>
-<span id="cb1-12"><a></a>marg_lik_laplace <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi) <span class="sc">-</span> <span class="fu">log</span>(H) <span class="sc">+</span> <span class="fu">logpost</span>(map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The Laplace approximation gives <span class="math inline">\(-281.9.\)</span></p>
-</section>
-<section id="posterior-expectation-using-laplace-method" class="slide level2">
-<h2>Posterior expectation using Laplace method</h2>
-<p>If we are interested in computing the posterior expectation of a positive real-valued functional <span class="math inline">\(g(\boldsymbol{\theta}): \mathbb{R}^p \to \mathbb{R}_{+},\)</span> we may write <span class="math display">\[\begin{align*}
-\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} &amp;=  \frac{\int g(\boldsymbol{\theta}) p(\boldsymbol{y} \mid \boldsymbol{\theta}) p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}{\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}
-\end{align*}\]</span></p>
-</section>
-<section id="posterior-expectation-via-laplace" class="slide level2">
-<h2>Posterior expectation via Laplace</h2>
-<p>We can apply Laplace’s method to both numerator and denominator. Let <span class="math inline">\(\widehat{\boldsymbol{\theta}}_g\)</span> and <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}\)</span> of the integrand of the numerator and denominator, respectively, and the negative of the Hessian matrix of the log integrands <span class="math display">\[\begin{align*}
-\jmath_g&amp;=  -\frac{\partial^2}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} \left\{ \log g(\boldsymbol{\theta}) + \log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta})\right\}, \\
-\jmath &amp;=  -\frac{\partial^2}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} \left\{\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + \log p(\boldsymbol{\theta})\right\}.
-\end{align*}\]</span></p>
-</section>
-<section id="posterior-expectation-approximation" class="slide level2">
-<h2>Posterior expectation approximation</h2>
-<p>Putting these together <span class="math display">\[\begin{align*}
-\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} \approx \frac{|\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})|^{1/2}}{|\jmath_g(\widehat{\boldsymbol{\theta}}_g)|^{1/2}} \frac{g(\widehat{\boldsymbol{\theta}}_g) p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_g) p( \widehat{\boldsymbol{\theta}}_g)}{p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})}.
-\end{align*}\]</span> While the Laplace method has an error <span class="math inline">\(\mathrm{O}(n^{-1}),\)</span> the leading order term of the expansion cancels out from the ratio and the above has error of <span class="math inline">\(\mathrm{O}(n^{-2}).\)</span></p>
-</section>
-<section id="example-of-posterior-mean-for-exponential-likelihood" class="slide level2">
-<h2>Example of posterior mean for exponential likelihood</h2>
-<p>Consider the posterior mean <span class="math inline">\(\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\lambda)\)</span> and let <span class="math inline">\(s=\sum_{i=1}^n y_i\)</span>. Then, <span class="math display">\[\begin{align*}
-\widehat{\lambda}_g &amp;= \frac{(n+a)}{s + b} \\
-|\jmath_g(\widehat{\lambda}_g)|^{1/2} &amp;= \left(\frac{n+a}{\widehat{\lambda}_g^2}\right)^{1/2} =  \frac{s + b}{(n+a)^{1/2}}
-\end{align*}\]</span></p>
-</section>
-<section id="posterior-mean" class="slide level2">
-<h2>Posterior mean</h2>
-<p>Simplification gives the approximation <span class="math display">\[\begin{align*}
-\frac{\exp(-1)}{s + b} \frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}
-\end{align*}\]</span> which gives <span class="math inline">\(0.03457,\)</span> whereas the true posterior mean is <span class="math inline">\((n+a)/(s+b) = 0.03457.\)</span></p>
-</section>
-<section id="aside-on-prior-and-likelihood-relative-contribution" class="slide level2">
-<h2>Aside on prior and likelihood relative contribution</h2>
-<p>Usually,</p>
-<ul>
-<li><span class="math inline">\(p(\boldsymbol{\theta}) = \mathrm{O}(1)\)</span> and</li>
-<li><span class="math inline">\(p(\boldsymbol{y} \mid \boldsymbol{\theta}) = \mathrm{O}(n)\)</span></li>
-</ul>
-<p>Thus, provided the prior does not impose unnecessary support constraints, we could alternatively</p>
-<ul>
-<li>replace the MAP by the MLE, and</li>
-<li>the Hessian <span class="math inline">\(-\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\)</span> by the Fisher information <span class="math inline">\(n\boldsymbol{\imath}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}).\)</span></li>
-</ul>
-</section>
-<section id="frequentist-approximations" class="slide level2">
-<h2>Frequentist approximations</h2>
-<p>If we use these approximations instead, we get <span class="math display">\[\begin{align*}
-\log p(\boldsymbol{y}) &amp;= \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}) -\frac{p}{2} \log n + \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\\&amp; \quad   - \frac{1}{2} \log |\boldsymbol{\imath}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})| + \frac{p}{2} \log(2\pi)  + \mathrm{O}(n^{-1/2})
-\end{align*}\]</span> where the error is now <span class="math inline">\(\mathrm{O}(n^{-1/2})\)</span> due to replacing the true information by it’s sample counterpart.</p>
-</section>
-<section id="reducing-the-approximation-rate" class="slide level2">
-<h2>Reducing the approximation rate</h2>
-<p>Ignoring all but the two first terms leads to <span class="math inline">\(\mathrm{O}(1)\)</span> approximation error, unless we consider the setting where we take a prior centered at the MLE with unit Fisher information precision (equivalent to <span class="math inline">\(n=1\)</span> phantom observation). Then, due to cancellation of terms in the expansion, <span class="math display">\[\boldsymbol{\theta} \sim \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}, \boldsymbol{\imath}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\},\]</span> with approximation error of <span class="math inline">\(\mathrm{O}(n^{-1/2}).\)</span></p>
-</section>
-<section id="frequentist-approximation-to-the-marginal-likelihood" class="slide level2">
-<h2>Frequentist approximation to the marginal likelihood</h2>
-<p>This gives the approximation, whose quality improves with increasing sample size <span class="math inline">\(n\)</span>: <span class="math display">\[\begin{align*}
--2\log p(\boldsymbol{y}) \approx \mathsf{BIC} = -2\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + p\log n
-\end{align*}\]</span></p>
-<p>The unnormalized weight <span class="math inline">\(\exp(-\mathsf{BIC}/2)\)</span> is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor.</p>
-</section>
-<section id="bayesian-model-averaging-via-bic" class="slide level2">
-<h2>Bayesian model averaging via BIC</h2>
-<p>We consider the <code>diabetes</code> model from <span class="citation" data-cites="Park.Casella:2008">Park &amp; Casella (<a href="#/references" role="doc-biblioref" onclick="">2008</a>)</span> and models with 10 predictors plus intercept.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">library</span>(leaps)</span>
-<span id="cb2-2"><a></a><span class="fu">data</span>(diabetes, <span class="at">package =</span> <span class="st">"lars"</span>)</span>
-<span id="cb2-3"><a></a>search <span class="ot">&lt;-</span> leaps<span class="sc">::</span><span class="fu">regsubsets</span>(</span>
-<span id="cb2-4"><a></a>  <span class="at">x =</span> diabetes<span class="sc">$</span>x,</span>
-<span id="cb2-5"><a></a>  <span class="at">y =</span> diabetes<span class="sc">$</span>y,</span>
-<span id="cb2-6"><a></a>  <span class="at">intercept =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb2-7"><a></a>  <span class="at">method =</span> <span class="st">"exhaustive"</span>, </span>
-<span id="cb2-8"><a></a>  <span class="at">nvmax =</span> <span class="dv">10</span>, <span class="at">nbest =</span> <span class="dv">99</span>, <span class="at">really.big =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-9"><a></a>models_bic <span class="ot">&lt;-</span> <span class="fu">summary</span>(search)<span class="sc">$</span>bic</span>
-<span id="cb2-10"><a></a><span class="co"># Renormalize BIC and keep only models with some weight</span></span>
-<span id="cb2-11"><a></a>bic <span class="ot">&lt;-</span> models_bic <span class="sc">-</span> <span class="fu">min</span>(models_bic)</span>
-<span id="cb2-12"><a></a>models <span class="ot">&lt;-</span> <span class="fu">which</span>(bic <span class="sc">&lt;</span> <span class="dv">7</span>)</span>
-<span id="cb2-13"><a></a>bma_weights <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>(<span class="fu">exp</span>(<span class="sc">-</span>bic[models]<span class="sc">/</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="weights-and-model-components" class="slide level2">
-<h2>Weights and model components</h2>
-
-<img data-src="bayesmod-slides9_files/figure-revealjs/fig-bmaweights-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-bmaweights"><p class="caption">
-Figure&nbsp;1: BIC as a function of the linear model covariates (left) and Bayesian model averaging approximate weights (in percentage) for the 10 models with the highest posterior weights according to the BIC approximation.
-</p></section>
-<section id="gaussian-approximation-to-the-posterior" class="slide level2">
-<h2>Gaussian approximation to the posterior</h2>
-<p>We can also use similar ideas to approximate the posterior. Suppose that we can Taylor expand the log prior and log density around their respective mode, say <span class="math inline">\(\widehat{\boldsymbol{\theta}}_0\)</span> and <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},\)</span> with <span class="math inline">\(\jmath_0(\widehat{\boldsymbol{\theta}}_0)\)</span> and <span class="math inline">\(\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\)</span> denoting negative of the corresponding Hessian matrices.</p>
-</section>
-<section id="approximation-to-posterior" class="slide level2">
-<h2>Approximation to posterior</h2>
-<p>Together, these yield <span class="math display">\[\begin{align*}
-\log p(\boldsymbol{\theta}) &amp;\approx \log p(\widehat{\boldsymbol{\theta}}_0) - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_0)^\top\jmath_0(\widehat{\boldsymbol{\theta}}_0)(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_0)\\
-\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) &amp;\approx \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\\&amp; \quad  - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})^\top\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})
-\end{align*}\]</span></p>
-</section>
-<section id="gaussian-approximation-to-posterior" class="slide level2">
-<h2>Gaussian approximation to posterior</h2>
-<p>The approximate posterior must be Gaussian with precision <span class="math inline">\(\jmath_n^{-1}\)</span> and mean <span class="math inline">\(\mu_n,\)</span> where <span class="math display">\[\begin{align*}
-\jmath_n &amp;= \jmath_0(\widehat{\boldsymbol{\theta}}_{0}) + \jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})
-\\
-\widehat{\boldsymbol{\theta}}_n &amp;= \jmath_n^{-1}\left\{ \jmath_0(\widehat{\boldsymbol{\theta}}_{0})\widehat{\boldsymbol{\theta}}_{0} + \jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}\right\}
-\end{align*}\]</span> and note that <span class="math inline">\(\jmath_0(\widehat{\boldsymbol{\theta}}_{0}) = \mathrm{O}(1),\)</span> whereas <span class="math inline">\(\jmath_n\)</span> is <span class="math inline">\(\mathrm{O}(n).\)</span></p>
-</section>
-<section id="gaussian-large-sample-approximation-to-mle" class="slide level2">
-<h2>Gaussian large-sample approximation to MLE</h2>
-<p>Suppose that the prior is continuous and positive in a neighborhood of the maximum.</p>
-<p>Assume further that the regularity conditions for maximum likelihood estimator holds. Then, in the limit as <span class="math inline">\(n \to \infty\)</span> <span class="math display">\[\begin{align*}
-\boldsymbol{\theta} \mid \boldsymbol{y} \stackrel{\cdot}{\sim} \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},  \jmath^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\}
-\end{align*}\]</span></p>
-</section>
-<section id="corollary" class="slide level2">
-<h2>Corollary</h2>
-<p>In large samples, the inference obtained from using likelihood-based inference and Bayesian methods will be equivalent</p>
-<ul>
-<li>credible intervals will also have guaranteed frequentist coverage.</li>
-</ul>
-<p>Misspecified model: Bayesian will return the model from the family that minimizes the Kullback–Leibler divergence with the true data generating process.</p>
-</section>
-<section id="regularity-conditions" class="slide level2">
-<h2>Regularity conditions</h2>
-<ul>
-<li>The maximizer must be uniquely identified from the data and must not be on boundary, so that we can perform a two-sided Taylor series expansion around <span class="math inline">\(\boldsymbol{\theta}_0.\)</span></li>
-<li>We need to be able to apply the law of large numbers to get the variance (reciprocal Fisher information) and apply a central limit theorem to the score.</li>
-<li>The third-order derivative of the likelihood is bounded: we can get away with weaker, but this is easiest to check (and ensures that the higher order terms of the Taylor series expansion vanishes asymptotically).</li>
-</ul>
-</section>
-<section id="gaussian-approximation-to-gamma-posterior" class="slide level2">
-<h2>Gaussian approximation to gamma posterior</h2>
-
-<img data-src="bayesmod-slides9_files/figure-revealjs/fig-post-gamma-laplace-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-post-gamma-laplace"><p class="caption">
-Figure&nbsp;2: Gaussian approximation (dashed) to the posterior density (full line) of the exponential rate <span class="math inline">\(\lambda\)</span> for the <code>waiting</code> dataset with an exponential likelihood and a gamma prior with <span class="math inline">\(a=0.01\)</span> and <span class="math inline">\(b=0.01.\)</span> The plots are based on the first <span class="math inline">\(10\)</span> observations (left) and the whole sample of size <span class="math inline">\(n=62\)</span> (right).
-</p></section>
-<section id="structured-models" class="slide level2">
-<h2>Structured models</h2>
-<p>Models in genomics data or spatio-temporal applications including random effects (e.g., spline smoothers) are predominant.</p>
-<p>They often contain several thousands or millions of latent parameters.</p>
-<p>Inference becomes <strong>unfeasible</strong> in reasonable time using methods we covered so far.</p>
-</section>
-<section id="integrated-nested-laplace-approximation" class="slide level2">
-<h2>Integrated nested Laplace approximation</h2>
-<p>Consider a model with response <span class="math inline">\(\boldsymbol{y}\)</span> which depends on covariates <span class="math inline">\(\mathbf{x}\)</span> through a latent Gaussian process <span class="math inline">\(\boldsymbol{\beta}.\)</span></p>
-<p>Typically, the prior of coefficients <span class="math inline">\(\boldsymbol{\beta} \in \mathbb{R}^p.\)</span> The dimension <span class="math inline">\(p\)</span> can be substantial (several thousands) with a comparably low-dimensional hyperparameter vector <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^m.\)</span></p>
-<p>Consider data that are conditionally independent given <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{Q}^{-1})\)</span> for simplicity.</p>
-</section>
-<section id="gaussian-approximations-considered" class="slide level2">
-<h2>Gaussian approximations considered</h2>
-<p>Then, <span class="math display">\[\begin{align*}
-p(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto \exp\left\{-\frac{1}{2} \boldsymbol{\beta}^\top\mathbf{Q}\boldsymbol{\beta} + \sum_{i=1}^n \log p(y_i \mid \beta_i, \boldsymbol{\theta})\right\}
-\end{align*}\]</span> If <span class="math inline">\(\boldsymbol{\beta}\)</span> is a Gaussian Markov random field, it’s precision matrix <span class="math inline">\(\mathbf{Q}\)</span> will be sparse. A Gaussian approximation to this model would have precision matrix <span class="math inline">\(\mathbf{Q} + \mathrm{diag}(\boldsymbol{c})\)</span> for some vector <span class="math inline">\(\boldsymbol{c}\)</span> obtained from the second-order expansion of the likelihood.</p>
-<p>This allows one to use dedicated algorithms for sparse matrices.</p>
-</section>
-<section id="inla-targets-of-inference" class="slide level2">
-<h2>INLA: targets of inference</h2>
-<p>Interest typically then lies in marginal parameters <span class="math display">\[\begin{align*}
-p(\beta_i \mid \boldsymbol{y}) &amp;= \int p(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}\\
-p(\theta_i \mid \boldsymbol{y}) &amp;= \int p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}_{-i}
-\end{align*}\]</span> where <span class="math inline">\(\boldsymbol{\theta}_{-i}\)</span> denotes the vector of hyperparameters excluding the <span class="math inline">\(i\)</span>th element <span class="math inline">\(\theta_i.\)</span></p>
-</section>
-<section id="philosophy-of-inla" class="slide level2">
-<h2>Philosophy of INLA</h2>
-<p>The INLA method builds Laplace approximations to the integrands <span class="math inline">\(p(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y})\)</span> and <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y}),\)</span> and evaluates the integral using quadrature rules over a coarse grid of values of <span class="math inline">\(\boldsymbol{\theta}.\)</span></p>
-<p>The marginal posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is approximated by writing <span class="math display">\[p(\boldsymbol{\beta}, \boldsymbol{\theta} \mid \boldsymbol{y}) \propto p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}) p(\boldsymbol{\theta} \mid \boldsymbol{y})\]</span> and performing a Laplace approximation for fixed value of <span class="math inline">\(\boldsymbol{\theta}\)</span> for the term <span class="math inline">\(p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),\)</span> whose mode we denote by <span class="math inline">\(\widehat{\boldsymbol{\beta}}.\)</span></p>
-</section>
-<section id="inla-approximation-step-1" class="slide level2">
-<h2>INLA approximation (step 1)</h2>
-<p>This yields <span class="math display">\[\begin{align*}
-\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}}
-\end{align*}\]</span></p>
-</section>
-<section id="note-on-approximation" class="slide level2">
-<h2>Note on approximation</h2>
+<section id="hamiltonian-monte-carlo" class="slide level2">
+<h2>Hamiltonian Monte Carlo</h2>
 <div style="font-size: 0.8em;">
-<p>The Laplace approximation <span class="math inline">\(p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})\)</span> has kernel <span class="math display">\[p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}\exp\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})/2\};\]</span> since it is evaluated at <span class="math inline">\(\widehat{\boldsymbol{\beta}},\)</span> we retrieve only the determinant of the negative Hessian of <span class="math inline">\(p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),\)</span> namely <span class="math inline">\(\mathbf{H}(\widehat{\boldsymbol{\beta}}).\)</span> Note that the latter varies with <span class="math inline">\(\boldsymbol{\theta}.\)</span></p>
+<p>Hamitonian Monte Carlo borrows ideas from Hamiltonian dynamics. Consider the evolution over time of a particle characterized by</p>
+<ul>
+<li>a position <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^d\)</span> along with potential energy <span class="math display">\[U(\boldsymbol{\theta})=- \log p(\boldsymbol{\theta} \mid \boldsymbol{y})\]</span></li>
+<li>an added auxiliary vector <span class="math inline">\(\boldsymbol{s} \in \mathbb{R}^d\)</span> of <strong>momentum</strong> (describing mass and velocity) with accompaying kinetic energy <span class="math display">\[K(\boldsymbol{s}).\]</span></li>
+</ul>
 </div>
 </section>
-<section id="numerical-integration" class="slide level2">
-<h2>Numerical integration</h2>
-<p>To obtain <span class="math inline">\(p(\theta_i \mid \boldsymbol{y})\)</span>:</p>
-<ol type="1">
-<li>Find the mode of <span class="math inline">\(\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> using a Newton’s method, approximating the gradient and Hessian via finite differences.</li>
-<li>Compute the negative Hessian at the mode to get an approximation to the covariance of <span class="math inline">\(\boldsymbol{\theta}.\)</span> Use an eigendecomposition to get the principal directions <span class="math inline">\(\boldsymbol{z}\)</span>.</li>
-</ol>
+<section id="hamiltonian" class="slide level2">
+<h2>Hamiltonian</h2>
+<p>Write <span class="math inline">\(U(\boldsymbol{\theta}) = - \log p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> and the total energy <span class="math display">\[H(\boldsymbol{\theta}, \boldsymbol{s})=U(\boldsymbol{\theta}) + K(\boldsymbol{s}).\]</span></p>
+<p>The partial derivatives of the Hamiltonian give the evolution over time of the system: <span class="math display">\[\begin{align*}
+\frac{\mathrm{d} \theta_j}{\mathrm{d} t} = \frac{\partial H}{\partial s_j} &amp;= \frac{\partial K}{\partial s_j}\\
+\frac{\mathrm{d} s_j}{\mathrm{d} t}= - \frac{\partial H}{\partial \theta_j} &amp;= - \frac{\partial U}{\partial \theta_j}, \quad j =1, \ldots, d.
+\end{align*}\]</span></p>
+<p>There is no explicit solution to these differential equations in most settings.</p>
 </section>
-<section id="numerical-integration-2" class="slide level2">
-<h2>Numerical integration (2)</h2>
-<ol start="3" type="1">
-<li>In each direction of <span class="math inline">\(\boldsymbol{z}\)</span>, consider drops in <span class="math inline">\(\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> as we move away from the mode and define a coarse grid based on these, keeping points where the difference in <span class="math inline">\(\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> relative to the mode is less than some small <span class="math inline">\(\delta.\)</span></li>
-<li>Retrieve the marginal by numerical integration using the central composition design outline above. We can also use directly avoid the integration and use the approximation at the posterior mode of <span class="math inline">\(\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}).\)</span></li>
-</ol>
+<section id="kinetic-energy" class="slide level2">
+<h2>Kinetic energy</h2>
+<p>The most popular choice of kinetic energy is the Gaussian, <span class="math display">\[\begin{align*}
+K(\boldsymbol{s}) = \frac{1}{2} \boldsymbol{s}^\top \mathbf{M}^{-1}\boldsymbol{s}
+\end{align*}\]</span> the negative of a mean zero log Gaussian density with positive-definite covariance matrix <span class="math inline">\(\mathbf{M}.\)</span></p>
+<p>Typically, we take <span class="math inline">\(\mathbf{M}=\mathrm{diag}\{m_1, \ldots, m_d\}\)</span> diagonal, or else proportional <span class="math inline">\(\mathbf{M} = m \mathbf{I}_d\)</span>.</p>
 </section>
-<section id="approximation-of-marginal-of-gaussian-latent-effect" class="slide level2">
-<h2>Approximation of marginal of Gaussian latent effect</h2>
-<p>For the marginal <span class="math inline">\(p(\beta_i \mid \boldsymbol{y})\)</span> term, <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> proceed instead with the marginal for <span class="math inline">\(\beta_i\)</span> by building an approximation of it based on maximizing <span class="math inline">\(\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}\)</span> to yield <span class="math inline">\(\widehat{\boldsymbol{\beta}}_{(i)}\)</span> whose <span class="math inline">\(i\)</span>th element is <span class="math inline">\(\beta_i,\)</span> yielding <span class="math display">\[\begin{align*}
-\widetilde{p}(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}_{(i)}, \boldsymbol{\theta} \mid \boldsymbol{y})}{\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i),-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y})},
-\end{align*}\]</span> with a suitable renormalization of <span class="math inline">\(\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i),-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}).\)</span></p>
+<section id="properties-of-hamiltonian-dynamics" class="slide level2">
+<h2>Properties of Hamiltonian dynamics</h2>
+<div style="font-size: 0.9em;">
+<p>The mapping <span class="math inline">\(T_s\)</span> from time <span class="math inline">\(t\)</span> at <span class="math inline">\((\boldsymbol{\theta}(t), \boldsymbol{s}(t))\)</span> to time <span class="math inline">\(t + \varepsilon\)</span>, <span class="math inline">\((\boldsymbol{\theta}(t + \varepsilon), \boldsymbol{s}(t + \varepsilon))\)</span> satisfies the following properties:</p>
+<ul>
+<li>Reversible: MCMC will thus preserve the invariant target distribution</li>
+<li>Conservation of energy: proposals from Hamiltonian dynamics would lead to acceptance probability of 1.</li>
+<li>Symplecticness/volume preserving: the Jacobian of <span class="math inline">\(T_s\)</span> is one — no need to calculate it.</li>
+</ul>
+</div>
 </section>
-<section id="remark-on-approximation" class="slide level2">
-<h2>Remark on approximation</h2>
-<p>While we could use the Laplace approximation <span class="math inline">\(p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})\)</span> and marginalize the latter directly, this leads to evaluation of the Laplace approximation to the density far from the mode, which is often inaccurate.</p>
+<section id="a-necessary-discretization-step" class="slide level2">
+<h2>A necessary discretization step</h2>
+<p>There is no explicit solution to the Hamiltonian differential equation. We must move away from continuous time…</p>
+<ul>
+<li>For solving the differential equation numerically, Euler’s method doesn’t work because it does not preserve volume, and this leads to divergences.</li>
+</ul>
 </section>
-<section id="numerical-challenges-to-laplace-approximation" class="slide level2">
-<h2>Numerical challenges to Laplace approximation</h2>
-<p>One challenge is that <span class="math inline">\(p\)</span> is <strong>very large</strong>, so calculation of the Hessian <span class="math inline">\(\mathbf{H}\)</span> is costly to evaluate.</p>
-<p>Having to evaluate it repeatedly for each marginal <span class="math inline">\(\beta_i\)</span> for <span class="math inline">\(i=1, \ldots, p\)</span> is prohibitive since it involves factorizations of <span class="math inline">\(p \times p\)</span> matrices.</p>
-</section>
-<section id="further-approximations" class="slide level2">
-<h2>Further approximations</h2>
-<p>To reduce the computational costs, <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> propose to use the approximate mean to avoid optimizing and use the conditional of the Gaussian approximation with mean <span class="math inline">\(\widehat{\boldsymbol{\beta}}\)</span> and covariance <span class="math inline">\(\boldsymbol{\Sigma} = \mathbf{H}^{-1}(\widehat{\boldsymbol{\beta}}),\)</span> <span class="math display">\[\begin{align*}
-\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y} &amp;\approx \mathsf{Gauss}_{p-1}\left(\widetilde{\boldsymbol{\beta}}_{(i)}, \mathbf{M}^{-1}_{-i,-i}\right);
+<section id="leapfrog-integrator" class="slide level2">
+<h2>Leapfrog integrator</h2>
+<p>The leapfrog integrator performs a half step for momentum, then does a full step for the position using the updated components, etc.</p>
+<p><span class="math display">\[\begin{align*}
+s_j(t+\varepsilon/2) &amp;= s_j(t) - \frac{\varepsilon}{2}  \left.\frac{\partial U(\boldsymbol{\theta})}{\partial \theta_j}\right|_{\boldsymbol{\theta}(t)}
 \\
-\widetilde{\boldsymbol{\beta}}_{(i)} &amp;= \widehat{\boldsymbol{\beta}}_{-i} + \boldsymbol{\Sigma}_{i,i}^{-1}\boldsymbol{\Sigma}_{i,-i}(\beta_i - \widehat{\beta}_i),
-\end{align*}\]</span> This only requires a rank-one update.</p>
+\theta_j(t+\varepsilon) &amp;= \theta_j(t)  + \varepsilon \frac{s_j(t+\varepsilon/2)}{m_j} \\
+s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\frac{\partial U(\boldsymbol{\theta})}{\partial \theta_j}\right|_{\boldsymbol{\theta}(t + \varepsilon)}
+\end{align*}\]</span></p>
 </section>
-<section id="further-approximations-1" class="slide level2">
-<h2>Further approximations</h2>
-<p><span class="citation" data-cites="Wood:2019">Wood (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span> suggest to use a Newton step to correct <span class="math inline">\(\widetilde{\boldsymbol{\beta}}_{(i)},\)</span> starting from the conditional mean.</p>
-<p>The second step is to exploit the local dependence on <span class="math inline">\(\boldsymbol{\beta}\)</span> using the Markov structure to build an improvement to the Hessian. Various strategies are proposed in <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span> and <span class="citation" data-cites="Wood:2019">Wood (<a href="#/references" role="doc-biblioref" onclick="">2019</a>)</span>.</p>
-<p>Nowadays, the INLA software uses a low-rank variational correction to Laplace method, proposed in <span class="citation" data-cites="vanNiekerk.Rue:2024"><span class="nocase">van Niekerk &amp; Rue</span> (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span>.</p>
+<section id="hamiltonian-monte-carlo-algorithm" class="slide level2">
+<h2>Hamiltonian Monte Carlo algorithm</h2>
+<p>Consider the joint distribution with positions <span class="math inline">\(\boldsymbol{\theta}\)</span> and momentum variables <span class="math inline">\(\boldsymbol{s}\)</span>, <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{s}) \propto \exp \{- H(\boldsymbol{\theta}, \boldsymbol{s})\}.\)</span></p>
+<div style="font-size: 0.8em;">
+<p>We start with a position vector <span class="math inline">\(\boldsymbol{\theta}_{t-1}\)</span> at step <span class="math inline">\(t-1\)</span>:</p>
+<ol type="1">
+<li>Sample a new momentum vector <span class="math inline">\(\boldsymbol{s}_{t-1} \sim \mathsf{Gauss}(\boldsymbol{0}_d, \mathbf{M}).\)</span></li>
+<li>Use Verlet’s (leapfrog) integrator to evolve the state vector for <span class="math inline">\(L=\lfloor\tau/\varepsilon\rfloor\)</span> steps of size <span class="math inline">\(\varepsilon\)</span> to get a proposal tuple <span class="math inline">\((\boldsymbol{\theta}_t^{\star}, \boldsymbol{s}_t^{\star})\)</span></li>
+</ol>
+</div>
 </section>
-<section id="the-inla-software" class="slide level2">
-<h2>The INLA software</h2>
-<p>The <code>INLA</code> <a href="https://www.r-inla.org/"><strong>R</strong> package</a> provides an interface to fit models with Gaussian latent random effects. While the software is particularly popular for spatio-temporal applications using the SPDE approach, we revisit two examples in the sequel where we can exploit the Markov structure.</p>
+<section id="hamiltonian-monte-carlo-algorithm-1" class="slide level2">
+<h2>Hamiltonian Monte Carlo algorithm</h2>
+<div style="font-size: 0.8em;">
+<ol start="3" type="1">
+<li>Flip the momentum variable, <span class="math inline">\(\boldsymbol{s} \mapsto - \boldsymbol{s}.\)</span></li>
+<li>Metropolis step: if <span class="math inline">\(U \sim \mathsf{unif}(0,1) &lt;R\)</span>, where <span class="math display">\[\log R = -H(\boldsymbol{\theta}^{\star}, \boldsymbol{s}^{\star}_{t}) + H(\boldsymbol{\theta}_{t-1}, \boldsymbol{s}_{t-1}),\]</span> set <span class="math inline">\(\boldsymbol{\theta}_t = \boldsymbol{\theta}_t^{\star}\)</span>, else keep the previous value and set <span class="math inline">\(\boldsymbol{\theta}_t = \boldsymbol{\theta}_{t-1}\)</span>.</li>
+<li>Discard the momentum vector</li>
+</ol>
+</div>
 </section>
-<section id="stochastic-volatility-model-with-inla" class="slide level2">
-<h2>Stochastic volatility model with INLA</h2>
+<section id="tuning" class="slide level2">
+<h2>Tuning</h2>
+<div style="font-size: 0.8em;">
+<p>Hamiltonian Monte Carlo (HMC) has numerous tuning parameters</p>
+<ol type="1">
+<li>size of the leapfrog step <span class="math inline">\(\varepsilon\)</span>.</li>
+<li>length of the integration time <span class="math inline">\(\tau\)</span>
+<ul>
+<li>equivalently, the number of steps <span class="math inline">\(L=\lfloor \tau / \varepsilon \rfloor\)</span>.</li>
+<li>too small leads HMC to bear close resemblance to random walk.</li>
+<li>too large leads to wasteful calculations.</li>
+</ul></li>
+<li>choice of the mass matrix <span class="math inline">\(\mathbf{M}\)</span> (pre-conditioner obtained during warmup period).</li>
+</ol>
+</div>
+</section>
+<section id="leapfrog-and-error" class="slide level2">
+<h2>Leapfrog and error</h2>
+<p>The Störmer–Verlet (leapfrog) integrator is a second order method, so for step size <span class="math inline">\(\varepsilon\)</span>:</p>
+<div style="font-size: 0.9em;">
+<ul>
+<li>local error <span class="math inline">\(\mathrm{O}(\varepsilon^3)\)</span> and</li>
+<li>global error of size <span class="math inline">\(\mathrm{O}(\varepsilon^2)\)</span> (accumulated error over <span class="math inline">\(L\)</span> steps).</li>
+</ul>
+</div>
+<p>Leapfrog updates one variable at a time, a shear transformation.</p>
+<p>Leapfrog step should be <span class="math inline">\(\mathrm{O}(d^{-1/4})\)</span> <span class="citation" data-cites="Beskos:2013">(<a href="#/references" role="doc-biblioref" onclick="">Beskos et al., 2013</a>)</span></p>
+</section>
+<section id="optimal-acceptance-rate" class="slide level2">
+<h2>Optimal acceptance rate</h2>
+<p>In practice, we use a Metropolis step to adjust for the discretization of the system.</p>
+<ul>
+<li>This leads to acceptance rates less than the theoretical value of 1.</li>
+<li>with optimal acceptance rate of <span class="math inline">\(0.651\)</span> <span class="citation" data-cites="Beskos:2013">(<a href="#/references" role="doc-biblioref" onclick="">Beskos et al., 2013</a>)</span>; see <span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> for heuristics.</li>
+<li>software like Stan tunes to around 0.8, but can be adjusted in settings.</li>
+</ul>
+</section>
+<section id="its-nuts" class="slide level2">
+<h2>It’s nuts!</h2>
+<ul>
+<li><span class="citation" data-cites="Homan.Gelman:2014">Homan &amp; Gelman (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> propose the no <span class="math inline">\(U\)</span>-turn sampler (NUTS), which continues the trajectory until the sampler turns back, to determine the number of steps <span class="math inline">\(L\)</span>, along with tuning of <span class="math inline">\(\varepsilon.\)</span></li>
+<li>Stan uses an adaptation of NUTS due to <span class="citation" data-cites="Betancourt:2016">Betancourt (<a href="#/references" role="doc-biblioref" onclick="">2016</a>)</span></li>
+</ul>
+</section>
+<section id="hmc-and-divergences" class="slide level2">
+<h2>HMC and divergences</h2>
+<p>In theory, the energy of the Hamiltonian should stay constant, but the numerical scheme leads to small perturbations (hence the rejection step).</p>
+<ul>
+<li>If the value of the Hamiltonian changes too much, this is identified as a <strong>divergence</strong>. These occur when the geometry of the posterior is heavily constrained (funnel shaped).</li>
+<li>Reparametrization of the model can help improve this: see the <a href="https://mc-stan.org/docs/stan-users-guide/efficiency-tuning.html#reparameterization.section">Stan manual</a>.</li>
+</ul>
+</section>
+<section id="neals-funnel" class="slide level2">
+<h2>Neal’s funnel</h2>
+
+<img data-src="fig/fig-Neal-funnel.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
+<section id="achieving-independence" class="slide level2">
+<h2>Achieving independence</h2>
+<p>We have seen that for differentiable posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, using the gradient information can improve convergence by informing about the direction of the mode.</p>
+<ul>
+<li><span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> discusses how informally, random walk Metropolis requires <span class="math inline">\(\mathrm{O}(d^2)\)</span> steps to get an independent draw, compared to <span class="math inline">\(\mathrm{O}(d^{4/3})\)</span> for MALA.</li>
+<li>HMC scales like <span class="math inline">\(\mathrm{O}(d^{5/4})\)</span>, a notable improvement in performance.</li>
+<li>It however comes at the cost of repeated gradient evaluations (<span class="math inline">\(L\)</span> by update).</li>
+</ul>
+</section>
+<section id="take-home" class="slide level2">
+<h2>Take-home</h2>
+<ul>
+<li>HMC is more efficient than what we have seen, but not a silver bullet: it works very well for not overly complicated models and moderate sample sizes.</li>
+<li>HMC works better than many MCMC, but requires special tuning best left to specialized implementations already available in software.</li>
+<li>Most implementations don’t cover the case of discrete random variables <span class="citation" data-cites="Nishimura:2020">(<a href="#/references" role="doc-biblioref" onclick="">Nishimura et al., 2020</a>)</span>.</li>
+</ul>
+</section>
+<section id="probabilistic-programming" class="slide level2">
+<h2>Probabilistic programming</h2>
+<p>There are several languages and interfaces that implement probabilistic programming where the user has only to specify the likelihood and prior.</p>
+<p>Historically, <a href="https://www.mrc-bsu.cam.ac.uk/software/bugs-project">Bugs</a> paved the way to practitioners.</p>
+<p>It relies on Gibbs sampling (updating one parameter at the time), but is not actively developed. Still the source of many exercises and inspiration for the syntax of other implementations (e.g., Nimble, JAGS).</p>
+</section>
+<section>
+<section id="stan" class="title-slide slide level1 center">
+<h1>Stan</h1>
+<p>The programming language <a href="https://mc-stan.org/">Stan</a> is written in C++ and offers cross-platform interfaces.</p>
+
+<img data-src="fig/Stan.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
+<section id="other-mcmc-software" class="slide level2">
+<h2>Other MCMC software</h2>
+<ul>
+<li><a href="https://r-nimble.org/">Nimble</a>, C++ with <strong>R</strong> interface</li>
+<li><a href="https://turinglang.org/docs/getting-started/">Turing.jl</a>, Julia</li>
+<li><a href="https://www.pymc.io/welcome.html">PyMC</a>, Python</li>
+<li><a href="https://pigeons.run/stable/">Pigeons</a>, Julia</li>
+</ul>
+</section>
+<section id="stochastic-volatility-model" class="slide level2">
+<h2>Stochastic volatility model</h2>
 <p>Financial returns <span class="math inline">\(Y_t\)</span> typically exhibit time-varying variability. The <strong>stochastic volatility</strong> model is a parameter-driven model that specifies <span class="math display">\[\begin{align*}
 Y_t &amp;= \exp(h_t/2) Z_t \\
 h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
-\end{align*}\]</span> where <span class="math inline">\(U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).\)</span> The <a href="https://inla.r-inla-download.org/r-inla.org/doc/likelihood/stochvolgaussian.pdf"><code>INLA</code> documentation</a> provides information about which default prior and hyperparameters are specified. We use a <span class="math inline">\(\mathsf{gamma}(1, 0.001)\)</span> prior for the precision.</p>
+\end{align*}\]</span> where <span class="math inline">\(U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).\)</span></p>
+<p>It is possible to introduce leverage by adding <span class="math inline">\(\mathsf{Cor}(Z_t, U_t) = \rho.\)</span></p>
 </section>
-<section id="stochastic-volality-code" class="slide level2">
-<h2>Stochastic volality code</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(INLA)</span>
-<span id="cb3-2"><a></a><span class="fu">data</span>(exchangerate, <span class="at">package =</span> <span class="st">"hecbayes"</span>)</span>
-<span id="cb3-3"><a></a><span class="co"># Compute response from raw spot exchange rates at noon</span></span>
-<span id="cb3-4"><a></a>y <span class="ot">&lt;-</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">diff</span>(<span class="fu">log</span>(exchangerate<span class="sc">$</span>dexrate))</span>
-<span id="cb3-5"><a></a>time <span class="ot">&lt;-</span> <span class="fu">seq_along</span>(y)</span>
-<span id="cb3-6"><a></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">time =</span> time)</span>
-<span id="cb3-7"><a></a>f_stochvol <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"ar1"</span>,</span>
-<span id="cb3-8"><a></a>                            <span class="at">param =</span> <span class="fu">list</span>(<span class="at">prec =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.001</span>)))</span>
-<span id="cb3-9"><a></a>mod_stochvol <span class="ot">&lt;-</span> <span class="fu">inla</span>(f_stochvol, <span class="at">family =</span> <span class="st">"stochvol"</span>, <span class="at">data =</span> data)</span>
-<span id="cb3-10"><a></a><span class="co"># Obtain summary</span></span>
-<span id="cb3-11"><a></a>summary <span class="ot">&lt;-</span> <span class="fu">summary</span>(mod_stochvol)</span>
-<span id="cb3-12"><a></a><span class="co"># plot(mod_stochvol)</span></span>
-<span id="cb3-13"><a></a>marg_prec <span class="ot">&lt;-</span> mod_stochvol<span class="sc">$</span>marginals.hyperpar[[<span class="dv">1</span>]]</span>
-<span id="cb3-14"><a></a>marg_phi <span class="ot">&lt;-</span> mod_stochvol<span class="sc">$</span>marginals.hyperpar[[<span class="dv">2</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section>
-<section id="marginal-posterior-approximations" class="slide level2">
-<h2>Marginal posterior approximations</h2>
-
-<img data-src="bayesmod-slides9_files/figure-revealjs/fig-stochvol-inla-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-stochvol-inla"><p class="caption">
-Figure&nbsp;3: Marginal densities of precision and autocorrelation parameters from the Gaussian stochastic volatility model.
-</p></section>
-<section id="comment-on-stochastic-volatility" class="slide level2">
-<h2>Comment on stochastic volatility</h2>
-<p><a href="#/fig-stochvol-inla" class="quarto-xref">Figure&nbsp;3</a> shows that the correlation <span class="math inline">\(\phi\)</span> is nearly one, leading to random walk behaviour and high persistence over time.</p>
-<p>This strong serial dependence in the variance is in part responsible for the difficulty in fitting this model using MCMC.</p>
-</section>
-<section id="marginal-approximations" class="slide level2">
-<h2>Marginal approximations</h2>
-<p>We can use the marginal density approximations to obtain quantiles for summary of interest, marginal posterior moments, etc.</p>
-<p>The software also includes utilities to transform the parameters using the change of variable formula.</p>
-</section>
-<section id="marginal-summaries" class="slide level2">
-<h2>Marginal summaries</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="co"># Compute density, quantiles, etc. via inla.*marginal</span></span>
-<span id="cb4-2"><a></a><span class="co"># Change of variable to get variance from precision</span></span>
-<span id="cb4-3"><a></a>marg_var <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.tmarginal</span>(</span>
-<span id="cb4-4"><a></a>  <span class="at">fun =</span> <span class="cf">function</span>(x) { <span class="dv">1</span> <span class="sc">/</span> x }, </span>
-<span id="cb4-5"><a></a>  <span class="at">marginal =</span> marg_prec)</span>
-<span id="cb4-6"><a></a>INLA<span class="sc">::</span><span class="fu">inla.qmarginal</span>(marg_var, <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>,  <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2875418 0.4523687 0.7324296</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="co"># Posterior marginal mean and variance of phi</span></span>
-<span id="cb6-2"><a></a>mom1 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
-<span id="cb6-3"><a></a>    <span class="at">fun =</span> <span class="cf">function</span>(x){x}, </span>
-<span id="cb6-4"><a></a>    <span class="at">marginal =</span> marg_phi)</span>
-<span id="cb6-5"><a></a>mom2 <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla.emarginal</span>(</span>
-<span id="cb6-6"><a></a>    <span class="at">fun =</span> <span class="cf">function</span>(x){x<span class="sc">^</span><span class="dv">2</span>}, </span>
-<span id="cb6-7"><a></a>    <span class="at">marginal =</span> marg_phi)</span>
-<span id="cb6-8"><a></a><span class="fu">c</span>(<span class="at">mean =</span> mom1, <span class="at">sd =</span> <span class="fu">sqrt</span>(mom2 <span class="sc">-</span> mom1<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       mean          sd 
-0.984094392 0.005665661 </code></pre>
-</div>
-</div>
-</section>
-<section id="tokyo-binomial-time-series" class="slide level2">
-<h2>Tokyo binomial time series</h2>
-<p>We revisit the Tokyo rainfall example, but this time fit the model with <code>INLA</code> rather than MCMC.</p>
-<ul>
-<li>Logistic regression, with a second-order cyclic random walk prior for the coefficients, and the default gamma prior for the precision.</li>
-</ul>
-</section>
-<section id="code-syntax" class="slide level2">
-<h2>Code syntax</h2>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a><span class="fu">data</span>(Tokyo, <span class="at">package =</span> <span class="st">"INLA"</span>)</span>
-<span id="cb8-2"><a></a><span class="co"># Formula (removing intercept)</span></span>
-<span id="cb8-3"><a></a>formula <span class="ot">&lt;-</span> y <span class="sc">~</span> <span class="fu">f</span>(time, <span class="at">model =</span> <span class="st">"rw2"</span>, <span class="at">cyclic =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb8-4"><a></a>mod <span class="ot">&lt;-</span> INLA<span class="sc">::</span><span class="fu">inla</span>(</span>
-<span id="cb8-5"><a></a>   <span class="at">formula =</span> formula, </span>
-<span id="cb8-6"><a></a>   <span class="at">family =</span> <span class="st">"binomial"</span>,</span>
-<span id="cb8-7"><a></a>   <span class="at">Ntrials =</span> n, </span>
-<span id="cb8-8"><a></a>   <span class="at">data =</span> Tokyo)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The marginal posterior with pointwise 95% credible intervals on the next slide show nearly identical results to marginals from the probit model.</p>
-</section>
-<section id="posterior-of-random-effect-prior" class="slide level2">
-<h2>Posterior of random effect prior</h2>
-
-<img data-src="bayesmod-slides9_files/figure-revealjs/fig-rainfall-inla-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-rainfall-inla"><p class="caption">
-Figure&nbsp;4: Posterior probability per day of the year with posterior median and 95% credible interval for the Tokyo rainfall binomial time series.
-</p></section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
-<div id="ref-Park.Casella:2008" class="csl-entry" role="listitem">
-Park, T., &amp; Casella, G. (2008). The <span>B</span>ayesian <span>L</span>asso. <em>Journal of the American Statistical Association</em>, <em>103</em>(482), 681–686. <a href="https://doi.org/10.1198/016214508000000337">https://doi.org/10.1198/016214508000000337</a>
+<div id="ref-Beskos:2013" class="csl-entry" role="listitem">
+Beskos, A., Pillai, N., Roberts, G., Sanz-Serna, J.-M., &amp; Stuart, A. (2013). Optimal tuning of the hybrid <span>M</span>onte <span>C</span>arlo algorithm. <em>Bernoulli</em>, <em>19</em>(5a), 1501–1534. <a href="https://doi.org/10.3150/12-bej414">https://doi.org/10.3150/12-bej414</a>
 </div>
-<div id="ref-Raftery:1995" class="csl-entry" role="listitem">
-Raftery, A. E. (1995). Bayesian model selection in social research. <em>Sociological Methodology</em>, <em>25</em>, 111–163. <a href="https://doi.org/10.2307/271063">https://doi.org/10.2307/271063</a>
+<div id="ref-Betancourt:2016" class="csl-entry" role="listitem">
+Betancourt, M. (2016). Identifying the optimal integration time in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>arXiv</em>. <a href="https://doi.org/10.48550/arXiv.1601.00225">https://doi.org/10.48550/arXiv.1601.00225</a>
 </div>
-<div id="ref-Rue.Martino.Chopin:2009" class="csl-entry" role="listitem">
-Rue, H., Martino, S., &amp; Chopin, N. (2009). Approximate bayesian inference for latent <span>G</span>aussian models by using integrated nested <span>L</span>aplace approximations. <em>Journal of the Royal Statistical Society: Series B (Statistical Methodology)</em>, <em>71</em>(2), 319–392. <a href="https://doi.org/10.1111/j.1467-9868.2008.00700.x">https://doi.org/10.1111/j.1467-9868.2008.00700.x</a>
+<div id="ref-Homan.Gelman:2014" class="csl-entry" role="listitem">
+Homan, M. D., &amp; Gelman, A. (2014). The no-<span>U</span>-turn sampler: Adaptively setting path lengths in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>Journal of Machine Learning Research</em>, <em>15</em>(1), 1593–1623.
 </div>
-<div id="ref-Tierney.Kadane:1986" class="csl-entry" role="listitem">
-Tierney, L., &amp; Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. <em>Journal of the American Statistical Association</em>, <em>81</em>(393), 82–86. <a href="https://doi.org/10.1080/01621459.1986.10478240">https://doi.org/10.1080/01621459.1986.10478240</a>
+<div id="ref-Neal:2011" class="csl-entry" role="listitem">
+Neal, R. M. (2011). <span>MCMC</span> using <span>H</span>amiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 113–162). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
 </div>
-<div id="ref-vanNiekerk.Rue:2024" class="csl-entry" role="listitem">
-<span class="nocase">van Niekerk, J., &amp; Rue, H.</span> (2024). Low-rank variational <span>B</span>ayes correction to the <span>L</span>aplace method. <em>Journal of Machine Learning Research</em>, <em>25</em>(62), 1–25. <a href="http://jmlr.org/papers/v25/21-1405.html">http://jmlr.org/papers/v25/21-1405.html</a>
-</div>
-<div id="ref-Wood:2019" class="csl-entry" role="listitem">
-Wood, S. N. (2019). Simplified integrated nested <span>L</span>aplace approximation. <em>Biometrika</em>, <em>107</em>(1), 223–230. <a href="https://doi.org/10.1093/biomet/asz044">https://doi.org/10.1093/biomet/asz044</a>
+<div id="ref-Nishimura:2020" class="csl-entry" role="listitem">
+Nishimura, A., Dunson, D. B., &amp; Lu, J. (2020). Discontinuous <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo for discrete parameters and discontinuous likelihoods. <em>Biometrika</em>, <em>107</em>(2), 365–380. <a href="https://doi.org/10.1093/biomet/asz083">https://doi.org/10.1093/biomet/asz083</a>
 </div>
 </div>
-</section>
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <p><img src="fig/logo_hec_montreal_bleu_web.png" class="slide-logo"></p>
@@ -855,7 +580,7 @@ Wood, S. N. (2019). Simplified integrated nested <span>L</span>aplace approximat
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
