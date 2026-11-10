@@ -1,7 +1,7 @@
 ---
 title: "Bayesian modelling"
 author: "Léo Belzile"
-subtitle: "Computational strategies and probabilistic programming"
+subtitle: "Hamiltonian Monte Carlo and probabilistic programming"
 date: today
 date-format: "[Last compiled] dddd MMM D, YYYY"
 eval: true
@@ -50,8 +50,10 @@ options(digits = 3, width = 75)
 
 This material is drawn from
 
-- @Neal:2011,
+- @Neal:2011
 - @Betancourt:2017
+- @Mukherjee.Vats:2026
+- [Stan manual](https://mc-stan.org/docs/reference-manual/mcmc.html#hmc.chapter)
 
 Check out these [animations](https://chi-feng.github.io/mcmc-demo/) by Chi Feng
 
@@ -63,7 +65,7 @@ We are interested in calculating expectations of some function $g$ against the p
 \int_{\mathbb{R}^d} g(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}
 
-The integral is determined by the product of the ``volume'' of $g(\cdot)$ and the density.
+The integral is determined by the product of the "volume" of $g(\cdot)$ and the posterior density $p(\boldsymbol{\theta} \mid \boldsymbol{y})$.
 
 ## Curse of dimensionality
 
@@ -86,17 +88,19 @@ For differentiable targets, we saw that we can do better than random walk Metrop
 
 ## Hamiltonian Monte Carlo
 
-Hamitonian Monte Carlo borrows ideas from Hamiltonian dynamics.
+::: {style="font-size: 0.8em;"}
 
-Consider the evolution over time of a particle characterized by a
+Hamitonian Monte Carlo borrows ideas from Hamiltonian dynamics. Consider the evolution over time of a particle characterized by
 
-- position $\boldsymbol{\theta} \in \mathbb{R}^d$ along with potential energy $U(\boldsymbol{\theta})=- \log p(\boldsymbol{\theta} \mid \boldsymbol{y})$
-- an added auxiliary vector $\boldsymbol{s} \in \mathbb{R}^d$ of **momentum** (describing mass and velocity) with accompaying kinetic energy $K(\boldsymbol{s})= -\log p(\boldsymbol{s})$.
+- a position $\boldsymbol{\theta} \in \mathbb{R}^d$ along with potential energy $$U(\boldsymbol{\theta})=- \log p(\boldsymbol{\theta} \mid \boldsymbol{y})$$
+- an added auxiliary vector $\boldsymbol{s} \in \mathbb{R}^d$ of **momentum** (describing mass and velocity) with accompaying kinetic energy $$K(\boldsymbol{s}).$$
+
+:::
 
 ## Hamiltonian
 
-Write the negative of the log of the joint density as
-$$H(\boldsymbol{\theta}, \boldsymbol{s}) = -\log p(\boldsymbol{s}) - \log p(\boldsymbol{\theta}) = U(\boldsymbol{\theta}) + K(\boldsymbol{s}).$$
+Write $U(\boldsymbol{\theta}) = - \log p(\boldsymbol{\theta} \mid \boldsymbol{y})$ and the total energy
+$$H(\boldsymbol{\theta}, \boldsymbol{s})=U(\boldsymbol{\theta}) + K(\boldsymbol{s}).$$
 
 The partial derivatives of the Hamiltonian give the evolution over time of the system:
 \begin{align*}
@@ -119,12 +123,16 @@ Typically, we take $\mathbf{M}=\mathrm{diag}\{m_1, \ldots, m_d\}$ diagonal, or e
 
 ## Properties of Hamiltonian dynamics
 
+::: {style="font-size: 0.9em;"}
+
 The mapping $T_s$ from time $t$ at $(\boldsymbol{\theta}(t), \boldsymbol{s}(t))$ to time $t + \varepsilon$, $(\boldsymbol{\theta}(t + \varepsilon), \boldsymbol{s}(t + \varepsilon))$ satisfies the following properties:
 
 
 - Reversible: MCMC will thus preserve the invariant target distribution
 - Conservation of energy: proposals from Hamiltonian dynamics would lead to acceptance probability of 1.
 - Symplecticness/volume preserving: the Jacobian of $T_s$ is one --- no need to calculate it.
+
+:::
 
 ## A necessary discretization step
 
@@ -148,14 +156,21 @@ s_j(t+\varepsilon) &= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\frac{
 
 Consider the joint distribution with positions $\boldsymbol{\theta}$ and momentum variables $\boldsymbol{s}$, $p(\boldsymbol{\theta}, \boldsymbol{s}) \propto \exp \{- H(\boldsymbol{\theta}, \boldsymbol{s})\}.$
 
+
+::: {style="font-size: 0.8em;"}
+
 We start with a position vector $\boldsymbol{\theta}_{t-1}$ at step $t-1$:
-
-
 
 1. Sample a new momentum vector $\boldsymbol{s}_{t-1} \sim \mathsf{Gauss}(\boldsymbol{0}_d, \mathbf{M}).$
 2. Use Verlet's (leapfrog) integrator to evolve the state vector for   $L=\lfloor\tau/\varepsilon\rfloor$ steps of size $\varepsilon$ to get a proposal tuple $(\boldsymbol{\theta}_t^{\star}, \boldsymbol{s}_t^{\star})$
 
+:::
+
 ## Hamiltonian Monte Carlo algorithm
+
+
+::: {style="font-size: 0.8em;"}
+
 
 3. Flip the momentum variable, $\boldsymbol{s} \mapsto - \boldsymbol{s}.$
 4. Metropolis step: if $U \sim \mathsf{unif}(0,1) <R$, where
@@ -163,26 +178,34 @@ $$\log R = -H(\boldsymbol{\theta}^{\star}, \boldsymbol{s}^{\star}_{t}) + H(\bold
 set $\boldsymbol{\theta}_t = \boldsymbol{\theta}_t^{\star}$, else keep the previous value and set $\boldsymbol{\theta}_t = \boldsymbol{\theta}_{t-1}$.
 5. Discard the momentum vector
 
+::: 
 
 ## Tuning
+
+::: {style="font-size: 0.8em;"}
 
 Hamiltonian Monte Carlo (HMC) has numerous tuning parameters
 
 
 1. size of the leapfrog step $\varepsilon$.
-2. length of the integration time $\tau$ (or equivalently the number of steps $L=\lfloor \tau / \varepsilon \rfloor$).
-    - too small leads HMC to bear close resemblance to random walk, 
+2. length of the integration time $\tau$ 
+    - equivalently, the number of steps $L=\lfloor \tau / \varepsilon \rfloor$.
+    - too small leads HMC to bear close resemblance to random walk. 
     - too large leads to wasteful calculations.
 3. choice of the mass matrix $\mathbf{M}$ (pre-conditioner obtained during warmup period).
 
-
+:::
 
 ## Leapfrog and error
 
-  The Störmer--Verlet (leapfrog) integrator is a second order method, so for step size $\varepsilon$:
+The Störmer--Verlet (leapfrog) integrator is a second order method, so for step size $\varepsilon$:
+
+::: {style="font-size: 0.9em;"}
 
 - local error $\mathrm{O}(\varepsilon^3)$ and
 - global error of size $\mathrm{O}(\varepsilon^2)$ (accumulated error over $L$ steps).
+
+:::
 
 Leapfrog updates one variable at a time, a shear transformation.
 

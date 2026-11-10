@@ -5112,14 +5112,14 @@
     "href": "slides/bayesmod-slides7_old.html#curse-of-dimensionality",
     "title": "Bayesian modelling",
     "section": "Curse of dimensionality",
-    "text": "Curse of dimensionality\nThis material is drawn from\n\nNeal (2011),\nBetancourt (2017)\n\nCheck out these animations by Chi Feng"
+    "text": "Curse of dimensionality\nThis material is drawn from\n\nNeal (2011),\nBetancourt (2017)\nMukherjee & Vats (2026)\nStan manual\n\nCheck out these animations by Chi Feng"
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#motivation",
     "href": "slides/bayesmod-slides7_old.html#motivation",
     "title": "Bayesian modelling",
     "section": "Motivation",
-    "text": "Motivation\nWe are interested in calculating expectations of some function \\(g\\) against the posterior. \\[\\begin{align*}\n\\int_{\\mathbb{R}^d} g(\\boldsymbol{\\theta}) p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]\nThe integral is determined by the product of the ``volume’’ of \\(g(\\cdot)\\) and the density."
+    "text": "Motivation\nWe are interested in calculating expectations of some function \\(g\\) against the posterior. \\[\\begin{align*}\n\\int_{\\mathbb{R}^d} g(\\boldsymbol{\\theta}) p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]\nThe integral is determined by the product of the “volume” of \\(g(\\cdot)\\) and the posterior density \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\)."
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#curse-of-dimensionality-1",
@@ -5140,14 +5140,14 @@
     "href": "slides/bayesmod-slides7_old.html#hamiltonian-monte-carlo",
     "title": "Bayesian modelling",
     "section": "Hamiltonian Monte Carlo",
-    "text": "Hamiltonian Monte Carlo\nHamitonian Monte Carlo borrows ideas from Hamiltonian dynamics.\nConsider the evolution over time of a particle characterized by a\n\nposition \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^d\\) along with potential energy \\(U(\\boldsymbol{\\theta})=- \\log p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\)\nan added auxiliary vector \\(\\boldsymbol{s} \\in \\mathbb{R}^d\\) of momentum (describing mass and velocity) with accompaying kinetic energy \\(K(\\boldsymbol{s})= -\\log p(\\boldsymbol{s})\\)."
+    "text": "Hamiltonian Monte Carlo\n\nHamitonian Monte Carlo borrows ideas from Hamiltonian dynamics. Consider the evolution over time of a particle characterized by\n\na position \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^d\\) along with potential energy \\[U(\\boldsymbol{\\theta})=- \\log p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\]\nan added auxiliary vector \\(\\boldsymbol{s} \\in \\mathbb{R}^d\\) of momentum (describing mass and velocity) with accompaying kinetic energy \\[K(\\boldsymbol{s}).\\]"
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#hamiltonian",
     "href": "slides/bayesmod-slides7_old.html#hamiltonian",
     "title": "Bayesian modelling",
     "section": "Hamiltonian",
-    "text": "Hamiltonian\nWrite the negative of the log of the joint density as \\[H(\\boldsymbol{\\theta}, \\boldsymbol{s}) = -\\log p(\\boldsymbol{s}) - \\log p(\\boldsymbol{\\theta}) = U(\\boldsymbol{\\theta}) + K(\\boldsymbol{s}).\\]\nThe partial derivatives of the Hamiltonian give the evolution over time of the system: \\[\\begin{align*}\n\\frac{\\mathrm{d} \\theta_j}{\\mathrm{d} t} = \\frac{\\partial H}{\\partial s_j} &= \\frac{\\partial K}{\\partial s_j}\\\\\n\\frac{\\mathrm{d} s_j}{\\mathrm{d} t}= - \\frac{\\partial H}{\\partial \\theta_j} &= - \\frac{\\partial U}{\\partial \\theta_j}, \\quad j =1, \\ldots, d.\n\\end{align*}\\]\nThere is no explicit solution to these differential equations in most settings."
+    "text": "Hamiltonian\nWrite \\(U(\\boldsymbol{\\theta}) = - \\log p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) and the total energy \\[H(\\boldsymbol{\\theta}, \\boldsymbol{s})=U(\\boldsymbol{\\theta}) + K(\\boldsymbol{s}).\\]\nThe partial derivatives of the Hamiltonian give the evolution over time of the system: \\[\\begin{align*}\n\\frac{\\mathrm{d} \\theta_j}{\\mathrm{d} t} = \\frac{\\partial H}{\\partial s_j} &= \\frac{\\partial K}{\\partial s_j}\\\\\n\\frac{\\mathrm{d} s_j}{\\mathrm{d} t}= - \\frac{\\partial H}{\\partial \\theta_j} &= - \\frac{\\partial U}{\\partial \\theta_j}, \\quad j =1, \\ldots, d.\n\\end{align*}\\]\nThere is no explicit solution to these differential equations in most settings."
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#kinetic-energy",
@@ -5161,7 +5161,7 @@
     "href": "slides/bayesmod-slides7_old.html#properties-of-hamiltonian-dynamics",
     "title": "Bayesian modelling",
     "section": "Properties of Hamiltonian dynamics",
-    "text": "Properties of Hamiltonian dynamics\nThe mapping \\(T_s\\) from time \\(t\\) at \\((\\boldsymbol{\\theta}(t), \\boldsymbol{s}(t))\\) to time \\(t + \\varepsilon\\), \\((\\boldsymbol{\\theta}(t + \\varepsilon), \\boldsymbol{s}(t + \\varepsilon))\\) satisfies the following properties:\n\nReversible: MCMC will thus preserve the invariant target distribution\nConservation of energy: proposals from Hamiltonian dynamics would lead to acceptance probability of 1.\nSymplecticness/volume preserving: the Jacobian of \\(T_s\\) is one — no need to calculate it."
+    "text": "Properties of Hamiltonian dynamics\n\nThe mapping \\(T_s\\) from time \\(t\\) at \\((\\boldsymbol{\\theta}(t), \\boldsymbol{s}(t))\\) to time \\(t + \\varepsilon\\), \\((\\boldsymbol{\\theta}(t + \\varepsilon), \\boldsymbol{s}(t + \\varepsilon))\\) satisfies the following properties:\n\nReversible: MCMC will thus preserve the invariant target distribution\nConservation of energy: proposals from Hamiltonian dynamics would lead to acceptance probability of 1.\nSymplecticness/volume preserving: the Jacobian of \\(T_s\\) is one — no need to calculate it."
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#a-necessary-discretization-step",
@@ -5182,28 +5182,28 @@
     "href": "slides/bayesmod-slides7_old.html#hamiltonian-monte-carlo-algorithm",
     "title": "Bayesian modelling",
     "section": "Hamiltonian Monte Carlo algorithm",
-    "text": "Hamiltonian Monte Carlo algorithm\nConsider the joint distribution with positions \\(\\boldsymbol{\\theta}\\) and momentum variables \\(\\boldsymbol{s}\\), \\(p(\\boldsymbol{\\theta}, \\boldsymbol{s}) \\propto \\exp \\{- H(\\boldsymbol{\\theta}, \\boldsymbol{s})\\}.\\)\nWe start with a position vector \\(\\boldsymbol{\\theta}_{t-1}\\) at step \\(t-1\\):\n\nSample a new momentum vector \\(\\boldsymbol{s}_{t-1} \\sim \\mathsf{Gauss}(\\boldsymbol{0}_d, \\mathbf{M}).\\)\nUse Verlet’s (leapfrog) integrator to evolve the state vector for \\(L=\\lfloor\\tau/\\varepsilon\\rfloor\\) steps of size \\(\\varepsilon\\) to get a proposal tuple \\((\\boldsymbol{\\theta}_t^{\\star}, \\boldsymbol{s}_t^{\\star})\\)"
+    "text": "Hamiltonian Monte Carlo algorithm\nConsider the joint distribution with positions \\(\\boldsymbol{\\theta}\\) and momentum variables \\(\\boldsymbol{s}\\), \\(p(\\boldsymbol{\\theta}, \\boldsymbol{s}) \\propto \\exp \\{- H(\\boldsymbol{\\theta}, \\boldsymbol{s})\\}.\\)\n\nWe start with a position vector \\(\\boldsymbol{\\theta}_{t-1}\\) at step \\(t-1\\):\n\nSample a new momentum vector \\(\\boldsymbol{s}_{t-1} \\sim \\mathsf{Gauss}(\\boldsymbol{0}_d, \\mathbf{M}).\\)\nUse Verlet’s (leapfrog) integrator to evolve the state vector for \\(L=\\lfloor\\tau/\\varepsilon\\rfloor\\) steps of size \\(\\varepsilon\\) to get a proposal tuple \\((\\boldsymbol{\\theta}_t^{\\star}, \\boldsymbol{s}_t^{\\star})\\)"
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#hamiltonian-monte-carlo-algorithm-1",
     "href": "slides/bayesmod-slides7_old.html#hamiltonian-monte-carlo-algorithm-1",
     "title": "Bayesian modelling",
     "section": "Hamiltonian Monte Carlo algorithm",
-    "text": "Hamiltonian Monte Carlo algorithm\n\nFlip the momentum variable, \\(\\boldsymbol{s} \\mapsto - \\boldsymbol{s}.\\)\nMetropolis step: if \\(U \\sim \\mathsf{unif}(0,1) &lt;R\\), where \\[\\log R = -H(\\boldsymbol{\\theta}^{\\star}, \\boldsymbol{s}^{\\star}_{t}) + H(\\boldsymbol{\\theta}_{t-1}, \\boldsymbol{s}_{t-1}),\\] set \\(\\boldsymbol{\\theta}_t = \\boldsymbol{\\theta}_t^{\\star}\\), else keep the previous value and set \\(\\boldsymbol{\\theta}_t = \\boldsymbol{\\theta}_{t-1}\\).\nDiscard the momentum vector"
+    "text": "Hamiltonian Monte Carlo algorithm\n\n\nFlip the momentum variable, \\(\\boldsymbol{s} \\mapsto - \\boldsymbol{s}.\\)\nMetropolis step: if \\(U \\sim \\mathsf{unif}(0,1) &lt;R\\), where \\[\\log R = -H(\\boldsymbol{\\theta}^{\\star}, \\boldsymbol{s}^{\\star}_{t}) + H(\\boldsymbol{\\theta}_{t-1}, \\boldsymbol{s}_{t-1}),\\] set \\(\\boldsymbol{\\theta}_t = \\boldsymbol{\\theta}_t^{\\star}\\), else keep the previous value and set \\(\\boldsymbol{\\theta}_t = \\boldsymbol{\\theta}_{t-1}\\).\nDiscard the momentum vector"
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#tuning",
     "href": "slides/bayesmod-slides7_old.html#tuning",
     "title": "Bayesian modelling",
     "section": "Tuning",
-    "text": "Tuning\nHamiltonian Monte Carlo (HMC) has numerous tuning parameters\n\nsize of the leapfrog step \\(\\varepsilon\\).\nlength of the integration time \\(\\tau\\) (or equivalently the number of steps \\(L=\\lfloor \\tau / \\varepsilon \\rfloor\\)).\n\ntoo small leads HMC to bear close resemblance to random walk,\ntoo large leads to wasteful calculations.\n\nchoice of the mass matrix \\(\\mathbf{M}\\) (pre-conditioner obtained during warmup period)."
+    "text": "Tuning\n\nHamiltonian Monte Carlo (HMC) has numerous tuning parameters\n\nsize of the leapfrog step \\(\\varepsilon\\).\nlength of the integration time \\(\\tau\\)\n\nequivalently, the number of steps \\(L=\\lfloor \\tau / \\varepsilon \\rfloor\\).\ntoo small leads HMC to bear close resemblance to random walk.\ntoo large leads to wasteful calculations.\n\nchoice of the mass matrix \\(\\mathbf{M}\\) (pre-conditioner obtained during warmup period)."
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#leapfrog-and-error",
     "href": "slides/bayesmod-slides7_old.html#leapfrog-and-error",
     "title": "Bayesian modelling",
     "section": "Leapfrog and error",
-    "text": "Leapfrog and error\nThe Störmer–Verlet (leapfrog) integrator is a second order method, so for step size \\(\\varepsilon\\):\n\nlocal error \\(\\mathrm{O}(\\varepsilon^3)\\) and\nglobal error of size \\(\\mathrm{O}(\\varepsilon^2)\\) (accumulated error over \\(L\\) steps).\n\nLeapfrog updates one variable at a time, a shear transformation.\nLeapfrog step should be \\(\\mathrm{O}(d^{-1/4})\\) (Beskos et al., 2013)"
+    "text": "Leapfrog and error\nThe Störmer–Verlet (leapfrog) integrator is a second order method, so for step size \\(\\varepsilon\\):\n\n\nlocal error \\(\\mathrm{O}(\\varepsilon^3)\\) and\nglobal error of size \\(\\mathrm{O}(\\varepsilon^2)\\) (accumulated error over \\(L\\) steps).\n\n\nLeapfrog updates one variable at a time, a shear transformation.\nLeapfrog step should be \\(\\mathrm{O}(d^{-1/4})\\) (Beskos et al., 2013)"
   },
   {
     "objectID": "slides/bayesmod-slides7_old.html#optimal-acceptance-rate",
@@ -5273,7 +5273,7 @@
     "href": "slides/bayesmod-slides7_old.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nBeskos, A., Pillai, N., Roberts, G., Sanz-Serna, J.-M., & Stuart, A. (2013). Optimal tuning of the hybrid Monte Carlo algorithm. Bernoulli, 19(5a), 1501–1534. https://doi.org/10.3150/12-bej414\n\n\nBetancourt, M. (2016). Identifying the optimal integration time in Hamiltonian Monte Carlo. arXiv. https://doi.org/10.48550/arXiv.1601.00225\n\n\nBetancourt, M. (2017). A conceptual introduction to Hamiltonian Monte Carlo. arXiv Preprint. https://doi.org/10.48550/arXiv.1701.02434\n\n\nHoman, M. D., & Gelman, A. (2014). The no-U-turn sampler: Adaptively setting path lengths in Hamiltonian Monte Carlo. Journal of Machine Learning Research, 15(1), 1593–1623.\n\n\nNeal, R. M. (2011). MCMC using Hamiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, & X. L. Meng (Eds.), Handbook of Markov chain Monte Carlo (pp. 113–162). CRC Press. https://doi.org/10.1201/b10905-5\n\n\nNishimura, A., Dunson, D. B., & Lu, J. (2020). Discontinuous Hamiltonian Monte Carlo for discrete parameters and discontinuous likelihoods. Biometrika, 107(2), 365–380. https://doi.org/10.1093/biomet/asz083"
+    "text": "References\n\n\n\n\nBeskos, A., Pillai, N., Roberts, G., Sanz-Serna, J.-M., & Stuart, A. (2013). Optimal tuning of the hybrid Monte Carlo algorithm. Bernoulli, 19(5a), 1501–1534. https://doi.org/10.3150/12-bej414\n\n\nBetancourt, M. (2016). Identifying the optimal integration time in Hamiltonian Monte Carlo. arXiv. https://doi.org/10.48550/arXiv.1601.00225\n\n\nBetancourt, M. (2017). A conceptual introduction to Hamiltonian Monte Carlo. arXiv Preprint. https://doi.org/10.48550/arXiv.1701.02434\n\n\nHoman, M. D., & Gelman, A. (2014). The no-U-turn sampler: Adaptively setting path lengths in Hamiltonian Monte Carlo. Journal of Machine Learning Research, 15(1), 1593–1623.\n\n\nMukherjee, A., & Vats, D. (2026). Hamiltonian Monte Carlo for (physics) dummies. Statistics and Applications, 24(2), 23–57. https://www.ssca.org.in/media/02_HMC_Dootika_27052026_final.pdf\n\n\nNeal, R. M. (2011). MCMC using Hamiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, & X. L. Meng (Eds.), Handbook of Markov chain Monte Carlo (pp. 113–162). CRC Press. https://doi.org/10.1201/b10905-5\n\n\nNishimura, A., Dunson, D. B., & Lu, J. (2020). Discontinuous Hamiltonian Monte Carlo for discrete parameters and discontinuous likelihoods. Biometrika, 107(2), 365–380. https://doi.org/10.1093/biomet/asz083"
   },
   {
     "objectID": "slides/bayesmod-slides9.html#rationale-for-deterministic-approximations",

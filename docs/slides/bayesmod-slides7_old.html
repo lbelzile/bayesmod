@@ -154,7 +154,7 @@
 
 <section id="title-slide" data-background-color="#ff585d" class="quarto-title-block center">
   <h1 class="title">Bayesian modelling</h1>
-  <p class="subtitle">Computational strategies and probabilistic programming</p>
+  <p class="subtitle">Hamiltonian Monte Carlo and probabilistic programming</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -164,7 +164,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Nov 3, 2026</p>
+  <p class="date">Last compiled Monday Nov 9, 2026</p>
 </section>
 <section id="curse-of-dimensionality" class="slide level2">
 <h2>Curse of dimensionality</h2>
@@ -172,6 +172,8 @@ Léo Belzile
 <ul>
 <li><span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span>,</li>
 <li><span class="citation" data-cites="Betancourt:2017">Betancourt (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span></li>
+<li><span class="citation" data-cites="Mukherjee.Vats:2026">Mukherjee &amp; Vats (<a href="#/references" role="doc-biblioref" onclick="">2026</a>)</span></li>
+<li><a href="https://mc-stan.org/docs/reference-manual/mcmc.html#hmc.chapter">Stan manual</a></li>
 </ul>
 <p>Check out these <a href="https://chi-feng.github.io/mcmc-demo/">animations</a> by Chi Feng</p>
 </section>
@@ -180,7 +182,7 @@ Léo Belzile
 <p>We are interested in calculating expectations of some function <span class="math inline">\(g\)</span> against the posterior. <span class="math display">\[\begin{align*}
 \int_{\mathbb{R}^d} g(\boldsymbol{\theta}) p(\boldsymbol{\theta} \mid \boldsymbol{y}) \mathrm{d} \boldsymbol{\theta}.
 \end{align*}\]</span></p>
-<p>The integral is determined by the product of the ``volume’’ of <span class="math inline">\(g(\cdot)\)</span> and the density.</p>
+<p>The integral is determined by the product of the “volume” of <span class="math inline">\(g(\cdot)\)</span> and the posterior density <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>.</p>
 </section>
 <section id="curse-of-dimensionality-1" class="slide level2">
 <h2>Curse of dimensionality</h2>
@@ -202,16 +204,17 @@ Léo Belzile
 </section>
 <section id="hamiltonian-monte-carlo" class="slide level2">
 <h2>Hamiltonian Monte Carlo</h2>
-<p>Hamitonian Monte Carlo borrows ideas from Hamiltonian dynamics.</p>
-<p>Consider the evolution over time of a particle characterized by a</p>
+<div style="font-size: 0.8em;">
+<p>Hamitonian Monte Carlo borrows ideas from Hamiltonian dynamics. Consider the evolution over time of a particle characterized by</p>
 <ul>
-<li>position <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^d\)</span> along with potential energy <span class="math inline">\(U(\boldsymbol{\theta})=- \log p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span></li>
-<li>an added auxiliary vector <span class="math inline">\(\boldsymbol{s} \in \mathbb{R}^d\)</span> of <strong>momentum</strong> (describing mass and velocity) with accompaying kinetic energy <span class="math inline">\(K(\boldsymbol{s})= -\log p(\boldsymbol{s})\)</span>.</li>
+<li>a position <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^d\)</span> along with potential energy <span class="math display">\[U(\boldsymbol{\theta})=- \log p(\boldsymbol{\theta} \mid \boldsymbol{y})\]</span></li>
+<li>an added auxiliary vector <span class="math inline">\(\boldsymbol{s} \in \mathbb{R}^d\)</span> of <strong>momentum</strong> (describing mass and velocity) with accompaying kinetic energy <span class="math display">\[K(\boldsymbol{s}).\]</span></li>
 </ul>
+</div>
 </section>
 <section id="hamiltonian" class="slide level2">
 <h2>Hamiltonian</h2>
-<p>Write the negative of the log of the joint density as <span class="math display">\[H(\boldsymbol{\theta}, \boldsymbol{s}) = -\log p(\boldsymbol{s}) - \log p(\boldsymbol{\theta}) = U(\boldsymbol{\theta}) + K(\boldsymbol{s}).\]</span></p>
+<p>Write <span class="math inline">\(U(\boldsymbol{\theta}) = - \log p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> and the total energy <span class="math display">\[H(\boldsymbol{\theta}, \boldsymbol{s})=U(\boldsymbol{\theta}) + K(\boldsymbol{s}).\]</span></p>
 <p>The partial derivatives of the Hamiltonian give the evolution over time of the system: <span class="math display">\[\begin{align*}
 \frac{\mathrm{d} \theta_j}{\mathrm{d} t} = \frac{\partial H}{\partial s_j} &amp;= \frac{\partial K}{\partial s_j}\\
 \frac{\mathrm{d} s_j}{\mathrm{d} t}= - \frac{\partial H}{\partial \theta_j} &amp;= - \frac{\partial U}{\partial \theta_j}, \quad j =1, \ldots, d.
@@ -227,12 +230,14 @@ K(\boldsymbol{s}) = \frac{1}{2} \boldsymbol{s}^\top \mathbf{M}^{-1}\boldsymbol{s
 </section>
 <section id="properties-of-hamiltonian-dynamics" class="slide level2">
 <h2>Properties of Hamiltonian dynamics</h2>
+<div style="font-size: 0.9em;">
 <p>The mapping <span class="math inline">\(T_s\)</span> from time <span class="math inline">\(t\)</span> at <span class="math inline">\((\boldsymbol{\theta}(t), \boldsymbol{s}(t))\)</span> to time <span class="math inline">\(t + \varepsilon\)</span>, <span class="math inline">\((\boldsymbol{\theta}(t + \varepsilon), \boldsymbol{s}(t + \varepsilon))\)</span> satisfies the following properties:</p>
 <ul>
 <li>Reversible: MCMC will thus preserve the invariant target distribution</li>
 <li>Conservation of energy: proposals from Hamiltonian dynamics would lead to acceptance probability of 1.</li>
 <li>Symplecticness/volume preserving: the Jacobian of <span class="math inline">\(T_s\)</span> is one — no need to calculate it.</li>
 </ul>
+</div>
 </section>
 <section id="a-necessary-discretization-step" class="slide level2">
 <h2>A necessary discretization step</h2>
@@ -254,40 +259,49 @@ s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\f
 <section id="hamiltonian-monte-carlo-algorithm" class="slide level2">
 <h2>Hamiltonian Monte Carlo algorithm</h2>
 <p>Consider the joint distribution with positions <span class="math inline">\(\boldsymbol{\theta}\)</span> and momentum variables <span class="math inline">\(\boldsymbol{s}\)</span>, <span class="math inline">\(p(\boldsymbol{\theta}, \boldsymbol{s}) \propto \exp \{- H(\boldsymbol{\theta}, \boldsymbol{s})\}.\)</span></p>
+<div style="font-size: 0.8em;">
 <p>We start with a position vector <span class="math inline">\(\boldsymbol{\theta}_{t-1}\)</span> at step <span class="math inline">\(t-1\)</span>:</p>
 <ol type="1">
 <li>Sample a new momentum vector <span class="math inline">\(\boldsymbol{s}_{t-1} \sim \mathsf{Gauss}(\boldsymbol{0}_d, \mathbf{M}).\)</span></li>
 <li>Use Verlet’s (leapfrog) integrator to evolve the state vector for <span class="math inline">\(L=\lfloor\tau/\varepsilon\rfloor\)</span> steps of size <span class="math inline">\(\varepsilon\)</span> to get a proposal tuple <span class="math inline">\((\boldsymbol{\theta}_t^{\star}, \boldsymbol{s}_t^{\star})\)</span></li>
 </ol>
+</div>
 </section>
 <section id="hamiltonian-monte-carlo-algorithm-1" class="slide level2">
 <h2>Hamiltonian Monte Carlo algorithm</h2>
+<div style="font-size: 0.8em;">
 <ol start="3" type="1">
 <li>Flip the momentum variable, <span class="math inline">\(\boldsymbol{s} \mapsto - \boldsymbol{s}.\)</span></li>
 <li>Metropolis step: if <span class="math inline">\(U \sim \mathsf{unif}(0,1) &lt;R\)</span>, where <span class="math display">\[\log R = -H(\boldsymbol{\theta}^{\star}, \boldsymbol{s}^{\star}_{t}) + H(\boldsymbol{\theta}_{t-1}, \boldsymbol{s}_{t-1}),\]</span> set <span class="math inline">\(\boldsymbol{\theta}_t = \boldsymbol{\theta}_t^{\star}\)</span>, else keep the previous value and set <span class="math inline">\(\boldsymbol{\theta}_t = \boldsymbol{\theta}_{t-1}\)</span>.</li>
 <li>Discard the momentum vector</li>
 </ol>
+</div>
 </section>
 <section id="tuning" class="slide level2">
 <h2>Tuning</h2>
+<div style="font-size: 0.8em;">
 <p>Hamiltonian Monte Carlo (HMC) has numerous tuning parameters</p>
 <ol type="1">
 <li>size of the leapfrog step <span class="math inline">\(\varepsilon\)</span>.</li>
-<li>length of the integration time <span class="math inline">\(\tau\)</span> (or equivalently the number of steps <span class="math inline">\(L=\lfloor \tau / \varepsilon \rfloor\)</span>).
+<li>length of the integration time <span class="math inline">\(\tau\)</span>
 <ul>
-<li>too small leads HMC to bear close resemblance to random walk,</li>
+<li>equivalently, the number of steps <span class="math inline">\(L=\lfloor \tau / \varepsilon \rfloor\)</span>.</li>
+<li>too small leads HMC to bear close resemblance to random walk.</li>
 <li>too large leads to wasteful calculations.</li>
 </ul></li>
 <li>choice of the mass matrix <span class="math inline">\(\mathbf{M}\)</span> (pre-conditioner obtained during warmup period).</li>
 </ol>
+</div>
 </section>
 <section id="leapfrog-and-error" class="slide level2">
 <h2>Leapfrog and error</h2>
 <p>The Störmer–Verlet (leapfrog) integrator is a second order method, so for step size <span class="math inline">\(\varepsilon\)</span>:</p>
+<div style="font-size: 0.9em;">
 <ul>
 <li>local error <span class="math inline">\(\mathrm{O}(\varepsilon^3)\)</span> and</li>
 <li>global error of size <span class="math inline">\(\mathrm{O}(\varepsilon^2)\)</span> (accumulated error over <span class="math inline">\(L\)</span> steps).</li>
 </ul>
+</div>
 <p>Leapfrog updates one variable at a time, a shear transformation.</p>
 <p>Leapfrog step should be <span class="math inline">\(\mathrm{O}(d^{-1/4})\)</span> <span class="citation" data-cites="Beskos:2013">(<a href="#/references" role="doc-biblioref" onclick="">Beskos et al., 2013</a>)</span></p>
 </section>
@@ -381,6 +395,9 @@ Betancourt, M. (2017). A conceptual introduction to <span>H</span>amiltonian <sp
 </div>
 <div id="ref-Homan.Gelman:2014" class="csl-entry" role="listitem">
 Homan, M. D., &amp; Gelman, A. (2014). The no-<span>U</span>-turn sampler: Adaptively setting path lengths in <span>H</span>amiltonian <span>M</span>onte <span>C</span>arlo. <em>Journal of Machine Learning Research</em>, <em>15</em>(1), 1593–1623.
+</div>
+<div id="ref-Mukherjee.Vats:2026" class="csl-entry" role="listitem">
+Mukherjee, A., &amp; Vats, D. (2026). Hamiltonian <span>M</span>onte <span>C</span>arlo for (physics) dummies. <em>Statistics and Applications</em>, <em>24</em>(2), 23–57. <a href="https://www.ssca.org.in/media/02_HMC_Dootika_27052026_final.pdf">https://www.ssca.org.in/media/02_HMC_Dootika_27052026_final.pdf</a>
 </div>
 <div id="ref-Neal:2011" class="csl-entry" role="listitem">
 Neal, R. M. (2011). <span>MCMC</span> using <span>H</span>amiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, &amp; X. L. Meng (Eds.), <em>Handbook of <span>M</span>arkov chain <span>M</span>onte <span>C</span>arlo</em> (pp. 113–162). CRC Press. <a href="https://doi.org/10.1201/b10905-5">https://doi.org/10.1201/b10905-5</a>
@@ -606,6 +623,44 @@ Nishimura, A., Dunson, D. B., &amp; Lu, J. (2020). Discontinuous <span>H</span>a
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {
         const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
