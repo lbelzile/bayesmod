@@ -57,6 +57,8 @@ The terminology **variational** is synonym for optimization in this context.
 
 ## Kullback--Leibler divergence
 
+::: {style="font-size: 0.8em;"}
+
 The Kullback--Leibler divergence between densities $f_t(\cdot)$ and $g(\cdot; \boldsymbol{\psi}),$ is
 \begin{align*}
 \mathsf{KL}(f_t \parallel g) &=\int \log \left(\frac{f_t(\boldsymbol{x})}{g(\boldsymbol{x}; \boldsymbol{\psi})}\right) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x}\\
@@ -65,6 +67,7 @@ The Kullback--Leibler divergence between densities $f_t(\cdot)$ and $g(\cdot; \b
 \end{align*}
 The ${\color{#c38f16}{\text{negative entropy}}}$ does not depend on $g(\cdot).$
 
+:::
 
 ## Model misspecification
 
@@ -98,9 +101,7 @@ Objective: minimize the Kullback--Leibler divergence $$\mathsf{KL}\left\{p(\bold
 
 ## Problems ahead
 
-Minimizing the Kullback--Leibler divergence is not feasible to evaluate the posterior.
-
-Taking $f_t = p(\boldsymbol{\theta} \mid \boldsymbol{y})$ is not feasible: we need the marginal likelihood
+Ideally, we would minimizing the Kullback--Leibler divergence. However taking $f_t = p(\boldsymbol{\theta} \mid \boldsymbol{y})$ is not feasible: we need the marginal likelihood
 to compute the expectation!
 
 
@@ -695,9 +696,9 @@ We consider alternative numeric schemes which rely on stochastic optimization [@
 The key idea behind these methods is that
 
 - we can use gradient-based algorithms,
-- and approximate the expectations with respect to $g$ by drawing samples from it
+- and approximate the expectations with respect to $g$ by drawing samples from it.
 
-Also allows for minibatch (random subset) selection to reduce computational costs in large samples
+Also allows for minibatch (random subset) selection to reduce computational costs in large samples.
 
 
 ## Stochastic gradient descent
@@ -724,13 +725,16 @@ Parameter-specific scaling helps with updates of parameters on very different sc
 \end{align*}
 using the change rule, differentiation under the integral sign (dominated convergence theorem) and the identity
 \begin{align*}
-\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \frac{\partial g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}}
+\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \frac{\partial g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}}.
 \end{align*}
 
 ## Black-box variational inference in practice
 
 - Note that the gradient simplifies for $g_i$ in exponential families.
-- The gradient estimator is particularly noisy, so @Ranganath.Gerrish.Blei:2014 provide two methods to reduce the variance of this expression using control variates and Rao--Blackwellization.
+- The gradient estimator is particularly noisy, so @Ranganath.Gerrish.Blei:2014 provide two methods to reduce the variance of this expression using 
+
+- control variates and 
+- Rao--Blackwellization.
 
 ## Automatic differentiation variational inference
 
@@ -848,10 +852,14 @@ Fitting HMC-NUTS to the exchange rate data takes 156 seconds for 10K iterations,
 
 The speed of convergence of the stochastic gradient descent depends on multiple factors: 
 
-- the properties of the function. Good performance is obtained for log concave distributions.
-- the level of noise of the gradient estimator. Less noisy gradient estimators are preferable.
-- good starting values, as the algorithm converges to a local maximum.
-- the Robbins--Munro sequence used for the step size, as overly large steps may lead to divergences.
+- the properties of the function:
+    - good performance is obtained for log concave distributions.
+- the level of noise of the gradient estimator:
+    - less noisy gradient estimators are preferable.
+- good starting values
+    - the algorithm converges to a local maximum.
+- the Robbins--Munro sequence used for the step size:
+    - overly large steps may lead to divergences.
 
 
 

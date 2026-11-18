@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,13 +12,10 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -61,10 +58,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f85ba92f94e3b63026c259a480ab99bc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2cb17c8bb9a51688442ec2991039dc21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -312,7 +309,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="content">Content</h2>
 <ul>
 <li>Bernstein–von Mises theorem</li>
-<li>Laplace approximations</li>
+<li>Laplace approximations and skew-symmetric corrections</li>
 <li>integrated nested Laplace approximation (INLA)</li>
 </ul>
 </section>
@@ -334,7 +331,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="complementary-readings">Complementary readings</h2>
 <ul>
 <li>Laplace approximation use in statistics: <span class="citation" data-cites="Tierney.Kadane:1986">Tierney &amp; Kadane (<a href="#ref-Tierney.Kadane:1986" role="doc-biblioref">1986</a>)</span></li>
-<li>skewed Bernstein–von Mises: <span class="citation" data-cites="Durante:2024">Durante et al. (<a href="#ref-Durante:2024" role="doc-biblioref">2024</a>)</span></li>
+<li>skewed Bernstein–von Mises: <span class="citation" data-cites="Durante:2024">Durante et al. (<a href="#ref-Durante:2024" role="doc-biblioref">2024</a>)</span>, <span class="citation" data-cites="Pozza.Durante.Szabo:2026">Pozza et al. (<a href="#ref-Pozza.Durante.Szabo:2026" role="doc-biblioref">2026</a>)</span>.</li>
 <li>Laplace approximation for Bayes factor: <span class="citation" data-cites="Raftery:1995">Raftery (<a href="#ref-Raftery:1995" role="doc-biblioref">1995</a>)</span></li>
 <li>integrated nested Laplace approximation: <span class="citation" data-cites="Rue.Martino.Chopin:2009">Rue et al. (<a href="#ref-Rue.Martino.Chopin:2009" role="doc-biblioref">2009</a>)</span>, <span class="citation" data-cites="Wood:2019">Wood (<a href="#ref-Wood:2019" role="doc-biblioref">2019</a>)</span></li>
 </ul>
@@ -342,18 +339,18 @@ div.csl-indent {
 <section id="slides" class="level2">
 <h2 class="anchored" data-anchor-id="slides">Slides</h2>
 <p class="text-center">
-<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides9.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides9.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
+<a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides10.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>  View all slides in new window</a> <a class="btn btn-success btn-lg" target="_blank" href="../slides/bayesmod-slides10.pdf" role="button"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i>  Download PDF of all slides</a>
 </p>
 <div class="ratio ratio-16x9">
-<iframe class="slide-deck" src="../slides/bayesmod-slides9.html">
+<iframe class="slide-deck" src="../slides/bayesmod-slides10.html">
 </iframe>
 </div>
 </section>
 <section id="code" class="level2">
 <h2 class="anchored" data-anchor-id="code">Code</h2>
 <ul>
-<li>Laplace approximations for exponential-gamma model <a href="../files/code/09-laplace.R"><strong>R</strong> script</a></li>
-<li><code>INLA</code> package <a href="../files/code/09-INLA.R"><strong>R</strong> script</a></li>
+<li>Laplace approximations for exponential-gamma model <a href="../files/code/laplace.R"><strong>R</strong> script</a> and skew-symmetric approximation (/files/code/skewsym-approx.R)</li>
+<li><code>INLA</code> package <a href="../files/code/INLA.R"><strong>R</strong> script</a></li>
 </ul>
 
 
@@ -363,6 +360,9 @@ div.csl-indent {
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-Durante:2024" class="csl-entry" role="listitem">
 Durante, D., Pozza, F., &amp; Szabo, B. (2024). Skewed <span>B</span>ernstein–von <span>M</span>ises theorem and skew-modal approximations. <em>The Annals of Statistics</em>, <em>52</em>(6), 2714–2737. <a href="https://doi.org/10.1214/24-aos2429">https://doi.org/10.1214/24-aos2429</a>
+</div>
+<div id="ref-Pozza.Durante.Szabo:2026" class="csl-entry" role="listitem">
+Pozza, F., Durante, D., &amp; Szabo, B. (2026). Skew-symmetric approximations of posterior distributions. <em>Journal of the Royal Statistical Society Series B: Statistical Methodology</em>, qkaf082. <a href="https://doi.org/10.1093/jrsssb/qkaf082">https://doi.org/10.1093/jrsssb/qkaf082</a>
 </div>
 <div id="ref-Raftery:1995" class="csl-entry" role="listitem">
 Raftery, A. E. (1995). Bayesian model selection in social research. <em>Sociological Methodology</em>, <em>25</em>, 111–163. <a href="https://doi.org/10.2307/271063">https://doi.org/10.2307/271063</a>

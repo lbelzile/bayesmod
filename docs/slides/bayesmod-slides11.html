@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.10.19">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,13 +20,10 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
+    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: 1.5em;}
-    div.column{flex: auto;}
-    @media screen {
-    div.columns{gap: min(4vw, 1.5em);}
-    div.column{overflow-x: auto;}
-    }
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -159,12 +156,12 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile
+Léo Belzile 
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Nov 10, 2026</p>
+  <p class="date">Last compiled Tuesday Nov 17, 2026</p>
 </section>
 <section id="variational-inference" class="slide level2">
 <h2>Variational inference</h2>
@@ -174,11 +171,13 @@ Léo Belzile
 </section>
 <section id="kullbackleibler-divergence" class="slide level2">
 <h2>Kullback–Leibler divergence</h2>
+<div style="font-size: 0.8em;">
 <p>The Kullback–Leibler divergence between densities <span class="math inline">\(f_t(\cdot)\)</span> and <span class="math inline">\(g(\cdot; \boldsymbol{\psi}),\)</span> is <span class="math display">\[\begin{align*}
 \mathsf{KL}(f_t \parallel g) &amp;=\int \log \left(\frac{f_t(\boldsymbol{x})}{g(\boldsymbol{x}; \boldsymbol{\psi})}\right) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x}\\
 &amp;= \int \log f_t(\boldsymbol{x}) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x} - \int \log g(\boldsymbol{x}; \boldsymbol{\psi}) f_t(\boldsymbol{x}) \mathrm{d} \boldsymbol{x}
 \\ &amp;= {\color{#c38f16}{\mathsf{E}_{f_t}\{\log f_t(\boldsymbol{X})\}}} - \mathsf{E}_{f_t}\{\log g(\boldsymbol{X}; \boldsymbol{\psi})\}
 \end{align*}\]</span> The <span class="math inline">\({\color{#c38f16}{\text{negative entropy}}}\)</span> does not depend on <span class="math inline">\(g(\cdot).\)</span></p>
+</div>
 </section>
 <section id="model-misspecification" class="slide level2">
 <h2>Model misspecification</h2>
@@ -208,8 +207,7 @@ p(\boldsymbol{y}) = \int_{\boldsymbol{\Theta}} p(\boldsymbol{y}, \boldsymbol{\th
 </section>
 <section id="problems-ahead" class="slide level2">
 <h2>Problems ahead</h2>
-<p>Minimizing the Kullback–Leibler divergence is not feasible to evaluate the posterior.</p>
-<p>Taking <span class="math inline">\(f_t = p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is not feasible: we need the marginal likelihood to compute the expectation!</p>
+<p>Ideally, we would minimizing the Kullback–Leibler divergence. However taking <span class="math inline">\(f_t = p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span> is not feasible: we need the marginal likelihood to compute the expectation!</p>
 </section>
 <section id="alternative-expression-for-the-marginal-likelihood" class="slide level2">
 <h2>Alternative expression for the marginal likelihood</h2>
@@ -463,9 +461,9 @@ Figure&nbsp;4: ELBO (left) and marginal density approximation with true density 
 <p>The key idea behind these methods is that</p>
 <ul>
 <li>we can use gradient-based algorithms,</li>
-<li>and approximate the expectations with respect to <span class="math inline">\(g\)</span> by drawing samples from it</li>
+<li>and approximate the expectations with respect to <span class="math inline">\(g\)</span> by drawing samples from it.</li>
 </ul>
-<p>Also allows for minibatch (random subset) selection to reduce computational costs in large samples</p>
+<p>Also allows for minibatch (random subset) selection to reduce computational costs in large samples.</p>
 </section>
 <section id="stochastic-gradient-descent" class="slide level2">
 <h2>Stochastic gradient descent</h2>
@@ -484,14 +482,16 @@ Figure&nbsp;4: ELBO (left) and marginal density approximation with true density 
 <p><span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> shows that the gradient of the ELBO reduces to <span class="math display">\[\begin{align*}
 \frac{\partial}{\partial \boldsymbol{\psi}} \mathsf{ELBO}(g) &amp;=\mathsf{E}_{g}\left\{\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} \times \log \left( \frac{p(\boldsymbol{\theta}, \boldsymbol{y})}{g(\boldsymbol{\theta}; \boldsymbol{\psi})}\right)\right\}
 \end{align*}\]</span> using the change rule, differentiation under the integral sign (dominated convergence theorem) and the identity <span class="math display">\[\begin{align*}
-\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \frac{\partial g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}}
+\frac{\partial \log g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}} g(\boldsymbol{\theta}; \boldsymbol{\psi}) = \frac{\partial g(\boldsymbol{\theta}; \boldsymbol{\psi})}{\partial \boldsymbol{\psi}}.
 \end{align*}\]</span></p>
 </section>
 <section id="black-box-variational-inference-in-practice" class="slide level2">
 <h2>Black-box variational inference in practice</h2>
 <ul>
-<li>Note that the gradient simplifies for <span class="math inline">\(g_i\)</span> in exponential families.</li>
-<li>The gradient estimator is particularly noisy, so <span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> provide two methods to reduce the variance of this expression using control variates and Rao–Blackwellization.</li>
+<li><p>Note that the gradient simplifies for <span class="math inline">\(g_i\)</span> in exponential families.</p></li>
+<li><p>The gradient estimator is particularly noisy, so <span class="citation" data-cites="Ranganath.Gerrish.Blei:2014">Ranganath et al. (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span> provide two methods to reduce the variance of this expression using</p></li>
+<li><p>control variates and</p></li>
+<li><p>Rao–Blackwellization.</p></li>
 </ul>
 </section>
 <section id="automatic-differentiation-variational-inference" class="slide level2">
@@ -585,10 +585,22 @@ p(\boldsymbol{\theta}, \boldsymbol{y}) = p(\boldsymbol{\zeta}, \boldsymbol{y}) \
 <h2>Performance of stochastic gradient descent</h2>
 <p>The speed of convergence of the stochastic gradient descent depends on multiple factors:</p>
 <ul>
-<li>the properties of the function. Good performance is obtained for log concave distributions.</li>
-<li>the level of noise of the gradient estimator. Less noisy gradient estimators are preferable.</li>
-<li>good starting values, as the algorithm converges to a local maximum.</li>
-<li>the Robbins–Munro sequence used for the step size, as overly large steps may lead to divergences.</li>
+<li>the properties of the function:
+<ul>
+<li>good performance is obtained for log concave distributions.</li>
+</ul></li>
+<li>the level of noise of the gradient estimator:
+<ul>
+<li>less noisy gradient estimators are preferable.</li>
+</ul></li>
+<li>good starting values
+<ul>
+<li>the algorithm converges to a local maximum.</li>
+</ul></li>
+<li>the Robbins–Munro sequence used for the step size:
+<ul>
+<li>overly large steps may lead to divergences.</li>
+</ul></li>
 </ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
@@ -803,7 +815,7 @@ Ranganath, R., Gerrish, S., &amp; Blei, D. (2014). Black box variational inferen
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],

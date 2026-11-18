@@ -1635,14 +1635,14 @@
     "href": "slides/bayesmod-slides10.html#taylor-series-expansion",
     "title": "Bayesian modelling",
     "section": "Taylor series expansion",
-    "text": "Taylor series expansion\nConsider a concave function \\(h(x)\\) assumed twice continuously differentiable with mode at \\(x_0\\). Then, a Taylor series expansion around \\(x_0\\) gives \\[\\begin{align*}\nh(x) = h(x_0) + h'(x_0)(x-x_0) + h''(x_0)(x-x_0)^2/2 + R\n\\end{align*}\\] where the remainder \\(R=\\mathrm{O}\\{(x-x_0)^3\\}.\\)"
+    "text": "Taylor series expansion\nConsider a concave function \\(h(x)\\) assumed twice continuously differentiable with mode at \\(x_0\\). Then, a Taylor series expansion around \\(x_0\\) gives\n\n\\[\\begin{align*}\nh(x) = h(x_0) + h'(x_0)(x-x_0) + \\dfrac{h''(x_0)(x-x_0)^2}{2} + R\n\\end{align*}\\]\n\nwhere the remainder \\(R=\\mathrm{O}\\{(x-x_0)^3\\}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#multivariate-taylor-series-expansion",
     "href": "slides/bayesmod-slides10.html#multivariate-taylor-series-expansion",
     "title": "Bayesian modelling",
     "section": "Multivariate Taylor series expansion",
-    "text": "Multivariate Taylor series expansion\nSimilarly, for \\(h(\\boldsymbol{x})\\) a smooth vector valued function with mode at \\(\\boldsymbol{x}_0 \\in \\mathbb{R}^p\\), we can write ::: {style=“font-size: 0.8em;”} \\[\\begin{align*}\nh(\\boldsymbol{x}) &= h(\\boldsymbol{x}_0) + (\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h'(\\boldsymbol{x}_0) \\\\&+ \\frac{1}{2}(\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h''(\\boldsymbol{x}_0)(\\boldsymbol{x}- \\boldsymbol{x}_0) + R.\n\\end{align*}\\] ::: Under regularity conditions, the mode \\(\\boldsymbol{x}_0\\) is such that \\(h'(\\boldsymbol{x}_0)=\\boldsymbol{0}_p.\\)"
+    "text": "Multivariate Taylor series expansion\nSimilarly, for \\(h(\\boldsymbol{x})\\) a smooth vector valued function with mode at \\(\\boldsymbol{x}_0 \\in \\mathbb{R}^p\\), we can write\n\\[\\begin{align*}\nh(\\boldsymbol{x}) &= h(\\boldsymbol{x}_0) + (\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h'(\\boldsymbol{x}_0) \\\\&+ \\frac{1}{2}(\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h''(\\boldsymbol{x}_0)(\\boldsymbol{x}- \\boldsymbol{x}_0) + R.\n\\end{align*}\\]\nUnder regularity conditions, the mode \\(\\boldsymbol{x}_0\\) is such that \\(h'(\\boldsymbol{x}_0)=\\boldsymbol{0}_p.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#laplace-approximation",
@@ -1677,14 +1677,14 @@
     "href": "slides/bayesmod-slides10.html#laplace-approximation-to-the-marginal-likelihood-1",
     "title": "Bayesian modelling",
     "section": "Laplace approximation to the marginal likelihood",
-    "text": "Laplace approximation to the marginal likelihood\nEvaluating at the maximum a posteriori \\(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}\\) and letting \\(\\mathbf{H} = - \\log p(\\boldsymbol{y}, \\boldsymbol{\\theta}) / \\partial \\boldsymbol{\\theta}\\partial \\boldsymbol{\\theta}^\\top\\) denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get (Tierney & Kadane, 1986) \\[\\begin{align*}\n\\log p(\\boldsymbol{y}) &= \\log p(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}) + \\log p(\\boldsymbol{y} \\mid \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}) \\\\&\\quad + \\frac{p}{2} \\log (2\\pi) - \\frac{1}{2}\\log |\\mathbf{H}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})| + \\mathrm{O}(n^{-1})\n\\end{align*}\\]"
+    "text": "Laplace approximation to the marginal likelihood\nEvaluating at the maximum a posteriori \\(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}\\) and letting \\(\\mathbf{H} = - h(\\boldsymbol{\\theta}) / \\partial \\boldsymbol{\\theta}\\partial \\boldsymbol{\\theta}^\\top\\) denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get (Tierney & Kadane, 1986) \\[\\begin{align*}\n\\log p(\\boldsymbol{y}) &= \\log p(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}) + \\log p(\\boldsymbol{y} \\mid \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}) \\\\&\\quad + \\frac{p}{2} \\log (2\\pi) - \\frac{1}{2}\\log |\\mathbf{H}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})| + \\mathrm{O}(n^{-1}).\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#example-with-exponential-likelihood",
     "href": "slides/bayesmod-slides10.html#example-with-exponential-likelihood",
     "title": "Bayesian modelling",
     "section": "Example with exponential likelihood",
-    "text": "Example with exponential likelihood\nConsider an exponential likelihood \\(Y_i \\mid \\lambda \\sim \\mathsf{expo}(\\lambda)\\) with conjugate gamma prior \\(\\lambda \\sim \\mathsf{gamma}(a,b)\\). The exponential model has information \\(i(\\lambda)=n/\\lambda^2\\) and the mode of the posterior is \\[\\widehat{\\lambda}_{\\mathrm{MAP}}=\\frac{n+a-1}{\\sum_{i=1}^n y_i + b}.\\]"
+    "text": "Example with exponential likelihood\nConsider an exponential likelihood \\(Y_i \\mid \\lambda \\sim \\mathsf{expo}(\\lambda)\\) with conjugate gamma prior \\(\\lambda \\sim \\mathsf{gamma}(a,b)\\).\nThe negative Hessian of the log-posterior with respect to \\(\\lambda\\) is \\(-h''(\\lambda)=(n+a-1)/\\lambda^2.\\)\nThe mode of the posterior is \\[\\widehat{\\lambda}_{\\mathrm{MAP}}=\\frac{n+a-1}{\\sum_{i=1}^n y_i + b}.\\]"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#marginal-likelihood-approximation-for-exponential-likelihood",
@@ -1705,7 +1705,7 @@
     "href": "slides/bayesmod-slides10.html#posterior-expectation-using-laplace-method",
     "title": "Bayesian modelling",
     "section": "Posterior expectation using Laplace method",
-    "text": "Posterior expectation using Laplace method\nIf we are interested in computing the posterior expectation of a positive real-valued functional \\(g(\\boldsymbol{\\theta}): \\mathbb{R}^p \\to \\mathbb{R}_{+},\\) we may write \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{\\Theta} \\mid \\boldsymbol{Y}}\\{g(\\boldsymbol{\\theta}) \\mid \\boldsymbol{y}\\} &=  \\frac{\\int g(\\boldsymbol{\\theta}) p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) p( \\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}}{\\int p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta})p( \\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}}\n\\end{align*}\\]"
+    "text": "Posterior expectation using Laplace method\nIf we are interested in computing the posterior expectation of a positive real-valued functional \\(g(\\boldsymbol{\\theta}): \\mathbb{R}^p \\to \\mathbb{R}_{+},\\) we may write \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{\\Theta} \\mid \\boldsymbol{Y}}\\{g(\\boldsymbol{\\theta}) \\mid \\boldsymbol{y}\\} &=  \\frac{\\int g(\\boldsymbol{\\theta}) p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) p( \\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}}{\\int p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta})p( \\boldsymbol{\\theta}) \\mathrm{d} \\boldsymbol{\\theta}}.\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#posterior-expectation-via-laplace",
@@ -1726,21 +1726,21 @@
     "href": "slides/bayesmod-slides10.html#example-of-posterior-mean-for-exponential-likelihood",
     "title": "Bayesian modelling",
     "section": "Example of posterior mean for exponential likelihood",
-    "text": "Example of posterior mean for exponential likelihood\nConsider the posterior mean \\(\\mathsf{E}_{\\Lambda \\mid \\boldsymbol{Y}}(\\lambda)\\) and let \\(s=\\sum_{i=1}^n y_i\\). Then, \\[\\begin{align*}\n\\widehat{\\lambda}_g &= \\frac{(n+a)}{s + b} \\\\\n|\\jmath_g(\\widehat{\\lambda}_g)|^{1/2} &= \\left(\\frac{n+a}{\\widehat{\\lambda}_g^2}\\right)^{1/2} =  \\frac{s + b}{(n+a)^{1/2}}\n\\end{align*}\\]"
+    "text": "Example of posterior mean for exponential likelihood\nConsider the posterior mean \\(\\mathsf{E}_{\\Lambda \\mid \\boldsymbol{Y}}(\\Lambda)\\) and let \\(s=\\sum_{i=1}^n y_i\\). Then, \\[\\begin{align*}\n\\widehat{\\lambda}_g &= \\frac{(n+a)}{s + b} \\\\\n|\\jmath_g(\\widehat{\\lambda}_g)|^{1/2} &= \\Bigg(\\frac{n+a}{\\widehat{\\lambda}_g^2}\\Bigg)^{1/2} =  \\frac{\\hphantom{(}s + b\\hphantom{)^{1/2}}}{(n+a)^{1/2}}.\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#posterior-mean",
     "href": "slides/bayesmod-slides10.html#posterior-mean",
     "title": "Bayesian modelling",
     "section": "Posterior mean",
-    "text": "Posterior mean\nSimplification gives the approximation \\[\\begin{align*}\n\\frac{\\exp(-1)}{s + b} \\frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}\n\\end{align*}\\] which gives \\(0.035,\\) whereas the true posterior mean is \\((n+a)/(s+b) = 0.035.\\)"
+    "text": "Posterior mean\nSimplification gives the approximation \\[\\begin{align*}\n\\frac{\\exp(-1)}{s + b} \\frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}\n\\end{align*}\\] which gives \\(0.03457,\\) whereas the true posterior mean is \\((n+a)/(s+b) = 0.03457.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#aside-on-prior-and-likelihood-relative-contribution",
     "href": "slides/bayesmod-slides10.html#aside-on-prior-and-likelihood-relative-contribution",
     "title": "Bayesian modelling",
     "section": "Aside on prior and likelihood relative contribution",
-    "text": "Aside on prior and likelihood relative contribution\nUsually,\n\n\\(p(\\boldsymbol{\\theta}) = \\mathrm{O}(1)\\) and\n\\(p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) = \\mathrm{O}(n)\\)\n\nThus, provided the prior does not impose unnecessary support constraints, we could alternatively\n\nreplace the MAP by the MLE, and\nthe Hessian \\(-\\mathbf{H}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})\\) by the Fisher information \\(n\\boldsymbol{\\imath}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}).\\)"
+    "text": "Aside on prior and likelihood relative contribution\n\nUsually,\n\n\\(p(\\boldsymbol{\\theta}) = \\mathrm{O}(1)\\) and\n\\(p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) = \\mathrm{O}(n).\\)\n\nThus, provided the prior does not impose unnecessary support constraints, we could alternatively replace\n\nthe MAP by the MLE, and\nthe Hessian \\(-\\mathbf{H}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})\\) by the Fisher information \\(n\\boldsymbol{\\imath}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#frequentist-approximations",
@@ -1754,14 +1754,14 @@
     "href": "slides/bayesmod-slides10.html#reducing-the-approximation-rate",
     "title": "Bayesian modelling",
     "section": "Reducing the approximation rate",
-    "text": "Reducing the approximation rate\nIgnoring all but the two first terms leads to \\(\\mathrm{O}(1)\\) approximation error, unless we consider the setting where we take a prior centered at the MLE with unit Fisher information precision (equivalent to \\(n=1\\) phantom observation). Then, due to cancellation of terms in the expansion, \\[\\boldsymbol{\\theta} \\sim \\mathsf{Gauss}_p\\{ \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}, \\boldsymbol{\\imath}^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\},\\] with approximation error of \\(\\mathrm{O}(n^{-1/2}).\\)"
+    "text": "Reducing the approximation rate\nIgnoring all but the two first terms leads to an \\(\\mathrm{O}(1)\\) approximation error.\nTaking a prior centered at the MLE with unit Fisher information precision is equivalent to a phantom observation: cancellation of terms in the expansion gives \\[\\boldsymbol{\\theta} \\sim \\mathsf{Gauss}_p\\{ \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}, \\boldsymbol{\\imath}^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\},\\] with approximation error of \\(\\mathrm{O}(n^{-1/2}).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#frequentist-approximation-to-the-marginal-likelihood",
     "href": "slides/bayesmod-slides10.html#frequentist-approximation-to-the-marginal-likelihood",
     "title": "Bayesian modelling",
     "section": "Frequentist approximation to the marginal likelihood",
-    "text": "Frequentist approximation to the marginal likelihood\nThis gives the approximation, whose quality improves with increasing sample size \\(n\\): \\[\\begin{align*}\n-2\\log p(\\boldsymbol{y}) \\approx \\mathsf{BIC} = -2\\log p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) + p\\log n\n\\end{align*}\\]\nThe unnormalized weight \\(\\exp(-\\mathsf{BIC}/2)\\) is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor."
+    "text": "Frequentist approximation to the marginal likelihood\nThis gives the approximation, whose quality improves with increasing sample size \\(n\\): \\[\\begin{align*}\n-2\\log p(\\boldsymbol{y}) \\approx \\mathsf{BIC} = -2\\log p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) + p\\log n\n\\end{align*}\\]\nThe unnormalized weight \\[\\exp(-\\mathsf{BIC}/2)\\] is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#bayesian-model-averaging-via-bic",
@@ -1782,14 +1782,14 @@
     "href": "slides/bayesmod-slides10.html#gaussian-approximation-to-the-posterior",
     "title": "Bayesian modelling",
     "section": "Gaussian approximation to the posterior",
-    "text": "Gaussian approximation to the posterior\nWe can also use similar ideas to approximate the posterior. Suppose that we can Taylor expand the log prior and log density around their respective mode, say \\(\\widehat{\\boldsymbol{\\theta}}_0\\) and \\(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}},\\) with \\(\\jmath_0(\\widehat{\\boldsymbol{\\theta}}_0)\\) and \\(\\jmath(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\) denoting negative of the corresponding Hessian matrices."
+    "text": "Gaussian approximation to the posterior\nWe can also use similar ideas to approximate the posterior. Suppose that we can Taylor expand the log prior and log density around their respective mode, say \\(\\widehat{\\boldsymbol{\\theta}}_0\\) and \\(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}},\\) with \\(\\jmath_0(\\widehat{\\boldsymbol{\\theta}}_0)\\) and \\(\\jmath(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\) denoting the observed information matrices."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#approximation-to-posterior",
     "href": "slides/bayesmod-slides10.html#approximation-to-posterior",
     "title": "Bayesian modelling",
     "section": "Approximation to posterior",
-    "text": "Approximation to posterior\nTogether, these yield \\[\\begin{align*}\n\\log p(\\boldsymbol{\\theta}) &\\approx \\log p(\\widehat{\\boldsymbol{\\theta}}_0) - \\frac{1}{2}(\\boldsymbol{\\theta} - \\widehat{\\boldsymbol{\\theta}}_0)^\\top\\jmath_0(\\widehat{\\boldsymbol{\\theta}}_0)(\\boldsymbol{\\theta} - \\widehat{\\boldsymbol{\\theta}}_0)\\\\\n\\log p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) &\\approx \\log p(\\boldsymbol{y} \\mid \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\\\& \\quad  - \\frac{1}{2}(\\boldsymbol{\\theta} - \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})^\\top\\jmath(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})(\\boldsymbol{\\theta} - \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\n\\end{align*}\\]"
+    "text": "Approximation to posterior\nTogether, these yield \\[\\begin{align*}\n\\log p(\\boldsymbol{\\theta}) &\\approx \\log p(\\widehat{\\boldsymbol{\\theta}}_0) - \\frac{1}{2}(\\boldsymbol{\\theta} - \\widehat{\\boldsymbol{\\theta}}_0)^\\top\\jmath_0(\\widehat{\\boldsymbol{\\theta}}_0)(\\boldsymbol{\\theta} - \\widehat{\\boldsymbol{\\theta}}_0),\\\\\n\\log p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) &\\approx \\log p(\\boldsymbol{y} \\mid \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\\\&\\qquad  - \\frac{1}{2}(\\boldsymbol{\\theta} - \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})^\\top\\jmath(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})(\\boldsymbol{\\theta} - \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}).\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#gaussian-approximation-to-posterior",
@@ -1803,7 +1803,7 @@
     "href": "slides/bayesmod-slides10.html#gaussian-large-sample-approximation-to-mle",
     "title": "Bayesian modelling",
     "section": "Gaussian large-sample approximation to MLE",
-    "text": "Gaussian large-sample approximation to MLE\nSuppose that the prior is continuous and positive in a neighborhood of the maximum.\nAssume further that the regularity conditions for maximum likelihood estimator holds. Then, in the limit as \\(n \\to \\infty\\) \\[\\begin{align*}\n\\boldsymbol{\\theta} \\mid \\boldsymbol{y} \\stackrel{\\cdot}{\\sim} \\mathsf{Gauss}_p\\{ \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}},  \\jmath^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\}\n\\end{align*}\\]"
+    "text": "Gaussian large-sample approximation to MLE\nSuppose that the prior is continuous and positive in a neighborhood of the maximum.\nAssume further that the regularity conditions for maximum likelihood estimator holds. Then, in the limit as \\(n \\to \\infty\\) \\[\\begin{align*}\n\\boldsymbol{\\theta} \\mid \\boldsymbol{y} \\stackrel{\\cdot}{\\sim} \\mathsf{Gauss}_p\\{ \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}},  \\jmath^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\}.\n\\end{align*}\\]\nThis is Bernstein–von Mises theorem."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#corollary",
@@ -1827,6 +1827,55 @@
     "text": "Gaussian approximation to gamma posterior\n\n\nFigure 2: Gaussian approximation (dashed) to the posterior density (full line) of the exponential rate \\(\\lambda\\) for the waiting dataset with an exponential likelihood and a gamma prior with \\(a=0.01\\) and \\(b=0.01.\\) The plots are based on the first \\(10\\) observations (left) and the whole sample of size \\(n=62\\) (right)."
   },
   {
+    "objectID": "slides/bayesmod-slides10.html#symmetric-distribution",
+    "href": "slides/bayesmod-slides10.html#symmetric-distribution",
+    "title": "Bayesian modelling",
+    "section": "Symmetric distribution",
+    "text": "Symmetric distribution\nLet \\(g^{\\text{sym}}(\\boldsymbol{\\theta}; \\boldsymbol{\\theta}_{\\text{sym}})\\) be a density function that is symmetric around \\(\\boldsymbol{\\theta}_{\\text{sym}};\\) for a Gaussian or any elliptical distribution, this value \\(\\boldsymbol{\\theta}_{\\text{sym}}\\) would be the location vector \\(\\boldsymbol{\\mu}.\\)\nA symmetric function \\(g\\) about \\(\\boldsymbol{x}_{\\text{sym}}\\) satisfies the identity \\[g(\\boldsymbol{x}) = g(2\\boldsymbol{x}_{\\text{sym}}-\\boldsymbol{x}_{\\text{sym}}).\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#perturbation-of-symmetric-distributions",
+    "href": "slides/bayesmod-slides10.html#perturbation-of-symmetric-distributions",
+    "title": "Bayesian modelling",
+    "section": "Perturbation of symmetric distributions",
+    "text": "Perturbation of symmetric distributions\nA skew-symmetric approximation is obtained by multiplying the symmetric density by a perturbation factor, where \\[\\begin{align*}\ng^{\\text{skew}}(\\boldsymbol{\\theta}) = 2 g^{\\text{sym}}(\\boldsymbol{\\theta}; \\boldsymbol{\\theta}_{\\text{sym}})w(\\boldsymbol{\\theta}, \\boldsymbol{\\theta}_{\\text{sym}}; \\boldsymbol{\\theta}).\n\\end{align*}\\]\nThe skewing factor \\(w(\\boldsymbol{\\theta};  \\boldsymbol{\\theta}_{\\text{sym}})\\) satisfies \\[w(\\boldsymbol{\\theta}; \\boldsymbol{\\theta}_{\\text{sym}}) = 1-w(2\\boldsymbol{\\theta}_{\\text{sym}}-\\boldsymbol{\\theta}; \\boldsymbol{\\theta}_{\\text{sym}})\\] for any \\(\\boldsymbol{\\theta} \\in \\boldsymbol{\\Theta} \\subseteq \\mathbb{R}^d.\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#skew-approximations",
+    "href": "slides/bayesmod-slides10.html#skew-approximations",
+    "title": "Bayesian modelling",
+    "section": "Skew-approximations",
+    "text": "Skew-approximations\n\nWe consider a skew-symmetric approximation to the posterior \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) from a symmetric approximation, say \\(g(\\boldsymbol{\\theta})\\) at the cost of two additional likelihood and prior evaluations for every parameter vector \\(\\boldsymbol{\\theta}\\) of interest.\nThe Gaussian (Laplace) and variational approximations typically rely on symmetric approximations to the posterior. Symmetric approximations perform poorly when the underlying posterior is skewed."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#skewing-factor-for-bayesian-approximations",
+    "href": "slides/bayesmod-slides10.html#skewing-factor-for-bayesian-approximations",
+    "title": "Bayesian modelling",
+    "section": "Skewing factor for Bayesian approximations",
+    "text": "Skewing factor for Bayesian approximations\nFor a posterior approximation, taking\n\n\\[\\begin{align*}\nw(\\boldsymbol{\\theta};\\boldsymbol{\\theta}_{\\text{sym}}) = \\frac{p(\\boldsymbol{\\theta})p(\\boldsymbol{y}\\mid \\boldsymbol{\\theta})}{p(\\boldsymbol{\\theta})p(\\boldsymbol{y}\\mid \\boldsymbol{\\theta}) + p(2\\boldsymbol{\\theta}_{\\text{sym}} -\\boldsymbol{\\theta})p(\\boldsymbol{y}\\mid 2\\boldsymbol{\\theta}_{\\text{sym}}-\\boldsymbol{\\theta})}\n\\end{align*}\\]\n\nleads to an improvement in fit (in the sense of reducing the Kullback–Leibler divergence with the true distribution) (Pozza et al., 2026)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#comments",
+    "href": "slides/bayesmod-slides10.html#comments",
+    "title": "Bayesian modelling",
+    "section": "Comments",
+    "text": "Comments\nSince the unnormalized posterior (prior and likelihood) appear in both the numerator and the denominator, this amounts to using the posterior density in the skewing factor definition, as the marginal likelihood would cancel out.\nIf the posterior is zero at some value of \\(\\boldsymbol{\\theta},\\) which is outside the support, then we define \\(w(\\boldsymbol{\\theta};\\boldsymbol{\\theta}_{\\text{sym}})=0.5\\) to satisfy the properties of \\(w(\\cdot;\\cdot).\\)"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#sampling-from-the-posterior-approximation",
+    "href": "slides/bayesmod-slides10.html#sampling-from-the-posterior-approximation",
+    "title": "Bayesian modelling",
+    "section": "Sampling from the posterior approximation",
+    "text": "Sampling from the posterior approximation\nProposition 1 of Pozza et al. (2026) shows that we can generate from the skewed approximation by first sampling a candidate \\(\\boldsymbol{\\omega}_0\\) from the model with density \\(g^{\\text{sym}}(\\cdot; \\boldsymbol{\\theta}_{\\text{sym}})\\) and \\(U \\sim \\mathsf{unif}(0,1),\\) then setting \\[\\begin{align*}\n\\boldsymbol{\\theta}_0 =\n\\begin{cases}\n\\boldsymbol{\\omega}_0, &\nU \\leq w(\\boldsymbol{\\omega}_0; \\boldsymbol{\\theta}_{\\text{sym}}) \\\\\n2\\boldsymbol{\\theta}_{\\text{sym}}-\\boldsymbol{\\omega}_0, & U &gt; w(\\boldsymbol{\\omega}_0; \\boldsymbol{\\theta}_{\\text{sym}}).\n\\end{cases}\n\\end{align*}\\]"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#example-of-skew-symmetric-approximation",
+    "href": "slides/bayesmod-slides10.html#example-of-skew-symmetric-approximation",
+    "title": "Bayesian modelling",
+    "section": "Example of skew-symmetric approximation",
+    "text": "Example of skew-symmetric approximation\n\n\nFigure 3: True gamma posterior (black) with skew symmetric (dashed red) and Laplace (dotted blue) approximations for the waiting time model with the first \\(n=10\\) observations."
+  },
+  {
     "objectID": "slides/bayesmod-slides10.html#structured-models",
     "href": "slides/bayesmod-slides10.html#structured-models",
     "title": "Bayesian modelling",
@@ -1841,11 +1890,11 @@
     "text": "Integrated nested Laplace approximation\nConsider a model with response \\(\\boldsymbol{y}\\) which depends on covariates \\(\\mathbf{x}\\) through a latent Gaussian process \\(\\boldsymbol{\\beta}.\\)\nTypically, the prior of coefficients \\(\\boldsymbol{\\beta} \\in \\mathbb{R}^p.\\) The dimension \\(p\\) can be substantial (several thousands) with a comparably low-dimensional hyperparameter vector \\(\\boldsymbol{\\theta} \\in \\mathbb{R}^m.\\)\nConsider data that are conditionally independent given \\(\\boldsymbol{\\beta}\\) and \\(\\boldsymbol{\\beta} \\sim \\mathsf{Gauss}_p(\\boldsymbol{0}_p, \\mathbf{Q}^{-1})\\) for simplicity."
   },
   {
-    "objectID": "slides/bayesmod-slides10.html#gaussian-approximations-considered",
-    "href": "slides/bayesmod-slides10.html#gaussian-approximations-considered",
+    "objectID": "slides/bayesmod-slides10.html#gaussian-approximations",
+    "href": "slides/bayesmod-slides10.html#gaussian-approximations",
     "title": "Bayesian modelling",
-    "section": "Gaussian approximations considered",
-    "text": "Gaussian approximations considered\nThen, \\[\\begin{align*}\np(\\boldsymbol{\\beta} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}) \\propto \\exp\\left\\{-\\frac{1}{2} \\boldsymbol{\\beta}^\\top\\mathbf{Q}\\boldsymbol{\\beta} + \\sum_{i=1}^n \\log p(y_i \\mid \\beta_i, \\boldsymbol{\\theta})\\right\\}\n\\end{align*}\\] If \\(\\boldsymbol{\\beta}\\) is a Gaussian Markov random field, it’s precision matrix \\(\\mathbf{Q}\\) will be sparse. A Gaussian approximation to this model would have precision matrix \\(\\mathbf{Q} + \\mathrm{diag}(\\boldsymbol{c})\\) for some vector \\(\\boldsymbol{c}\\) obtained from the second-order expansion of the likelihood.\nThis allows one to use dedicated algorithms for sparse matrices."
+    "section": "Gaussian approximations",
+    "text": "Gaussian approximations\n\\[\\begin{align*}\np(\\boldsymbol{\\beta} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}) \\propto \\exp\\left\\{-\\frac{1}{2} \\boldsymbol{\\beta}^\\top\\mathbf{Q}\\boldsymbol{\\beta} + \\sum_{i=1}^n \\log p(y_i \\mid \\beta_i, \\boldsymbol{\\theta})\\right\\}\n\\end{align*}\\] If \\(\\boldsymbol{\\beta}\\) is a Gaussian Markov random field, the precision matrix \\(\\mathbf{Q}\\) will be sparse.\nThe Gaussian approximation to the posterior would have precision matrix \\(\\mathbf{Q} + \\mathrm{diag}(\\boldsymbol{c})\\) for some vector \\(\\boldsymbol{c}\\) obtained from the second-order expansion of the likelihood.\nThis allows one to use dedicated algorithms for sparse matrices."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#inla-targets-of-inference",
@@ -1866,14 +1915,14 @@
     "href": "slides/bayesmod-slides10.html#inla-approximation-step-1",
     "title": "Bayesian modelling",
     "section": "INLA approximation (step 1)",
-    "text": "INLA approximation (step 1)\nThis yields \\[\\begin{align*}\n\\widetilde{p}(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\propto \\frac{p(\\widehat{\\boldsymbol{\\beta}}, \\boldsymbol{\\theta} \\mid \\boldsymbol{y})}{ p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})} = \\frac{p(\\widehat{\\boldsymbol{\\beta}}, \\boldsymbol{\\theta} \\mid \\boldsymbol{y})}{ |\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})|^{1/2}}\n\\end{align*}\\]"
+    "text": "INLA approximation (step 1)\nThis yields \\[\\begin{align*}\n\\widetilde{p}(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\propto \\frac{p(\\widehat{\\boldsymbol{\\beta}}, \\boldsymbol{\\theta} \\mid \\boldsymbol{y})}{ p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})} = \\frac{p(\\widehat{\\boldsymbol{\\beta}}, \\boldsymbol{\\theta} \\mid \\boldsymbol{y})}{ |\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})|^{1/2}}\n\\end{align*}\\] since the exponential term"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#note-on-approximation",
     "href": "slides/bayesmod-slides10.html#note-on-approximation",
     "title": "Bayesian modelling",
     "section": "Note on approximation",
-    "text": "Note on approximation\n\nThe Laplace approximation \\(p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})\\) has kernel \\[p_{G}(\\boldsymbol{\\beta} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}) \\propto |\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})|^{1/2}\\exp\\{-(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})^\\top \\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})/2\\};\\] since it is evaluated at \\(\\widehat{\\boldsymbol{\\beta}},\\) we retrieve only the determinant of the negative Hessian of \\(p(\\boldsymbol{\\beta} \\mid \\boldsymbol{\\theta}, \\boldsymbol{y}),\\) namely \\(\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}}).\\) Note that the latter varies with \\(\\boldsymbol{\\theta}.\\)"
+    "text": "Note on approximation\n\nThe Laplace approximation \\(p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})\\) has kernel \\[p_{G}(\\boldsymbol{\\beta} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}) \\propto |\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})|^{1/2}\\exp\\left\\{-(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})^\\top \\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})/2\\right\\};\\] since it is evaluated at \\(\\widehat{\\boldsymbol{\\beta}},\\) we retrieve only the determinant of the negative Hessian of \\(p(\\boldsymbol{\\beta} \\mid \\boldsymbol{\\theta}, \\boldsymbol{y}),\\) namely \\(\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}}).\\) Note that the latter varies with \\(\\boldsymbol{\\theta}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#numerical-integration",
@@ -1894,14 +1943,14 @@
     "href": "slides/bayesmod-slides10.html#approximation-of-marginal-of-gaussian-latent-effect",
     "title": "Bayesian modelling",
     "section": "Approximation of marginal of Gaussian latent effect",
-    "text": "Approximation of marginal of Gaussian latent effect\nFor the marginal \\(p(\\beta_i \\mid \\boldsymbol{y})\\) term, Rue et al. (2009) proceed instead with the marginal for \\(\\beta_i\\) by building an approximation of it based on maximizing \\(\\boldsymbol{\\beta}_{-i} \\mid \\beta_i, \\boldsymbol{\\theta}, \\boldsymbol{y}\\) to yield \\(\\widehat{\\boldsymbol{\\beta}}_{(i)}\\) whose \\(i\\)th element is \\(\\beta_i,\\) yielding \\[\\begin{align*}\n\\widetilde{p}(\\beta_i \\mid \\boldsymbol{\\theta}, \\boldsymbol{y}) \\propto \\frac{p(\\widehat{\\boldsymbol{\\beta}}_{(i)}, \\boldsymbol{\\theta} \\mid \\boldsymbol{y})}{\\widetilde{p}(\\widehat{\\boldsymbol{\\beta}}_{(i),-i} \\mid \\beta_i, \\boldsymbol{\\theta}, \\boldsymbol{y})},\n\\end{align*}\\] with a suitable renormalization of \\(\\widetilde{p}(\\widehat{\\boldsymbol{\\beta}}_{(i),-i} \\mid \\beta_i, \\boldsymbol{\\theta}, \\boldsymbol{y}).\\)"
+    "text": "Approximation of marginal of Gaussian latent effect\nFor the marginal term \\(p(\\beta_i \\mid \\boldsymbol{y})\\), Rue et al. (2009) proceed instead with the marginal for \\(\\beta_i\\) by building an approximation of it based on maximizing \\(\\boldsymbol{\\beta}_{-i} \\mid \\beta_i, \\boldsymbol{\\theta}, \\boldsymbol{y}\\) to yield \\(\\widehat{\\boldsymbol{\\beta}}_{(i)}\\) whose \\(i\\)th element is \\(\\beta_i,\\) yielding \\[\\begin{align*}\n\\widetilde{p}(\\beta_i \\mid \\boldsymbol{\\theta}, \\boldsymbol{y}) \\propto \\frac{p(\\widehat{\\boldsymbol{\\beta}}_{(i)}, \\boldsymbol{\\theta} \\mid \\boldsymbol{y})}{\\widetilde{p}(\\widehat{\\boldsymbol{\\beta}}_{(i),-i} \\mid \\beta_i, \\boldsymbol{\\theta}, \\boldsymbol{y})},\n\\end{align*}\\] with a suitable renormalization of \\(\\widetilde{p}(\\widehat{\\boldsymbol{\\beta}}_{(i),-i} \\mid \\beta_i, \\boldsymbol{\\theta}, \\boldsymbol{y}).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#remark-on-approximation",
     "href": "slides/bayesmod-slides10.html#remark-on-approximation",
     "title": "Bayesian modelling",
     "section": "Remark on approximation",
-    "text": "Remark on approximation\nWhile we could use the Laplace approximation \\(p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})\\) and marginalize the latter directly, this leads to evaluation of the Laplace approximation to the density far from the mode, which is often inaccurate."
+    "text": "Remark on approximation\nWhile we could marginalize directly the multivariate Laplace approximation \\[p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}),\\] this leads to evaluation of the Laplace approximation to the density far from the mode, which is often inaccurate."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#numerical-challenges-to-laplace-approximation",
@@ -1950,14 +1999,14 @@
     "href": "slides/bayesmod-slides10.html#marginal-posterior-approximations",
     "title": "Bayesian modelling",
     "section": "Marginal posterior approximations",
-    "text": "Marginal posterior approximations\n\n\nFigure 3: Marginal densities of precision and autocorrelation parameters from the Gaussian stochastic volatility model."
+    "text": "Marginal posterior approximations\n\n\nFigure 4: Marginal densities of precision and autocorrelation parameters from the Gaussian stochastic volatility model."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#comment-on-stochastic-volatility",
     "href": "slides/bayesmod-slides10.html#comment-on-stochastic-volatility",
     "title": "Bayesian modelling",
     "section": "Comment on stochastic volatility",
-    "text": "Comment on stochastic volatility\nFigure 3 shows that the correlation \\(\\phi\\) is nearly one, leading to random walk behaviour and high persistence over time.\nThis strong serial dependence in the variance is in part responsible for the difficulty in fitting this model using MCMC."
+    "text": "Comment on stochastic volatility\nFigure 4 shows that the correlation \\(\\phi\\) is nearly one, leading to random walk behaviour and high persistence over time.\nThis strong serial dependence in the variance is in part responsible for the difficulty in fitting this model using MCMC."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#marginal-approximations",
@@ -1971,7 +2020,7 @@
     "href": "slides/bayesmod-slides10.html#marginal-summaries",
     "title": "Bayesian modelling",
     "section": "Marginal summaries",
-    "text": "Marginal summaries\n\n# Compute density, quantiles, etc. via inla.*marginal\n# Change of variable to get variance from precision\nmarg_var &lt;- INLA::inla.tmarginal(\n  fun = function(x) { 1 / x }, \n  marginal = marg_prec)\nINLA::inla.qmarginal(marg_var, p = c(0.025, 0.5,  0.975))\n## [1] 0.288 0.452 0.732\n# Posterior marginal mean and variance of phi\nmom1 &lt;- INLA::inla.emarginal(\n    fun = function(x){x}, \n    marginal = marg_phi)\nmom2 &lt;- INLA::inla.emarginal(\n    fun = function(x){x^2}, \n    marginal = marg_phi)\nc(mean = mom1, sd = sqrt(mom2 - mom1^2))\n##    mean      sd \n## 0.98409 0.00567"
+    "text": "Marginal summaries\n\n# Compute density, quantiles, etc. via inla.*marginal\n# Change of variable to get variance from precision\nmarg_var &lt;- INLA::inla.tmarginal(\n  fun = function(x) { 1 / x }, \n  marginal = marg_prec)\nINLA::inla.qmarginal(marg_var, p = c(0.025, 0.5,  0.975))\n\n[1] 0.2872159 0.4529812 0.7337615\n\n# Posterior marginal mean and variance of phi\nmom1 &lt;- INLA::inla.emarginal(\n    fun = function(x){x}, \n    marginal = marg_phi)\nmom2 &lt;- INLA::inla.emarginal(\n    fun = function(x){x^2}, \n    marginal = marg_phi)\nc(mean = mom1, sd = sqrt(mom2 - mom1^2))\n\n      mean         sd \n0.98409185 0.00568761"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#tokyo-binomial-time-series",
@@ -1992,14 +2041,14 @@
     "href": "slides/bayesmod-slides10.html#posterior-of-random-effect-prior",
     "title": "Bayesian modelling",
     "section": "Posterior of random effect prior",
-    "text": "Posterior of random effect prior\n\n\nFigure 4: Posterior probability per day of the year with posterior median and 95% credible interval for the Tokyo rainfall binomial time series."
+    "text": "Posterior of random effect prior\n\n\nFigure 5: Posterior probability per day of the year with posterior median and 95% credible interval for the Tokyo rainfall binomial time series."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#references",
     "href": "slides/bayesmod-slides10.html#references",
     "title": "Bayesian modelling",
     "section": "References",
-    "text": "References\n\n\n\n\nPark, T., & Casella, G. (2008). The Bayesian Lasso. Journal of the American Statistical Association, 103(482), 681–686. https://doi.org/10.1198/016214508000000337\n\n\nRaftery, A. E. (1995). Bayesian model selection in social research. Sociological Methodology, 25, 111–163. https://doi.org/10.2307/271063\n\n\nRue, H., Martino, S., & Chopin, N. (2009). Approximate bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 71(2), 319–392. https://doi.org/10.1111/j.1467-9868.2008.00700.x\n\n\nTierney, L., & Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. Journal of the American Statistical Association, 81(393), 82–86. https://doi.org/10.1080/01621459.1986.10478240\n\n\nvan Niekerk, J., & Rue, H. (2024). Low-rank variational Bayes correction to the Laplace method. Journal of Machine Learning Research, 25(62), 1–25. http://jmlr.org/papers/v25/21-1405.html\n\n\nWood, S. N. (2019). Simplified integrated nested Laplace approximation. Biometrika, 107(1), 223–230. https://doi.org/10.1093/biomet/asz044"
+    "text": "References\n\n\n\n\nPark, T., & Casella, G. (2008). The Bayesian Lasso. Journal of the American Statistical Association, 103(482), 681–686. https://doi.org/10.1198/016214508000000337\n\n\nPozza, F., Durante, D., & Szabo, B. (2026). Skew-symmetric approximations of posterior distributions. Journal of the Royal Statistical Society Series B: Statistical Methodology, qkaf082. https://doi.org/10.1093/jrsssb/qkaf082\n\n\nRaftery, A. E. (1995). Bayesian model selection in social research. Sociological Methodology, 25, 111–163. https://doi.org/10.2307/271063\n\n\nRue, H., Martino, S., & Chopin, N. (2009). Approximate bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 71(2), 319–392. https://doi.org/10.1111/j.1467-9868.2008.00700.x\n\n\nTierney, L., & Kadane, J. B. (1986). Accurate approximations for posterior moments and marginal densities. Journal of the American Statistical Association, 81(393), 82–86. https://doi.org/10.1080/01621459.1986.10478240\n\n\nvan Niekerk, J., & Rue, H. (2024). Low-rank variational Bayes correction to the Laplace method. Journal of Machine Learning Research, 25(62), 1–25. http://jmlr.org/papers/v25/21-1405.html\n\n\nWood, S. N. (2019). Simplified integrated nested Laplace approximation. Biometrika, 107(1), 223–230. https://doi.org/10.1093/biomet/asz044"
   },
   {
     "objectID": "index.html",
@@ -2471,7 +2520,7 @@
     "href": "content/10-content.html#content",
     "title": "Deterministic approximations",
     "section": "Content",
-    "text": "Content\n\nBernstein–von Mises theorem\nLaplace approximations\nintegrated nested Laplace approximation (INLA)",
+    "text": "Content\n\nBernstein–von Mises theorem\nLaplace approximations and skew-symmetric corrections\nintegrated nested Laplace approximation (INLA)",
     "crumbs": [
       "Content",
       "Course content",
@@ -2507,7 +2556,7 @@
     "href": "content/10-content.html#complementary-readings",
     "title": "Deterministic approximations",
     "section": "Complementary readings",
-    "text": "Complementary readings\n\nLaplace approximation use in statistics: Tierney & Kadane (1986)\nskewed Bernstein–von Mises: Durante et al. (2024)\nLaplace approximation for Bayes factor: Raftery (1995)\nintegrated nested Laplace approximation: Rue et al. (2009), Wood (2019)",
+    "text": "Complementary readings\n\nLaplace approximation use in statistics: Tierney & Kadane (1986)\nskewed Bernstein–von Mises: Durante et al. (2024), Pozza et al. (2026).\nLaplace approximation for Bayes factor: Raftery (1995)\nintegrated nested Laplace approximation: Rue et al. (2009), Wood (2019)",
     "crumbs": [
       "Content",
       "Course content",
@@ -2531,7 +2580,7 @@
     "href": "content/10-content.html#code",
     "title": "Deterministic approximations",
     "section": "Code",
-    "text": "Code\n\nLaplace approximations for exponential-gamma model R script\nINLA package R script",
+    "text": "Code\n\nLaplace approximations for exponential-gamma model R script and skew-symmetric approximation (/files/code/skewsym-approx.R)\nINLA package R script",
     "crumbs": [
       "Content",
       "Course content",
@@ -4070,7 +4119,7 @@
     "href": "slides/bayesmod-slides11.html#kullbackleibler-divergence",
     "title": "Bayesian modelling",
     "section": "Kullback–Leibler divergence",
-    "text": "Kullback–Leibler divergence\nThe Kullback–Leibler divergence between densities \\(f_t(\\cdot)\\) and \\(g(\\cdot; \\boldsymbol{\\psi}),\\) is \\[\\begin{align*}\n\\mathsf{KL}(f_t \\parallel g) &=\\int \\log \\left(\\frac{f_t(\\boldsymbol{x})}{g(\\boldsymbol{x}; \\boldsymbol{\\psi})}\\right) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\\\\\n&= \\int \\log f_t(\\boldsymbol{x}) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x} - \\int \\log g(\\boldsymbol{x}; \\boldsymbol{\\psi}) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\n\\\\ &= {\\color{#c38f16}{\\mathsf{E}_{f_t}\\{\\log f_t(\\boldsymbol{X})\\}}} - \\mathsf{E}_{f_t}\\{\\log g(\\boldsymbol{X}; \\boldsymbol{\\psi})\\}\n\\end{align*}\\] The \\({\\color{#c38f16}{\\text{negative entropy}}}\\) does not depend on \\(g(\\cdot).\\)"
+    "text": "Kullback–Leibler divergence\n\nThe Kullback–Leibler divergence between densities \\(f_t(\\cdot)\\) and \\(g(\\cdot; \\boldsymbol{\\psi}),\\) is \\[\\begin{align*}\n\\mathsf{KL}(f_t \\parallel g) &=\\int \\log \\left(\\frac{f_t(\\boldsymbol{x})}{g(\\boldsymbol{x}; \\boldsymbol{\\psi})}\\right) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\\\\\n&= \\int \\log f_t(\\boldsymbol{x}) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x} - \\int \\log g(\\boldsymbol{x}; \\boldsymbol{\\psi}) f_t(\\boldsymbol{x}) \\mathrm{d} \\boldsymbol{x}\n\\\\ &= {\\color{#c38f16}{\\mathsf{E}_{f_t}\\{\\log f_t(\\boldsymbol{X})\\}}} - \\mathsf{E}_{f_t}\\{\\log g(\\boldsymbol{X}; \\boldsymbol{\\psi})\\}\n\\end{align*}\\] The \\({\\color{#c38f16}{\\text{negative entropy}}}\\) does not depend on \\(g(\\cdot).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides11.html#model-misspecification",
@@ -4098,7 +4147,7 @@
     "href": "slides/bayesmod-slides11.html#problems-ahead",
     "title": "Bayesian modelling",
     "section": "Problems ahead",
-    "text": "Problems ahead\nMinimizing the Kullback–Leibler divergence is not feasible to evaluate the posterior.\nTaking \\(f_t = p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) is not feasible: we need the marginal likelihood to compute the expectation!"
+    "text": "Problems ahead\nIdeally, we would minimizing the Kullback–Leibler divergence. However taking \\(f_t = p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\) is not feasible: we need the marginal likelihood to compute the expectation!"
   },
   {
     "objectID": "slides/bayesmod-slides11.html#alternative-expression-for-the-marginal-likelihood",
@@ -4329,7 +4378,7 @@
     "href": "slides/bayesmod-slides11.html#stochastic-optimization",
     "title": "Bayesian modelling",
     "section": "Stochastic optimization",
-    "text": "Stochastic optimization\nWe consider alternative numeric schemes which rely on stochastic optimization (Hoffman et al., 2013).\nThe key idea behind these methods is that\n\nwe can use gradient-based algorithms,\nand approximate the expectations with respect to \\(g\\) by drawing samples from it\n\nAlso allows for minibatch (random subset) selection to reduce computational costs in large samples"
+    "text": "Stochastic optimization\nWe consider alternative numeric schemes which rely on stochastic optimization (Hoffman et al., 2013).\nThe key idea behind these methods is that\n\nwe can use gradient-based algorithms,\nand approximate the expectations with respect to \\(g\\) by drawing samples from it.\n\nAlso allows for minibatch (random subset) selection to reduce computational costs in large samples."
   },
   {
     "objectID": "slides/bayesmod-slides11.html#stochastic-gradient-descent",
@@ -4350,14 +4399,14 @@
     "href": "slides/bayesmod-slides11.html#black-box-variational-inference",
     "title": "Bayesian modelling",
     "section": "Black-box variational inference",
-    "text": "Black-box variational inference\nRanganath et al. (2014) shows that the gradient of the ELBO reduces to \\[\\begin{align*}\n\\frac{\\partial}{\\partial \\boldsymbol{\\psi}} \\mathsf{ELBO}(g) &=\\mathsf{E}_{g}\\left\\{\\frac{\\partial \\log g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}} \\times \\log \\left( \\frac{p(\\boldsymbol{\\theta}, \\boldsymbol{y})}{g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}\\right)\\right\\}\n\\end{align*}\\] using the change rule, differentiation under the integral sign (dominated convergence theorem) and the identity \\[\\begin{align*}\n\\frac{\\partial \\log g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}} g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi}) = \\frac{\\partial g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}}\n\\end{align*}\\]"
+    "text": "Black-box variational inference\nRanganath et al. (2014) shows that the gradient of the ELBO reduces to \\[\\begin{align*}\n\\frac{\\partial}{\\partial \\boldsymbol{\\psi}} \\mathsf{ELBO}(g) &=\\mathsf{E}_{g}\\left\\{\\frac{\\partial \\log g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}} \\times \\log \\left( \\frac{p(\\boldsymbol{\\theta}, \\boldsymbol{y})}{g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}\\right)\\right\\}\n\\end{align*}\\] using the change rule, differentiation under the integral sign (dominated convergence theorem) and the identity \\[\\begin{align*}\n\\frac{\\partial \\log g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}} g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi}) = \\frac{\\partial g(\\boldsymbol{\\theta}; \\boldsymbol{\\psi})}{\\partial \\boldsymbol{\\psi}}.\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides11.html#black-box-variational-inference-in-practice",
     "href": "slides/bayesmod-slides11.html#black-box-variational-inference-in-practice",
     "title": "Bayesian modelling",
     "section": "Black-box variational inference in practice",
-    "text": "Black-box variational inference in practice\n\nNote that the gradient simplifies for \\(g_i\\) in exponential families.\nThe gradient estimator is particularly noisy, so Ranganath et al. (2014) provide two methods to reduce the variance of this expression using control variates and Rao–Blackwellization."
+    "text": "Black-box variational inference in practice\n\nNote that the gradient simplifies for \\(g_i\\) in exponential families.\nThe gradient estimator is particularly noisy, so Ranganath et al. (2014) provide two methods to reduce the variance of this expression using\ncontrol variates and\nRao–Blackwellization."
   },
   {
     "objectID": "slides/bayesmod-slides11.html#automatic-differentiation-variational-inference",
@@ -4448,7 +4497,7 @@
     "href": "slides/bayesmod-slides11.html#performance-of-stochastic-gradient-descent",
     "title": "Bayesian modelling",
     "section": "Performance of stochastic gradient descent",
-    "text": "Performance of stochastic gradient descent\nThe speed of convergence of the stochastic gradient descent depends on multiple factors:\n\nthe properties of the function. Good performance is obtained for log concave distributions.\nthe level of noise of the gradient estimator. Less noisy gradient estimators are preferable.\ngood starting values, as the algorithm converges to a local maximum.\nthe Robbins–Munro sequence used for the step size, as overly large steps may lead to divergences."
+    "text": "Performance of stochastic gradient descent\nThe speed of convergence of the stochastic gradient descent depends on multiple factors:\n\nthe properties of the function:\n\ngood performance is obtained for log concave distributions.\n\nthe level of noise of the gradient estimator:\n\nless noisy gradient estimators are preferable.\n\ngood starting values\n\nthe algorithm converges to a local maximum.\n\nthe Robbins–Munro sequence used for the step size:\n\noverly large steps may lead to divergences."
   },
   {
     "objectID": "slides/bayesmod-slides11.html#references",

@@ -64,20 +64,26 @@ We need notation to characterize the growth rate of functions: when $n \to \inft
 ## Taylor series expansion
 
 Consider a concave function $h(x)$ assumed twice continuously differentiable with mode at $x_0$. Then, a Taylor series expansion around $x_0$ gives
+
+::: {style="font-size: 0.9em;"}
+
 \begin{align*}
-h(x) = h(x_0) + h'(x_0)(x-x_0) + h''(x_0)(x-x_0)^2/2 + R
+h(x) = h(x_0) + h'(x_0)(x-x_0) + \dfrac{h''(x_0)(x-x_0)^2}{2} + R
 \end{align*}
+
+:::
+
 where the remainder $R=\mathrm{O}\{(x-x_0)^3\}.$
 
 ## Multivariate Taylor series expansion
 
 
 Similarly, for $h(\boldsymbol{x})$ a smooth vector valued function with mode at $\boldsymbol{x}_0 \in \mathbb{R}^p$, we can write
-::: {style="font-size: 0.8em;"}
+
 \begin{align*}
  h(\boldsymbol{x}) &= h(\boldsymbol{x}_0) + (\boldsymbol{x}- \boldsymbol{x}_0)^\top h'(\boldsymbol{x}_0) \\&+ \frac{1}{2}(\boldsymbol{x}- \boldsymbol{x}_0)^\top h''(\boldsymbol{x}_0)(\boldsymbol{x}- \boldsymbol{x}_0) + R.
 \end{align*}
-:::
+
 Under regularity conditions, the mode $\boldsymbol{x}_0$ is such that $h'(\boldsymbol{x}_0)=\boldsymbol{0}_p.$
 
 ## Laplace approximation
@@ -119,16 +125,22 @@ and take
 
 ## Laplace approximation to the marginal likelihood
 
-Evaluating at the maximum a posteriori $\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}$ and letting $\mathbf{H} = - \log p(\boldsymbol{y}, \boldsymbol{\theta}) / \partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top$ denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get [@Tierney.Kadane:1986]
+Evaluating at the maximum a posteriori $\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}$ and letting $\mathbf{H} = - h(\boldsymbol{\theta}) / \partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top$ denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get [@Tierney.Kadane:1986]
 \begin{align*}
- \log p(\boldsymbol{y}) &= \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) + \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) \\&\quad + \frac{p}{2} \log (2\pi) - \frac{1}{2}\log |\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})| + \mathrm{O}(n^{-1})
+ \log p(\boldsymbol{y}) &= \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) + \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) \\&\quad + \frac{p}{2} \log (2\pi) - \frac{1}{2}\log |\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})| + \mathrm{O}(n^{-1}).
 \end{align*}
 
 
 ## Example with exponential likelihood
 
 
-Consider an exponential likelihood $Y_i \mid \lambda \sim \mathsf{expo}(\lambda)$ with conjugate gamma prior $\lambda \sim \mathsf{gamma}(a,b)$. The exponential model  has information $i(\lambda)=n/\lambda^2$ and the mode of the posterior is $$\widehat{\lambda}_{\mathrm{MAP}}=\frac{n+a-1}{\sum_{i=1}^n y_i + b}.$$
+Consider an exponential likelihood $Y_i \mid \lambda \sim \mathsf{expo}(\lambda)$ with conjugate gamma prior $\lambda \sim \mathsf{gamma}(a,b)$.
+
+
+The negative Hessian of the log-posterior with respect to $\lambda$ is $-h''(\lambda)=(n+a-1)/\lambda^2.$
+
+
+The mode of the posterior is $$\widehat{\lambda}_{\mathrm{MAP}}=\frac{n+a-1}{\sum_{i=1}^n y_i + b}.$$
 
 ## Marginal likelihood approximation for exponential likelihood
 
@@ -187,7 +199,7 @@ The Laplace approximation gives $`r round(log_marg_laplace,1)`.$
 
 If we are interested in computing the posterior expectation of a positive real-valued functional $g(\boldsymbol{\theta}): \mathbb{R}^p \to \mathbb{R}_{+},$ we may write
 \begin{align*}
- \mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} &=  \frac{\int g(\boldsymbol{\theta}) p(\boldsymbol{y} \mid \boldsymbol{\theta}) p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}{\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}
+ \mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} &=  \frac{\int g(\boldsymbol{\theta}) p(\boldsymbol{y} \mid \boldsymbol{\theta}) p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}{\int p(\boldsymbol{y} \mid \boldsymbol{\theta})p( \boldsymbol{\theta}) \mathrm{d} \boldsymbol{\theta}}.
 \end{align*}
 
 ## Posterior expectation via Laplace
@@ -209,9 +221,9 @@ While the Laplace method has an error $\mathrm{O}(n^{-1}),$ the leading order te
 
 ## Example of posterior mean for exponential likelihood
 
-Consider the posterior mean $\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\lambda)$ and let $s=\sum_{i=1}^n y_i$. Then, \begin{align*}
+Consider the posterior mean $\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\Lambda)$ and let $s=\sum_{i=1}^n y_i$. Then, \begin{align*}
 \widehat{\lambda}_g &= \frac{(n+a)}{s + b} \\
-|\jmath_g(\widehat{\lambda}_g)|^{1/2} &= \left(\frac{n+a}{\widehat{\lambda}_g^2}\right)^{1/2} =  \frac{s + b}{(n+a)^{1/2}}
+|\jmath_g(\widehat{\lambda}_g)|^{1/2} &= \Bigg(\frac{n+a}{\widehat{\lambda}_g^2}\Bigg)^{1/2} =  \frac{\hphantom{(}s + b\hphantom{)^{1/2}}}{(n+a)^{1/2}}.
 \end{align*}
 
 ## Posterior mean
@@ -226,15 +238,19 @@ which gives $`r round(exp(-1)/(s+b) * exp((n+a+0.5)*log(n+a) - (n+a-0.5)*log(n+a
 
 ## Aside on prior and likelihood relative contribution
 
+::: {style="font-size: 0.9em;"}
+
 Usually,
 
 - $p(\boldsymbol{\theta}) = \mathrm{O}(1)$ and
-- $p(\boldsymbol{y} \mid \boldsymbol{\theta}) = \mathrm{O}(n)$
+- $p(\boldsymbol{y} \mid \boldsymbol{\theta}) = \mathrm{O}(n).$
 
-Thus, provided the prior does not impose unnecessary support constraints, we could alternatively 
+Thus, provided the prior does not impose unnecessary support constraints, we could alternatively replace 
 
-- replace the MAP by the MLE, and
+- the MAP by the MLE, and
 - the Hessian $-\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})$ by the Fisher information $n\boldsymbol{\imath}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}).$
+
+:::
 
 ## Frequentist approximations
 
@@ -247,7 +263,9 @@ where the error is now $\mathrm{O}(n^{-1/2})$ due to replacing the true informat
 
 ## Reducing the approximation rate
 
-Ignoring all but the two first terms leads to $\mathrm{O}(1)$ approximation error, unless we consider the setting where we take a prior centered at the MLE with unit Fisher information precision (equivalent to $n=1$ phantom observation). Then, due to cancellation of terms in the expansion,
+Ignoring all but the two first terms leads to an $\mathrm{O}(1)$ approximation error.
+
+Taking a prior centered at the MLE with unit Fisher information precision is equivalent to a phantom observation: cancellation of terms in the expansion gives
 $$\boldsymbol{\theta} \sim \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}, \boldsymbol{\imath}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\},$$ 
 with approximation error of $\mathrm{O}(n^{-1/2}).$
 
@@ -258,7 +276,7 @@ This gives the approximation, whose quality improves with increasing sample size
 -2\log p(\boldsymbol{y}) \approx \mathsf{BIC} = -2\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + p\log n
 \end{align*}
 
-The unnormalized weight $\exp(-\mathsf{BIC}/2)$ is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor.
+The unnormalized weight $$\exp(-\mathsf{BIC}/2)$$ is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor.
 
 ## Bayesian model averaging via BIC
 
@@ -298,14 +316,14 @@ barplot(round(100*sort(
 
 ## Gaussian approximation to the posterior
 
-We can also use similar ideas to approximate the posterior. Suppose that we can Taylor expand the log prior and log density around their respective mode, say $\widehat{\boldsymbol{\theta}}_0$ and $\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},$ with $\jmath_0(\widehat{\boldsymbol{\theta}}_0)$ and $\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})$ denoting negative of the corresponding Hessian matrices.
+We can also use similar ideas to approximate the posterior. Suppose that we can Taylor expand the log prior and log density around their respective mode, say $\widehat{\boldsymbol{\theta}}_0$ and $\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},$ with $\jmath_0(\widehat{\boldsymbol{\theta}}_0)$ and $\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})$ denoting the observed information matrices.
 
 ## Approximation to posterior
 
 Together, these yield
 \begin{align*}
-\log p(\boldsymbol{\theta}) &\approx \log p(\widehat{\boldsymbol{\theta}}_0) - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_0)^\top\jmath_0(\widehat{\boldsymbol{\theta}}_0)(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_0)\\
-\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) &\approx \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\\& \quad  - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})^\top\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})
+\log p(\boldsymbol{\theta}) &\approx \log p(\widehat{\boldsymbol{\theta}}_0) - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_0)^\top\jmath_0(\widehat{\boldsymbol{\theta}}_0)(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_0),\\
+\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) &\approx \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\\&\qquad  - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})^\top\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}).
 \end{align*}
 
 ## Gaussian approximation to  posterior
@@ -323,11 +341,13 @@ and note that $\jmath_0(\widehat{\boldsymbol{\theta}}_{0}) = \mathrm{O}(1),$ whe
 
 Suppose that the prior is continuous and positive in a neighborhood of the maximum.
 
-
 Assume further that the regularity conditions for maximum likelihood estimator holds. Then, in the limit as $n \to \infty$ 
 \begin{align*}
-\boldsymbol{\theta} \mid \boldsymbol{y} \stackrel{\cdot}{\sim} \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},  \jmath^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\}
+\boldsymbol{\theta} \mid \boldsymbol{y} \stackrel{\cdot}{\sim} \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}},  \jmath^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\}.
 \end{align*}
+
+This is **Bernstein--von Mises** theorem.
+
 
 ## Corollary
 
@@ -359,19 +379,173 @@ post <- function(x){dgamma(x, shape = n + a, rate = sum(waiting[1:n]) + b)}
 mode <- (n+a-1)/(sum(waiting[1:n]) + b)
 ll3 <- function(x){2*n/x^3}
 hessian <- function(x){-(n+a)/x^2}
-curve(post, from = 0, to = 1/10, bty = "l", ylab = "posterior density", xlab = expression("exponential rate"~lambda), n = 1001)
+curve(post, from = 0, to = 1/10, bty = "l", ylim = c(0, 40), yaxs ="i", ylab = "posterior density", xlab = expression("exponential rate"~lambda), n = 1001)
 curve(dnorm(x, mean = mode, sd = sqrt(-1/hessian(mode))), add = TRUE, lty = 2, n = 1001)
 
 a <- 0.01; b <- 0.01; n <- length(waiting)
 post <- function(x){dgamma(x, shape = n + a, rate = sum(waiting) + b)}
 mode <- (n+a-1)/(sum(waiting) + b)
 hessian <- function(x){-(n+a)/x^2}
-curve(post, from = 0.01, to = 1/15, bty = "l", ylab = "posterior density", xlab = expression("exponential rate"~lambda), n = 1001)
+curve(post, from = 0.01, to = 1/15,ylim = c(0, 95), yaxs ="i",  bty = "l", ylab = "posterior density", xlab = expression("exponential rate"~lambda), n = 1001)
 curve(dnorm(x, mean = mode, sd = sqrt(-1/hessian(mode))), add = TRUE, lty = 2, n = 1001)
 
 ```
 
 
+
+## Symmetric distribution
+
+Let $g^{\text{sym}}(\boldsymbol{\theta}; \boldsymbol{\theta}_{\text{sym}})$ be a density function that is symmetric around $\boldsymbol{\theta}_{\text{sym}};$ for a Gaussian or any elliptical distribution, this value $\boldsymbol{\theta}_{\text{sym}}$ would be the location vector $\boldsymbol{\mu}.$ 
+
+
+A symmetric function $g$ about $\boldsymbol{x}_{\text{sym}}$ satisfies the identity $$g(\boldsymbol{x}) = g(2\boldsymbol{x}_{\text{sym}}-\boldsymbol{x}_{\text{sym}}).$$
+
+## Perturbation of symmetric distributions
+
+A skew-symmetric approximation is obtained by multiplying the symmetric density by a perturbation factor, where 
+\begin{align*}
+g^{\text{skew}}(\boldsymbol{\theta}) = 2 g^{\text{sym}}(\boldsymbol{\theta}; \boldsymbol{\theta}_{\text{sym}})w(\boldsymbol{\theta}, \boldsymbol{\theta}_{\text{sym}}; \boldsymbol{\theta}).
+\end{align*}
+
+The skewing factor $w(\boldsymbol{\theta};  \boldsymbol{\theta}_{\text{sym}})$ satisfies $$w(\boldsymbol{\theta}; \boldsymbol{\theta}_{\text{sym}}) = 1-w(2\boldsymbol{\theta}_{\text{sym}}-\boldsymbol{\theta}; \boldsymbol{\theta}_{\text{sym}})$$ for any $\boldsymbol{\theta} \in \boldsymbol{\Theta} \subseteq \mathbb{R}^d.$
+
+
+## Skew-approximations
+
+::: {style="font-size: 0.9em;"}
+We consider a skew-symmetric approximation to the posterior $p(\boldsymbol{\theta} \mid \boldsymbol{y})$ from a symmetric approximation, say $g(\boldsymbol{\theta})$ at the cost of two additional likelihood and prior evaluations for every parameter vector $\boldsymbol{\theta}$ of interest.
+
+
+The Gaussian (Laplace) and variational approximations typically rely on symmetric approximations to the posterior. Symmetric approximations perform poorly when the underlying posterior is skewed.
+
+:::
+
+## Skewing factor for Bayesian approximations
+
+For a posterior approximation, taking
+
+::: {style="font-size: 0.9em;"}
+
+\begin{align*}
+w(\boldsymbol{\theta};\boldsymbol{\theta}_{\text{sym}}) = \frac{p(\boldsymbol{\theta})p(\boldsymbol{y}\mid \boldsymbol{\theta})}{p(\boldsymbol{\theta})p(\boldsymbol{y}\mid \boldsymbol{\theta}) + p(2\boldsymbol{\theta}_{\text{sym}} -\boldsymbol{\theta})p(\boldsymbol{y}\mid 2\boldsymbol{\theta}_{\text{sym}}-\boldsymbol{\theta})}
+\end{align*}
+
+:::
+
+leads to an improvement in fit (in the sense of reducing the Kullback--Leibler divergence with the true distribution) [@Pozza.Durante.Szabo:2026].
+
+
+## Comments
+
+Since the unnormalized posterior (prior and likelihood) appear in both the numerator and the denominator, this amounts to using the posterior density in the skewing factor definition, as the marginal likelihood would cancel out.
+
+If the posterior is zero at some value of $\boldsymbol{\theta},$ which is outside the support, then we define $w(\boldsymbol{\theta};\boldsymbol{\theta}_{\text{sym}})=0.5$ to satisfy the properties of $w(\cdot;\cdot).$
+
+## Sampling from the posterior approximation
+
+Proposition 1 of @Pozza.Durante.Szabo:2026 shows that we can generate from the skewed approximation by first sampling a candidate $\boldsymbol{\omega}_0$ from the model with density $g^{\text{sym}}(\cdot; \boldsymbol{\theta}_{\text{sym}})$ and $U \sim \mathsf{unif}(0,1),$ then setting
+\begin{align*}
+\boldsymbol{\theta}_0 = 
+\begin{cases} 
+\boldsymbol{\omega}_0, & 
+U \leq w(\boldsymbol{\omega}_0; \boldsymbol{\theta}_{\text{sym}}) \\
+2\boldsymbol{\theta}_{\text{sym}}-\boldsymbol{\omega}_0, & U > w(\boldsymbol{\omega}_0; \boldsymbol{\theta}_{\text{sym}}).
+\end{cases}
+\end{align*}
+
+## Example of skew-symmetric approximation
+
+```{r}
+#| eval: true
+#| echo: false
+#| label: fig-skew
+#| fig-cap: "True gamma posterior (black) with skew symmetric (dashed red) and Laplace (dotted blue) approximations for the waiting time model with the first $n=10$ observations."
+#| fig-align: 'center'
+data(waiting, package = "hecbayes")
+a <- 0.01
+b <- 0.01
+set.seed(80601)
+waiting <- waiting[1:10]
+n <- length(waiting)
+s <- sum(waiting)
+log_marg_lik <- lgamma(n + a) - lgamma(a) + a * log(b) - (n + a) * log(b + s)
+# Laplace approximation
+map <- (n + a - 1) / (s + b)
+logpost <- function(x) {
+  n <- length(waiting)
+  ifelse(
+    x <= 0,
+    -Inf,
+    -sum(waiting) *
+      x +
+      length(waiting) * log(x) +
+      # sum(dexp(waiting, rate = x, log = TRUE)) +
+      dgamma(x, a, b, log = TRUE)
+  )
+}
+# Hessian evaluated at MAP
+Hess <- (n + a - 1) / map^2
+log_marg_laplace <- 0.5 * log(2 * pi) - Hess + logpost(map)
+# Skew-symmetric approximation
+# on log-scale for lambda
+# logmap <- log(map)
+# logpost_log <- function(loglambda){
+#  logpost(exp(loglambda))
+# }
+# Hess_log <- Hess * map^2
+
+xs <- map +
+  seq(
+    from = -sqrt(1 / Hess) * 4,
+    to = sqrt(1 / Hess) * 4,
+    length.out = 101
+  )
+wskew <- function(theta) {
+  p1 <- exp(logpost(theta))
+  p2 <- exp(logpost(2 * map - theta))
+  p1 / (p1 + p2)
+}
+
+skewpost_approx <- function(theta) {
+  2 * dnorm(x = theta, mean = map, sd = sqrt(1 / Hess)) * wskew(theta)
+}
+
+
+# integrate(skewpost_approx, lower = 1e-03, upper = 0.1)
+# library(ggplot2)
+ggplot() +
+  geom_function(
+    fun = dgamma,
+    args = list(shape = n + a, rate = sum(waiting) + b),
+    linewidth = 1.5
+  ) +
+  geom_function(
+    fun = skewpost_approx,
+    col = "#e76254",
+    linetype = "dashed",
+    linewidth = 1.5,
+    n = 1001
+  ) +
+  geom_function(
+    fun = dnorm,
+    args = list(mean = map, sd = sqrt(1 / Hess)),
+    col = "#376795",
+    linewidth = 1.5,
+    linetype = "dotted",
+    n = 1001
+  ) +
+  MetBrewer::scale_color_met_d(name = "Hiroshige") +
+  scale_x_continuous(
+    limits = c(0.005, 0.08)
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    expand = expansion()
+  ) +
+  labs(y = "density", x = expression(lambda)) +
+  theme_classic()
+
+```
 
 ## Structured models
 
@@ -393,13 +567,14 @@ Typically, the prior of coefficients $\boldsymbol{\beta} \in \mathbb{R}^p.$ The 
 
 Consider data that are conditionally independent given $\boldsymbol{\beta}$ and $\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{Q}^{-1})$ for simplicity.
 
-## Gaussian approximations considered
+## Gaussian approximations
 
-Then,
 \begin{align*}
 p(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto \exp\left\{-\frac{1}{2} \boldsymbol{\beta}^\top\mathbf{Q}\boldsymbol{\beta} + \sum_{i=1}^n \log p(y_i \mid \beta_i, \boldsymbol{\theta})\right\}
 \end{align*}
-If $\boldsymbol{\beta}$ is a Gaussian Markov random field, it's precision matrix $\mathbf{Q}$ will be sparse. A Gaussian approximation to this model would have precision matrix $\mathbf{Q} + \mathrm{diag}(\boldsymbol{c})$ for some vector $\boldsymbol{c}$ obtained from the second-order expansion of the likelihood.
+If $\boldsymbol{\beta}$ is a Gaussian Markov random field, the precision matrix $\mathbf{Q}$ will be sparse. 
+
+The Gaussian approximation to the posterior would have precision matrix $\mathbf{Q} + \mathrm{diag}(\boldsymbol{c})$ for some vector $\boldsymbol{c}$ obtained from the second-order expansion of the likelihood.
 
 This allows one to use dedicated algorithms for sparse matrices.
 
@@ -427,10 +602,11 @@ This yields
 \begin{align*}
 \widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}}
 \end{align*}
+since the exponential term 
 
 ## Note on approximation
 ::: {style="font-size: 0.8em;"}
-The Laplace approximation $p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})$ has kernel $$p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}\exp\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})/2\};$$
+The Laplace approximation $p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})$ has kernel $$p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}\exp\left\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})/2\right\};$$
 since it is evaluated at $\widehat{\boldsymbol{\beta}},$ we retrieve only the determinant of the negative Hessian of 
 $p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),$ namely $\mathbf{H}(\widehat{\boldsymbol{\beta}}).$ Note that the latter varies with $\boldsymbol{\theta}.$
 
@@ -451,7 +627,7 @@ To obtain $p(\theta_i \mid \boldsymbol{y})$:
 
 ## Approximation of marginal of Gaussian latent effect
 
-For the marginal $p(\beta_i \mid \boldsymbol{y})$ term, @Rue.Martino.Chopin:2009 proceed instead with the marginal for $\beta_i$ by building an approximation of it based on maximizing $\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}$ to yield $\widehat{\boldsymbol{\beta}}_{(i)}$ whose $i$th element is $\beta_i,$ yielding
+For the marginal term $p(\beta_i \mid \boldsymbol{y})$, @Rue.Martino.Chopin:2009 proceed instead with the marginal for $\beta_i$ by building an approximation of it based on maximizing $\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}$ to yield $\widehat{\boldsymbol{\beta}}_{(i)}$ whose $i$th element is $\beta_i,$ yielding
 \begin{align*}
 \widetilde{p}(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}_{(i)}, \boldsymbol{\theta} \mid \boldsymbol{y})}{\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i),-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y})},
 \end{align*}
@@ -459,7 +635,7 @@ with a suitable renormalization of $\widetilde{p}(\widehat{\boldsymbol{\beta}}_{
 
 ## Remark on approximation
 
-While we could use the Laplace approximation $p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})$ and marginalize the latter directly, this leads to evaluation of the Laplace approximation to the density far from the mode, which is often inaccurate. 
+While we could marginalize directly the multivariate Laplace approximation $$p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta}),$$ this leads to evaluation of the Laplace approximation to the density far from the mode, which is often inaccurate. 
 
 ## Numerical challenges to Laplace approximation
 
