@@ -1719,14 +1719,14 @@
     "href": "slides/bayesmod-slides10.html#example-of-posterior-mean-for-exponential-likelihood",
     "title": "Bayesian modelling",
     "section": "Example of posterior mean for exponential likelihood",
-    "text": "Example of posterior mean for exponential likelihood\nConsider the posterior mean \\(\\mathsf{E}_{\\Lambda \\mid \\boldsymbol{Y}}(\\Lambda)\\) and let \\(s=\\sum_{i=1}^n y_i\\). Then, \\[\\begin{align*}\n\n\\begin{align*}\n\\widehat{\\lambda}_g &= \\frac{(n+a)}{s + b} \\\\\n|\\jmath_g(\\widehat{\\lambda}_g)|^{1/2} &= \\Bigg(\\frac{n+a}{\\widehat{\\lambda}_g^2}\\Bigg)^{1/2} =  \\frac{\\hphantom{(}s + b\\hphantom{)^{1/2}}}{(n+a)^{1/2}}.\n\\end{align*}\\]"
+    "text": "Example of posterior mean for exponential likelihood\nConsider the posterior mean \\(\\mathsf{E}_{\\Lambda \\mid \\boldsymbol{Y}}(\\Lambda)\\) and let \\(s=\\sum_{i=1}^n y_i\\). Then, \\[\\begin{align*}\n\\widehat{\\lambda}_g &= \\frac{(n+a)}{s + b} \\\\\n|\\jmath_g(\\widehat{\\lambda}_g)|^{1/2} &= \\Bigg(\\frac{n+a}{\\widehat{\\lambda}_g^2}\\Bigg)^{1/2} =  \\frac{\\hphantom{(}s + b\\hphantom{)^{1/2}}}{(n+a)^{1/2}}.\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#posterior-mean",
     "href": "slides/bayesmod-slides10.html#posterior-mean",
     "title": "Bayesian modelling",
     "section": "Posterior mean",
-    "text": "Posterior mean\nSimplification gives the approximation \\[\\begin{align*}\n\\frac{\\exp(-1)}{s + b} \\frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}\n\\end{align*}\\] which gives \\(0.03457,\\) whereas the true posterior mean is \\((n+a)/(s+b) = 0.03457.\\)"
+    "text": "Posterior mean\nSimplification gives the approximation \\[\\begin{align*}\n\\widehat{\\mathsf{E}}_{\\Lambda \\mid \\boldsymbol{Y}}(\\Lambda) = \\frac{\\exp(-1)}{s + b} \\frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}\n\\end{align*}\\] which gives \\(0.03457,\\) whereas the true posterior mean is \\[\\mathsf{E}_{\\Lambda \\mid \\boldsymbol{Y}}(\\Lambda)=(n+a)/(s+b) = 0.03457.\\] Both are equal to five significant digits."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#aside-on-prior-and-likelihood-relative-contribution",
@@ -1803,7 +1803,7 @@
     "href": "slides/bayesmod-slides10.html#corollary",
     "title": "Bayesian modelling",
     "section": "Corollary",
-    "text": "Corollary\nIn large samples, the inference obtained from using likelihood-based inference and Bayesian methods will be equivalent\n\ncredible intervals will also have guaranteed frequentist coverage.\n\nMisspecified model: Bayesian will return the model from the family that minimizes the Kullback–Leibler divergence with the true data generating process."
+    "text": "Corollary\nIn large samples, the inference obtained from using likelihood-based inference and Bayesian methods will be equivalent\n\ncredible intervals will also have guaranteed frequentist coverage.\n\nIn case of misspecified models: Bayesian will return the model from the parametric family that minimizes the Kullback–Leibler divergence with the true data generating process."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#regularity-conditions",

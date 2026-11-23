@@ -353,8 +353,6 @@ p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}
 <section id="example-of-posterior-mean-for-exponential-likelihood" class="slide level2">
 <h2>Example of posterior mean for exponential likelihood</h2>
 <p>Consider the posterior mean <span class="math inline">\(\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\Lambda)\)</span> and let <span class="math inline">\(s=\sum_{i=1}^n y_i\)</span>. Then, <span class="math display">\[\begin{align*}
-
-\begin{align*}
 \widehat{\lambda}_g &amp;= \frac{(n+a)}{s + b} \\
 |\jmath_g(\widehat{\lambda}_g)|^{1/2} &amp;= \Bigg(\frac{n+a}{\widehat{\lambda}_g^2}\Bigg)^{1/2} =  \frac{\hphantom{(}s + b\hphantom{)^{1/2}}}{(n+a)^{1/2}}.
 \end{align*}\]</span></p>
@@ -362,8 +360,8 @@ p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}
 <section id="posterior-mean" class="slide level2">
 <h2>Posterior mean</h2>
 <p>Simplification gives the approximation <span class="math display">\[\begin{align*}
-\frac{\exp(-1)}{s + b} \frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}
-\end{align*}\]</span> which gives <span class="math inline">\(0.03457,\)</span> whereas the true posterior mean is <span class="math inline">\((n+a)/(s+b) = 0.03457.\)</span></p>
+\widehat{\mathsf{E}}_{\Lambda \mid \boldsymbol{Y}}(\Lambda) = \frac{\exp(-1)}{s + b} \frac{(n+a)^{n+a+1/2}}{(n+a-1)^{n+a-1/2}}
+\end{align*}\]</span> which gives <span class="math inline">\(0.03457,\)</span> whereas the true posterior mean is <span class="math display">\[\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\Lambda)=(n+a)/(s+b) = 0.03457.\]</span> Both are equal to five significant digits.</p>
 </section>
 <section id="aside-on-prior-and-likelihood-relative-contribution" class="slide level2">
 <h2>Aside on prior and likelihood relative contribution</h2>
@@ -456,7 +454,7 @@ Figure&nbsp;1: BIC as a function of the linear model covariates (left) and Bayes
 <ul>
 <li>credible intervals will also have guaranteed frequentist coverage.</li>
 </ul>
-<p>Misspecified model: Bayesian will return the model from the family that minimizes the Kullback–Leibler divergence with the true data generating process.</p>
+<p>In case of misspecified models: Bayesian will return the model from the parametric family that minimizes the Kullback–Leibler divergence with the true data generating process.</p>
 </section>
 <section id="regularity-conditions" class="slide level2">
 <h2>Regularity conditions</h2>
