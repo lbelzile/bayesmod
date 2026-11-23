@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -156,12 +159,12 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile 
+Léo Belzile
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Nov 17, 2026</p>
+  <p class="date">Last compiled Monday Nov 23, 2026</p>
 </section>
 <section id="bayesian-regression" class="slide level2">
 <h2>Bayesian regression</h2>
@@ -308,7 +311,7 @@ Figure&nbsp;1: Difference in appropriation rating for black vs non-black Chef Da
 </section>
 <section id="wishart-distribution" class="slide level2">
 <h2>Wishart distribution</h2>
-<p>We say <span class="math inline">\(\mathbf{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})\)</span> for <span class="math inline">\(\nu&gt;0\)</span> degrees of freedom and scale <span class="math inline">\(\mathbf{S}\)</span> if its density is proportional to <span class="math display">\[\begin{align*}
+<p>We say <span class="math inline">\(\boldsymbol{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})\)</span> for <span class="math inline">\(\nu&gt;0\)</span> degrees of freedom and scale <span class="math inline">\(\mathbf{S}\)</span> if its density is proportional to <span class="math display">\[\begin{align*}
 f(\boldsymbol{Q}) \stackrel{\boldsymbol{Q}}{\propto} |\boldsymbol{Q}|^{(\nu-p-1)/2}\exp\left\{-\frac{\mathrm{tr}(\mathbf{S}^{-1}\boldsymbol{Q})}{2}\right\}, \quad \nu &gt; p-1.
 \end{align*}\]</span> where <span class="math inline">\(|\cdot|\)</span> denotes the determinant of the matrix and <span class="math inline">\(\mathrm{tr}(\cdot)\)</span> the trace operator.</p>
 </section>
@@ -356,6 +359,7 @@ Figure&nbsp;2: Prior draws from a bivariate inverse Wishart with identity scale 
 </p></section>
 <section id="onion-peel-prior" class="slide level2">
 <h2>Onion peel prior</h2>
+<div style="font-size: 90%;">
 <p>A better alternative is to specify</p>
 <ul>
 <li>different prior for each marginal scale <span class="math inline">\(\sigma_j\)</span> and</li>
@@ -363,6 +367,7 @@ Figure&nbsp;2: Prior draws from a bivariate inverse Wishart with identity scale 
 </ul>
 <p>For the latter, the onion peel or LKJ prior, named after the authors of <span class="citation" data-cites="Lewandowski:2009">Lewandowski et al. (<a href="#/references" role="doc-biblioref" onclick="">2009</a>)</span>, is <span class="math display">\[p(\mathbf{R}) \propto |\mathbf{R}|^{\eta-1}, \eta&gt;0\]</span></p>
 <p>The case <span class="math inline">\(\eta=1\)</span> leads to uniform over the space of correlation matrices, and <span class="math inline">\(\eta&gt;1\)</span> favours the identity matrix.</p>
+</div>
 </section>
 <section id="shrinkage-and-variable-selection" class="slide level2">
 <h2>Shrinkage and variable selection</h2>
@@ -388,10 +393,12 @@ Figure&nbsp;2: Prior draws from a bivariate inverse Wishart with identity scale 
 <section id="prior-for-the-spike-and-slab-prior-probability" class="slide level2">
 <h2>Prior for the spike-and-slab prior probability</h2>
 <p>Set independent and identically distributed conjugate prior for <span class="math inline">\(\gamma_j \sim \mathsf{binom}(1, \omega),\)</span> whence <span class="math display">\[\begin{align*}
-p(\boldsymbol{\gamma} \mid \omega) = \prod_{j=1}^n \omega^{\gamma_j} (1-\omega)^{1-\gamma_j}
+p(\boldsymbol{\gamma} \mid \omega) = \prod_{j=1}^n \omega^{\gamma_j} (1-\omega)^{1-\gamma_j}.
 \end{align*}\]</span></p>
-<p>Apriori, we set <span class="math inline">\(\omega \in (0,1)\)</span> as the proportion of the <span class="math inline">\(p\)</span> coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span> that are zero</p>
-<p>-<span class="math inline">\(p(1-\omega)\)</span> nonzero coefficients.</p>
+<ul>
+<li>Apriori, we set <span class="math inline">\(\omega \in (0,1)\)</span> as the proportion of coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span> that are zero.</li>
+<li>On average, there are <span class="math inline">\(p\omega\)</span> zero coefficients.</li>
+</ul>
 </section>
 <section id="continuous-spike-and-slab-prior" class="slide level2">
 <h2>Continuous spike-and-slab prior</h2>
@@ -408,12 +415,10 @@ p(\boldsymbol{\gamma} \mid \omega) = \prod_{j=1}^n \omega^{\gamma_j} (1-\omega)^
 </section>
 <section id="understanding-shrinkage-priors" class="slide level2">
 <h2>Understanding shrinkage priors</h2>
-<p>The choice of <span class="math inline">\(\sigma^2_j\)</span> leads to an unconditional scale mixture of Gaussian for <span class="math inline">\(\beta_j\)</span>.</p>
-<p>Better is to consider <span class="math display">\[\kappa = 1 - 1/(1+\sigma^2) \in [0,1].\]</span> Penalization of near-zero components can be deduced from the density of <span class="math inline">\(\kappa \to 0\)</span>, and similarly penalization of large signals by looking at the density when <span class="math inline">\(\kappa \to 1.\)</span></p>
+<p>The choice of <span class="math inline">\(\sigma^2_j\)</span> leads to an unconditional scale mixture of Gaussian for <span class="math inline">\(\beta_j\)</span>. Consider the weight <span class="math display">\[\kappa = 1 - 1/(1+\sigma^2) \in [0,1].\]</span> - Penalization of near-zero components can be deduced from the density of <span class="math inline">\(\kappa \to 0,\)</span> - penalization of large signals by looking at the density when <span class="math inline">\(\kappa \to 1.\)</span></p>
 </section>
 <section id="shrinkage-weights" class="slide level2">
 <h2>Shrinkage weights</h2>
-<p>Weighting implied by Gaussian mixture density with Cauchy/Laplace/horsehoe.</p>
 
 <img data-src="bayesmod-slides8_files/figure-revealjs/fig-weights-shrinkage-1.png" width="960" class="r-stretch quarto-figure-center" id="fig-weights-shrinkage"><p class="caption">
 Figure&nbsp;3: Density of penalization weights <span class="math inline">\(\kappa\)</span> of spike (near zero) and slab (near one) for three shrinkage priors.
@@ -448,7 +453,7 @@ c^2 \mid s^2, \nu &amp;\sim \mathsf{inv. gamma}(\nu/2, \nu s^2/2)\\
 <div style="font-size: 90%;">
 <p>The above specification does not specify the prior for the global scale <span class="math inline">\(\lambda\)</span>, for which <span class="citation" data-cites="Piironen.Vehtari:2017">Piironen &amp; Vehtari (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span> recommend <span class="math display">\[\lambda \sim \mathsf{Student}_{+}\left\{0, \frac{p_0}{(p-p_0)}\frac{\sigma}{n^{1/2}}, 1\right\},\]</span> where</p>
 </div>
-<div style="font-size: 65%;">
+<div style="font-size: 80%;">
 <ul>
 <li><span class="math inline">\(p_0\)</span> is a prior guess for the number of non-zero components out of <span class="math inline">\(p,\)</span></li>
 <li><span class="math inline">\(n\)</span> is the sample size and</li>
@@ -498,23 +503,31 @@ Figure&nbsp;5: Density estimates for regression coefficients with Gaussian (ridg
 \end{align*}\]</span></p>
 <p>In regression models, we will consider moves that adds or removes one parameter/regressor at a time.</p>
 </section>
-<section id="setup" class="slide level2">
-<h2>Setup</h2>
-<p>We consider models <span class="math inline">\(M_1, \ldots, M_m\)</span>; for simplicity <span class="math inline">\(p(M_i)=1\)</span> and all models include an intercept.</p>
-<p>We write <span class="math inline">\(|M|\)</span> for the cardinality of the set of non-zero coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span> in model <span class="math inline">\(M.\)</span></p>
-<p>Define <span class="math inline">\(\mathbf{X}^{(m)}\)</span> and <span class="math inline">\(\boldsymbol{\beta}^{(m)}\)</span> as the model matrix and the associated vector of non-zero coefficients associated with model <span class="math inline">\(M_m.\)</span></p>
-</section>
-<section id="setup-for-regression" class="slide level2">
-<h2>Setup for regression</h2>
-<p><span class="math display">\[\begin{align*}
-\boldsymbol{Y} \mid M_m, \boldsymbol{\beta}, \sim \mathsf{Gauss}(\mathbf{X}^{(m)}\boldsymbol{\beta}^{(m)}, \sigma^2 \mathbf{I}_n).
+<section id="setup-for-linear-regression" class="slide level2">
+<h2>Setup for linear regression</h2>
+<div style="font-size: 80%;">
+<p>Write</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\beta}\)</span>: the vector of mean coefficients,</li>
+<li><span class="math inline">\(\boldsymbol{\theta}\)</span>: the other parameters, e.g., the variance <span class="math inline">\(\sigma^2\)</span>,</li>
+<li><span class="math inline">\(\boldsymbol{Y}\in \mathbb{R}^n\)</span>: the response vector,</li>
+<li><span class="math inline">\(M_j\)</span>: the <span class="math inline">\(j\)</span>th model with associated model matrix <span class="math inline">\(\mathbf{X}^{(j)}\)</span>.</li>
+</ul>
+<p>The ordinary linear regression model is <span class="math display">\[\begin{align*}
+\boldsymbol{Y} \mid M_j, \boldsymbol{\beta} \sim \mathsf{Gauss}(\mathbf{X}^{(j)}\boldsymbol{\beta}, \sigma^2 \mathbf{I}_n).
 \end{align*}\]</span></p>
-<p>We assign a priors as usual, e.g.&nbsp;a Gaussian prior on <span class="math inline">\(\boldsymbol{\beta}^{(m)} \mid M_m.\)</span></p>
+</div>
 </section>
 <section id="conditional-bayes-factor" class="slide level2">
 <h2>Conditional Bayes factor</h2>
-<p>Write <span class="math inline">\(\boldsymbol{\theta}\)</span> for all parameters other than the response <span class="math inline">\(\boldsymbol{Y}\)</span>, model <span class="math inline">\(M_i\)</span> and vector of coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span>.</p>
-<p>We can consider a joint update of the regression parameters <span class="math inline">\((\boldsymbol{\beta}, M)\)</span> by sampling from their joint distribution via <span class="math display">\[p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) p(M \mid \boldsymbol{\theta}).\]</span> The update for <span class="math inline">\(p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta})\)</span> is as usual.</p>
+<div style="font-size: 80%;">
+<ul>
+<li>We have <span class="math inline">\(m\)</span> candidate models <span class="math inline">\(M_1, \ldots, M_m\)</span>; for simplicity <span class="math inline">\(p(M_j)\propto 1\)</span> for all models with an intercept.</li>
+<li>We write <span class="math inline">\(|M|\)</span> for the cardinality of the set of non-zero coefficients <span class="math inline">\(\boldsymbol{\beta}\)</span> in model <span class="math inline">\(M.\)</span></li>
+<li>We can consider a joint update of the regression parameters <span class="math inline">\((\boldsymbol{\beta}, M)\)</span> by sampling from their joint distribution <span class="math display">\[p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) p(M \mid \boldsymbol{\theta}).\]</span></li>
+<li>The update for <span class="math inline">\(p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta})\)</span> is as usual.</li>
+</ul>
+</div>
 </section>
 <section id="update-for-model" class="slide level2">
 <h2>Update for model</h2>
@@ -531,17 +544,17 @@ p(\boldsymbol{M} \mid \boldsymbol{Y}, \boldsymbol{\theta}) \propto p(M) |\boldsy
 </section>
 <section id="moves-for-variable-selection" class="slide level2">
 <h2>Moves for variable selection</h2>
-<p>We consider different types of move for the <span class="math inline">\(k_{\max}\)</span> potential covariates (including interactions, etc.) <span class="citation" data-cites="Holmes:2002">(<a href="#/references" role="doc-biblioref" onclick="">Holmes et al., 2002</a>)</span></p>
+<p>We consider different types of move for the <span class="math inline">\(k_{\max}\)</span> potential covariates (including interactions, etc.) <span class="citation" data-cites="Holmes:2002">(<a href="#/references" role="doc-biblioref" onclick="">Holmes et al., 2002</a>)</span>.</p>
 <ul>
-<li>birth: adding an unused covariate chosen at random from the remaining ones</li>
-<li>death: removing one covariate at random from the current matrix</li>
+<li>birth: adding an unused covariate chosen at random from the remaining ones,</li>
+<li>death: removing one covariate at random from the current matrix,</li>
 <li>swap: changing an active covariate for an unused one.</li>
 </ul>
 <p>Only the last type of move preserves the dimension.</p>
 </section>
 <section id="jacobians-for-reversible-jump" class="slide level2">
 <h2>Jacobians for reversible jump</h2>
-<p>For most moves, the Jacobian <span class="math inline">\(J=1\)</span>, except in four cases where the dimension <span class="math inline">\(|M| \in\{1, 2, k_{\max}-1, k_{\max}\}\)</span> and</p>
+<p>For most moves, the Jacobian is <span class="math inline">\(J=1\)</span>, except in four cases where the dimension <span class="math inline">\(|M| \in\{1, 2, k_{\max}-1, k_{\max}\}\)</span> and</p>
 <div style="font-size: 90%;">
 <ul>
 <li><span class="math inline">\(J=2/3\)</span> if <span class="math inline">\(|M|=1\)</span> and we try to add a covariate,</li>
@@ -556,17 +569,17 @@ p(\boldsymbol{M} \mid \boldsymbol{Y}, \boldsymbol{\theta}) \propto p(M) |\boldsy
 <p>We can keep track of which variables are active at each iteration of the MCMC and obtain the marginal posterior probability of inclusion through sample proportions.</p>
 <p>This methods</p>
 <ul>
-<li>explores neighbouring models (Grey code)</li>
-<li>works only with a limited number of covariates, say <span class="math inline">\(p &lt; 25.\)</span></li>
+<li>only explores neighbouring models (Grey code),</li>
+<li>works only with a small number of covariates, <span class="math inline">\(p &lt; 25.\)</span></li>
 </ul>
 </section>
 <section id="learning-objectives" class="slide level2">
 <h2>Learning objectives</h2>
 <p>Students should be able to</p>
 <ul>
-<li>implement the Bayesian linear model</li>
-<li>distinguish between global and local shrinkage priors</li>
-<li>use methods for variable selection via dedicated software implementations</li>
+<li>implement the Bayesian linear model,</li>
+<li>distinguish between global and local shrinkage priors,</li>
+<li>use methods for variable selection via dedicated software implementations.</li>
 </ul>
 </section>
 <section id="summary-13" class="slide level2">
@@ -578,7 +591,7 @@ p(\boldsymbol{M} \mid \boldsymbol{Y}, \boldsymbol{\theta}) \propto p(M) |\boldsy
 <li>Gaussian models are closed under linear transformations</li>
 </ul></li>
 <li>Conjugate priors allow for Gibbs sampling (extension of the Gaussian-inverse gamma model)</li>
-<li>In more complex hierarchical models, we may need to specificy covariance structures
+<li>In more complex hierarchical models, we may need to specify covariance structures
 <ul>
 <li>conjugate Wishart priors are not recommended</li>
 <li>non-conjugate priors can be easily dealt with in modern applications</li>
@@ -589,23 +602,20 @@ p(\boldsymbol{M} \mid \boldsymbol{Y}, \boldsymbol{\theta}) \propto p(M) |\boldsy
 </section>
 <section id="summary-23" class="slide level2">
 <h2>Summary (2/3)</h2>
-<p>Variable selection in Bayesian models is different from frequentist</p>
+<p>Variable selection in Bayesian models is different from frequentist.</p>
 <p>Many classical methods provide global shrinkage:</p>
 <ul>
 <li>Ridge regression arises naturally from conjugate priors (but scaling is fixed or assigned a prior)</li>
-<li>The Bayesian LASSO model only shrinks coefficients towards zero)</li>
+<li>The Bayesian LASSO model only shrinks coefficients towards zero).</li>
 </ul>
-<p>Other models provide local shrinkage</p>
-<ul>
-<li>Examples include the horseshoe prior</li>
-</ul>
+<p>Other models provide local shrinkage (e.g., horseshoe prior).</p>
 </section>
 <section id="summary-33" class="slide level2">
 <h2>Summary (3/3)</h2>
 <p>Variable selection comes from prior probabilities of covariates not being included:</p>
 <ul>
-<li>assign probabilities to specific models with only subset of covariates (Bayesian model averaging)</li>
-<li>use priors with point masses at zero, which allows for posterior probability at zero (spike-and-slab)
+<li>assign probabilities to specific models with only subset of covariates (Bayesian model averaging),</li>
+<li>use priors with point masses at zero, which allows for posterior probability at zero (spike-and-slab),
 <ul>
 <li>these have a discrete component, so are harder to fit.</li>
 </ul></li>
@@ -838,7 +848,7 @@ Piironen, J., &amp; Vehtari, A. (2017). Sparsity information and regularization 
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],

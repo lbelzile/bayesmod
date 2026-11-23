@@ -179,7 +179,7 @@
     "href": "slides/bayesmod-slides8.html#wishart-distribution",
     "title": "Bayesian modelling",
     "section": "Wishart distribution",
-    "text": "Wishart distribution\nWe say \\(\\mathbf{Q} \\sim \\mathsf{Wishart}_p(\\nu, \\mathbf{S})\\) for \\(\\nu&gt;0\\) degrees of freedom and scale \\(\\mathbf{S}\\) if its density is proportional to \\[\\begin{align*}\nf(\\boldsymbol{Q}) \\stackrel{\\boldsymbol{Q}}{\\propto} |\\boldsymbol{Q}|^{(\\nu-p-1)/2}\\exp\\left\\{-\\frac{\\mathrm{tr}(\\mathbf{S}^{-1}\\boldsymbol{Q})}{2}\\right\\}, \\quad \\nu &gt; p-1.\n\\end{align*}\\] where \\(|\\cdot|\\) denotes the determinant of the matrix and \\(\\mathrm{tr}(\\cdot)\\) the trace operator."
+    "text": "Wishart distribution\nWe say \\(\\boldsymbol{Q} \\sim \\mathsf{Wishart}_p(\\nu, \\mathbf{S})\\) for \\(\\nu&gt;0\\) degrees of freedom and scale \\(\\mathbf{S}\\) if its density is proportional to \\[\\begin{align*}\nf(\\boldsymbol{Q}) \\stackrel{\\boldsymbol{Q}}{\\propto} |\\boldsymbol{Q}|^{(\\nu-p-1)/2}\\exp\\left\\{-\\frac{\\mathrm{tr}(\\mathbf{S}^{-1}\\boldsymbol{Q})}{2}\\right\\}, \\quad \\nu &gt; p-1.\n\\end{align*}\\] where \\(|\\cdot|\\) denotes the determinant of the matrix and \\(\\mathrm{tr}(\\cdot)\\) the trace operator."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#wishart-distribution-1",
@@ -228,7 +228,7 @@
     "href": "slides/bayesmod-slides8.html#onion-peel-prior",
     "title": "Bayesian modelling",
     "section": "Onion peel prior",
-    "text": "Onion peel prior\nA better alternative is to specify\n\ndifferent prior for each marginal scale \\(\\sigma_j\\) and\na prior on the correlation matrix \\(\\mathbf{R}.\\)\n\nFor the latter, the onion peel or LKJ prior, named after the authors of Lewandowski et al. (2009), is \\[p(\\mathbf{R}) \\propto |\\mathbf{R}|^{\\eta-1}, \\eta&gt;0\\]\nThe case \\(\\eta=1\\) leads to uniform over the space of correlation matrices, and \\(\\eta&gt;1\\) favours the identity matrix."
+    "text": "Onion peel prior\n\nA better alternative is to specify\n\ndifferent prior for each marginal scale \\(\\sigma_j\\) and\na prior on the correlation matrix \\(\\mathbf{R}.\\)\n\nFor the latter, the onion peel or LKJ prior, named after the authors of Lewandowski et al. (2009), is \\[p(\\mathbf{R}) \\propto |\\mathbf{R}|^{\\eta-1}, \\eta&gt;0\\]\nThe case \\(\\eta=1\\) leads to uniform over the space of correlation matrices, and \\(\\eta&gt;1\\) favours the identity matrix."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#shrinkage-and-variable-selection",
@@ -249,7 +249,7 @@
     "href": "slides/bayesmod-slides8.html#prior-for-the-spike-and-slab-prior-probability",
     "title": "Bayesian modelling",
     "section": "Prior for the spike-and-slab prior probability",
-    "text": "Prior for the spike-and-slab prior probability\nSet independent and identically distributed conjugate prior for \\(\\gamma_j \\sim \\mathsf{binom}(1, \\omega),\\) whence \\[\\begin{align*}\np(\\boldsymbol{\\gamma} \\mid \\omega) = \\prod_{j=1}^n \\omega^{\\gamma_j} (1-\\omega)^{1-\\gamma_j}\n\\end{align*}\\]\nApriori, we set \\(\\omega \\in (0,1)\\) as the proportion of the \\(p\\) coefficients \\(\\boldsymbol{\\beta}\\) that are zero\n-\\(p(1-\\omega)\\) nonzero coefficients."
+    "text": "Prior for the spike-and-slab prior probability\nSet independent and identically distributed conjugate prior for \\(\\gamma_j \\sim \\mathsf{binom}(1, \\omega),\\) whence \\[\\begin{align*}\np(\\boldsymbol{\\gamma} \\mid \\omega) = \\prod_{j=1}^n \\omega^{\\gamma_j} (1-\\omega)^{1-\\gamma_j}.\n\\end{align*}\\]\n\nApriori, we set \\(\\omega \\in (0,1)\\) as the proportion of coefficients \\(\\boldsymbol{\\beta}\\) that are zero.\nOn average, there are \\(p\\omega\\) zero coefficients."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#continuous-spike-and-slab-prior",
@@ -270,14 +270,14 @@
     "href": "slides/bayesmod-slides8.html#understanding-shrinkage-priors",
     "title": "Bayesian modelling",
     "section": "Understanding shrinkage priors",
-    "text": "Understanding shrinkage priors\nThe choice of \\(\\sigma^2_j\\) leads to an unconditional scale mixture of Gaussian for \\(\\beta_j\\).\nBetter is to consider \\[\\kappa = 1 - 1/(1+\\sigma^2) \\in [0,1].\\] Penalization of near-zero components can be deduced from the density of \\(\\kappa \\to 0\\), and similarly penalization of large signals by looking at the density when \\(\\kappa \\to 1.\\)"
+    "text": "Understanding shrinkage priors\nThe choice of \\(\\sigma^2_j\\) leads to an unconditional scale mixture of Gaussian for \\(\\beta_j\\). Consider the weight \\[\\kappa = 1 - 1/(1+\\sigma^2) \\in [0,1].\\] - Penalization of near-zero components can be deduced from the density of \\(\\kappa \\to 0,\\) - penalization of large signals by looking at the density when \\(\\kappa \\to 1.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides8.html#shrinkage-weights",
     "href": "slides/bayesmod-slides8.html#shrinkage-weights",
     "title": "Bayesian modelling",
     "section": "Shrinkage weights",
-    "text": "Shrinkage weights\nWeighting implied by Gaussian mixture density with Cauchy/Laplace/horsehoe.\n\n\nFigure 3: Density of penalization weights \\(\\kappa\\) of spike (near zero) and slab (near one) for three shrinkage priors."
+    "text": "Shrinkage weights\n\n\nFigure 3: Density of penalization weights \\(\\kappa\\) of spike (near zero) and slab (near one) for three shrinkage priors."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#comparison-of-shrinkage-priors",
@@ -350,25 +350,18 @@
     "text": "Dimension changes and jacobians\nDimensions changes are integrated in the Metropolis–Hastings step through a Jacobian term \\(J\\): the probability of rejection \\(R\\) for Metropolis becomes \\[\\begin{align*}\n    R = J\\frac{p(\\boldsymbol{\\theta}_t^{\\star})}{p(\\boldsymbol{\\theta}_{t-1} \\mid \\boldsymbol{y})}\\frac{q(\\boldsymbol{\\theta}_{t-1} \\mid \\boldsymbol{\\theta}_t^{\\star}  \\mid \\boldsymbol{y})}{q(\\boldsymbol{\\theta}_t^{\\star} \\mid \\boldsymbol{\\theta}_{t-1})}\n\\end{align*}\\]\nIn regression models, we will consider moves that adds or removes one parameter/regressor at a time."
   },
   {
-    "objectID": "slides/bayesmod-slides8.html#setup",
-    "href": "slides/bayesmod-slides8.html#setup",
+    "objectID": "slides/bayesmod-slides8.html#setup-for-linear-regression",
+    "href": "slides/bayesmod-slides8.html#setup-for-linear-regression",
     "title": "Bayesian modelling",
-    "section": "Setup",
-    "text": "Setup\nWe consider models \\(M_1, \\ldots, M_m\\); for simplicity \\(p(M_i)=1\\) and all models include an intercept.\nWe write \\(|M|\\) for the cardinality of the set of non-zero coefficients \\(\\boldsymbol{\\beta}\\) in model \\(M.\\)\nDefine \\(\\mathbf{X}^{(m)}\\) and \\(\\boldsymbol{\\beta}^{(m)}\\) as the model matrix and the associated vector of non-zero coefficients associated with model \\(M_m.\\)"
-  },
-  {
-    "objectID": "slides/bayesmod-slides8.html#setup-for-regression",
-    "href": "slides/bayesmod-slides8.html#setup-for-regression",
-    "title": "Bayesian modelling",
-    "section": "Setup for regression",
-    "text": "Setup for regression\n\\[\\begin{align*}\n\\boldsymbol{Y} \\mid M_m, \\boldsymbol{\\beta}, \\sim \\mathsf{Gauss}(\\mathbf{X}^{(m)}\\boldsymbol{\\beta}^{(m)}, \\sigma^2 \\mathbf{I}_n).\n\\end{align*}\\]\nWe assign a priors as usual, e.g. a Gaussian prior on \\(\\boldsymbol{\\beta}^{(m)} \\mid M_m.\\)"
+    "section": "Setup for linear regression",
+    "text": "Setup for linear regression\n\nWrite\n\n\\(\\boldsymbol{\\beta}\\): the vector of mean coefficients,\n\\(\\boldsymbol{\\theta}\\): the other parameters, e.g., the variance \\(\\sigma^2\\),\n\\(\\boldsymbol{Y}\\in \\mathbb{R}^n\\): the response vector,\n\\(M_j\\): the \\(j\\)th model with associated model matrix \\(\\mathbf{X}^{(j)}\\).\n\nThe ordinary linear regression model is \\[\\begin{align*}\n\\boldsymbol{Y} \\mid M_j, \\boldsymbol{\\beta} \\sim \\mathsf{Gauss}(\\mathbf{X}^{(j)}\\boldsymbol{\\beta}, \\sigma^2 \\mathbf{I}_n).\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides8.html#conditional-bayes-factor",
     "href": "slides/bayesmod-slides8.html#conditional-bayes-factor",
     "title": "Bayesian modelling",
     "section": "Conditional Bayes factor",
-    "text": "Conditional Bayes factor\nWrite \\(\\boldsymbol{\\theta}\\) for all parameters other than the response \\(\\boldsymbol{Y}\\), model \\(M_i\\) and vector of coefficients \\(\\boldsymbol{\\beta}\\).\nWe can consider a joint update of the regression parameters \\((\\boldsymbol{\\beta}, M)\\) by sampling from their joint distribution via \\[p(\\boldsymbol{\\beta} \\mid M, \\boldsymbol{\\theta}) p(M \\mid \\boldsymbol{\\theta}).\\] The update for \\(p(\\boldsymbol{\\beta} \\mid M, \\boldsymbol{\\theta})\\) is as usual."
+    "text": "Conditional Bayes factor\n\n\nWe have \\(m\\) candidate models \\(M_1, \\ldots, M_m\\); for simplicity \\(p(M_j)\\propto 1\\) for all models with an intercept.\nWe write \\(|M|\\) for the cardinality of the set of non-zero coefficients \\(\\boldsymbol{\\beta}\\) in model \\(M.\\)\nWe can consider a joint update of the regression parameters \\((\\boldsymbol{\\beta}, M)\\) by sampling from their joint distribution \\[p(\\boldsymbol{\\beta} \\mid M, \\boldsymbol{\\theta}) p(M \\mid \\boldsymbol{\\theta}).\\]\nThe update for \\(p(\\boldsymbol{\\beta} \\mid M, \\boldsymbol{\\theta})\\) is as usual."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#update-for-model",
@@ -389,49 +382,49 @@
     "href": "slides/bayesmod-slides8.html#moves-for-variable-selection",
     "title": "Bayesian modelling",
     "section": "Moves for variable selection",
-    "text": "Moves for variable selection\nWe consider different types of move for the \\(k_{\\max}\\) potential covariates (including interactions, etc.) (Holmes et al., 2002)\n\nbirth: adding an unused covariate chosen at random from the remaining ones\ndeath: removing one covariate at random from the current matrix\nswap: changing an active covariate for an unused one.\n\nOnly the last type of move preserves the dimension."
+    "text": "Moves for variable selection\nWe consider different types of move for the \\(k_{\\max}\\) potential covariates (including interactions, etc.) (Holmes et al., 2002).\n\nbirth: adding an unused covariate chosen at random from the remaining ones,\ndeath: removing one covariate at random from the current matrix,\nswap: changing an active covariate for an unused one.\n\nOnly the last type of move preserves the dimension."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#jacobians-for-reversible-jump",
     "href": "slides/bayesmod-slides8.html#jacobians-for-reversible-jump",
     "title": "Bayesian modelling",
     "section": "Jacobians for reversible jump",
-    "text": "Jacobians for reversible jump\nFor most moves, the Jacobian \\(J=1\\), except in four cases where the dimension \\(|M| \\in\\{1, 2, k_{\\max}-1, k_{\\max}\\}\\) and\n\n\n\\(J=2/3\\) if \\(|M|=1\\) and we try to add a covariate,\n\\(J=2/3\\) if \\(|M|=k_{\\max}\\) and we try to remove a covariate,\n\\(J=3/2\\) if \\(|M|=2\\) and we try to remove a covariate,\n\\(J=3/2\\) if \\(|M|=k_{\\max}-1\\) and we try to add the last covariate."
+    "text": "Jacobians for reversible jump\nFor most moves, the Jacobian is \\(J=1\\), except in four cases where the dimension \\(|M| \\in\\{1, 2, k_{\\max}-1, k_{\\max}\\}\\) and\n\n\n\\(J=2/3\\) if \\(|M|=1\\) and we try to add a covariate,\n\\(J=2/3\\) if \\(|M|=k_{\\max}\\) and we try to remove a covariate,\n\\(J=3/2\\) if \\(|M|=2\\) and we try to remove a covariate,\n\\(J=3/2\\) if \\(|M|=k_{\\max}-1\\) and we try to add the last covariate."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#posterior-weights",
     "href": "slides/bayesmod-slides8.html#posterior-weights",
     "title": "Bayesian modelling",
     "section": "Posterior weights",
-    "text": "Posterior weights\nWe can keep track of which variables are active at each iteration of the MCMC and obtain the marginal posterior probability of inclusion through sample proportions.\nThis methods\n\nexplores neighbouring models (Grey code)\nworks only with a limited number of covariates, say \\(p &lt; 25.\\)"
+    "text": "Posterior weights\nWe can keep track of which variables are active at each iteration of the MCMC and obtain the marginal posterior probability of inclusion through sample proportions.\nThis methods\n\nonly explores neighbouring models (Grey code),\nworks only with a small number of covariates, \\(p &lt; 25.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides8.html#learning-objectives",
     "href": "slides/bayesmod-slides8.html#learning-objectives",
     "title": "Bayesian modelling",
     "section": "Learning objectives",
-    "text": "Learning objectives\nStudents should be able to\n\nimplement the Bayesian linear model\ndistinguish between global and local shrinkage priors\nuse methods for variable selection via dedicated software implementations"
+    "text": "Learning objectives\nStudents should be able to\n\nimplement the Bayesian linear model,\ndistinguish between global and local shrinkage priors,\nuse methods for variable selection via dedicated software implementations."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#summary-13",
     "href": "slides/bayesmod-slides8.html#summary-13",
     "title": "Bayesian modelling",
     "section": "Summary (1/3)",
-    "text": "Summary (1/3)\n\n\nMost software implementations will work with scaled regressors\n\nGaussian models are closed under linear transformations\n\nConjugate priors allow for Gibbs sampling (extension of the Gaussian-inverse gamma model)\nIn more complex hierarchical models, we may need to specificy covariance structures\n\nconjugate Wishart priors are not recommended\nnon-conjugate priors can be easily dealt with in modern applications\nbetter to provide separate priors for individual scales and correlation"
+    "text": "Summary (1/3)\n\n\nMost software implementations will work with scaled regressors\n\nGaussian models are closed under linear transformations\n\nConjugate priors allow for Gibbs sampling (extension of the Gaussian-inverse gamma model)\nIn more complex hierarchical models, we may need to specify covariance structures\n\nconjugate Wishart priors are not recommended\nnon-conjugate priors can be easily dealt with in modern applications\nbetter to provide separate priors for individual scales and correlation"
   },
   {
     "objectID": "slides/bayesmod-slides8.html#summary-23",
     "href": "slides/bayesmod-slides8.html#summary-23",
     "title": "Bayesian modelling",
     "section": "Summary (2/3)",
-    "text": "Summary (2/3)\nVariable selection in Bayesian models is different from frequentist\nMany classical methods provide global shrinkage:\n\nRidge regression arises naturally from conjugate priors (but scaling is fixed or assigned a prior)\nThe Bayesian LASSO model only shrinks coefficients towards zero)\n\nOther models provide local shrinkage\n\nExamples include the horseshoe prior"
+    "text": "Summary (2/3)\nVariable selection in Bayesian models is different from frequentist.\nMany classical methods provide global shrinkage:\n\nRidge regression arises naturally from conjugate priors (but scaling is fixed or assigned a prior)\nThe Bayesian LASSO model only shrinks coefficients towards zero).\n\nOther models provide local shrinkage (e.g., horseshoe prior)."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#summary-33",
     "href": "slides/bayesmod-slides8.html#summary-33",
     "title": "Bayesian modelling",
     "section": "Summary (3/3)",
-    "text": "Summary (3/3)\nVariable selection comes from prior probabilities of covariates not being included:\n\nassign probabilities to specific models with only subset of covariates (Bayesian model averaging)\nuse priors with point masses at zero, which allows for posterior probability at zero (spike-and-slab)\n\nthese have a discrete component, so are harder to fit."
+    "text": "Summary (3/3)\nVariable selection comes from prior probabilities of covariates not being included:\n\nassign probabilities to specific models with only subset of covariates (Bayesian model averaging),\nuse priors with point masses at zero, which allows for posterior probability at zero (spike-and-slab),\n\nthese have a discrete component, so are harder to fit."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#references",
@@ -1628,7 +1621,7 @@
     "href": "slides/bayesmod-slides10.html#landau-notation",
     "title": "Bayesian modelling",
     "section": "Landau notation",
-    "text": "Landau notation\nWe need notation to characterize the growth rate of functions: when \\(n \\to \\infty\\)\n\nbig-O: \\(x = \\mathrm{O}(n)\\) means that \\(x/n \\to c \\in \\mathbb{R}\\) as \\(n\\to \\infty\\)\nlittle-o: \\(x =\\mathrm{o}(n)\\) implies \\(x/n \\to 0\\) as \\(n\\to \\infty.\\)"
+    "text": "Landau notation\nWe need notation to characterize the growth rate of functions: when \\(n \\to \\infty\\)\n\nbig-O: \\(x = \\mathrm{O}(n)\\) means that \\(x/n \\to c \\in \\mathbb{R}\\) as \\(n\\to \\infty\\) - little-o: \\(x =\\mathrm{o}(n)\\) implies \\(x/n \\to 0\\) as \\(n\\to \\infty.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#taylor-series-expansion",
@@ -1642,7 +1635,7 @@
     "href": "slides/bayesmod-slides10.html#multivariate-taylor-series-expansion",
     "title": "Bayesian modelling",
     "section": "Multivariate Taylor series expansion",
-    "text": "Multivariate Taylor series expansion\nSimilarly, for \\(h(\\boldsymbol{x})\\) a smooth vector valued function with mode at \\(\\boldsymbol{x}_0 \\in \\mathbb{R}^p\\), we can write\n\\[\\begin{align*}\nh(\\boldsymbol{x}) &= h(\\boldsymbol{x}_0) + (\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h'(\\boldsymbol{x}_0) \\\\&+ \\frac{1}{2}(\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h''(\\boldsymbol{x}_0)(\\boldsymbol{x}- \\boldsymbol{x}_0) + R.\n\\end{align*}\\]\nUnder regularity conditions, the mode \\(\\boldsymbol{x}_0\\) is such that \\(h'(\\boldsymbol{x}_0)=\\boldsymbol{0}_p.\\)"
+    "text": "Multivariate Taylor series expansion\nSimilarly, for \\(h(\\boldsymbol{x})\\) a smooth vector valued function with mode at \\(\\boldsymbol{x}_0 \\in \\mathbb{R}^p\\), we can write\n\n\\[\\begin{align*}\nh(\\boldsymbol{x}) &= h(\\boldsymbol{x}_0) + (\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h'(\\boldsymbol{x}_0) \\\\&+ \\frac{1}{2}(\\boldsymbol{x}- \\boldsymbol{x}_0)^\\top h''(\\boldsymbol{x}_0)(\\boldsymbol{x}- \\boldsymbol{x}_0) + R.\n\\end{align*}\\]\n\nUnder regularity conditions, the mode \\(\\boldsymbol{x}_0\\) is such that \\(h'(\\boldsymbol{x}_0)=\\boldsymbol{0}_p.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#laplace-approximation",
@@ -1726,7 +1719,7 @@
     "href": "slides/bayesmod-slides10.html#example-of-posterior-mean-for-exponential-likelihood",
     "title": "Bayesian modelling",
     "section": "Example of posterior mean for exponential likelihood",
-    "text": "Example of posterior mean for exponential likelihood\nConsider the posterior mean \\(\\mathsf{E}_{\\Lambda \\mid \\boldsymbol{Y}}(\\Lambda)\\) and let \\(s=\\sum_{i=1}^n y_i\\). Then, \\[\\begin{align*}\n\\widehat{\\lambda}_g &= \\frac{(n+a)}{s + b} \\\\\n|\\jmath_g(\\widehat{\\lambda}_g)|^{1/2} &= \\Bigg(\\frac{n+a}{\\widehat{\\lambda}_g^2}\\Bigg)^{1/2} =  \\frac{\\hphantom{(}s + b\\hphantom{)^{1/2}}}{(n+a)^{1/2}}.\n\\end{align*}\\]"
+    "text": "Example of posterior mean for exponential likelihood\nConsider the posterior mean \\(\\mathsf{E}_{\\Lambda \\mid \\boldsymbol{Y}}(\\Lambda)\\) and let \\(s=\\sum_{i=1}^n y_i\\). Then, \\[\\begin{align*}\n\n\\begin{align*}\n\\widehat{\\lambda}_g &= \\frac{(n+a)}{s + b} \\\\\n|\\jmath_g(\\widehat{\\lambda}_g)|^{1/2} &= \\Bigg(\\frac{n+a}{\\widehat{\\lambda}_g^2}\\Bigg)^{1/2} =  \\frac{\\hphantom{(}s + b\\hphantom{)^{1/2}}}{(n+a)^{1/2}}.\n\\end{align*}\\]"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#posterior-mean",
@@ -1761,7 +1754,7 @@
     "href": "slides/bayesmod-slides10.html#frequentist-approximation-to-the-marginal-likelihood",
     "title": "Bayesian modelling",
     "section": "Frequentist approximation to the marginal likelihood",
-    "text": "Frequentist approximation to the marginal likelihood\nThis gives the approximation, whose quality improves with increasing sample size \\(n\\): \\[\\begin{align*}\n-2\\log p(\\boldsymbol{y}) \\approx \\mathsf{BIC} = -2\\log p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) + p\\log n\n\\end{align*}\\]\nThe unnormalized weight \\[\\exp(-\\mathsf{BIC}/2)\\] is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor."
+    "text": "Frequentist approximation to the marginal likelihood\nThis gives the approximation, whose quality improves with increasing sample size \\(n\\): \\[\\begin{align*}\n-2\\log p(\\boldsymbol{y}) \\approx \\mathsf{BIC} = -2\\log p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) + p\\log n.\n\\end{align*}\\]\nThe unnormalized weight \\[\\exp(-\\mathsf{BIC}/2)\\] is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#bayesian-model-averaging-via-bic",
@@ -1922,7 +1915,7 @@
     "href": "slides/bayesmod-slides10.html#note-on-approximation",
     "title": "Bayesian modelling",
     "section": "Note on approximation",
-    "text": "Note on approximation\n\nThe Laplace approximation \\(p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})\\) has kernel \\[p_{G}(\\boldsymbol{\\beta} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}) \\propto |\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})|^{1/2}\\exp\\left\\{-(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})^\\top \\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})/2\\right\\};\\] since it is evaluated at \\(\\widehat{\\boldsymbol{\\beta}},\\) we retrieve only the determinant of the negative Hessian of \\(p(\\boldsymbol{\\beta} \\mid \\boldsymbol{\\theta}, \\boldsymbol{y}),\\) namely \\(\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}}).\\) Note that the latter varies with \\(\\boldsymbol{\\theta}.\\)"
+    "text": "Note on approximation\n\nThe Laplace approximation \\(p_{G}(\\widehat{\\boldsymbol{\\beta}} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta})\\) has kernel \\[p_{G}(\\boldsymbol{\\beta} \\mid \\boldsymbol{y}, \\boldsymbol{\\theta}) \\propto |\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})|^{1/2}\\exp\\left\\{-(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})^\\top \\mathbf{H}(\\widehat{\\boldsymbol{\\beta}})(\\boldsymbol{\\beta}- \\widehat{\\boldsymbol{\\beta}})/2\\right\\}.\\] Since it is evaluated at \\(\\widehat{\\boldsymbol{\\beta}},\\) we retrieve only the determinant of the negative Hessian of \\(p(\\boldsymbol{\\beta} \\mid \\boldsymbol{\\theta}, \\boldsymbol{y}),\\) namely \\(\\mathbf{H}(\\widehat{\\boldsymbol{\\beta}}).\\) Note that the latter varies with \\(\\boldsymbol{\\theta}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#numerical-integration",
@@ -2020,7 +2013,7 @@
     "href": "slides/bayesmod-slides10.html#marginal-summaries",
     "title": "Bayesian modelling",
     "section": "Marginal summaries",
-    "text": "Marginal summaries\n\n# Compute density, quantiles, etc. via inla.*marginal\n# Change of variable to get variance from precision\nmarg_var &lt;- INLA::inla.tmarginal(\n  fun = function(x) { 1 / x }, \n  marginal = marg_prec)\nINLA::inla.qmarginal(marg_var, p = c(0.025, 0.5,  0.975))\n\n[1] 0.2872159 0.4529812 0.7337615\n\n# Posterior marginal mean and variance of phi\nmom1 &lt;- INLA::inla.emarginal(\n    fun = function(x){x}, \n    marginal = marg_phi)\nmom2 &lt;- INLA::inla.emarginal(\n    fun = function(x){x^2}, \n    marginal = marg_phi)\nc(mean = mom1, sd = sqrt(mom2 - mom1^2))\n\n      mean         sd \n0.98409185 0.00568761"
+    "text": "Marginal summaries\n\n# Compute density, quantiles, etc. via inla.*marginal\n# Change of variable to get variance from precision\nmarg_var &lt;- INLA::inla.tmarginal(\n  fun = function(x) { 1 / x }, \n  marginal = marg_prec)\nINLA::inla.qmarginal(marg_var, p = c(0.025, 0.5,  0.975))\n\n[1] 0.2875417 0.4523687 0.7324300\n\n# Posterior marginal mean and variance of phi\nmom1 &lt;- INLA::inla.emarginal(\n    fun = function(x){x}, \n    marginal = marg_phi)\nmom2 &lt;- INLA::inla.emarginal(\n    fun = function(x){x^2}, \n    marginal = marg_phi)\nc(mean = mom1, sd = sqrt(mom2 - mom1^2))\n\n      mean         sd \n0.98409439 0.00566567"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#tokyo-binomial-time-series",
@@ -5736,7 +5729,7 @@
     "href": "slides/bayesmod-slides9.html#achieving-independence",
     "title": "Bayesian modelling",
     "section": "Achieving independence",
-    "text": "Achieving independence\nWe have seen that for differentiable posterior \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\), using the gradient information can improve convergence by informing about the direction of the mode.\n\nNeal (2011) discusses how informally, random walk Metropolis requires \\(\\mathrm{O}(d^2)\\) steps to get an independent draw, compared to \\(\\mathrm{O}(d^{4/3})\\) for MALA.\nHMC scales like \\(\\mathrm{O}(d^{5/4})\\), a notable improvement in performance.\nIt however comes at the cost of repeated gradient evaluations (\\(L\\) by update)."
+    "text": "Achieving independence\n\nWe have seen that for differentiable posterior \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\), using the gradient information can improve convergence by informing about the direction of the mode.\n\nNeal (2011) discusses how informally, random walk Metropolis requires \\(\\mathrm{O}(d^2)\\) steps to get an independent draw, compared to \\(\\mathrm{O}(d^{4/3})\\) for MALA.\nHMC scales like \\(\\mathrm{O}(d^{5/4})\\), a notable improvement in performance.\nIt however comes at the cost of repeated gradient evaluations (\\(L\\) by update)."
   },
   {
     "objectID": "slides/bayesmod-slides9.html#take-home",
@@ -5757,14 +5750,14 @@
     "href": "slides/bayesmod-slides9.html#other-mcmc-software",
     "title": "Bayesian modelling",
     "section": "Other MCMC software",
-    "text": "Other MCMC software\n\nNimble, C++ with R interface\nTuring.jl, Julia\nPyMC, Python\nPigeons, Julia"
+    "text": "Other MCMC software\n\nNimble, C++ with R interface\nTuring.jl, Julia\nPyMC, Python\nPigeons, Julia\nWalnutpie, Python"
   },
   {
     "objectID": "slides/bayesmod-slides9.html#stochastic-volatility-model",
     "href": "slides/bayesmod-slides9.html#stochastic-volatility-model",
     "title": "Bayesian modelling",
     "section": "Stochastic volatility model",
-    "text": "Stochastic volatility model\nFinancial returns \\(Y_t\\) typically exhibit time-varying variability. The stochastic volatility model is a parameter-driven model that specifies \\[\\begin{align*}\nY_t &= \\exp(h_t/2) Z_t \\\\\nh_t &= \\gamma + \\phi (h_{t-1} - \\gamma) + \\sigma U_t\n\\end{align*}\\] where \\(U_t \\stackrel{\\mathrm{iid}}{\\sim} \\mathsf{Gauss}(0,1)\\) and \\(Z_t \\sim  \\stackrel{\\mathrm{iid}}{\\sim} \\mathsf{Gauss}(0,1).\\)\nIt is possible to introduce leverage by adding \\(\\mathsf{Cor}(Z_t, U_t) = \\rho.\\)"
+    "text": "Stochastic volatility model\nFinancial returns \\(Y_t\\) typically exhibit time-varying variability. The stochastic volatility model is a parameter-driven model that specifies \\[\\begin{align*}\nY_t &= \\exp(h_t/2) Z_t \\\\\nh_t &= \\gamma + \\phi (h_{t-1} - \\gamma) + \\sigma U_t\n\\end{align*}\\] where \\(U_t \\stackrel{\\mathrm{iid}}{\\sim} \\mathsf{Gauss}(0,1)\\) and \\(Z_t  \\stackrel{\\mathrm{iid}}{\\sim} \\mathsf{Gauss}(0,1).\\)\nIt is possible to introduce leverage by adding \\(\\mathsf{Cor}(Z_t, U_t) = \\rho.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides9.html#references",

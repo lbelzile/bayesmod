@@ -232,11 +232,15 @@ knitr::include_graphics("fig/fig-Neal-funnel.png")
 
 ## Achieving independence
 
+::: {style="font-size: 80%;"}
+
 We have seen that for differentiable posterior $p(\boldsymbol{\theta} \mid \boldsymbol{y})$, using the gradient information can improve convergence by informing about the direction of the mode.
 
 - @Neal:2011 discusses how informally, random walk Metropolis requires $\mathrm{O}(d^2)$ steps to get an independent draw, compared to $\mathrm{O}(d^{4/3})$ for MALA.
 - HMC scales like $\mathrm{O}(d^{5/4})$, a notable improvement in performance. 
 - It however comes at the cost of repeated gradient evaluations ($L$ by update).
+
+:::
 
 ## Take-home
 
@@ -274,6 +278,7 @@ knitr::include_graphics("fig/Stan.png")
 - [Turing.jl](https://turinglang.org/docs/getting-started/), Julia
 - [PyMC](https://www.pymc.io/welcome.html), Python
 - [Pigeons](https://pigeons.run/stable/), Julia
+- [Walnutpie](https://flatironinstitute.github.io/walnutpie/latest/), Python
 
 ## Stochastic volatility model
 
@@ -282,7 +287,7 @@ Financial returns $Y_t$ typically exhibit time-varying variability. The **stocha
 Y_t &= \exp(h_t/2) Z_t \\
 h_t &= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
 \end{align*}
-where $U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)$ and $Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).$
+where $U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)$ and $Z_t  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).$
 
 It is possible to introduce leverage by adding $\mathsf{Cor}(Z_t, U_t) = \rho.$
 

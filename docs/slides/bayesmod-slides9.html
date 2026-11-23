@@ -6,8 +6,8 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.9.36">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.10.19">
 
   <meta name="author" content="Léo Belzile">
   <title>Bayesian modelling</title>
@@ -20,10 +20,13 @@
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
     */
-    code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
@@ -156,12 +159,12 @@
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Léo Belzile 
+Léo Belzile
 </div>
 </div>
 </div>
 
-  <p class="date">Last compiled Tuesday Nov 17, 2026</p>
+  <p class="date">Last compiled Monday Nov 23, 2026</p>
 </section>
 <section id="motivation" class="slide level2">
 <h2>Motivation</h2>
@@ -321,12 +324,14 @@ s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\f
 <img data-src="fig/fig-Neal-funnel.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
 <section id="achieving-independence" class="slide level2">
 <h2>Achieving independence</h2>
+<div style="font-size: 80%;">
 <p>We have seen that for differentiable posterior <span class="math inline">\(p(\boldsymbol{\theta} \mid \boldsymbol{y})\)</span>, using the gradient information can improve convergence by informing about the direction of the mode.</p>
 <ul>
 <li><span class="citation" data-cites="Neal:2011">Neal (<a href="#/references" role="doc-biblioref" onclick="">2011</a>)</span> discusses how informally, random walk Metropolis requires <span class="math inline">\(\mathrm{O}(d^2)\)</span> steps to get an independent draw, compared to <span class="math inline">\(\mathrm{O}(d^{4/3})\)</span> for MALA.</li>
 <li>HMC scales like <span class="math inline">\(\mathrm{O}(d^{5/4})\)</span>, a notable improvement in performance.</li>
 <li>It however comes at the cost of repeated gradient evaluations (<span class="math inline">\(L\)</span> by update).</li>
 </ul>
+</div>
 </section>
 <section id="take-home" class="slide level2">
 <h2>Take-home</h2>
@@ -355,6 +360,7 @@ s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\f
 <li><a href="https://turinglang.org/docs/getting-started/">Turing.jl</a>, Julia</li>
 <li><a href="https://www.pymc.io/welcome.html">PyMC</a>, Python</li>
 <li><a href="https://pigeons.run/stable/">Pigeons</a>, Julia</li>
+<li><a href="https://flatironinstitute.github.io/walnutpie/latest/">Walnutpie</a>, Python</li>
 </ul>
 </section>
 <section id="stochastic-volatility-model" class="slide level2">
@@ -362,7 +368,7 @@ s_j(t+\varepsilon) &amp;= s_j(t+\varepsilon/2) - \frac{\varepsilon}{2}  \left.\f
 <p>Financial returns <span class="math inline">\(Y_t\)</span> typically exhibit time-varying variability. The <strong>stochastic volatility</strong> model is a parameter-driven model that specifies <span class="math display">\[\begin{align*}
 Y_t &amp;= \exp(h_t/2) Z_t \\
 h_t &amp;= \gamma + \phi (h_{t-1} - \gamma) + \sigma U_t
-\end{align*}\]</span> where <span class="math inline">\(U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(Z_t \sim  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).\)</span></p>
+\end{align*}\]</span> where <span class="math inline">\(U_t \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1)\)</span> and <span class="math inline">\(Z_t  \stackrel{\mathrm{iid}}{\sim} \mathsf{Gauss}(0,1).\)</span></p>
 <p>It is possible to introduce leverage by adding <span class="math inline">\(\mathsf{Cor}(Z_t, U_t) = \rho.\)</span></p>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
@@ -577,7 +583,7 @@ Nishimura, A., Dunson, D. B., &amp; Lu, J. (2020). Discontinuous <span>H</span>a
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],

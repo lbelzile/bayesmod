@@ -58,8 +58,7 @@ We consider simple approximations to the marginal likelihood, posterior moments,
 
 We need notation to characterize the growth rate of functions: when $n \to \infty$
 
-- big-O: $x = \mathrm{O}(n)$ means that $x/n \to c \in \mathbb{R}$ as $n\to \infty$ 
-- little-o: $x =\mathrm{o}(n)$ implies $x/n \to 0$ as $n\to \infty.$
+- big-O: $x = \mathrm{O}(n)$ means that $x/n \to c \in \mathbb{R}$ as $n\to \infty$ - little-o: $x =\mathrm{o}(n)$ implies $x/n \to 0$ as $n\to \infty.$
 
 ## Taylor series expansion
 
@@ -80,9 +79,14 @@ where the remainder $R=\mathrm{O}\{(x-x_0)^3\}.$
 
 Similarly, for $h(\boldsymbol{x})$ a smooth vector valued function with mode at $\boldsymbol{x}_0 \in \mathbb{R}^p$, we can write
 
+::: {style="font-size: 0.8em;"}
+
 \begin{align*}
  h(\boldsymbol{x}) &= h(\boldsymbol{x}_0) + (\boldsymbol{x}- \boldsymbol{x}_0)^\top h'(\boldsymbol{x}_0) \\&+ \frac{1}{2}(\boldsymbol{x}- \boldsymbol{x}_0)^\top h''(\boldsymbol{x}_0)(\boldsymbol{x}- \boldsymbol{x}_0) + R.
 \end{align*}
+
+:::
+
 
 Under regularity conditions, the mode $\boldsymbol{x}_0$ is such that $h'(\boldsymbol{x}_0)=\boldsymbol{0}_p.$
 
@@ -221,7 +225,10 @@ While the Laplace method has an error $\mathrm{O}(n^{-1}),$ the leading order te
 
 ## Example of posterior mean for exponential likelihood
 
+
 Consider the posterior mean $\mathsf{E}_{\Lambda \mid \boldsymbol{Y}}(\Lambda)$ and let $s=\sum_{i=1}^n y_i$. Then, \begin{align*}
+
+\begin{align*}
 \widehat{\lambda}_g &= \frac{(n+a)}{s + b} \\
 |\jmath_g(\widehat{\lambda}_g)|^{1/2} &= \Bigg(\frac{n+a}{\widehat{\lambda}_g^2}\Bigg)^{1/2} =  \frac{\hphantom{(}s + b\hphantom{)^{1/2}}}{(n+a)^{1/2}}.
 \end{align*}
@@ -273,7 +280,7 @@ with approximation error of $\mathrm{O}(n^{-1/2}).$
 
 This gives the approximation, whose quality improves with increasing sample size $n$:
 \begin{align*}
--2\log p(\boldsymbol{y}) \approx \mathsf{BIC} = -2\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + p\log n
+-2\log p(\boldsymbol{y}) \approx \mathsf{BIC} = -2\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + p\log n.
 \end{align*}
 
 The unnormalized weight $$\exp(-\mathsf{BIC}/2)$$ is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor.
@@ -326,7 +333,7 @@ Together, these yield
 \log p(\boldsymbol{y} \mid \boldsymbol{\theta}) &\approx \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\\&\qquad  - \frac{1}{2}(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})^\top\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})(\boldsymbol{\theta} - \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}).
 \end{align*}
 
-## Gaussian approximation to  posterior
+## Gaussian approximation to posterior
 
 The approximate posterior must be Gaussian with precision $\jmath_n^{-1}$ and mean $\mu_n,$ where
 \begin{align*}
@@ -605,9 +612,12 @@ This yields
 since the exponential term 
 
 ## Note on approximation
+
 ::: {style="font-size: 0.8em;"}
-The Laplace approximation $p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})$ has kernel $$p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}\exp\left\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})/2\right\};$$
-since it is evaluated at $\widehat{\boldsymbol{\beta}},$ we retrieve only the determinant of the negative Hessian of 
+
+The Laplace approximation $p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})$ has kernel 
+$$p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}\exp\left\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})/2\right\}.$$
+Since it is evaluated at $\widehat{\boldsymbol{\beta}},$ we retrieve only the determinant of the negative Hessian of 
 $p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),$ namely $\mathbf{H}(\widehat{\boldsymbol{\beta}}).$ Note that the latter varies with $\boldsymbol{\theta}.$
 
 :::

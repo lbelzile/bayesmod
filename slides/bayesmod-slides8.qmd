@@ -347,7 +347,7 @@ Wishart allows for conjugacy, but has unintuitive properties.
 
 ## Wishart distribution
 
-We say $\mathbf{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})$ for $\nu>0$ degrees of freedom and scale $\mathbf{S}$ if its density is proportional to
+We say $\boldsymbol{Q} \sim \mathsf{Wishart}_p(\nu, \mathbf{S})$ for $\nu>0$ degrees of freedom and scale $\mathbf{S}$ if its density is proportional to
 \begin{align*}
  f(\boldsymbol{Q}) \stackrel{\boldsymbol{Q}}{\propto} |\boldsymbol{Q}|^{(\nu-p-1)/2}\exp\left\{-\frac{\mathrm{tr}(\mathbf{S}^{-1}\boldsymbol{Q})}{2}\right\}, \quad \nu > p-1.
 \end{align*}
@@ -427,6 +427,8 @@ theme_classic()
 
 ## Onion peel prior
 
+::: {style="font-size: 90%;"}
+
 
 A better alternative is to specify 
 
@@ -438,6 +440,7 @@ For the latter, the onion peel or LKJ prior, named after the authors of @Lewando
 
 The case $\eta=1$ leads to uniform over the space of correlation matrices, and $\eta>1$ favours the identity matrix.
 
+:::
 
 
 ## Shrinkage and variable selection
@@ -472,13 +475,11 @@ The **discrete spike-and-slab prior** [@Mitchell.Beauchamp:1988] is a two-compon
 
 Set independent and identically distributed conjugate prior for $\gamma_j \sim \mathsf{binom}(1, \omega),$ whence
 \begin{align*}
-p(\boldsymbol{\gamma} \mid \omega) = \prod_{j=1}^n \omega^{\gamma_j} (1-\omega)^{1-\gamma_j}
+p(\boldsymbol{\gamma} \mid \omega) = \prod_{j=1}^n \omega^{\gamma_j} (1-\omega)^{1-\gamma_j}.
 \end{align*}
 
-Apriori, we set $\omega \in (0,1)$ as the proportion of the $p$ coefficients $\boldsymbol{\beta}$ that are zero 
-
- -$p(1-\omega)$ nonzero coefficients.
-
+- Apriori, we set $\omega \in (0,1)$ as the proportion of coefficients $\boldsymbol{\beta}$ that are zero.
+- On average, there are $p\omega$ zero coefficients.
 
 
 ## Continuous spike-and-slab prior
@@ -503,18 +504,17 @@ where $\mathsf{Student}_{+}(0, a, 1)$ denotes a half-Cauchy distribution with sc
 
 ## Understanding shrinkage priors
 
-The choice of $\sigma^2_j$ leads to an unconditional scale mixture of Gaussian for $\beta_j$. 
-
-Better is to consider 
+The choice of $\sigma^2_j$ leads to an unconditional scale mixture of Gaussian for $\beta_j$. Consider the weight
 $$\kappa = 1 - 1/(1+\sigma^2) \in [0,1].$$
-Penalization of near-zero components can be deduced from the density of $\kappa \to 0$, and similarly penalization of large signals by looking at the density when $\kappa \to 1.$
+- Penalization of near-zero components can be deduced from the density of $\kappa \to 0,$
+- penalization of large signals by looking at the density when $\kappa \to 1.$
 
 
 
 
 ## Shrinkage weights
  
-Weighting implied by Gaussian mixture density with Cauchy/Laplace/horsehoe.
+
 
 ```{r}
 #| eval: true
@@ -591,7 +591,7 @@ dhorseshoe_v <- function(lambda, beta, log = TRUE){
 }
 
 B <- 1001L
-beta_s <- seq(0.01, 6, length.out = B)
+beta_s <- seq(0.01, 8, length.out = B)
 dbeta_hs1 <- dbeta_hs2 <- numeric(B)
 for(i in seq_along(beta_s)){
   integ <- integrate(f = function(lam){
@@ -615,14 +615,14 @@ plot(x = c(-rev(beta_s), beta_s),
 lines(xs, dl, lty = 2)
 lines(xs, dt(xs, df = 1), lty = 3, lwd = 1.5)
 
-xs2 <- seq(4, 6, length.out = 101)
+xs2 <- seq(4, 8, length.out = 101)
 plot(x = beta_s[beta_s>=4],
      y = dbeta_hs1[beta_s>=4],
      type = "l",
      ylab = "density",
      bty = "l",
      ylim = c(0,0.02),
-     xlim = c(4,6),
+     xlim = c(4,8),
      yaxs = "i",
      xlab = expression(beta))
 lines(xs2, extraDistr::dlaplace(x = xs2, mu = 0, sigma = 1), lty = 2)
@@ -662,7 +662,7 @@ The above specification does not specify the prior for the global scale $\lambda
 
 :::
 
-::: {style="font-size: 65%;"}
+::: {style="font-size: 80%;"}
 
 - $p_0$ is a prior guess for the number of non-zero components out of $p,$ 
 - $n$ is the sample size and 
@@ -742,27 +742,38 @@ Dimensions changes are integrated in the Metropolis--Hastings step through a Jac
 
 In regression models, we will consider moves that adds or removes one parameter/regressor at a time.
 
-## Setup
 
-We consider models $M_1, \ldots, M_m$; for simplicity $p(M_i)=1$ and all models include an intercept.
+## Setup for linear regression 
 
-We write $|M|$ for the cardinality of the set of non-zero coefficients $\boldsymbol{\beta}$ in model $M.$
+::: {style="font-size: 80%;"}
 
-Define $\mathbf{X}^{(m)}$ and $\boldsymbol{\beta}^{(m)}$ as the model matrix and the associated vector of non-zero coefficients associated with model $M_m.$
 
-## Setup for regression 
+Write 
+
+- $\boldsymbol{\beta}$: the vector of mean coefficients, 
+- $\boldsymbol{\theta}$: the other parameters, e.g., the variance $\sigma^2$,
+- $\boldsymbol{Y}\in \mathbb{R}^n$: the response vector,
+- $M_j$: the $j$th model with associated model matrix $\mathbf{X}^{(j)}$.
+
+The ordinary linear regression model is
 \begin{align*}
-\boldsymbol{Y} \mid M_m, \boldsymbol{\beta}, \sim \mathsf{Gauss}(\mathbf{X}^{(m)}\boldsymbol{\beta}^{(m)}, \sigma^2 \mathbf{I}_n).
+\boldsymbol{Y} \mid M_j, \boldsymbol{\beta} \sim \mathsf{Gauss}(\mathbf{X}^{(j)}\boldsymbol{\beta}, \sigma^2 \mathbf{I}_n).
 \end{align*}
 
-We assign a priors as usual, e.g. a Gaussian prior on $\boldsymbol{\beta}^{(m)} \mid M_m.$
+
+:::
 
 ## Conditional Bayes factor
 
+::: {style="font-size: 80%;"}
 
-Write $\boldsymbol{\theta}$ for all parameters other than the response $\boldsymbol{Y}$, model $M_i$ and vector of coefficients $\boldsymbol{\beta}$.
 
-We can consider a joint update of the regression parameters $(\boldsymbol{\beta}, M)$ by sampling from their joint distribution via $$p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) p(M \mid \boldsymbol{\theta}).$$ The update for $p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta})$ is as usual.
+- We have $m$ candidate models $M_1, \ldots, M_m$; for simplicity $p(M_j)\propto 1$ for all models with an intercept. 
+- We write $|M|$ for the cardinality of the set of non-zero coefficients $\boldsymbol{\beta}$ in model $M.$
+- We can consider a joint update of the regression parameters $(\boldsymbol{\beta}, M)$ by sampling from their joint distribution $$p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta}) p(M \mid \boldsymbol{\theta}).$$ 
+- The update for $p(\boldsymbol{\beta} \mid M, \boldsymbol{\theta})$ is as usual.
+
+:::
 
 ## Update for model
 
@@ -782,10 +793,10 @@ where $\boldsymbol{\mu}_{\boldsymbol{\beta}}$ and $\boldsymbol{Q}_{\boldsymbol{\
 
 ## Moves for variable selection
 
-We consider different types of move for the $k_{\max}$ potential covariates (including interactions, etc.) [@Holmes:2002]
+We consider different types of move for the $k_{\max}$ potential covariates (including interactions, etc.) [@Holmes:2002].
 
-- birth: adding an unused covariate chosen at random from the remaining ones
-- death: removing one covariate at random from the current matrix
+- birth: adding an unused covariate chosen at random from the remaining ones,
+- death: removing one covariate at random from the current matrix,
 - swap: changing an active covariate for an unused one.
 
 Only the last type of move preserves the dimension.
@@ -793,8 +804,7 @@ Only the last type of move preserves the dimension.
 ## Jacobians for reversible jump
 
 
-
-For most moves, the Jacobian $J=1$, except in four cases where the dimension $|M| \in\{1, 2, k_{\max}-1, k_{\max}\}$ and
+For most moves, the Jacobian is $J=1$, except in four cases where the dimension $|M| \in\{1, 2, k_{\max}-1, k_{\max}\}$ and
 
 ::: {style="font-size: 90%;"}
 
@@ -811,16 +821,16 @@ We can keep track of which variables are active at each iteration of the MCMC an
 
 This methods
 
-- explores neighbouring models (Grey code) 
-- works only  with a limited number of covariates, say $p < 25.$
+- only explores neighbouring models (Grey code),
+- works only with a small number of covariates, $p < 25.$
 
 ## Learning objectives
 
 Students should be able to
 
-- implement the Bayesian linear model
-- distinguish between global and local shrinkage priors
-- use methods for variable selection via dedicated software implementations
+- implement the Bayesian linear model,
+- distinguish between global and local shrinkage priors,
+- use methods for variable selection via dedicated software implementations.
 
 ## Summary (1/3)
 
@@ -829,7 +839,7 @@ Students should be able to
 - Most software implementations will work with scaled regressors 
     - Gaussian models are closed under linear transformations
 - Conjugate priors allow for Gibbs sampling (extension of the Gaussian-inverse gamma model)
-- In more complex hierarchical models, we may need to specificy covariance structures
+- In more complex hierarchical models, we may need to specify covariance structures
     - conjugate Wishart priors are not recommended
     - non-conjugate priors can be easily dealt with in modern applications
     - better to provide separate priors for individual scales and correlation
@@ -838,23 +848,21 @@ Students should be able to
 
 ## Summary (2/3)
 
-Variable selection in Bayesian models is different from frequentist
+Variable selection in Bayesian models is different from frequentist.
 
 Many classical methods provide global shrinkage:
 
 - Ridge regression arises naturally from conjugate priors (but scaling is fixed or assigned a prior)
-- The Bayesian LASSO model only shrinks coefficients towards zero)
+- The Bayesian LASSO model only shrinks coefficients towards zero).
 
-Other models provide local shrinkage
-
-- Examples include the horseshoe prior
+Other models provide local shrinkage (e.g., horseshoe prior).
 
 ## Summary (3/3)
 
 Variable selection comes from prior probabilities of covariates not being included:
 
-- assign probabilities to specific models with only subset of covariates (Bayesian model averaging)
-- use priors with point masses at zero, which allows for posterior probability at zero (spike-and-slab)
+- assign probabilities to specific models with only subset of covariates (Bayesian model averaging),
+- use priors with point masses at zero, which allows for posterior probability at zero (spike-and-slab),
      - these have a discrete component, so are harder to fit.
 
 ## References
