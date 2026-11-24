@@ -17,12 +17,12 @@ logpost <- function(x) {
 }
 # Hessian evaluated at MAP
 H <- -numDeriv::hessian(logpost, x = map)
+# Compare with analytical expression
+(n + a - 1) / map^2
+
 # Approximation to log of marginal likelihood
-log_marg_laplace <- 1 /
-  2 *
-  log(2 * pi) -
-  c(determinant(H)$modulus) +
-  logpost(map)
+log_marg_laplace <-
+  log(2 * pi) / 2 - c(determinant(H)$modulus) / 2 + logpost(map)
 
 
 # Gaussian approximation to the posterior
@@ -53,7 +53,6 @@ curve(
 
 
 # Posterior expectation
-
 laplace_mean <- exp(-1) /
   (s + b) *
   exp((n + a + 0.5) * log(n + a) - (n + a - 0.5) * log(n + a - 1))

@@ -66,8 +66,8 @@
     "objectID": "slides/bayesmod-slides8.html#bayesian-regression",
     "href": "slides/bayesmod-slides8.html#bayesian-regression",
     "title": "Bayesian modelling",
-    "section": "Bayesian regression",
-    "text": "Bayesian regression\nSame, same, but different…\n\nGeneralized linear models, with distributional assumptions and link functions.\nWe assign priors to \\(\\boldsymbol{\\beta}\\) which\n\ncan provide shrinkage (regularization towards zero)\ncan enable variable selection (spike and slab)"
+    "section": "",
+    "text": "Same, same, but different…\n\nGeneralized linear models, with distributional assumptions and link functions.\nWe assign priors to \\(\\boldsymbol{\\beta}\\) which\n\ncan provide shrinkage (regularization towards zero)\ncan enable variable selection (spike and slab)"
   },
   {
     "objectID": "slides/bayesmod-slides8.html#model-setup",
@@ -151,7 +151,7 @@
     "href": "slides/bayesmod-slides8.html#posterior-densities-for-marginal-effects",
     "title": "Bayesian modelling",
     "section": "Posterior densities for marginal effects",
-    "text": "Posterior densities for marginal effects\n\n\nFigure 1: Difference in appropriation rating for black vs non-black Chef Dax, average accross different levels of brand action."
+    "text": "Posterior densities for marginal effects\n\n\n\n\n\n\n\n\nFigure 1: Difference in appropriation rating for black vs non-black Chef Dax, average accross different levels of brand action."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#chef-dax-and-cultural-appropriation",
@@ -221,7 +221,7 @@
     "href": "slides/bayesmod-slides8.html#wishart-draws",
     "title": "Bayesian modelling",
     "section": "Wishart draws",
-    "text": "Wishart draws\n\n\nFigure 2: Prior draws from a bivariate inverse Wishart with identity scale matrix and \\(\\nu \\in \\{3, 20\\}\\) degrees of freedom."
+    "text": "Wishart draws\n\n\n\n\n\n\n\n\nFigure 2: Prior draws from a bivariate inverse Wishart with identity scale matrix and \\(\\nu \\in \\{3, 20\\}\\) degrees of freedom."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#onion-peel-prior",
@@ -277,14 +277,14 @@
     "href": "slides/bayesmod-slides8.html#shrinkage-weights",
     "title": "Bayesian modelling",
     "section": "Shrinkage weights",
-    "text": "Shrinkage weights\n\n\nFigure 3: Density of penalization weights \\(\\kappa\\) of spike (near zero) and slab (near one) for three shrinkage priors."
+    "text": "Shrinkage weights\n\n\n\n\n\n\n\n\nFigure 3: Density of penalization weights \\(\\kappa\\) of spike (near zero) and slab (near one) for three shrinkage priors."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#comparison-of-shrinkage-priors",
     "href": "slides/bayesmod-slides8.html#comparison-of-shrinkage-priors",
     "title": "Bayesian modelling",
     "section": "Comparison of shrinkage priors",
-    "text": "Comparison of shrinkage priors\n\n\nFigure 4: Marginal density for a regression coefficient \\(\\beta\\) with horseshoe prior (full), Laplace (dashed) and a Student-\\(t\\) (thick dotted)."
+    "text": "Comparison of shrinkage priors\n\n\n\n\n\n\n\n\nFigure 4: Marginal density for a regression coefficient \\(\\beta\\) with horseshoe prior (full), Laplace (dashed) and a Student-\\(t\\) (thick dotted)."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#comments-about-the-horseshoe",
@@ -319,7 +319,7 @@
     "href": "slides/bayesmod-slides8.html#density-estimates-of-ordered-coefficients",
     "title": "Bayesian modelling",
     "section": "Density estimates of ordered coefficients",
-    "text": "Density estimates of ordered coefficients\n\n\nFigure 5: Density estimates for regression coefficients with Gaussian (ridge), double exponential (Laplace) and horseshoe priors for the diabetes data."
+    "text": "Density estimates of ordered coefficients\n\n\n\n\n\n\n\n\nFigure 5: Density estimates for regression coefficients with Gaussian (ridge), double exponential (Laplace) and horseshoe priors for the diabetes data."
   },
   {
     "objectID": "slides/bayesmod-slides8.html#comments-on-penalization",
@@ -1691,7 +1691,7 @@
     "href": "slides/bayesmod-slides10.html#numerical-approximation-to-marginal-likelihood",
     "title": "Bayesian modelling",
     "section": "Numerical approximation to marginal likelihood",
-    "text": "Numerical approximation to marginal likelihood\n\ndata(waiting, package = \"hecbayes\")\na &lt;- 0.01; b &lt;- 0.01\nn &lt;- length(waiting); s &lt;- sum(waiting)\nmap &lt;- (n + a - 1)/(s + b) #posterior mode\nlogpost &lt;- function(x){\n  sum(dexp(waiting, rate = x, log = TRUE)) +\n    dgamma(x, a, b, log = TRUE)\n}\n# Hessian evaluated at MAP\nH &lt;- -c(numDeriv::hessian(logpost, x = map))\n# Laplace approximation\nmarg_lik_laplace &lt;- 0.5*log(2*pi) - log(H) + logpost(map)\n\nThe Laplace approximation gives \\(-281.9.\\)"
+    "text": "Numerical approximation to marginal likelihood\n\ndata(waiting, package = \"hecbayes\")\na &lt;- 0.01; b &lt;- 0.01\nn &lt;- length(waiting); s &lt;- sum(waiting)\nmap &lt;- (n + a - 1)/(s + b) #posterior mode\nlogpost &lt;- function(x){\n  sum(dexp(waiting, rate = x, log = TRUE)) +\n    dgamma(x, a, b, log = TRUE)\n}\n# Hessian evaluated at MAP\nH &lt;- (n + a - 1) / map^2\n# H &lt;- -c(numDeriv::hessian(logpost, x = map))\n# Laplace approximation\nmarg_lik_laplace &lt;- 0.5*log(2*pi) - 0.5*log(H) + logpost(map)\n\nThe Laplace approximation gives \\(-281.9.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#posterior-expectation-using-laplace-method",
@@ -1747,14 +1747,14 @@
     "href": "slides/bayesmod-slides10.html#reducing-the-approximation-rate",
     "title": "Bayesian modelling",
     "section": "Reducing the approximation rate",
-    "text": "Reducing the approximation rate\nIgnoring all but the two first terms leads to an \\(\\mathrm{O}(1)\\) approximation error.\nTaking a prior centered at the MLE with unit Fisher information precision is equivalent to a phantom observation: cancellation of terms in the expansion gives \\[\\boldsymbol{\\theta} \\sim \\mathsf{Gauss}_p\\{ \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}, \\boldsymbol{\\imath}^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\},\\] with approximation error of \\(\\mathrm{O}(n^{-1/2}).\\)"
+    "text": "Reducing the approximation rate\nIgnoring all but the two first terms leads to an \\(\\mathrm{O}(1)\\) approximation error.\nTaking a prior centered at the MLE with unit Fisher information precision is equivalent to a phantom observation: cancellation of terms in the expansion gives \\[\\sqrt{n}\\boldsymbol{\\imath}^{-1/2}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})(\\boldsymbol{\\theta}-\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}) \\stackrel{\\cdot}{\\sim} \\mathsf{Gauss}_p(\\boldsymbol{0}_p,\\mathbf{I}_p),\\] with approximation error of \\(\\mathrm{O}(n^{-1/2}).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#frequentist-approximation-to-the-marginal-likelihood",
     "href": "slides/bayesmod-slides10.html#frequentist-approximation-to-the-marginal-likelihood",
     "title": "Bayesian modelling",
     "section": "Frequentist approximation to the marginal likelihood",
-    "text": "Frequentist approximation to the marginal likelihood\nThis gives the approximation, whose quality improves with increasing sample size \\(n\\): \\[\\begin{align*}\n-2\\log p(\\boldsymbol{y}) \\approx \\mathsf{BIC} = -2\\log p(\\boldsymbol{y} \\mid \\boldsymbol{\\theta}) + p\\log n.\n\\end{align*}\\]\nThe unnormalized weight \\[\\exp(-\\mathsf{BIC}/2)\\] is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor."
+    "text": "Frequentist approximation to the marginal likelihood\nIgnoring terms that are \\(\\mathrm{O}(1)\\), we get the approximation \\[\\begin{align*}\n-2\\log p(\\boldsymbol{y}) \\approx \\mathsf{BIC} = -2\\log p(\\boldsymbol{y} \\mid \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}) + p\\log n.\n\\end{align*}\\]\nThe unnormalized weight \\[\\exp(-\\mathsf{BIC}/2)\\] is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor."
   },
   {
     "objectID": "slides/bayesmod-slides10.html#bayesian-model-averaging-via-bic",
@@ -1789,7 +1789,7 @@
     "href": "slides/bayesmod-slides10.html#gaussian-approximation-to-posterior",
     "title": "Bayesian modelling",
     "section": "Gaussian approximation to posterior",
-    "text": "Gaussian approximation to posterior\nThe approximate posterior must be Gaussian with precision \\(\\jmath_n^{-1}\\) and mean \\(\\mu_n,\\) where \\[\\begin{align*}\n\\jmath_n &= \\jmath_0(\\widehat{\\boldsymbol{\\theta}}_{0}) + \\jmath(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\n\\\\\n\\widehat{\\boldsymbol{\\theta}}_n &= \\jmath_n^{-1}\\left\\{ \\jmath_0(\\widehat{\\boldsymbol{\\theta}}_{0})\\widehat{\\boldsymbol{\\theta}}_{0} + \\jmath(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}\\right\\}\n\\end{align*}\\] and note that \\(\\jmath_0(\\widehat{\\boldsymbol{\\theta}}_{0}) = \\mathrm{O}(1),\\) whereas \\(\\jmath_n\\) is \\(\\mathrm{O}(n).\\)"
+    "text": "Gaussian approximation to posterior\nThe approximate posterior must be Gaussian with precision \\(\\jmath_n\\) and mean \\(\\mu_n,\\) where \\[\\begin{align*}\n\\jmath_n &= \\jmath_0(\\widehat{\\boldsymbol{\\theta}}_{0}) + \\jmath(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\n\\\\\n\\widehat{\\boldsymbol{\\theta}}_n &= \\jmath_n^{-1}\\left\\{ \\jmath_0(\\widehat{\\boldsymbol{\\theta}}_{0})\\widehat{\\boldsymbol{\\theta}}_{0} + \\jmath(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}})\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MLE}}\\right\\}\n\\end{align*}\\] and note that \\(\\jmath_0(\\widehat{\\boldsymbol{\\theta}}_{0}) = \\mathrm{O}(1),\\) whereas \\(\\jmath_n\\) is \\(\\mathrm{O}(n).\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#gaussian-large-sample-approximation-to-mle",
@@ -2013,7 +2013,7 @@
     "href": "slides/bayesmod-slides10.html#marginal-summaries",
     "title": "Bayesian modelling",
     "section": "Marginal summaries",
-    "text": "Marginal summaries\n\n# Compute density, quantiles, etc. via inla.*marginal\n# Change of variable to get variance from precision\nmarg_var &lt;- INLA::inla.tmarginal(\n  fun = function(x) { 1 / x }, \n  marginal = marg_prec)\nINLA::inla.qmarginal(marg_var, p = c(0.025, 0.5,  0.975))\n\n[1] 0.2875417 0.4523687 0.7324300\n\n# Posterior marginal mean and variance of phi\nmom1 &lt;- INLA::inla.emarginal(\n    fun = function(x){x}, \n    marginal = marg_phi)\nmom2 &lt;- INLA::inla.emarginal(\n    fun = function(x){x^2}, \n    marginal = marg_phi)\nc(mean = mom1, sd = sqrt(mom2 - mom1^2))\n\n      mean         sd \n0.98409439 0.00566567"
+    "text": "Marginal summaries\n\n# Compute density, quantiles, etc. via inla.*marginal\n# Change of variable to get variance from precision\nmarg_var &lt;- INLA::inla.tmarginal(\n  fun = function(x) { 1 / x }, \n  marginal = marg_prec)\nINLA::inla.qmarginal(marg_var, p = c(0.025, 0.5,  0.975))\n\n[1] 0.2872159 0.4529812 0.7337615\n\n# Posterior marginal mean and variance of phi\nmom1 &lt;- INLA::inla.emarginal(\n    fun = function(x){x}, \n    marginal = marg_phi)\nmom2 &lt;- INLA::inla.emarginal(\n    fun = function(x){x^2}, \n    marginal = marg_phi)\nc(mean = mom1, sd = sqrt(mom2 - mom1^2))\n\n      mean         sd \n0.98409185 0.00568761"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#tokyo-binomial-time-series",
@@ -2104,7 +2104,7 @@
     "href": "exercises/08-exercise.html",
     "title": "Exercises 8",
     "section": "",
-    "text": "Zellner’s \\(g\\) prior for linear regression takes the form \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\sigma, \\mathbf{X} &\\sim \\mathsf{Gauss}_p\\left(\\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right)\\\\\np(\\sigma^2) &\\propto \\frac{1}{\\sigma^2}\n\\end{align*}\\] which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is \\[\\widehat{\\boldsymbol{\\beta}} \\sim \\mathsf{Gauss}_p\\{\\boldsymbol{\\beta}, \\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\}.\\] Note that the prior is conditional on the covariates, which are assumed to be exogeneous.\n\nShow that Zellner’s \\(g\\) prior gives rise to a conjugate prior and derive the posterior mean and covariance.\nWhat is the benefit of this relative to an isotropic prior covariance \\(\\sigma^2\\mathsf{I}_p\\) for \\(\\beta \\mid \\sigma^2\\)?\nGive an interpretation to \\(\\kappa_0\\): what happens when \\(\\kappa_0=1\\)? or \\(\\kappa_0=n\\)?",
+    "text": "Zellner’s \\(g\\) prior (Zellner, 1986) for linear regression takes the form \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\sigma^2, \\mathbf{X} &\\sim \\mathsf{Gauss}_p\\left(\\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right)\\\\\np(\\sigma^2) &\\propto \\frac{1}{\\sigma^2}\n\\end{align*}\\] which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is \\[\\widehat{\\boldsymbol{\\beta}} \\sim \\mathsf{Gauss}_p\\{\\boldsymbol{\\beta}, \\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\}.\\] Note that the prior is conditional on the covariates, which are assumed to be exogeneous.\n\nShow that Zellner’s \\(g\\) prior gives rise to a conjugate prior and derive the posterior mean and covariance.\nWhat is the benefit of this relative to an isotropic prior covariance \\(\\sigma^2\\mathbf{I}_p\\) for \\(\\beta \\mid \\sigma^2\\)?\nGive an interpretation to \\(\\kappa_0\\): what happens when \\(\\kappa_0=1\\)? or \\(\\kappa_0=n\\)?",
     "crumbs": [
       "Exercises",
       "Problem sets",
@@ -2116,7 +2116,7 @@
     "href": "exercises/08-exercise.html#exercise-8.1",
     "title": "Exercises 8",
     "section": "",
-    "text": "Zellner’s \\(g\\) prior for linear regression takes the form \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\sigma, \\mathbf{X} &\\sim \\mathsf{Gauss}_p\\left(\\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right)\\\\\np(\\sigma^2) &\\propto \\frac{1}{\\sigma^2}\n\\end{align*}\\] which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is \\[\\widehat{\\boldsymbol{\\beta}} \\sim \\mathsf{Gauss}_p\\{\\boldsymbol{\\beta}, \\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\}.\\] Note that the prior is conditional on the covariates, which are assumed to be exogeneous.\n\nShow that Zellner’s \\(g\\) prior gives rise to a conjugate prior and derive the posterior mean and covariance.\nWhat is the benefit of this relative to an isotropic prior covariance \\(\\sigma^2\\mathsf{I}_p\\) for \\(\\beta \\mid \\sigma^2\\)?\nGive an interpretation to \\(\\kappa_0\\): what happens when \\(\\kappa_0=1\\)? or \\(\\kappa_0=n\\)?",
+    "text": "Zellner’s \\(g\\) prior (Zellner, 1986) for linear regression takes the form \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\sigma^2, \\mathbf{X} &\\sim \\mathsf{Gauss}_p\\left(\\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right)\\\\\np(\\sigma^2) &\\propto \\frac{1}{\\sigma^2}\n\\end{align*}\\] which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is \\[\\widehat{\\boldsymbol{\\beta}} \\sim \\mathsf{Gauss}_p\\{\\boldsymbol{\\beta}, \\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\}.\\] Note that the prior is conditional on the covariates, which are assumed to be exogeneous.\n\nShow that Zellner’s \\(g\\) prior gives rise to a conjugate prior and derive the posterior mean and covariance.\nWhat is the benefit of this relative to an isotropic prior covariance \\(\\sigma^2\\mathbf{I}_p\\) for \\(\\beta \\mid \\sigma^2\\)?\nGive an interpretation to \\(\\kappa_0\\): what happens when \\(\\kappa_0=1\\)? or \\(\\kappa_0=n\\)?",
     "crumbs": [
       "Exercises",
       "Problem sets",
@@ -2573,7 +2573,7 @@
     "href": "content/10-content.html#code",
     "title": "Deterministic approximations",
     "section": "Code",
-    "text": "Code\n\nLaplace approximations for exponential-gamma model R script and skew-symmetric approximation (/files/code/skewsym-approx.R)\nINLA package R script",
+    "text": "Code\n\nLaplace approximations for exponential-gamma model R script and skew-symmetric approximation R script\nINLA package R script",
     "crumbs": [
       "Content",
       "Course content",
@@ -5609,8 +5609,8 @@
     "objectID": "slides/bayesmod-slides9.html#motivation",
     "href": "slides/bayesmod-slides9.html#motivation",
     "title": "Bayesian modelling",
-    "section": "Motivation",
-    "text": "Motivation\nWe are interested in calculating expectations of some function \\(g\\) against the posterior. \\[\\begin{align*}\n\\int_{\\mathbb{R}^d} g(\\boldsymbol{\\theta}) p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]\nThe integral is determined by the product of the “volume” of \\(g(\\cdot)\\) and the posterior density \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\)."
+    "section": "",
+    "text": "We are interested in calculating expectations of some function \\(g\\) against the posterior. \\[\\begin{align*}\n\\int_{\\mathbb{R}^d} g(\\boldsymbol{\\theta}) p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]\nThe integral is determined by the product of the “volume” of \\(g(\\cdot)\\) and the posterior density \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\)."
   },
   {
     "objectID": "slides/bayesmod-slides9.html#curse-of-dimensionality",
@@ -5771,13 +5771,34 @@
     "href": "exercises/08-solution.html",
     "title": "Solution 8",
     "section": "",
-    "text": "Zellner’s \\(g\\) prior (Zellner, 1986) for linear regression takes the form \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\sigma^2, \\mathbf{X} &\\sim \\mathsf{Gauss}_p\\left(\\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right)\\\\\np(\\sigma^2) &\\propto \\frac{1}{\\sigma^2}\n\\end{align*}\\] which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is \\[\\widehat{\\boldsymbol{\\beta}} \\sim \\mathsf{Gauss}_p\\{\\boldsymbol{\\beta}, \\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\}.\\] Note that the prior is conditional on the covariates, which are assumed to be exogeneous.\n\nShow that Zellner’s \\(g\\) prior gives rise to a conjugate prior and derive the posterior mean and covariance.\n\n\nSolution. This follows the same derivation as the Gaussian - inverse gamma model in the chapter on regression models.\nThe data distribution is \\[\\begin{align*}\n\\boldsymbol{Y} \\mid \\boldsymbol{\\beta}, \\mathbf{X}, \\sigma^2 &\\sim \\mathsf{Gauss}_n(\\mathbf{X}\\boldsymbol{\\beta}, \\sigma^2\\mathbf{I}_n)\\\\\n\\boldsymbol{\\beta} \\mid \\mathbf{X}, \\sigma^2 & \\sim \\mathsf{Gauss}_p\\left\\{ \\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right\\} \\\\\np(\\sigma^2) &\\propto \\sigma^{-2}\n\\end{align*}\\]\n\n\nWhat is the benefit of this relative to an isotropic prior covariance \\(\\sigma^2\\mathbf{I}_p\\) for \\(\\beta \\mid \\sigma^2\\)?\n\n\nSolution. The model is now invariant to linear change of units. Indeed, consider the case with a single covariate \\(\\mathbf{x}^{\\star}_1 \\mapsto 2\\mathbf{x}_1.\\) Then, the corresponding coefficient \\(\\beta_1\\) shrinks, and the posterior would have \\(\\widehat{\\beta}_1^{\\star} = \\widehat{\\beta}_1/2\\). The \\(g\\)-prior directly incorporates the change through the variance term \\(\\mathbf{X}^\\top\\mathbf{X}\\).\n\n\nGive an interpretation to \\(\\kappa_0\\): what happens when \\(\\kappa_0=1\\)? or \\(\\kappa_0=n\\)?\n\n\nSolution. We can establish that the posterior mean is a weighted average of the maximum likelihood \\(\\widehat{\\boldsymbol{\\beta}},\\) the OLS estimator, and the prior mean \\(\\boldsymbol{\\beta}_0.\\) If \\(\\kappa_0=1,\\) then the prior weight for the prior is \\(1/n,\\) corresponding to a phantom observation for a sample of size \\(n+1.\\) By contrast, taking \\(\\kappa_0=n\\) gives prior weight \\(1/2\\) regardless of the sample size, which is clearly undesirable as the prior does not vanishes."
+    "text": "Zellner’s \\(g\\) prior (Zellner, 1986) for linear regression takes the form \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\sigma^2, \\mathbf{X} &\\sim \\mathsf{Gauss}_p\\left(\\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right)\\\\\np(\\sigma^2) &\\propto \\frac{1}{\\sigma^2}\n\\end{align*}\\] which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is \\[\\widehat{\\boldsymbol{\\beta}} \\sim \\mathsf{Gauss}_p\\{\\boldsymbol{\\beta}, \\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\}.\\] Note that the prior is conditional on the covariates, which are assumed to be exogeneous.\n\nShow that Zellner’s \\(g\\) prior gives rise to a conjugate prior and derive the posterior mean and covariance.\n\n\nSolution. This follows the same derivation as the Gaussian - inverse gamma model in the chapter on regression models.\nThe data distribution is \\[\\begin{align*}\n\\boldsymbol{Y} \\mid \\boldsymbol{\\beta}, \\mathbf{X}, \\sigma^2 &\\sim \\mathsf{Gauss}_n(\\mathbf{X}\\boldsymbol{\\beta}, \\sigma^2\\mathbf{I}_n)\\\\\n\\boldsymbol{\\beta} \\mid \\mathbf{X}, \\sigma^2 & \\sim \\mathsf{Gauss}_p\\left\\{ \\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right\\} \\\\\np(\\sigma^2) &\\propto \\sigma^{-2}.\n\\end{align*}\\]\nThe log posterior \\[\\begin{align*}\n\\ell(\\boldsymbol{\\beta}, \\sigma^2) \\propto -\\frac{n}{2} \\log(\\sigma^2) -\\frac{(\\boldsymbol{y}-\\mathbf{X}\\boldsymbol{\\beta})^\\top (\\boldsymbol{y}-\\mathbf{X}\\boldsymbol{\\beta})}{2\\sigma^2} -  \\log  - \\frac{\\kappa_0(\\boldsymbol{\\beta}-\\boldsymbol{\\beta}_0)^\\top \\mathbf{X}^\\top\\mathbf{X} (\\boldsymbol{\\beta}-\\boldsymbol{\\beta}_0)}{2n\\sigma^2}\n\\end{align*}\\]\n\n\nWhat is the benefit of this relative to an isotropic prior covariance \\(\\sigma^2\\mathbf{I}_p\\) for \\(\\beta \\mid \\sigma^2\\)?\n\n\nSolution. The model is now invariant to linear change of units. Indeed, consider the case with a single covariate \\(\\mathbf{x}^{\\star}_1 \\mapsto 2\\mathbf{x}_1.\\) Then, the corresponding coefficient \\(\\beta_1\\) shrinks, and the posterior would have \\(\\widehat{\\beta}_1^{\\star} = \\widehat{\\beta}_1/2\\). The \\(g\\)-prior directly incorporates the change through the variance term \\(\\mathbf{X}^\\top\\mathbf{X}.\\)\n\n\nGive an interpretation to \\(\\kappa_0\\): what happens when \\(\\kappa_0=1\\)? or \\(\\kappa_0=n\\)?\n\n\nSolution. We can establish that the posterior mean is a weighted average of the maximum likelihood \\(\\widehat{\\boldsymbol{\\beta}},\\) the OLS estimator, and the prior mean \\(\\boldsymbol{\\beta}_0.\\) If \\(\\kappa_0=1,\\) then the prior weight for the prior is \\(1/n,\\) corresponding to a phantom observation for a sample of size \\(n+1.\\) By contrast, taking \\(\\kappa_0=n\\) gives prior weight \\(1/2\\) regardless of the sample size, which is clearly undesirable as the prior does not vanishes."
   },
   {
     "objectID": "exercises/08-solution.html#exercise-8.1",
     "href": "exercises/08-solution.html#exercise-8.1",
     "title": "Solution 8",
     "section": "",
-    "text": "Zellner’s \\(g\\) prior (Zellner, 1986) for linear regression takes the form \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\sigma^2, \\mathbf{X} &\\sim \\mathsf{Gauss}_p\\left(\\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right)\\\\\np(\\sigma^2) &\\propto \\frac{1}{\\sigma^2}\n\\end{align*}\\] which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is \\[\\widehat{\\boldsymbol{\\beta}} \\sim \\mathsf{Gauss}_p\\{\\boldsymbol{\\beta}, \\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\}.\\] Note that the prior is conditional on the covariates, which are assumed to be exogeneous.\n\nShow that Zellner’s \\(g\\) prior gives rise to a conjugate prior and derive the posterior mean and covariance.\n\n\nSolution. This follows the same derivation as the Gaussian - inverse gamma model in the chapter on regression models.\nThe data distribution is \\[\\begin{align*}\n\\boldsymbol{Y} \\mid \\boldsymbol{\\beta}, \\mathbf{X}, \\sigma^2 &\\sim \\mathsf{Gauss}_n(\\mathbf{X}\\boldsymbol{\\beta}, \\sigma^2\\mathbf{I}_n)\\\\\n\\boldsymbol{\\beta} \\mid \\mathbf{X}, \\sigma^2 & \\sim \\mathsf{Gauss}_p\\left\\{ \\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right\\} \\\\\np(\\sigma^2) &\\propto \\sigma^{-2}\n\\end{align*}\\]\n\n\nWhat is the benefit of this relative to an isotropic prior covariance \\(\\sigma^2\\mathbf{I}_p\\) for \\(\\beta \\mid \\sigma^2\\)?\n\n\nSolution. The model is now invariant to linear change of units. Indeed, consider the case with a single covariate \\(\\mathbf{x}^{\\star}_1 \\mapsto 2\\mathbf{x}_1.\\) Then, the corresponding coefficient \\(\\beta_1\\) shrinks, and the posterior would have \\(\\widehat{\\beta}_1^{\\star} = \\widehat{\\beta}_1/2\\). The \\(g\\)-prior directly incorporates the change through the variance term \\(\\mathbf{X}^\\top\\mathbf{X}\\).\n\n\nGive an interpretation to \\(\\kappa_0\\): what happens when \\(\\kappa_0=1\\)? or \\(\\kappa_0=n\\)?\n\n\nSolution. We can establish that the posterior mean is a weighted average of the maximum likelihood \\(\\widehat{\\boldsymbol{\\beta}},\\) the OLS estimator, and the prior mean \\(\\boldsymbol{\\beta}_0.\\) If \\(\\kappa_0=1,\\) then the prior weight for the prior is \\(1/n,\\) corresponding to a phantom observation for a sample of size \\(n+1.\\) By contrast, taking \\(\\kappa_0=n\\) gives prior weight \\(1/2\\) regardless of the sample size, which is clearly undesirable as the prior does not vanishes."
+    "text": "Zellner’s \\(g\\) prior (Zellner, 1986) for linear regression takes the form \\[\\begin{align*}\n\\boldsymbol{\\beta} \\mid \\sigma^2, \\mathbf{X} &\\sim \\mathsf{Gauss}_p\\left(\\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right)\\\\\np(\\sigma^2) &\\propto \\frac{1}{\\sigma^2}\n\\end{align*}\\] which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is \\[\\widehat{\\boldsymbol{\\beta}} \\sim \\mathsf{Gauss}_p\\{\\boldsymbol{\\beta}, \\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\}.\\] Note that the prior is conditional on the covariates, which are assumed to be exogeneous.\n\nShow that Zellner’s \\(g\\) prior gives rise to a conjugate prior and derive the posterior mean and covariance.\n\n\nSolution. This follows the same derivation as the Gaussian - inverse gamma model in the chapter on regression models.\nThe data distribution is \\[\\begin{align*}\n\\boldsymbol{Y} \\mid \\boldsymbol{\\beta}, \\mathbf{X}, \\sigma^2 &\\sim \\mathsf{Gauss}_n(\\mathbf{X}\\boldsymbol{\\beta}, \\sigma^2\\mathbf{I}_n)\\\\\n\\boldsymbol{\\beta} \\mid \\mathbf{X}, \\sigma^2 & \\sim \\mathsf{Gauss}_p\\left\\{ \\boldsymbol{\\beta}_0, \\frac{n}{\\kappa_0}\\sigma^2(\\mathbf{X}^\\top\\mathbf{X})^{-1}\\right\\} \\\\\np(\\sigma^2) &\\propto \\sigma^{-2}.\n\\end{align*}\\]\nThe log posterior \\[\\begin{align*}\n\\ell(\\boldsymbol{\\beta}, \\sigma^2) \\propto -\\frac{n}{2} \\log(\\sigma^2) -\\frac{(\\boldsymbol{y}-\\mathbf{X}\\boldsymbol{\\beta})^\\top (\\boldsymbol{y}-\\mathbf{X}\\boldsymbol{\\beta})}{2\\sigma^2} -  \\log  - \\frac{\\kappa_0(\\boldsymbol{\\beta}-\\boldsymbol{\\beta}_0)^\\top \\mathbf{X}^\\top\\mathbf{X} (\\boldsymbol{\\beta}-\\boldsymbol{\\beta}_0)}{2n\\sigma^2}\n\\end{align*}\\]\n\n\nWhat is the benefit of this relative to an isotropic prior covariance \\(\\sigma^2\\mathbf{I}_p\\) for \\(\\beta \\mid \\sigma^2\\)?\n\n\nSolution. The model is now invariant to linear change of units. Indeed, consider the case with a single covariate \\(\\mathbf{x}^{\\star}_1 \\mapsto 2\\mathbf{x}_1.\\) Then, the corresponding coefficient \\(\\beta_1\\) shrinks, and the posterior would have \\(\\widehat{\\beta}_1^{\\star} = \\widehat{\\beta}_1/2\\). The \\(g\\)-prior directly incorporates the change through the variance term \\(\\mathbf{X}^\\top\\mathbf{X}.\\)\n\n\nGive an interpretation to \\(\\kappa_0\\): what happens when \\(\\kappa_0=1\\)? or \\(\\kappa_0=n\\)?\n\n\nSolution. We can establish that the posterior mean is a weighted average of the maximum likelihood \\(\\widehat{\\boldsymbol{\\beta}},\\) the OLS estimator, and the prior mean \\(\\boldsymbol{\\beta}_0.\\) If \\(\\kappa_0=1,\\) then the prior weight for the prior is \\(1/n,\\) corresponding to a phantom observation for a sample of size \\(n+1.\\) By contrast, taking \\(\\kappa_0=n\\) gives prior weight \\(1/2\\) regardless of the sample size, which is clearly undesirable as the prior does not vanishes."
+  },
+  {
+    "objectID": "slides/bayesmod-slides9.html",
+    "href": "slides/bayesmod-slides9.html",
+    "title": "Bayesian modelling",
+    "section": "",
+    "text": "We are interested in calculating expectations of some function \\(g\\) against the posterior. \\[\\begin{align*}\n\\int_{\\mathbb{R}^d} g(\\boldsymbol{\\theta}) p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y}) \\mathrm{d} \\boldsymbol{\\theta}.\n\\end{align*}\\]\nThe integral is determined by the product of the “volume” of \\(g(\\cdot)\\) and the posterior density \\(p(\\boldsymbol{\\theta} \\mid \\boldsymbol{y})\\)."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html",
+    "href": "slides/bayesmod-slides10.html",
+    "title": "Bayesian modelling",
+    "section": "",
+    "text": "Markov chain Monte Carlo methods require tuning and can be markedly slow when the dimension of the parameter space grows.\nThe curse of dimensionality affects the performance of MCMC.\nWe consider simple approximations to the marginal likelihood, posterior moments, or posterior density that only require numerical optimization."
+  },
+  {
+    "objectID": "slides/bayesmod-slides8.html",
+    "href": "slides/bayesmod-slides8.html",
+    "title": "Bayesian modelling",
+    "section": "",
+    "text": "Same, same, but different…\n\nGeneralized linear models, with distributional assumptions and link functions.\nWe assign priors to \\(\\boldsymbol{\\beta}\\) which\n\ncan provide shrinkage (regularization towards zero)\ncan enable variable selection (spike and slab)"
   }
 ]

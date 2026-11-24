@@ -191,9 +191,10 @@ logpost <- function(x){
     dgamma(x, a, b, log = TRUE)
 }
 # Hessian evaluated at MAP
-H <- -c(numDeriv::hessian(logpost, x = map))
+H <- (n + a - 1) / map^2
+# H <- -c(numDeriv::hessian(logpost, x = map))
 # Laplace approximation
-marg_lik_laplace <- 0.5*log(2*pi) - log(H) + logpost(map)
+marg_lik_laplace <- 0.5*log(2*pi) - 0.5*log(H) + logpost(map)
 ```
 
 The Laplace approximation gives $`r round(log_marg_laplace,1)`.$
@@ -274,14 +275,14 @@ where the error is now $\mathrm{O}(n^{-1/2})$ due to replacing the true informat
 Ignoring all but the two first terms leads to an $\mathrm{O}(1)$ approximation error.
 
 Taking a prior centered at the MLE with unit Fisher information precision is equivalent to a phantom observation: cancellation of terms in the expansion gives
-$$\boldsymbol{\theta} \sim \mathsf{Gauss}_p\{ \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}, \boldsymbol{\imath}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})\},$$ 
+$$\sqrt{n}\boldsymbol{\imath}^{-1/2}(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})(\boldsymbol{\theta}-\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}) \stackrel{\cdot}{\sim} \mathsf{Gauss}_p(\boldsymbol{0}_p,\mathbf{I}_p),$$ 
 with approximation error of $\mathrm{O}(n^{-1/2}).$
 
 ## Frequentist approximation to the marginal likelihood
 
-This gives the approximation, whose quality improves with increasing sample size $n$:
+Ignoring terms that are $\mathrm{O}(1)$, we get the approximation
 \begin{align*}
--2\log p(\boldsymbol{y}) \approx \mathsf{BIC} = -2\log p(\boldsymbol{y} \mid \boldsymbol{\theta}) + p\log n.
+-2\log p(\boldsymbol{y}) \approx \mathsf{BIC} = -2\log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MLE}}) + p\log n.
 \end{align*}
 
 The unnormalized weight $$\exp(-\mathsf{BIC}/2)$$ is an approximation fo the marginal likelihood sometimes used for model comparison in Bayes factor.
@@ -336,7 +337,7 @@ Together, these yield
 
 ## Gaussian approximation to posterior
 
-The approximate posterior must be Gaussian with precision $\jmath_n^{-1}$ and mean $\mu_n,$ where
+The approximate posterior must be Gaussian with precision $\jmath_n$ and mean $\mu_n,$ where
 \begin{align*}
 \jmath_n &= \jmath_0(\widehat{\boldsymbol{\theta}}_{0}) + \jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MLE}})
 \\

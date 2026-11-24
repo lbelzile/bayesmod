@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.19">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,13 +12,10 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
+code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: 1.5em;}
-div.column{flex: auto;}
-@media screen {
-div.columns{gap: min(4vw, 1.5em);}
-div.column{overflow-x: auto;}
-}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -26,7 +23,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -41,10 +58,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5c1318cf63eba56dbef7ba16bc7d56f5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-a06763021a52c43c40a351ac8b799b8f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f85ba92f94e3b63026c259a480ab99bc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2cb17c8bb9a51688442ec2991039dc21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -76,7 +93,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -328,20 +345,25 @@ window.Quarto = {
 
 <section id="exercise-8.1" class="level2">
 <h2 class="anchored" data-anchor-id="exercise-8.1">Exercise 8.1</h2>
-<p>Zellner’s <span class="math inline">\(g\)</span> prior for linear regression takes the form <span class="math display">\[\begin{align*}
-\boldsymbol{\beta} \mid \sigma, \mathbf{X} &amp;\sim \mathsf{Gauss}_p\left(\boldsymbol{\beta}_0, \frac{n}{\kappa_0}\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\right)\\
+<p>Zellner’s <span class="math inline">\(g\)</span> prior <span class="citation" data-cites="Zellner:1986">(<a href="#ref-Zellner:1986" role="doc-biblioref">Zellner, 1986</a>)</span> for linear regression takes the form <span class="math display">\[\begin{align*}
+\boldsymbol{\beta} \mid \sigma^2, \mathbf{X} &amp;\sim \mathsf{Gauss}_p\left(\boldsymbol{\beta}_0, \frac{n}{\kappa_0}\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\right)\\
 p(\sigma^2) &amp;\propto \frac{1}{\sigma^2}
 \end{align*}\]</span> which gives a prior variance proportional to that of the sampling distribution of the ordinary least squares estimator, which is <span class="math display">\[\widehat{\boldsymbol{\beta}} \sim \mathsf{Gauss}_p\{\boldsymbol{\beta}, \sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\}.\]</span> Note that the prior is conditional on the covariates, which are assumed to be exogeneous.</p>
 <ol type="a">
 <li>Show that Zellner’s <span class="math inline">\(g\)</span> prior gives rise to a conjugate prior and derive the posterior mean and covariance.</li>
-<li>What is the benefit of this relative to an isotropic prior covariance <span class="math inline">\(\sigma^2\mathsf{I}_p\)</span> for <span class="math inline">\(\beta \mid \sigma^2\)</span>?</li>
+<li>What is the benefit of this relative to an isotropic prior covariance <span class="math inline">\(\sigma^2\mathbf{I}_p\)</span> for <span class="math inline">\(\beta \mid \sigma^2\)</span>?</li>
 <li>Give an interpretation to <span class="math inline">\(\kappa_0\)</span>: what happens when <span class="math inline">\(\kappa_0=1\)</span>? or <span class="math inline">\(\kappa_0=n\)</span>?</li>
 </ol>
 
 
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-Zellner:1986" class="csl-entry" role="listitem">
+Zellner, A. (1986). On assessing prior distributions and <span>B</span>ayesian regression analysis with <span class="math inline">\(g\)</span>-prior distributions. <em><span>B</span>ayesian Inference and Decision Techniques: Essays in Honor of <span>B</span>runo de <span>F</span>inetti</em>, 233–243.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
