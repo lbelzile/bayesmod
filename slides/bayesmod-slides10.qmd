@@ -58,7 +58,8 @@ We consider simple approximations to the marginal likelihood, posterior moments,
 
 We need notation to characterize the growth rate of functions: when $n \to \infty$
 
-- big-O: $x = \mathrm{O}(n)$ means that $x/n \to c \in \mathbb{R}$ as $n\to \infty$ - little-o: $x =\mathrm{o}(n)$ implies $x/n \to 0$ as $n\to \infty.$
+- big-O: $x = \mathrm{O}(n)$ means that $x/n \to c \in \mathbb{R},$ 
+- little-o: $x =\mathrm{o}(n)$ implies $x/n \to 0.$
 
 ## Taylor series expansion
 
@@ -565,6 +566,7 @@ Inference becomes **unfeasible** in reasonable time using methods we covered so 
 
 ## Integrated nested Laplace approximation
 
+::: {style="font-size: 0.9em;"}
 
 Consider a model with response $\boldsymbol{y}$ which depends on covariates $\mathbf{x}$ through a latent Gaussian process $\boldsymbol{\beta}.$
 
@@ -572,18 +574,21 @@ Consider a model with response $\boldsymbol{y}$ which depends on covariates $\ma
 Typically, the prior of coefficients $\boldsymbol{\beta} \in \mathbb{R}^p.$ The dimension $p$ can be substantial (several thousands) with a comparably low-dimensional hyperparameter vector $\boldsymbol{\theta} \in \mathbb{R}^m.$
 
 
-Consider data that are conditionally independent given $\boldsymbol{\beta}$ and $\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{Q}^{-1})$ for simplicity.
+Take $\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{Q}^{-1})$ for simplicity. If $\boldsymbol{\beta}$ is a Gaussian Markov random field, the precision matrix $\mathbf{Q}$ will be sparse. This allows one to use dedicated algorithms for sparse matrices.
+
+:::
 
 ## Gaussian approximations
 
+Consider data that are conditionally independent given $\boldsymbol{\beta}$, so that
 \begin{align*}
-p(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto \exp\left\{-\frac{1}{2} \boldsymbol{\beta}^\top\mathbf{Q}\boldsymbol{\beta} + \sum_{i=1}^n \log p(y_i \mid \beta_i, \boldsymbol{\theta})\right\}
+p(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto \exp\left\{-\frac{\boldsymbol{\beta}^\top\mathbf{Q}\boldsymbol{\beta}}{2}  + \sum_{i=1}^n \log p(y_i \mid \beta_i, \boldsymbol{\theta})\right\}
 \end{align*}
-If $\boldsymbol{\beta}$ is a Gaussian Markov random field, the precision matrix $\mathbf{Q}$ will be sparse. 
+
 
 The Gaussian approximation to the posterior would have precision matrix $\mathbf{Q} + \mathrm{diag}(\boldsymbol{c})$ for some vector $\boldsymbol{c}$ obtained from the second-order expansion of the likelihood.
 
-This allows one to use dedicated algorithms for sparse matrices.
+
 
 
 
@@ -607,9 +612,9 @@ The marginal posterior $p(\boldsymbol{\theta} \mid \boldsymbol{y})$ is approxima
 
 This yields
 \begin{align*}
-\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}}
+\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}}.
 \end{align*}
-since the exponential term 
+
 
 ## Note on approximation
 
@@ -652,7 +657,7 @@ While we could marginalize directly the multivariate Laplace approximation $$p_{
 One challenge is that $p$ is **very large**, so calculation of the Hessian $\mathbf{H}$ is costly to evaluate. 
 
 
-Having to evaluate it repeatedly for each marginal $\beta_i$ for $i=1, \ldots, p$ is prohibitive since it involves factorizations of $p \times p$ matrices.
+Having to evaluate it repeatedly for each marginal  for parameter $\beta_i$ with $i=1, \ldots, p$ is prohibitive since it involves factorizations of $p \times p$ matrices.
 
 ## Further approximations
 

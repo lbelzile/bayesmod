@@ -230,7 +230,7 @@ Léo Belzile
 </div>
 </div>
 
-  <p class="date">Last compiled Monday Nov 23, 2026</p>
+  <p class="date">Last compiled Tuesday Nov 24, 2026</p>
 </section>
 <section id="rationale-for-deterministic-approximations" class="slide level2">
 <h2>Rationale for deterministic approximations</h2>
@@ -242,7 +242,8 @@ Léo Belzile
 <h2>Landau notation</h2>
 <p>We need notation to characterize the growth rate of functions: when <span class="math inline">\(n \to \infty\)</span></p>
 <ul>
-<li>big-O: <span class="math inline">\(x = \mathrm{O}(n)\)</span> means that <span class="math inline">\(x/n \to c \in \mathbb{R}\)</span> as <span class="math inline">\(n\to \infty\)</span> - little-o: <span class="math inline">\(x =\mathrm{o}(n)\)</span> implies <span class="math inline">\(x/n \to 0\)</span> as <span class="math inline">\(n\to \infty.\)</span></li>
+<li>big-O: <span class="math inline">\(x = \mathrm{O}(n)\)</span> means that <span class="math inline">\(x/n \to c \in \mathbb{R},\)</span></li>
+<li>little-o: <span class="math inline">\(x =\mathrm{o}(n)\)</span> implies <span class="math inline">\(x/n \to 0.\)</span></li>
 </ul>
 </section>
 <section id="taylor-series-expansion" class="slide level2">
@@ -529,17 +530,18 @@ Figure&nbsp;3: True gamma posterior (black) with skew symmetric (dashed red) and
 </section>
 <section id="integrated-nested-laplace-approximation" class="slide level2">
 <h2>Integrated nested Laplace approximation</h2>
+<div style="font-size: 0.9em;">
 <p>Consider a model with response <span class="math inline">\(\boldsymbol{y}\)</span> which depends on covariates <span class="math inline">\(\mathbf{x}\)</span> through a latent Gaussian process <span class="math inline">\(\boldsymbol{\beta}.\)</span></p>
 <p>Typically, the prior of coefficients <span class="math inline">\(\boldsymbol{\beta} \in \mathbb{R}^p.\)</span> The dimension <span class="math inline">\(p\)</span> can be substantial (several thousands) with a comparably low-dimensional hyperparameter vector <span class="math inline">\(\boldsymbol{\theta} \in \mathbb{R}^m.\)</span></p>
-<p>Consider data that are conditionally independent given <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{Q}^{-1})\)</span> for simplicity.</p>
+<p>Take <span class="math inline">\(\boldsymbol{\beta} \sim \mathsf{Gauss}_p(\boldsymbol{0}_p, \mathbf{Q}^{-1})\)</span> for simplicity. If <span class="math inline">\(\boldsymbol{\beta}\)</span> is a Gaussian Markov random field, the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> will be sparse. This allows one to use dedicated algorithms for sparse matrices.</p>
+</div>
 </section>
 <section id="gaussian-approximations" class="slide level2">
 <h2>Gaussian approximations</h2>
-<p><span class="math display">\[\begin{align*}
-p(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto \exp\left\{-\frac{1}{2} \boldsymbol{\beta}^\top\mathbf{Q}\boldsymbol{\beta} + \sum_{i=1}^n \log p(y_i \mid \beta_i, \boldsymbol{\theta})\right\}
-\end{align*}\]</span> If <span class="math inline">\(\boldsymbol{\beta}\)</span> is a Gaussian Markov random field, the precision matrix <span class="math inline">\(\mathbf{Q}\)</span> will be sparse.</p>
+<p>Consider data that are conditionally independent given <span class="math inline">\(\boldsymbol{\beta}\)</span>, so that <span class="math display">\[\begin{align*}
+p(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto \exp\left\{-\frac{\boldsymbol{\beta}^\top\mathbf{Q}\boldsymbol{\beta}}{2}  + \sum_{i=1}^n \log p(y_i \mid \beta_i, \boldsymbol{\theta})\right\}
+\end{align*}\]</span></p>
 <p>The Gaussian approximation to the posterior would have precision matrix <span class="math inline">\(\mathbf{Q} + \mathrm{diag}(\boldsymbol{c})\)</span> for some vector <span class="math inline">\(\boldsymbol{c}\)</span> obtained from the second-order expansion of the likelihood.</p>
-<p>This allows one to use dedicated algorithms for sparse matrices.</p>
 </section>
 <section id="inla-targets-of-inference" class="slide level2">
 <h2>INLA: targets of inference</h2>
@@ -556,8 +558,8 @@ p(\theta_i \mid \boldsymbol{y}) &amp;= \int p(\boldsymbol{\theta} \mid \boldsymb
 <section id="inla-approximation-step-1" class="slide level2">
 <h2>INLA approximation (step 1)</h2>
 <p>This yields <span class="math display">\[\begin{align*}
-\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}}
-\end{align*}\]</span> since the exponential term</p>
+\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}}.
+\end{align*}\]</span></p>
 </section>
 <section id="note-on-approximation" class="slide level2">
 <h2>Note on approximation</h2>
@@ -593,7 +595,7 @@ p(\theta_i \mid \boldsymbol{y}) &amp;= \int p(\boldsymbol{\theta} \mid \boldsymb
 <section id="numerical-challenges-to-laplace-approximation" class="slide level2">
 <h2>Numerical challenges to Laplace approximation</h2>
 <p>One challenge is that <span class="math inline">\(p\)</span> is <strong>very large</strong>, so calculation of the Hessian <span class="math inline">\(\mathbf{H}\)</span> is costly to evaluate.</p>
-<p>Having to evaluate it repeatedly for each marginal <span class="math inline">\(\beta_i\)</span> for <span class="math inline">\(i=1, \ldots, p\)</span> is prohibitive since it involves factorizations of <span class="math inline">\(p \times p\)</span> matrices.</p>
+<p>Having to evaluate it repeatedly for each marginal for parameter <span class="math inline">\(\beta_i\)</span> with <span class="math inline">\(i=1, \ldots, p\)</span> is prohibitive since it involves factorizations of <span class="math inline">\(p \times p\)</span> matrices.</p>
 </section>
 <section id="further-approximations" class="slide level2">
 <h2>Further approximations</h2>
