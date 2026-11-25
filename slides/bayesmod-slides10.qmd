@@ -417,7 +417,7 @@ curve(dnorm(x, mean = mode, sd = sqrt(-1/hessian(mode))), add = TRUE, lty = 2, n
 Let $g^{\text{sym}}(\boldsymbol{\theta}; \boldsymbol{\theta}_{\text{sym}})$ be a density function that is symmetric around $\boldsymbol{\theta}_{\text{sym}};$ for a Gaussian or any elliptical distribution, this value $\boldsymbol{\theta}_{\text{sym}}$ would be the location vector $\boldsymbol{\mu}.$ 
 
 
-A symmetric function $g$ about $\boldsymbol{x}_{\text{sym}}$ satisfies the identity $$g(\boldsymbol{x}) = g(2\boldsymbol{x}_{\text{sym}}-\boldsymbol{x}_{\text{sym}}).$$
+A symmetric function $g$ about $\boldsymbol{x}_{\text{sym}}$ satisfies the identity $$g(\boldsymbol{x}) = g(2\boldsymbol{x}_{\text{sym}}-\boldsymbol{x}).$$
 
 ## Perturbation of symmetric distributions
 
@@ -617,13 +617,13 @@ where $\boldsymbol{\theta}_{-i}$ denotes the vector of hyperparameters excluding
 The INLA method builds Laplace approximations to the integrands $p(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y})$ and $p(\boldsymbol{\theta} \mid \boldsymbol{y}),$ and evaluates the integral using quadrature rules over a coarse grid of values of $\boldsymbol{\theta}.$
 
 
-The marginal posterior $p(\boldsymbol{\theta} \mid \boldsymbol{y})$ is approximated by writing $$p(\boldsymbol{\beta}, \boldsymbol{\theta} \mid \boldsymbol{y}) \propto p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}) p(\boldsymbol{\theta} \mid \boldsymbol{y})$$ and performing a Laplace approximation for fixed value of $\boldsymbol{\theta}$ for the term $p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),$ whose mode we denote by $\widehat{\boldsymbol{\beta}}.$
+The marginal posterior $p(\boldsymbol{\theta} \mid \boldsymbol{y})$ is approximated by writing $$p(\boldsymbol{\beta}, \boldsymbol{\theta} \mid \boldsymbol{y}) \propto p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}) p(\boldsymbol{\theta} \mid \boldsymbol{y})$$ and performing a Laplace approximation for fixed value of $\boldsymbol{\theta}$ for the term $p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),$ whose mode we denote by $\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}}.$
 
 ## INLA approximation (step 1)
 
 This yields
 \begin{align*}
-\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}}.
+\widetilde{p}(\boldsymbol{\theta} \mid \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ p_{G}(\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}} \mid \boldsymbol{y}, \boldsymbol{\theta})} = \frac{p(\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{ |\mathbf{H}(\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}})|^{1/2}}.
 \end{align*}
 
 
@@ -632,9 +632,9 @@ This yields
 ::: {style="font-size: 0.8em;"}
 
 The Laplace approximation $p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta})$ has kernel 
-$$p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}})|^{1/2}\exp\left\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}})/2\right\}.$$
-Since it is evaluated at $\widehat{\boldsymbol{\beta}},$ we retrieve only the determinant of the negative Hessian of 
-$p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),$ namely $\mathbf{H}(\widehat{\boldsymbol{\beta}}).$ Note that the latter varies with $\boldsymbol{\theta}.$
+$$p_{G}(\boldsymbol{\beta} \mid \boldsymbol{y}, \boldsymbol{\theta}) \propto |\mathbf{H}(\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}})|^{1/2}\exp\left\{-(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}})^\top \mathbf{H}(\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}})(\boldsymbol{\beta}- \widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}})/2\right\}.$$
+Since it is evaluated at $\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}},$ we retrieve only the determinant of the negative Hessian of 
+$p(\boldsymbol{\beta} \mid \boldsymbol{\theta}, \boldsymbol{y}),$ namely $\mathbf{H}(\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}}).$ Note that the latter varies with $\boldsymbol{\theta}.$
 
 :::
 
@@ -653,15 +653,15 @@ To obtain $p(\theta_i \mid \boldsymbol{y})$:
 
 ## Approximation of marginal of Gaussian latent effect
 
-For the marginal term $p(\beta_i \mid \boldsymbol{y})$, @Rue.Martino.Chopin:2009 proceed instead with the marginal for $\beta_i$ by building an approximation of it based on maximizing $\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}$ to yield $\widehat{\boldsymbol{\beta}}_{(i)}$ whose $i$th element is $\beta_i,$ yielding
+For the marginal term $p(\beta_i \mid \boldsymbol{y})$, @Rue.Martino.Chopin:2009 proceed instead with the marginal for $\beta_i$ by building an approximation of it based on maximizing $\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}$ to yield $\widehat{\boldsymbol{\beta}}_{(i), {\boldsymbol{\theta}}}$ whose $i$th element is $\beta_i,$ yielding
 \begin{align*}
-\widetilde{p}(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}_{(i)}, \boldsymbol{\theta} \mid \boldsymbol{y})}{\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i),-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y})},
+\widetilde{p}(\beta_i \mid \boldsymbol{\theta}, \boldsymbol{y}) \propto \frac{p(\widehat{\boldsymbol{\beta}}_{(i),{\boldsymbol{\theta}}}, \boldsymbol{\theta} \mid \boldsymbol{y})}{\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i), {\boldsymbol{\theta}},-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y})},
 \end{align*}
-with a suitable renormalization of $\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i),-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}).$
+with a suitable renormalization of $\widetilde{p}(\widehat{\boldsymbol{\beta}}_{(i), {\boldsymbol{\theta}}, -i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y}).$
 
 ## Remark on approximation
 
-While we could marginalize directly the multivariate Laplace approximation $$p_{G}(\widehat{\boldsymbol{\beta}} \mid \boldsymbol{y}, \boldsymbol{\theta}),$$ this leads to evaluation of the Laplace approximation to the density far from the mode, which is often inaccurate. 
+While we could marginalize directly the multivariate Laplace approximation $$p_{G}(\widehat{\boldsymbol{\beta}}_{\boldsymbol{\theta}} \mid \boldsymbol{y}, \boldsymbol{\theta}),$$ this leads to evaluation of the Laplace approximation to the density far from the mode, which is often inaccurate. 
 
 ## Numerical challenges to Laplace approximation
 
@@ -674,7 +674,7 @@ Having to evaluate it repeatedly for each marginal  for parameter $\beta_i$ with
 
 To reduce the computational costs, @Rue.Martino.Chopin:2009 propose to use the approximate mean to avoid optimizing and use the conditional of the Gaussian approximation with mean $\widehat{\boldsymbol{\beta}}$ and covariance $\boldsymbol{\Sigma} = \mathbf{H}^{-1}(\widehat{\boldsymbol{\beta}}),$
 \begin{align*}
-\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y} &\approx \mathsf{Gauss}_{p-1}\left(\widetilde{\boldsymbol{\beta}}_{(i)}, \mathbf{M}^{-1}_{-i,-i}\right);
+\boldsymbol{\beta}_{-i} \mid \beta_i, \boldsymbol{\theta}, \boldsymbol{y} &\approx \mathsf{Gauss}_{p-1}\left(\widetilde{\boldsymbol{\beta}}_{(i)}, \mathbf{H}^{-1}_{-i,-i}\right);
 \\
 \widetilde{\boldsymbol{\beta}}_{(i)} &= \widehat{\boldsymbol{\beta}}_{-i} + \boldsymbol{\Sigma}_{i,i}^{-1}\boldsymbol{\Sigma}_{i,-i}(\beta_i - \widehat{\beta}_i),
 \end{align*}
