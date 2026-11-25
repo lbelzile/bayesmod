@@ -27,12 +27,32 @@ The data distribution is
 \boldsymbol{\beta} \mid \mathbf{X}, \sigma^2 & \sim \mathsf{Gauss}_p\left\{ \boldsymbol{\beta}_0, \frac{n}{\kappa_0}\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\right\} \\
 p(\sigma^2) &\propto \sigma^{-2}.
 \end{align*}
-
-The log posterior 
+The log posterior is
 \begin{align*}
-\ell(\boldsymbol{\beta}, \sigma^2) \propto -\frac{n}{2} \log(\sigma^2) -\frac{(\boldsymbol{y}-\mathbf{X}\boldsymbol{\beta})^\top (\boldsymbol{y}-\mathbf{X}\boldsymbol{\beta})}{2\sigma^2} -  \log  - \frac{\kappa_0(\boldsymbol{\beta}-\boldsymbol{\beta}_0)^\top \mathbf{X}^\top\mathbf{X} (\boldsymbol{\beta}-\boldsymbol{\beta}_0)}{2n\sigma^2} 
+\log p(\boldsymbol{\beta}, \sigma^2 \mid \boldsymbol{y}, \mathbf{X}) &\propto -\frac{n}{2} \log(\sigma^2) -\frac{(\boldsymbol{y}-\mathbf{X}\boldsymbol{\beta})^\top (\boldsymbol{y}-\mathbf{X}\boldsymbol{\beta})}{2\sigma^2} -  \frac{1}{2}\log \det\left( \frac{\kappa_0}{n\sigma^2}\mathbf{X}^\top\mathbf{X}\right) \\&- \frac{\kappa_0(\boldsymbol{\beta}-\boldsymbol{\beta}_0)^\top \mathbf{X}^\top\mathbf{X} (\boldsymbol{\beta}-\boldsymbol{\beta}_0)}{2n\sigma^2} 
 \end{align*}
-
+and note that, by properties of determinants,
+\begin{align*}
+\log \det\left( \frac{\kappa_0}{n\sigma^2}\mathbf{X}^\top\mathbf{X}\right)
+&= \log\left\{\left(\frac{\kappa_0}{n\sigma^2}\right)^{p}\det\left( \mathbf{X}^\top\mathbf{X}\right)\right\}
+\\&\stackrel{\sigma^2}{\propto} -p  \log(\sigma^2).
+\end{align*}
+Thus, if we expand the quadratic forms and take $c^{-1}=1+\kappa_0/n,$ we find that the log posterior for $(\boldsymbol{\beta}, \sigma^2)$ is proportional to
+\begin{align*}
+\log p(\boldsymbol{\beta}, \sigma^2 \mid \boldsymbol{y}, \mathbf{X}) &\propto -(n+p+1)\log(\sigma^2) \\&\qquad - \frac{1}{2\sigma^2}\left(\boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} - 2\boldsymbol{y}^\top\mathbf{X}\boldsymbol{\beta} + \boldsymbol{y}^\top\boldsymbol{y}\right) \\&\qquad - \frac{\kappa_0}{2n\sigma^2}\left(\boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}-2\boldsymbol{\beta}_0^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\beta}_0\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}_0\right)
+ \\&=-(n+p+1)\log(\sigma^2) \\&\qquad -\frac{1}{2c\sigma^2}\left(\boldsymbol{\beta}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} - 2\boldsymbol{\mu}_{\boldsymbol{\beta}}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\mu}_{\boldsymbol{\beta}}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\mu}_{\boldsymbol{\beta}}\right) \\
+& \qquad  + \frac{\boldsymbol{\mu}_{\boldsymbol{\beta}}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\mu}_{\boldsymbol{\beta}}/c - \boldsymbol{y}^\top\boldsymbol{y} - (\kappa_0/n)\boldsymbol{\beta}_0\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}_0}{2\sigma^2}
+\end{align*}
+and, upon writing $\boldsymbol{y}^\top\mathbf{X} = \boldsymbol{y}^\top\mathbf{X}(\mathbf{X}^\top\mathbf{X})^{-1}(\mathbf{X}^\top\mathbf{X})=\widehat{\boldsymbol{\beta}}^\top(\mathbf{X}^\top\mathbf{X}),$ we get that 
+\begin{align*}
+\boldsymbol{\mu}_{\boldsymbol{\beta}} &= c\widehat{\boldsymbol{\beta}} + (1-c)\boldsymbol{\beta}_0
+\end{align*}
+We see that this is the joint distribution $p(\boldsymbol{\beta} \mid \sigma^2, \boldsymbol{y}, \mathbf{X}) p(\sigma^2 \mid \boldsymbol{y}, \mathbf{X})$, where
+\begin{align*}
+\boldsymbol{\beta}\mid \sigma^2, \boldsymbol{y}, \mathbf{X} & \sim \mathsf{Gauss}_{p}\left\{\boldsymbol{\mu}_{\boldsymbol{\beta}}, c\sigma^2(\mathbf{X}^\top\mathbf{X})^{-1}\right\} \\
+\sigma^2 \mid  \boldsymbol{y}, \mathbf{X} & \sim \mathsf{inv. gamma}\left(n + p, \frac{\boldsymbol{\mu}_{\boldsymbol{\beta}}^\top\mathbf{X}^\top\mathbf{X}\boldsymbol{\mu}_{\boldsymbol{\beta}}}{2c} - \frac{\boldsymbol{y}^\top\boldsymbol{y}}{2} - \frac{\kappa_0\boldsymbol{\beta}_0\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta}_0}{2n}\right).
+\end{align*}
+This is a conjugate model, since the (improper) prior can be viewed as a limiting member of the inverse gamma distribution when the scale parameter $b \to 0.$ As usual, the prior mean is a weighted average of the maximum likelihood estimator (here the ordinary least square estimator) and the prior mean.
 
 :::
 

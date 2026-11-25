@@ -107,7 +107,7 @@ If we perform a Taylor series expansion of the log of the integrand, then
 \begin{align*}
  I_n \approx (2\pi)^{p/2} | \mathbf{H}(\boldsymbol{x}_0)|^{-1/2}\exp\{h(\boldsymbol{x}_0)\} + \mathrm{O}(n^{-1})
 \end{align*}
-where $|\mathbf{H}(\boldsymbol{x}_0)|$ is the determinant of the Hessian matrix of $-h(\boldsymbol{x})$ evaluated at the mode  $\boldsymbol{x}_0.$
+where $|\cdot|$ denotes the determinant and $\mathbf{H}(\boldsymbol{\theta}) = - h(\boldsymbol{\theta}) / \partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top$ is the negative of the Hessian matrix of $h.$
 
 ## Laplace approximation
 
@@ -130,7 +130,7 @@ and take
 
 ## Laplace approximation to the marginal likelihood
 
-Evaluating at the maximum a posteriori $\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}$ and letting $\mathbf{H} = - h(\boldsymbol{\theta}) / \partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top$ denote the Hessian matrix of second partial derivatives of the unnormalized log posterior, we get [@Tierney.Kadane:1986]
+Evaluating at the maximum a posteriori $\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}$ and letting $\mathbf{H}$ denote the negative of the Hessian matrix of the unnormalized log posterior, we get [@Tierney.Kadane:1986]
 \begin{align*}
  \log p(\boldsymbol{y}) &= \log p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) + \log p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) \\&\quad + \frac{p}{2} \log (2\pi) - \frac{1}{2}\log |\mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})| + \mathrm{O}(n^{-1}).
 \end{align*}
@@ -172,7 +172,7 @@ logpost <- function(x){
 }
 # Hessian evaluated at MAP
 H <- -numDeriv::hessian(logpost, x = map)
-log_marg_laplace <- 0.5*log(2*pi) - c(determinant(H)$modulus) + logpost(map)
+log_marg_laplace <- 0.5*log(2*pi) - 0.5*c(determinant(H)$modulus) + logpost(map)
 ```
 
 For the sample of size $`r length(waiting)`,$ the exponential model marginal likelihood is $`r round(log_marg_lik,1)`.$
@@ -224,6 +224,16 @@ Putting these together
 \mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} \approx \frac{|\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})|^{1/2}}{|\jmath_g(\widehat{\boldsymbol{\theta}}_g)|^{1/2}} \frac{g(\widehat{\boldsymbol{\theta}}_g) p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_g) p( \widehat{\boldsymbol{\theta}}_g)}{p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})}.
 \end{align*}
 While the Laplace method has an error $\mathrm{O}(n^{-1}),$ the leading order term of the expansion cancels out from the ratio and the above has error of $\mathrm{O}(n^{-2}).$
+
+## More general functionals
+
+We could alternatively apply the Laplace approximation to the log unnormalized posterior and then compute moments with respect to the Gaussian approximation, if the support of the distribution was $\mathbb{R}.$ 
+
+For example, if we take $g(x) = x$ (posterior expectation), the estimator
+\begin{align*}
+ \mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} &=  \frac{\int g(\boldsymbol{\theta}) \phi\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}}{\int \phi\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}}.
+\end{align*}
+would return the posterior mode $\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}.$ The approximation would be most accurate for unimodal symmetric posterior distributions.
 
 ## Example of posterior mean for exponential likelihood
 

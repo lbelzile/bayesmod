@@ -31,5 +31,5 @@ fit$summary()
 # Extract posterior samples
 post_samp <- fit$draws()
 # Plot a histogram
-bayesplot::mcmc_hist(pars = "phi")
-bayesplot::mcmc_trace_highlight(pars = "sigma")
+bayesplot::mcmc_dens(x = post_samp, pars = "phi")
+bayesplot::mcmc_trace_highlight(x = post_samp, pars = "sigma")
