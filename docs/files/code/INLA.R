@@ -33,21 +33,34 @@ data <- data.frame(y = y, time = time)
 # https://inla.r-inla-download.org/r-inla.org/doc/likelihood/stochvolgaussian.pdf
 # The model uses a log link, and a (log)-gamma prior for the precision
 f_stochvol <- formula(
-  y ~ f(time, model = "ar1", param = list(prec = c(1, 0.001)))
+  y ~
+    f(
+      time,
+      model = "ar1",
+      param = list(prec = c(1, 0.001))
+    )
 )
-mod_stochvol <- inla(f_stochvol, family = "stochvol", data = data)
+mod_stochvol <- inla(
+  f_stochvol,
+  family = "stochvol",
+  data = data
+)
 summary(mod_stochvol)
 plot(mod_stochvol)
 marg_prec <- mod_stochvol$marginals.hyperpar[[1]]
 marg_phi <- mod_stochvol$marginals.hyperpar[[2]]
 
-g1 <- ggplot(data.frame(inla.smarginal(marg_prec))) +
+g1 <- ggplot(
+  data.frame(inla.smarginal(marg_prec))
+) +
   geom_line(aes(x, y)) +
   labs(x = expression(tau), y = "", subtitle = "posterior of precision") +
   scale_y_continuous(limits = c(0, NA), expand = expansion()) +
   theme_classic()
 
-g2 <- ggplot(data.frame(inla.smarginal(marg_phi))) +
+g2 <- ggplot(
+  data.frame(inla.smarginal(marg_phi))
+) +
   geom_line(aes(x, y)) +
   labs(x = expression(rho), y = "", subtitle = "posterior correlation") +
   scale_y_continuous(limits = c(0, NA), expand = expansion()) +
@@ -57,7 +70,10 @@ g1 + g2
 
 # Compute density, quantiles, etc. via inla.*marginal
 ## approximate 95% credible interval and marginal post median
-INLA::inla.qmarginal(marg_phi, p = c(0.025, 0.5, 0.975))
+INLA::inla.qmarginal(
+  marg_phi,
+  p = c(0.025, 0.5, 0.975)
+)
 # Change of variable to get variance from precision
 marg_var <- inla.tmarginal(
   fun = function(x) {
@@ -65,7 +81,10 @@ marg_var <- inla.tmarginal(
   },
   marginal = marg_prec
 )
-INLA::inla.qmarginal(marg_var, p = c(0.025, 0.975))
+INLA::inla.qmarginal(
+  marg_var,
+  p = c(0.025, 0.5, 0.975)
+)
 
 # Posterior marginal mean and variance of phi
 mom1 <- INLA::inla.emarginal(
