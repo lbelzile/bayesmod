@@ -352,12 +352,14 @@ p(\boldsymbol{y}) = \frac{\Gamma(n+a)}{\Gamma(a)}\frac{b^a}{\left(b + \sum_{i=1}
 \mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} \approx \frac{|\jmath(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})|^{1/2}}{|\jmath_g(\widehat{\boldsymbol{\theta}}_g)|^{1/2}} \frac{g(\widehat{\boldsymbol{\theta}}_g) p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_g) p( \widehat{\boldsymbol{\theta}}_g)}{p(\boldsymbol{y} \mid \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}) p(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})}.
 \end{align*}\]</span> While the Laplace method has an error <span class="math inline">\(\mathrm{O}(n^{-1}),\)</span> the leading order term of the expansion cancels out from the ratio and the above has error of <span class="math inline">\(\mathrm{O}(n^{-2}).\)</span></p>
 </section>
-<section id="more-general-functionals" class="slide level2">
-<h2>More general functionals</h2>
-<p>We could alternatively apply the Laplace approximation to the log unnormalized posterior and then compute moments with respect to the Gaussian approximation, if the support of the distribution was <span class="math inline">\(\mathbb{R}.\)</span></p>
-<p>For example, if we take <span class="math inline">\(g(x) = x\)</span> (posterior expectation), the estimator <span class="math display">\[\begin{align*}
-\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} &amp;=  \frac{\int g(\boldsymbol{\theta}) \phi\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}}{\int \phi\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}}.
-\end{align*}\]</span> would return the posterior mode <span class="math inline">\(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}.\)</span> The approximation would be most accurate for unimodal symmetric posterior distributions.</p>
+<section id="posterior-expectations" class="slide level2">
+<h2>Posterior expectations</h2>
+<div style="font-size: 0.7em;">
+<p>We could alternatively apply the Laplace approximation to the log unnormalized posterior and then compute moments with respect to the Gaussian approximation with density <span class="math inline">\(\phi_p(\cdot; \boldsymbol{\mu}, \boldsymbol{\Sigma}).\)</span></p>
+<p>For example, the posterior expectation <span class="math inline">\(g(\boldsymbol{x}) = \boldsymbol{x}\)</span> would return <span class="math display">\[\begin{align*}
+\mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{\boldsymbol{\theta} \mid \boldsymbol{y}\} &amp;\approx  \frac{\int \boldsymbol{\theta} \phi_p\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}}{\int \phi_p\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}} = \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}.
+\end{align*}\]</span> The approximation would be most accurate for unimodal symmetric posterior distributions.</p>
+</div>
 </section>
 <section id="example-of-posterior-mean-for-exponential-likelihood" class="slide level2">
 <h2>Example of posterior mean for exponential likelihood</h2>

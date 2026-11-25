@@ -1880,7 +1880,7 @@
     "href": "slides/bayesmod-slides10.html#more-general-functionals",
     "title": "Bayesian modelling",
     "section": "More general functionals",
-    "text": "More general functionals\nWe could alternatively apply the Laplace approximation to the log unnormalized posterior and then compute moments with respect to the Gaussian approximation, if the support of the distribution was \\(\\mathbb{R}.\\)\nFor example, if we take \\(g(x) = x\\) (posterior expectation), the estimator \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{\\Theta} \\mid \\boldsymbol{Y}}\\{g(\\boldsymbol{\\theta}) \\mid \\boldsymbol{y}\\} &=  \\frac{\\int g(\\boldsymbol{\\theta}) \\phi\\left\\{\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}, \\mathbf{H}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})\\right\\} \\mathrm{d} \\boldsymbol{\\theta}}{\\int \\phi\\left\\{\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}, \\mathbf{H}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})\\right\\} \\mathrm{d} \\boldsymbol{\\theta}}.\n\\end{align*}\\] would return the posterior mode \\(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}.\\) The approximation would be most accurate for unimodal symmetric posterior distributions."
+    "text": "More general functionals\nWe could alternatively apply the Laplace approximation to the log unnormalized posterior and then compute moments with respect to the Gaussian approximation with density \\(\\phi_p(\\cdot; \\boldsymbol{\\mu}, \\boldsymbol{\\Sigma})\\), if the support of the distribution was \\(\\mathbb{R}.\\)"
   },
   {
     "objectID": "slides/bayesmod-slides10.html#example-of-posterior-mean-for-exponential-likelihood",
@@ -5786,5 +5786,19 @@
     "title": "Bayesian modelling",
     "section": "References",
     "text": "References\n\n\n\n\nBeskos, A., Pillai, N., Roberts, G., Sanz-Serna, J.-M., & Stuart, A. (2013). Optimal tuning of the hybrid Monte Carlo algorithm. Bernoulli, 19(5a), 1501–1534. https://doi.org/10.3150/12-bej414\n\n\nBetancourt, M. (2016). Identifying the optimal integration time in Hamiltonian Monte Carlo. arXiv. https://doi.org/10.48550/arXiv.1601.00225\n\n\nHoman, M. D., & Gelman, A. (2014). The no-U-turn sampler: Adaptively setting path lengths in Hamiltonian Monte Carlo. Journal of Machine Learning Research, 15(1), 1593–1623.\n\n\nNeal, R. M. (2011). MCMC using Hamiltonian dynamics. In S. Brooks, A. Gelman, G. Jones, & X. L. Meng (Eds.), Handbook of Markov chain Monte Carlo (pp. 113–162). CRC Press. https://doi.org/10.1201/b10905-5\n\n\nNishimura, A., Dunson, D. B., & Lu, J. (2020). Discontinuous Hamiltonian Monte Carlo for discrete parameters and discontinuous likelihoods. Biometrika, 107(2), 365–380. https://doi.org/10.1093/biomet/asz083"
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#posterior-expectation",
+    "href": "slides/bayesmod-slides10.html#posterior-expectation",
+    "title": "Bayesian modelling",
+    "section": "Posterior expectation",
+    "text": "Posterior expectation\nFor example, if we take \\(g(x) = x\\) (posterior expectation), the estimator would return the posterior mode \\(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}},\\) \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{\\Theta} \\mid \\boldsymbol{Y}}\\{\\boldsymbol{\\theta} \\mid \\boldsymbol{y}\\} &\\approx  \\frac{\\int \\boldsymbol{\\theta} \\phi_p\\left\\{\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}, \\mathbf{H}^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})\\right\\} \\mathrm{d} \\boldsymbol{\\theta}}{\\int \\phi_p\\left\\{\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}, \\mathbf{H}^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})\\right\\} \\mathrm{d} \\boldsymbol{\\theta}} = \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}.\n\\end{align*}\\] The approximation would be most accurate for unimodal symmetric posterior distributions."
+  },
+  {
+    "objectID": "slides/bayesmod-slides10.html#posterior-expectations",
+    "href": "slides/bayesmod-slides10.html#posterior-expectations",
+    "title": "Bayesian modelling",
+    "section": "Posterior expectations",
+    "text": "Posterior expectations\n\nWe could alternatively apply the Laplace approximation to the log unnormalized posterior and then compute moments with respect to the Gaussian approximation with density \\(\\phi_p(\\cdot; \\boldsymbol{\\mu}, \\boldsymbol{\\Sigma}).\\)\nFor example, the posterior expectation \\(g(\\boldsymbol{x}) = \\boldsymbol{x}\\) would return \\[\\begin{align*}\n\\mathsf{E}_{\\boldsymbol{\\Theta} \\mid \\boldsymbol{Y}}\\{\\boldsymbol{\\theta} \\mid \\boldsymbol{y}\\} &\\approx  \\frac{\\int \\boldsymbol{\\theta} \\phi_p\\left\\{\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}, \\mathbf{H}^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})\\right\\} \\mathrm{d} \\boldsymbol{\\theta}}{\\int \\phi_p\\left\\{\\boldsymbol{\\theta}; \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}, \\mathbf{H}^{-1}(\\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}})\\right\\} \\mathrm{d} \\boldsymbol{\\theta}} = \\widehat{\\boldsymbol{\\theta}}_{\\mathrm{MAP}}.\n\\end{align*}\\] The approximation would be most accurate for unimodal symmetric posterior distributions."
   }
 ]

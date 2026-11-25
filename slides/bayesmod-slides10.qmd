@@ -225,15 +225,19 @@ Putting these together
 \end{align*}
 While the Laplace method has an error $\mathrm{O}(n^{-1}),$ the leading order term of the expansion cancels out from the ratio and the above has error of $\mathrm{O}(n^{-2}).$
 
-## More general functionals
+## Posterior expectations
+::: {style="font-size: 0.7em;"}
 
-We could alternatively apply the Laplace approximation to the log unnormalized posterior and then compute moments with respect to the Gaussian approximation, if the support of the distribution was $\mathbb{R}.$ 
+We could alternatively apply the Laplace approximation to the log unnormalized posterior and then compute moments with respect to the Gaussian approximation with density $\phi_p(\cdot; \boldsymbol{\mu}, \boldsymbol{\Sigma}).$
 
-For example, if we take $g(x) = x$ (posterior expectation), the estimator
+
+For example, the posterior expectation $g(\boldsymbol{x}) = \boldsymbol{x}$ would return
 \begin{align*}
- \mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{g(\boldsymbol{\theta}) \mid \boldsymbol{y}\} &=  \frac{\int g(\boldsymbol{\theta}) \phi\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}}{\int \phi\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}}.
+ \mathsf{E}_{\boldsymbol{\Theta} \mid \boldsymbol{Y}}\{\boldsymbol{\theta} \mid \boldsymbol{y}\} &\approx  \frac{\int \boldsymbol{\theta} \phi_p\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}}{\int \phi_p\left\{\boldsymbol{\theta}; \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}, \mathbf{H}^{-1}(\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}})\right\} \mathrm{d} \boldsymbol{\theta}} = \widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}.
 \end{align*}
-would return the posterior mode $\widehat{\boldsymbol{\theta}}_{\mathrm{MAP}}.$ The approximation would be most accurate for unimodal symmetric posterior distributions.
+ The approximation would be most accurate for unimodal symmetric posterior distributions.
+
+:::
 
 ## Example of posterior mean for exponential likelihood
 
